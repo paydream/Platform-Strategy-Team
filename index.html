@@ -1,237 +1,92 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>예스폼 메인 | 시안 01</title>
-
-  <!-- Pretendard 웹폰트 -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
-
-  <link rel="stylesheet" href="css/tokens.css" />
-  <link rel="stylesheet" href="css/style.css" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>플랫폼전략팀 디자인 아카이브</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--line:#e5e8ec;--text:#191f28;--sub:#6b7684;--accent:#2f6bff;--chip:#eef3ff}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Pretendard Variable",Pretendard,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
+  header{background:var(--card);border-bottom:1px solid var(--line)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+  .top{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .top strong{font-size:17px}
+  .top span{font-size:13px;color:var(--sub)}
+  .hero{padding:40px 0 24px}
+  .hero h1{font-size:28px;font-weight:700}
+  .hero p{color:var(--sub);margin-top:6px}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+  .toolbar input{flex:1;min-width:200px;height:40px;border:1px solid var(--line);border-radius:8px;padding:0 12px;font:inherit}
+  .count{font-size:13px;color:var(--sub)}
+  .list{display:grid;gap:12px;padding-bottom:60px}
+  .item{display:flex;gap:20px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;align-items:center}
+  .thumb{width:180px;aspect-ratio:16/10;border-radius:8px;overflow:hidden;background:#eef0f3;flex-shrink:0;border:1px solid var(--line)}
+  .thumb iframe{width:1440px;height:900px;border:0;transform:scale(.125);transform-origin:0 0;pointer-events:none}
+  .info{flex:1;min-width:0}
+  .meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+  .chip{font-size:12px;background:var(--chip);color:var(--accent);padding:2px 8px;border-radius:99px}
+  .chip.gray{background:#f2f4f6;color:var(--sub)}
+  .info h2{font-size:18px}
+  .info p{font-size:14px;color:var(--sub);margin-top:4px}
+  .vers{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+  .vers a{font-size:13px;text-decoration:none;color:var(--text);border:1px solid var(--line);border-radius:6px;padding:5px 10px}
+  .vers a:hover{border-color:var(--accent);color:var(--accent)}
+  .empty{text-align:center;color:var(--sub);padding:40px 0;display:none}
+  @media (max-width:640px){.item{flex-direction:column;align-items:stretch}.thumb{width:100%}.thumb iframe{transform:scale(calc((100vw - 82px)/1440))}}
+</style>
 </head>
 <body>
+<header><div class="wrap top"><strong>플랫폼전략팀</strong><span>디자인 시안 아카이브</span></div></header>
+<main class="wrap">
+  <section class="hero">
+    <h1>디자인 시안 아카이브</h1>
+    <p>팀에서 작업한 디자인 시안을 프로젝트별로 모아둔 곳입니다.</p>
+  </section>
+  <div class="toolbar">
+    <input id="q" type="search" placeholder="프로젝트 이름으로 찾기">
+    <span class="count" id="count"></span>
+  </div>
+  <div class="list" id="list"></div>
+  <p class="empty" id="empty">찾는 프로젝트가 없습니다.</p>
+</main>
+<script>
+// 새 프로젝트는 이 배열 맨 위에 한 줄씩 추가하면 됩니다.
+const projects = [
+  {
+    title: "예스폼 메인 화면 개선",
+    desc: "검색 + 추천 콘텐츠 카드 그리드 구성의 메인 페이지 시안",
+    category: "웹 메인",
+    date: "2026.10",
+    preview: "yesform-main.html",
+    versions: [
+      { label: "시안 01", href: "yesform-main.html" },
+      { label: "시안 01-1", href: "v01-1/index.html" },
+      { label: "시안 02", href: "v02/index.html" },
+      { label: "시안 03", href: "v03/index.html" }
+    ]
+  }
+];
 
-  <!-- =====================================================
-       시안 전환 바 (검토용 · 실제 서비스 화면에는 없음)
-       시안 01 = 이 파일 / 시안 01-1 = v01-1/index.html / 시안 02 = v02/index.html (각각 따로 수정)
-       ===================================================== -->
-  <nav class="version-switch" aria-label="시안 선택">
-    <a href="index.html" class="version-switch__btn is-active" aria-current="page">시안 01</a>
-    <!-- 시안 01-1은 잠시 숨김 (파일은 v01-1/ 폴더에 그대로 있음 — 다시 보이게 하려면 아래 주석을 풀기)
-    <a href="v01-1/index.html" class="version-switch__btn">시안 01-1</a> -->
-    <a href="v02/index.html" class="version-switch__btn">시안 02</a>
-    <a href="v03/index.html" class="version-switch__btn">시안 03</a>
-  </nav>
-
-  <!-- =====================================================
-       GNB (header-main · Figma 5594:5407)
-       ===================================================== -->
-  <header class="gnb">
-    <div class="gnb__inner">
-      <div class="gnb__left">
-        <h1 class="gnb__logo">
-          <a href="#" aria-label="예스폼 홈">
-            <img src="assets/icons/logo-yesform.svg" width="78" height="34" alt="예스폼" />
-          </a>
-        </h1>
-        <button type="button" class="gnb__category">
-          <img src="assets/icons/ic-menu.svg" width="24" height="24" alt="" />
-          <span>카테고리</span>
-        </button>
+const list = document.getElementById('list');
+function render(q = '') {
+  const rows = projects.filter(p => (p.title + p.desc + p.category).includes(q.trim()));
+  list.innerHTML = rows.map(p => `
+    <article class="item">
+      <a class="thumb" href="${p.preview}"><iframe src="${p.preview}" loading="lazy" tabindex="-1" title="${p.title} 미리보기"></iframe></a>
+      <div class="info">
+        <div class="meta"><span class="chip">${p.category}</span><span class="chip gray">${p.date}</span></div>
+        <h2>${p.title}</h2>
+        <p>${p.desc}</p>
+        <div class="vers">${p.versions.map(v => `<a href="${v.href}">${v.label}</a>`).join('')}</div>
       </div>
-
-      <nav class="gnb__util" aria-label="회원 메뉴">
-        <a href="#" class="gnb__util-item">
-          <img src="assets/icons/ic-join.svg" width="24" height="24" alt="" />
-          <span>회원가입</span>
-        </a>
-        <a href="#" class="gnb__util-item">
-          <img src="assets/icons/ic-charge.svg" width="24" height="24" alt="" />
-          <span>이용요금</span>
-        </a>
-        <a href="#" class="gnb__util-item">
-          <img src="assets/icons/ic-call.svg" width="24" height="24" alt="" />
-          <span>고객센터</span>
-        </a>
-        <a href="#" class="gnb__util-item">
-          <img src="assets/icons/ic-login.svg" width="24" height="24" alt="" />
-          <span>로그인</span>
-        </a>
-      </nav>
-    </div>
-  </header>
-
-  <main>
-    <!-- =====================================================
-         검색 영역 (Frame 372 · Figma 5594:5408)
-         ===================================================== -->
-    <section class="search" aria-labelledby="search-title">
-      <h2 id="search-title" class="search__title">오늘 찾고 있는 서식은 무엇인가요?</h2>
-
-      <div class="search__body">
-        <div class="search__box">
-          <div class="search__mode" role="group" aria-label="검색 방식">
-            <button type="button" class="search__mode-btn is-active" data-mode="doc" aria-pressed="true">문서 검색</button>
-            <button type="button" class="search__mode-btn" data-mode="ai" aria-pressed="false">예스폼 AI</button>
-          </div>
-
-          <form class="search__form" role="search" action="#" onsubmit="return false;">
-            <label for="search-input" class="sr-only">서식 검색어</label>
-            <input id="search-input" class="search__input" type="search" placeholder="내용증명" autocomplete="off" />
-            <button type="submit" class="search__submit" aria-label="검색">
-              <img src="assets/icons/ic-search.svg" width="30" height="30" alt="" />
-            </button>
-          </form>
-        </div>
-
-        <a href="#" class="search__hint">
-          <span class="search__hint-text">2026 연차관리 엑셀 프로그램! 연차계산기부터 연차촉진서식 까지</span>
-          <img src="assets/images/sparkle.png" width="16" height="16" alt="" />
-        </a>
-      </div>
-    </section>
-
-    <!-- =====================================================
-         메뉴 탭 (menu tab · Figma 5594:5538)
-         ===================================================== -->
-    <nav class="menu-tab" aria-label="추천 카테고리">
-      <ul class="menu-tab__list" role="tablist">
-        <li role="presentation">
-          <button type="button" class="menu-tab__item is-active" role="tab" data-tab="prompt" aria-controls="panel-package" aria-selected="true">
-            <img src="assets/icons/tab-prompt.svg" width="26" height="26" alt="" class="menu-tab__icon" />
-            <span>AI로 초안 생성하기</span>
-          </button>
-        </li>
-        <li role="presentation">
-          <button type="button" class="menu-tab__item" role="tab" data-tab="recommend" aria-controls="panel-thumb" aria-selected="false">
-            <img src="assets/icons/tab-recommend.svg" width="26" height="25" alt="" class="menu-tab__icon" />
-            <span>예스폼 추천 콘텐츠</span>
-          </button>
-        </li>
-        <li role="presentation">
-          <button type="button" class="menu-tab__item" role="tab" data-tab="calendar" aria-controls="panel-thumb" aria-selected="false">
-            <img src="assets/icons/tab-calendar.svg" width="25" height="25" alt="" class="menu-tab__icon" />
-            <span>2026년 달력</span>
-          </button>
-        </li>
-        <li role="presentation">
-          <button type="button" class="menu-tab__item" role="tab" data-tab="goal" aria-controls="panel-thumb" aria-selected="false">
-            <img src="assets/icons/tab-target.svg" width="25" height="25" alt="" class="menu-tab__icon" />
-            <span>2026 목표관리</span>
-          </button>
-        </li>
-        <li role="presentation">
-          <button type="button" class="menu-tab__item" role="tab" data-tab="excel" aria-controls="panel-thumb" aria-selected="false">
-            <img src="assets/icons/tab-excel.svg" width="25" height="25" alt="" class="menu-tab__icon" />
-            <span>실무활용엑셀</span>
-          </button>
-        </li>
-        <li role="presentation">
-          <button type="button" class="menu-tab__item" role="tab" data-tab="ppt" aria-controls="panel-thumb" aria-selected="false">
-            <img src="assets/icons/tab-ppt.svg" width="25" height="25" alt="" class="menu-tab__icon" />
-            <span>12월 신상 PPT 모음</span>
-          </button>
-        </li>
-        <li role="presentation">
-          <button type="button" class="menu-tab__add" aria-label="카테고리 더보기">
-            <img src="assets/icons/ic-add.svg" width="24" height="24" alt="" />
-          </button>
-        </li>
-      </ul>
-    </nav>
-
-    <!-- =====================================================
-         콘텐츠 영역 — 선택한 탭에 따라 패널 전환
-         · 프롬프트 (처음 열리는 탭) → 패키지 카드 (테스트2 Figma 16:241, 2560에서 1행 9개)
-         · 예스폼 추천 콘텐츠 등 나머지 탭 → 썸네일 카드 (메인 Figma 5594:5620)
-         · 예전 프롬프트 카드(카드01)는 _보관/카드01 에 보관
-         카드 데이터는 js/main.js 의 PACKAGE_CARDS / CARDS 배열에서 렌더링
-         ===================================================== -->
-    <section class="contents">
-      <div class="tab-panel" id="panel-package" role="tabpanel" aria-label="AI로 초안 생성하기">
-        <!-- 카드 목록 오른쪽 위: "관심분야" 안내 — 마우스를 올리거나 키보드로 이동하면 관심분야 목록 팝오버가 뜸
-             (디자인가이드 Figma 6103:11148 · 팝오버 6103:11180) -->
-        <div class="package-toolbar">
-          <div class="field-info">
-            <button type="button" class="field-info__trigger" aria-describedby="field-info-popover">
-              <img src="assets/icons/ic-info.svg" width="16" height="16" alt="" />관심분야
-            </button>
-            <ul class="field-info__popover" id="field-info-popover" role="tooltip">
-              <li><img src="assets/icons/line-legal.svg" width="20" height="20" alt="" />법무·계약·지식재산</li>
-              <li><img src="assets/icons/line-admin.svg" width="20" height="20" alt="" />총무·경영지원·일반사무</li>
-              <li><img src="assets/icons/line-ai-it.svg" width="20" height="20" alt="" />AI·IT</li>
-              <li><img src="assets/icons/line-hr.svg" width="20" height="20" alt="" />HR 관리·채용</li>
-              <li><img src="assets/icons/line-site.svg" width="20" height="20" alt="" />현장·공사·부동산 관리</li>
-            </ul>
-          </div>
-        </div>
-        <ul class="package-grid" id="package-grid"></ul>
-        <div class="more-wrap">
-          <button type="button" class="btn-neutral">프롬프트 더보기</button>
-        </div>
-      </div>
-      <div class="tab-panel" id="panel-thumb" role="tabpanel" aria-label="서식 목록" hidden>
-        <ul class="card-grid" id="card-grid"></ul>
-        <div class="more-wrap">
-          <button type="button" class="btn-neutral">콘텐츠 더보기</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- 하단 섹션: 놓치면 후회할 콘텐츠 (전달받은 화면 캡처 이미지 그대로) -->
-    <section class="promo-section" aria-label="놓치면 후회할 콘텐츠">
-      <img src="assets/images/section-recommend.png" width="1405" height="710" alt="놓치면 후회할 콘텐츠! 회원님만을 위해 딱 골라왔어요." loading="lazy" />
-    </section>
-  </main>
-
-  <!-- 카드 템플릿 -->
-  <template id="card-template">
-    <li class="card">
-      <a href="#" class="card__link">
-        <div class="card__img-area">
-          <div class="card__thumb">
-            <img src="" alt="" loading="lazy" />
-          </div>
-        </div>
-        <div class="card__txt-area">
-          <p class="card__title"></p>
-          <div class="card__meta">
-            <div class="card__badges"></div>
-            <span class="card__views">
-              <img src="assets/icons/ic-visibility.svg" width="16" height="16" alt="" />
-              <span class="card__views-count"></span>
-            </span>
-          </div>
-        </div>
-      </a>
-      <button type="button" class="card__fav" aria-pressed="false" aria-label="찜하기">
-        <img src="assets/icons/ic-favorite.svg" width="56" height="56" alt="" />
-      </button>
-    </li>
-  </template>
-
-  <!-- 패키지 카드 템플릿 — 임시 업데이트: 디자인가이드 Figma 6098:10993 (관심분야별 카드 250×229)
-       업무분야 라인 아이콘 36 · 윗부분 업무분야 색 그라데이션 · 회색 칩 · 하단 흰 버튼(위 구분선)
-       이전 카드(Figma 6039:241)는 _보관/시안01_카드_6039-241 에 백업 -->
-  <template id="package-card-template">
-    <li class="package-card">
-      <div class="package-card__body">
-        <span class="package-card__icon"><img src="" width="30" height="30" alt="" /></span>
-        <div class="package-card__text">
-          <p class="package-card__title"></p>
-          <p class="package-card__desc"></p>
-        </div>
-        <div class="package-card__chips"></div>
-      </div>
-      <div class="package-card__foot">
-        <!-- 하단 버튼 영역 — 흰 배경 · 위 구분선 · 높이 42 · "바로 생성하기 >" (Figma 6098:10993) -->
-        <a href="#" class="package-card__cta">바로 생성하기<img src="assets/icons/ic-chevron-right-blue.svg" width="6" height="8" alt="" /></a>
-      </div>
-    </li>
-  </template>
-
-  <script src="js/main.js"></script>
+    </article>`).join('');
+  document.getElementById('count').textContent = `${rows.length}개 프로젝트`;
+  document.getElementById('empty').style.display = rows.length ? 'none' : 'block';
+}
+document.getElementById('q').addEventListener('input', e => render(e.target.value));
+render();
+</script>
 </body>
 </html>
