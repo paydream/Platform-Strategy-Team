@@ -30,6 +30,7 @@
   .chip.gray{background:#f2f4f6;color:var(--sub)}
   .info h2{font-size:18px}
   .info p{font-size:14px;color:var(--sub);margin-top:4px}
+  .info p.dates{font-size:13px;color:var(--sub);margin-top:8px}
   .vers{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
   .vers a{font-size:13px;text-decoration:none;color:var(--text);border:1px solid var(--line);border-radius:6px;padding:5px 10px}
   .vers a:hover{border-color:var(--accent);color:var(--accent)}
@@ -52,13 +53,14 @@
   <p class="empty" id="empty">찾는 프로젝트가 없습니다.</p>
 </main>
 <script>
-// 새 프로젝트는 이 배열 맨 위에 한 줄씩 추가하면 됩니다.
+// 새 프로젝트는 이 배열 맨 위에 추가하면 됩니다. 날짜는 YYYY.MM.DD 형식, 시안을 고치면 updated만 바꿔주세요.
 const projects = [
   {
     title: "예스폼 메인 화면 개선",
     desc: "검색 + 추천 콘텐츠 카드 그리드 구성의 메인 페이지 시안",
     category: "웹 메인",
-    date: "2026.10",
+    created: "2026.10.07",
+    updated: "2026.10.07",
     preview: "yesform-main.html",
     versions: [
       { label: "시안 01", href: "yesform-main.html" },
@@ -76,9 +78,10 @@ function render(q = '') {
     <article class="item">
       <a class="thumb" href="${p.preview}"><iframe src="${p.preview}" loading="lazy" tabindex="-1" title="${p.title} 미리보기"></iframe></a>
       <div class="info">
-        <div class="meta"><span class="chip">${p.category}</span><span class="chip gray">${p.date}</span></div>
+        <div class="meta"><span class="chip">${p.category}</span></div>
         <h2>${p.title}</h2>
         <p>${p.desc}</p>
+        <p class="dates">작성일 ${p.created} · 수정일 ${p.updated}</p>
         <div class="vers">${p.versions.map(v => `<a href="${v.href}">${v.label}</a>`).join('')}</div>
       </div>
     </article>`).join('');
