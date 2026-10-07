@@ -1,10 +1,10 @@
 /* =========================================================
    예스폼 메인 — 카드 렌더링 + 인터랙션
-   ★ 시안 03 전용 — 시안 02(../시안02/js/main.js)를 복사한 것. 여기만 고치면 됩니다.
-   · 예스폼 추천 콘텐츠 탭 (1번 · 처음 열리는 탭) 등 썸네일 탭 → CARDS (썸네일 카드, 1920에서 1행 7개)
-   · 프롬프트 탭 (2번) → PACKAGE_CARDS (패키지 카드 200×260, 카드 영역 1300 · 1줄 6개 × 4줄)
-   · 4초마다 다음 탭으로 자동 넘김 → TAB_AUTO_MS
-   · 예전 프롬프트 카드(카드01)는 ../_보관/카드01 로 옮김
+   시안 01-1 스크립트 (시안 01 복사본) — 프롬프트 카드만 디자인가이드 Figma 6056:497로 바꿈
+   시안 01은 ../js/main.js, 시안 02는 ../v02/js/main.js 에서 따로 수정
+   · 프롬프트 탭 (처음 열리는 탭) → PACKAGE_CARDS (패키지 카드, 2560에서 1행 9개)
+   · 예스폼 추천 콘텐츠 등 나머지 탭 → CARDS (썸네일 카드, 1920에서 1행 7개)
+   · 예전 프롬프트 카드(카드01)는 _보관/카드01 로 옮김
    카드 내용은 두 배열만 고치면 됩니다.
    ========================================================= */
 
@@ -40,11 +40,11 @@ const CARDS = [
 ];
 
 /**
- * 패키지 카드 (시안 03: 디자인가이드 Figma 6096:2691 Card Variant9) — 프롬프트 탭
+ * 패키지 카드 (테스트2 Figma 16:241) — 프롬프트 탭
  * no      : 원본 데이터 번호
  * industry: 업종 → 첫 번째 칩
- * field   : 업무분야 → 두 번째 칩 + 아이콘 (FIELD_ICON) + 아이콘 박스 색 (FIELD_TONE)
- * title / desc : 제목 1줄, 설명 최대 3줄 (넘치면 말줄임)
+ * field   : 업무분야 → 두 번째 칩 + 아이콘 (FIELD_ICON)
+ * title / desc : 제목 1줄, 설명 2줄 (넘치면 말줄임)
  */
 /* 업무분야 아이콘 — 예스폼 에디터 Figma 5490:40913 (업무분야 9종)
    업무분야 이름의 첫 단어(· 앞, 공백 제거)로 찾음 → '총무·경영지원·일반사무'와 '총무 · 경영 · 일반사무' 모두 '총무'로 연결 */
@@ -63,10 +63,18 @@ const FIELD_ICON_DEFAULT = '../assets/icons/cat-legal-24.svg';
 const fieldKey = (field) => field.replace(/\s/g, '').split('·')[0];
 const iconForField = (field) => FIELD_ICON[fieldKey(field)] || FIELD_ICON_DEFAULT;
 
-/* 업무분야 → 색 이름 (tokens.css --field-*-bg) — 시안 03 카드 아이콘 박스 배경에 씀 */
+/* 관심분야(업무분야) 칩 컬러 — 예스폼 에디터 Figma 5281:21380 컬러차트 9종
+   업무분야 첫 단어로 찾음 → CSS .tone--* 클래스 */
 const FIELD_TONE = {
-  'HR관리': 'hr', '회계': 'accounting', '현장': 'site', '법무': 'legal', '총무': 'admin',
-  'AI': 'ai', '생산': 'scm', '공공행정': 'public', '영업': 'sales',
+  'HR관리': 'hr',
+  '회계': 'accounting',
+  '현장': 'site',
+  '법무': 'legal',
+  '총무': 'admin',
+  'AI': 'ai',
+  '생산': 'scm',
+  '공공행정': 'public',
+  '영업': 'sales',
 };
 const toneForField = (field) => FIELD_TONE[fieldKey(field)] || 'hr';
 
@@ -75,12 +83,12 @@ const PACKAGE_CARDS = [
   { no: 2,   industry: '건설·시공',     field: '공공행정·생활·서비스',   title: '공사대금 지급확인서', desc: '시공 현장에서 행정 처리에 사용할 공사대금 지급확인서 양식을 만들어 주세요. 지급자·수취자, 지급 금액, 지급 일자, 사유를 빠짐없이 넣어주세요.' },
   { no: 130, industry: '건설·시공',     field: '회계·경리·재무 실무',    title: '공사 원가 계산서',   desc: '프로젝트의 투명한 예산 관리를 위한 공사 원가 계산서 만들어 주세요' },
   { no: 131, industry: '건설·시공',     field: '회계·경리·재무 실무',    title: '지출 결의서',       desc: '현장 비용 사용 승인을 받기 위한 지출 결의서 생성해 주세요' },
-  { no: 181, industry: '유통·무역·소매', field: '공공행정·생활·서비스',   title: '위임장(대리인)',     desc: '위임장(대리인) 표준 양식을 제작해 주세요.' },
+  { no: 181, industry: '유통·무역·소매', field: '공공행정·생활·서비스',   title: '위임장(대리인)',     desc: '위임장(대리인) 표준 양식을 제작해 주세요. B2B 거래에 실무에서 자주 쓰는 위임인·수임인 정보, 위임 사항, 위임 기간, 인감 확인란을 반영해주세요.' },
   { no: 187, industry: '유통·무역·소매', field: '공공행정·생활·서비스',   title: '통관 신고서',       desc: '해외 수입 물품 반입 시 세관에 제출할 통관 신고서 작성해 주세요' },
   { no: 188, industry: '유통·무역·소매', field: '공공행정·생활·서비스',   title: '수입신고 위임장',    desc: '관세사에게 수입 업무를 맡길 때 사용할 수입신고 위임장 만들어 주세요' },
   { no: 235, industry: '유통·무역·소매', field: '총무·경영지원·일반사무', title: '사무용품 관리대장',   desc: '부서 내 소모품 재고 현황을 실시간으로 추적할 사무용품 관리대장 제작해 주세요' },
   { no: 236, industry: '유통·무역·소매', field: '총무·경영지원·일반사무', title: '경조사 지원 신청서',  desc: '사내 임직원 복리후생 지급을 위한 경조사 지원 신청서 기안해 주세요' },
-  { no: 237, industry: '유통·무역·소매', field: '현장·공사·부동산 관리',  title: '상가 월세 계약서',    desc: '상가 월세 계약서를 만들어주세요.' },
+  { no: 237, industry: '유통·무역·소매', field: '현장·공사·부동산 관리',  title: '상가 월세 계약서',    desc: '상가 월세 계약서를 만들어주세요. 임대인·임차인 정보, 보증금, 월세, 임대 기간, 관리비, 특약사항 항목을 포함해주세요.' },
   // ---- 2차 추가 (번호 없는 항목은 no: null) ----
   { no: null, industry: '유통·무역·소매',   field: 'HR 관리·채용',           title: '연차 사용 신청서',     desc: '직원의 원활한 휴가 처리를 위한 연차 사용 신청서 제작해 주세요' },
   { no: null, industry: '유통·무역·소매',   field: 'HR 관리·채용',           title: '판매직 교육 일지',     desc: '신규 직원 대상 서비스 응대 교육 내역을 기록할 판매직 교육 일지 기안해 주세요' },
@@ -170,13 +178,11 @@ function renderCards() {
   grid.appendChild(frag);
 }
 
-/* 1줄 6개 기준 4번째 줄까지 꽉 채우려고 기존 카드 중 랜덤 3개를 한 번 더 넣음
-   (카드 20 + 중복 3 + 광고 1 = 24 = 6열 × 4줄) */
-const PACKAGE_FILL_DUPLICATES = 3;
+/* 4번째 줄까지 꽉 채우려고 기존 카드 중 랜덤 11개를 한 번 더 넣음
+   (카드 20 + 중복 11 + 광고 1 = 32 = 8열 × 4줄 · 7열일 때는 28칸만 보이고 나머지는 css에서 숨김) */
+const PACKAGE_FILL_DUPLICATES = 11;
 
-/* 패키지 탭 광고 카드 — 다른 카드와 같은 한 칸 크기, 항상 6번째 자리에 둠
-   카드 영역 1300 · 1줄 6개라 1번째 줄 오른쪽 끝. 창 크기가 바뀌어도 자리를 옮기지 않음 */
-const PACKAGE_AD_INDEX = 5;
+/* 패키지 탭 광고 카드 — 1번째 줄 맨 오른쪽에 고정 */
 const PACKAGE_AD = {
   img: '../assets/images/ad-hwp-docx.jpg',
   alt: 'HWP·DOCX 문서를 웹에서 열고, AI로 편집하세요',
@@ -203,14 +209,9 @@ function renderPackageCards() {
   // 같은 제목 카드가 바로 옆에 붙지 않게, 붙으면 다시 섞음
   let list = shuffle([...PACKAGE_CARDS, ...extra]);
   for (let t = 0; t < 50 && list.some((c, k) => k > 0 && c.title === list[k - 1].title); t += 1) list = shuffle(list);
-  list.forEach((data, i) => {
-    if (i === PACKAGE_AD_INDEX) frag.appendChild(createPackageAd());
+  list.forEach((data) => {
     const card = tpl.content.firstElementChild.cloneNode(true);
     if (data.no != null) card.dataset.no = data.no;
-
-    // 업무분야 아이콘(16) + 아이콘 박스 배경은 업무분야 연한 색 (Figma 6096:2691)
-    card.querySelector('.package-card__icon img').src = data.icon;
-    card.querySelector('.package-card__icon').style.background = `var(--field-${toneForField(data.field)}-bg)`;
 
     const link = card.querySelector('.package-card__link');
     link.textContent = data.title;
@@ -220,12 +221,12 @@ function renderPackageCards() {
 
     const chips = card.querySelector('.package-card__chips');
     chips.appendChild(el('span', 'package-chip', data.industry)); // 업종
-    chips.appendChild(el('span', 'package-chip', data.field));    // 업무분야 — 두 칩 모두 같은 파란 칩, 세로로 쌓음 (Figma 6096:2691)
-
+    chips.appendChild(el('span', 'package-chip', data.field));    // 업무분야 — 두 칩 모두 같은 회색 칩 (Figma 6056:497)
 
     frag.appendChild(card);
   });
 
+  frag.appendChild(createPackageAd());
   grid.appendChild(frag);
 }
 
@@ -240,6 +241,18 @@ function createPackageAd() {
   a.appendChild(img);
   li.appendChild(a);
   return li;
+}
+
+// 광고는 1번째 줄 맨 오른쪽 칸에 고정 (열 수가 바뀌면 다시 맞춤)
+function placePackageAd() {
+  const grid = document.getElementById('package-grid');
+  const ad = grid.querySelector('.package-ad');
+  if (!ad || !grid.offsetParent) return; // 탭이 숨겨져 있으면 열 수를 못 구함
+  const cols = getComputedStyle(grid).gridTemplateColumns.split(' ').length;
+  const others = [...grid.children].filter((c) => c !== ad);
+  const target = Math.min(cols - 1, others.length);
+  if (Array.prototype.indexOf.call(grid.children, ad) === target) return;
+  grid.insertBefore(ad, others[target] || null);
 }
 
 /* ---------- 인터랙션 ---------- */
@@ -260,59 +273,31 @@ function bindSearchMode() {
   });
 }
 
-/* 탭 자동 넘김 — 4초마다 다음 탭을 선택 (탭 위치는 그대로, 마지막 탭 다음은 1번 탭)
-   콘텐츠 영역에 마우스가 올라가 있는 동안은 멈춤
-   사용자가 탭을 누르면 그 탭부터 다시 4초를 세고 다음 탭으로 넘어감 */
-const TAB_AUTO_MS = 4000;
-const TAB_AUTO_PLAY = false; // ⏸ 자동 넘김 잠시 꺼 둠 — 다시 켜려면 true로 바꾸면 됨
-
 function bindMenuTab() {
-  const tabs = [...document.querySelectorAll('.menu-tab__item')];
+  const tabs = document.querySelectorAll('.menu-tab__item');
   const panels = document.querySelectorAll('.tab-panel');
-  const content = document.querySelector('.contents');
-  let current = tabs.find((t) => t.classList.contains('is-active')) || tabs[0];
-  let timer;
-  let hovering = false; // 콘텐츠 영역에 마우스가 올라가 있음
-  let focusing = false; // 키보드(Tab 키)로 콘텐츠 안의 카드에 들어가 있음
 
-  const scheduleNext = () => {
-    clearTimeout(timer);
-    if (!TAB_AUTO_PLAY || hovering || focusing || document.hidden) return; // 꺼 두었거나 멈춘 동안은 넘기지 않음
-    timer = setTimeout(() => activate(tabs[(tabs.indexOf(current) + 1) % tabs.length]), TAB_AUTO_MS);
-  };
-
-  function activate(tab) {
-    current = tab;
-    tabs.forEach((t) => {
-      const on = t === tab;
-      t.classList.toggle('is-active', on);
-      t.setAttribute('aria-selected', String(on));
-    });
+  const showPanel = (tab) => {
     const target = tab.getAttribute('aria-controls');
     panels.forEach((panel) => { panel.hidden = panel.id !== target; });
-    // 썸네일 패널은 탭 종류를 data 속성으로 남겨 둠 (탭별 데이터 연결 · 추천 콘텐츠 탭 간격 30)
+    // 썸네일 패널은 탭 종류를 data 속성으로 남겨 둠 (탭별 데이터 연결용)
     document.getElementById('panel-thumb').dataset.tab = tab.dataset.tab;
-    scheduleNext();
-  }
+    if (target === 'panel-package') placePackageAd();
+  };
 
-  tabs.forEach((tab) => tab.addEventListener('click', () => activate(tab)));
-
-  // 콘텐츠 영역에 마우스를 올리면 자동 넘김을 멈추고, 마우스가 나가면 지금 탭부터 다시 4초
-  content.addEventListener('mouseenter', () => { hovering = true; clearTimeout(timer); });
-  content.addEventListener('mouseleave', () => { hovering = false; scheduleNext(); });
-
-  // 키보드로 카드 사이를 이동하는 동안에도 멈춤 (마우스 클릭으로 생긴 포커스는 제외)
-  content.addEventListener('focusin', (e) => {
-    if (e.target.matches(':focus-visible')) { focusing = true; clearTimeout(timer); }
-  });
-  content.addEventListener('focusout', (e) => {
-    if (focusing && !content.contains(e.relatedTarget)) { focusing = false; scheduleNext(); }
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      tabs.forEach((t) => {
+        const on = t === tab;
+        t.classList.toggle('is-active', on);
+        t.setAttribute('aria-selected', String(on));
+      });
+      showPanel(tab);
+    });
   });
 
-  // 브라우저 탭을 다른 데로 옮겨 둔 동안은 멈췄다가, 돌아오면 지금 탭부터 다시 4초
-  document.addEventListener('visibilitychange', scheduleNext);
-
-  activate(current);
+  const active = document.querySelector('.menu-tab__item.is-active');
+  if (active) showPanel(active);
 }
 
 function bindFavorite() {
@@ -324,6 +309,9 @@ function bindFavorite() {
     btn.setAttribute('aria-label', on ? '찜 해제' : '찜하기');
   });
 }
+
+// 창 크기가 바뀌어 열 수가 달라져도 광고는 1번째 줄 맨 오른쪽 유지 (카드 크기 245×288 고정은 css)
+new ResizeObserver(placePackageAd).observe(document.getElementById('package-grid'));
 
 document.addEventListener('DOMContentLoaded', () => {
   renderPackageCards();
