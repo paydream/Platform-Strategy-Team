@@ -1,0 +1,20 @@
+name: 시안 덮어쓰기 검사
+on: [push, pull_request]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: 이미 올린 시안 파일이 바뀌거나 지워졌는지 확인
+        run: |
+          BASE="${{ github.event.before }}"
+          [ "${{ github.event_name }}" = "pull_request" ] && BASE="${{ github.event.pull_request.base.sha }}"
+          if [ -z "$BASE" ] || [ "$BASE" = "0000000000000000000000000000000000000000" ]; then exit 0; fi
+          # 새로 추가(A)만 허용. 수정(M)·삭제(D)·이름변경(R)은 아래 관리 파일만 허용
+          BAD=$(git diff --name-status "$BASE" HEAD | awk '$1!="A"' \
+            | grep -vE '\s(projects\.json|index\.html|admin/.*|README\.md|CLAUDE\.md|\.github/.*)$' || true)
+          if [ -n "$BAD" ]; then
+            echo "::error::이미 아카이브된 시안 파일이 바뀌었습니다. 새 폴더로 올려 주세요."
+            echo "$BAD"; exit 1
+          fi

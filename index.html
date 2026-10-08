@@ -53,72 +53,30 @@
   <p class="empty" id="empty">찾는 프로젝트가 없습니다.</p>
 </main>
 <script>
-// 새 프로젝트는 이 배열 맨 위에 추가하면 됩니다. 날짜는 YYYY.MM.DD 형식, 시안을 고치면 updated만 바꿔주세요.
-const projects = [
-  {
-    title: "예스폼 메인 화면 개선 (10.08 업데이트 2차)",
-    desc: "프롬프트 탭 카드 4종(시안 03)과 AI로 문서 생성하기 카드 시안 04~06을 추가한 업데이트본",
-    category: "웹 메인",
-    created: "2026.10.08",
-    updated: "2026.10.08",
-    preview: "yesform-main-1008-2/v01/index.html",
-    versions: [
-      { label: "시안 01", href: "yesform-main-1008-2/v01/index.html" },
-      { label: "시안 02", href: "yesform-main-1008-2/v02/index.html" },
-      { label: "시안 03", href: "yesform-main-1008-2/v03/index.html" },
-      { label: "시안 04", href: "yesform-main-1008-2/v04/index.html" },
-      { label: "시안 05", href: "yesform-main-1008-2/v05/index.html" },
-      { label: "시안 06", href: "yesform-main-1008-2/v06/index.html" }
-    ]
-  },
-  {
-    title: "예스폼 메인 화면 개선 (10.08 업데이트)",
-    desc: "AI로 초안 생성하기 탭 카드를 관심분야 색 카드로 바꾼 시안 01, 시안 02·03 업데이트본",
-    category: "웹 메인",
-    created: "2026.10.08",
-    updated: "2026.10.08",
-    preview: "yesform-main-1008/v01/index.html",
-    versions: [
-      { label: "시안 01", href: "yesform-main-1008/v01/index.html" },
-      { label: "시안 02", href: "yesform-main-1008/v02/index.html" },
-      { label: "시안 03", href: "yesform-main-1008/v03/index.html" }
-    ]
-  },
-  {
-    title: "예스폼 메인 화면 개선",
-    desc: "검색 + 추천 콘텐츠 카드 그리드 구성의 메인 페이지 시안",
-    category: "웹 메인",
-    created: "2026.10.07",
-    updated: "2026.10.07",
-    preview: "yesform-main.html",
-    versions: [
-      { label: "시안 01", href: "yesform-main.html" },
-      { label: "시안 01-1", href: "v01-1/index.html" },
-      { label: "시안 02", href: "v02/index.html" },
-      { label: "시안 03", href: "v03/index.html" }
-    ]
-  }
-];
+// 목록 데이터는 projects.json 에 있습니다. 관리자 페이지(/admin/)에서 고치세요.
+let projects = [];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const enc = h => encodeURI(h);
 
 const list = document.getElementById('list');
 function render(q = '') {
-  const rows = projects.filter(p => (p.title + p.desc + p.category).includes(q.trim()));
+  const rows = projects.filter(p => !p.hidden && (p.title + p.desc + p.category).includes(q.trim()));
   list.innerHTML = rows.map(p => `
     <article class="item">
-      <a class="thumb" href="${p.preview}"><iframe src="${p.preview}" loading="lazy" tabindex="-1" title="${p.title} 미리보기"></iframe></a>
+      <a class="thumb" href="${enc(p.preview)}"><iframe src="${enc(p.preview)}" loading="lazy" tabindex="-1" title="${esc(p.title)} 미리보기"></iframe></a>
       <div class="info">
-        <div class="meta"><span class="chip">${p.category}</span></div>
-        <h2>${p.title}</h2>
-        <p>${p.desc}</p>
-        <p class="dates">작성일 ${p.created} · 수정일 ${p.updated}</p>
-        <div class="vers">${p.versions.map(v => `<a href="${v.href}">${v.label}</a>`).join('')}</div>
+        <div class="meta"><span class="chip">${esc(p.category)}</span></div>
+        <h2>${esc(p.title)}</h2>
+        <p>${esc(p.desc)}</p>
+        <p class="dates">작성일 ${esc(p.created)} · 수정일 ${esc(p.updated)}</p>
+        <div class="vers">${p.versions.map(v => `<a href="${enc(v.href)}">${esc(v.label)}</a>`).join('')}</div>
       </div>
     </article>`).join('');
   document.getElementById('count').textContent = `${rows.length}개 프로젝트`;
   document.getElementById('empty').style.display = rows.length ? 'none' : 'block';
 }
 document.getElementById('q').addEventListener('input', e => render(e.target.value));
-render();
+fetch('projects.json', {cache:'no-store'}).then(r => r.json()).then(d => { projects = d.projects || []; render(); });
 </script>
 </body>
 </html>

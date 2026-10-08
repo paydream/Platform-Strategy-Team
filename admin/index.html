@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>아카이브 관리자</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--line:#e5e8ec;--text:#191f28;--sub:#6b7684;--accent:#2f6bff;--danger:#e5484d;--ok:#12a150}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Pretendard Variable",Pretendard,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;font-size:14px}
+  header{background:#191f28;color:#fff}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+  .top{display:flex;align-items:center;justify-content:space-between;height:56px}
+  .top a{color:#cfd4da;text-decoration:none;font-size:13px}
+  h1{font-size:22px;margin:28px 0 4px}
+  .lead{color:var(--sub);margin-bottom:20px}
+  section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:16px}
+  section h2{font-size:16px;margin-bottom:12px}
+  label{display:block;font-size:12px;color:var(--sub);margin:10px 0 4px}
+  input,textarea,select{width:100%;font:inherit;border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:#fff}
+  textarea{min-height:60px;resize:vertical}
+  .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+  button{font:inherit;border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 14px;cursor:pointer}
+  button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  button:disabled{opacity:.5;cursor:default}
+  .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px}
+  .status{font-size:13px;color:var(--sub)}
+  .status.ok{color:var(--ok)}.status.err{color:var(--danger)}
+  .proj{border:1px solid var(--line);border-radius:10px;padding:14px;margin-top:10px}
+  .proj.hidden{opacity:.55;background:#fafbfc}
+  .proj-head{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+  .proj-head strong{font-size:15px}
+  .tag{font-size:11px;border-radius:99px;padding:2px 8px;background:#eef3ff;color:var(--accent)}
+  .tag.gray{background:#f2f4f6;color:var(--sub)}
+  .proj details{margin-top:8px}
+  .proj summary{cursor:pointer;color:var(--sub);font-size:13px}
+  .vlist{display:grid;gap:6px;margin-top:6px}
+  .vrow{display:grid;grid-template-columns:140px 1fr auto;gap:6px}
+  .note{font-size:12px;color:var(--sub);margin-top:6px}
+  .warn{background:#fff7e6;border:1px solid #ffe2a8;border-radius:8px;padding:10px 12px;font-size:13px;margin-top:10px}
+  .log{font-family:ui-monospace,monospace;font-size:12px;background:#f6f8fa;border-radius:8px;padding:10px;max-height:180px;overflow:auto;white-space:pre-wrap;margin-top:10px;display:none}
+  @media (max-width:640px){.vrow{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="wrap top"><strong>아카이브 관리자</strong><a href="../">← 아카이브 보기</a></div></header>
+<main class="wrap">
+  <h1>디자인 시안 아카이브 관리</h1>
+  <p class="lead">새 시안은 항상 새 폴더로 올라가고, 이미 올린 시안 파일은 고치거나 지우지 않습니다. 목록에서 빼고 싶으면 "숨기기"를 쓰세요.</p>
+
+  <section>
+    <h2>1. GitHub 연결</h2>
+    <p class="note">저장 버튼을 누르면 GitHub 저장소에 바로 커밋되고, Vercel이 자동으로 배포합니다(1~2분). 토큰은 이 브라우저에만 저장됩니다.</p>
+    <div class="row">
+      <div><label>저장소</label><input id="repo" value="paydream/Platform-Strategy-Team"></div>
+      <div><label>브랜치</label><input id="branch" value="main"></div>
+    </div>
+    <label>GitHub 토큰 (Fine-grained, 이 저장소의 Contents: Read and write 권한)</label>
+    <input id="token" type="password" placeholder="github_pat_...">
+    <div class="bar">
+      <button class="primary" id="connect">연결 확인</button>
+      <button id="forget">토큰 지우기</button>
+      <span class="status" id="connStatus"></span>
+    </div>
+  </section>
+
+  <section>
+    <h2>2. 새 시안 올리기</h2>
+    <p class="note">zip 파일을 고르면 안에 있는 <code>index.html</code>들을 찾아 시안 버튼을 자동으로 만듭니다. 올린 파일은 <code>archive/날짜-시간-이름/</code> 새 폴더에 들어갑니다.</p>
+    <label>zip 파일</label>
+    <input id="zip" type="file" accept=".zip">
+    <div class="row">
+      <div><label>제목</label><input id="nTitle" placeholder="예: 예스폼 메인 화면 개선 (10.09)"></div>
+      <div><label>카테고리</label><input id="nCat" value="웹 메인" list="cats"></div>
+      <div><label>작성일</label><input id="nCreated" placeholder="YYYY.MM.DD"></div>
+      <div><label>폴더 이름(영문)</label><input id="nSlug" placeholder="yesform-main"></div>
+    </div>
+    <label>설명</label><textarea id="nDesc" placeholder="이번 시안에서 바뀐 점"></textarea>
+    <label>시안 버튼 (이름 · 경로)</label>
+    <div class="vlist" id="nVers"><p class="note">zip을 고르면 여기에 나옵니다.</p></div>
+    <div class="bar">
+      <button class="primary" id="upload" disabled>올리고 아카이브에 추가</button>
+      <span class="status" id="upStatus"></span>
+    </div>
+    <div class="log" id="upLog"></div>
+  </section>
+
+  <section>
+    <h2>3. 아카이브 목록 관리</h2>
+    <p class="note">제목·설명·날짜·순서·공개 여부만 바꿉니다. 내용을 고치면 수정일이 오늘로 바뀝니다. 시안 파일 자체는 건드리지 않습니다.</p>
+    <div id="list"><p class="note">불러오는 중…</p></div>
+    <div class="bar">
+      <button class="primary" id="saveList" disabled>목록 저장</button>
+      <span class="status" id="saveStatus"></span>
+    </div>
+  </section>
+  <datalist id="cats"></datalist>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const today = () => { const d = new Date(); return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`; };
+const store = { get(k){ try { return localStorage.getItem(k) || ''; } catch { return ''; } }, set(k,v){ try { localStorage.setItem(k,v); } catch {} }, del(k){ try { localStorage.removeItem(k); } catch {} } };
+
+let data = { projects: [] };
+let dataSha = null;
+let dirty = false;
+let pending = null; // { files: [{path, bytes}], versions: [] }
+
+$('token').value = store.get('gh_token');
+$('nCreated').value = today();
+
+/* ---------- GitHub API ---------- */
+const cfg = () => ({ repo: $('repo').value.trim(), branch: $('branch').value.trim() || 'main', token: $('token').value.trim() });
+async function gh(path, opts = {}) {
+  const { token } = cfg();
+  const res = await fetch(`https://api.github.com${path}`, {
+    ...opts,
+    headers: { 'Accept': 'application/vnd.github+json', 'Authorization': `Bearer ${token}`, 'X-GitHub-Api-Version': '2022-11-28', ...(opts.body ? {'Content-Type':'application/json'} : {}) }
+  });
+  if (res.status === 404 && opts.allow404) return null;
+  if (!res.ok) { const t = await res.text(); throw new Error(`GitHub ${res.status}: ${t.slice(0,200)}`); }
+  return res.status === 204 ? null : res.json();
+}
+const b64 = bytes => { let s = ''; const n = 0x8000; for (let i = 0; i < bytes.length; i += n) s += String.fromCharCode.apply(null, bytes.subarray(i, i + n)); return btoa(s); };
+const utf8b64 = str => b64(new TextEncoder().encode(str));
+const decodeB64Utf8 = s => new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\n/g,'')), c => c.charCodeAt(0)));
+
+async function loadData() {
+  const { repo, branch, token } = cfg();
+  if (token) {
+    const f = await gh(`/repos/${repo}/contents/projects.json?ref=${branch}`);
+    dataSha = f.sha; data = JSON.parse(decodeB64Utf8(f.content));
+  } else {
+    data = await fetch('../projects.json', {cache:'no-store'}).then(r => r.json());
+  }
+  dirty = false; renderList();
+}
+
+// 한 번의 커밋으로 여러 파일을 올림. 이미 있는 파일 경로는 절대 덮어쓰지 않음(projects.json만 예외).
+async function commitFiles(files, message, log = () => {}) {
+  const { repo, branch } = cfg();
+  const ref = await gh(`/repos/${repo}/git/ref/heads/${branch}`);
+  const head = await gh(`/repos/${repo}/git/commits/${ref.object.sha}`);
+  const tree = [];
+  let i = 0;
+  for (const f of files) {
+    i++;
+    const blob = await gh(`/repos/${repo}/git/blobs`, { method:'POST', body: JSON.stringify({ content: f.b64, encoding:'base64' }) });
+    tree.push({ path: f.path, mode:'100644', type:'blob', sha: blob.sha });
+    if (i % 10 === 0 || i === files.length) log(`파일 올리는 중 ${i}/${files.length}`);
+  }
+  const newTree = await gh(`/repos/${repo}/git/trees`, { method:'POST', body: JSON.stringify({ base_tree: head.tree.sha, tree }) });
+  const commit = await gh(`/repos/${repo}/git/commits`, { method:'POST', body: JSON.stringify({ message, tree: newTree.sha, parents: [ref.object.sha] }) });
+  await gh(`/repos/${repo}/git/refs/heads/${branch}`, { method:'PATCH', body: JSON.stringify({ sha: commit.sha }) });
+  return commit.sha;
+}
+
+/* ---------- 연결 ---------- */
+$('connect').onclick = async () => {
+  const s = $('connStatus'); s.className = 'status'; s.textContent = '확인 중…';
+  try {
+    const { repo } = cfg();
+    const r = await gh(`/repos/${repo}`);
+    if (!r.permissions || !r.permissions.push) throw new Error('이 토큰에는 쓰기 권한이 없습니다.');
+    store.set('gh_token', cfg().token);
+    await loadData();
+    s.className = 'status ok'; s.textContent = `연결됨 · ${r.full_name}`;
+    $('saveList').disabled = false; updateUploadBtn();
+  } catch (e) { s.className = 'status err'; s.textContent = e.message; }
+};
+$('forget').onclick = () => { store.del('gh_token'); $('token').value = ''; $('connStatus').textContent = '토큰을 지웠습니다.'; $('saveList').disabled = true; updateUploadBtn(); };
+
+/* ---------- 목록 관리 ---------- */
+function renderList() {
+  const cats = [...new Set(data.projects.map(p => p.category).filter(Boolean))];
+  $('cats').innerHTML = cats.map(c => `<option value="${esc(c)}">`).join('');
+  $('list').innerHTML = data.projects.map((p, i) => `
+    <div class="proj ${p.hidden ? 'hidden' : ''}" data-i="${i}">
+      <div class="proj-head">
+        <div><strong>${esc(p.title)}</strong> <span class="tag">${esc(p.category)}</span> ${p.hidden ? '<span class="tag gray">숨김</span>' : ''}</div>
+        <div class="bar" style="margin:0">
+          <button data-act="up" ${i===0?'disabled':''}>▲</button>
+          <button data-act="down" ${i===data.projects.length-1?'disabled':''}>▼</button>
+          <button data-act="hide">${p.hidden ? '보이기' : '숨기기'}</button>
+          <a href="../${encodeURI(p.preview)}" target="_blank"><button>열기</button></a>
+        </div>
+      </div>
+      <details>
+        <summary>내용 고치기</summary>
+        <div class="row">
+          <div><label>제목</label><input data-f="title" value="${esc(p.title)}"></div>
+          <div><label>카테고리</label><input data-f="category" value="${esc(p.category)}" list="cats"></div>
+          <div><label>작성일</label><input data-f="created" value="${esc(p.created)}"></div>
+          <div><label>수정일</label><input data-f="updated" value="${esc(p.updated)}"></div>
+        </div>
+        <label>설명</label><textarea data-f="desc">${esc(p.desc)}</textarea>
+        <label>시안 버튼 이름</label>
+        <div class="vlist">${p.versions.map((v, j) => `<div class="vrow"><input data-v="${j}" value="${esc(v.label)}"><input value="${esc(v.href)}" disabled></div>`).join('')}</div>
+        <p class="note">폴더: ${esc(p.folder || '-')} · 경로는 바꿀 수 없습니다(덮어쓰기 방지).</p>
+      </details>
+    </div>`).join('') || '<p class="note">아직 항목이 없습니다.</p>';
+}
+function markDirty(i) { data.projects[i].updated = today(); dirty = true; $('saveStatus').className = 'status'; $('saveStatus').textContent = '저장 안 된 변경이 있습니다.'; }
+$('list').addEventListener('click', e => {
+  const b = e.target.closest('button[data-act]'); if (!b) return;
+  const i = +b.closest('.proj').dataset.i, P = data.projects;
+  if (b.dataset.act === 'up') [P[i-1], P[i]] = [P[i], P[i-1]];
+  if (b.dataset.act === 'down') [P[i+1], P[i]] = [P[i], P[i+1]];
+  if (b.dataset.act === 'hide') P[i].hidden = !P[i].hidden;
+  dirty = true; $('saveStatus').className = 'status'; $('saveStatus').textContent = '저장 안 된 변경이 있습니다.';
+  renderList();
+});
+$('list').addEventListener('input', e => {
+  const box = e.target.closest('.proj'); if (!box) return;
+  const i = +box.dataset.i, p = data.projects[i];
+  if (e.target.dataset.f) { p[e.target.dataset.f] = e.target.value; if (e.target.dataset.f !== 'updated') { markDirty(i); box.querySelector('[data-f="updated"]').value = p.updated; } else dirty = true; }
+  if (e.target.dataset.v !== undefined) { p.versions[+e.target.dataset.v].label = e.target.value; markDirty(i); box.querySelector('[data-f="updated"]').value = p.updated; }
+});
+$('saveList').onclick = async () => {
+  const s = $('saveStatus'); s.className = 'status'; s.textContent = '저장 중…';
+  try {
+    const { repo, branch } = cfg();
+    // 다른 사람이 그사이 저장했는지 확인
+    const cur = await gh(`/repos/${repo}/contents/projects.json?ref=${branch}`);
+    if (cur.sha !== dataSha) throw new Error('그사이 다른 곳에서 목록이 바뀌었습니다. 새로고침 후 다시 해주세요.');
+    const r = await gh(`/repos/${repo}/contents/projects.json`, { method:'PUT', body: JSON.stringify({ message:'아카이브 목록 수정 (관리자 페이지)', content: utf8b64(JSON.stringify(data, null, 2) + '\n'), sha: dataSha, branch }) });
+    dataSha = r.content.sha; dirty = false;
+    s.className = 'status ok'; s.textContent = '저장했습니다. 1~2분 뒤 사이트에 반영됩니다.';
+  } catch (e) { s.className = 'status err'; s.textContent = e.message; }
+};
+window.addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
+
+/* ---------- 새 시안 올리기 ---------- */
+const decodeName = bytes => { try { return new TextDecoder('utf-8', {fatal:true}).decode(bytes); } catch { return new TextDecoder('euc-kr').decode(bytes); } };
+function renderPending() {
+  $('nVers').innerHTML = pending.versions.map((v, j) => `<div class="vrow"><input data-nv="${j}" value="${esc(v.label)}"><input value="${esc(v.href)}" disabled><button data-del="${j}">빼기</button></div>`).join('') || '<p class="note">index.html을 찾지 못했습니다.</p>';
+}
+function updateUploadBtn() { $('upload').disabled = !(pending && cfg().token && $('saveList').disabled === false); }
+
+$('zip').onchange = async () => {
+  const file = $('zip').files[0]; if (!file) return;
+  const s = $('upStatus'); s.className = 'status'; s.textContent = 'zip 읽는 중…';
+  try {
+    const zip = await JSZip.loadAsync(file, { decodeFileName: decodeName });
+    let entries = Object.values(zip.files).filter(f => !f.dir)
+      .map(f => ({ f, name: f.name.normalize('NFC') }))
+      .filter(x => !x.name.startsWith('__MACOSX/') && !x.name.split('/').some(p => p.startsWith('.')) && !x.name.includes('..'));
+    // 맨 위 폴더가 하나뿐이면 벗겨냄
+    const tops = new Set(entries.map(x => x.name.split('/')[0]));
+    if (tops.size === 1 && entries.every(x => x.name.includes('/'))) entries = entries.map(x => ({ ...x, name: x.name.slice(x.name.indexOf('/') + 1) }));
+    const files = [];
+    for (const x of entries) files.push({ path: x.name, bytes: await x.f.async('uint8array') });
+    const htmls = files.map(f => f.path).filter(p => /(^|\/)index\.html$/i.test(p) && !p.startsWith('_보관/') && !/(^|\/)_/.test(p)).sort();
+    const subs = htmls.filter(p => p.includes('/'));
+    const versions = (subs.length ? subs : htmls).map(p => ({ label: p.includes('/') ? p.split('/').slice(-2,-1)[0] : '시안 01', href: p }));
+    const rootIndex = htmls.includes('index.html') ? 'index.html' : (versions[0] && versions[0].href);
+    pending = { files, versions, preview: rootIndex };
+    renderPending();
+    if (!$('nSlug').value) $('nSlug').value = (file.name.replace(/\.zip$/i,'').normalize('NFC').replace(/[^a-z0-9-]+/gi,'-').replace(/^-+|-+$/g,'').toLowerCase()) || 'design';
+    s.textContent = `파일 ${files.length}개 · 시안 ${versions.length}개를 찾았습니다.`;
+    updateUploadBtn();
+  } catch (e) { s.className = 'status err'; s.textContent = 'zip을 읽지 못했습니다: ' + e.message; pending = null; updateUploadBtn(); }
+};
+$('nVers').addEventListener('input', e => { if (e.target.dataset.nv !== undefined) pending.versions[+e.target.dataset.nv].label = e.target.value; });
+$('nVers').addEventListener('click', e => { const b = e.target.closest('button[data-del]'); if (!b) return; pending.versions.splice(+b.dataset.del, 1); renderPending(); });
+
+$('upload').onclick = async () => {
+  const s = $('upStatus'), log = $('upLog');
+  const title = $('nTitle').value.trim();
+  if (!title) { s.className = 'status err'; s.textContent = '제목을 넣어 주세요.'; return; }
+  if (!pending.versions.length) { s.className = 'status err'; s.textContent = '시안 버튼이 하나도 없습니다.'; return; }
+  const slug = ($('nSlug').value.trim().toLowerCase().replace(/[^a-z0-9-]+/g,'-').replace(/^-+|-+$/g,'')) || 'design';
+  const d = new Date(), stamp = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}-${String(d.getHours()).padStart(2,'0')}${String(d.getMinutes()).padStart(2,'0')}${String(d.getSeconds()).padStart(2,'0')}`;
+  const folder = `archive/${stamp}-${slug}`;
+  $('upload').disabled = true; log.style.display = 'block'; log.textContent = '';
+  const say = m => { log.textContent += m + '\n'; log.scrollTop = 1e9; };
+  try {
+    const { repo, branch } = cfg();
+    // 덮어쓰기 방지: 같은 폴더가 이미 있으면 중단
+    const exists = await gh(`/repos/${repo}/contents/${encodeURIComponent(folder).replace(/%2F/g,'/')}?ref=${branch}`, { allow404: true });
+    if (exists) throw new Error(`${folder} 폴더가 이미 있습니다. 덮어쓰지 않고 멈췄습니다.`);
+    const cur = await gh(`/repos/${repo}/contents/projects.json?ref=${branch}`);
+    const latest = JSON.parse(decodeB64Utf8(cur.content));
+    const id = `${stamp}-${slug}`;
+    if (latest.projects.some(p => p.id === id)) throw new Error('같은 ID 항목이 이미 있습니다.');
+    const entry = {
+      id, title, desc: $('nDesc').value.trim(), category: $('nCat').value.trim() || '기타',
+      created: $('nCreated').value.trim() || today(), updated: today(), hidden: false, folder,
+      preview: `${folder}/${pending.preview}`,
+      versions: pending.versions.map(v => ({ label: v.label, href: `${folder}/${v.href}` }))
+    };
+    latest.projects.unshift(entry);
+    const files = pending.files.map(f => ({ path: `${folder}/${f.path}`, b64: b64(f.bytes) }));
+    files.push({ path: 'projects.json', b64: utf8b64(JSON.stringify(latest, null, 2) + '\n') });
+    say(`새 폴더: ${folder}`);
+    await commitFiles(files, `아카이브 추가: ${title} (관리자 페이지)`, say);
+    say('커밋 완료. 1~2분 뒤 사이트에 반영됩니다.');
+    s.className = 'status ok'; s.textContent = '올렸습니다.';
+    pending = null; $('zip').value = ''; $('nTitle').value = ''; $('nDesc').value = ''; $('nSlug').value = ''; $('nVers').innerHTML = '';
+    await loadData();
+  } catch (e) { s.className = 'status err'; s.textContent = e.message; say('실패: ' + e.message); }
+  updateUploadBtn();
+};
+
+loadData().catch(() => { $('list').innerHTML = '<p class="note">목록을 불러오지 못했습니다.</p>'; });
+</script>
+</body>
+</html>
