@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>예스폼 메인 | 시안 03</title>
+
+  <!-- Pretendard 웹폰트 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- =====================================================
+       시안 전환 바 (검토용 · 실제 서비스 화면에는 없음)
+       시안 01 = ../v01/index.html / 시안 02 = ../v02/index.html / 시안 03 = 이 파일 / 예전 시안 01 = ../시안01_예전.html (숨김)
+       시안 03은 시안 02를 복사한 것 — 이 폴더의 css·js만 고치면 다른 시안에는 영향 없음
+       ===================================================== -->
+  <nav class="version-switch" aria-label="시안 선택">
+    <!-- 예전 시안 01(../시안01_예전.html)은 전환 바에서 숨김 — 파일은 그대로 있음
+    <a href="../시안01_예전.html" class="version-switch__btn">시안 01(예전)</a> -->
+    <a href="../v01/index.html" class="version-switch__btn">시안 01</a> <!-- 새 시안 01 = 시안01-1 폴더 -->
+    <a href="../v02/index.html" class="version-switch__btn">시안 02</a>
+    <!-- 시안 03(이 파일)은 전환 바에서 숨김 — 다시 보이게 하려면 각 파일 전환 바의 주석을 풀기
+    <a href="index.html" class="version-switch__btn is-active" aria-current="page">시안 03</a> -->
+  </nav>
+
+  <!-- =====================================================
+       GNB (header-main · Figma 5594:5407)
+       ===================================================== -->
+  <header class="gnb">
+    <div class="gnb__inner">
+      <div class="gnb__left">
+        <h1 class="gnb__logo">
+          <a href="#" aria-label="예스폼 홈">
+            <img src="../assets/icons/logo-yesform.svg" width="78" height="34" alt="예스폼" />
+          </a>
+        </h1>
+        <button type="button" class="gnb__category">
+          <img src="../assets/icons/ic-menu.svg" width="24" height="24" alt="" />
+          <span>카테고리</span>
+        </button>
+      </div>
+
+      <nav class="gnb__util" aria-label="회원 메뉴">
+        <a href="#" class="gnb__util-item">
+          <img src="../assets/icons/ic-join.svg" width="24" height="24" alt="" />
+          <span>회원가입</span>
+        </a>
+        <a href="#" class="gnb__util-item">
+          <img src="../assets/icons/ic-charge.svg" width="24" height="24" alt="" />
+          <span>이용요금</span>
+        </a>
+        <a href="#" class="gnb__util-item">
+          <img src="../assets/icons/ic-call.svg" width="24" height="24" alt="" />
+          <span>고객센터</span>
+        </a>
+        <a href="#" class="gnb__util-item">
+          <img src="../assets/icons/ic-login.svg" width="24" height="24" alt="" />
+          <span>로그인</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- =====================================================
+         검색 영역 (Frame 372 · Figma 5594:5408)
+         ===================================================== -->
+    <section class="search" aria-labelledby="search-title">
+      <h2 id="search-title" class="search__title">오늘 찾고 있는 서식은 무엇인가요?</h2>
+
+      <div class="search__body">
+        <div class="search__box">
+          <div class="search__mode" role="group" aria-label="검색 방식">
+            <button type="button" class="search__mode-btn is-active" data-mode="doc" aria-pressed="true">문서 검색</button>
+            <button type="button" class="search__mode-btn" data-mode="ai" aria-pressed="false">예스폼 AI</button>
+          </div>
+
+          <form class="search__form" role="search" action="#" onsubmit="return false;">
+            <label for="search-input" class="sr-only">서식 검색어</label>
+            <input id="search-input" class="search__input" type="search" placeholder="내용증명" autocomplete="off" />
+            <button type="submit" class="search__submit" aria-label="검색">
+              <img src="../assets/icons/ic-search.svg" width="30" height="30" alt="" />
+            </button>
+          </form>
+        </div>
+
+        <a href="#" class="search__hint">
+          <span class="search__hint-text">2026 연차관리 엑셀 프로그램! 연차계산기부터 연차촉진서식 까지</span>
+          <img src="../assets/images/sparkle.png" width="16" height="16" alt="" />
+        </a>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         메뉴 탭 (menu tab · Figma 5594:5538)
+         ===================================================== -->
+    <!-- 4초마다 다음 탭이 자동으로 선택됨 (탭 위치는 고정) -->
+    <nav class="menu-tab" aria-label="추천 카테고리">
+      <ul class="menu-tab__list" role="tablist">
+        <li role="presentation">
+          <button type="button" class="menu-tab__item is-active" role="tab" data-tab="prompt" aria-controls="panel-package" aria-selected="true">
+            <img src="../assets/icons/tab-prompt.svg" width="26" height="26" alt="" class="menu-tab__icon" />
+            <span>AI로 초안 생성하기</span>
+          </button>
+        </li>
+        <li role="presentation">
+          <button type="button" class="menu-tab__item" role="tab" data-tab="recommend" aria-controls="panel-thumb" aria-selected="false">
+            <img src="../assets/icons/tab-recommend.svg" width="26" height="25" alt="" class="menu-tab__icon" />
+            <span>예스폼 추천 콘텐츠</span>
+          </button>
+        </li>
+        <li role="presentation">
+          <button type="button" class="menu-tab__item" role="tab" data-tab="calendar" aria-controls="panel-thumb" aria-selected="false">
+            <img src="../assets/icons/tab-calendar.svg" width="25" height="25" alt="" class="menu-tab__icon" />
+            <span>2026년 달력</span>
+          </button>
+        </li>
+        <li role="presentation">
+          <button type="button" class="menu-tab__item" role="tab" data-tab="goal" aria-controls="panel-thumb" aria-selected="false">
+            <img src="../assets/icons/tab-target.svg" width="25" height="25" alt="" class="menu-tab__icon" />
+            <span>2026 목표관리</span>
+          </button>
+        </li>
+        <li role="presentation">
+          <button type="button" class="menu-tab__item" role="tab" data-tab="excel" aria-controls="panel-thumb" aria-selected="false">
+            <img src="../assets/icons/tab-excel.svg" width="25" height="25" alt="" class="menu-tab__icon" />
+            <span>실무활용엑셀</span>
+          </button>
+        </li>
+        <li role="presentation">
+          <button type="button" class="menu-tab__item" role="tab" data-tab="ppt" aria-controls="panel-thumb" aria-selected="false">
+            <img src="../assets/icons/tab-ppt.svg" width="25" height="25" alt="" class="menu-tab__icon" />
+            <span>12월 신상 PPT 모음</span>
+          </button>
+        </li>
+        <li role="presentation">
+          <button type="button" class="menu-tab__add" aria-label="카테고리 더보기">
+            <img src="../assets/icons/ic-add.svg" width="24" height="24" alt="" />
+          </button>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- =====================================================
+         콘텐츠 영역 — 선택한 탭에 따라 패널 전환
+         · 프롬프트 (1번 · 처음 열리는 탭) → 패키지 카드 (디자인가이드 Figma 6096:2691, 카드 영역 1300 · 1줄 6개 × 4줄)
+         · 예스폼 추천 콘텐츠 (2번) 등 썸네일 탭 → 썸네일 카드 (메인 Figma 5594:5620)
+         · 4초마다 다음 탭으로 자동으로 넘어감 (js/main.js TAB_AUTO_MS)
+         · 예전 프롬프트 카드(카드01)는 ../_보관/카드01 에 보관
+         카드 데이터는 js/main.js 의 PACKAGE_CARDS / CARDS 배열에서 렌더링
+         ===================================================== -->
+    <section class="contents">
+      <div class="tab-panel" id="panel-package" role="tabpanel" aria-label="AI로 초안 생성하기">
+        <ul class="package-grid" id="package-grid"></ul>
+        <div class="more-wrap">
+          <button type="button" class="btn-neutral">프롬프트 더보기</button>
+        </div>
+      </div>
+      <div class="tab-panel" id="panel-thumb" role="tabpanel" aria-label="서식 목록" data-tab="recommend" hidden>
+        <ul class="card-grid" id="card-grid"></ul>
+        <div class="more-wrap">
+          <button type="button" class="btn-neutral">콘텐츠 더보기</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 하단 섹션: 놓치면 후회할 콘텐츠 (전달받은 화면 캡처 이미지 그대로) -->
+    <section class="promo-section" aria-label="놓치면 후회할 콘텐츠">
+      <img src="../assets/images/section-recommend.png" width="1405" height="710" alt="놓치면 후회할 콘텐츠! 회원님만을 위해 딱 골라왔어요." loading="lazy" />
+    </section>
+  </main>
+
+  <!-- 카드 템플릿 -->
+  <template id="card-template">
+    <li class="card">
+      <a href="#" class="card__link">
+        <div class="card__img-area">
+          <div class="card__thumb">
+            <img src="" alt="" loading="lazy" />
+          </div>
+        </div>
+        <div class="card__txt-area">
+          <p class="card__title"></p>
+          <div class="card__meta">
+            <div class="card__badges"></div>
+            <span class="card__views">
+              <img src="../assets/icons/ic-visibility.svg" width="16" height="16" alt="" />
+              <span class="card__views-count"></span>
+            </span>
+          </div>
+        </div>
+      </a>
+      <button type="button" class="card__fav" aria-pressed="false" aria-label="찜하기">
+        <img src="../assets/icons/ic-favorite.svg" width="56" height="56" alt="" />
+      </button>
+    </li>
+  </template>
+
+  <!-- 패키지 카드 템플릿 — 시안 03 (디자인가이드 Figma 6096:2691 Card Variant9 · 높이 260)
+       업무분야 아이콘(32 박스 · 16 아이콘) · 제목 16 · 설명 13 최대 3줄 · 칩 2개 세로로 쌓아 카드 아래쪽에 -->
+  <template id="package-card-template">
+    <li class="package-card">
+      <span class="package-card__icon"><img src="" width="16" height="16" alt="" /></span>
+      <div class="package-card__content">
+        <div class="package-card__text">
+          <p class="package-card__title"><a href="#" class="package-card__link"></a></p>
+          <p class="package-card__desc"></p>
+        </div>
+        <div class="package-card__chips"></div>
+      </div>
+    </li>
+  </template>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
