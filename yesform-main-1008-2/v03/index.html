@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>예스폼 메인 | 시안 03</title>
+
+  <!-- Pretendard 웹폰트 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- =====================================================
+       시안 전환 바 (검토용 · 실제 서비스 화면에는 없음)
+       시안 01 = ../v01/index.html (맨 위 index.html을 열면 여기로 감) / 시안 02 = ../v02/index.html / 시안 03 = 이 파일 / 예전 시안 01 = ../시안01_예전.html (숨김)
+       ===================================================== -->
+  <nav class="version-switch" aria-label="시안 선택">
+    <!-- 예전 시안 01(../시안01_예전.html)은 전환 바에서 숨김 — 파일은 그대로 있음 -->
+    <a href="../v01/index.html" class="version-switch__btn">시안 01</a>
+    <a href="../v02/index.html" class="version-switch__btn">시안 02</a>
+    <a href="index.html" class="version-switch__btn is-active" aria-current="page">시안 03</a>
+    <a href="../v04/index.html" class="version-switch__btn">시안 04</a>
+    <a href="../v05/index.html" class="version-switch__btn">시안 05</a>
+    <a href="../v06/index.html" class="version-switch__btn">시안 06</a>
+  </nav>
+
+  <!-- =====================================================
+       GNB (header-main · Figma 5594:5407)
+       ===================================================== -->
+  <header class="gnb">
+    <div class="gnb__inner">
+      <div class="gnb__left">
+        <h1 class="gnb__logo">
+          <a href="#" aria-label="예스폼 홈">
+            <img src="../assets/icons/logo-yesform.svg" width="78" height="34" alt="예스폼" />
+          </a>
+        </h1>
+        <button type="button" class="gnb__category">
+          <img src="../assets/icons/ic-menu.svg" width="24" height="24" alt="" />
+          <span>카테고리</span>
+        </button>
+      </div>
+
+      <nav class="gnb__util" aria-label="회원 메뉴">
+        <a href="#" class="gnb__util-item">
+          <img src="../assets/icons/ic-join.svg" width="24" height="24" alt="" />
+          <span>회원가입</span>
+        </a>
+        <a href="#" class="gnb__util-item">
+          <img src="../assets/icons/ic-charge.svg" width="24" height="24" alt="" />
+          <span>이용요금</span>
+        </a>
+        <a href="#" class="gnb__util-item">
+          <img src="../assets/icons/ic-call.svg" width="24" height="24" alt="" />
+          <span>고객센터</span>
+        </a>
+        <a href="#" class="gnb__util-item">
+          <img src="../assets/icons/ic-login.svg" width="24" height="24" alt="" />
+          <span>로그인</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- =====================================================
+         검색 영역 (Frame 372 · Figma 5594:5408)
+         ===================================================== -->
+    <section class="search" aria-labelledby="search-title">
+      <h2 id="search-title" class="search__title">오늘 찾고 있는 서식은 무엇인가요?</h2>
+
+      <div class="search__body">
+        <div class="search__box">
+          <div class="search__mode" role="group" aria-label="검색 방식">
+            <button type="button" class="search__mode-btn is-active" data-mode="doc" aria-pressed="true">문서 검색</button>
+            <button type="button" class="search__mode-btn" data-mode="ai" aria-pressed="false">예스폼 AI</button>
+          </div>
+
+          <form class="search__form" role="search" action="#" onsubmit="return false;">
+            <label for="search-input" class="sr-only">서식 검색어</label>
+            <input id="search-input" class="search__input" type="search" placeholder="내용증명" autocomplete="off" />
+            <button type="submit" class="search__submit" aria-label="검색">
+              <img src="../assets/icons/ic-search.svg" width="30" height="30" alt="" />
+            </button>
+          </form>
+        </div>
+
+        <a href="#" class="search__hint">
+          <span class="search__hint-text">2026 연차관리 엑셀 프로그램! 연차계산기부터 연차촉진서식 까지</span>
+          <img src="../assets/images/sparkle.png" width="16" height="16" alt="" />
+        </a>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         메뉴 탭 (menu tab · Figma 5594:5538)
+         ===================================================== -->
+    <nav class="menu-tab" aria-label="추천 카테고리">
+      <ul class="menu-tab__list" role="tablist">
+        <li role="presentation">
+          <button type="button" class="menu-tab__item is-active" role="tab" data-tab="prompt" aria-controls="panel-package" aria-selected="true">
+            <img src="../assets/icons/tab-prompt.svg" width="26" height="26" alt="" class="menu-tab__icon" />
+            <span>AI로 초안 생성하기</span>
+          </button>
+        </li>
+        <li role="presentation">
+          <button type="button" class="menu-tab__item" role="tab" data-tab="recommend" aria-controls="panel-thumb" aria-selected="false">
+            <img src="../assets/icons/tab-recommend.svg" width="26" height="25" alt="" class="menu-tab__icon" />
+            <span>예스폼 추천 콘텐츠</span>
+          </button>
+        </li>
+        <li role="presentation">
+          <button type="button" class="menu-tab__item" role="tab" data-tab="calendar" aria-controls="panel-thumb" aria-selected="false">
+            <img src="../assets/icons/tab-calendar.svg" width="25" height="25" alt="" class="menu-tab__icon" />
+            <span>2026년 달력</span>
+          </button>
+        </li>
+        <li role="presentation">
+          <button type="button" class="menu-tab__item" role="tab" data-tab="goal" aria-controls="panel-thumb" aria-selected="false">
+            <img src="../assets/icons/tab-target.svg" width="25" height="25" alt="" class="menu-tab__icon" />
+            <span>2026 목표관리</span>
+          </button>
+        </li>
+        <li role="presentation">
+          <button type="button" class="menu-tab__item" role="tab" data-tab="excel" aria-controls="panel-thumb" aria-selected="false">
+            <img src="../assets/icons/tab-excel.svg" width="25" height="25" alt="" class="menu-tab__icon" />
+            <span>실무활용엑셀</span>
+          </button>
+        </li>
+        <li role="presentation">
+          <button type="button" class="menu-tab__item" role="tab" data-tab="ppt" aria-controls="panel-thumb" aria-selected="false">
+            <img src="../assets/icons/tab-ppt.svg" width="25" height="25" alt="" class="menu-tab__icon" />
+            <span>12월 신상 PPT 모음</span>
+          </button>
+        </li>
+        <li role="presentation">
+          <button type="button" class="menu-tab__add" aria-label="카테고리 더보기">
+            <img src="../assets/icons/ic-add.svg" width="24" height="24" alt="" />
+          </button>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- =====================================================
+         콘텐츠 영역 — 선택한 탭에 따라 패널 전환
+         · AI로 초안 생성하기 (처음 열리는 탭) → 패키지 카드 4종 (디자인가이드 Figma 6136:9232) — 종류마다 1줄씩, 1920 1줄 7개 / 2560 1줄 8개
+             1번 태그형(왼쪽 위 6124:1773) · 2번 아이콘 분리 태그형(왼쪽 아래 6136:9045) · 3번 관심분야 표기(오른쪽 위 6136:9167) · 4번 상단 타이틀 강조형(오른쪽 아래 6136:9126)
+             줄마다 왼쪽 위에 "1번 태그형" 같은 이름표(검토용)를 붙임 · 네 줄 모두 같은 카드 내용을 같은 순서로 넣어서 위아래로 비교 · 광고 카드는 뺌
+         · 예스폼 추천 콘텐츠 등 나머지 탭 → 썸네일 카드 (메인 Figma 5594:5620)
+         · 시안 01(시안01-1 폴더)을 복사해서 패키지 카드만 바꾼 시안
+         카드 데이터는 js/main.js 의 PACKAGE_CARDS / CARDS 배열에서 렌더링
+         ===================================================== -->
+    <section class="contents">
+      <div class="tab-panel" id="panel-package" role="tabpanel" aria-label="AI로 초안 생성하기">
+        <!-- 카드 4종을 1줄씩 — js가 줄마다 이름표 + <ul class="package-grid">를 만들어 넣음 -->
+        <div class="package-rows" id="package-rows"></div>
+        <div class="more-wrap">
+          <button type="button" class="btn-neutral">프롬프트 더보기</button>
+        </div>
+      </div>
+      <div class="tab-panel" id="panel-thumb" role="tabpanel" aria-label="서식 목록" hidden>
+        <ul class="card-grid" id="card-grid"></ul>
+        <div class="more-wrap">
+          <button type="button" class="btn-neutral">콘텐츠 더보기</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 하단 섹션: 놓치면 후회할 콘텐츠 (전달받은 화면 캡처 이미지 그대로) -->
+    <section class="promo-section" aria-label="놓치면 후회할 콘텐츠">
+      <img src="../assets/images/section-recommend.png" width="1405" height="710" alt="놓치면 후회할 콘텐츠! 회원님만을 위해 딱 골라왔어요." loading="lazy" />
+    </section>
+  </main>
+
+  <!-- 카드 템플릿 -->
+  <template id="card-template">
+    <li class="card">
+      <a href="#" class="card__link">
+        <div class="card__img-area">
+          <div class="card__thumb">
+            <img src="" alt="" loading="lazy" />
+          </div>
+        </div>
+        <div class="card__txt-area">
+          <p class="card__title"></p>
+          <div class="card__meta">
+            <div class="card__badges"></div>
+            <span class="card__views">
+              <img src="../assets/icons/ic-visibility.svg" width="16" height="16" alt="" />
+              <span class="card__views-count"></span>
+            </span>
+          </div>
+        </div>
+      </a>
+      <button type="button" class="card__fav" aria-pressed="false" aria-label="찜하기">
+        <img src="../assets/icons/ic-favorite.svg" width="56" height="56" alt="" />
+      </button>
+    </li>
+  </template>
+
+  <!-- 패키지 카드 템플릿 4종 — 디자인가이드 Figma 6136:9232 (카드 폭 273 · 업무분야 연한 색 배경 · 테두리 1px #f1f2f4 · 모서리 12)
+       공통: 아래 흰 박스 = (제목) · 설명 2줄 · 업종 칩 1개 + 오른쪽 "생성하기 ↗" — 카드 아무 데나 누르면 링크로 이동
+       아이콘·글자색은 js에서 업무분야별로 넣음 (아이콘 = js/field-icons.js) -->
+
+  <!-- 1번 태그형 — 피그마 왼쪽 위 카드 (Figma 6124:1773 · 높이 168): 위 줄 40에 [아이콘 14 + 업무분야] 알약 배지 -->
+  <template id="package-card-template-1">
+    <li class="package-card package-card--v1">
+      <div class="package-card__head">
+        <span class="package-card__badge"><span class="package-card__icon"></span><span class="package-card__field"></span></span>
+      </div>
+      <div class="package-card__body">
+        <div class="package-card__text">
+          <p class="package-card__title"><a href="#" class="package-card__link"></a></p>
+          <p class="package-card__desc"></p>
+        </div>
+        <div class="package-card__foot"><span class="package-chip"></span><span class="package-card__cta">생성하기</span></div>
+      </div>
+    </li>
+  </template>
+
+  <!-- 2번 아이콘 분리 태그형 — 피그마 왼쪽 아래 카드 (Figma 6136:9045 · 높이 164): 위 줄 36에 작은 아이콘 박스 20 + 업무분야 -->
+  <template id="package-card-template-2">
+    <li class="package-card package-card--v2">
+      <div class="package-card__head">
+        <span class="package-card__icon-box"><span class="package-card__icon"></span></span>
+        <p class="package-card__field"></p>
+      </div>
+      <div class="package-card__body">
+        <div class="package-card__text">
+          <p class="package-card__title"><a href="#" class="package-card__link"></a></p>
+          <p class="package-card__desc"></p>
+        </div>
+        <div class="package-card__foot"><span class="package-chip"></span><span class="package-card__cta">생성하기</span></div>
+      </div>
+    </li>
+  </template>
+
+  <!-- 3번 관심분야 표기 — 피그마 오른쪽 위 카드 (Figma 6136:9167 · 높이 180): 위 줄에 아이콘 박스 36 + [업무분야 / "관심분야"] 두 줄 · 칩은 흰 배경 + 테두리 · "생성하기" 업무분야 색 -->
+  <template id="package-card-template-3">
+    <li class="package-card package-card--v3">
+      <div class="package-card__head">
+        <span class="package-card__icon-box"><span class="package-card__icon"></span></span>
+        <div class="package-card__head-text"><p class="package-card__field"></p><p class="package-card__sub">관심분야</p></div>
+      </div>
+      <div class="package-card__body">
+        <div class="package-card__text">
+          <p class="package-card__title"><a href="#" class="package-card__link"></a></p>
+          <p class="package-card__desc"></p>
+        </div>
+        <div class="package-card__foot"><span class="package-chip"></span><span class="package-card__cta">생성하기</span></div>
+      </div>
+    </li>
+  </template>
+
+  <!-- 4번 상단 타이틀 강조형 — 피그마 오른쪽 아래 카드 (Figma 6136:9126 · 높이 164): 위 줄에 아이콘 박스 40 + [업무분야 / 제목] · 흰 박스엔 설명부터 -->
+  <template id="package-card-template-4">
+    <li class="package-card package-card--v4">
+      <div class="package-card__head">
+        <span class="package-card__icon-box"><span class="package-card__icon"></span></span>
+        <div class="package-card__head-text"><p class="package-card__field"></p><p class="package-card__title"><a href="#" class="package-card__link"></a></p></div>
+      </div>
+      <div class="package-card__body">
+        <p class="package-card__desc"></p>
+        <div class="package-card__foot"><span class="package-chip"></span><span class="package-card__cta">생성하기</span></div>
+      </div>
+    </li>
+  </template>
+
+  <script src="js/field-icons.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

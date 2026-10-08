@@ -1,0 +1,126 @@
+/* =========================================================
+   예스폼 디자인 토큰 (Figma 변수에서 추출)
+   파일: 디자인가이드_2025 / 메인페이지 / 2560 (5594:5406)
+   ========================================================= */
+:root {
+  /* Brand */
+  --brand-main: #0472e3;      /* Brand/Yesform/main, primary/700, button/primary-fill */
+  --brand-premium: #e12b5f;   /* Brand/Yesform/premium */
+  --brand-member: #05b113;    /* Brand/Yesform/member */
+
+  /* Font color */
+  --font-black: #000000;
+  --font-white: #ffffff;
+  --font-800: #444444;
+  --font-700: #666666;
+  --font-view: #979797;       /* 조회수 */
+
+  /* Background / Fill */
+  --bg-white: #ffffff;
+  --bg-100: #f6f6f6;
+  --button-secondary-fill-light: #f3f3f3;
+
+  /* Border */
+  --border-light-gray: #eaeaea;
+  --border-gray: #c2c2c2;
+
+  /* Icon */
+  --icon-dark-gray: #666666;
+
+  /* Badge (카드 하단 배지) */
+  --review: #6e3ffd;
+  --review-new-bg: #b6ff3f;
+
+  /* Tag (썸네일 좌상단 태그) */
+  --tag-ai-from: #3d28f6;
+  --tag-ai-to: #a735f4;
+  --tag-update: #f45c26;
+  --tag-light-bg: rgba(255, 255, 255, 0.8);
+
+  /* 프롬프트 카드 — 예스폼 에디터 디자인 시스템 (gray/light) */
+  --gray-lt-01: #f9fafb;      /* 프롬프트 카드 상단 배경 */
+  --gray-lt-02: #f6f7f8;      /* (이전 시안 02 카드 배경 — 지금은 안 씀) */
+  --gray-lt-03: #f1f2f4;      /* 패키지 카드 업종 칩 배경 */
+  --gray-lt-04: #ebedef;
+  --bg-hover: var(--gray-lt-04); /* 카드 마우스오버 배경 (시안 02 패키지 카드) — 기본 배경 gray-lt-01보다 한 단계 진하게 */      /* 카드 테두리 · 구분선 */
+  --gray-lt-07: #babfc4;      /* 프롬프트 카드 조회수 */
+  --gray-lt-08: #a0a6ac;      /* 아이콘 */
+  --gray-lt-10: #6d7379;      /* 설명 */
+  --gray-lt-12: #464a4e;      /* 카테고리명 */
+  --chip-bg: #eaf4fb;
+  --chip-text: #4472c4;
+  --radius-card: 12px;
+
+  /* 패키지 카드 — 테스트2 시안 (font/text-*, line/line-divider-light, background/bg) */
+  --text-primary: #1d1f20;    /* 제목 */
+  --text-secondary: #383b3e;  /* 칩 글자 */
+  --text-tertiary: #888f95;   /* 설명 */
+  --line-divider-light: #f1f2f4;
+  --line-border: #e3e5e8;     /* line/line-border — (이전 패키지 카드 테두리, 지금은 안 씀) */
+
+  /* 패키지 카드 칩 — 업종 칩은 회색(아래 --chip-gray-*) · 관심분야 칩은 아래 --field-* 분야별 색
+     파란 칩(디자인가이드 Figma 6055:294)은 지금 안 씀 — 다시 쓰려면 style.css .package-chip 의 --chip-gray-* 를 --chip-blue-* 로 */
+  --chip-gray-bg: var(--gray-lt-03);    /* #f1f2f4 */
+  --chip-gray-line: var(--line-border); /* #e3e5e8 */
+  --chip-gray-text: var(--gray-lt-10);  /* #6d7379 */
+  --chip-blue-bg: #e5f1ff;
+  --chip-blue-line: #cfe4f9;
+  --chip-blue-text: #335bb3;
+  --bg-soft: #f6f8fa;         /* 칩 배경 */
+  --icon-box-bg: var(--bg-soft); /* 카드 아이콘 박스 — background/bg 토큰 */
+
+  /* 관심분야(업무분야) 칩 컬러 — 예스폼 에디터 Figma 5281:21380 컬러차트
+     칩 배경 = 4번째 열(연한 배경), 칩 글자 = 3번째 열(메인) */
+  --field-hr-bg: #eaf4fb;         --field-hr-text: #4472c4;         /* HR관리·채용 */
+  --field-accounting-bg: #e9f6f3; --field-accounting-text: #3597a5; /* 회계·경리·재무 실무 */
+  --field-site-bg: #fef6f0;       --field-site-text: #df7d49;       /* 현장·공사·부동산 관리 */
+  --field-legal-bg: #f3eee5;      --field-legal-text: #a4825f;      /* 법무·계약·지식재산 */
+  --field-admin-bg: #f9eff8;      --field-admin-text: #a24897;      /* 총무·경영지원·일반사무 */
+  --field-ai-bg: #f1f0ff;         --field-ai-text: #6c64d9;         /* AI·IT */
+  --field-scm-bg: #e9f6f4;        --field-scm-text: #44c0ac;        /* 생산·구매·자재·SCM 관리 */
+  --field-public-bg: #fff9f3;     --field-public-text: #b45309;     /* 공공행정·생활·서비스 — 차트 원본 #ffab4b는 대비 1.8:1이라 4.8:1로 교정 */
+  --field-sales-bg: #f0f7fd;      --field-sales-text: #4baeff;      /* 영업·마케팅·사업기획 */
+
+  /* 뉴트럴 버튼 */
+  --btn-neutral-line: #d0d4d7;
+  --btn-neutral-hover: #f9fafb;
+
+  /* Radius */
+  --radius-small: 5px;
+  --radius-large: 20px;       /* 패키지 카드 · 광고 카드 모서리 (Figma 6055:294) */
+  --radius-badge: 3px;
+
+  /* Typography — Pretendard */
+  --font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+    "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕", sans-serif;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+
+  /* Headline/H2_Sb */
+  --h2-size: 30px;   --h2-lh: 42px;
+  /* Body/B1_Md */
+  --b1-size: 18px;   --b1-lh: 28px;
+  /* Body/B3_Md */
+  --b3-size: 15px;   --b3-lh: 24px;
+  /* 패키지 카드 제목 — 디자인가이드 Figma 6096:1568 (16px SemiBold · 줄높이 20) */
+  --card-title-size: 16px;
+  --card-title-lh: 20px;
+  --card-title-weight: 600;
+  /* Tight/T2_Md */
+  --t2-size: 15px;   --t2-lh: 22px;
+  /* Tight/T3_Sb */
+  --t3-size: 14px;   --t3-lh: 20px;
+  /* Caption/C1_Md */
+  --c1-size: 13px;   --c1-lh: 18px;
+  /* Caption/C2_Md */
+  --c2-size: 12px;   --c2-lh: 16px;
+  /* GNB 카테고리 */
+  --gnb-size: 20px;  --gnb-lh: 34px;
+
+  /* Layout */
+  --container-max: 1280px;
+  --container-min: 984px;
+  --grid-side: 50px;
+  --grid-gap: 24px;          /* 썸네일 카드 간격 — Figma 40 → 30 → 24로 일괄 수정 (720px 이하는 12) */
+  --grid-cols: 8;
+}
