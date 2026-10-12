@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>아카이브 관리자</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="jszip.min.js"></script>
 <style>
   :root{--bg:#f6f7f9;--card:#fff;--line:#e5e8ec;--text:#191f28;--sub:#6b7684;--accent:#2f6bff;--danger:#e5484d;--ok:#12a150}
   *{box-sizing:border-box;margin:0;padding:0}
@@ -93,7 +93,7 @@
     <p class="note">제목·설명·날짜·순서·공개 여부만 바꿉니다. 내용을 고치면 수정일이 오늘로 바뀝니다. 시안 파일 자체는 건드리지 않습니다.</p>
     <div id="list"><p class="note">불러오는 중…</p></div>
     <div class="bar">
-      <button class="primary" id="saveList" disabled>목록 저장</button>
+      <button class="primary" id="saveList">목록 저장</button>
       <span class="status" id="saveStatus"></span>
     </div>
   </section>
@@ -161,19 +161,28 @@ async function commitFiles(files, message, log = () => {}) {
 }
 
 /* ---------- 연결 ---------- */
-$('connect').onclick = async () => {
-  const s = $('connStatus'); s.className = 'status'; s.textContent = '확인 중…';
+let connected = false;
+// 연결 확인. 업로드·저장 전에 자동으로도 불림 (연결 버튼을 안 눌러도 됨)
+async function ensureConnected() {
+  if (connected) return true;
+  const s = $('connStatus');
+  if (!cfg().token) { s.className = 'status err'; s.textContent = '먼저 GitHub 토큰을 넣어 주세요.'; $('token').focus(); throw new Error('GitHub 토큰이 없습니다. 위 1번에 토큰을 넣어 주세요.'); }
+  s.className = 'status'; s.textContent = '확인 중…';
   try {
     const { repo } = cfg();
     const r = await gh(`/repos/${repo}`);
     if (!r.permissions || !r.permissions.push) throw new Error('이 토큰에는 쓰기 권한이 없습니다.');
     store.set('gh_token', cfg().token);
+    connected = true;
     await loadData();
     s.className = 'status ok'; s.textContent = `연결됨 · ${r.full_name}`;
-    $('saveList').disabled = false; updateUploadBtn();
-  } catch (e) { s.className = 'status err'; s.textContent = e.message; }
-};
-$('forget').onclick = () => { store.del('gh_token'); $('token').value = ''; $('connStatus').textContent = '토큰을 지웠습니다.'; $('saveList').disabled = true; updateUploadBtn(); };
+    $('saveList').disabled = false;
+    return true;
+  } catch (e) { s.className = 'status err'; s.textContent = e.message; throw e; }
+}
+$('connect').onclick = () => { connected = false; ensureConnected().catch(() => {}); };
+['token','repo','branch'].forEach(id => $(id).addEventListener('input', () => { connected = false; }));
+$('forget').onclick = () => { store.del('gh_token'); $('token').value = ''; $('connStatus').textContent = '토큰을 지웠습니다.'; connected = false; };
 
 /* ---------- 목록 관리 ---------- */
 function renderList() {
@@ -224,6 +233,7 @@ $('list').addEventListener('input', e => {
 $('saveList').onclick = async () => {
   const s = $('saveStatus'); s.className = 'status'; s.textContent = '저장 중…';
   try {
+    await ensureConnected();
     const { repo, branch } = cfg();
     // 다른 사람이 그사이 저장했는지 확인
     const cur = await gh(`/repos/${repo}/contents/projects.json?ref=${branch}`);
@@ -240,7 +250,8 @@ const decodeName = bytes => { try { return new TextDecoder('utf-8', {fatal:true}
 function renderPending() {
   $('nVers').innerHTML = pending.versions.map((v, j) => `<div class="vrow"><input data-nv="${j}" value="${esc(v.label)}"><input value="${esc(v.href)}" disabled><button data-del="${j}">빼기</button></div>`).join('') || '<p class="note">index.html을 찾지 못했습니다.</p>';
 }
-function updateUploadBtn() { $('upload').disabled = !(pending && cfg().token && $('saveList').disabled === false); }
+// zip만 골랐으면 누를 수 있음. 토큰·제목 같은 빠진 값은 누를 때 알려 줌
+function updateUploadBtn() { $('upload').disabled = !pending; }
 
 $('zip').onchange = async () => {
   const file = $('zip').files[0]; if (!file) return;
@@ -274,6 +285,7 @@ $('upload').onclick = async () => {
   const title = $('nTitle').value.trim();
   if (!title) { s.className = 'status err'; s.textContent = '제목을 넣어 주세요.'; return; }
   if (!pending.versions.length) { s.className = 'status err'; s.textContent = '시안 버튼이 하나도 없습니다.'; return; }
+  try { await ensureConnected(); } catch (e) { s.className = 'status err'; s.textContent = e.message; return; }
   const slug = ($('nSlug').value.trim().toLowerCase().replace(/[^a-z0-9-]+/g,'-').replace(/^-+|-+$/g,'')) || 'design';
   const d = new Date(), stamp = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}-${String(d.getHours()).padStart(2,'0')}${String(d.getMinutes()).padStart(2,'0')}${String(d.getSeconds()).padStart(2,'0')}`;
   const folder = `archive/${stamp}-${slug}`;
@@ -307,7 +319,8 @@ $('upload').onclick = async () => {
   updateUploadBtn();
 };
 
-loadData().catch(() => { $('list').innerHTML = '<p class="note">목록을 불러오지 못했습니다.</p>'; });
+// 저장해 둔 토큰이 있으면 바로 연결, 없으면 공개 목록만 보여 줌
+(cfg().token ? ensureConnected() : loadData()).catch(() => loadData().catch(() => { $('list').innerHTML = '<p class="note">목록을 불러오지 못했습니다.</p>'; }));
 </script>
 </body>
 </html>
