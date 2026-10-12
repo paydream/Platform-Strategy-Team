@@ -1,6 +1,43 @@
 {
   "projects": [
     {
+      "id": "20261012-125430-yesform-main-tabname",
+      "title": "예스폼 메인 화면 개선 (10.12 업데이트 3차 · 탭 이름 통일)",
+      "desc": "10.12 업데이트 3차와 같은 시안에서 시안 04~06의 첫 탭 이름을 \"AI로 초안 생성하기\"로 통일한 버전",
+      "category": "웹 메인",
+      "created": "2026.10.12",
+      "updated": "2026.10.12",
+      "hidden": false,
+      "folder": "archive/20261012-125430-yesform-main-tabname",
+      "preview": "archive/20261012-125430-yesform-main-tabname/index.html",
+      "versions": [
+        {
+          "label": "시안01-1",
+          "href": "archive/20261012-125430-yesform-main-tabname/시안01-1/index.html"
+        },
+        {
+          "label": "시안02",
+          "href": "archive/20261012-125430-yesform-main-tabname/시안02/index.html"
+        },
+        {
+          "label": "시안03",
+          "href": "archive/20261012-125430-yesform-main-tabname/시안03/index.html"
+        },
+        {
+          "label": "시안04",
+          "href": "archive/20261012-125430-yesform-main-tabname/시안04/index.html"
+        },
+        {
+          "label": "시안05",
+          "href": "archive/20261012-125430-yesform-main-tabname/시안05/index.html"
+        },
+        {
+          "label": "시안06",
+          "href": "archive/20261012-125430-yesform-main-tabname/시안06/index.html"
+        }
+      ]
+    },
+    {
       "id": "20261012-114314-20261012-3",
       "title": "예스폼 메인 화면 개선 (10.12 업데이트 3차)",
       "desc": "",
