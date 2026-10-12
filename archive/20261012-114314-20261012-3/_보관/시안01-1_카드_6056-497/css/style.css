@@ -1,0 +1,827 @@
+/* =========================================================
+   예스폼 메인 — 검색 + 추천 콘텐츠 (Figma 5594:5406 · 2560×1440)
+   시안 01 스타일 — 시안 02는 시안02/css/style.css 에서 따로 수정
+   ========================================================= */
+
+/* ---------- Reset ---------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body { margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-family);
+  font-weight: var(--fw-medium);
+  color: var(--font-black);
+  background: var(--bg-white);
+  -webkit-font-smoothing: antialiased;
+  word-break: keep-all;
+}
+
+h1, h2, p, ul { margin: 0; padding: 0; }
+ul { list-style: none; }
+a { color: inherit; text-decoration: none; }
+img { display: block; }
+button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+input { font: inherit; }
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* =========================================================
+   시안 전환 바 (검토용 · 실제 서비스 화면에는 없음)
+   스크롤해도 맨 위에 붙어 있음
+   ========================================================= */
+.version-switch {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--text-primary);
+}
+.version-switch__btn {
+  min-width: 88px;
+  height: 32px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  font-size: var(--t3-size);
+  line-height: var(--t3-lh);
+  font-weight: var(--fw-semibold);
+  color: rgba(255, 255, 255, 0.7);
+  transition: background-color .15s ease, color .15s ease;
+}
+.version-switch__btn:hover { color: var(--font-white); background: rgba(255, 255, 255, 0.12); }
+.version-switch__btn.is-active { color: var(--text-primary); background: var(--bg-white); }
+.version-switch__btn:focus-visible { outline: 2px solid var(--brand-main); outline-offset: 2px; }
+
+/* =========================================================
+   GNB  (height 90 · border-bottom #eaeaea)
+   ========================================================= */
+.gnb {
+  height: 90px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-white);
+  border-bottom: 1px solid var(--border-light-gray);
+}
+
+.gnb__inner {
+  width: 100%;
+  max-width: var(--container-max);
+  min-width: var(--container-min);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gnb__left { display: flex; align-items: center; }
+
+.gnb__logo { padding-right: 30px; }
+.gnb__logo img { width: 78px; height: 34px; }
+
+.gnb__category {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 30px;
+  font-size: var(--gnb-size);
+  line-height: var(--gnb-lh);
+  font-weight: var(--fw-semibold);
+  color: var(--font-black);
+  white-space: nowrap;
+}
+
+.gnb__util { display: flex; align-items: center; gap: 25px; }
+
+.gnb__util-item {
+  width: 46px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--c1-size);
+  line-height: var(--c1-lh);
+  font-weight: var(--fw-medium);
+  color: var(--font-black);
+  text-align: center;
+  white-space: nowrap;
+}
+.gnb__util-item:first-child { width: 45px; }
+
+/* =========================================================
+   검색 영역  (padding-top 50 · gap 20)
+   ========================================================= */
+.search {
+  padding-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.search__title {
+  font-size: var(--h2-size);
+  line-height: var(--h2-lh);
+  font-weight: var(--fw-semibold);
+  color: var(--font-black);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.search__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.search__box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+/* 문서 검색 / 예스폼 AI 토글 */
+.search__mode {
+  display: flex;
+  align-items: flex-start;
+  padding: 5px;
+  background: var(--bg-100);
+  border-radius: 25px;
+}
+
+.search__mode-btn {
+  height: 40px;
+  padding: 5px 15px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  border-radius: var(--radius-small);
+  font-size: var(--t2-size);
+  line-height: var(--t2-lh);
+  font-weight: var(--fw-medium);
+  color: var(--font-700);
+  white-space: nowrap;
+  transition: background-color .15s ease, color .15s ease;
+}
+
+.search__mode-btn.is-active {
+  background: var(--brand-main);
+  color: var(--font-white);
+  border-radius: 20px;
+}
+
+/* 검색 입력 (577 × 60 · border-bottom 2px #c2c2c2) */
+.search__form {
+  width: 577px;
+  height: 60px; /* Figma: 테두리 포함 60 (stroke inside) */
+  padding: 15px 10px 13px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 2px solid var(--border-gray);
+}
+
+.search__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font-size: var(--b1-size);
+  line-height: var(--b1-lh);
+  font-weight: var(--fw-medium);
+  color: var(--font-black);
+}
+/* 디자인상 검색 예시어가 검정(#000)으로 표기됨 */
+.search__input::placeholder { color: var(--font-black); opacity: 1; }
+.search__input::-webkit-search-cancel-button { display: none; }
+
+.search__form:focus-within { border-bottom-color: var(--brand-main); }
+
+.search__submit { flex: none; width: 30px; height: 30px; }
+.search__submit img { width: 30px; height: 30px; }
+
+/* 추천 문구 */
+.search__hint {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  max-width: min(577px, 100%);
+}
+
+.search__hint-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--b3-size);
+  line-height: var(--b3-lh);
+  font-weight: var(--fw-medium);
+  color: var(--font-700);
+}
+
+.search__hint img { flex: none; width: 16px; height: 16px; object-fit: cover; }
+
+/* =========================================================
+   메뉴 탭  (1280 · gap 10 · item h40)
+   ========================================================= */
+.menu-tab {
+  margin-top: 60px;
+  display: flex;
+  justify-content: center;
+}
+
+.menu-tab__list {
+  width: var(--container-max);
+  max-width: 100%;
+  padding: 0 30px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 10px;
+}
+
+.menu-tab__item {
+  height: 40px;
+  padding: 0 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border-radius: 5px;
+  font-size: var(--b3-size);
+  line-height: var(--b3-lh);
+  font-weight: var(--fw-medium);
+  color: var(--font-800);
+  white-space: nowrap;
+  transition: background-color .15s ease;
+}
+
+.menu-tab__item:hover,
+.menu-tab__item.is-active { background: var(--button-secondary-fill-light); }
+
+.menu-tab__icon { flex: none; }
+
+.menu-tab__add {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-small);
+}
+.menu-tab__add:hover { background: var(--button-secondary-fill-light); }
+
+/* =========================================================
+   콘텐츠 카드 그리드  (좌우 50 · 8열 · gap 24, Figma는 40)
+   ========================================================= */
+.contents {
+  margin-top: 30px;
+  padding: 0 var(--grid-side) 40px;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr));
+  gap: var(--grid-gap);
+  align-items: start;
+}
+/* 썸네일 카드 간격은 모든 탭 24 (--grid-gap) — 예전 추천 콘텐츠 탭 전용 30 규칙은 합쳐서 삭제 */
+
+/* ---------- Card ---------- */
+.card {
+  position: relative;
+  min-width: 132px;
+  max-width: 334px;
+  border-radius: var(--radius-small);
+  overflow: hidden;
+  background: var(--bg-white);
+}
+/* Figma stroke(inside)와 같게: 테두리가 레이아웃 폭을 차지하지 않도록 오버레이로 그림 */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border: 1px solid var(--border-light-gray);
+  border-radius: inherit;
+  pointer-events: none;
+  transition: border-color .15s ease;
+}
+.card-grid > .card { justify-self: stretch; }
+.card.card--wide { max-width: 400px; } /* 2행 카드: max-w 400 */
+
+.card__link { display: block; }
+
+/* 이미지 영역 (p 10 · 710:1000) */
+.card__img-area {
+  position: relative;
+  padding: 10px;
+  background: var(--bg-white);
+}
+
+.card__thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 710 / 1000;
+  overflow: hidden;
+}
+.card__thumb img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 텍스트 영역 (p 20 · gap 15 · drop-shadow) */
+.card__txt-area {
+  position: relative;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  background: var(--bg-white);
+  filter: drop-shadow(1px 1px 5px rgba(0, 0, 0, 0.16));
+}
+
+.card__title {
+  width: 100%;
+  height: 44px; /* 2줄 고정 (22 × 2) */
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font-size: var(--t2-size);
+  line-height: var(--t2-lh);
+  font-weight: var(--fw-medium);
+  color: var(--font-800);
+  text-align: center;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.card__meta {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card__badges { display: flex; align-items: center; gap: 3px; }
+
+.card__views { display: flex; align-items: center; gap: 3px; }
+.card__views img { width: 16px; height: 16px; }
+.card__views-count {
+  font-size: var(--c1-size);
+  line-height: var(--c1-lh);
+  font-weight: var(--fw-medium);
+  color: var(--font-view);
+  white-space: nowrap;
+}
+
+/* ---------- 등급 배지 (Grade: Premium / Member / Free) ---------- */
+.grade {
+  width: 55px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid currentColor;
+  border-radius: var(--radius-badge);
+  font-size: var(--c2-size);
+  line-height: var(--c2-lh);
+  font-weight: var(--fw-medium);
+  white-space: nowrap;
+}
+.grade--premium { color: var(--brand-premium); }
+.grade--member  { color: var(--brand-member); }
+.grade--free    { color: var(--brand-main); }
+
+/* ---------- 후기 배지 (Review) ---------- */
+.review {
+  height: 20px;
+  padding-left: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  border: 1px solid var(--review);
+  border-radius: var(--radius-badge);
+  white-space: nowrap;
+}
+.review--plain { width: 55px; padding-left: 0; }
+
+.review__new {
+  width: 14px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--review-new-bg);
+  border-radius: 2px;
+  font-size: 10px;
+  line-height: 11px;
+  font-weight: var(--fw-medium);
+  color: var(--font-800);
+}
+
+.review__text {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding-right: 5px;
+  font-size: var(--c2-size);
+  line-height: var(--c2-lh);
+  font-weight: var(--fw-medium);
+  color: var(--review);
+}
+.review--plain .review__text { padding-right: 0; }
+
+/* ---------- 썸네일 태그 (AI / Update) ---------- */
+.tag {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: var(--radius-small);
+  font-size: var(--t3-size);
+  line-height: var(--t3-lh);
+  font-weight: var(--fw-semibold);
+  white-space: nowrap;
+}
+
+/* 카드가 좁아져도(1920 · 7열) 태그가 찜 하트를 덮지 않게 폭 제한 */
+.tag { max-width: calc(100% - 64px); }
+.tag__label { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+
+.tag__icon {
+  width: 18px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.tag--ai {
+  background: linear-gradient(90deg, var(--tag-ai-from), var(--tag-ai-to));
+  color: var(--font-white);
+}
+.tag--ai .tag__icon img { width: 18px; height: 18px; }
+
+.tag--update {
+  background: var(--tag-update);
+  color: var(--font-white);
+}
+.tag--update .tag__icon img { width: 14px; height: 14px; }
+
+.tag--update-light {
+  background: var(--tag-light-bg);
+  border: 1px solid var(--border-light-gray);
+  color: var(--font-800);
+}
+.tag--update-light .tag__icon img { width: 16px; height: 16px; }
+
+/* ---------- 찜 버튼 (56 × 56) ---------- */
+.card__fav {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  width: 56px;
+  height: 56px;
+}
+.card__fav img { width: 56px; height: 56px; transition: transform .15s ease; }
+.card__fav:hover img { transform: scale(1.08); }
+/* 활성(찜) 상태 디자인은 Figma에 없음 — 개선안 확정 시 교체 */
+.card__fav[aria-pressed="true"] img {
+  filter: invert(27%) sepia(83%) saturate(3053%) hue-rotate(327deg) brightness(91%) contrast(93%);
+}
+
+/* ---------- Hover ---------- */
+.card:hover::after { border-color: var(--border-gray); }
+
+/* 프롬프트 카드(카드01)는 메인에서 내리고 _보관/카드01/card01.css 로 옮김 */
+
+/* 공통 아웃라인 버튼 — 바로 생성하기 (패키지 카드 · 카드01 공용) */
+.btn-outline {
+  min-width: 89px;
+  height: 40px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background: var(--bg-white);
+  border: 1px solid var(--brand-main);
+  border-radius: var(--radius-small);
+  font-size: var(--t2-size);
+  line-height: var(--t2-lh);
+  font-weight: var(--fw-semibold);
+  color: var(--brand-main);
+  white-space: nowrap;
+  transition: background-color .15s ease;
+}
+.btn-outline:hover { background: #f2f7fd; } /* 마우스오버 색은 Figma에 없음 — 임시 */
+
+/* =========================================================
+   패키지 카드 — 프롬프트 탭 (시안 01-1)
+   디자인가이드 Figma 6056:497 · Card Variant8 (피그마 카드 폭 278)
+   ========================================================= */
+/*
+  1줄 6개(2201px 이상은 7개) · 간격 16 · 카드 높이 158 고정 · 카드 폭 최소 245
+  · 화면이 넓으면 좌우 여백 50까지 꽉 차게 카드가 늘어남 (1920 → 약 290 × 6개, 2560 → 약 338 × 7개)
+  · 4줄만 보임: 6개일 때 24칸, 7개일 때 28칸 (js에서 카드 31장 + 광고 1을 만들고 넘치는 카드는 숨김)
+  · 화면이 좁으면(카드 영역 1550px보다 좁으면) 카드는 245로 두고 왼쪽 여백 50에서 시작, 오른쪽은 화면 끝에서 잘림
+*/
+.contents { overflow-x: clip; } /* 넘친 카드는 화면 끝에서 잘림 */
+.package-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(245px, 1fr));
+  gap: 16px;
+  align-items: stretch;
+}
+.package-grid > .package-card:nth-child(n + 25) { display: none; }   /* 6개 × 4줄 */
+/* 2560 등 넓은 화면(2201px부터)은 1줄 7개 */
+@media (min-width: 2201px) {
+  .package-grid { grid-template-columns: repeat(7, minmax(245px, 1fr)); }
+  .package-grid > .package-card:nth-child(n + 25) { display: flex; }
+  .package-grid > .package-card:nth-child(n + 29) { display: none; }  /* 7개 × 4줄 */
+}
+
+/* 카드: 흰 배경 · 테두리 1px line-divider-light(#f1f2f4) · 모서리 5 · 안쪽 여백 위아래 20 / 좌우 24 */
+.package-card {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-white);
+  border: 1px solid var(--line-divider-light);
+  border-radius: var(--radius-small);
+  transition: border-color .15s ease;
+}
+.package-card:hover { border-color: var(--gray-lt-04); } /* 마우스오버는 Figma에 없음 — 시안 01과 같은 방식 */
+
+/* 제목·설명 묶음 ↔ 칩 12 · 안쪽 여백 위아래 20 / 좌우 24 (피그마 좌우 20에서 늘림) */
+.package-card__body {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 제목 줄 ↔ 설명 10 (피그마 8에서 늘림) */
+.package-card__text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* 제목 줄 — 디자인가이드 Figma 6057:614: 높이 32 · 제목(왼쪽) + 화살표 아이콘 24×24(오른쪽 끝) · 세로 가운데 */
+.package-card__head {
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+/* 제목: 17px SemiBold · 줄높이 22 · 1줄 (넘치면 "…") — heading/heading-17 (피그마 Medium에서 SemiBold로 조정) */
+.package-card__title {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 17px;
+  line-height: 22px;
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+/* 카드에 마우스를 올리면 제목 글자가 파랑(#0472e3, --brand-main)으로 바뀜 */
+.package-card__title { transition: color .15s ease; }
+.package-card:hover .package-card__title,
+.package-card:focus-within .package-card__title { color: var(--brand-main); }
+/* 카드 전체가 눌리게 제목 링크를 카드 크기로 늘림 */
+.package-card__link::after {
+  content: "";
+  position: absolute;
+  inset: -1px; /* 테두리까지 덮음 */
+  border-radius: inherit;
+}
+.package-card__link:focus-visible { outline: none; }
+.package-card__link:focus-visible::after { outline: 2px solid var(--brand-main); outline-offset: 2px; }
+
+/* 화살표(↗) 아이콘 — Figma 6077:687 (assets/icons/ic-arrow-up-right-box.svg)
+   24×24 · 배경 #f6f7f8 · 모서리 4 · 화살표 선 #6d7379 1.2 — 모든 카드 같음
+   (이전 문서 아이콘 card-doc-ai.svg 는 피그마에서 숨김 처리돼 뺌, 파일은 보관) */
+.package-card__icon {
+  flex: none;
+  width: 24px;
+  height: 24px;
+}
+
+/* 설명: 13px Regular · 줄높이 18 · 2줄을 높이 40 칸 가운데에 (넘치면 "…") */
+.package-card__desc {
+  height: 40px;
+  padding: 2px 0;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 400;
+  color: var(--text-tertiary);
+  word-break: keep-all;      /* 피그마처럼 단어 단위로 줄바꿈 */
+  overflow-wrap: break-word; /* 아주 긴 단어만 중간에서 끊음 */
+}
+
+/* 칩 2개 — 간격 4 · 아래 여백 2 · 한 줄 유지 (넘치면 뒤 칩부터 "…") */
+.package-card__chips {
+  padding-bottom: 2px;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 4px;
+  overflow: hidden;
+}
+
+/* 칩: 배경 background/bg(#f6f8fa) · 글자 text-secondary(#383b3e) 12px Medium(줄높이 12) · 모서리 4 → 높이 20
+   업종·업무분야 두 칩 모두 같은 회색 (파란 칩 #e5f1ff / #335bb3 은 tokens.css --chip-blue-* 에 보관) */
+.package-chip {
+  display: block;
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 4px 6px;
+  border-radius: 4px;
+  background: var(--bg-soft);
+  font-size: 12px;
+  line-height: 12px;
+  font-weight: var(--fw-medium);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.package-chip:first-child { flex-shrink: 0; max-width: 70%; } /* 업종 칩은 다 보이게 두고, 넘치면 업무분야 칩부터 "…" */
+
+
+/* ---------- 패키지 탭 광고 카드 (CARD · ADS) ---------- */
+.package-ad {
+  position: relative;
+  min-width: 0;
+  min-height: 158px; /* 광고 이미지가 줄 높이를 바꾸지 않게 — 높이는 옆 카드(158)에 맞춤 */
+  border-radius: var(--radius-small);
+  overflow: hidden;
+  background: var(--bg-soft);
+}
+.package-ad::after { /* 카드 테두리 (오버레이) */
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--line-divider-light);
+  border-radius: inherit;
+  pointer-events: none;
+}
+.package-ad__link { position: absolute; inset: 0; display: block; }
+.package-ad__link img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: left bottom; /* 왼쪽·아래 기준 → 오른쪽·위부터 잘림 */
+  transition: transform .3s ease;
+}
+.package-ad__link:hover img { transform: scale(1.03); }
+
+
+
+/* ---------- 더보기 버튼 (뉴트럴 타입) ---------- */
+.more-wrap {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+}
+.btn-neutral {
+  width: 160px;
+  height: 48px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-white);
+  border: 1px solid var(--btn-neutral-line);
+  border-radius: var(--radius-small);
+  font-size: var(--t2-size);
+  line-height: var(--t2-lh);
+  font-weight: var(--fw-semibold);
+  color: var(--gray-lt-12);
+  white-space: nowrap;
+  transition: background-color .15s ease;
+}
+.btn-neutral:hover { background: var(--btn-neutral-hover); }
+
+/* =========================================================
+   하단 섹션 — 놓치면 후회할 콘텐츠 (캡처 이미지)
+   ========================================================= */
+.promo-section {
+  margin-top: 40px;
+  padding: 0 16px;
+  background: #f6f9fd; /* 캡처 배경색과 동일 */
+}
+.promo-section img {
+  width: 100%;
+  max-width: 1405px;
+  height: auto;
+  margin: 0 auto;
+}
+
+/* =========================================================
+   반응형
+   Figma는 2560 기준(8열 · 카드 272.5px).
+   1920 해상도에서는 1행 7개 (좌우 50 · 간격 40 유지 → 카드 약 223~226px).
+   카드 폭이 약 210px 밑으로 내려가지 않게 열 수를 단계적으로 줄임.
+   ========================================================= */
+@media (max-width: 2200px) { :root { --grid-cols: 7; } }  /* 1920 → 7열 */
+@media (max-width: 1820px) { :root { --grid-cols: 6; } }
+@media (max-width: 1560px) { :root { --grid-cols: 5; } }
+@media (max-width: 1300px) { :root { --grid-cols: 4; } }
+
+@media (max-width: 1200px) {
+  :root { --grid-cols: 3; --grid-gap: 24px; --grid-side: 30px; }
+  .gnb__inner { min-width: 0; }
+  .menu-tab__list { justify-content: flex-start; overflow-x: auto; scrollbar-width: none; }
+  .menu-tab__list::-webkit-scrollbar { display: none; }
+}
+
+@media (max-width: 720px) {
+  :root { --grid-cols: 2; --grid-gap: 12px; --grid-side: 16px; }
+  .gnb { padding: 0 16px; height: 64px; }
+  .gnb__logo { padding-right: 16px; }
+  .gnb__category { padding-left: 0; }
+  .gnb__category span,
+  .gnb__util-item span { display: none; }
+  .gnb__util { gap: 14px; }
+  .gnb__util-item,
+  .gnb__util-item:first-child { width: 24px; }
+  .search { padding: 32px 16px 0; }
+  .search__title { font-size: 22px; line-height: 32px; white-space: normal; }
+  .search__body, .search__box { width: 100%; }
+  .search__form { width: 100%; }
+  .menu-tab { margin-top: 32px; }
+  .menu-tab__list { padding: 0 16px; }
+  .contents { margin-top: 20px; }
+  .card__txt-area { padding: 14px 10px; gap: 10px; }
+  .card__meta { flex-wrap: wrap; row-gap: 6px; }
+  .tag { top: 14px; left: 14px; max-width: calc(100% - 70px); }
+  .tag__label { overflow: hidden; text-overflow: ellipsis; }
+
+}
+
+/* =========================================================
+   썸네일 카드 5줄 고정 — 한 줄 개수(--grid-cols)에 맞춰 5줄 넘는 카드는 숨김
+   (js/main.js에서 40장 = 8개 × 5줄을 만들어 둠)
+   ========================================================= */
+.card-grid > .card:nth-child(n + 41) { display: none; }                                   /* 8개 × 5 */
+@media (max-width: 2200px) { .card-grid > .card:nth-child(n + 36) { display: none; } }   /* 7개 × 5 (1920) */
+@media (max-width: 1820px) { .card-grid > .card:nth-child(n + 31) { display: none; } }   /* 6개 × 5 */
+@media (max-width: 1560px) { .card-grid > .card:nth-child(n + 26) { display: none; } }   /* 5개 × 5 (1440) */
+@media (max-width: 1300px) { .card-grid > .card:nth-child(n + 21) { display: none; } }   /* 4개 × 5 */
+@media (max-width: 1200px) { .card-grid > .card:nth-child(n + 16) { display: none; } }   /* 3개 × 5 */
+@media (max-width: 720px)  { .card-grid > .card:nth-child(n + 11) { display: none; } }   /* 2개 × 5 (모바일) */
