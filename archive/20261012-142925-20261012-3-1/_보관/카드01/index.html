@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>카드01 — 프롬프트 카드 (보관)</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="stylesheet" href="../../css/tokens.css" />
+  <link rel="stylesheet" href="../../css/style.css" />
+  <link rel="stylesheet" href="card01.css" />
+</head>
+<body>
+  <!-- 카드01: 메인 화면 '예스폼 추천 콘텐츠' 탭에서 쓰던 프롬프트 카드.
+       메인에서는 지웠고, 다시 쓰려면 이 폴더의 마크업·CSS·JS를 메인으로 옮기면 됩니다. -->
+  <main class="archive">
+    <h1 class="archive__title">카드01 — 프롬프트 카드</h1>
+    <p class="archive__desc">예스폼 에디터 Figma 5451:53036 · 메인 화면에서 내린 카드 (보관용)</p>
+    <ul class="prompt-grid" id="prompt-grid"></ul>
+  </main>
+
+  <!-- 카드01 템플릿 (예스폼 에디터 Figma 5451:53036 · 카드 437×257) -->
+  <template id="prompt-card-template">
+    <li class="prompt-card">
+      <div class="prompt-card__head">
+        <div class="prompt-card__cat">
+          <span class="prompt-card__cat-icon"><img src="" width="24" height="24" alt="" /></span>
+          <div class="prompt-card__cat-text">
+            <span class="prompt-card__cat-name"></span>
+            <span class="prompt-card__chip"></span>
+          </div>
+        </div>
+        <div class="prompt-card__actions">
+          <button type="button" class="prompt-card__icon-btn prompt-card__copy" aria-label="복사">
+            <img src="../../assets/icons/ic-copy.svg" width="24" height="24" alt="" />
+          </button>
+          <button type="button" class="prompt-card__icon-btn prompt-card__fav" aria-pressed="false" aria-label="찜하기">
+            <img src="../../assets/icons/ic-heart.svg" width="24" height="24" alt="" />
+          </button>
+        </div>
+      </div>
+      <div class="prompt-card__text">
+        <p class="prompt-card__title"></p>
+        <p class="prompt-card__desc"></p>
+      </div>
+      <div class="prompt-card__foot">
+        <span class="prompt-card__views">
+          <img src="../../assets/icons/ic-visibility-sm.svg" width="14" height="14" alt="" />
+          <span class="prompt-card__views-count"></span>
+        </span>
+        <a href="#" class="prompt-card__cta btn-outline">바로 생성하기</a>
+      </div>
+    </li>
+  </template>
+
+  <script src="card01.js"></script>
+</body>
+</html>
