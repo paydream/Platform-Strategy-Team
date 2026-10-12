@@ -6,7 +6,7 @@
 - 한 번 올린 시안 폴더·파일은 **고치거나 지우거나 이름을 바꾸지 않는다.** 같은 시안의 새 버전이라도 항상 새 폴더로 올린다.
 - 새 시안은 `archive/YYYYMMDD-HHMMSS-영문이름/` 새 폴더에 넣는다. 폴더가 이미 있으면 멈춘다.
 - 목록에서 빼고 싶으면 `projects.json`에서 `"hidden": true`로 숨긴다(파일은 그대로 둔다).
-- 바꿔도 되는 파일은 관리용뿐이다: `projects.json`, 루트 `index.html`, `admin/`, `README.md`, `CLAUDE.md`, `.github/`.
+- 바꿔도 되는 파일은 관리용뿐이다: `projects.json`, 루트 `index.html`, `admin/`, `api/`, `README.md`, `CLAUDE.md`, `.github/`.
 - `.github/workflows/no-overwrite.yml`이 push마다 이 규칙을 검사한다.
 
 ## 목록 데이터

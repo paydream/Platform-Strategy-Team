@@ -91,6 +91,10 @@
   <section>
     <h2>3. 아카이브 목록 관리</h2>
     <p class="note">제목·설명·날짜·순서·공개 여부만 바꿉니다. 내용을 고치면 수정일이 오늘로 바뀝니다. 시안 파일 자체는 건드리지 않습니다.</p>
+    <div id="pwRow" style="display:none">
+      <label>관리자 비밀번호 (한 번 넣으면 이 브라우저에 기억됩니다)</label>
+      <input id="adminPw" type="password" placeholder="관리자 비밀번호">
+    </div>
     <div id="list"><p class="note">불러오는 중…</p></div>
     <div class="bar">
       <button class="primary" id="saveList">목록 저장</button>
@@ -136,8 +140,18 @@ const b64 = bytes => { let s = ''; const n = 0x8000; for (let i = 0; i < bytes.l
 const utf8b64 = str => b64(new TextEncoder().encode(str));
 const decodeB64Utf8 = s => new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\n/g,'')), c => c.charCodeAt(0)));
 
+let serverMode = false; // 서버(Vercel)에 토큰이 설정돼 있으면 GitHub 토큰 없이 목록 저장
 async function loadData() {
   const { repo, branch, token } = cfg();
+  try {
+    const r = await fetch('/api/projects', { cache: 'no-store' });
+    const j = r.ok ? await r.json() : null;
+    if (j && j.enabled) {
+      serverMode = true; dataSha = j.sha; data = j.data;
+      $('pwRow').style.display = store.get('admin_pw') ? 'none' : 'block';
+      dirty = false; renderList(); return;
+    }
+  } catch {}
   if (token) {
     const f = await gh(`/repos/${repo}/contents/projects.json?ref=${branch}`);
     dataSha = f.sha; data = JSON.parse(decodeB64Utf8(f.content));
@@ -236,9 +250,21 @@ $('list').addEventListener('input', e => {
   if (e.target.dataset.f) { p[e.target.dataset.f] = e.target.value; if (e.target.dataset.f !== 'updated') { markDirty(i); box.querySelector('[data-f="updated"]').value = p.updated; } else dirty = true; }
   if (e.target.dataset.v !== undefined) { p.versions[+e.target.dataset.v].label = e.target.value; markDirty(i); box.querySelector('[data-f="updated"]').value = p.updated; }
 });
+async function saveViaServer(s) {
+  const password = $('adminPw').value || store.get('admin_pw');
+  if (!password) { $('pwRow').style.display = 'block'; $('adminPw').focus(); throw new Error('관리자 비밀번호를 넣어 주세요.'); }
+  const r = await fetch('/api/projects', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password, sha: dataSha, data }) });
+  const j = await r.json().catch(() => ({}));
+  if (r.status === 401) { store.del('admin_pw'); $('pwRow').style.display = 'block'; $('adminPw').value = ''; }
+  if (!r.ok) throw new Error(j.error || `저장 실패 (${r.status})`);
+  store.set('admin_pw', password); $('pwRow').style.display = 'none';
+  dataSha = j.sha; dirty = false;
+  s.className = 'status ok'; s.textContent = '저장했습니다. 1~2분 뒤 사이트에 반영됩니다.';
+}
 $('saveList').onclick = async () => {
   const s = $('saveStatus'); s.className = 'status'; s.textContent = '저장 중…';
   try {
+    if (serverMode) return await saveViaServer(s);
     await ensureConnected();
     const { repo, branch } = cfg();
     // 다른 사람이 그사이 저장했는지 확인
