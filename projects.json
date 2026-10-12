@@ -1,13 +1,42 @@
 {
   "projects": [
     {
+      "id": "20261012-151722-02",
+      "title": "예스폼 메인 화면 개선 (10.12 업데이트 3차)",
+      "desc": "",
+      "category": "웹 메인",
+      "created": "2026.10.12",
+      "updated": "2026.10.12",
+      "hidden": false,
+      "folder": "archive/20261012-151722-02",
+      "preview": "archive/20261012-151722-02/시안01-1/index.html",
+      "versions": [
+        {
+          "label": "시안01-1",
+          "href": "archive/20261012-151722-02/시안01-1/index.html"
+        },
+        {
+          "label": "시안02",
+          "href": "archive/20261012-151722-02/시안02/index.html"
+        },
+        {
+          "label": "시안05",
+          "href": "archive/20261012-151722-02/시안05/index.html"
+        },
+        {
+          "label": "시안06",
+          "href": "archive/20261012-151722-02/시안06/index.html"
+        }
+      ]
+    },
+    {
       "id": "20261012-150558-20261012-3",
       "title": "예스폼 메인 화면 개선 (10.12 업데이트 3차)",
       "desc": "",
       "category": "웹 메인",
       "created": "2026.10.12",
       "updated": "2026.10.12",
-      "hidden": true,
+      "hidden": false,
       "folder": "archive/20261012-150558-20261012-3",
       "preview": "archive/20261012-150558-20261012-3/시안01-1/index.html",
       "versions": [
