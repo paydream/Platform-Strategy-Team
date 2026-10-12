@@ -42,22 +42,25 @@ async function readCurrent() {
   return { sha: f.sha, data: JSON.parse(Buffer.from(f.content, 'base64').toString('utf8')) };
 }
 
-// 덮어쓰기 방지: 이미 있는 항목의 폴더·경로는 못 바꾸고, 항목을 지울 수도 없음(숨기기만 가능)
+// 덮어쓰기 방지: 이미 있는 항목의 폴더·경로는 못 바꿈. 삭제는 trash(휴지통)로 옮기는 것만 허용(시안 파일은 그대로)
 function checkNoOverwrite(oldData, newData) {
   if (!newData || !Array.isArray(newData.projects)) return '목록 형식이 올바르지 않습니다.';
-  const byId = new Map(newData.projects.map(p => [p.id, p]));
-  if (byId.size !== newData.projects.length) return '같은 ID 항목이 두 번 들어 있습니다.';
-  for (const old of oldData.projects) {
+  if (newData.trash != null && !Array.isArray(newData.trash)) return '목록 형식이 올바르지 않습니다.';
+  const all = [...newData.projects, ...(newData.trash || [])];
+  const byId = new Map(all.map(p => [p.id, p]));
+  if (byId.size !== all.length) return '같은 ID 항목이 두 번 들어 있습니다.';
+  const oldAll = [...oldData.projects, ...(oldData.trash || [])];
+  for (const old of oldAll) {
     const p = byId.get(old.id);
-    if (!p) return `"${old.title}" 항목을 지울 수 없습니다. 숨기기를 써 주세요.`;
+    if (!p) return `"${old.title}" 항목 기록이 사라졌습니다. 다시 불러온 뒤 해 주세요.`;
     if (p.folder !== old.folder || p.preview !== old.preview) return `"${old.title}" 항목의 폴더·경로는 바꿀 수 없습니다.`;
     const oh = (old.versions || []).map(v => v.href).join('\n');
     const nh = (p.versions || []).map(v => v.href).join('\n');
     if (oh !== nh) return `"${old.title}" 항목의 시안 경로는 바꿀 수 없습니다.`;
   }
-  if (newData.projects.length !== oldData.projects.length) return '여기서는 항목을 새로 만들 수 없습니다. 새 시안은 2번에서 올려 주세요.';
-  for (const p of newData.projects) {
-    for (const k of ['title', 'desc', 'category', 'created', 'updated']) {
+  if (all.length !== oldAll.length) return '여기서는 항목을 새로 만들 수 없습니다. 새 시안은 2번에서 올려 주세요.';
+  for (const p of all) {
+    for (const k of ['title', 'desc', 'category', 'created', 'updated', 'deleted']) {
       if (p[k] != null && typeof p[k] !== 'string') return '글자 항목 형식이 올바르지 않습니다.';
       if (typeof p[k] === 'string' && p[k].length > 2000) return '글자가 너무 깁니다.';
     }

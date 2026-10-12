@@ -33,6 +33,11 @@
   .proj.hidden{opacity:.55;background:#fafbfc}
   .proj-head{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}
   .proj-head strong{font-size:15px}
+  .icon-btn{display:inline-flex;align-items:center;justify-content:center;padding:7px 9px;color:var(--sub)}
+  .icon-btn.del:hover{color:var(--danger);border-color:var(--danger)}
+  .trash{margin-top:14px}
+  .trash summary{cursor:pointer;color:var(--sub);font-size:13px}
+  .trash-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--line);font-size:13px}
   .tag{font-size:11px;border-radius:99px;padding:2px 8px;background:#eef3ff;color:var(--accent)}
   .tag.gray{background:#f2f4f6;color:var(--sub)}
   .proj details{margin-top:8px}
@@ -96,6 +101,7 @@
       <input id="adminPw" type="password" placeholder="관리자 비밀번호">
     </div>
     <div id="list"><p class="note">불러오는 중…</p></div>
+    <div id="trashBox"></div>
     <div class="bar">
       <button class="primary" id="saveList">목록 저장</button>
       <span class="status" id="saveStatus"></span>
@@ -217,6 +223,7 @@ function renderList() {
           <button data-act="down" ${i===data.projects.length-1?'disabled':''}>▼</button>
           <button data-act="hide">${p.hidden ? '보이기' : '숨기기'}</button>
           <a href="../${encodeURI(p.preview)}" target="_blank"><button>열기</button></a>
+          <button class="icon-btn del" data-act="del" title="목록에서 삭제" aria-label="목록에서 삭제"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></button>
         </div>
       </div>
       <details>
@@ -233,6 +240,9 @@ function renderList() {
         <p class="note">폴더: ${esc(p.folder || '-')} · 경로는 바꿀 수 없습니다(덮어쓰기 방지).</p>
       </details>
     </div>`).join('') || '<p class="note">아직 항목이 없습니다.</p>';
+  const T = data.trash || [];
+  $('trashBox').innerHTML = T.length ? `<details class="trash"><summary>삭제한 항목 ${T.length}개 (시안 파일은 남아 있어 되살릴 수 있습니다)</summary>
+    ${T.map((p, i) => `<div class="trash-row"><span>${esc(p.title)} <span class="tag gray">${esc(p.deleted || '')} 삭제</span></span><button data-restore="${i}">되살리기</button></div>`).join('')}</details>` : '';
 }
 function markDirty(i) { data.projects[i].updated = today(); dirty = true; $('saveStatus').className = 'status'; $('saveStatus').textContent = '저장 안 된 변경이 있습니다.'; }
 $('list').addEventListener('click', e => {
@@ -241,6 +251,18 @@ $('list').addEventListener('click', e => {
   if (b.dataset.act === 'up') [P[i-1], P[i]] = [P[i], P[i-1]];
   if (b.dataset.act === 'down') [P[i+1], P[i]] = [P[i], P[i+1]];
   if (b.dataset.act === 'hide') P[i].hidden = !P[i].hidden;
+  if (b.dataset.act === 'del') {
+    if (!confirm(`"${P[i].title}" 항목을 목록에서 삭제할까요?\n(시안 파일은 지우지 않아서 아래 '삭제한 항목'에서 되살릴 수 있습니다. "목록 저장"을 눌러야 반영됩니다.)`)) return;
+    const [gone] = P.splice(i, 1); gone.deleted = today();
+    (data.trash = data.trash || []).unshift(gone);
+  }
+  dirty = true; $('saveStatus').className = 'status'; $('saveStatus').textContent = '저장 안 된 변경이 있습니다.';
+  renderList();
+});
+$('trashBox').addEventListener('click', e => {
+  const b = e.target.closest('button[data-restore]'); if (!b) return;
+  const [back] = data.trash.splice(+b.dataset.restore, 1); delete back.deleted;
+  data.projects.unshift(back);
   dirty = true; $('saveStatus').className = 'status'; $('saveStatus').textContent = '저장 안 된 변경이 있습니다.';
   renderList();
 });
