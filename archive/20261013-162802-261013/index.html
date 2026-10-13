@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>예스폼 에디터 | 템플릿</title>
+  <!-- Pretendard 글꼴 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- =====================================================
+       예스폼 에디터 — 템플릿 화면
+       Figma: 예스폼-에디터 (UEFYzhh4vwD96r3A0J9TwH) / 6422:46352 "템플릿 헤더 수정 3" (1920 × 1236)
+       ===================================================== -->
+
+  <!-- 왼쪽 메뉴 (6422:46355) — 선택된 메뉴: 템플릿 -->
+  <nav class="side-bar" aria-label="에디터 메뉴">
+    <div class="side-bar__inner">
+      <h1 class="side-bar__logo">
+        <a href="#" aria-label="예스폼 에디터"><img src="assets/icons/logo-form.svg" width="28" height="28" alt="" /></a>
+      </h1>
+      <div class="side-bar__menu">
+        <button type="button" class="side-item">
+          <span class="side-item__icon"><img src="assets/icons/ic-document-search.svg" width="16" height="16" alt="" /></span>
+          예스폼 AI
+        </button>
+        <button type="button" class="side-item">
+          <span class="side-item__icon"><img src="assets/icons/ic-category.svg" width="16" height="16" alt="" /></span>
+          도형
+        </button>
+        <button type="button" class="side-item is-active" aria-current="page">
+          <span class="side-item__icon"><img src="assets/icons/ic-template.svg" width="16" height="16" alt="" /></span>
+          템플릿
+        </button>
+        <button type="button" class="side-item">
+          <span class="side-item__icon"><img src="assets/icons/ic-prompt.svg" width="24" height="24" alt="" /></span>
+          프롬프트
+        </button>
+        <div class="side-bar__sub">
+          <button type="button" class="side-item">
+            <span class="side-item__icon"><img src="assets/images/ic-econtract.png" width="24" height="24" alt="" /></span>
+            예스폼싸인
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="side-bar__user">
+      <button type="button" class="side-item" aria-label="내 정보">
+        <span class="side-item__icon"><img src="assets/icons/ic-user.svg" width="24" height="24" alt="" /></span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="page">
+    <!-- 키워드별 인기 템플릿 (6422:46514) — 키워드 버튼 4개 + 카드 6장(js/main.js의 HERO_CARDS) -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero__head">
+        <h2 class="hero__title" id="hero-title">키워드별 인기 템플릿</h2>
+        <div class="keyword-chips" role="tablist" aria-label="키워드">
+          <button type="button" class="keyword-chip is-active" role="tab" aria-selected="true">자기소개서</button>
+          <button type="button" class="keyword-chip" role="tab" aria-selected="false">근로계약서</button>
+          <button type="button" class="keyword-chip" role="tab" aria-selected="false">이력서</button>
+          <button type="button" class="keyword-chip" role="tab" aria-selected="false">견적서</button>
+        </div>
+      </div>
+      <div class="hero-grid" id="hero-grid"></div>
+    </section>
+
+    <!-- 예스폼싸인 띠 (6424:46982) — X를 누르면 닫힘 -->
+    <div class="sign-band" id="sign-band">
+      <p class="sign-band__text">
+        <img class="sign-band__logo" src="assets/icons/logo-sign.svg" width="24" height="24" alt="" />
+        에디터에서 계약서를 편집하고 <em>예스폼싸인으로 간편하게 전자계약</em>을 진행하세요!
+      </p>
+      <button type="button" class="sign-band__close" id="sign-band-close" aria-label="닫기">
+        <img src="assets/icons/ic-close.svg" width="24" height="24" alt="" />
+      </button>
+    </div>
+
+    <!-- 탭 · 검색 (6422:46565) -->
+    <div class="editor-header">
+      <div class="editor-header__inner">
+        <div class="editor-tabs" role="tablist" aria-label="템플릿 분류">
+          <button type="button" class="editor-tab is-active" role="tab" aria-selected="true">전체</button>
+          <button type="button" class="editor-tab" role="tab" aria-selected="false">계약서</button>
+          <button type="button" class="editor-tab" role="tab" aria-selected="false">자기소개서</button>
+          <button type="button" class="editor-tab" role="tab" aria-selected="false">이력서</button>
+          <button type="button" class="editor-tab" role="tab" aria-selected="false">MY</button>
+        </div>
+        <form class="search-box" role="search" onsubmit="return false;">
+          <input class="search-box__input" type="search" placeholder="검색어를 입력하세요." aria-label="템플릿 검색" />
+          <button type="submit" class="search-box__btn" aria-label="검색">
+            <img src="assets/icons/ic-search.svg" width="24" height="24" alt="" />
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- 전체 템플릿 목록 (6422:46579) — 카드 16장(js/main.js의 LIST_CARDS) -->
+    <section class="template-list" aria-labelledby="list-title">
+      <div class="template-list__head">
+        <h2 class="template-list__title" id="list-title"><strong>전체 템플릿</strong><span>1,234</span></h2>
+        <button type="button" class="sort-btn">인기순<img src="assets/icons/ic-down.svg" width="12" height="20" alt="" /></button>
+      </div>
+      <div class="list-grid" id="list-grid"></div>
+    </section>
+  </main>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
