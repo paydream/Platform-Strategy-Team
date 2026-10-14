@@ -85,7 +85,9 @@ module.exports = async (req, res) => {
     if (body.check) return res.status(200).json({ ok: true });
 
     const cur = await readCurrent();
-    if (body.sha !== cur.sha) return res.status(409).json({ error: '그사이 다른 곳에서 목록이 바뀌었습니다. 새로고침 후 다시 해주세요.' });
+    // 버전 표시(sha)만 다르고 내용은 불러온 때와 같으면 저장 진행
+    if (body.sha !== cur.sha && JSON.stringify(cur.data) !== JSON.stringify(body.base))
+      return res.status(409).json({ error: '그사이 다른 사람이 목록을 바꿨습니다. 새로고침해서 최신 목록을 불러온 뒤 다시 고쳐 주세요.' });
     const problem = checkNoOverwrite(cur.data, body.data);
     if (problem) return res.status(400).json({ error: problem });
 
