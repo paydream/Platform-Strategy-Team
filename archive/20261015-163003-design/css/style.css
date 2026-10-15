@@ -1,0 +1,262 @@
+/* =========================================================
+   예스폼 에디터 — 메인 편집 화면 + 안내 모달 (Figma 6514:51583 "목업" · 1920 × 1080)
+   구성: 왼쪽 메뉴(64) + 예스폼 AI 패널(420) + 에디터(1436 = 상단 60 + 문서 영역)
+         그 위에 딤드(검정 60%) + 안내 모달(520 × 524)
+   ========================================================= */
+:root {
+  --primary-700: #0472e3;          /* primary/700 */
+  --gradient-start: #0472e3;       /* Brand/Yesform/gradient — 다운로드 버튼 */
+  --gradient-end: #3893f1;
+  --side-active-bg: #f1f8fd;       /* 왼쪽 메뉴 선택 · 맞춤 프롬프트 버튼 배경 */
+  --border-light-gray: #eaeaea;    /* color/border/light-gray */
+  --border-gray: #c2c2c2;          /* color/border/gray */
+  --gray-lt-02: #f6f7f8;           /* 문서 영역 바탕 */
+  --gray-lt-03: #f1f2f4;           /* 인쇄 버튼 · 모달 그림 아래 선 */
+  --gray-lt-07: #babfc4;           /* 모달 "/ 4" */
+  --gray-lt-12: #464a4e;           /* 왼쪽 메뉴 글자 */
+  --bg-50: #f8f8f8;                /* bg-color/50 — 추천 프롬프트 */
+  --font-800: #444444;             /* font-color/800 */
+  --font-700: #666666;             /* font-color/700 */
+  --font-500: #929292;             /* font-color/500 */
+  --text-primary: #1d1f20;         /* font/text-primary */
+  --text-secondary: #383b3e;       /* font/text-secondary */
+  --black: #000000;
+  --white: #ffffff;
+  --dim: rgba(0, 0, 0, 0.6);       /* 딤드 — 검정 60% */
+  --radius-small: 5px;
+  --radius-large: 10px;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕", sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; padding: 0; }
+body { font-family: var(--font-family); color: var(--text-primary); background: var(--white); -webkit-font-smoothing: antialiased; }
+body.is-modal-open { overflow: hidden; } /* 모달이 떠 있는 동안 뒤 화면 스크롤 막음 */
+p, h1, h2, ul { margin: 0; }
+ul { padding: 0; list-style: none; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+img { display: block; }
+
+/* 화면 전체 — 왼쪽 메뉴 · 패널 · 에디터를 가로로 */
+.app { height: 100vh; min-height: 640px; display: flex; overflow: hidden; }
+
+/* ---------- 왼쪽 메뉴 (6514:51228) — 폭 64 · 오른쪽 선 #eaeaea · 위 12 / 아래 16 ---------- */
+.side-bar {
+  flex: none;
+  width: 64px;
+  padding: 12px 0 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--white);
+  box-shadow: inset -1px 0 0 var(--border-light-gray); /* 오른쪽 선 — 안쪽 폭 64 유지 */
+}
+.side-bar__inner { display: flex; flex-direction: column; gap: 15px; }
+.side-bar__logo { height: 40px; display: flex; align-items: center; justify-content: center; }
+.side-bar__menu { display: flex; flex-direction: column; gap: 15px; }
+/* 메뉴 한 칸 — 아이콘 칸(50 × 30 · 모서리 10) ↔ 2 ↔ 12px Medium(줄높이 16) #464a4e */
+.side-item {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: var(--fw-medium);
+  color: var(--gray-lt-12);
+  white-space: nowrap;
+}
+.side-item__icon { width: 50px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-large); }
+.side-item.is-active { color: var(--primary-700); }
+.side-item.is-active .side-item__icon { background: var(--side-active-bg); }
+/* 새 문서 · 로그인 아이콘은 24 그림을 16 칸에 넣은 것 (Figma처럼 가운데) */
+.side-item--login { color: var(--font-800); }
+
+/* ---------- 예스폼 AI 패널 (6514:51336) — 폭 420 · 오른쪽 선 ---------- */
+.ai-panel {
+  flex: none;
+  width: 420px;
+  display: flex;
+  flex-direction: column;
+  background: var(--white);
+  box-shadow: inset -1px 0 0 var(--border-light-gray);
+}
+/* 위 — 높이 60 · 좌우 15 · 위아래 10 */
+.ai-panel__top { flex: none; height: 60px; padding: 10px 15px; display: flex; align-items: center; justify-content: space-between; }
+.ai-panel__title { font-size: 15px; line-height: 22px; font-weight: var(--fw-semibold); color: var(--black); }
+.ai-panel__actions { display: flex; align-items: center; gap: 5px; }
+.ai-panel__new { height: 40px; padding: 0 10px; display: flex; align-items: center; gap: 5px; font-size: 15px; line-height: 24px; font-weight: var(--fw-medium); color: var(--font-500); white-space: nowrap; }
+.ai-panel__fold { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; }
+/* 채팅 내역 — 남는 높이 · 여백 20 / 15 */
+.ai-panel__chat { flex: 1; min-height: 0; overflow-y: auto; padding: 20px 15px; }
+/* 이용 안내 — 위 30 · 15px Medium(줄높이 24) #666 · 목록 점 들여쓰기 22.5 */
+.ai-guide { padding-top: 30px; font-size: 15px; line-height: 24px; font-weight: var(--fw-medium); color: var(--font-700); }
+.ai-guide ul { padding-left: 22.5px; list-style: disc; }
+
+/* 입력창 + 추천 프롬프트 (6514:51397) — 높이 560 (그라데이션 30 + 흰 영역 530) */
+.ai-input { flex: none; }
+.ai-input__fade { height: 30px; background: linear-gradient(to bottom, rgba(255, 255, 255, 0), var(--white)); pointer-events: none; }
+.ai-input__body { padding: 0 15px 15px; display: flex; flex-direction: column; gap: 10px; background: var(--white); }
+/* 입력 상자 — 테두리 #eaeaea · 모서리 10 · 여백 10 · 간격 10 */
+.chat-box { padding: 9px; /* Figma 여백 10 = 테두리 1 포함 */ display: flex; flex-direction: column; gap: 10px; border: 1px solid var(--border-light-gray); border-radius: var(--radius-large); background: var(--white); }
+.chat-box__field {
+  height: 95px;
+  padding: 0 5px;
+  border: 0;
+  outline: none;
+  resize: none;
+  font: inherit;
+  font-size: 15px;
+  line-height: 24px;
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
+}
+.chat-box__field::placeholder { color: var(--font-500); }
+.chat-box__send-row { display: flex; justify-content: flex-end; }
+/* 보내기 — 35 원 · 흰 바탕 · 테두리 · 그림자 */
+.chat-box__send {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-light-gray);
+  border-radius: 50%;
+  background: var(--white);
+  filter: drop-shadow(2px 4px 7.5px rgba(0, 0, 0, 0.1));
+}
+/* 추천 프롬프트 — 위 선 1px · 머리 35 · 목록 간격 5 */
+.prompt-rec { display: flex; flex-direction: column; gap: 10px; padding-top: 0; }
+.prompt-rec::before { content: ""; height: 1px; background: var(--border-light-gray); }
+.prompt-rec__head { height: 35px; display: flex; align-items: center; justify-content: space-between; }
+.prompt-rec__label { display: flex; align-items: center; gap: 5px; font-size: 14px; line-height: 24px; font-weight: var(--fw-medium); color: var(--font-800); }
+.prompt-rec__toggle { width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; }
+.prompt-rec__list { display: flex; flex-direction: column; gap: 5px; }
+.prompt-rec__item {
+  width: 100%;
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 10px;
+  background: var(--bg-50);
+  text-align: left;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: var(--fw-medium);
+  color: var(--font-800);
+}
+.prompt-rec__item--setting { justify-content: space-between; background: var(--side-active-bg); color: var(--primary-700); }
+.prompt-rec__item--setting img { margin-right: 2px; }
+/* 아래 안내 — 12px Medium #929292 가운데 */
+.ai-input__note { font-size: 12px; line-height: 16px; font-weight: var(--fw-medium); color: var(--font-500); text-align: center; }
+
+/* ---------- 에디터 (6514:51433) ---------- */
+.editor { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+/* 상단 (6514:51434) — 높이 60 · 아래 선 · 좌우 20 · 오른쪽 정렬 */
+.editor-header { flex: none; height: 60px; padding: 0 20px; display: flex; align-items: center; justify-content: flex-end; background: var(--white); border-bottom: 1px solid var(--border-light-gray); }
+.editor-header__right { display: flex; align-items: center; gap: 10px; }
+/* 문서 제목 — 200 × 40 · 15px Medium #444 */
+.doc-title { width: 200px; height: 40px; padding: 5px 10px; border: 0; border-radius: var(--radius-small); outline: none; background: transparent; font: inherit; font-size: 15px; line-height: 22px; font-weight: var(--fw-medium); color: var(--font-800); }
+.doc-title:hover, .doc-title:focus { background: var(--gray-lt-03); }
+.divider { width: 1px; height: 25px; background: var(--border-light-gray); }
+/* 구분선 ↔ 실행취소·다시실행 ↔ 구분선 사이 15 (오른쪽 묶음 간격 10에 5 더함) */
+.history { margin: 0 5px; display: flex; gap: 5px; }
+.history button { width: 30px; height: 30px; }
+.header-btns { display: flex; gap: 5px; }
+.btn-print { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-small); background: var(--gray-lt-03); }
+.btn-download {
+  height: 40px;
+  min-width: 89px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border-radius: var(--radius-small);
+  background: linear-gradient(-90deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: var(--fw-semibold);
+  color: var(--white);
+  white-space: nowrap;
+}
+
+/* 문서 영역 (6514:51435) — 바탕 #f6f7f8 · 위 10 · 간격 10 · 가운데 */
+.editor-body { flex: 1; min-height: 0; overflow-y: auto; padding: 10px 0 40px; display: flex; flex-direction: column; align-items: center; gap: 10px; background: var(--gray-lt-02); }
+/* 서식 도구 (6514:51446) — 흰 바탕 · 테두리 · 모서리 5 · 여백 5 · 칸 간격 5 · 그림자 */
+.menu-bar {
+  flex: none;
+  padding: 4px; /* Figma 여백 5는 테두리 1을 포함한 값 → 4 + 테두리 1 */
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid var(--border-light-gray);
+  border-radius: var(--radius-small);
+  background: var(--white);
+  filter: drop-shadow(0 4px 6px rgba(47, 44, 44, 0.1));
+}
+/* 글꼴 — 높이 32 · 왼쪽 10 / 오른쪽 5 · 14px Medium #444 (글자 폭 75) */
+.menu-bar__font { height: 32px; padding: 5px 5px 5px 10px; display: flex; align-items: center; gap: 5px; border-radius: 3px; font-size: 14px; line-height: 20px; font-weight: var(--fw-medium); color: var(--font-800); text-align: left; }
+.menu-bar__font { width: 111px; justify-content: space-between; }
+/* 글자 크기 — − [16] + · 좌우 5 · 간격 5 */
+.menu-bar__size { padding: 0 5px; display: flex; align-items: center; gap: 5px; }
+.menu-bar__size button { width: 20px; height: 20px; }
+.menu-bar__size-value { width: 40px; height: 32px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-light-gray); border-radius: var(--radius-small); background: var(--white); font-size: 14px; line-height: 20px; font-weight: var(--fw-medium); color: var(--font-800); }
+/* 아이콘 버튼 — 32 × 32 · 아이콘 16 */
+.menu-bar__icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-small); }
+.menu-bar__icon:hover { background: var(--gray-lt-03); }
+/* 글자 색 · 형광펜 — 아이콘 16 ↔ 2 ↔ 색 막대(17 × 4) */
+.menu-bar__icon--color { flex-direction: column; gap: 2px; }
+.swatch { display: block; width: 17px; height: 4px; }
+.swatch--black { background: var(--black); }
+.swatch--white { background: var(--white); border: 0.5px solid var(--border-gray); }
+/* 빈 문서 (6514:51535) — 793 × 1318 · 흰 바탕 · 그림자 */
+.paper { flex: none; width: 793px; height: 1318px; background: var(--white); box-shadow: 0 8px 16px rgba(47, 44, 44, 0.1); }
+
+/* ---------- 딤드 + 안내 모달 ---------- */
+/* 딤드 (6514:51581) — 화면 전체 · 검정 60% · 눌러도 반응 없음 */
+.dimmed {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: var(--dim);
+}
+.dimmed[hidden] { display: none; }
+/* 모달 (섹션 6514:51221 · 단계마다 520 × 510) — 흰 바탕 · 모서리 10 */
+.guide-modal { position: relative; width: 520px; max-width: 100%; overflow: hidden; border-radius: 10px; background: var(--white); outline: none; }
+/* 위 그림 (6514:51585) — 520 × 260 · 아래 선 1px #f1f2f4 (그림에 포함) */
+.guide-modal__visual img { width: 100%; height: auto; }
+/* 닫기 X — 30 · 위 22 · 오른쪽 22 */
+.guide-modal__close { position: absolute; top: 22px; right: 22px; width: 30px; height: 30px; border-radius: 50%; }
+.guide-modal__close:focus-visible { outline: 2px solid var(--primary-700); outline-offset: 2px; }
+/* 글 영역 (contents · 520 × 250) — 여백 32 / 36 · 글 ↔ 버튼 24 */
+.guide-modal__contents { padding: 32px 36px; display: flex; flex-direction: column; gap: 24px; }
+/* 글 묶음 높이 122 고정 — 버튼 위치가 단계마다 같게 (4단계는 용량 안내 한 줄이 더 있어 Figma처럼 아래로 넘쳐 보임) */
+.guide-modal__text { height: 122px; display: flex; flex-direction: column; gap: 16px; }
+/* 단계 "1 / 4" — 14px SemiBold · 현재 단계 파란색 · 나머지 #babfc4 · 간격 2 */
+.guide-modal__step { display: flex; gap: 2px; font-size: 14px; line-height: 14px; font-weight: var(--fw-semibold); color: var(--gray-lt-07); }
+.guide-modal__step b { font-weight: inherit; color: var(--primary-700); }
+/* 제목 24px Bold(줄높이 34) ↔ 8 ↔ 설명 15px Regular(줄높이 21) #383b3e */
+.guide-modal__copy { display: flex; flex-direction: column; gap: 8px; }
+.guide-modal__title { font-size: 24px; line-height: 34px; font-weight: var(--fw-bold); color: var(--text-primary); }
+.guide-modal__desc-box { display: flex; flex-direction: column; gap: 4px; }
+/* 4단계 용량 안내 "문서 용량은 5MB 이하만 가능합니다." — 13px Regular(줄높이 18) #888f95 · 설명과 간격 4 */
+.guide-modal__note { font-size: 13px; line-height: 18px; font-weight: var(--fw-regular); color: #888f95; }
+.guide-modal__note[hidden] { display: none; }
+.guide-modal__desc { font-size: 15px; line-height: 21px; font-weight: var(--fw-regular); color: var(--text-secondary); }
+/* 다음 — 160 × 40 · 파란 바탕 · 모서리 6 · 15px SemiBold 흰 글자 · 오른쪽 */
+.guide-modal__btns { display: flex; justify-content: flex-end; gap: 8px; }
+/* 이전 — 80 × 40 · 배경 #f3f3f3 · 15px SemiBold #666 (1단계에는 없음) */
+.guide-modal__prev { width: 80px; height: 40px; padding: 0 20px; border-radius: 6px; background: #f3f3f3; font-size: 15px; line-height: 22px; font-weight: var(--fw-semibold); color: var(--font-700); white-space: nowrap; }
+.guide-modal__prev[hidden] { display: none; }
+.guide-modal__next { white-space: nowrap; width: 160px; height: 40px; padding: 0 20px; border-radius: 6px; background: var(--primary-700); font-size: 15px; line-height: 22px; font-weight: var(--fw-semibold); color: var(--white); }

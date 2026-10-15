@@ -1,6 +1,23 @@
 {
   "projects": [
     {
+      "id": "20261015-163003-design",
+      "title": "예스폼에디터 가이드 모달 (10.15)",
+      "desc": "",
+      "category": "웹 메인",
+      "created": "2026.10.15",
+      "updated": "2026.10.15",
+      "hidden": false,
+      "folder": "archive/20261015-163003-design",
+      "preview": "archive/20261015-163003-design/index.html",
+      "versions": [
+        {
+          "label": "시안 01",
+          "href": "archive/20261015-163003-design/index.html"
+        }
+      ]
+    },
+    {
       "id": "20261015-162214-261015",
       "title": "예스폼 상세페이지_에디터 강조 (10.15 업데이트 2차)",
       "desc": "",

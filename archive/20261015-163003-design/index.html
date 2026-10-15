@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>예스폼 에디터 | 편집</title>
+  <!-- Pretendard 글꼴 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="is-modal-open">
+  <!-- =====================================================
+       예스폼 에디터 — 메인 편집 화면 + 안내 모달
+       Figma: 예스폼-에디터 (UEFYzhh4vwD96r3A0J9TwH) / 6514:51583 "목업" (1920 × 1080)
+       · 뒤 화면 = 6514:51225 "01_에디터 이동" (왼쪽 메뉴 · 예스폼 AI 패널 · 에디터 상단 · 서식 도구 · 빈 문서)
+       · 앞 화면 = 6514:51581 "딤드"(검정 60%) + 6514:51584 안내 모달
+       · 딤드를 눌러도 아무 일 없음 — 모달 오른쪽 위 X를 눌러야 닫힘
+       ===================================================== -->
+  <div class="app" id="app">
+    <!-- 왼쪽 메뉴 (6514:51228) — 선택된 메뉴: 예스폼 AI -->
+    <nav class="side-bar" aria-label="에디터 메뉴">
+      <div class="side-bar__inner">
+        <h1 class="side-bar__logo">
+          <a href="#" aria-label="예스폼 에디터"><img src="assets/icons/logo-form.svg" width="28" height="28" alt="" /></a>
+        </h1>
+        <div class="side-bar__menu">
+          <button type="button" class="side-item">
+            <span class="side-item__icon"><img src="assets/icons/side-add.svg" width="24" height="24" alt="" /></span>
+            새 문서
+          </button>
+          <button type="button" class="side-item is-active" aria-current="page">
+            <span class="side-item__icon"><img src="assets/icons/side-ai.svg" width="16" height="16" alt="" /></span>
+            예스폼 AI
+          </button>
+          <button type="button" class="side-item">
+            <span class="side-item__icon"><img src="assets/icons/side-category.svg" width="16" height="16" alt="" /></span>
+            도형
+          </button>
+          <button type="button" class="side-item">
+            <span class="side-item__icon"><img src="assets/icons/side-template.svg" width="16" height="16" alt="" /></span>
+            템플릿
+          </button>
+          <button type="button" class="side-item">
+            <span class="side-item__icon"><img src="assets/icons/side-prompt.svg" width="16" height="16" alt="" /></span>
+            프롬프트
+          </button>
+        </div>
+      </div>
+      <button type="button" class="side-item side-item--login">
+        <span class="side-item__icon"><img src="assets/icons/side-login.svg" width="24" height="24" alt="" /></span>
+        로그인
+      </button>
+    </nav>
+
+    <!-- 예스폼 AI 패널 (6514:51336) — 폭 420 -->
+    <aside class="ai-panel" aria-label="예스폼 AI">
+      <div class="ai-panel__top">
+        <h2 class="ai-panel__title">예스폼 AI</h2>
+        <div class="ai-panel__actions">
+          <button type="button" class="ai-panel__new"><img src="assets/icons/panel-add.svg" width="24" height="24" alt="" />새 문서</button>
+          <button type="button" class="ai-panel__fold" aria-label="패널 접기"><img src="assets/icons/panel-collapse.svg" width="24" height="24" alt="" /></button>
+        </div>
+      </div>
+
+      <div class="ai-panel__chat">
+        <!-- 이용 안내 -->
+        <div class="ai-guide">
+          <p>📍 예스폼 에디터 이용 가이드</p>
+          <p aria-hidden="true">&#8203;</p>
+          <ul>
+            <li>AI 기반 문서 생성기로 원하는 문서를 손쉽게 만들어 보세요.</li>
+            <li>필요하신 문서 주제를 입력하면 AI가 편집 가능한 문서를<br />자동으로 생성해 드립니다.</li>
+            <li>생성된 문서는 에디터에서 바로 수정 편집 하실 수 있습니다.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 입력창 + 추천 프롬프트 펼침 (6514:51397) -->
+      <div class="ai-input">
+        <div class="ai-input__fade"></div>
+        <div class="ai-input__body">
+          <div class="chat-box">
+            <textarea class="chat-box__field" rows="4" placeholder="만들고 싶은 문서를 설명해주세요 (예: 이력서, 보고서, 계약서 등). 표나 목록을 포함한 결과로 생성할 수 있습니다." aria-label="만들고 싶은 문서 설명"></textarea>
+            <div class="chat-box__send-row">
+              <button type="button" class="chat-box__send" aria-label="보내기"><img src="assets/icons/ic-north.svg" width="20" height="20" alt="" /></button>
+            </div>
+            <div class="prompt-rec">
+              <div class="prompt-rec__head">
+                <span class="prompt-rec__label"><img src="assets/icons/ic-sparkle.svg" width="20" height="20" alt="" />추천 프롬프트</span>
+                <button type="button" class="prompt-rec__toggle" aria-label="추천 프롬프트 접기"><img src="assets/icons/ic-up.svg" width="20" height="20" alt="" /></button>
+              </div>
+              <ul class="prompt-rec__list">
+                <li><button type="button" class="prompt-rec__item">목표 설정을 위한 체크리스트 작성해줘</button></li>
+                <li><button type="button" class="prompt-rec__item">신입 지원자를 위한 이력서를 작성해주세요. 경영학 전공 마케팅 직무 인턴 경험 1회와 교내 프로젝트 경험을 강조해서 정리해주세요.</button></li>
+                <li><button type="button" class="prompt-rec__item">1페이지 분량의 간결한 이력서를 작성해 주세요. 경력은 3년 차 영업직이며, 핵심 성과와 숫자 지표 위주로 정리해주세요.</button></li>
+                <li><button type="button" class="prompt-rec__item prompt-rec__item--setting">관심 분야 설정하고 맞춤 프롬프트 제안 받기<img src="assets/icons/ic-right-blue.svg" width="20" height="20" alt="" /></button></li>
+              </ul>
+            </div>
+          </div>
+          <p class="ai-input__note">예스폼 AI는 실수할 수 있으니 정확성을 확인해 주세요.</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- 에디터 영역 (6514:51433) -->
+    <main class="editor">
+      <!-- 에디터 상단 (6514:51434) -->
+      <header class="editor-header">
+        <div class="editor-header__right">
+          <input class="doc-title" type="text" value="제목없는 문서" aria-label="문서 제목" />
+          <span class="divider" aria-hidden="true"></span>
+          <div class="history">
+            <button type="button" aria-label="실행 취소"><img src="assets/icons/ic-undo.svg" width="30" height="30" alt="" /></button>
+            <button type="button" aria-label="다시 실행"><img src="assets/icons/ic-redo.svg" width="30" height="30" alt="" /></button>
+          </div>
+          <span class="divider" aria-hidden="true"></span>
+          <div class="header-btns">
+            <button type="button" class="btn-print" aria-label="인쇄"><img src="assets/icons/ic-print.svg" width="20" height="20" alt="" /></button>
+            <button type="button" class="btn-download"><img src="assets/icons/ic-lock.svg" width="20" height="20" alt="" />다운로드</button>
+          </div>
+        </div>
+      </header>
+
+      <!-- 문서 영역 (6514:51435) — 서식 도구 + 빈 문서(793 × 1318) -->
+      <div class="editor-body">
+        <div class="menu-bar" role="toolbar" aria-label="서식 도구">
+          <button type="button" class="menu-bar__font">Pretendard<img src="assets/icons/mb-down.svg" width="16" height="16" alt="" /></button>
+          <div class="menu-bar__size">
+            <button type="button" aria-label="글자 작게"><img src="assets/icons/mb-remove.svg" width="20" height="20" alt="" /></button>
+            <span class="menu-bar__size-value">16</span>
+            <button type="button" aria-label="글자 크게"><img src="assets/icons/mb-add.svg" width="20" height="20" alt="" /></button>
+          </div>
+          <button type="button" class="menu-bar__icon menu-bar__icon--color" aria-label="글자 색"><img src="assets/icons/mb-font-color.svg" width="16" height="16" alt="" /><i class="swatch swatch--black"></i></button>
+          <button type="button" class="menu-bar__icon menu-bar__icon--color" aria-label="형광펜"><img src="assets/icons/mb-highlighter.svg" width="16" height="16" alt="" /><i class="swatch swatch--white"></i></button>
+          <button type="button" class="menu-bar__icon" aria-label="굵게"><img src="assets/icons/mb-bold.svg" width="16" height="16" alt="" /></button>
+          <button type="button" class="menu-bar__icon" aria-label="기울임"><img src="assets/icons/mb-italic.svg" width="16" height="16" alt="" /></button>
+          <button type="button" class="menu-bar__icon" aria-label="밑줄"><img src="assets/icons/mb-underline.svg" width="16" height="16" alt="" /></button>
+          <button type="button" class="menu-bar__icon" aria-label="취소선"><img src="assets/icons/mb-strike.svg" width="16" height="16" alt="" /></button>
+          <button type="button" class="menu-bar__icon" aria-label="왼쪽 정렬"><img src="assets/icons/mb-align-start.svg" width="16" height="16" alt="" /></button>
+          <button type="button" class="menu-bar__icon" aria-label="가운데 정렬"><img src="assets/icons/mb-align-center.svg" width="16" height="16" alt="" /></button>
+          <button type="button" class="menu-bar__icon" aria-label="오른쪽 정렬"><img src="assets/icons/mb-align-end.svg" width="16" height="16" alt="" /></button>
+          <button type="button" class="menu-bar__icon" aria-label="번호 목록"><img src="assets/icons/mb-list-ordered.svg" width="16" height="16" alt="" /></button>
+          <button type="button" class="menu-bar__icon" aria-label="글머리 목록"><img src="assets/icons/mb-list.svg" width="16" height="16" alt="" /></button>
+          <button type="button" class="menu-bar__icon" aria-label="링크"><img src="assets/icons/mb-link.svg" width="16" height="16" alt="" /></button>
+          <button type="button" class="menu-bar__icon" aria-label="표"><img src="assets/icons/mb-table.svg" width="16" height="16" alt="" /></button>
+          <button type="button" class="menu-bar__icon" aria-label="이미지"><img src="assets/icons/mb-image.svg" width="16" height="16" alt="" /></button>
+        </div>
+        <div class="paper" aria-label="문서"></div>
+      </div>
+    </main>
+  </div>
+
+  <!-- 딤드 + 에디터 가이드 모달 4단계 (딤드 6514:51581 · 모달 섹션 6514:51221 "261015_에디터 가이드 모달")
+       딤드 = 검정 60% · 눌러도 닫히지 않음 / 모달 520 × 510 · 모서리 10 · 화면 가운데 / 닫기 = 오른쪽 위 X
+       1/4 다음 → 2/4 이전·다음 → 3/4 이전·다음 → 4/4 이전·에디터 시작하기(누르면 닫힘) — 단계 내용은 js/main.js의 GUIDE_STEPS -->
+  <div class="dimmed" id="guide-dim">
+    <section class="guide-modal" role="dialog" aria-modal="true" aria-labelledby="guide-title" aria-describedby="guide-desc" tabindex="-1">
+      <div class="guide-modal__visual">
+        <img src="assets/images/guide-step1.png" width="520" height="260" alt="" id="guide-img" />
+      </div>
+      <button type="button" class="guide-modal__close" id="guide-close" aria-label="닫기"><img src="assets/icons/ic-close-30.svg" width="30" height="30" alt="" /></button>
+      <div class="guide-modal__contents">
+        <div class="guide-modal__text">
+          <p class="guide-modal__step" aria-live="polite"><b id="guide-step-now">1</b><span>/</span><span id="guide-step-total">4</span></p>
+          <div class="guide-modal__copy">
+            <h2 class="guide-modal__title" id="guide-title">예스폼 서식을 나만의 문서로 완성하세요</h2>
+            <div class="guide-modal__desc-box">
+              <p class="guide-modal__desc" id="guide-desc">전문가가 만든 서식의 구성과 예시를 참고해, 내 상황에 맞게 고쳐 쓰세요.<br />이름·날짜·금액 같은 예시 내용은 꼭 실제 정보로 변경하거나 삭제해 주세요.</p>
+              <p class="guide-modal__note" id="guide-note" hidden></p>
+            </div>
+          </div>
+        </div>
+        <div class="guide-modal__btns">
+          <button type="button" class="guide-modal__prev" id="guide-prev" hidden>이전</button>
+          <button type="button" class="guide-modal__next" id="guide-next">다음</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
