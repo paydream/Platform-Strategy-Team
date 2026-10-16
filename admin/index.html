@@ -44,6 +44,11 @@
   .phead strong{font-size:15px}
   .tag{font-size:11px;border-radius:99px;padding:2px 8px;background:#eef3ff;color:var(--accent)}
   .tag.plan{background:var(--plan-bg);color:var(--plan)}
+  .teamsw{display:inline-flex;gap:2px;background:#eceef1;border-radius:99px;padding:2px;vertical-align:middle;margin:0 4px}
+  .teamsw button{border:0;background:none;border-radius:99px;padding:2px 10px;font-size:12px;color:var(--sub)}
+  .teamsw button.on{background:#fff;font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+  .teamsw button.on.design{color:var(--accent)}
+  .teamsw button.on.planning{color:var(--plan)}
   .tag.gray{background:#f2f4f6;color:var(--sub)}
   .tag.final{background:var(--final-bg);color:var(--ok);font-weight:600}
   .icon-btn{display:inline-flex;align-items:center;justify-content:center;padding:7px 9px;color:var(--sub)}
@@ -204,7 +209,8 @@ function renderList() {
   $('list').innerHTML = P().map((p, i) => `
     <div class="proj ${p.hidden ? 'hidden' : ''}" data-p="${i}">
       <div class="phead">
-        <div><strong>${esc(p.title)}</strong> <span class="tag ${p.team === 'planning' ? 'plan' : ''}">${M.TEAMS[p.team] || '디자인'}</span>
+        <div><strong>${esc(p.title)}</strong>
+          <span class="teamsw" role="group" aria-label="팀">${Object.entries(M.TEAMS).map(([k, n]) => `<button data-act="team" data-team="${k}" class="${(p.team || 'design') === k ? 'on ' + k : ''}" aria-pressed="${(p.team || 'design') === k}">${n}</button>`).join('')}</span>
           ${p.final ? '<span class="tag final">최종안 확정</span>' : ''} ${p.hidden ? '<span class="tag gray">숨김</span>' : ''}
           <span class="tag gray">버전 ${p.versions.length}개</span></div>
         <div class="bar" style="margin:0">
@@ -256,6 +262,7 @@ $('list').addEventListener('click', e => {
     case 'up': [P()[i-1], P()[i]] = [P()[i], P()[i-1]]; break;
     case 'down': [P()[i+1], P()[i]] = [P()[i], P()[i+1]]; break;
     case 'hide': p.hidden = !p.hidden; break;
+    case 'team': if (p.team === b.dataset.team) return; p.team = b.dataset.team; p.updated = today(); break;
     case 'delp':
       if (!confirm(`"${p.title}" 프로젝트를 휴지통으로 옮길까요? (파일은 남아 있어 되살릴 수 있습니다)`)) return;
       P().splice(i, 1); delete p._open; data.trash.unshift({ type: 'project', deleted: today(), project: p }); break;
