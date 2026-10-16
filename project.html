@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>프로젝트 · 업무 아카이브</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--line:#e5e8ec;--text:#191f28;--sub:#6b7684;--accent:#2f6bff;--chip:#eef3ff;--final:#12a150;--final-bg:#e8f7ee;--plan:#8a4dff;--plan-bg:#f3edff;--danger:#e5484d}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Pretendard Variable",Pretendard,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;font-size:14px}
+  header{background:var(--card);border-bottom:1px solid var(--line)}
+  .bar{display:flex;align-items:center;gap:12px;height:56px;padding:0 20px}
+  .bar a{color:var(--sub);text-decoration:none;font-size:13px}
+  .bar a:hover{color:var(--accent)}
+  .head{padding:18px 20px 14px;background:var(--card);border-bottom:1px solid var(--line)}
+  .head h1{font-size:20px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .head p{color:var(--sub);margin-top:4px}
+  .chip{font-size:12px;font-weight:500;padding:2px 8px;border-radius:99px;background:var(--chip);color:var(--accent)}
+  .chip.plan{background:var(--plan-bg);color:var(--plan)}
+  .chip.final{background:var(--final-bg);color:var(--final);font-weight:600}
+  .layout{display:grid;grid-template-columns:250px minmax(0,1fr) 330px;height:calc(100vh - 56px - var(--head-h,86px))}
+  aside,.comments{background:var(--card);overflow:auto}
+  aside{border-right:1px solid var(--line);padding:12px}
+  aside h2,.comments h2{font-size:13px;color:var(--sub);font-weight:600;margin:4px 4px 8px}
+  .ver{border-radius:8px;margin-bottom:4px}
+  .ver > button{width:100%;text-align:left;font:inherit;border:0;background:none;padding:8px;border-radius:8px;cursor:pointer;display:flex;gap:6px;align-items:center}
+  .ver > button:hover{background:#f2f4f6}
+  .ver.open > button{background:#f2f4f6}
+  .ver .folder{font-size:15px}
+  .ver .vname{font-weight:600}
+  .ver .vdate{margin-left:auto;font-size:12px;color:var(--sub)}
+  .ver .vtitle{font-size:12px;color:var(--sub);padding:0 8px 4px 30px;display:none}
+  .ver.open .vtitle{display:block}
+  .items{display:none;padding:0 0 6px 22px}
+  .ver.open .items{display:block}
+  .items button{display:flex;align-items:center;gap:6px;width:100%;text-align:left;font:inherit;font-size:13px;border:0;background:none;padding:6px 8px;border-radius:6px;cursor:pointer;color:var(--text)}
+  .items button:hover{background:#f6f8fa}
+  .items button[aria-current="true"]{background:var(--chip);color:var(--accent);font-weight:600}
+  .items .cnt{margin-left:auto;font-size:11px;color:var(--sub)}
+  .star{font-size:11px;color:var(--final);font-weight:700}
+  .viewer{display:flex;flex-direction:column;min-width:0}
+  .vbar{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--card);border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .vbar strong{font-size:14px}
+  .vbar .desc{color:var(--sub);font-size:13px}
+  .vbar a{margin-left:auto;font-size:13px;color:var(--accent);text-decoration:none;border:1px solid var(--line);border-radius:6px;padding:4px 10px;background:#fff}
+  .frame{flex:1;background:#e9ecf0}
+  .frame iframe{width:100%;height:100%;border:0;background:#fff}
+  .comments{border-left:1px solid var(--line);display:flex;flex-direction:column}
+  .clist{flex:1;overflow:auto;padding:12px}
+  .c{padding:10px 4px;border-bottom:1px solid var(--line)}
+  .c:last-child{border-bottom:0}
+  .c .who{display:flex;gap:6px;align-items:baseline}
+  .c .who b{font-size:13px}
+  .c .who time{font-size:11px;color:var(--sub)}
+  .c .who button{margin-left:auto;border:0;background:none;color:var(--sub);cursor:pointer;font-size:12px}
+  .c .who button:hover{color:var(--danger)}
+  .c p{white-space:pre-wrap;word-break:break-word;margin-top:2px}
+  .none{color:var(--sub);font-size:13px;padding:8px 4px}
+  form{border-top:1px solid var(--line);padding:12px;display:grid;gap:8px;background:#fafbfc}
+  form input,form textarea{font:inherit;border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:#fff;width:100%}
+  form textarea{min-height:84px;resize:vertical}
+  .frow{display:flex;align-items:center;gap:8px}
+  .frow small{color:var(--sub);font-size:12px}
+  .frow small.over{color:var(--danger)}
+  form button{margin-left:auto;font:inherit;border:0;background:var(--accent);color:#fff;border-radius:8px;padding:8px 16px;cursor:pointer}
+  form button:disabled{opacity:.5;cursor:default}
+  .msg{font-size:12px;color:var(--danger);min-height:1em}
+  .msg.ok{color:var(--final)}
+  .notfound{padding:60px 20px;text-align:center;color:var(--sub)}
+  @media (max-width:1000px){
+    .layout{grid-template-columns:1fr;height:auto}
+    aside{border-right:0;border-bottom:1px solid var(--line);max-height:260px}
+    .frame{height:70vh;flex:none}
+    .comments{border-left:0;border-top:1px solid var(--line)}
+  }
+</style>
+</head>
+<body>
+<header><div class="bar"><a href="./">← 업무 아카이브</a><a href="admin/" style="margin-left:auto">관리자</a></div></header>
+<div id="app"><p class="notfound">불러오는 중…</p></div>
+<script>
+const TEAMS = { design: '디자인', planning: '기획' };
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const store = { get(k){ try { return localStorage.getItem(k) || ''; } catch { return ''; } }, set(k,v){ try { localStorage.setItem(k,v); } catch {} }, del(k){ try { localStorage.removeItem(k); } catch {} } };
+const params = new URLSearchParams(location.search);
+let P = null, comments = [], cur = { v: null, href: null }, commentsOn = true;
+
+const isFinalV = v => P.final && P.final.version === v.id;
+const isFinalItem = (v, h) => P.final && P.final.version === v.id && P.final.href === h;
+const fmt = iso => { const d = new Date(iso); return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`; };
+const countFor = (v, h) => comments.filter(c => c.version === v.id && c.href === h).length;
+
+function shell() {
+  document.title = `${P.title} · 업무 아카이브`;
+  document.getElementById('app').innerHTML = `
+    <div class="head" id="head"><h1>${esc(P.title)}
+      <span class="chip ${P.team === 'planning' ? 'plan' : ''}">${TEAMS[P.team] || '디자인'}</span>
+      ${P.final ? '<span class="chip final">최종안 확정</span>' : ''}</h1>
+      ${P.desc ? `<p>${esc(P.desc)}</p>` : ''}</div>
+    <div class="layout">
+      <aside><h2>버전</h2><div id="vers"></div></aside>
+      <section class="viewer">
+        <div class="vbar" id="vbar"></div>
+        <div class="frame"><iframe id="frame" title="시안 화면"></iframe></div>
+      </section>
+      <section class="comments">
+        <h2 style="margin:12px 16px 0" id="ctitle">코멘트</h2>
+        <div class="clist" id="clist"></div>
+        <form id="cform" autocomplete="off">
+          <input id="author" maxlength="30" placeholder="작성자 이름" required>
+          <textarea id="text" maxlength="500" placeholder="이 화면에 대한 의견 (500자 이하)" required></textarea>
+          <div class="frow"><small id="len">0 / 500</small><button id="send">코멘트 남기기</button></div>
+          <div class="msg" id="cmsg"></div>
+        </form>
+      </section>
+    </div>`;
+  document.documentElement.style.setProperty('--head-h', document.getElementById('head').offsetHeight + 'px');
+  document.getElementById('author').value = store.get('comment_author');
+  document.getElementById('text').addEventListener('input', e => {
+    const n = [...e.target.value].length, l = document.getElementById('len');
+    l.textContent = `${n} / 500`; l.classList.toggle('over', n > 500);
+  });
+  document.getElementById('cform').addEventListener('submit', send);
+  document.getElementById('vers').addEventListener('click', e => {
+    const it = e.target.closest('[data-href]');
+    if (it) return select(it.dataset.v, it.dataset.href);
+    const vb = e.target.closest('[data-toggle]');
+    if (vb) vb.parentElement.classList.toggle('open');
+  });
+  document.getElementById('clist').addEventListener('click', e => { const b = e.target.closest('[data-del]'); if (b) delComment(b.dataset.del); });
+}
+
+function renderVers() {
+  const vs = P.versions.filter(v => !v.hidden).slice().reverse(); // 최신 버전이 위
+  document.getElementById('vers').innerHTML = vs.map(v => `
+    <div class="ver ${cur.v && cur.v.id === v.id ? 'open' : ''}">
+      <button data-toggle><span class="folder">📁</span><span class="vname">${esc(v.label)}</span>${isFinalV(v) ? '<span class="star">최종</span>' : ''}<span class="vdate">${esc(v.created)}</span></button>
+      <div class="vtitle">${esc(v.title)}</div>
+      <div class="items">${v.items.map(i => `<button data-v="${esc(v.id)}" data-href="${esc(i.href)}" aria-current="${cur.v && cur.v.id === v.id && cur.href === i.href}">
+        ${esc(i.label)}${isFinalItem(v, i.href) ? ' <span class="star">★ 최종안</span>' : ''}<span class="cnt">${countFor(v, i.href) ? '💬 ' + countFor(v, i.href) : ''}</span></button>`).join('')}</div>
+    </div>`).join('');
+}
+function renderBar() {
+  const v = cur.v, item = v.items.find(i => i.href === cur.href) || { label: '' };
+  document.getElementById('vbar').innerHTML = `<strong>${esc(v.label)} · ${esc(item.label)}</strong>
+    ${isFinalItem(v, cur.href) || (isFinalV(v) && !P.final.href) ? '<span class="chip final">최종안</span>' : ''}
+    <span class="desc">${esc(v.desc || v.title)}</span>
+    <a href="${esc(encodeURI(cur.href))}" target="_blank" rel="noopener">새 창으로 열기 ↗</a>`;
+}
+function renderComments() {
+  const list = comments.filter(c => c.version === cur.v.id && c.href === cur.href);
+  const admin = !!store.get('admin_pw');
+  document.getElementById('ctitle').textContent = `코멘트 ${list.length}`;
+  document.getElementById('clist').innerHTML = !commentsOn ? '<p class="none">코멘트 기능이 아직 설정되지 않았습니다.</p>'
+    : list.length ? list.map(c => `<div class="c"><div class="who"><b>${esc(c.author)}</b><time>${fmt(c.created)}</time>${admin ? `<button data-del="${esc(c.id)}" title="관리자 삭제">삭제</button>` : ''}</div><p>${esc(c.text)}</p></div>`).join('')
+    : '<p class="none">아직 코멘트가 없습니다. 첫 의견을 남겨 주세요.</p>';
+}
+function select(vid, href) {
+  cur.v = P.versions.find(v => v.id === vid); cur.href = href;
+  document.getElementById('frame').src = encodeURI(href);
+  const u = new URL(location); u.searchParams.set('v', vid); u.searchParams.set('h', href); history.replaceState(null, '', u);
+  renderVers(); renderBar(); renderComments();
+}
+
+async function loadComments() {
+  try {
+    const r = await fetch(`api/comments?project=${encodeURIComponent(P.id)}`, { cache: 'no-store' });
+    if (r.status === 503) { commentsOn = false; document.getElementById('send').disabled = true; return; }
+    comments = (await r.json()).comments || [];
+  } catch { comments = []; }
+}
+async function send(e) {
+  e.preventDefault();
+  const msg = document.getElementById('cmsg'); msg.className = 'msg'; msg.textContent = '';
+  const author = document.getElementById('author').value.trim(), text = document.getElementById('text').value.trim();
+  if (!author || !text) { msg.textContent = '이름과 내용을 넣어 주세요.'; return; }
+  if ([...text].length > 500) { msg.textContent = '코멘트는 500자까지 쓸 수 있습니다.'; return; }
+  let password = store.get('team_pw');
+  if (!password) { password = prompt('팀 비밀번호를 넣어 주세요. (한 번 넣으면 이 브라우저가 기억합니다)') || ''; if (!password) return; }
+  const btn = document.getElementById('send'); btn.disabled = true;
+  try {
+    const r = await fetch('api/comments', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'add', password, project: P.id, version: cur.v.id, href: cur.href, author, text }) });
+    const j = await r.json().catch(() => ({}));
+    if (r.status === 401) store.del('team_pw');
+    if (!r.ok) throw new Error(j.error || `오류 (${r.status})`);
+    store.set('team_pw', password); store.set('comment_author', author);
+    comments.push(j.comment); document.getElementById('text').value = ''; document.getElementById('len').textContent = '0 / 500';
+    msg.className = 'msg ok'; msg.textContent = '코멘트를 남겼습니다.';
+    renderComments(); renderVers();
+  } catch (err) { msg.textContent = err.message; }
+  btn.disabled = false;
+}
+async function delComment(id) {
+  if (!confirm('이 코멘트를 지울까요?')) return;
+  const r = await fetch('api/comments', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'delete', password: store.get('admin_pw'), id }) });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) return alert(j.error || '지우지 못했습니다.');
+  comments = comments.filter(c => c.id !== id); renderComments(); renderVers();
+}
+
+(async () => {
+  const d = await fetch('projects.json', { cache: 'no-store' }).then(r => r.json());
+  P = (d.projects || []).find(p => p.id === params.get('id'));
+  const vs = P ? P.versions.filter(v => !v.hidden) : [];
+  if (!P || !vs.length) { document.getElementById('app').innerHTML = '<p class="notfound">프로젝트를 찾지 못했습니다. <a href="./">목록으로</a></p>'; return; }
+  shell();
+  await loadComments();
+  // 처음 열 화면: 주소에 있는 것 → 최종안 → 최신 버전 첫 시안
+  const qv = vs.find(v => v.id === params.get('v'));
+  const fv = P.final && vs.find(v => v.id === P.final.version);
+  const v = qv || fv || vs[vs.length - 1];
+  const h = (qv && v.items.some(i => i.href === params.get('h')) && params.get('h')) || (fv === v && P.final.href) || v.items[0].href;
+  select(v.id, h);
+})();
+</script>
+</body>
+</html>

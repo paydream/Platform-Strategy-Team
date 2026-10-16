@@ -1,415 +1,485 @@
 {
+  "version": 2,
   "projects": [
     {
-      "id": "20261016-152527-20261016",
+      "id": "main-prompt-check",
       "title": "메인홈 프롬프트 검증",
-      "desc": "",
+      "team": "design",
       "category": "웹 메인",
+      "desc": "",
       "created": "2026.10.16",
       "updated": "2026.10.16",
       "hidden": false,
-      "folder": "archive/20261016-152527-20261016",
-      "preview": "archive/20261016-152527-20261016/index.html",
+      "final": null,
       "versions": [
         {
-          "label": "시안 01",
-          "href": "archive/20261016-152527-20261016/index.html"
+          "id": "20261016-152527-20261016",
+          "label": "v1",
+          "title": "메인홈 프롬프트 검증",
+          "desc": "",
+          "created": "2026.10.16",
+          "folder": "archive/20261016-152527-20261016",
+          "preview": "archive/20261016-152527-20261016/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261016-152527-20261016/index.html"
+            }
+          ]
         }
       ]
     },
     {
-      "id": "20261015-163003-design",
-      "title": "예스폼에디터 가이드 모달 (10.15)",
-      "desc": "",
-      "category": "웹 메인",
-      "created": "2026.10.15",
-      "updated": "2026.10.15",
-      "hidden": false,
-      "folder": "archive/20261015-163003-design",
-      "preview": "archive/20261015-163003-design/index.html",
-      "versions": [
-        {
-          "label": "시안 01",
-          "href": "archive/20261015-163003-design/index.html"
-        }
-      ]
-    },
-    {
-      "id": "20261015-162214-261015",
-      "title": "예스폼 상세페이지_에디터 강조 (10.15 업데이트 2차)",
-      "desc": "",
-      "category": "웹 메인",
-      "created": "2026.10.15",
-      "updated": "2026.10.15",
-      "hidden": false,
-      "folder": "archive/20261015-162214-261015",
-      "preview": "archive/20261015-162214-261015/index.html",
-      "versions": [
-        {
-          "label": "시안 01",
-          "href": "archive/20261015-162214-261015/index.html"
-        }
-      ]
-    },
-    {
-      "id": "20261014-124026-261014",
+      "id": "detail-editor-highlight",
       "title": "예스폼 상세페이지_에디터 강조",
-      "desc": "",
+      "team": "design",
       "category": "웹 메인",
+      "desc": "",
       "created": "2026.10.14",
-      "updated": "2026.10.14",
+      "updated": "2026.10.15",
       "hidden": false,
-      "folder": "archive/20261014-124026-261014",
-      "preview": "archive/20261014-124026-261014/index.html",
+      "final": null,
       "versions": [
         {
-          "label": "시안 01",
-          "href": "archive/20261014-124026-261014/index.html"
+          "id": "20261014-124026-261014",
+          "label": "v1",
+          "title": "예스폼 상세페이지_에디터 강조",
+          "desc": "",
+          "created": "2026.10.14",
+          "folder": "archive/20261014-124026-261014",
+          "preview": "archive/20261014-124026-261014/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261014-124026-261014/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261015-162214-261015",
+          "label": "v2",
+          "title": "예스폼 상세페이지_에디터 강조 (10.15 업데이트 2차)",
+          "desc": "",
+          "created": "2026.10.15",
+          "folder": "archive/20261015-162214-261015",
+          "preview": "archive/20261015-162214-261015/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261015-162214-261015/index.html"
+            }
+          ]
         }
       ]
     },
     {
-      "id": "20261013-162802-261013",
-      "title": "에디터 템플릿 페이지 추가 디자인(띠배너, 싸인 퀵메뉴, 썸네일 뱃지)",
-      "desc": "",
+      "id": "editor-guide-modal",
+      "title": "예스폼에디터 가이드 모달",
+      "team": "design",
       "category": "웹 메인",
+      "desc": "",
+      "created": "2026.10.15",
+      "updated": "2026.10.15",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261015-163003-design",
+          "label": "v1",
+          "title": "예스폼에디터 가이드 모달 (10.15)",
+          "desc": "",
+          "created": "2026.10.15",
+          "folder": "archive/20261015-163003-design",
+          "preview": "archive/20261015-163003-design/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261015-163003-design/index.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "editor-template-page",
+      "title": "에디터 템플릿 페이지 추가 디자인",
+      "team": "design",
+      "category": "웹 메인",
+      "desc": "띠배너, 싸인 퀵메뉴, 썸네일 뱃지",
       "created": "2026.10.13",
       "updated": "2026.10.13",
       "hidden": false,
-      "folder": "archive/20261013-162802-261013",
-      "preview": "archive/20261013-162802-261013/index.html",
+      "final": null,
       "versions": [
         {
-          "label": "시안 01",
-          "href": "archive/20261013-162802-261013/index.html"
+          "id": "20261013-162802-261013",
+          "label": "v1",
+          "title": "에디터 템플릿 페이지 추가 디자인(띠배너, 싸인 퀵메뉴, 썸네일 뱃지)",
+          "desc": "",
+          "created": "2026.10.13",
+          "folder": "archive/20261013-162802-261013",
+          "preview": "archive/20261013-162802-261013/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261013-162802-261013/index.html"
+            }
+          ]
         }
       ]
     },
     {
-      "id": "20261012-153340-design",
-      "title": "예스폼 메인 화면 개선 (10.12 업데이트 3차)",
-      "desc": "",
-      "category": "웹 메인",
-      "created": "2026.10.12",
-      "updated": "2026.10.12",
-      "hidden": false,
-      "folder": "archive/20261012-153340-design",
-      "preview": "archive/20261012-153340-design/시안01-1/index.html",
-      "versions": [
-        {
-          "label": "시안01-1",
-          "href": "archive/20261012-153340-design/시안01-1/index.html"
-        },
-        {
-          "label": "시안03",
-          "href": "archive/20261012-153340-design/시안03/index.html"
-        },
-        {
-          "label": "시안05",
-          "href": "archive/20261012-153340-design/시안05/index.html"
-        },
-        {
-          "label": "시안06",
-          "href": "archive/20261012-153340-design/시안06/index.html"
-        }
-      ]
-    },
-    {
-      "id": "20261012-150321-20261012-3",
-      "title": "예스폼 메인 화면 개선 (10.12 업데이트 3차)",
-      "desc": "",
-      "category": "웹 메인",
-      "created": "2026.10.12",
-      "updated": "2026.10.12",
-      "hidden": true,
-      "folder": "archive/20261012-150321-20261012-3",
-      "preview": "archive/20261012-150321-20261012-3/시안01-1/index.html",
-      "versions": [
-        {
-          "label": "시안01-1",
-          "href": "archive/20261012-150321-20261012-3/시안01-1/index.html"
-        },
-        {
-          "label": "시안02",
-          "href": "archive/20261012-150321-20261012-3/시안02/index.html"
-        },
-        {
-          "label": "시안03",
-          "href": "archive/20261012-150321-20261012-3/시안03/index.html"
-        },
-        {
-          "label": "시안04",
-          "href": "archive/20261012-150321-20261012-3/시안04/index.html"
-        }
-      ]
-    },
-    {
-      "id": "20261012-114314-20261012-3",
-      "title": "예스폼 메인 화면 개선 (10.12 업데이트 3차)",
-      "desc": "",
-      "category": "웹 메인",
-      "created": "2026.10.12",
-      "updated": "2026.10.12",
-      "hidden": true,
-      "folder": "archive/20261012-114314-20261012-3",
-      "preview": "archive/20261012-114314-20261012-3/index.html",
-      "versions": [
-        {
-          "label": "시안01-1",
-          "href": "archive/20261012-114314-20261012-3/시안01-1/index.html"
-        },
-        {
-          "label": "시안02",
-          "href": "archive/20261012-114314-20261012-3/시안02/index.html"
-        },
-        {
-          "label": "시안03",
-          "href": "archive/20261012-114314-20261012-3/시안03/index.html"
-        },
-        {
-          "label": "시안04",
-          "href": "archive/20261012-114314-20261012-3/시안04/index.html"
-        }
-      ]
-    },
-    {
-      "title": "예스폼 메인 화면 개선 (10.08 업데이트 2차)",
-      "desc": "프롬프트 탭 카드 4종(시안 03)과 AI로 문서 생성하기 카드 시안 04~06을 추가한 업데이트본",
-      "category": "웹 메인",
-      "created": "2026.10.08",
-      "updated": "2026.10.08",
-      "preview": "yesform-main-1008-2/v01/index.html",
-      "versions": [
-        {
-          "label": "시안 01",
-          "href": "yesform-main-1008-2/v01/index.html"
-        },
-        {
-          "label": "시안 02",
-          "href": "yesform-main-1008-2/v02/index.html"
-        },
-        {
-          "label": "시안 03",
-          "href": "yesform-main-1008-2/v03/index.html"
-        },
-        {
-          "label": "시안 04",
-          "href": "yesform-main-1008-2/v04/index.html"
-        },
-        {
-          "label": "시안 05",
-          "href": "yesform-main-1008-2/v05/index.html"
-        },
-        {
-          "label": "시안 06",
-          "href": "yesform-main-1008-2/v06/index.html"
-        }
-      ],
-      "id": "yesform-main-1008-2",
-      "hidden": false,
-      "folder": "yesform-main-1008-2"
-    },
-    {
-      "title": "예스폼 메인 화면 개선 (10.08 업데이트)",
-      "desc": "AI로 초안 생성하기 탭 카드를 관심분야 색 카드로 바꾼 시안 01, 시안 02·03 업데이트본",
-      "category": "웹 메인",
-      "created": "2026.10.08",
-      "updated": "2026.10.08",
-      "preview": "yesform-main-1008/v01/index.html",
-      "versions": [
-        {
-          "label": "시안 01",
-          "href": "yesform-main-1008/v01/index.html"
-        },
-        {
-          "label": "시안 02",
-          "href": "yesform-main-1008/v02/index.html"
-        },
-        {
-          "label": "시안 03",
-          "href": "yesform-main-1008/v03/index.html"
-        }
-      ],
-      "id": "yesform-main-1008",
-      "hidden": false,
-      "folder": "yesform-main-1008"
-    },
-    {
+      "id": "yesform-main",
       "title": "예스폼 메인 화면 개선",
-      "desc": "검색 + 추천 콘텐츠 카드 그리드 구성의 메인 페이지 시안",
+      "team": "design",
       "category": "웹 메인",
+      "desc": "검색 + 추천 콘텐츠 카드 그리드 구성의 메인 페이지",
       "created": "2026.10.07",
-      "updated": "2026.10.07",
-      "preview": "yesform-main.html",
+      "updated": "2026.10.12",
+      "hidden": false,
+      "final": null,
       "versions": [
         {
-          "label": "시안 01",
-          "href": "yesform-main.html"
+          "id": "yesform-main-1007",
+          "label": "v1",
+          "title": "예스폼 메인 화면 개선",
+          "desc": "검색 + 추천 콘텐츠 카드 그리드 구성의 메인 페이지 시안",
+          "created": "2026.10.07",
+          "folder": "(루트 · yesform-main.html, v01-1, v02, v03)",
+          "preview": "yesform-main.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "yesform-main.html"
+            },
+            {
+              "label": "시안 01-1",
+              "href": "v01-1/index.html"
+            },
+            {
+              "label": "시안 02",
+              "href": "v02/index.html"
+            },
+            {
+              "label": "시안 03",
+              "href": "v03/index.html"
+            }
+          ]
         },
         {
-          "label": "시안 01-1",
-          "href": "v01-1/index.html"
+          "id": "yesform-main-1008",
+          "label": "v2",
+          "title": "예스폼 메인 화면 개선 (10.08 업데이트)",
+          "desc": "AI로 초안 생성하기 탭 카드를 관심분야 색 카드로 바꾼 시안 01, 시안 02·03 업데이트본",
+          "created": "2026.10.08",
+          "folder": "yesform-main-1008",
+          "preview": "yesform-main-1008/v01/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "yesform-main-1008/v01/index.html"
+            },
+            {
+              "label": "시안 02",
+              "href": "yesform-main-1008/v02/index.html"
+            },
+            {
+              "label": "시안 03",
+              "href": "yesform-main-1008/v03/index.html"
+            }
+          ]
         },
         {
-          "label": "시안 02",
-          "href": "v02/index.html"
+          "id": "yesform-main-1008-2",
+          "label": "v3",
+          "title": "예스폼 메인 화면 개선 (10.08 업데이트 2차)",
+          "desc": "프롬프트 탭 카드 4종(시안 03)과 AI로 문서 생성하기 카드 시안 04~06을 추가한 업데이트본",
+          "created": "2026.10.08",
+          "folder": "yesform-main-1008-2",
+          "preview": "yesform-main-1008-2/v01/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "yesform-main-1008-2/v01/index.html"
+            },
+            {
+              "label": "시안 02",
+              "href": "yesform-main-1008-2/v02/index.html"
+            },
+            {
+              "label": "시안 03",
+              "href": "yesform-main-1008-2/v03/index.html"
+            },
+            {
+              "label": "시안 04",
+              "href": "yesform-main-1008-2/v04/index.html"
+            },
+            {
+              "label": "시안 05",
+              "href": "yesform-main-1008-2/v05/index.html"
+            },
+            {
+              "label": "시안 06",
+              "href": "yesform-main-1008-2/v06/index.html"
+            }
+          ]
         },
         {
-          "label": "시안 03",
-          "href": "v03/index.html"
+          "id": "20261012-114314-20261012-3",
+          "label": "v4",
+          "title": "예스폼 메인 화면 개선 (10.12 업데이트 3차)",
+          "desc": "",
+          "created": "2026.10.12",
+          "folder": "archive/20261012-114314-20261012-3",
+          "preview": "archive/20261012-114314-20261012-3/index.html",
+          "hidden": true,
+          "items": [
+            {
+              "label": "시안01-1",
+              "href": "archive/20261012-114314-20261012-3/시안01-1/index.html"
+            },
+            {
+              "label": "시안02",
+              "href": "archive/20261012-114314-20261012-3/시안02/index.html"
+            },
+            {
+              "label": "시안03",
+              "href": "archive/20261012-114314-20261012-3/시안03/index.html"
+            },
+            {
+              "label": "시안04",
+              "href": "archive/20261012-114314-20261012-3/시안04/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261012-150321-20261012-3",
+          "label": "v5",
+          "title": "예스폼 메인 화면 개선 (10.12 업데이트 3차)",
+          "desc": "",
+          "created": "2026.10.12",
+          "folder": "archive/20261012-150321-20261012-3",
+          "preview": "archive/20261012-150321-20261012-3/시안01-1/index.html",
+          "hidden": true,
+          "items": [
+            {
+              "label": "시안01-1",
+              "href": "archive/20261012-150321-20261012-3/시안01-1/index.html"
+            },
+            {
+              "label": "시안02",
+              "href": "archive/20261012-150321-20261012-3/시안02/index.html"
+            },
+            {
+              "label": "시안03",
+              "href": "archive/20261012-150321-20261012-3/시안03/index.html"
+            },
+            {
+              "label": "시안04",
+              "href": "archive/20261012-150321-20261012-3/시안04/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261012-153340-design",
+          "label": "v6",
+          "title": "예스폼 메인 화면 개선 (10.12 업데이트 3차)",
+          "desc": "",
+          "created": "2026.10.12",
+          "folder": "archive/20261012-153340-design",
+          "preview": "archive/20261012-153340-design/시안01-1/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안01-1",
+              "href": "archive/20261012-153340-design/시안01-1/index.html"
+            },
+            {
+              "label": "시안03",
+              "href": "archive/20261012-153340-design/시안03/index.html"
+            },
+            {
+              "label": "시안05",
+              "href": "archive/20261012-153340-design/시안05/index.html"
+            },
+            {
+              "label": "시안06",
+              "href": "archive/20261012-153340-design/시안06/index.html"
+            }
+          ]
         }
-      ],
-      "id": "yesform-main-1007",
-      "hidden": false,
-      "folder": "(루트 · yesform-main.html, v01-1, v02, v03)"
+      ]
     }
   ],
   "trash": [
     {
-      "id": "20261015-145728-261015",
-      "title": "예스폼 상세페이지_에디터 강조 (10.15 업데이트 2차)",
-      "desc": "",
-      "category": "웹 메인",
-      "created": "2026.10.15",
-      "updated": "2026.10.15",
-      "hidden": false,
-      "folder": "archive/20261015-145728-261015",
-      "preview": "archive/20261015-145728-261015/index.html",
-      "versions": [
-        {
-          "label": "시안 01",
-          "href": "archive/20261015-145728-261015/index.html"
-        }
-      ],
-      "deleted": "2026.10.15"
+      "type": "version",
+      "projectId": "detail-editor-highlight",
+      "deleted": "2026.10.15",
+      "version": {
+        "id": "20261015-145728-261015",
+        "label": "삭제됨",
+        "title": "예스폼 상세페이지_에디터 강조 (10.15 업데이트 2차)",
+        "desc": "",
+        "created": "2026.10.15",
+        "folder": "archive/20261015-145728-261015",
+        "preview": "archive/20261015-145728-261015/index.html",
+        "hidden": false,
+        "items": [
+          {
+            "label": "시안 01",
+            "href": "archive/20261015-145728-261015/index.html"
+          }
+        ]
+      }
     },
     {
-      "id": "20261012-151722-02",
-      "title": "예스폼 메인 화면 개선 (10.12 업데이트 3차)",
-      "desc": "",
-      "category": "웹 메인",
-      "created": "2026.10.12",
-      "updated": "2026.10.12",
-      "hidden": false,
-      "folder": "archive/20261012-151722-02",
-      "preview": "archive/20261012-151722-02/시안01-1/index.html",
-      "versions": [
-        {
-          "label": "시안01-1",
-          "href": "archive/20261012-151722-02/시안01-1/index.html"
-        },
-        {
-          "label": "시안02",
-          "href": "archive/20261012-151722-02/시안02/index.html"
-        },
-        {
-          "label": "시안05",
-          "href": "archive/20261012-151722-02/시안05/index.html"
-        },
-        {
-          "label": "시안06",
-          "href": "archive/20261012-151722-02/시안06/index.html"
-        }
-      ],
-      "deleted": "2026.10.12"
+      "type": "version",
+      "projectId": "yesform-main",
+      "deleted": "2026.10.12",
+      "version": {
+        "id": "20261012-151722-02",
+        "label": "삭제됨",
+        "title": "예스폼 메인 화면 개선 (10.12 업데이트 3차)",
+        "desc": "",
+        "created": "2026.10.12",
+        "folder": "archive/20261012-151722-02",
+        "preview": "archive/20261012-151722-02/시안01-1/index.html",
+        "hidden": false,
+        "items": [
+          {
+            "label": "시안01-1",
+            "href": "archive/20261012-151722-02/시안01-1/index.html"
+          },
+          {
+            "label": "시안02",
+            "href": "archive/20261012-151722-02/시안02/index.html"
+          },
+          {
+            "label": "시안05",
+            "href": "archive/20261012-151722-02/시안05/index.html"
+          },
+          {
+            "label": "시안06",
+            "href": "archive/20261012-151722-02/시안06/index.html"
+          }
+        ]
+      }
     },
     {
-      "id": "20261012-125430-yesform-main-tabname",
-      "title": "예스폼 메인 화면 개선 (10.12 업데이트 3차 · 탭 이름 통일)",
-      "desc": "10.12 업데이트 3차와 같은 시안에서 시안 04~06의 첫 탭 이름을 \"AI로 초안 생성하기\"로 통일한 버전",
-      "category": "웹 메인",
-      "created": "2026.10.12",
-      "updated": "2026.10.12",
-      "hidden": true,
-      "folder": "archive/20261012-125430-yesform-main-tabname",
-      "preview": "archive/20261012-125430-yesform-main-tabname/index.html",
-      "versions": [
-        {
-          "label": "시안01-1",
-          "href": "archive/20261012-125430-yesform-main-tabname/시안01-1/index.html"
-        },
-        {
-          "label": "시안02",
-          "href": "archive/20261012-125430-yesform-main-tabname/시안02/index.html"
-        },
-        {
-          "label": "시안03",
-          "href": "archive/20261012-125430-yesform-main-tabname/시안03/index.html"
-        },
-        {
-          "label": "시안04",
-          "href": "archive/20261012-125430-yesform-main-tabname/시안04/index.html"
-        },
-        {
-          "label": "시안05",
-          "href": "archive/20261012-125430-yesform-main-tabname/시안05/index.html"
-        },
-        {
-          "label": "시안06",
-          "href": "archive/20261012-125430-yesform-main-tabname/시안06/index.html"
-        }
-      ],
-      "deleted": "2026.10.12"
+      "type": "version",
+      "projectId": "yesform-main",
+      "deleted": "2026.10.12",
+      "version": {
+        "id": "20261012-125430-yesform-main-tabname",
+        "label": "삭제됨",
+        "title": "예스폼 메인 화면 개선 (10.12 업데이트 3차 · 탭 이름 통일)",
+        "desc": "10.12 업데이트 3차와 같은 시안에서 시안 04~06의 첫 탭 이름을 \"AI로 초안 생성하기\"로 통일한 버전",
+        "created": "2026.10.12",
+        "folder": "archive/20261012-125430-yesform-main-tabname",
+        "preview": "archive/20261012-125430-yesform-main-tabname/index.html",
+        "hidden": true,
+        "items": [
+          {
+            "label": "시안01-1",
+            "href": "archive/20261012-125430-yesform-main-tabname/시안01-1/index.html"
+          },
+          {
+            "label": "시안02",
+            "href": "archive/20261012-125430-yesform-main-tabname/시안02/index.html"
+          },
+          {
+            "label": "시안03",
+            "href": "archive/20261012-125430-yesform-main-tabname/시안03/index.html"
+          },
+          {
+            "label": "시안04",
+            "href": "archive/20261012-125430-yesform-main-tabname/시안04/index.html"
+          },
+          {
+            "label": "시안05",
+            "href": "archive/20261012-125430-yesform-main-tabname/시안05/index.html"
+          },
+          {
+            "label": "시안06",
+            "href": "archive/20261012-125430-yesform-main-tabname/시안06/index.html"
+          }
+        ]
+      }
     },
     {
-      "id": "20261012-142925-20261012-3-1",
-      "title": "예스폼 메인 화면 개선 (10.12 업데이트 3차)",
-      "desc": "",
-      "category": "웹 메인",
-      "created": "2026.10.12",
-      "updated": "2026.10.12",
-      "hidden": true,
-      "folder": "archive/20261012-142925-20261012-3-1",
-      "preview": "archive/20261012-142925-20261012-3-1/시안01-1/index.html",
-      "versions": [
-        {
-          "label": "시안01-1",
-          "href": "archive/20261012-142925-20261012-3-1/시안01-1/index.html"
-        },
-        {
-          "label": "시안02",
-          "href": "archive/20261012-142925-20261012-3-1/시안02/index.html"
-        },
-        {
-          "label": "시안03",
-          "href": "archive/20261012-142925-20261012-3-1/시안03/index.html"
-        },
-        {
-          "label": "시안04",
-          "href": "archive/20261012-142925-20261012-3-1/시안04/index.html"
-        }
-      ],
-      "deleted": "2026.10.12"
+      "type": "version",
+      "projectId": "yesform-main",
+      "deleted": "2026.10.12",
+      "version": {
+        "id": "20261012-142925-20261012-3-1",
+        "label": "삭제됨",
+        "title": "예스폼 메인 화면 개선 (10.12 업데이트 3차)",
+        "desc": "",
+        "created": "2026.10.12",
+        "folder": "archive/20261012-142925-20261012-3-1",
+        "preview": "archive/20261012-142925-20261012-3-1/시안01-1/index.html",
+        "hidden": true,
+        "items": [
+          {
+            "label": "시안01-1",
+            "href": "archive/20261012-142925-20261012-3-1/시안01-1/index.html"
+          },
+          {
+            "label": "시안02",
+            "href": "archive/20261012-142925-20261012-3-1/시안02/index.html"
+          },
+          {
+            "label": "시안03",
+            "href": "archive/20261012-142925-20261012-3-1/시안03/index.html"
+          },
+          {
+            "label": "시안04",
+            "href": "archive/20261012-142925-20261012-3-1/시안04/index.html"
+          }
+        ]
+      }
     },
     {
-      "id": "20261012-150558-20261012-3",
-      "title": "예스폼 메인 화면 개선 (10.12 업데이트 3차)",
-      "desc": "",
-      "category": "웹 메인",
-      "created": "2026.10.12",
-      "updated": "2026.10.12",
-      "hidden": false,
-      "folder": "archive/20261012-150558-20261012-3",
-      "preview": "archive/20261012-150558-20261012-3/시안01-1/index.html",
-      "versions": [
-        {
-          "label": "시안01-1",
-          "href": "archive/20261012-150558-20261012-3/시안01-1/index.html"
-        },
-        {
-          "label": "시안02",
-          "href": "archive/20261012-150558-20261012-3/시안02/index.html"
-        },
-        {
-          "label": "시안03",
-          "href": "archive/20261012-150558-20261012-3/시안03/index.html"
-        },
-        {
-          "label": "시안04",
-          "href": "archive/20261012-150558-20261012-3/시안04/index.html"
-        }
-      ],
-      "deleted": "2026.10.12"
+      "type": "version",
+      "projectId": "yesform-main",
+      "deleted": "2026.10.12",
+      "version": {
+        "id": "20261012-150558-20261012-3",
+        "label": "삭제됨",
+        "title": "예스폼 메인 화면 개선 (10.12 업데이트 3차)",
+        "desc": "",
+        "created": "2026.10.12",
+        "folder": "archive/20261012-150558-20261012-3",
+        "preview": "archive/20261012-150558-20261012-3/시안01-1/index.html",
+        "hidden": false,
+        "items": [
+          {
+            "label": "시안01-1",
+            "href": "archive/20261012-150558-20261012-3/시안01-1/index.html"
+          },
+          {
+            "label": "시안02",
+            "href": "archive/20261012-150558-20261012-3/시안02/index.html"
+          },
+          {
+            "label": "시안03",
+            "href": "archive/20261012-150558-20261012-3/시안03/index.html"
+          },
+          {
+            "label": "시안04",
+            "href": "archive/20261012-150558-20261012-3/시안04/index.html"
+          }
+        ]
+      }
     }
   ]
 }

@@ -3,83 +3,117 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>플랫폼전략팀 디자인 아카이브</title>
+<title>플랫폼전략팀 업무 아카이브</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
-  :root{--bg:#f6f7f9;--card:#fff;--line:#e5e8ec;--text:#191f28;--sub:#6b7684;--accent:#2f6bff;--chip:#eef3ff}
+  :root{--bg:#f6f7f9;--card:#fff;--line:#e5e8ec;--text:#191f28;--sub:#6b7684;--accent:#2f6bff;--chip:#eef3ff;--final:#12a150;--final-bg:#e8f7ee;--plan:#8a4dff;--plan-bg:#f3edff}
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:"Pretendard Variable",Pretendard,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
+  a{color:inherit}
   header{background:var(--card);border-bottom:1px solid var(--line)}
-  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 20px}
   .top{display:flex;align-items:center;justify-content:space-between;height:64px}
   .top strong{font-size:17px}
-  .top span{font-size:13px;color:var(--sub)}
   .top-right{display:flex;align-items:center;gap:12px}
+  .top-right span{font-size:13px;color:var(--sub)}
   .admin-btn{font-size:12px;color:var(--sub);text-decoration:none;border:1px solid var(--line);border-radius:6px;padding:4px 10px}
   .admin-btn:hover{border-color:var(--accent);color:var(--accent)}
-  .hero{padding:40px 0 24px}
-  .hero h1{font-size:28px;font-weight:700}
-  .hero p{color:var(--sub);margin-top:6px}
-  .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+  .hero{padding:36px 0 20px}
+  .hero h1{font-size:26px}
+  .hero p{color:var(--sub);margin-top:4px}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+  .tabs{display:flex;gap:4px;background:#eceef1;border-radius:10px;padding:4px}
+  .tabs button{font:inherit;font-size:14px;border:0;background:none;padding:6px 14px;border-radius:7px;cursor:pointer;color:var(--sub)}
+  .tabs button[aria-selected="true"]{background:#fff;color:var(--text);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.06)}
   .toolbar input{flex:1;min-width:200px;height:40px;border:1px solid var(--line);border-radius:8px;padding:0 12px;font:inherit}
   .count{font-size:13px;color:var(--sub)}
-  .list{display:grid;gap:12px;padding-bottom:60px}
-  .item{display:flex;gap:20px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;align-items:center}
-  .thumb{width:180px;aspect-ratio:16/10;border-radius:8px;overflow:hidden;background:#eef0f3;flex-shrink:0;border:1px solid var(--line)}
-  .thumb iframe{width:1440px;height:900px;border:0;transform:scale(.125);transform-origin:0 0;pointer-events:none}
-  .info{flex:1;min-width:0}
-  .meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
-  .chip{font-size:12px;background:var(--chip);color:var(--accent);padding:2px 8px;border-radius:99px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;padding-bottom:60px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;text-decoration:none;display:flex;flex-direction:column;transition:border-color .15s,box-shadow .15s}
+  .card:hover{border-color:#c9d3e6;box-shadow:0 4px 14px rgba(0,0,0,.05)}
+  .thumb{aspect-ratio:16/10;background:#eef0f3;overflow:hidden;position:relative;border-bottom:1px solid var(--line)}
+  .thumb iframe{position:absolute;top:0;left:0;width:1440px;height:900px;border:0;transform-origin:0 0;pointer-events:none}
+  .body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+  .chips{display:flex;gap:6px;flex-wrap:wrap}
+  .chip{font-size:12px;padding:2px 8px;border-radius:99px;background:var(--chip);color:var(--accent)}
+  .chip.plan{background:var(--plan-bg);color:var(--plan)}
   .chip.gray{background:#f2f4f6;color:var(--sub)}
-  .info h2{font-size:18px}
-  .info p{font-size:14px;color:var(--sub);margin-top:4px}
-  .info p.dates{font-size:13px;color:var(--sub);margin-top:8px}
-  .vers{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
-  .vers a{font-size:13px;text-decoration:none;color:var(--text);border:1px solid var(--line);border-radius:6px;padding:5px 10px}
-  .vers a:hover{border-color:var(--accent);color:var(--accent)}
+  .chip.final{background:var(--final-bg);color:var(--final);font-weight:600}
+  .card h2{font-size:16px;line-height:1.4}
+  .card p{font-size:13px;color:var(--sub);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .meta{margin-top:auto;padding-top:6px;font-size:12px;color:var(--sub);display:flex;gap:10px;flex-wrap:wrap}
   .empty{text-align:center;color:var(--sub);padding:40px 0;display:none}
-  @media (max-width:640px){.item{flex-direction:column;align-items:stretch}.thumb{width:100%}.thumb iframe{transform:scale(calc((100vw - 82px)/1440))}}
+  @media (max-width:640px){.grid{grid-template-columns:1fr}.top-right span{display:none}}
 </style>
 </head>
 <body>
-<header><div class="wrap top"><strong>플랫폼전략팀</strong><div class="top-right"><span>디자인 시안 아카이브</span><a class="admin-btn" href="admin/">관리자</a></div></div></header>
+<header><div class="wrap top"><strong>플랫폼전략팀</strong><div class="top-right"><span>업무 아카이브</span><a class="admin-btn" href="admin/">관리자</a></div></div></header>
 <main class="wrap">
   <section class="hero">
-    <h1>디자인 시안 아카이브</h1>
-    <p>팀에서 작업한 디자인 시안을 프로젝트별로 모아둔 곳입니다.</p>
+    <h1>업무 아카이브</h1>
+    <p>디자인 시안과 기획서를 프로젝트별로 모아두고, 버전마다 코멘트를 남깁니다.</p>
   </section>
   <div class="toolbar">
+    <div class="tabs" role="tablist">
+      <button role="tab" data-team="" aria-selected="true">전체</button>
+      <button role="tab" data-team="design" aria-selected="false">디자인</button>
+      <button role="tab" data-team="planning" aria-selected="false">기획</button>
+    </div>
     <input id="q" type="search" placeholder="프로젝트 이름으로 찾기">
     <span class="count" id="count"></span>
   </div>
-  <div class="list" id="list"></div>
+  <div class="grid" id="list"></div>
   <p class="empty" id="empty">찾는 프로젝트가 없습니다.</p>
 </main>
 <script>
-// 목록 데이터는 projects.json 에 있습니다. 관리자 페이지(/admin/)에서 고치세요.
-let projects = [];
+const TEAMS = { design: '디자인', planning: '기획' };
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const enc = h => encodeURI(h);
+let projects = [], counts = {}, team = '', q = '';
 
-const list = document.getElementById('list');
-function render(q = '') {
-  const rows = projects.filter(p => !p.hidden && (p.title + p.desc + p.category).includes(q.trim()));
-  list.innerHTML = rows.map(p => `
-    <article class="item">
-      <a class="thumb" href="${enc(p.preview)}"><iframe src="${enc(p.preview)}" loading="lazy" tabindex="-1" title="${esc(p.title)} 미리보기"></iframe></a>
-      <div class="info">
-        <div class="meta"><span class="chip">${esc(p.category)}</span></div>
+// 카드에 보여줄 화면: 최종안 → 없으면 최신 버전
+function cover(p) {
+  const vs = p.versions.filter(v => !v.hidden);
+  const fv = p.final && vs.find(v => v.id === p.final.version);
+  const v = fv || vs[vs.length - 1];
+  return { v, href: fv ? (p.final.href || fv.preview) : v && v.preview };
+}
+function render() {
+  const rows = projects.filter(p => !p.hidden && p.versions.some(v => !v.hidden)
+    && (!team || p.team === team) && (p.title + p.desc + p.category).toLowerCase().includes(q.toLowerCase()));
+  document.getElementById('list').innerHTML = rows.map(p => {
+    const { v, href } = cover(p), n = p.versions.filter(x => !x.hidden).length;
+    return `<a class="card" href="project.html?id=${encodeURIComponent(p.id)}">
+      <div class="thumb"><iframe data-src="${esc(encodeURI(href))}" loading="lazy" tabindex="-1" title="${esc(p.title)} 미리보기"></iframe></div>
+      <div class="body">
+        <div class="chips"><span class="chip ${p.team === 'planning' ? 'plan' : ''}">${TEAMS[p.team] || '디자인'}</span>
+          ${p.category ? `<span class="chip gray">${esc(p.category)}</span>` : ''}
+          ${p.final ? '<span class="chip final">최종안 확정</span>' : ''}</div>
         <h2>${esc(p.title)}</h2>
-        <p>${esc(p.desc)}</p>
-        <p class="dates">작성일 ${esc(p.created)} · 수정일 ${esc(p.updated)}</p>
-        <div class="vers">${p.versions.map(v => `<a href="${enc(v.href)}">${esc(v.label)}</a>`).join('')}</div>
-      </div>
-    </article>`).join('');
+        ${p.desc ? `<p>${esc(p.desc)}</p>` : ''}
+        <div class="meta"><span>버전 ${n}개 · 최신 ${esc(v.label)} (${esc(v.created)})</span><span>코멘트 ${counts[p.id] || 0}</span><span>수정 ${esc(p.updated)}</span></div>
+      </div></a>`;
+  }).join('');
   document.getElementById('count').textContent = `${rows.length}개 프로젝트`;
   document.getElementById('empty').style.display = rows.length ? 'none' : 'block';
+  fitThumbs();
 }
-document.getElementById('q').addEventListener('input', e => render(e.target.value));
-fetch('projects.json', {cache:'no-store'}).then(r => r.json()).then(d => { projects = d.projects || []; render(); });
+// 썸네일 iframe: 화면에 보일 때만 불러오고, 카드 폭에 맞춰 축소
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { const f = e.target; f.src = f.dataset.src; io.unobserve(f); } }), { rootMargin: '200px' });
+function fitThumbs() {
+  document.querySelectorAll('.thumb').forEach(t => {
+    const f = t.querySelector('iframe'); f.style.transform = `scale(${t.clientWidth / 1440})`;
+    if (!f.src) io.observe(f);
+  });
+}
+addEventListener('resize', fitThumbs);
+document.querySelector('.tabs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  team = b.dataset.team;
+  document.querySelectorAll('.tabs button').forEach(x => x.setAttribute('aria-selected', x === b));
+  render();
+});
+document.getElementById('q').addEventListener('input', e => { q = e.target.value.trim(); render(); });
+fetch('projects.json', { cache: 'no-store' }).then(r => r.json()).then(d => { projects = d.projects || []; render(); });
+fetch('api/comments?summary=1', { cache: 'no-store' }).then(r => r.ok ? r.json() : {}).then(d => { counts = d.counts || {}; if (projects.length) render(); }).catch(() => {});
 </script>
 </body>
 </html>
