@@ -49,6 +49,13 @@
   .teamsw button.on{background:#fff;font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
   .teamsw button.on.design{color:var(--accent)}
   .teamsw button.on.planning{color:var(--plan)}
+  .finalrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;padding:8px 10px;border-radius:8px;background:#f6f8fa}
+  .finalrow.set{background:var(--final-bg)}
+  .finalrow .flabel{font-size:12px;font-weight:600;color:var(--sub)}
+  .finalrow.set .flabel{color:var(--ok)}
+  .finalrow select{width:auto;min-width:240px;max-width:100%;padding:6px 8px}
+  .finalrow .fnow{font-size:13px;color:var(--ok);font-weight:600}
+  .finalrow .fnow.none{color:var(--sub);font-weight:400}
   .tag.gray{background:#f2f4f6;color:var(--sub)}
   .tag.final{background:var(--final-bg);color:var(--ok);font-weight:600}
   .icon-btn{display:inline-flex;align-items:center;justify-content:center;padding:7px 9px;color:var(--sub)}
@@ -125,7 +132,7 @@
 
   <section>
     <h2>3. 프로젝트·버전 관리</h2>
-    <p class="note">이름·팀·설명·순서·공개 여부와 <b>최종안</b>을 정합니다. 휴지통은 목록에서만 빼고 파일은 남겨서 되살릴 수 있습니다. 바꾼 뒤 <b>저장</b>을 눌러야 반영됩니다.</p>
+    <p class="note">이름·팀·설명·순서·공개 여부와 <b>확정안</b>을 정합니다. 휴지통은 목록에서만 빼고 파일은 남겨서 되살릴 수 있습니다. 바꾼 뒤 <b>저장</b>을 눌러야 반영됩니다.</p>
     <div id="list"><p class="note">불러오는 중…</p></div>
     <div id="trashBox"></div>
     <div class="bar"><button class="primary" id="saveList">저장</button><span class="status" id="saveStatus"></span></div>
@@ -205,13 +212,30 @@ function renderPick() {
   $('pPick').innerHTML = P().map(p => `<option value="${esc(p.id)}">${esc(p.title)} (${M.TEAMS[p.team] || '디자인'} · 버전 ${p.versions.length}개)</option>`).join('');
   $('cats').innerHTML = [...new Set(P().map(p => p.category).filter(Boolean))].map(c => `<option value="${esc(c)}">`).join('');
 }
+// 디자인 프로젝트의 확정안 고르기: 버전별로 묶은 시안 목록에서 하나 선택
+function finalPicker(p) {
+  const key = p.final ? `${p.final.version}|${p.final.href || ''}` : '';
+  const opts = p.versions.slice().reverse().map(v => `<optgroup label="${esc(v.label)} · ${esc(v.created)}${v.hidden ? ' (숨김)' : ''}">
+      <option value="${esc(v.id)}|" ${key === v.id + '|' ? 'selected' : ''}>${esc(v.label)} 버전 전체</option>
+      ${v.items.map(it => `<option value="${esc(v.id)}|${esc(it.href)}" ${key === v.id + '|' + it.href ? 'selected' : ''}>${esc(v.label)} › ${esc(it.label)}</option>`).join('')}
+    </optgroup>`).join('');
+  const cur = p.final && p.versions.find(v => v.id === p.final.version);
+  const curItem = cur && p.final.href && cur.items.find(i => i.href === p.final.href);
+  const preview = cur ? (p.final.href || cur.preview) : '';
+  return `<div class="finalrow ${p.final ? 'set' : ''}">
+    <span class="flabel">확정안</span>
+    <select data-act-final aria-label="확정안 선택"><option value="">아직 정하지 않음</option>${opts}</select>
+    ${cur ? `<span class="fnow">✓ ${esc(cur.label)}${curItem ? ' › ' + esc(curItem.label) : ' 버전 전체'}</span>
+      <a href="../${encodeURI(preview)}" target="_blank" rel="noopener"><button>확정안 보기</button></a>` : '<span class="fnow none">시안 중 하나를 골라 주세요</span>'}
+  </div>`;
+}
 function renderList() {
   $('list').innerHTML = P().map((p, i) => `
     <div class="proj ${p.hidden ? 'hidden' : ''}" data-p="${i}">
       <div class="phead">
         <div><strong>${esc(p.title)}</strong>
           <span class="teamsw" role="group" aria-label="팀">${Object.entries(M.TEAMS).map(([k, n]) => `<button data-act="team" data-team="${k}" class="${(p.team || 'design') === k ? 'on ' + k : ''}" aria-pressed="${(p.team || 'design') === k}">${n}</button>`).join('')}</span>
-          ${p.final ? '<span class="tag final">최종안 확정</span>' : ''} ${p.hidden ? '<span class="tag gray">숨김</span>' : ''}
+          ${p.final ? '<span class="tag final">확정안</span>' : ''} ${p.hidden ? '<span class="tag gray">숨김</span>' : ''}
           <span class="tag gray">버전 ${p.versions.length}개</span></div>
         <div class="bar" style="margin:0">
           <button data-act="up" ${i === 0 ? 'disabled' : ''}>▲</button>
@@ -221,15 +245,16 @@ function renderList() {
           <button class="icon-btn del" data-act="delp" title="프로젝트를 휴지통으로" aria-label="프로젝트 삭제">${TRASH_SVG}</button>
         </div>
       </div>
+      ${(p.team || 'design') === 'design' ? finalPicker(p) : ''}
       <details ${p._open ? 'open' : ''} data-open>
-        <summary>내용·버전·최종안 고치기</summary>
+        <summary>내용·버전·확정안 고치기</summary>
         <div class="row">
           <div><label>프로젝트 이름</label><input data-f="title" value="${esc(p.title)}"></div>
           <div><label>팀</label><select data-f="team"><option value="design" ${p.team !== 'planning' ? 'selected' : ''}>디자인</option><option value="planning" ${p.team === 'planning' ? 'selected' : ''}>기획</option></select></div>
           <div><label>카테고리</label><input data-f="category" value="${esc(p.category)}" list="cats"></div>
         </div>
         <label>프로젝트 설명</label><textarea data-f="desc">${esc(p.desc)}</textarea>
-        <label>버전 (최신이 아래) — ★를 누르면 최종안으로 표시, 다시 누르면 해제</label>
+        <label>버전 (최신이 아래) — ★를 누르면 확정안으로 표시, 다시 누르면 해제</label>
         ${p.versions.map((v, j) => `
           <div class="ver ${v.hidden ? 'hidden' : ''}" data-v="${j}">
             <div class="vgrid">
@@ -237,14 +262,14 @@ function renderList() {
               <input data-vf="title" value="${esc(v.desc || v.title)}" title="바뀐 점" placeholder="바뀐 점">
               <input data-vf="created" value="${esc(v.created)}" title="작성일">
               <div style="display:flex;gap:4px">
-                <button class="fbtn ${p.final && p.final.version === v.id && !p.final.href ? 'on' : ''}" data-act="finalv" title="이 버전 전체를 최종안으로">★ 버전</button>
+                <button class="fbtn ${p.final && p.final.version === v.id && !p.final.href ? 'on' : ''}" data-act="finalv" title="이 버전 전체를 확정안으로">★ 버전</button>
                 <button data-act="hidev">${v.hidden ? '보이기' : '숨기기'}</button>
                 <button class="icon-btn del" data-act="delv" title="버전을 휴지통으로" aria-label="버전 삭제">${TRASH_SVG}</button>
               </div>
             </div>
             <div class="items">${v.items.map((it, k) => `
               <div class="irow" data-i="${k}"><input data-if="label" value="${esc(it.label)}" title="${esc(it.href)}">
-                <button class="fbtn ${p.final && p.final.version === v.id && p.final.href === it.href ? 'on' : ''}" data-act="finali">★ 최종안</button></div>`).join('')}</div>
+                <button class="fbtn ${p.final && p.final.version === v.id && p.final.href === it.href ? 'on' : ''}" data-act="finali">★ 확정안</button></div>`).join('')}</div>
           </div>`).join('')}
       </details>
     </div>`).join('') || '<p class="note">아직 프로젝트가 없습니다.</p>';
@@ -292,7 +317,15 @@ $('list').addEventListener('input', e => {
   }
   p.updated = today(); changed();
 });
-$('list').addEventListener('change', e => { if (e.target.dataset.f === 'team') renderList(); });
+$('list').addEventListener('change', e => {
+  if (e.target.dataset.f === 'team') return renderList();
+  if (e.target.matches('[data-act-final]')) {
+    const p = P()[+e.target.closest('.proj').dataset.p], val = e.target.value;
+    if (!val) p.final = null;
+    else { const i = val.indexOf('|'); p.final = { version: val.slice(0, i), href: val.slice(i + 1) || null }; }
+    p.updated = today(); changed('확정안을 바꿨습니다. 저장을 눌러야 반영됩니다.'); renderList(); renderPick();
+  }
+});
 $('trashBox').addEventListener('click', e => {
   const b = e.target.closest('button[data-restore]'); if (!b) return;
   const [t] = data.trash.splice(+b.dataset.restore, 1);

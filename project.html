@@ -42,8 +42,15 @@
   .viewer{display:flex;flex-direction:column;min-width:0}
   .vbar{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--card);border-bottom:1px solid var(--line);flex-wrap:wrap}
   .vbar strong{font-size:14px}
-  .vbar .desc{color:var(--sub);font-size:13px}
+  .vbar{flex-wrap:nowrap}
+  .vbar strong{white-space:nowrap}
+  .vbar .desc{color:var(--sub);font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .vbar a,.fpick{white-space:nowrap;flex:none}
   .vbar a{margin-left:auto;font-size:13px;color:var(--accent);text-decoration:none;border:1px solid var(--line);border-radius:6px;padding:4px 10px;background:#fff}
+  .fpick{margin-left:auto;font:inherit;font-size:13px;border:1px solid var(--line);background:#fff;border-radius:6px;padding:4px 10px;cursor:pointer;color:var(--text)}
+  .fpick:hover{border-color:var(--final);color:var(--final)}
+  .fpick.on{background:var(--final-bg);border-color:var(--final);color:var(--final);font-weight:600}
+  .fpick + a{margin-left:0}
   .frame{flex:1;background:#e9ecf0}
   .frame iframe{width:100%;height:100%;border:0;background:#fff}
   .comments{border-left:1px solid var(--line);display:flex;flex-direction:column}
@@ -96,7 +103,7 @@ function shell() {
   document.getElementById('app').innerHTML = `
     <div class="head" id="head"><h1>${esc(P.title)}
       <span class="chip ${P.team === 'planning' ? 'plan' : ''}">${TEAMS[P.team] || '디자인'}</span>
-      ${P.final ? '<span class="chip final">최종안 확정</span>' : ''}</h1>
+      ${P.final ? '<span class="chip final">확정안</span>' : ''}</h1>
       ${P.desc ? `<p>${esc(P.desc)}</p>` : ''}</div>
     <div class="layout">
       <aside><h2>버전</h2><div id="vers"></div></aside>
@@ -128,6 +135,7 @@ function shell() {
     const vb = e.target.closest('[data-toggle]');
     if (vb) vb.parentElement.classList.toggle('open');
   });
+  document.getElementById('vbar').addEventListener('click', e => { if (e.target.closest('#fpick')) toggleFinal(); });
   document.getElementById('clist').addEventListener('click', e => { const b = e.target.closest('[data-del]'); if (b) delComment(b.dataset.del); });
 }
 
@@ -135,18 +143,49 @@ function renderVers() {
   const vs = P.versions.filter(v => !v.hidden).slice().reverse(); // 최신 버전이 위
   document.getElementById('vers').innerHTML = vs.map(v => `
     <div class="ver ${cur.v && cur.v.id === v.id ? 'open' : ''}">
-      <button data-toggle><span class="folder">📁</span><span class="vname">${esc(v.label)}</span>${isFinalV(v) ? '<span class="star">최종</span>' : ''}<span class="vdate">${esc(v.created)}</span></button>
+      <button data-toggle><span class="folder">📁</span><span class="vname">${esc(v.label)}</span>${isFinalV(v) ? '<span class="star">확정</span>' : ''}<span class="vdate">${esc(v.created)}</span></button>
       <div class="vtitle">${esc(v.title)}</div>
       <div class="items">${v.items.map(i => `<button data-v="${esc(v.id)}" data-href="${esc(i.href)}" aria-current="${cur.v && cur.v.id === v.id && cur.href === i.href}">
-        ${esc(i.label)}${isFinalItem(v, i.href) ? ' <span class="star">★ 최종안</span>' : ''}<span class="cnt">${countFor(v, i.href) ? '💬 ' + countFor(v, i.href) : ''}</span></button>`).join('')}</div>
+        ${esc(i.label)}${isFinalItem(v, i.href) ? ' <span class="star">★ 확정안</span>' : ''}<span class="cnt">${countFor(v, i.href) ? '💬 ' + countFor(v, i.href) : ''}</span></button>`).join('')}</div>
     </div>`).join('');
 }
 function renderBar() {
   const v = cur.v, item = v.items.find(i => i.href === cur.href) || { label: '' };
   document.getElementById('vbar').innerHTML = `<strong>${esc(v.label)} · ${esc(item.label)}</strong>
-    ${isFinalItem(v, cur.href) || (isFinalV(v) && !P.final.href) ? '<span class="chip final">최종안</span>' : ''}
+    ${isFinalItem(v, cur.href) || (isFinalV(v) && !P.final.href) ? '<span class="chip final">확정안</span>' : ''}
     <span class="desc">${esc(v.desc || v.title)}</span>
+    ${(P.team || 'design') === 'design' ? (isFinalItem(v, cur.href)
+      ? '<button class="fpick on" id="fpick" title="확정안 표시 해제">✓ 확정안 · 해제</button>'
+      : '<button class="fpick" id="fpick" title="이 시안을 확정안으로 정합니다">★ 이 시안을 확정안으로</button>') : ''}
     <a href="${esc(encodeURI(cur.href))}" target="_blank" rel="noopener">새 창으로 열기 ↗</a>`;
+}
+// 확정안 지정/해제 (디자인 프로젝트) — 관리자 비밀번호로 서버에 저장
+async function toggleFinal() {
+  let password = store.get('admin_pw');
+  if (!password) { password = prompt('확정안은 관리자만 바꿀 수 있습니다. 관리자 비밀번호를 넣어 주세요.') || ''; if (!password) return; }
+  const btn = document.getElementById('fpick'); btn.disabled = true; btn.textContent = '저장 중…';
+  try {
+    const g = await fetch('api/projects', { cache: 'no-store' }).then(r => r.json());
+    if (!g.enabled) throw new Error('서버 저장이 아직 설정되지 않았습니다. 관리자 페이지에서 정해 주세요.');
+    const base = JSON.parse(JSON.stringify(g.data)), data = g.data;
+    const p = data.projects.find(x => x.id === P.id);
+    if (!p) throw new Error('프로젝트를 찾지 못했습니다. 새로고침해 주세요.');
+    const on = p.final && p.final.version === cur.v.id && p.final.href === cur.href;
+    p.final = on ? null : { version: cur.v.id, href: cur.href };
+    p.updated = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10).replace(/-/g, '.');
+    const r = await fetch('api/projects', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password, sha: g.sha, base, data }) });
+    const j = await r.json().catch(() => ({}));
+    if (r.status === 401) store.del('admin_pw');
+    if (!r.ok) throw new Error(j.error || `저장 실패 (${r.status})`);
+    store.set('admin_pw', password);
+    P.final = p.final;
+    renderHead(); renderVers(); renderBar();
+  } catch (e) { alert(e.message); renderBar(); }
+}
+function renderHead() {
+  const h = document.querySelector('#head h1 .chip.final');
+  if (P.final && !h) document.querySelector('#head h1').insertAdjacentHTML('beforeend', '<span class="chip final">확정안</span>');
+  if (!P.final && h) h.remove();
 }
 function renderComments() {
   const list = comments.filter(c => c.version === cur.v.id && c.href === cur.href);

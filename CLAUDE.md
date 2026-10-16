@@ -14,7 +14,7 @@
 ## 데이터 (`projects.json`, version 2)
 - `projects[]`: `{ id, title, team('design'|'planning'), category, desc, created, updated, hidden, final, versions[] }`. 배열 순서 = 화면 순서.
 - `versions[]`: `{ id, label('v1'…), title, desc(바뀐 점), created, folder, preview, hidden, items[{label, href}] }`. 오래된 것이 앞.
-- `final`: `null` 또는 `{ version: 버전id, href: 시안경로|null }` (href가 null이면 버전 전체가 최종안).
+- `final`(확정안, 디자인 프로젝트는 관리자 3번의 "확정안" 칸이나 프로젝트 화면의 "이 시안을 확정안으로" 버튼으로 지정): `null` 또는 `{ version: 버전id, href: 시안경로|null }` (href가 null이면 버전 전체가 최종안).
 - `trash[]`: `{type:'version', projectId, deleted, version}` 또는 `{type:'project', deleted, project}`.
 - 규칙 코드는 `admin/model.js` 한 곳(관리자 페이지와 서버 API가 같이 씀).
 
