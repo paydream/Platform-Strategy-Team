@@ -2,6 +2,39 @@
   "version": 2,
   "projects": [
     {
+      "id": "20261019-220534-blog-230-redesign",
+      "title": "예스폼 블로그 디자인 시스템 적용 — AI 사업계획서 글(keyn 230)",
+      "team": "design",
+      "category": "블로그",
+      "desc": "contents.yesform.com 블로그 글을 블로그 디자인 시스템 v1.2(피그마 00 AI 작성 규칙)로 리디자인. 원본(실제 게시 페이지)과 리디자인을 좌우로 비교.",
+      "created": "2026.10.19",
+      "updated": "2026.10.19",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261019-220534-blog-230-redesign",
+          "label": "v1",
+          "title": "원본 vs 리디자인 비교",
+          "desc": "합니다체→해요체, 목차+번호 섹션 구조, 컴포넌트 [1][4][9][10][12][13][14][15][16][17][18][21] 적용",
+          "created": "2026.10.19",
+          "folder": "archive/20261019-220534-blog-230-redesign",
+          "preview": "archive/20261019-220534-blog-230-redesign/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "원본 vs 리디자인 비교",
+              "href": "archive/20261019-220534-blog-230-redesign/index.html"
+            },
+            {
+              "label": "리디자인 단독",
+              "href": "archive/20261019-220534-blog-230-redesign/redesign.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "20261019-172912-261019",
       "title": "에디터 문서 의견 수집 모달",
       "team": "design",
