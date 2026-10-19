@@ -2,6 +2,35 @@
   "version": 2,
   "projects": [
     {
+      "id": "20261019-172912-261019",
+      "title": "에디터 문서 의견 수집 모달",
+      "team": "design",
+      "category": "웹 메인",
+      "desc": "",
+      "created": "2026.10.19",
+      "updated": "2026.10.19",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261019-172912-261019",
+          "label": "v1",
+          "title": "에디터 문서 의견 수집 모달",
+          "desc": "",
+          "created": "2026.10.19",
+          "folder": "archive/20261019-172912-261019",
+          "preview": "archive/20261019-172912-261019/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261019-172912-261019/index.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "main-prompt-check",
       "title": "메인홈 프롬프트 검증",
       "team": "planning",
