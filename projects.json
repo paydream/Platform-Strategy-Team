@@ -31,6 +31,26 @@
               "href": "archive/20261019-220534-blog-230-redesign/redesign.html"
             }
           ]
+        },
+        {
+          "id": "20261019-221416-blog-230-redesign-v2",
+          "label": "v2",
+          "title": "공통 영역 고정 + 가변 영역만 리디자인",
+          "desc": "블로그 상단 공통 컴포넌트(헤더·카테고리·제목·태그·조회수)는 캡처 그대로 고정하고, 그 아래 본문만 디자인 시스템 적용. 원본 vs 리디자인 좌우 비교",
+          "created": "2026.10.19",
+          "folder": "archive/20261019-221416-blog-230-redesign-v2",
+          "preview": "archive/20261019-221416-blog-230-redesign-v2/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "원본 vs 리디자인 비교",
+              "href": "archive/20261019-221416-blog-230-redesign-v2/index.html"
+            },
+            {
+              "label": "리디자인 단독(공통 영역 포함)",
+              "href": "archive/20261019-221416-blog-230-redesign-v2/redesign.html"
+            }
+          ]
         }
       ]
     },
