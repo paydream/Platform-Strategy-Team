@@ -71,6 +71,26 @@
               "href": "archive/20261019-223941-blog-230-redesign-v3/redesign.html"
             }
           ]
+        },
+        {
+          "id": "20261019-225720-blog-230-redesign-v4",
+          "label": "v4",
+          "title": "글 내용 원문 그대로 + 디자인·레이아웃만 적용",
+          "desc": "v3에서 고쳐 썼던 문장(해요체·요약·인용)을 전부 원문으로 되돌림. 문장·순서·이미지는 원본과 동일하고 디자인 시스템 v1.3 컴포넌트와 720px/18px 레이아웃만 적용. 서식 카드는 04 끝과 마무리에 서식명·링크만",
+          "created": "2026.10.19",
+          "folder": "archive/20261019-225720-blog-230-redesign-v4",
+          "preview": "archive/20261019-225720-blog-230-redesign-v4/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "원본 vs 리디자인 비교",
+              "href": "archive/20261019-225720-blog-230-redesign-v4/index.html"
+            },
+            {
+              "label": "리디자인 단독(공통 영역 포함)",
+              "href": "archive/20261019-225720-blog-230-redesign-v4/redesign.html"
+            }
+          ]
         }
       ]
     },
