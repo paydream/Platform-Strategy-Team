@@ -3,255 +3,262 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>프로젝트 · 업무 아카이브</title>
+<meta name="color-scheme" content="light">
+<title>시안 보기 · 업무 아카이브</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
-  :root{--bg:#f6f7f9;--card:#fff;--line:#e5e8ec;--text:#191f28;--sub:#6b7684;--accent:#2f6bff;--chip:#eef3ff;--final:#12a150;--final-bg:#e8f7ee;--plan:#8a4dff;--plan-bg:#f3edff;--danger:#e5484d}
+  :root{color-scheme:light;--bg:#f6f7f9;--card:#fff;--line:#e5e8ec;--text:#191f28;--sub:#6b7684;--accent:#2f6bff;--chip:#eef3ff;--final:#12a150;--final-bg:#e8f7ee;--plan:#8a4dff;--plan-bg:#f3edff;--danger:#e5484d}
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:"Pretendard Variable",Pretendard,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;font-size:14px}
-  header{background:var(--card);border-bottom:1px solid var(--line)}
-  .bar{display:flex;align-items:center;gap:12px;height:56px;padding:0 20px}
-  .bar a{color:var(--sub);text-decoration:none;font-size:13px}
-  .bar a:hover{color:var(--accent)}
-  .head{padding:18px 20px 14px;background:var(--card);border-bottom:1px solid var(--line)}
-  .head h1{font-size:20px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-  .head p{color:var(--sub);margin-top:4px}
-  .chip{font-size:12px;font-weight:500;padding:2px 8px;border-radius:99px;background:var(--chip);color:var(--accent)}
+  html,body{height:100%}
+  body{font-family:"Pretendard Variable",Pretendard,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;font-size:14px;display:flex;flex-direction:column}
+  button{font:inherit;cursor:pointer}
+
+  /* 상단 헤더 */
+  header{background:var(--card);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:0 16px;height:56px;flex:none;min-width:0}
+  .back{color:var(--sub);text-decoration:none;font-size:13px;white-space:nowrap}
+  .back:hover{color:var(--accent)}
+  .title{display:flex;align-items:center;gap:6px;min-width:0}
+  .title h1{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .chip{font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--chip);color:var(--accent);white-space:nowrap}
   .chip.plan{background:var(--plan-bg);color:var(--plan)}
-  .chip.final{background:var(--final-bg);color:var(--final);font-weight:600}
-  .layout{display:grid;grid-template-columns:250px minmax(0,1fr) 330px;height:calc(100vh - 56px - var(--head-h,86px))}
-  aside,.comments{background:var(--card);overflow:auto}
-  aside{border-right:1px solid var(--line);padding:12px}
-  aside h2,.comments h2{font-size:13px;color:var(--sub);font-weight:600;margin:4px 4px 8px}
-  .ver{border-radius:8px;margin-bottom:4px}
-  .ver > button{width:100%;text-align:left;font:inherit;border:0;background:none;padding:8px;border-radius:8px;cursor:pointer;display:flex;gap:6px;align-items:center}
-  .ver > button:hover{background:#f2f4f6}
-  .ver.open > button{background:#f2f4f6}
-  .ver .folder{font-size:15px}
-  .ver .vname{font-weight:600}
-  .ver .vdate{margin-left:auto;font-size:12px;color:var(--sub)}
-  .ver .vtitle{font-size:12px;color:var(--sub);padding:0 8px 4px 30px;display:none}
-  .ver.open .vtitle{display:block}
-  .items{display:none;padding:0 0 6px 22px}
-  .ver.open .items{display:block}
-  .items button{display:flex;align-items:center;gap:6px;width:100%;text-align:left;font:inherit;font-size:13px;border:0;background:none;padding:6px 8px;border-radius:6px;cursor:pointer;color:var(--text)}
-  .items button:hover{background:#f6f8fa}
-  .items button[aria-current="true"]{background:var(--chip);color:var(--accent);font-weight:600}
-  .items .cnt{margin-left:auto;font-size:11px;color:var(--sub)}
-  .star{font-size:11px;color:var(--final);font-weight:700}
-  .viewer{display:flex;flex-direction:column;min-width:0}
-  .vbar{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--card);border-bottom:1px solid var(--line);flex-wrap:wrap}
-  .vbar strong{font-size:14px}
-  .vbar{flex-wrap:nowrap}
-  .vbar strong{white-space:nowrap}
-  .vbar .desc{color:var(--sub);font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .vbar a,.fpick{white-space:nowrap;flex:none}
-  .vbar a{margin-left:auto;font-size:13px;color:var(--accent);text-decoration:none;border:1px solid var(--line);border-radius:6px;padding:4px 10px;background:#fff}
-  .fpick{margin-left:auto;font:inherit;font-size:13px;border:1px solid var(--line);background:#fff;border-radius:6px;padding:4px 10px;cursor:pointer;color:var(--text)}
-  .fpick:hover{border-color:var(--final);color:var(--final)}
-  .fpick.on{background:var(--final-bg);border-color:var(--final);color:var(--final);font-weight:600}
-  .fpick + a{margin-left:0}
-  .frame{flex:1;background:#e9ecf0}
-  .frame iframe{width:100%;height:100%;border:0;background:#fff}
-  .comments{border-left:1px solid var(--line);display:flex;flex-direction:column}
-  .clist{flex:1;overflow:auto;padding:12px}
-  .c{padding:10px 4px;border-bottom:1px solid var(--line)}
+  .chip.final{background:var(--final-bg);color:var(--final)}
+  .tabs{display:flex;gap:2px;background:#eceef1;border-radius:8px;padding:3px;overflow-x:auto;max-width:42vw;flex:none}
+  .tabs button{border:0;background:none;border-radius:6px;padding:4px 10px;font-size:13px;color:var(--sub);white-space:nowrap}
+  .tabs button[aria-current="true"]{background:#fff;color:var(--text);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+  .tabs button .star{color:var(--final);font-weight:700;margin-left:3px}
+  .actions{margin-left:auto;display:flex;align-items:center;gap:6px;flex:none}
+  .hbtn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;font-size:13px;color:var(--text);text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+  .hbtn:hover{border-color:#c9d3e6}
+  .hbtn.final.on{background:var(--final-bg);border-color:var(--final);color:var(--final);font-weight:600}
+  .hbtn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+  .hbtn.primary:hover{background:#1f5be8}
+  .hbtn .n{font-size:11px;background:rgba(255,255,255,.25);border-radius:99px;padding:0 6px}
+  .hbtn.list .n{background:#eef0f3;color:var(--sub)}
+
+  /* 본문: 시안 화면 + (코멘트가 열리면) 오른쪽 사이드바 */
+  .main{flex:1;display:flex;min-height:0}
+  .frame{flex:1;min-width:0;background:#e9ecf0}
+  .frame iframe{width:100%;height:100%;border:0;background:#fff;display:block}
+  .side{width:340px;flex:none;background:var(--card);border-left:1px solid var(--line);display:none;flex-direction:column}
+  .side.open{display:flex;animation:slide .18s ease-out}
+  @keyframes slide{from{transform:translateX(24px);opacity:0}to{transform:none;opacity:1}}
+  .side-head{display:flex;align-items:center;gap:8px;padding:14px 16px;border-bottom:1px solid var(--line)}
+  .side-head b{font-size:14px}
+  .side-head small{color:var(--sub);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .side-head button{margin-left:auto;border:0;background:none;font-size:18px;line-height:1;color:var(--sub);padding:4px}
+  .clist{flex:1;overflow:auto;padding:4px 16px 16px}
+  .c{padding:12px 0;border-bottom:1px solid var(--line)}
   .c:last-child{border-bottom:0}
-  .c .who{display:flex;gap:6px;align-items:baseline}
-  .c .who b{font-size:13px}
-  .c .who time{font-size:11px;color:var(--sub)}
-  .c .who button{margin-left:auto;border:0;background:none;color:var(--sub);cursor:pointer;font-size:12px}
-  .c .who button:hover{color:var(--danger)}
-  .c p{white-space:pre-wrap;word-break:break-word;margin-top:2px}
-  .none{color:var(--sub);font-size:13px;padding:8px 4px}
-  form{border-top:1px solid var(--line);padding:12px;display:grid;gap:8px;background:#fafbfc}
-  form input,form textarea{font:inherit;border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:#fff;width:100%}
-  form textarea{min-height:84px;resize:vertical}
-  .frow{display:flex;align-items:center;gap:8px}
-  .frow small{color:var(--sub);font-size:12px}
-  .frow small.over{color:var(--danger)}
-  form button{margin-left:auto;font:inherit;border:0;background:var(--accent);color:#fff;border-radius:8px;padding:8px 16px;cursor:pointer}
-  form button:disabled{opacity:.5;cursor:default}
-  .msg{font-size:12px;color:var(--danger);min-height:1em}
-  .msg.ok{color:var(--final)}
+  .c.new{animation:flash 1.6s ease-out}
+  @keyframes flash{from{background:#eef3ff}to{background:transparent}}
+  .who{display:flex;gap:6px;align-items:baseline}
+  .who b{font-size:13px}
+  .who time{font-size:11px;color:var(--sub)}
+  .who button{margin-left:auto;border:0;background:none;color:var(--sub);font-size:12px}
+  .who button:hover{color:var(--danger)}
+  .c p{white-space:pre-wrap;word-break:break-word;margin-top:3px}
+  .none{color:var(--sub);font-size:13px;padding:14px 0}
+
+  /* 코멘트 작성 모달 */
+  .dim{position:fixed;inset:0;background:rgba(17,24,39,.45);display:none;align-items:center;justify-content:center;padding:16px;z-index:10}
+  .dim.open{display:flex}
+  .modal{background:#fff;border-radius:14px;width:100%;max-width:460px;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.2)}
+  .modal h2{font-size:17px}
+  .modal .where{color:var(--sub);font-size:12px;margin-top:2px}
+  .modal label{display:block;font-size:12px;color:var(--sub);margin:14px 0 4px}
+  .modal input,.modal textarea{width:100%;font:inherit;border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:#fff;color:var(--text)}
+  .modal input:focus,.modal textarea:focus{outline:2px solid #c7d7ff;border-color:var(--accent)}
+  .modal textarea{min-height:130px;resize:vertical}
+  .len{text-align:right;font-size:12px;color:var(--sub);margin-top:4px}
+  .len.over{color:var(--danger)}
+  .msg{font-size:12px;color:var(--danger);min-height:1.2em;margin-top:6px}
+  .mbtns{display:flex;justify-content:flex-end;gap:8px;margin-top:8px}
   .notfound{padding:60px 20px;text-align:center;color:var(--sub)}
-  @media (max-width:1000px){
-    .layout{grid-template-columns:1fr;height:auto}
-    aside{border-right:0;border-bottom:1px solid var(--line);max-height:260px}
-    .frame{height:70vh;flex:none}
-    .comments{border-left:0;border-top:1px solid var(--line)}
+
+  @media (max-width:900px){
+    header{height:auto;flex-wrap:wrap;padding:10px 12px}
+    .tabs{max-width:100%;order:5;width:100%}
+    .side{position:fixed;right:0;top:0;bottom:0;width:min(340px,92vw);z-index:5;box-shadow:-8px 0 24px rgba(0,0,0,.12)}
   }
 </style>
 </head>
 <body>
-<header><div class="bar"><a href="./">← 업무 아카이브</a><a href="admin/" style="margin-left:auto">관리자</a></div></header>
-<div id="app"><p class="notfound">불러오는 중…</p></div>
+<div id="app" style="display:contents"><p class="notfound">불러오는 중…</p></div>
+
+<div class="dim" id="dim" aria-hidden="true">
+  <form class="modal" id="cform" role="dialog" aria-modal="true" aria-labelledby="mtitle" autocomplete="off">
+    <h2 id="mtitle">코멘트 남기기</h2>
+    <p class="where" id="mwhere"></p>
+    <label for="author">작성자</label>
+    <input id="author" maxlength="30" placeholder="이름">
+    <label for="text">코멘트</label>
+    <textarea id="text" maxlength="500" placeholder="이 화면에 대한 의견을 남겨 주세요"></textarea>
+    <div class="len" id="len">0 / 500</div>
+    <div class="msg" id="cmsg"></div>
+    <div class="mbtns"><button type="button" class="hbtn" id="cancel">취소</button><button class="hbtn primary" id="save">저장</button></div>
+  </form>
+</div>
+
 <script>
 const TEAMS = { design: '디자인', planning: '기획' };
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const store = { get(k){ try { return localStorage.getItem(k) || ''; } catch { return ''; } }, set(k,v){ try { localStorage.setItem(k,v); } catch {} }, del(k){ try { localStorage.removeItem(k); } catch {} } };
+const $ = id => document.getElementById(id);
 const params = new URLSearchParams(location.search);
-let P = null, comments = [], cur = { v: null, href: null }, commentsOn = true;
+let P = null, V = null, href = null, comments = [], commentsOn = true;
 
-const isFinalV = v => P.final && P.final.version === v.id;
-const isFinalItem = (v, h) => P.final && P.final.version === v.id && P.final.href === h;
-const fmt = iso => { const d = new Date(iso); return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`; };
-const countFor = (v, h) => comments.filter(c => c.version === v.id && c.href === h).length;
+const fmt = iso => { const d = new Date(iso); const z = n => String(n).padStart(2, '0'); return `${d.getFullYear()}.${z(d.getMonth()+1)}.${z(d.getDate())} ${z(d.getHours())}:${z(d.getMinutes())}`; };
+const here = () => comments.filter(c => c.version === V.id && c.href === href);
 
+/* ---------- 화면 ---------- */
 function shell() {
   document.title = `${P.title} · 업무 아카이브`;
-  document.getElementById('app').innerHTML = `
-    <div class="head" id="head"><h1>${esc(P.title)}
-      <span class="chip ${P.team === 'planning' ? 'plan' : ''}">${TEAMS[P.team] || '디자인'}</span>
-      ${P.final ? '<span class="chip final">확정안</span>' : ''}</h1>
-      ${P.desc ? `<p>${esc(P.desc)}</p>` : ''}</div>
-    <div class="layout">
-      <aside><h2>버전</h2><div id="vers"></div></aside>
-      <section class="viewer">
-        <div class="vbar" id="vbar"></div>
-        <div class="frame"><iframe id="frame" title="시안 화면"></iframe></div>
-      </section>
-      <section class="comments">
-        <h2 style="margin:12px 16px 0" id="ctitle">코멘트</h2>
+  $('app').innerHTML = `
+    <header>
+      <a class="back" href="./">← 목록</a>
+      <div class="title"><h1 title="${esc(P.title)}">${esc(P.title)}</h1>
+        <span class="chip ${P.team === 'planning' ? 'plan' : ''}">${TEAMS[P.team] || '디자인'}</span>
+        <span id="finalChip"></span></div>
+      <nav class="tabs" id="tabs" aria-label="시안"></nav>
+      <div class="actions">
+        <span id="finalBtnBox"></span>
+        <a class="hbtn" id="newWin" target="_blank" rel="noopener">새 창 ↗</a>
+        <button class="hbtn list" id="openSide" title="코멘트 보기" style="display:none">💬 <span class="n" id="sideN">0</span></button>
+        <button class="hbtn primary" id="openModal">코멘트</button>
+      </div>
+    </header>
+    <div class="main">
+      <div class="frame"><iframe id="frame" title="시안 화면"></iframe></div>
+      <aside class="side" id="side" aria-label="코멘트">
+        <div class="side-head"><b id="sideTitle">코멘트</b><small id="sideWhere"></small><button id="closeSide" aria-label="닫기">×</button></div>
         <div class="clist" id="clist"></div>
-        <form id="cform" autocomplete="off">
-          <input id="author" maxlength="30" placeholder="작성자 이름" required>
-          <textarea id="text" maxlength="500" placeholder="이 화면에 대한 의견 (500자 이하)" required></textarea>
-          <div class="frow"><small id="len">0 / 500</small><button id="send">코멘트 남기기</button></div>
-          <div class="msg" id="cmsg"></div>
-        </form>
-      </section>
+      </aside>
     </div>`;
-  document.documentElement.style.setProperty('--head-h', document.getElementById('head').offsetHeight + 'px');
-  document.getElementById('author').value = store.get('comment_author');
-  document.getElementById('text').addEventListener('input', e => {
-    const n = [...e.target.value].length, l = document.getElementById('len');
-    l.textContent = `${n} / 500`; l.classList.toggle('over', n > 500);
-  });
-  document.getElementById('cform').addEventListener('submit', send);
-  document.getElementById('vers').addEventListener('click', e => {
-    const it = e.target.closest('[data-href]');
-    if (it) return select(it.dataset.v, it.dataset.href);
-    const vb = e.target.closest('[data-toggle]');
-    if (vb) vb.parentElement.classList.toggle('open');
-  });
-  document.getElementById('vbar').addEventListener('click', e => { if (e.target.closest('#fpick')) toggleFinal(); });
-  document.getElementById('clist').addEventListener('click', e => { const b = e.target.closest('[data-del]'); if (b) delComment(b.dataset.del); });
+  $('tabs').addEventListener('click', e => { const b = e.target.closest('[data-href]'); if (b) select(b.dataset.href); });
+  $('openModal').onclick = openModal;
+  $('openSide').onclick = () => openSide(true);
+  $('closeSide').onclick = () => openSide(false);
+  $('clist').addEventListener('click', e => { const b = e.target.closest('[data-del]'); if (b) delComment(b.dataset.del); });
+  $('finalBtnBox').addEventListener('click', e => { if (e.target.closest('#fpick')) toggleFinal(); });
+}
+function renderHeader() {
+  const label = (V.items.find(i => i.href === href) || {}).label || '';
+  $('finalChip').innerHTML = P.final ? '<span class="chip final">확정안</span>' : '';
+  $('tabs').style.display = V.items.length > 1 ? '' : 'none';
+  $('tabs').innerHTML = V.items.map(i => `<button data-href="${esc(i.href)}" aria-current="${i.href === href}">${esc(i.label)}${P.final && P.final.version === V.id && P.final.href === i.href ? '<span class="star">★</span>' : ''}</button>`).join('');
+  const on = P.final && P.final.version === V.id && (P.final.href === href || !P.final.href);
+  $('finalBtnBox').innerHTML = (P.team || 'design') === 'design'
+    ? `<button class="hbtn final ${on ? 'on' : ''}" id="fpick" title="${on ? '확정안 표시 해제' : '보고 있는 시안을 확정안으로 정합니다'}">${on ? '✓ 확정안' : '★ 확정안으로'}</button>` : '';
+  $('newWin').href = encodeURI(href);
+  const n = here().length;
+  $('sideN').textContent = n; $('openSide').style.display = n && !$('side').classList.contains('open') ? '' : 'none';
+  $('sideWhere').textContent = label;
+}
+function renderComments(newId) {
+  const list = here(), admin = !!store.get('admin_pw');
+  $('sideTitle').textContent = `코멘트 ${list.length}`;
+  $('clist').innerHTML = list.length
+    ? list.map(c => `<div class="c ${c.id === newId ? 'new' : ''}"><div class="who"><b>${esc(c.author)}</b><time>${fmt(c.created)}</time>${admin ? `<button data-del="${esc(c.id)}">삭제</button>` : ''}</div><p>${esc(c.text)}</p></div>`).join('')
+    : '<p class="none">이 화면에는 아직 코멘트가 없습니다.</p>';
+  if (newId) { const el = $('clist').querySelector('.c.new'); if (el) el.scrollIntoView({ block: 'nearest' }); }
+}
+function openSide(on) {
+  $('side').classList.toggle('open', on);
+  renderComments(); renderHeader();
+}
+function select(h) {
+  href = h;
+  $('frame').src = encodeURI(h);
+  const u = new URL(location); u.searchParams.set('h', h); u.searchParams.delete('v'); history.replaceState(null, '', u);
+  renderHeader();
+  // 다른 화면으로 바꾸면: 그 화면에 코멘트가 있을 때만 열린 사이드바 유지
+  if ($('side').classList.contains('open')) { if (here().length) renderComments(); else openSide(false); }
 }
 
-function renderVers() {
-  const vs = P.versions.filter(v => !v.hidden).slice().reverse(); // 최신 버전이 위
-  document.getElementById('vers').innerHTML = vs.map(v => `
-    <div class="ver ${cur.v && cur.v.id === v.id ? 'open' : ''}">
-      <button data-toggle><span class="folder">📁</span><span class="vname">${esc(v.label)}</span>${isFinalV(v) ? '<span class="star">확정</span>' : ''}<span class="vdate">${esc(v.created)}</span></button>
-      <div class="vtitle">${esc(v.title)}</div>
-      <div class="items">${v.items.map(i => `<button data-v="${esc(v.id)}" data-href="${esc(i.href)}" aria-current="${cur.v && cur.v.id === v.id && cur.href === i.href}">
-        ${esc(i.label)}${isFinalItem(v, i.href) ? ' <span class="star">★ 확정안</span>' : ''}<span class="cnt">${countFor(v, i.href) ? '💬 ' + countFor(v, i.href) : ''}</span></button>`).join('')}</div>
-    </div>`).join('');
+/* ---------- 코멘트 모달 ---------- */
+function openModal() {
+  if (!commentsOn) return alert('코멘트 기능이 아직 설정되지 않았습니다.');
+  $('mwhere').textContent = `${P.title} · ${(V.items.find(i => i.href === href) || {}).label || ''}`;
+  $('author').value = store.get('comment_author'); $('text').value = ''; $('len').textContent = '0 / 500'; $('len').classList.remove('over'); $('cmsg').textContent = '';
+  $('dim').classList.add('open'); $('dim').setAttribute('aria-hidden', 'false');
+  setTimeout(() => ($('author').value ? $('text') : $('author')).focus(), 30);
 }
-function renderBar() {
-  const v = cur.v, item = v.items.find(i => i.href === cur.href) || { label: '' };
-  document.getElementById('vbar').innerHTML = `<strong>${esc(v.label)} · ${esc(item.label)}</strong>
-    ${isFinalItem(v, cur.href) || (isFinalV(v) && !P.final.href) ? '<span class="chip final">확정안</span>' : ''}
-    <span class="desc">${esc(v.desc || v.title)}</span>
-    ${(P.team || 'design') === 'design' ? (isFinalItem(v, cur.href)
-      ? '<button class="fpick on" id="fpick" title="확정안 표시 해제">✓ 확정안 · 해제</button>'
-      : '<button class="fpick" id="fpick" title="이 시안을 확정안으로 정합니다">★ 이 시안을 확정안으로</button>') : ''}
-    <a href="${esc(encodeURI(cur.href))}" target="_blank" rel="noopener">새 창으로 열기 ↗</a>`;
+function closeModal() { $('dim').classList.remove('open'); $('dim').setAttribute('aria-hidden', 'true'); $('openModal').focus(); }
+$('cancel').onclick = closeModal;
+$('dim').addEventListener('mousedown', e => { if (e.target === $('dim')) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('dim').classList.contains('open')) closeModal(); });
+$('text').addEventListener('input', e => { const n = [...e.target.value].length; $('len').textContent = `${n} / 500`; $('len').classList.toggle('over', n > 500); });
+$('cform').addEventListener('submit', async e => {
+  e.preventDefault();
+  const msg = $('cmsg'); msg.textContent = '';
+  const author = $('author').value.trim(), text = $('text').value.trim();
+  if (!author) { msg.textContent = '작성자 이름을 넣어 주세요.'; return $('author').focus(); }
+  if (!text) { msg.textContent = '코멘트 내용을 넣어 주세요.'; return $('text').focus(); }
+  if ([...text].length > 500) { msg.textContent = '코멘트는 500자까지 쓸 수 있습니다.'; return; }
+  let password = store.get('team_pw');
+  if (!password) { password = prompt('팀 비밀번호를 넣어 주세요. (한 번 넣으면 이 브라우저가 기억합니다)') || ''; if (!password) return; }
+  $('save').disabled = true; $('save').textContent = '저장 중…';
+  try {
+    const r = await fetch('api/comments', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'add', password, project: P.id, version: V.id, href, author, text }) });
+    const j = await r.json().catch(() => ({}));
+    if (r.status === 401) store.del('team_pw');
+    if (!r.ok) throw new Error(j.error || `저장하지 못했습니다 (${r.status})`);
+    store.set('team_pw', password); store.set('comment_author', author);
+    comments.push(j.comment);
+    closeModal();
+    $('side').classList.add('open'); renderComments(j.comment.id); renderHeader(); // 저장하면 오른쪽에 코멘트 사이드바가 열림
+  } catch (err) { msg.textContent = err.message; }
+  $('save').disabled = false; $('save').textContent = '저장';
+});
+async function delComment(id) {
+  if (!confirm('이 코멘트를 지울까요?')) return;
+  const r = await fetch('api/comments', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'delete', password: store.get('admin_pw'), id }) });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) return alert(j.error || '지우지 못했습니다.');
+  comments = comments.filter(c => c.id !== id); renderComments(); renderHeader();
 }
-// 확정안 지정/해제 (디자인 프로젝트) — 관리자 비밀번호로 서버에 저장
+
+/* ---------- 확정안 (디자인 프로젝트, 관리자 비밀번호) ---------- */
 async function toggleFinal() {
   let password = store.get('admin_pw');
   if (!password) { password = prompt('확정안은 관리자만 바꿀 수 있습니다. 관리자 비밀번호를 넣어 주세요.') || ''; if (!password) return; }
-  const btn = document.getElementById('fpick'); btn.disabled = true; btn.textContent = '저장 중…';
+  const btn = $('fpick'); btn.disabled = true; btn.textContent = '저장 중…';
   try {
     const g = await fetch('api/projects', { cache: 'no-store' }).then(r => r.json());
     if (!g.enabled) throw new Error('서버 저장이 아직 설정되지 않았습니다. 관리자 페이지에서 정해 주세요.');
     const base = JSON.parse(JSON.stringify(g.data)), data = g.data;
     const p = data.projects.find(x => x.id === P.id);
     if (!p) throw new Error('프로젝트를 찾지 못했습니다. 새로고침해 주세요.');
-    const on = p.final && p.final.version === cur.v.id && p.final.href === cur.href;
-    p.final = on ? null : { version: cur.v.id, href: cur.href };
+    const on = p.final && p.final.version === V.id && (p.final.href === href || !p.final.href);
+    p.final = on ? null : { version: V.id, href };
     p.updated = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10).replace(/-/g, '.');
     const r = await fetch('api/projects', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password, sha: g.sha, base, data }) });
     const j = await r.json().catch(() => ({}));
     if (r.status === 401) store.del('admin_pw');
     if (!r.ok) throw new Error(j.error || `저장 실패 (${r.status})`);
-    store.set('admin_pw', password);
-    P.final = p.final;
-    renderHead(); renderVers(); renderBar();
-  } catch (e) { alert(e.message); renderBar(); }
-}
-function renderHead() {
-  const h = document.querySelector('#head h1 .chip.final');
-  if (P.final && !h) document.querySelector('#head h1').insertAdjacentHTML('beforeend', '<span class="chip final">확정안</span>');
-  if (!P.final && h) h.remove();
-}
-function renderComments() {
-  const list = comments.filter(c => c.version === cur.v.id && c.href === cur.href);
-  const admin = !!store.get('admin_pw');
-  document.getElementById('ctitle').textContent = `코멘트 ${list.length}`;
-  document.getElementById('clist').innerHTML = !commentsOn ? '<p class="none">코멘트 기능이 아직 설정되지 않았습니다.</p>'
-    : list.length ? list.map(c => `<div class="c"><div class="who"><b>${esc(c.author)}</b><time>${fmt(c.created)}</time>${admin ? `<button data-del="${esc(c.id)}" title="관리자 삭제">삭제</button>` : ''}</div><p>${esc(c.text)}</p></div>`).join('')
-    : '<p class="none">아직 코멘트가 없습니다. 첫 의견을 남겨 주세요.</p>';
-}
-function select(vid, href) {
-  cur.v = P.versions.find(v => v.id === vid); cur.href = href;
-  document.getElementById('frame').src = encodeURI(href);
-  const u = new URL(location); u.searchParams.set('v', vid); u.searchParams.set('h', href); history.replaceState(null, '', u);
-  renderVers(); renderBar(); renderComments();
+    store.set('admin_pw', password); P.final = p.final;
+  } catch (e) { alert(e.message); }
+  renderHeader();
 }
 
-async function loadComments() {
-  try {
-    const r = await fetch(`api/comments?project=${encodeURIComponent(P.id)}`, { cache: 'no-store' });
-    if (r.status === 503) { commentsOn = false; document.getElementById('send').disabled = true; return; }
-    comments = (await r.json()).comments || [];
-  } catch { comments = []; }
-}
-async function send(e) {
-  e.preventDefault();
-  const msg = document.getElementById('cmsg'); msg.className = 'msg'; msg.textContent = '';
-  const author = document.getElementById('author').value.trim(), text = document.getElementById('text').value.trim();
-  if (!author || !text) { msg.textContent = '이름과 내용을 넣어 주세요.'; return; }
-  if ([...text].length > 500) { msg.textContent = '코멘트는 500자까지 쓸 수 있습니다.'; return; }
-  let password = store.get('team_pw');
-  if (!password) { password = prompt('팀 비밀번호를 넣어 주세요. (한 번 넣으면 이 브라우저가 기억합니다)') || ''; if (!password) return; }
-  const btn = document.getElementById('send'); btn.disabled = true;
-  try {
-    const r = await fetch('api/comments', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'add', password, project: P.id, version: cur.v.id, href: cur.href, author, text }) });
-    const j = await r.json().catch(() => ({}));
-    if (r.status === 401) store.del('team_pw');
-    if (!r.ok) throw new Error(j.error || `오류 (${r.status})`);
-    store.set('team_pw', password); store.set('comment_author', author);
-    comments.push(j.comment); document.getElementById('text').value = ''; document.getElementById('len').textContent = '0 / 500';
-    msg.className = 'msg ok'; msg.textContent = '코멘트를 남겼습니다.';
-    renderComments(); renderVers();
-  } catch (err) { msg.textContent = err.message; }
-  btn.disabled = false;
-}
-async function delComment(id) {
-  if (!confirm('이 코멘트를 지울까요?')) return;
-  const r = await fetch('api/comments', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'delete', password: store.get('admin_pw'), id }) });
-  const j = await r.json().catch(() => ({}));
-  if (!r.ok) return alert(j.error || '지우지 못했습니다.');
-  comments = comments.filter(c => c.id !== id); renderComments(); renderVers();
-}
-
+/* ---------- 시작 ---------- */
 (async () => {
   const d = await fetch('projects.json', { cache: 'no-store' }).then(r => r.json());
   P = (d.projects || []).find(p => p.id === params.get('id'));
   const vs = P ? P.versions.filter(v => !v.hidden) : [];
-  if (!P || !vs.length) { document.getElementById('app').innerHTML = '<p class="notfound">프로젝트를 찾지 못했습니다. <a href="./">목록으로</a></p>'; return; }
-  shell();
-  await loadComments();
-  // 처음 열 화면: 주소에 있는 것 → 최종안 → 최신 버전 첫 시안
-  const qv = vs.find(v => v.id === params.get('v'));
+  if (!P || !vs.length) { $('app').innerHTML = '<p class="notfound">프로젝트를 찾지 못했습니다. <a href="./">목록으로</a></p>'; return; }
+  // 버전은 고르지 않음: 확정안 버전 → 없으면 최신 버전 하나만 보여 줌 (주소에 v가 있으면 그 버전)
   const fv = P.final && vs.find(v => v.id === P.final.version);
-  const v = qv || fv || vs[vs.length - 1];
-  const h = (qv && v.items.some(i => i.href === params.get('h')) && params.get('h')) || (fv === v && P.final.href) || v.items[0].href;
-  select(v.id, h);
+  V = vs.find(v => v.id === params.get('v')) || fv || vs[vs.length - 1];
+  shell();
+  try {
+    const r = await fetch(`api/comments?project=${encodeURIComponent(P.id)}`, { cache: 'no-store' });
+    if (r.status === 503) commentsOn = false; else comments = (await r.json()).comments || [];
+  } catch { comments = []; }
+  const qh = params.get('h');
+  const h = (qh && V.items.some(i => i.href === qh) && qh) || (fv === V && P.final.href) || V.items[0].href;
+  select(h);
 })();
 </script>
 </body>
