@@ -2,64 +2,6 @@
   "version": 2,
   "projects": [
     {
-      "id": "20261020-165051-assets",
-      "title": "에디터 프리미엄 등급 모달",
-      "team": "design",
-      "category": "웹 메인",
-      "desc": "",
-      "created": "2026.10.20",
-      "updated": "2026.10.20",
-      "hidden": false,
-      "final": null,
-      "versions": [
-        {
-          "id": "20261020-165051-assets",
-          "label": "v1",
-          "title": "에디터 프리미엄 등급 모달",
-          "desc": "",
-          "created": "2026.10.20",
-          "folder": "archive/20261020-165051-assets",
-          "preview": "archive/20261020-165051-assets/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261020-165051-assets/index.html"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "20261020-163515-icons",
-      "title": "예스폼싸인 로고 개선 작업",
-      "team": "design",
-      "category": "웹 메인",
-      "desc": "",
-      "created": "2026.10.20",
-      "updated": "2026.10.20",
-      "hidden": false,
-      "final": null,
-      "versions": [
-        {
-          "id": "20261020-163515-icons",
-          "label": "v1",
-          "title": "예스폼싸인 로고 개선 작업",
-          "desc": "",
-          "created": "2026.10.20",
-          "folder": "archive/20261020-163515-icons",
-          "preview": "archive/20261020-163515-icons/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261020-163515-icons/index.html"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "id": "20261019-220534-blog-230-redesign",
       "title": "예스폼 블로그 디자인 시스템 적용 — AI 사업계획서 글(keyn 230)",
       "team": "design",
@@ -127,6 +69,84 @@
             {
               "label": "리디자인 단독(공통 영역 포함)",
               "href": "archive/20261020-154209-blog-230-redesign-v6/redesign.html"
+            }
+          ]
+        },
+        {
+          "id": "20261020-165558-blog-230-redesign-v7",
+          "label": "v7",
+          "title": "스킬 v2.2 — 피그마 04 컴포넌트 코드 실시간 적용",
+          "desc": "스킬이 피그마를 글마다 직접 읽는 v2.2 방식으로 다시 적용. 04 컴포넌트 페이지의 HTML 코드 박스를 그대로 사용([1] 요약+🎁, [12] 목차, [13] 제목+부제, [18] [22] [25] [17] [15] [16] [23]×2 [10]). 글 내용은 원문 그대로",
+          "created": "2026.10.20",
+          "folder": "archive/20261020-165558-blog-230-redesign-v7",
+          "preview": "archive/20261020-165558-blog-230-redesign-v7/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "원본 vs 리디자인 비교",
+              "href": "archive/20261020-165558-blog-230-redesign-v7/index.html"
+            },
+            {
+              "label": "리디자인 단독(공통 영역 포함)",
+              "href": "archive/20261020-165558-blog-230-redesign-v7/redesign.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "20261020-165051-assets",
+      "title": "에디터 프리미엄 등급 모달",
+      "team": "design",
+      "category": "웹 메인",
+      "desc": "",
+      "created": "2026.10.20",
+      "updated": "2026.10.20",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261020-165051-assets",
+          "label": "v1",
+          "title": "에디터 프리미엄 등급 모달",
+          "desc": "",
+          "created": "2026.10.20",
+          "folder": "archive/20261020-165051-assets",
+          "preview": "archive/20261020-165051-assets/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261020-165051-assets/index.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "20261020-163515-icons",
+      "title": "예스폼싸인 로고 개선 작업",
+      "team": "design",
+      "category": "웹 메인",
+      "desc": "",
+      "created": "2026.10.20",
+      "updated": "2026.10.20",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261020-163515-icons",
+          "label": "v1",
+          "title": "예스폼싸인 로고 개선 작업",
+          "desc": "",
+          "created": "2026.10.20",
+          "folder": "archive/20261020-163515-icons",
+          "preview": "archive/20261020-163515-icons/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261020-163515-icons/index.html"
             }
           ]
         }
