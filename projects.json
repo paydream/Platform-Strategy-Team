@@ -2,6 +2,35 @@
   "version": 2,
   "projects": [
     {
+      "id": "20261020-163515-icons",
+      "title": "예스폼싸인 로고 개선 작업",
+      "team": "design",
+      "category": "웹 메인",
+      "desc": "",
+      "created": "2026.10.20",
+      "updated": "2026.10.20",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261020-163515-icons",
+          "label": "v1",
+          "title": "예스폼싸인 로고 개선 작업",
+          "desc": "",
+          "created": "2026.10.20",
+          "folder": "archive/20261020-163515-icons",
+          "preview": "archive/20261020-163515-icons/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261020-163515-icons/index.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "20261019-220534-blog-230-redesign",
       "title": "예스폼 블로그 디자인 시스템 적용 — AI 사업계획서 글(keyn 230)",
       "team": "design",

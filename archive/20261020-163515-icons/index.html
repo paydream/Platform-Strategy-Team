@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light" />
+  <title>예스폼싸인 헤더 | 로고 SVG · PNG 화질 비교</title>
+  <!-- Pretendard 글꼴 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <style>
+    /* =========================================================
+       예스폼싸인 헤더 (Figma 디자인-시안 Tu14pavg2z84R2MVQXpMe0 / 1:1190 · 1920 × 110)
+       · 로고만 높이 32px로 바꿔 넣음 (Figma는 30)
+       · 차수(1차 · 2차 …)마다 같은 헤더를 SVG 로고 / PNG 로고로 두 번 보여 주고, 그 아래에서 로고만 크게 비교
+       · 차수를 더하려면 맨 아래 script의 TESTS에 한 줄 추가 (파일은 이 폴더에 "3차.svg" · "3차.png"처럼)
+       · 위쪽 탭: 시안 01 = 차수별 전체 비교 / 시안 02 = 4차 · 6차 · 8차 PNG 헤더를 3단으로 한 화면에 (SPLIT 목록)
+       · 항상 밝은 화면 (다크 모드 기기에서도 흰 바탕)
+       ========================================================= */
+    :root {
+      color-scheme: light;
+      --primary: #0472e3;
+      --text: #000000;
+      --sub: #6d7379;
+      --line: #ebedef;
+      --bg-soft: #f6f8fa;
+      --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕", sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; background: #ffffff; color: var(--text); }
+    body { font-family: var(--font); -webkit-font-smoothing: antialiased; }
+    p, h1, h2 { margin: 0; }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; }
+
+    /* ---------- 헤더 (1:1190) — 높이 110 · 흰 바탕 · 좌우 160 · 양끝 정렬 ---------- */
+    .sign-header {
+      height: 110px;
+      padding: 0 160px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #ffffff;
+    }
+    /* 왼쪽 — 로고 칸 ↔ 123 ↔ 메뉴 */
+    .sign-header__left { display: flex; align-items: center; gap: 123px; }
+    /* 로고 칸 (1:1192) — 121 × 60 · 아래 여백 6 (로고가 살짝 위로) · 로고 높이 32 */
+    .sign-header__logo { width: 121px; height: 60px; padding-bottom: 6px; display: flex; align-items: center; }
+    .sign-header__logo img { height: 32px; width: auto; }
+    /* 메뉴 (1:1194) — 16px SemiBold 검정 · 줄높이 24 · 간격 70 */
+    .sign-header__nav { display: flex; align-items: center; gap: 70px; font-size: 16px; line-height: 24px; font-weight: 600; white-space: nowrap; }
+    /* 오른쪽 (1:1199) — 아이콘 24 ↔ 5 ↔ 13px Medium · 칸 간격 25 */
+    .sign-header__right { display: flex; align-items: center; gap: 25px; }
+    .sign-header__item { display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 13px; line-height: 18px; font-weight: 500; white-space: nowrap; }
+    .sign-header__item--login { width: 45px; } /* 로그인 칸 폭 45 고정 (1:1203) */
+
+    /* ---------- 확인용 화면 (헤더 디자인 아님) ---------- */
+    .tool { padding: 28px 40px 0; }
+    .tool h1 { font-size: 22px; line-height: 32px; font-weight: 700; }
+    .tool__lead { margin-top: 6px; font-size: 14px; line-height: 22px; color: var(--sub); }
+    .label {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 40px; background: var(--bg-soft);
+      font-size: 13px; line-height: 18px; font-weight: 600; color: var(--sub);
+    }
+    .label b { display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 11px; background: var(--primary); color: #fff; font-size: 12px; }
+    .label b.png { background: #ff7a1a; }
+    .preview { overflow-x: auto; border-bottom: 1px solid var(--line); }
+    .preview .sign-header { min-width: 1600px; }
+
+    .env { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 14px; line-height: 22px; }
+    .env span { color: var(--sub); }
+    .env strong { font-weight: 600; }
+
+    .zoom { margin-top: 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+    .zoom__title { margin-right: 4px; font-size: 14px; font-weight: 600; }
+    .zoom button {
+      height: 34px; padding: 0 14px; border: 1px solid #dfe3e8; border-radius: 17px; background: #fff;
+      font: inherit; font-size: 14px; font-weight: 600; color: #5b636b; cursor: pointer;
+    }
+    .zoom button:hover { border-color: var(--primary); color: var(--primary); }
+    .zoom button[aria-pressed="true"] { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+    .compare { margin-top: 16px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .card { min-width: 0; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+    .card__head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--line); font-size: 14px; font-weight: 600; }
+    .card__head span { font-size: 13px; font-weight: 500; color: var(--sub); }
+    .card__stage { height: 300px; overflow: auto; display: flex; align-items: center; justify-content: center; background: #fff; }
+    /* zoom = 브라우저 확대처럼 다시 그림 → SVG는 선명하게 다시 그려지고, PNG는 원본 픽셀을 늘려서 보여 줌 */
+    .card__logo { zoom: var(--z, 1); }
+    .card__logo img { height: 32px; width: auto; }
+    .card__foot { padding: 12px 16px; border-top: 1px solid var(--line); font-size: 13px; line-height: 20px; color: var(--sub); }
+    .card__foot strong { color: var(--text); font-weight: 600; }
+    .ok { color: #0a7d3b !important; }
+    .warn { color: #c2410c !important; }
+
+    /* 차수(1차 · 2차 …) 구분 — 위에 굵은 선 + 제목 줄 */
+    .test + .test { margin-top: 56px; border-top: 3px solid #1d1f20; }
+    .test__title { display: flex; align-items: baseline; gap: 12px; padding: 22px 40px 14px; }
+    .test__title h2 { font-size: 26px; line-height: 36px; font-weight: 700; }
+    .test__title span { font-size: 14px; color: var(--sub); }
+    .page-notes { margin: 56px 40px 80px; }
+
+
+    /* ---------- 위쪽 탭 (시안 01 · 시안 02) ---------- */
+    .tabbar { position: sticky; top: 0; z-index: 100; display: flex; justify-content: center; gap: 8px; padding: 14px 16px; background: rgba(255, 255, 255, 0.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+    .tabbar button { padding: 9px 22px; border: 1px solid #dfe3e8; border-radius: 100px; background: #fff; font: inherit; font-size: 15px; font-weight: 600; color: #5b636b; cursor: pointer; transition: 0.15s; }
+    .tabbar button:hover { border-color: var(--primary); color: var(--primary); }
+    .tabbar button[aria-selected="true"] { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .panel[hidden] { display: none; }
+
+    /* ---------- 시안 02 — 3단 비교 ---------- */
+    .split-row + .split-row { border-top: 3px solid #1d1f20; }
+    .split-row .label { font-size: 14px; color: var(--text); }
+    .compare--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .compare--3 .card__stage { height: 240px; }
+    .split-tool { padding-bottom: 80px; }
+
+    .notes { margin-top: 24px; padding: 16px 20px; border-radius: 10px; background: var(--bg-soft); font-size: 14px; line-height: 24px; }
+    .notes ul { margin: 0; padding-left: 18px; }
+  </style>
+</head>
+<body>
+  <!-- 위쪽 탭 -->
+  <nav class="tabbar" role="tablist" aria-label="시안">
+    <button type="button" role="tab" id="tab-1" aria-controls="p1" aria-selected="true" data-t="1">시안 01</button>
+    <button type="button" role="tab" id="tab-2" aria-controls="p2" aria-selected="false" data-t="2">시안 02</button>
+  </nav>
+
+  <!-- 시안 01 — 차수별 전체 비교 (1차 ~ 8차) -->
+  <div class="panel" id="p1" role="tabpanel" aria-labelledby="tab-1">
+  <!-- 차수별 테스트가 여기에 들어감 (아래 TESTS 목록으로 만듦) -->
+  <main id="tests"></main>
+
+  <div class="notes page-notes">
+    <ul>
+      <li>헤더 전체는 브라우저 확대(Ctrl + 휠 · Ctrl +)로도 확인할 수 있어요. 확대할수록 SVG는 그대로 선명하고, PNG는 경계가 흐려져요.</li>
+      <li>PNG 원본 높이가 64픽셀이면 <strong>로고 32px 기준 2배 화면까지</strong> 선명하게 나와요. 그보다 큰 배율에서는 늘려서 그리기 때문에 흐려져요.</li>
+      <li>SVG 아래쪽 옅은 그림자(타원)도 그대로 들어가 있어요. SVG와 PNG는 가로세로 비율이 조금씩 달라서 높이 32px일 때 폭이 살짝 다를 수 있어요. 차수마다 비교 카드 위에 32px 기준 폭을 적어 뒀어요.</li>
+    </ul>
+  </div>
+  </div>
+
+  <!-- 시안 02 — 4차 · 6차 · 8차 PNG 헤더를 3단으로 (아래 SPLIT 목록으로 만듦) -->
+  <div class="panel" id="p2" role="tabpanel" aria-labelledby="tab-2" hidden>
+    <div id="split"></div>
+    <div class="tool split-tool">
+      <h1>로고만 나란히 (PNG)</h1>
+      <p class="tool__lead">세 로고를 같은 배율로 한 번에 비교해요. 배율을 누르면 고해상도 화면에서 PNG가 어떻게 보이는지 미리 볼 수 있어요.</p>
+      <div class="zoom" role="group" aria-label="미리보기 배율" id="split-zoom">
+        <span class="zoom__title">미리보기 배율</span>
+        <button type="button" data-z="1" aria-pressed="true">1배 (원래 크기)</button>
+        <button type="button" data-z="1.5" aria-pressed="false">1.5배</button>
+        <button type="button" data-z="2" aria-pressed="false">2배</button>
+        <button type="button" data-z="3" aria-pressed="false">3배</button>
+        <button type="button" data-z="4" aria-pressed="false">4배</button>
+      </div>
+      <div class="compare compare--3" id="split-cards"></div>
+    </div>
+  </div>
+
+  <!-- 차수 1개 = 제목 · SVG 헤더 · PNG 헤더 · 로고 확대 비교 -->
+  <template id="test-tpl">
+    <section class="test">
+      <div class="test__title"><h2 data-f="title"></h2><span data-f="files"></span></div>
+
+      <p class="label"><b>SVG</b><span data-f="svg-label"></span></p>
+      <div class="preview">
+        <header class="sign-header">
+          <div class="sign-header__left">
+            <a href="#" class="sign-header__logo" aria-label="예스폼싸인 홈"><img data-f="svg-img" alt="예스폼싸인" /></a>
+            <nav class="sign-header__nav" aria-label="주 메뉴">
+              <a href="#">서비스 가이드</a>
+              <a href="#">전자서명 만들기</a>
+              <a href="#">이용요금</a>
+              <a href="#">고객센터</a>
+            </nav>
+          </div>
+          <div class="sign-header__right">
+            <a href="#" class="sign-header__item"><img src="icons/ic-join.svg" width="24" height="24" alt="" />1개월 무료 체험</a>
+            <a href="#" class="sign-header__item sign-header__item--login"><img src="icons/ic-login.svg" width="24" height="24" alt="" />로그인</a>
+          </div>
+        </header>
+      </div>
+
+      <p class="label"><b class="png">PNG</b><span data-f="png-label"></span></p>
+      <div class="preview">
+        <header class="sign-header">
+          <div class="sign-header__left">
+            <a href="#" class="sign-header__logo" aria-label="예스폼싸인 홈"><img data-f="png-img" alt="예스폼싸인" /></a>
+            <nav class="sign-header__nav" aria-label="주 메뉴">
+              <a href="#">서비스 가이드</a>
+              <a href="#">전자서명 만들기</a>
+              <a href="#">이용요금</a>
+              <a href="#">고객센터</a>
+            </nav>
+          </div>
+          <div class="sign-header__right">
+            <a href="#" class="sign-header__item"><img src="icons/ic-join.svg" width="24" height="24" alt="" />1개월 무료 체험</a>
+            <a href="#" class="sign-header__item sign-header__item--login"><img src="icons/ic-login.svg" width="24" height="24" alt="" />로그인</a>
+          </div>
+        </header>
+      </div>
+
+      <div class="tool">
+        <h1 data-f="tool-title"></h1>
+        <p class="tool__lead">배율을 누르면 고해상도 화면(맥 레티나 · 윈도우 150% 등)이나 브라우저 확대에서 로고가 어떻게 보이는지 미리 볼 수 있어요.</p>
+        <div class="env">
+          <p><span>지금 화면 배율</span> <strong data-f="dpr"></strong></p>
+          <p><span>로고 32px이 실제로 쓰는 픽셀</span> <strong data-f="real-px"></strong></p>
+        </div>
+        <div class="zoom" role="group" aria-label="미리보기 배율">
+          <span class="zoom__title">미리보기 배율</span>
+          <button type="button" data-z="1" aria-pressed="true">1배 (원래 크기)</button>
+          <button type="button" data-z="1.5" aria-pressed="false">1.5배</button>
+          <button type="button" data-z="2" aria-pressed="false">2배</button>
+          <button type="button" data-z="3" aria-pressed="false">3배</button>
+          <button type="button" data-z="4" aria-pressed="false">4배</button>
+        </div>
+        <div class="compare">
+          <article class="card">
+            <div class="card__head">SVG <span data-f="svg-info"></span></div>
+            <div class="card__stage"><div class="card__logo"><img data-f="svg-zoom" alt="예스폼싸인 SVG 로고" /></div></div>
+            <p class="card__foot" data-f="svg-msg"></p>
+          </article>
+          <article class="card">
+            <div class="card__head">PNG <span data-f="png-info"></span></div>
+            <div class="card__stage"><div class="card__logo"><img data-f="png-zoom" alt="예스폼싸인 PNG 로고" /></div></div>
+            <p class="card__foot" data-f="png-msg"></p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <script>
+    /* 차수 목록 — 새 차수는 한 줄 추가 (파일은 header.html과 같은 폴더) */
+    const TESTS = [
+      { name: '1차', svg: '1차.svg', png: '1차.png' },
+      { name: '2차', svg: '2차.svg', png: '2차.png' },
+      { name: '3차', svg: '3차.svg', png: '3차.png' },
+      { name: '4차', svg: '4차.svg', png: '4차.png' },
+      { name: '5차', svg: '5차.svg', png: '5차.png' },
+      { name: '6차', svg: '6차.svg', png: '6차.png' },
+      { name: '7차', svg: '7차.svg', png: '7차.png' },
+      { name: '8차', svg: '8차.svg', png: '8차.png' },
+    ];
+
+    (function () {
+      const LOGO_H = 32; // 헤더 로고 높이
+      const dpr = window.devicePixelRatio || 1;
+      const root = document.getElementById('tests');
+      const tpl = document.getElementById('test-tpl');
+      const r2 = (n) => Math.round(n * 100) / 100;
+
+      TESTS.forEach((t) => {
+        const node = tpl.content.cloneNode(true);
+        const f = (k) => node.querySelector('[data-f="' + k + '"]');
+        f('title').textContent = t.name + ' 테스트';
+        f('files').textContent = t.svg + ' · ' + t.png;
+        f('svg-label').textContent = t.svg + ' · 로고 높이 32px';
+        f('tool-title').textContent = t.name + ' 로고 화질 비교';
+        f('dpr').textContent = r2(dpr) + '배';
+        ['svg-img', 'svg-zoom'].forEach((k) => { f(k).src = t.svg; });
+        ['png-img', 'png-zoom'].forEach((k) => { f(k).src = t.png; });
+
+        const sec = node.querySelector('.test');
+        root.appendChild(node);
+
+        const q = (k) => sec.querySelector('[data-f="' + k + '"]');
+        const buttons = sec.querySelectorAll('.zoom button');
+        const svgImg = q('svg-zoom');
+        const pngImg = q('png-zoom');
+        let z = 1;
+        let pngH = 0;
+
+        /* 파일 크기는 불러온 그림에서 바로 읽음 */
+        function readSizes() {
+          const w32 = (img) => Math.round(img.naturalWidth * LOGO_H / img.naturalHeight * 10) / 10; // 높이 32px일 때 폭
+          if (svgImg.naturalWidth) q('svg-info').textContent = t.svg + ' · ' + svgImg.naturalWidth + ' × ' + svgImg.naturalHeight + ' (벡터) · 32px일 때 폭 ' + w32(svgImg) + 'px';
+          if (pngImg.naturalWidth) {
+            pngH = pngImg.naturalHeight;
+            q('png-info').textContent = t.png + ' · ' + pngImg.naturalWidth + ' × ' + pngH + ' 픽셀 · 32px일 때 폭 ' + w32(pngImg) + 'px';
+            q('png-label').textContent = t.png + ' (원본 ' + pngImg.naturalWidth + ' × ' + pngH + ') · 로고 높이 32px';
+          }
+          render();
+        }
+
+        function render() {
+          sec.querySelectorAll('.card__logo').forEach((el) => el.style.setProperty('--z', z));
+          buttons.forEach((b) => b.setAttribute('aria-pressed', String(Number(b.dataset.z) === z)));
+          const px = Math.round(LOGO_H * dpr * z);
+          q('real-px').textContent = px + '픽셀 (32 × ' + r2(dpr * z) + ')';
+          q('svg-msg').innerHTML = '<strong class="ok">선명</strong> — 벡터라서 ' + px + '픽셀로 새로 그려요.';
+          const msg = q('png-msg');
+          if (!pngH) { msg.textContent = 'PNG를 불러오지 못했어요. 파일 이름을 확인해 주세요.'; return; }
+          if (px < pngH) msg.innerHTML = '<strong class="ok">선명</strong> — 원본 ' + pngH + '픽셀을 ' + px + '픽셀로 줄여서 보여 줘요.';
+          else if (px === pngH) msg.innerHTML = '<strong class="ok">선명</strong> — 원본 ' + pngH + '픽셀을 그대로 보여 줘요. (PNG가 가장 선명한 배율)';
+          else msg.innerHTML = '<strong class="warn">흐려짐</strong> — 원본 ' + pngH + '픽셀을 ' + px + '픽셀로 늘려서 보여 줘요 (' + (Math.round(px / pngH * 10) / 10) + '배 확대).';
+        }
+
+        buttons.forEach((b) => b.addEventListener('click', () => { z = Number(b.dataset.z); render(); }));
+        q('png-label').textContent = t.png + ' · 로고 높이 32px';
+        render();
+        [svgImg, pngImg].forEach((img) => {
+          if (img.complete) readSizes();
+          img.addEventListener('load', readSizes);
+          img.addEventListener('error', readSizes);
+        });
+      });
+    })();
+  </script>
+  <script>
+    /* 시안 02 — 3단 비교할 차수 (PNG만) */
+    const SPLIT = ['4차', '6차', '8차'];
+
+    (function () {
+      const LOGO_H = 32;
+      const dpr = window.devicePixelRatio || 1;
+      const tpl = document.getElementById('test-tpl');
+      const headerSrc = tpl.content.querySelector('.sign-header'); // 시안 01과 같은 헤더 모양
+      const split = document.getElementById('split');
+      const cards = document.getElementById('split-cards');
+      const zoomButtons = document.querySelectorAll('#split-zoom button');
+      const items = [];
+      let z = 1;
+
+      SPLIT.forEach((name) => {
+        const file = name + '.png';
+        // 헤더 한 줄
+        const row = document.createElement('section');
+        row.className = 'split-row';
+        row.innerHTML = '<p class="label"><b class="png">PNG</b><span>' + name + ' · ' + file + '</span></p><div class="preview"></div>';
+        const header = headerSrc.cloneNode(true);
+        header.querySelector('.sign-header__logo img').src = file;
+        row.querySelector('.preview').appendChild(header);
+        split.appendChild(row);
+
+        // 아래 로고 카드
+        const card = document.createElement('article');
+        card.className = 'card';
+        card.innerHTML = '<div class="card__head">' + name + ' <span></span></div>'
+          + '<div class="card__stage"><div class="card__logo"><img alt="' + name + ' PNG 로고" /></div></div>'
+          + '<p class="card__foot"></p>';
+        const img = card.querySelector('img');
+        const item = { name, file, card, img, rowLabel: row.querySelector('.label span') };
+        items.push(item);
+        img.addEventListener('load', () => { readSize(item); render(); });
+        img.addEventListener('error', render);
+        img.src = file;
+        cards.appendChild(card);
+      });
+
+      function readSize(it) {
+        const w = it.img.naturalWidth, h = it.img.naturalHeight;
+        if (!w) return;
+        const w32 = Math.round(w * LOGO_H / h * 10) / 10;
+        it.card.querySelector('.card__head span').textContent = it.file + ' · ' + w + ' × ' + h + ' 픽셀 · 32px일 때 폭 ' + w32 + 'px';
+        it.rowLabel.textContent = it.name + ' · ' + it.file + ' (원본 ' + w + ' × ' + h + ') · 로고 높이 32px · 폭 ' + w32 + 'px';
+      }
+
+      function render() {
+        zoomButtons.forEach((b) => b.setAttribute('aria-pressed', String(Number(b.dataset.z) === z)));
+        const px = Math.round(LOGO_H * dpr * z);
+        items.forEach((it) => {
+          it.card.querySelector('.card__logo').style.setProperty('--z', z);
+          const foot = it.card.querySelector('.card__foot');
+          const h = it.img.naturalHeight;
+          if (!h) { foot.textContent = 'PNG를 불러오지 못했어요. 파일 이름을 확인해 주세요.'; return; }
+          if (px < h) foot.innerHTML = '<strong class="ok">선명</strong> — 원본 ' + h + '픽셀을 ' + px + '픽셀로 줄여서 보여 줘요.';
+          else if (px === h) foot.innerHTML = '<strong class="ok">선명</strong> — 원본 ' + h + '픽셀을 그대로 보여 줘요.';
+          else foot.innerHTML = '<strong class="warn">흐려짐</strong> — 원본 ' + h + '픽셀을 ' + px + '픽셀로 늘려서 보여 줘요.';
+        });
+      }
+
+      zoomButtons.forEach((b) => b.addEventListener('click', () => { z = Number(b.dataset.z); render(); }));
+      render();
+    })();
+
+    /* 위쪽 탭 — 마지막으로 본 탭을 기억 (저장이 막힌 브라우저에서도 그냥 동작) */
+    (function () {
+      const tabs = document.querySelectorAll('.tabbar [role="tab"]');
+      function show(t) {
+        tabs.forEach((b) => b.setAttribute('aria-selected', String(b.dataset.t === t)));
+        document.querySelectorAll('.panel').forEach((p) => { p.hidden = p.id !== 'p' + t; });
+        try { localStorage.setItem('sign-header-tab', t); } catch (e) {}
+      }
+      tabs.forEach((b) => b.addEventListener('click', () => { show(b.dataset.t); window.scrollTo(0, 0); }));
+      let saved = null;
+      try { saved = localStorage.getItem('sign-header-tab'); } catch (e) {}
+      show(saved && document.querySelector('.tabbar [data-t="' + saved + '"]') ? saved : '1');
+    })();
+  </script>
+</body>
+</html>
