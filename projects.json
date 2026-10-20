@@ -31,6 +31,26 @@
               "href": "archive/20261019-225720-blog-230-redesign-v4/redesign.html"
             }
           ]
+        },
+        {
+          "id": "20261020-152306-blog-230-redesign-v5",
+          "label": "v5",
+          "title": "디자인 시스템 v2.1(피그마 10.20 뉴스레터·상세페이지 룩) 적용",
+          "desc": "섹션 제목 가운데 정렬+위 구분선+회색 부제(원문 리드 문장을 부제로 이동), 표 가운데 정렬·칸 선·각주, 전환 버튼 남색 #092377·5px·›, 템플릿 6종은 [25] 체크 리스트. 글 내용은 원문 그대로",
+          "created": "2026.10.20",
+          "folder": "archive/20261020-152306-blog-230-redesign-v5",
+          "preview": "archive/20261020-152306-blog-230-redesign-v5/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "원본 vs 리디자인 비교",
+              "href": "archive/20261020-152306-blog-230-redesign-v5/index.html"
+            },
+            {
+              "label": "리디자인 단독(공통 영역 포함)",
+              "href": "archive/20261020-152306-blog-230-redesign-v5/redesign.html"
+            }
+          ]
         }
       ]
     },
