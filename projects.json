@@ -8,70 +8,10 @@
       "category": "블로그",
       "desc": "contents.yesform.com 블로그 글을 블로그 디자인 시스템 v1.2(피그마 00 AI 작성 규칙)로 리디자인. 원본(실제 게시 페이지)과 리디자인을 좌우로 비교.",
       "created": "2026.10.19",
-      "updated": "2026.10.19",
+      "updated": "2026.10.20",
       "hidden": false,
       "final": null,
       "versions": [
-        {
-          "id": "20261019-220534-blog-230-redesign",
-          "label": "v1",
-          "title": "원본 vs 리디자인 비교",
-          "desc": "합니다체→해요체, 목차+번호 섹션 구조, 컴포넌트 [1][4][9][10][12][13][14][15][16][17][18][21] 적용",
-          "created": "2026.10.19",
-          "folder": "archive/20261019-220534-blog-230-redesign",
-          "preview": "archive/20261019-220534-blog-230-redesign/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "원본 vs 리디자인 비교",
-              "href": "archive/20261019-220534-blog-230-redesign/index.html"
-            },
-            {
-              "label": "리디자인 단독",
-              "href": "archive/20261019-220534-blog-230-redesign/redesign.html"
-            }
-          ]
-        },
-        {
-          "id": "20261019-221416-blog-230-redesign-v2",
-          "label": "v2",
-          "title": "공통 영역 고정 + 가변 영역만 리디자인",
-          "desc": "블로그 상단 공통 컴포넌트(헤더·카테고리·제목·태그·조회수)는 캡처 그대로 고정하고, 그 아래 본문만 디자인 시스템 적용. 원본 vs 리디자인 좌우 비교",
-          "created": "2026.10.19",
-          "folder": "archive/20261019-221416-blog-230-redesign-v2",
-          "preview": "archive/20261019-221416-blog-230-redesign-v2/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "원본 vs 리디자인 비교",
-              "href": "archive/20261019-221416-blog-230-redesign-v2/index.html"
-            },
-            {
-              "label": "리디자인 단독(공통 영역 포함)",
-              "href": "archive/20261019-221416-blog-230-redesign-v2/redesign.html"
-            }
-          ]
-        },
-        {
-          "id": "20261019-223941-blog-230-redesign-v3",
-          "label": "v3",
-          "title": "디자인 시스템 v1.3(피그마 10.19 규칙) 적용",
-          "desc": "래퍼 720px/18px/1.8, [1] 요약 박스에 결론 한 문장·N분 읽기·🎁 서식 바로가기, [22] 인용·대화, [23] 서식 CTA 카드 2곳, 제목 반복 배너 제거, 본문 최소 14px·터치 44px. 공통 영역 고정 유지",
-          "created": "2026.10.19",
-          "folder": "archive/20261019-223941-blog-230-redesign-v3",
-          "preview": "archive/20261019-223941-blog-230-redesign-v3/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "원본 vs 리디자인 비교",
-              "href": "archive/20261019-223941-blog-230-redesign-v3/index.html"
-            },
-            {
-              "label": "리디자인 단독(공통 영역 포함)",
-              "href": "archive/20261019-223941-blog-230-redesign-v3/redesign.html"
-            }
-          ]
-        },
         {
           "id": "20261019-225720-blog-230-redesign-v4",
           "label": "v4",
@@ -442,6 +382,81 @@
     }
   ],
   "trash": [
+    {
+      "type": "version",
+      "projectId": "20261019-220534-blog-230-redesign",
+      "deleted": "2026.10.20",
+      "version": {
+        "id": "20261019-223941-blog-230-redesign-v3",
+        "label": "v3",
+        "title": "디자인 시스템 v1.3(피그마 10.19 규칙) 적용",
+        "desc": "래퍼 720px/18px/1.8, [1] 요약 박스에 결론 한 문장·N분 읽기·🎁 서식 바로가기, [22] 인용·대화, [23] 서식 CTA 카드 2곳, 제목 반복 배너 제거, 본문 최소 14px·터치 44px. 공통 영역 고정 유지",
+        "created": "2026.10.19",
+        "folder": "archive/20261019-223941-blog-230-redesign-v3",
+        "preview": "archive/20261019-223941-blog-230-redesign-v3/index.html",
+        "hidden": false,
+        "items": [
+          {
+            "label": "원본 vs 리디자인 비교",
+            "href": "archive/20261019-223941-blog-230-redesign-v3/index.html"
+          },
+          {
+            "label": "리디자인 단독(공통 영역 포함)",
+            "href": "archive/20261019-223941-blog-230-redesign-v3/redesign.html"
+          }
+        ]
+      }
+    },
+    {
+      "type": "version",
+      "projectId": "20261019-220534-blog-230-redesign",
+      "deleted": "2026.10.20",
+      "version": {
+        "id": "20261019-221416-blog-230-redesign-v2",
+        "label": "v2",
+        "title": "공통 영역 고정 + 가변 영역만 리디자인",
+        "desc": "블로그 상단 공통 컴포넌트(헤더·카테고리·제목·태그·조회수)는 캡처 그대로 고정하고, 그 아래 본문만 디자인 시스템 적용. 원본 vs 리디자인 좌우 비교",
+        "created": "2026.10.19",
+        "folder": "archive/20261019-221416-blog-230-redesign-v2",
+        "preview": "archive/20261019-221416-blog-230-redesign-v2/index.html",
+        "hidden": false,
+        "items": [
+          {
+            "label": "원본 vs 리디자인 비교",
+            "href": "archive/20261019-221416-blog-230-redesign-v2/index.html"
+          },
+          {
+            "label": "리디자인 단독(공통 영역 포함)",
+            "href": "archive/20261019-221416-blog-230-redesign-v2/redesign.html"
+          }
+        ]
+      }
+    },
+    {
+      "type": "version",
+      "projectId": "20261019-220534-blog-230-redesign",
+      "deleted": "2026.10.20",
+      "version": {
+        "id": "20261019-220534-blog-230-redesign",
+        "label": "v1",
+        "title": "원본 vs 리디자인 비교",
+        "desc": "합니다체→해요체, 목차+번호 섹션 구조, 컴포넌트 [1][4][9][10][12][13][14][15][16][17][18][21] 적용",
+        "created": "2026.10.19",
+        "folder": "archive/20261019-220534-blog-230-redesign",
+        "preview": "archive/20261019-220534-blog-230-redesign/index.html",
+        "hidden": false,
+        "items": [
+          {
+            "label": "원본 vs 리디자인 비교",
+            "href": "archive/20261019-220534-blog-230-redesign/index.html"
+          },
+          {
+            "label": "리디자인 단독",
+            "href": "archive/20261019-220534-blog-230-redesign/redesign.html"
+          }
+        ]
+      }
+    },
     {
       "type": "version",
       "projectId": "detail-editor-highlight",
