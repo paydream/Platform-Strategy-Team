@@ -51,6 +51,26 @@
               "href": "archive/20261020-152306-blog-230-redesign-v5/redesign.html"
             }
           ]
+        },
+        {
+          "id": "20261020-154209-blog-230-redesign-v6",
+          "label": "v6",
+          "title": "v5에서 \"여기부터 가변 영역\" 점선 표시 삭제",
+          "desc": "비교 화면의 가변 영역 점선 표시만 제거. 본문·디자인은 v5와 동일(디자인 시스템 v2.1, 글 내용 원문 그대로)",
+          "created": "2026.10.20",
+          "folder": "archive/20261020-154209-blog-230-redesign-v6",
+          "preview": "archive/20261020-154209-blog-230-redesign-v6/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "원본 vs 리디자인 비교",
+              "href": "archive/20261020-154209-blog-230-redesign-v6/index.html"
+            },
+            {
+              "label": "리디자인 단독(공통 영역 포함)",
+              "href": "archive/20261020-154209-blog-230-redesign-v6/redesign.html"
+            }
+          ]
         }
       ]
     },
