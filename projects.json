@@ -151,6 +151,26 @@
               "href": "archive/20261021-092306-blog-230-redesign-v10/redesign.html"
             }
           ]
+        },
+        {
+          "id": "20261021-100124-blog-230-redesign-v11",
+          "label": "v11",
+          "title": "스킬 v2.3 재등록 후 재적용 — 피그마 실시간 읽기 + 레이어/코드 대조",
+          "desc": "삭제 후 다시 등록한 yesform-blog-design-system v2.3으로 적용. 피그마 04 컴포넌트 코드 박스를 실시간으로 읽고 레이어/코드 어긋남 0건 확인. 본문 결과는 v10과 동일(글 내용은 원문 그대로).",
+          "created": "2026.10.21",
+          "folder": "archive/20261021-100124-blog-230-redesign-v11",
+          "preview": "archive/20261021-100124-blog-230-redesign-v11/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "원본 vs 리디자인 비교",
+              "href": "archive/20261021-100124-blog-230-redesign-v11/index.html"
+            },
+            {
+              "label": "리디자인 단독(공통 영역 포함)",
+              "href": "archive/20261021-100124-blog-230-redesign-v11/redesign.html"
+            }
+          ]
         }
       ]
     },
