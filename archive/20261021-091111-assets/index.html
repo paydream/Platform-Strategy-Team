@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>예스폼 에디터 | 템플릿 · 등급 모달 시안 01 · 02</title>
+  <!-- Pretendard 글꼴 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/grade-modal.css" />
+</head>
+<body>
+  <!-- =====================================================
+       예스폼 에디터 — 템플릿 화면 + 등급 모달 (시안 01 · 시안 02 탭)
+       Figma: 예스폼-에디터 (UEFYzhh4vwD96r3A0J9TwH) / 6422:46352 "템플릿 헤더 수정 3" (1920 × 1236) — 템플릿페이지 index.html 그대로
+       시안 01 = 등급 모달 디자인1 (6657:32964) · 시안 02 = 등급 모달 디자인2 (6657:33397)
+       아래 "시안 탭" · "딤드 + 등급 모달" 부분 · css/grade-modal.css · js/grade-modal.js
+       ===================================================== -->
+
+  <!-- 왼쪽 메뉴 (6422:46355) — 선택된 메뉴: 템플릿 -->
+  <nav class="side-bar" aria-label="에디터 메뉴">
+    <div class="side-bar__inner">
+      <h1 class="side-bar__logo">
+        <a href="#" aria-label="예스폼 에디터"><img src="assets/icons/logo-form.svg" width="28" height="28" alt="" /></a>
+      </h1>
+      <div class="side-bar__menu">
+        <button type="button" class="side-item">
+          <span class="side-item__icon"><img src="assets/icons/ic-document-search.svg" width="16" height="16" alt="" /></span>
+          예스폼 AI
+        </button>
+        <button type="button" class="side-item">
+          <span class="side-item__icon"><img src="assets/icons/ic-category.svg" width="16" height="16" alt="" /></span>
+          도형
+        </button>
+        <button type="button" class="side-item is-active" aria-current="page">
+          <span class="side-item__icon"><img src="assets/icons/ic-template.svg" width="16" height="16" alt="" /></span>
+          템플릿
+        </button>
+        <button type="button" class="side-item">
+          <span class="side-item__icon"><img src="assets/icons/ic-prompt.svg" width="24" height="24" alt="" /></span>
+          프롬프트
+        </button>
+        <div class="side-bar__sub">
+          <button type="button" class="side-item">
+            <span class="side-item__icon"><img src="assets/images/ic-econtract.png" width="24" height="24" alt="" /></span>
+            예스폼싸인
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="side-bar__user">
+      <button type="button" class="side-item" aria-label="내 정보">
+        <span class="side-item__icon"><img src="assets/icons/ic-user.svg" width="24" height="24" alt="" /></span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="page">
+    <!-- 키워드별 인기 템플릿 (6422:46514) — 키워드 버튼 4개 + 카드 6장(js/main.js의 HERO_CARDS) -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero__head">
+        <h2 class="hero__title" id="hero-title">키워드별 인기 템플릿</h2>
+        <div class="keyword-chips" role="tablist" aria-label="키워드">
+          <button type="button" class="keyword-chip is-active" role="tab" aria-selected="true">자기소개서</button>
+          <button type="button" class="keyword-chip" role="tab" aria-selected="false">근로계약서</button>
+          <button type="button" class="keyword-chip" role="tab" aria-selected="false">이력서</button>
+          <button type="button" class="keyword-chip" role="tab" aria-selected="false">견적서</button>
+        </div>
+      </div>
+      <div class="hero-grid" id="hero-grid"></div>
+    </section>
+
+    <!-- 예스폼싸인 띠 (6424:46982) — X를 누르면 닫힘 -->
+    <div class="sign-band" id="sign-band">
+      <p class="sign-band__text">
+        <img class="sign-band__logo" src="assets/icons/logo-sign.svg" width="24" height="24" alt="" />
+        에디터에서 계약서를 편집하고 <em>예스폼싸인으로 간편하게 전자계약</em>을 진행하세요!
+      </p>
+      <button type="button" class="sign-band__close" id="sign-band-close" aria-label="닫기">
+        <img src="assets/icons/ic-close.svg" width="24" height="24" alt="" />
+      </button>
+    </div>
+
+    <!-- 탭 · 검색 (6422:46565) -->
+    <div class="editor-header">
+      <div class="editor-header__inner">
+        <div class="editor-tabs" role="tablist" aria-label="템플릿 분류">
+          <button type="button" class="editor-tab is-active" role="tab" aria-selected="true">전체</button>
+          <button type="button" class="editor-tab" role="tab" aria-selected="false">계약서</button>
+          <button type="button" class="editor-tab" role="tab" aria-selected="false">자기소개서</button>
+          <button type="button" class="editor-tab" role="tab" aria-selected="false">이력서</button>
+          <button type="button" class="editor-tab" role="tab" aria-selected="false">MY</button>
+        </div>
+        <form class="search-box" role="search" onsubmit="return false;">
+          <input class="search-box__input" type="search" placeholder="검색어를 입력하세요." aria-label="템플릿 검색" />
+          <button type="submit" class="search-box__btn" aria-label="검색">
+            <img src="assets/icons/ic-search.svg" width="24" height="24" alt="" />
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- 전체 템플릿 목록 (6422:46579) — 카드 16장(js/main.js의 LIST_CARDS) -->
+    <section class="template-list" aria-labelledby="list-title">
+      <div class="template-list__head">
+        <h2 class="template-list__title" id="list-title"><strong>전체 템플릿</strong><span>1,234</span></h2>
+        <button type="button" class="sort-btn">인기순<img src="assets/icons/ic-down.svg" width="12" height="20" alt="" /></button>
+      </div>
+      <div class="list-grid" id="list-grid"></div>
+    </section>
+  </main>
+
+
+  <!-- 시안 탭 — 화면 위 가운데에 떠 있음(딤드보다 위) · 탭을 누르면 그 시안 모달이 열림 · 고른 탭은 다음에 열어도 기억 -->
+  <div class="gm-tabs" role="tablist" aria-label="등급 모달 시안">
+    <button type="button" class="gm-tabs__btn" role="tab" id="gm-tab-1" aria-controls="gm-d1" aria-selected="true" data-t="1">시안 01</button>
+    <button type="button" class="gm-tabs__btn" role="tab" id="gm-tab-2" aria-controls="gm-d2" aria-selected="false" tabindex="-1" data-t="2">시안 02</button>
+  </div>
+
+  <!-- 딤드 + 등급 모달 (딤드 = 검정 60% · 눌러도 닫히지 않음 / 닫기 = 오른쪽 위 X / 닫은 뒤 템플릿 카드나 탭을 누르면 다시 열림) -->
+  <div class="gm-dim" id="gm-dim" hidden>
+    <!-- 시안 01 = 디자인1 (Figma 6657:32964 "등급 모달2_디자인1" · 팝업 6657:32967 · 680 × 692 · 모서리 12) -->
+    <section class="gm gm--d1" id="gm-d1" role="dialog" aria-modal="true" aria-labelledby="gm1-title" tabindex="-1">
+      <img class="gm__deco" src="assets/images/grade/d1-deco.png" width="680" height="692" alt="" />
+      <button type="button" class="gm__close" aria-label="닫기"><img src="assets/icons/gm-close.svg" width="30" height="30" alt="" /></button>
+      <div class="gm__head">
+        <span class="gm__badge">프리미엄 전용 서식</span>
+        <h2 class="gm__title" id="gm1-title">월 9,900원 구독으로<br /><em>문서 수정부터 전자계약</em>까지 완성하세요</h2>
+      </div>
+      <div class="gm__cards">
+        <div class="gm-card">
+          <img class="gm-card__bg" src="assets/images/grade/d1-card1.png" width="294" height="200" alt="" />
+          <div class="gm-card__text">
+            <p class="gm-card__title">100만종 프리미엄<br />문서서식</p>
+          </div>
+        </div>
+        <div class="gm-card">
+          <img class="gm-card__bg" src="assets/images/grade/d1-card2.png" width="294" height="200" alt="" />
+          <div class="gm-card__text">
+            <p class="gm-card__title">예스폼싸인<br />전자계약 월 10건</p>
+          </div>
+        </div>
+        <div class="gm-card gm-card--wide">
+          <img class="gm-card__bg" src="assets/images/grade/d1-card3.png" width="600" height="200" alt="" />
+          <div class="gm-card__text">
+            <p class="gm-card__title">업무 자동화 콘텐츠와<br />국내 트렌드를 한 곳에서!</p>
+            <ul class="gm-card__list">
+              <li><img src="assets/icons/gm-check.svg" width="18" height="18" alt="" />업무에 꼭 필요한 트렌드 인사이트</li>
+              <li><img src="assets/icons/gm-check.svg" width="18" height="18" alt="" />효율을 높이는 AI·실무 자동화 활용법</li>
+              <li><img src="assets/icons/gm-check.svg" width="18" height="18" alt="" />최신 법령·제도를 반영한 전문 콘텐츠</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="gm__cta">예스폼 프리미엄 구독하기<img src="assets/icons/gm-right.svg" width="24" height="24" alt="" /></button>
+    </section>
+
+    <!-- 시안 02 = 디자인2 (Figma 6657:33397 "등급 모달2_디자인2" · 팝업 6657:33400 · 680 × 746 · 모서리 12) -->
+    <section class="gm gm--d2" id="gm-d2" role="dialog" aria-modal="true" aria-labelledby="gm2-title" aria-describedby="gm2-desc" tabindex="-1" hidden>
+      <button type="button" class="gm__close" aria-label="닫기"><img src="assets/icons/gm-close.svg" width="30" height="30" alt="" /></button>
+      <div class="gm__head">
+        <span class="gm__badge">프리미엄 전용 서식</span>
+        <h2 class="gm__title" id="gm2-title">월 9,900원 구독으로<br /><em>문서 편집부터 전자계약</em>까지 완성하세요</h2>
+        <p class="gm__desc" id="gm2-desc">100만 종 프리미엄 문서서식과 예스폼싸인 무료 전자도장,<br />국내 업무 트렌드에 맞춘 실무 콘텐츠를 만나보세요.</p>
+      </div>
+      <div class="gm__cards">
+        <div class="gm-card">
+          <img class="gm-card__bg" src="assets/images/grade/d2-card1.png" width="294" height="200" alt="" />
+          <div class="gm-card__text">
+            <p class="gm-card__sub">업무용 프리미엄</p>
+            <p class="gm-card__title">100만종 문서서식</p>
+          </div>
+        </div>
+        <div class="gm-card">
+          <img class="gm-card__bg" src="assets/images/grade/d2-card2.png" width="294" height="200" alt="" />
+          <div class="gm-card__text">
+            <p class="gm-card__sub">작성한 문서 그대로 전자계약까지</p>
+            <p class="gm-card__title">예스폼싸인 계약 월 10건</p>
+          </div>
+        </div>
+        <div class="gm-card gm-card--wide">
+          <img class="gm-card__bg" src="assets/images/grade/d2-card3.png" width="600" height="200" alt="" />
+          <div class="gm-card__text">
+            <p class="gm-card__title">업무 자동화 콘텐츠와<br />국내 트렌드를 한 곳에서!</p>
+            <ul class="gm-card__list">
+              <li><img src="assets/icons/gm-check.svg" width="18" height="18" alt="" />업무에 꼭 필요한 트렌드 인사이트</li>
+              <li><img src="assets/icons/gm-check.svg" width="18" height="18" alt="" />효율을 높이는 AI·실무 자동화 활용법</li>
+              <li><img src="assets/icons/gm-check.svg" width="18" height="18" alt="" />최신 법령·제도를 반영한 전문 콘텐츠</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="gm__cta">예스폼 프리미엄 구독하기<img src="assets/icons/gm-right.svg" width="24" height="24" alt="" /></button>
+    </section>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script src="js/grade-modal.js"></script>
+</body>
+</html>
