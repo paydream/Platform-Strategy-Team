@@ -1,0 +1,134 @@
+/* =========================================================
+   등급 모달 (Figma 예스폼-에디터 UEFYzhh4vwD96r3A0J9TwH)
+   · 디자인1 = 6657:32964 "등급 모달2_디자인1" — 팝업 6657:32967 (680 × 692)
+   · 디자인2 = 6657:33397 "등급 모달2_디자인2" — 팝업 6657:33400 (680 × 746)
+   · 배경 = 템플릿페이지(index.html) 화면 그대로 + 딤드 검정 60%
+   · 카드 그림(문서 미리보기 · 아이콘 등)은 Figma에서 2배 PNG로 내보내고, 카드 제목·목록 글자는 HTML로 넣음
+   ========================================================= */
+
+body.gm-open { overflow: hidden; } /* 모달이 떠 있는 동안 뒤 화면 스크롤 막음 */
+
+/* 시안 탭 — 화면 위 가운데에 떠 있음 · 딤드보다 위(z 300) · 흰 바탕 알약 모양 · 고른 탭은 파랑 */
+.gm-tabs {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  z-index: 300;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 100px;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16);
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕", sans-serif;
+}
+.gm-tabs__btn { height: 36px; padding: 0 20px; border: 0; border-radius: 100px; background: none; font: inherit; font-size: 15px; font-weight: 600; color: #5b636b; white-space: nowrap; cursor: pointer; transition: background-color 0.15s, color 0.15s; }
+.gm-tabs__btn:hover { color: #0472e3; }
+.gm-tabs__btn[aria-selected="true"] { background: #0472e3; color: #ffffff; }
+.gm-tabs__btn:focus-visible { outline: 2px solid #0472e3; outline-offset: 2px; }
+
+/* 딤드 — 화면 전체 · 검정 60% · 눌러도 닫히지 않음 · 화면이 낮으면 모달을 스크롤
+   위아래 84 = 시안 탭(위 20 + 높이 44 + 여백 20)과 모달이 겹치지 않게 */
+.gm-dim {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  padding: 84px 20px;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.6);
+}
+.gm-dim[hidden],
+.gm[hidden] { display: none; }
+
+/* 팝업 — 폭 680 · 안쪽 40 · 묶음 간격 24 · 모서리 12 · 흰 바탕 위 아래쪽으로 옅은 하늘색 */
+.gm {
+  position: relative;
+  width: 680px;
+  max-width: 100%;
+  margin: auto;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  overflow: hidden;
+  border-radius: 12px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(184, 233, 255, 0.2) 70%, rgba(113, 209, 254, 0.2) 85.827%, rgba(255, 255, 255, 0.2) 100%),
+    #ffffff;
+  outline: none;
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕", sans-serif;
+  color: #1d1f20;
+  text-align: left;
+}
+.gm p, .gm h2, .gm ul { margin: 0; }
+.gm ul { padding: 0; list-style: none; }
+.gm button { font: inherit; border: 0; background: none; padding: 0; cursor: pointer; }
+.gm img { display: block; }
+.gm > * { position: relative; z-index: 1; }
+
+/* 디자인1 오른쪽 위 꾸밈(옅은 원 + 서식 아이콘) — 팝업 크기 그대로 뒤에 깔림 (6657:34016 · 6657:33960) */
+.gm > .gm__deco { position: absolute; top: 0; left: 0; z-index: 0; width: 680px; height: 692px; pointer-events: none; }
+
+/* 닫기 X — 30 · 위 24 · 오른쪽 24 */
+.gm > .gm__close { position: absolute; top: 24px; right: 24px; z-index: 2; width: 30px; height: 30px; border-radius: 50%; }
+.gm__close:focus-visible { outline: 2px solid #0472e3; outline-offset: 2px; }
+
+/* 위 글 묶음 — 배지 ↔ 12 ↔ 제목 (디자인2는 ↔ 12 ↔ 설명) · 가운데 */
+.gm__head { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+/* 배지 "프리미엄 전용 서식" — 높이 22 · 좌우 8 · 모서리 13 · 파랑 12% 바탕 · 14px SemiBold #0472e3 */
+.gm__badge { display: inline-flex; align-items: center; height: 22px; padding: 4px 8px; border-radius: 13px; background: rgba(4, 114, 227, 0.12); font-size: 14px; line-height: 14px; font-weight: 600; color: #0472e3; white-space: nowrap; }
+/* 제목 — 24px Bold · 줄높이 34 · 두 번째 줄 앞부분 파랑 */
+.gm__title { font-size: 24px; line-height: 34px; font-weight: 700; color: #1d1f20; }
+.gm__title em { font-style: normal; color: #0472e3; }
+/* 설명(디자인2) — 15px Regular · 줄높이 21 · #464a4e */
+.gm__desc { font-size: 15px; line-height: 21px; font-weight: 400; color: #464a4e; }
+
+/* 카드 묶음 — 위 2칸(294 × 200) + 아래 1칸(600 × 200) · 간격 12 */
+.gm__cards { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.gm-card { position: relative; height: 200px; overflow: hidden; border-radius: 12px; }
+.gm-card--wide { grid-column: 1 / -1; }
+/* 카드 그림 — 바탕색 · 테두리 · 문서 미리보기 · 아이콘까지 한 장 (Figma 2배 PNG) */
+.gm-card__bg { position: absolute; inset: 0; width: 100%; height: 100%; }
+/* 카드 글 — 왼쪽 24 · 위 22 · 폭 225 (아래 넓은 카드는 세로 가운데) */
+.gm-card__text { position: absolute; top: 22px; left: 24px; width: 225px; display: flex; flex-direction: column; gap: 4px; }
+.gm-card--wide .gm-card__text { top: 50%; transform: translateY(-50%); gap: 16px; }
+/* 카드 작은 제목(디자인2) — 15px Medium · 줄높이 15 · 자간 -0.3 · #383b3e */
+.gm-card__sub { font-size: 15px; line-height: 15px; font-weight: 500; letter-spacing: -0.3px; color: #383b3e; white-space: nowrap; }
+/* 카드 제목 — 20px Bold · 줄높이 25 · 자간 -0.4 */
+.gm-card__title { font-size: 20px; line-height: 25px; font-weight: 700; letter-spacing: -0.4px; color: #1d1f20; white-space: nowrap; }
+/* 체크 목록 — 체크 18 ↔ 4 ↔ 15px Regular(줄높이 21) #464a4e · 줄 간격 4 */
+.gm .gm-card__list { display: flex; flex-direction: column; gap: 4px; padding: 0 0 2px; }
+.gm-card__list li { display: flex; align-items: center; gap: 4px; font-size: 15px; line-height: 21px; color: #464a4e; white-space: nowrap; }
+.gm-card__list img { flex: none; }
+
+/* 구독 버튼 — 600 × 50 · 모서리 6 · 파랑 그라데이션(왼쪽 #3893f1 → 오른쪽 #0472e3) · 그림자 · 15px SemiBold 흰 글자 + 오른쪽 화살표 24 */
+.gm > .gm__cta {
+  width: 100%;
+  height: 50px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border-radius: 6px;
+  background: linear-gradient(270deg, #0472e3 0%, #3893f1 100%);
+  filter: drop-shadow(5px 5px 5px rgba(4, 114, 227, 0.25));
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+}
+.gm__cta:focus-visible { outline: 2px solid #1d1f20; outline-offset: 2px; }
+
+/* ---------- 시안 03 (디자인3 6720:30766) — 카드 글이 조금 작음 · 아래 넓은 카드는 남색 바탕 + 흰 글자 ---------- */
+/* 위 카드 작은 제목 14px Medium(줄높이 14 · 자간 -0.28) ↔ 4 ↔ 제목 18px Bold(줄높이 22.5 · 자간 -0.36) */
+.gm--d3 .gm-card__sub { font-size: 14px; line-height: 14px; letter-spacing: -0.28px; }
+.gm--d3 .gm-card__title { font-size: 18px; line-height: 22.5px; letter-spacing: -0.36px; }
+/* 아래 넓은 카드 — 제목 흰색 ↔ 12 ↔ 체크 목록(흰 체크 18 · 14px Regular 줄높이 20 · #efeff0) · 세로 가운데 */
+.gm--d3 .gm-card--wide .gm-card__text { gap: 12px; }
+.gm--d3 .gm-card--wide .gm-card__title { color: #ffffff; }
+.gm--d3 .gm-card__list li { font-size: 14px; line-height: 20px; color: #efeff0; }

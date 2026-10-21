@@ -2,6 +2,51 @@
   "version": 2,
   "projects": [
     {
+      "id": "20261021-091111-assets",
+      "title": "에디터 프리미엄 등급 안내 모달",
+      "team": "design",
+      "category": "웹 메인",
+      "desc": "",
+      "created": "2026.10.21",
+      "updated": "2026.10.21",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261021-091111-assets",
+          "label": "v1",
+          "title": "에디터 프리미엄 등급 안내 모달",
+          "desc": "",
+          "created": "2026.10.21",
+          "folder": "archive/20261021-091111-assets",
+          "preview": "archive/20261021-091111-assets/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261021-091111-assets/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261021-172807-assets-2",
+          "label": "v2",
+          "title": "에디터 프리미엄 등급 안내 모달",
+          "desc": "시안 3번 추가 및 폰트 사이즈 변경",
+          "created": "2026.10.21",
+          "folder": "archive/20261021-172807-assets-2",
+          "preview": "archive/20261021-172807-assets-2/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261021-172807-assets-2/index.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "20261019-220534-blog-230-redesign",
       "title": "예스폼 블로그 디자인 시스템 적용 — AI 사업계획서 글(keyn 230)",
       "team": "design",
@@ -209,35 +254,6 @@
             {
               "label": "리디자인 단독(공통 영역 포함)",
               "href": "archive/20261021-134140-blog-230-redesign-v13/redesign.html"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "20261021-091111-assets",
-      "title": "에디터 프리미엄 등급 안내 모달",
-      "team": "design",
-      "category": "웹 메인",
-      "desc": "",
-      "created": "2026.10.21",
-      "updated": "2026.10.21",
-      "hidden": false,
-      "final": null,
-      "versions": [
-        {
-          "id": "20261021-091111-assets",
-          "label": "v1",
-          "title": "에디터 프리미엄 등급 안내 모달",
-          "desc": "",
-          "created": "2026.10.21",
-          "folder": "archive/20261021-091111-assets",
-          "preview": "archive/20261021-091111-assets/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261021-091111-assets/index.html"
             }
           ]
         }
