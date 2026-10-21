@@ -191,6 +191,26 @@
               "href": "archive/20261021-100808-blog-230-redesign-v12/redesign.html"
             }
           ]
+        },
+        {
+          "id": "20261021-134140-blog-230-redesign-v13",
+          "label": "v13",
+          "title": "피그마 색 변수 변경(배경 연빨강 #FFFAFC) → [17] 주의 카드 반영",
+          "desc": "피그마 01 색상의 배경 연빨강이 #FDEEF3→#FFFAFC로 바뀌고 [17] 주의 카드 레이어가 이 색을 사용. 스킬 v2.4 색 대조로 감지 → 코드 박스 정정 후 재적용. 글 내용은 원문 그대로.",
+          "created": "2026.10.21",
+          "folder": "archive/20261021-134140-blog-230-redesign-v13",
+          "preview": "archive/20261021-134140-blog-230-redesign-v13/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "원본 vs 리디자인 비교",
+              "href": "archive/20261021-134140-blog-230-redesign-v13/index.html"
+            },
+            {
+              "label": "리디자인 단독(공통 영역 포함)",
+              "href": "archive/20261021-134140-blog-230-redesign-v13/redesign.html"
+            }
+          ]
         }
       ]
     },
