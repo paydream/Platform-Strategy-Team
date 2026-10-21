@@ -2,42 +2,13 @@
   "version": 2,
   "projects": [
     {
-      "id": "20261021-091111-assets",
-      "title": "에디터 프리미엄 등급 안내 모달",
-      "team": "design",
-      "category": "웹 메인",
-      "desc": "",
-      "created": "2026.10.21",
-      "updated": "2026.10.21",
-      "hidden": false,
-      "final": null,
-      "versions": [
-        {
-          "id": "20261021-091111-assets",
-          "label": "v1",
-          "title": "에디터 프리미엄 등급 안내 모달",
-          "desc": "",
-          "created": "2026.10.21",
-          "folder": "archive/20261021-091111-assets",
-          "preview": "archive/20261021-091111-assets/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261021-091111-assets/index.html"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "id": "20261019-220534-blog-230-redesign",
       "title": "예스폼 블로그 디자인 시스템 적용 — AI 사업계획서 글(keyn 230)",
       "team": "design",
       "category": "블로그",
       "desc": "contents.yesform.com 블로그 글을 블로그 디자인 시스템 v1.2(피그마 00 AI 작성 규칙)로 리디자인. 원본(실제 게시 페이지)과 리디자인을 좌우로 비교.",
       "created": "2026.10.19",
-      "updated": "2026.10.20",
+      "updated": "2026.10.21",
       "hidden": false,
       "final": null,
       "versions": [
@@ -118,6 +89,55 @@
             {
               "label": "리디자인 단독(공통 영역 포함)",
               "href": "archive/20261020-165558-blog-230-redesign-v7/redesign.html"
+            }
+          ]
+        },
+        {
+          "id": "20261021-091827-blog-230-redesign-v8",
+          "label": "v8",
+          "title": "[17] 주의 카드 행간 수정 반영 (피그마 코드 박스 동기화)",
+          "desc": "피그마 [17] 주의 카드 레이어 수정값(안쪽 여백 20px, 제목–설명 8px, 설명 15px)을 HTML 코드 박스에 맞춰 넣고 다시 적용. 그 외는 v7과 동일, 글 내용 원문 그대로",
+          "created": "2026.10.21",
+          "folder": "archive/20261021-091827-blog-230-redesign-v8",
+          "preview": "archive/20261021-091827-blog-230-redesign-v8/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "원본 vs 리디자인 비교",
+              "href": "archive/20261021-091827-blog-230-redesign-v8/index.html"
+            },
+            {
+              "label": "리디자인 단독(공통 영역 포함)",
+              "href": "archive/20261021-091827-blog-230-redesign-v8/redesign.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "20261021-091111-assets",
+      "title": "에디터 프리미엄 등급 안내 모달",
+      "team": "design",
+      "category": "웹 메인",
+      "desc": "",
+      "created": "2026.10.21",
+      "updated": "2026.10.21",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261021-091111-assets",
+          "label": "v1",
+          "title": "에디터 프리미엄 등급 안내 모달",
+          "desc": "",
+          "created": "2026.10.21",
+          "folder": "archive/20261021-091111-assets",
+          "preview": "archive/20261021-091111-assets/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261021-091111-assets/index.html"
             }
           ]
         }
