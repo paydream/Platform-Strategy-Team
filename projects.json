@@ -100,7 +100,7 @@
           "created": "2026.10.21",
           "folder": "archive/20261021-091827-blog-230-redesign-v8",
           "preview": "archive/20261021-091827-blog-230-redesign-v8/index.html",
-          "hidden": false,
+          "hidden": true,
           "items": [
             {
               "label": "원본 vs 리디자인 비교",
@@ -109,6 +109,26 @@
             {
               "label": "리디자인 단독(공통 영역 포함)",
               "href": "archive/20261021-091827-blog-230-redesign-v8/redesign.html"
+            }
+          ]
+        },
+        {
+          "id": "20261021-091859-blog-230-redesign-v9",
+          "label": "v9",
+          "title": "[17] 주의 카드 행간 수정 반영 (피그마 코드 박스 동기화)",
+          "desc": "피그마 [17] 주의 카드 레이어 수정값(안쪽 여백 20px, 제목–설명 8px, 설명 15px)을 HTML 코드 박스에 맞춰 넣고 다시 적용. v8은 설명 글자 15px가 빠져 숨김. 그 외는 v7과 동일, 글 내용 원문 그대로",
+          "created": "2026.10.21",
+          "folder": "archive/20261021-091859-blog-230-redesign-v9",
+          "preview": "archive/20261021-091859-blog-230-redesign-v9/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "원본 vs 리디자인 비교",
+              "href": "archive/20261021-091859-blog-230-redesign-v9/index.html"
+            },
+            {
+              "label": "리디자인 단독(공통 영역 포함)",
+              "href": "archive/20261021-091859-blog-230-redesign-v9/redesign.html"
             }
           ]
         }
