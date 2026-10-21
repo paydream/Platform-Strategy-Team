@@ -131,6 +131,26 @@
               "href": "archive/20261021-091859-blog-230-redesign-v9/redesign.html"
             }
           ]
+        },
+        {
+          "id": "20261021-092306-blog-230-redesign-v10",
+          "label": "v10",
+          "title": "스킬 v2.3 — 레이어/코드 박스 대조 후 재적용",
+          "desc": "figma_read.js가 레이어와 HTML 코드 박스를 대조(mismatches). [1] 요약 목록 18px, [18] 특징 카드 제목–설명 16px·설명 15px, [19] 안내 박스 여백 26px·간격 12px 코드 박스를 레이어에 맞춰 정정하고 재적용. 글 내용 원문 그대로",
+          "created": "2026.10.21",
+          "folder": "archive/20261021-092306-blog-230-redesign-v10",
+          "preview": "archive/20261021-092306-blog-230-redesign-v10/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "원본 vs 리디자인 비교",
+              "href": "archive/20261021-092306-blog-230-redesign-v10/index.html"
+            },
+            {
+              "label": "리디자인 단독(공통 영역 포함)",
+              "href": "archive/20261021-092306-blog-230-redesign-v10/redesign.html"
+            }
+          ]
         }
       ]
     },
