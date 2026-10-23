@@ -1,0 +1,512 @@
+/* =========================================================
+   예스폼 에디터 — 프롬프트 화면 (Figma 6790:48743 "프롬프트_관심사 설정완료" · 1920 × 1080)
+   구성: 왼쪽 메뉴(64) + 오른쪽 본문(1856)
+         본문 = 추천 프롬프트(6790:48920 · 높이 337) → 탭·검색·필터(6790:48946 · 60)
+              → 업종·관심 분야 체크(6790:48989 · 226) → 관심분야 프롬프트 카드(6790:49020)
+   ========================================================= */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font-family);
+  color: var(--gray-lt-15);
+  background: var(--white);
+  -webkit-font-smoothing: antialiased;
+}
+p, h1, h2, h3, ul { margin: 0; }
+ul { padding: 0; list-style: none; }
+fieldset { margin: 0; padding: 0; border: 0; min-width: 0; }
+legend { padding: 0; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+img { display: block; }
+:focus-visible { outline: 2px solid var(--primary-700); outline-offset: 2px; }
+
+/* ---------- 왼쪽 메뉴 (6790:48745) — 폭 64 · 흰 바탕 · 오른쪽 선 #eaeaea · 위 12 / 아래 16 · 화면에 고정 (템플릿페이지와 같은 모양) ---------- */
+.side-bar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+  width: 64px;
+  padding: 12px 0 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--white);
+  box-shadow: inset -1px 0 0 var(--border-light-gray);
+}
+.side-bar__inner { display: flex; flex-direction: column; gap: 15px; }
+/* 로고 — 높이 40 · 폼 로고 28 가운데 */
+.side-bar__logo { height: 40px; display: flex; align-items: center; justify-content: center; }
+/* 메뉴 5칸(새 문서 · 예스폼 AI · 도형 · 템플릿 · 프롬프트) — 칸 사이 15 */
+.side-bar__menu { display: flex; flex-direction: column; gap: 15px; }
+/* 메뉴 한 칸 — 아이콘 칸(50 × 30 · 모서리 10) ↔ 2 ↔ 글자 12px Medium(줄높이 16) #464a4e */
+.side-item {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: var(--fw-medium);
+  color: var(--gray-lt-12);
+  white-space: nowrap;
+}
+.side-item__icon {
+  width: 50px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-large);
+}
+/* 선택된 메뉴(프롬프트) — 아이콘 칸 #f1f8fd · 파란 로켓 아이콘 · 글자 파란색 */
+.side-item.is-active { color: var(--primary-700); }
+.side-item.is-active .side-item__icon { background: var(--side-active-bg); }
+.side-item:not(.is-active):hover .side-item__icon { background: var(--gray-lt-03); }
+/* 맨 아래 내 정보 아이콘(24) */
+.side-bar__user { display: flex; justify-content: center; }
+
+/* ---------- 오른쪽 본문 ---------- */
+.page { margin-left: 64px; min-width: 0; overflow-x: clip; }
+
+/* ---------- 추천 프롬프트 (6790:48920) — 여백 위아래 40 / 좌우 30 · 제목 줄 ↔ 20 ↔ 추천 카드
+   바탕 = 흰색 위에 하늘·보라 번짐 이미지 80% (두 겹을 합친 hero-bg.png · 영역 크기에 맞춰 늘림) ---------- */
+.hero {
+  padding: 40px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: var(--white) url("../assets/images/hero-bg.png") center / 100% 100% no-repeat;
+}
+.hero__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
+/* 왼쪽 글 — (인사 ↔ 4 ↔ 제목) ↔ 8 ↔ 설명 */
+.hero__text { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.hero__title-group { display: flex; flex-direction: column; gap: 4px; }
+.hero__greet { font-size: 15px; line-height: 21px; color: var(--gray-lt-14); }                        /* 15px Regular #292b2d */
+.hero__title { font-size: 24px; line-height: 34px; font-weight: var(--fw-bold); color: var(--gray-lt-15); } /* 24px Bold */
+.hero__desc { font-size: 15px; line-height: 21px; color: var(--gray-lt-10); }                         /* 15px Regular #6d7379 */
+/* 오른쪽 로그인 버튼 — 흰 바탕 · 여백 8 / 10 · 모서리 6 · 14px SemiBold #464a4e(가운데만 파랑) + 오른쪽 꺾쇠 20 */
+.hero__login {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: var(--white);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: var(--fw-semibold);
+  color: var(--gray-lt-12);
+  white-space: nowrap;
+}
+.hero__login em { font-style: normal; color: var(--primary-700); }
+.hero__login img { margin-left: 0; }
+
+/* 추천 카드 넘기기 — 카드 줄 ↔ 16 ↔ 점 */
+.reco { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.reco__row { position: relative; width: 100%; }
+.reco__viewport { overflow: hidden; }
+/* 카드 4장씩 · 간격 24 · 묶음을 넘길 때 옆으로 밀림 */
+.reco__track { display: flex; gap: 24px; transition: transform 0.45s ease; }
+.reco-card {
+  flex: 0 0 calc((100% - 72px) / 4);
+  min-width: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  position: relative;
+  background: var(--white);
+  border: 1px solid var(--gray-lt-02);
+  border-radius: 12px;
+}
+/* 관심분야 배지 — 여백 4 / 6 · 모서리 4 · 13px Medium(줄높이 13) · 색은 관심분야별(js에서 data-tone) */
+.reco-card__badge {
+  padding: 4px 6px;
+  border-radius: 4px;
+  background: var(--badge-bg, var(--field-hr-bg));
+  font-size: 13px;
+  line-height: 13px;
+  font-weight: var(--fw-medium);
+  color: var(--badge-ink, var(--field-hr-text));
+  white-space: nowrap;
+}
+/* Figma 그대로인 공공행정 배지 색 (#fff5eb / #f6972b) */
+.reco-card[data-tone="public"] { --badge-bg: #fff5eb; --badge-ink: #f6972b; }
+.reco-card__text { width: 100%; padding: 0 2px; display: flex; flex-direction: column; gap: 6px; }
+/* 제목 16px SemiBold(줄높이 22) + 꺾쇠 16 · 간격 2 */
+.reco-card__title {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: var(--fw-semibold);
+  color: var(--gray-lt-15);
+}
+.reco-card__link { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.reco-card__link::after { content: ""; position: absolute; inset: 0; } /* 카드 아무 데나 누르면 이동 */
+.reco-card__title img { flex: none; }
+/* 설명 14px(줄높이 20) #6d7379 · 1줄 · 넘치면 "…" */
+.reco-card__desc { width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; line-height: 20px; color: var(--gray-lt-10); }
+
+/* 좌우 화살표 — 흰 원 40 · 테두리 #f1f2f4 · 옅은 그림자 · 카드 줄 세로 가운데 · 카드 바깥으로 20씩 걸침 (Figma pre/next 1836) */
+.reco__arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--gray-lt-03);
+  border-radius: 20px;
+  background: var(--white);
+  filter: drop-shadow(4px 3px 10px rgba(0, 0, 0, 0.05));
+  transform: translateY(-50%);
+}
+.reco__arrow--prev { left: -20px; }
+.reco__arrow--next { right: -20px; }
+.reco__arrow:disabled { cursor: default; }
+.reco__arrow:disabled img { opacity: 0.4; } /* 첫 묶음에서 왼쪽 · 마지막 묶음에서 오른쪽 화살표는 옅게 (Figma 왼쪽 화살표 40%) */
+.reco__arrow:not(:disabled):hover { background: #f9fafb; }
+
+/* 점 — 10 · 간격 10 · 지금 묶음 파랑, 나머지 검정 16% */
+.reco__dots { display: flex; gap: 10px; }
+.reco__dot { width: 10px; height: 10px; border-radius: 5px; background: rgba(0, 0, 0, 0.16); }
+.reco__dot[aria-current="true"] { background: var(--primary-700); }
+
+/* ---------- 탭 · 검색 · 필터 (6790:48946) — 높이 60 · 좌우 30 · 아래 선 1px #ebedef ---------- */
+.list-bar {
+  height: 60px;
+  padding: 0 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: var(--white);
+  box-shadow: inset 0 -1px 0 var(--gray-lt-04);
+}
+.list-tabs { height: 100%; display: flex; align-items: stretch; gap: 20px; }
+/* 탭 — 16px SemiBold(줄높이 26) · 꺼진 탭 #888f95 · 선택된 탭 파랑 + 아래 3px 파란 줄 */
+.list-tab {
+  position: relative;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  line-height: 26px;
+  font-weight: var(--fw-semibold);
+  color: var(--gray-lt-09);
+  white-space: nowrap;
+}
+.list-tab.is-active { padding: 0 2px; color: var(--primary-700); }
+.list-tab.is-active::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--primary-700); }
+.list-tab:not(.is-active):hover { color: var(--gray-lt-12); }
+.list-tab:focus-visible { outline-offset: -2px; }
+
+.list-bar__tools { display: flex; align-items: center; gap: 8px; }
+/* 검색창 — 280 × 40 · #f1f2f4 · 모서리 6 · 좌우 12 · 15px Medium #888f95 + 돋보기 24 */
+.search-box {
+  width: 280px;
+  height: 40px;
+  padding: 0 12px 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: 6px;
+  background: var(--gray-lt-03);
+}
+.search-box__input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 15px;
+  line-height: 24px;
+  font-weight: var(--fw-medium);
+  color: var(--gray-lt-15);
+  outline: none;
+}
+.search-box__input::placeholder { color: var(--gray-lt-09); }
+.search-box__input::-webkit-search-cancel-button { cursor: pointer; }
+.search-box:focus-within { box-shadow: inset 0 0 0 1px var(--primary-700); }
+.search-box__btn { flex: none; display: flex; }
+/* 필터 버튼 — 높이 40 · 좌우 12 · 테두리 #e3e5e8 · 모서리 8 · 아이콘 20 ↔ 4 ↔ 15px Medium #5a5f63 */
+.filter-btn {
+  height: 40px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--line-border);
+  border-radius: 8px;
+  background: var(--white);
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: var(--fw-medium);
+  color: var(--gray-lt-11);
+  white-space: nowrap;
+}
+.filter-btn:hover { background: #f9fafb; }
+.filter-btn[aria-expanded="true"] { border-color: #c9ced3; }
+
+/* ---------- 업종 · 관심 분야 체크 (6790:48989) — 바깥 여백 20 / 30 · 흰 상자(테두리 #ebedef · 모서리 12 · 여백 24 / 30) ---------- */
+.interest { padding: 20px 30px; }
+.interest[hidden] { display: none; }
+.interest__box {
+  padding: 24px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 1px solid var(--gray-lt-04);
+  border-radius: 12px;
+  background: var(--white);
+}
+/* 묶음 제목 16px SemiBold(줄높이 26) 검정 */
+.interest__title { font-size: 16px; line-height: 26px; font-weight: var(--fw-semibold); color: var(--black); }
+/* 항목 — 줄바꿈 · 가로 간격 32 */
+.interest__options { display: flex; flex-wrap: wrap; align-items: center; gap: 0 32px; }
+/* 체크 항목 — 위아래 6 · 체크 상자 칸 24(상자 20 · 테두리 #c2c2c2 · 모서리 5) ↔ 5 ↔ 14px Medium(줄높이 24) #464a4e */
+.check {
+  position: relative;
+  padding: 6px 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: var(--fw-medium);
+  color: var(--gray-lt-12);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.check__input { position: absolute; width: 1px; height: 1px; margin: 0; opacity: 0; pointer-events: none; }
+.check__box { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
+.check__box::before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border-gray);
+  border-radius: var(--radius-small);
+  background: var(--white) center / 14px 14px no-repeat;
+  transition: background-color 0.12s, border-color 0.12s;
+}
+.check:hover .check__box::before { border-color: #9aa1a8; }
+/* 고른 항목 — Figma 시즈널 옵션(6796:49718 "체크")과 같은 모양: 파란 상자(#0472e3 · 모서리 5) + 흰 체크 */
+.check__input:checked + .check__box::before { border-color: var(--primary-700); background-color: var(--primary-700); background-image: url("../assets/icons/ic-check-white.svg"); background-size: 20px 20px; }
+.check__input:focus-visible + .check__box::before { outline: 2px solid var(--primary-700); outline-offset: 2px; }
+/* 월 — 한 줄 6칸(1920에서 칸 폭 289) · 좁으면 칸 수를 줄임 */
+.interest__options--grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0; }
+
+/* 시즈널 — 구분선 1px(#ebedef) + 11 = Figma 선 ↔ 12 ↔ 고른 항목 칩(왼쪽) + 초기화 · 적용하기(오른쪽) (6796:49743) */
+.season-apply { padding-top: 11px; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; border-top: 1px solid var(--gray-lt-04); }
+.season-apply__chips { min-height: 40px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.season-apply__btns { flex: none; display: flex; gap: 6px; }
+/* 칩 — #f6f7f8 · 여백 8 / 왼쪽 16 · 오른쪽 12 · 모서리 100 · 13px Medium(줄높이 18) #383b3e ↔ 6 ↔ X 20 */
+.season-chip {
+  padding: 8px 12px 8px 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 100px;
+  background: var(--gray-lt-02);
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: var(--fw-medium);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.season-chip__x { width: 20px; height: 20px; display: flex; border-radius: 50%; }
+.season-chip__x:hover { background: var(--gray-lt-04); }
+.season-apply__none { font-size: 13px; line-height: 18px; color: var(--gray-lt-09); }
+/* 초기화 — 테두리 #c2c2c2 · 높이 40 · 최소 89 · 모서리 5 · 15px SemiBold #666 */
+.btn-line {
+  min-width: 89px;
+  height: 40px;
+  padding: 0 20px;
+  border: 1px solid var(--border-gray);
+  border-radius: var(--radius-small);
+  background: var(--white);
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: var(--fw-semibold);
+  color: var(--font-700);
+  white-space: nowrap;
+}
+.btn-line:hover { background: #f9fafb; }
+/* 적용하기 — 파랑(#0472e3) · 160 × 40 · 모서리 5 · 15px SemiBold 흰 글자 (건수가 길면 늘어남) */
+.btn-primary {
+  min-width: 160px;
+  height: 40px;
+  padding: 0 20px;
+  border-radius: var(--radius-small);
+  background: var(--primary-700);
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: var(--fw-semibold);
+  color: var(--white);
+  white-space: nowrap;
+}
+.btn-primary:hover { background: #0366cc; }
+
+/* ---------- 관심분야 프롬프트 (6790:49020) — 좌우 30 ---------- */
+.prompt-list { padding: 0 30px 80px; container-type: inline-size; } /* 카드 줄 수는 이 영역 폭으로 정함 (아래 @container) */
+/* 제목 줄 — 위 20 · 높이 34 · 제목 18px Bold 검정 ↔ 4 ↔ 개수 15px Medium #a0a6ac / 인기순 15px Medium #666 + 꺾쇠 12×20 */
+.prompt-list__head { padding-top: 20px; display: flex; align-items: center; justify-content: space-between; }
+.prompt-list__title { padding: 0 2px; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+.prompt-list__title strong { font-size: 18px; line-height: 26px; font-weight: var(--fw-bold); color: var(--black); }
+.prompt-list__title span { font-size: 15px; line-height: 15px; font-weight: var(--fw-medium); color: var(--gray-lt-08); }
+.sort-btn { height: 34px; padding: 0 2px; display: flex; align-items: center; gap: 4px; border-radius: 8px; font-size: 15px; line-height: 24px; font-weight: var(--fw-medium); color: var(--font-700); }
+.prompt-list__empty { padding: 60px 0 20px; text-align: center; font-size: 15px; line-height: 24px; color: var(--gray-lt-09); }
+
+/* =========================================================
+   프롬프트 카드 — 메인_검색화면 시안01-1(전환 바 "시안01") 카드 그대로 재사용
+   (Figma 6790:49024 "시안01 카드 01" = 247.6 × 164 · 간격 12)
+   ========================================================= */
+/*
+  1줄 7개 · 간격 12 · 카드 높이 164 고정 · 카드 폭 최소 240 (메인_검색화면 시안01-1과 같음)
+  · 1920 화면은 카드 영역이 1796(세로 스크롤바가 있으면 약 1781) → 카드 약 244~246 × 7개 × 4줄 = 28장
+  · 카드 영역이 2004px 이상(2560 등)이면 1줄 8개 × 4줄 = 32장 (js에서 32장을 만들고 넘치는 카드는 숨김)
+  · 카드 영역이 1752px(240 × 7 + 12 × 6)보다 좁으면 — 이 화면은 왼쪽 메뉴가 있어서 1880px쯤부터 —
+    한 줄에 들어가는 만큼(6 · 5개 …)만 놓고 28장은 줄을 늘려 다 보여 줌 (메인_검색화면은 오른쪽이 잘렸지만 여기는 줄바꿈)
+*/
+.package-grid {
+  margin-top: 12px; /* 제목 줄 ↔ 12 ↔ 카드 */
+  display: grid;
+  grid-template-columns: repeat(7, minmax(240px, 1fr));
+  gap: 12px;
+  align-items: stretch;
+}
+.package-grid > .package-card:nth-child(n + 29) { display: none; }   /* 7개 × 4줄 */
+@container (min-width: 2004px) {
+  .package-grid { grid-template-columns: repeat(8, minmax(240px, 1fr)); }
+  .package-grid > .package-card:nth-child(n + 29) { display: flex; }
+  .package-grid > .package-card:nth-child(n + 33) { display: none; }  /* 8개 × 4줄 */
+}
+@container (max-width: 1751.98px) {
+  .package-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+}
+
+/* 카드 — 흰 바탕 · 테두리 1px #f1f2f4 · 모서리 12 · 안쪽 여백 4 · 높이 164
+   위 줄(높이 32 · 관심분야 연한 색 · 모서리 8) + 흰 박스(제목 17px · 설명 2줄 · 업종 글자)
+   --card-bg / --card-ink 는 js에서 관심분야별로 넣음 (tokens.css --field-*-bg / -dark) */
+.package-card {
+  position: relative;
+  min-width: 0;
+  height: 164px;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-white);
+  border: 1px solid var(--line-divider-light);
+  border-radius: 12px;
+  overflow: hidden;
+}
+/* 위 줄 — 높이 32 · 좌우 12 · 모서리 8 · 관심분야 연한 색 · 관심분야 이름 13px Medium(가장 진한 색) */
+.package-card__field {
+  flex: none;
+  height: 32px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--card-bg, var(--field-accounting-bg));
+  font-size: 13px;
+  line-height: 13px;
+  font-weight: var(--fw-medium);
+  color: var(--card-ink, var(--field-accounting-dark));
+  white-space: nowrap;
+}
+/* 흰 박스 — 여백 위아래 14 / 좌우 12 · 글 묶음 ↔ 업종 20 */
+.package-card__body {
+  flex: none;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: var(--bg-white);
+  border-radius: 8px;
+}
+/* 제목 ↔ 설명 4 */
+.package-card__text { width: 100%; display: flex; flex-direction: column; gap: 4px; }
+/* 제목 줄 — 제목 17px SemiBold(줄높이 22 · 1줄 · 넘치면 "…") + 꺾쇠 아이콘 16 · 간격 2 */
+.package-card__title {
+  height: 22px;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 17px;
+  line-height: 22px;
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+.package-card__link {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: inherit;
+  text-decoration: none;
+}
+.package-card__title-icon { flex: none; width: 16px; height: 16px; }
+.package-card__link::after { content: ""; position: absolute; inset: 0; } /* 카드 아무 데나 누르면 이동 */
+.package-card__link:focus-visible { outline: none; }
+.package-card:has(.package-card__link:focus-visible) { outline: 2px solid var(--primary-700); outline-offset: 2px; }
+/* 설명 — 13px(줄높이 18) #888f95 · 2줄 (넘치면 "…") */
+.package-card__desc {
+  height: 36px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 400;
+  color: var(--text-tertiary);
+  word-break: break-all;
+}
+/* 업종 — 칩 배경 없이 글자만 · 12px Medium(줄높이 12) #383b3e */
+.package-card__chips { width: 100%; height: 12px; display: flex; flex-wrap: wrap; gap: 0 8px; overflow: hidden; }
+.package-chip {
+  display: block;
+  flex: none;
+  max-width: 100%;
+  font-size: 12px;
+  line-height: 12px;
+  font-weight: var(--fw-medium);
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------- 프롬프트 더보기 (6790:49295) — 위 40 · 240 × 40 · #f3f3f3 · 모서리 5 · 15px SemiBold #666 · 가운데 ---------- */
+.more-wrap { padding-top: 40px; display: flex; justify-content: center; }
+.btn-more {
+  width: 240px;
+  height: 40px;
+  padding: 0 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-small);
+  background: var(--btn-secondary-fill);
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: var(--fw-semibold);
+  color: var(--font-700);
+  white-space: nowrap;
+}
+.btn-more:hover { background: #ebebeb; }

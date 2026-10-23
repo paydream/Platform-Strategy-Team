@@ -1,0 +1,65 @@
+/* =========================================================
+   예스폼 에디터 — 프롬프트 화면 디자인 토큰
+   · Figma 예스폼-에디터 (UEFYzhh4vwD96r3A0J9TwH) / 6790:48743 "프롬프트_관심사 설정완료"
+   · 왼쪽 메뉴 · 탭 · 검색은 템플릿페이지 토큰과 같음
+   · 카드 색(--field-*)은 01_예스폼/메인_검색화면/시안01-1/css/tokens.css 그대로 (시안01 카드 재사용)
+   ========================================================= */
+:root {
+  /* 브랜드 */
+  --primary-700: #0472e3;          /* primary/700 — 선택된 탭 · 메뉴 · 페이지 점 */
+
+  /* 회색 (gray/light) */
+  --gray-lt-02: #f6f7f8;           /* 추천 카드 테두리 */
+  --gray-lt-03: #f1f2f4;           /* 검색창 배경 · 화살표 버튼 테두리 · 카드 테두리 */
+  --gray-lt-04: #ebedef;           /* 탭 아래 선 · 관심분야 상자 테두리 */
+  --gray-lt-08: #a0a6ac;           /* 프롬프트 개수 */
+  --gray-lt-09: #888f95;           /* 꺼진 탭 · 검색창 글자 */
+  --gray-lt-10: #6d7379;           /* 추천 카드 설명 · 위 설명 */
+  --gray-lt-11: #5a5f63;           /* 필터 버튼 글자 */
+  --gray-lt-12: #464a4e;           /* 왼쪽 메뉴 글자 · 체크 항목 글자 · 로그인 버튼 글자 */
+  --gray-lt-14: #292b2d;           /* 위 인사 글자 */
+  --gray-lt-15: #1d1f20;           /* 제목 */
+  --font-700: #666666;             /* 정렬(인기순) · 더보기 버튼 글자 */
+  --black: #000000;
+  --white: #ffffff;
+
+  /* 선 */
+  --border-light-gray: #eaeaea;    /* 왼쪽 메뉴 오른쪽 선 */
+  --border-gray: #c2c2c2;          /* 체크 상자 테두리 */
+  --line-border: #e3e5e8;          /* 필터 버튼 테두리 */
+  --line-divider-light: #f1f2f4;   /* 프롬프트 카드 테두리 */
+
+  /* 채움 */
+  --side-active-bg: #f1f8fd;       /* 왼쪽 메뉴 선택 배경 */
+  --btn-secondary-fill: #f3f3f3;   /* 프롬프트 더보기 버튼 */
+
+  /* 프롬프트 카드 (시안01 카드 — 메인_검색화면 시안01-1과 같은 값) */
+  --text-primary: #1d1f20;         /* 카드 제목 */
+  --text-secondary: #383b3e;       /* 카드 업종 글자 */
+  --text-tertiary: #888f95;        /* 카드 설명 */
+  --bg-white: #ffffff;
+
+  /* 관심분야(업무분야) 색 — 예스폼 에디터 컬러차트 (메인_검색화면 시안01-1과 같음)
+     --field-*-bg = 연한 배경(4번째 열) · --field-*-text = 메인 색(3번째 열) · --field-*-dark = 가장 진한 색(1번째 열) */
+  --field-hr-bg: #eaf4fb;         --field-hr-text: #4472c4;         --field-hr-dark: #003491;         /* HR 관리·채용 */
+  --field-accounting-bg: #e9f6f3; --field-accounting-text: #3597a5; --field-accounting-dark: #004e5c; /* 회계·경리·재무 실무 */
+  --field-site-bg: #fef6f0;       --field-site-text: #df7d49;       --field-site-dark: #882f00;       /* 현장·공사·부동산 관리 */
+  --field-legal-bg: #f3eee5;      --field-legal-text: #a4825f;      --field-legal-dark: #4a2500;      /* 법무·계약·지식재산 */
+  --field-admin-bg: #f9eff8;      --field-admin-text: #a24897;      --field-admin-dark: #461b67;      /* 총무·경영지원·일반사무 */
+  --field-ai-bg: #f1f0ff;         --field-ai-text: #6c64d9;         --field-ai-dark: #090083;         /* AI·IT */
+  --field-scm-bg: #e9f6f4;        --field-scm-text: #44c0ac;        --field-scm-dark: #005546;        /* 생산·구매·자재·SCM 관리 */
+  --field-public-bg: #fff9f3;     --field-public-text: #b45309;     --field-public-dark: #a43f00;     /* 공공행정·생활·서비스 */
+  --field-sales-bg: #f0f7fd;      --field-sales-text: #4baeff;      --field-sales-dark: #0071c2;      /* 영업·마케팅·사업기획 */
+
+  /* 모서리 */
+  --radius-small: 5px;             /* 체크 상자 · 더보기 버튼 */
+  --radius-large: 10px;            /* 왼쪽 메뉴 아이콘 칸 */
+
+  /* 글꼴 굵기 */
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  --font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕", sans-serif;
+}

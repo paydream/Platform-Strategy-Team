@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light" />
+  <title>예스폼 에디터 | 프롬프트</title>
+  <!-- Pretendard 글꼴 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- =====================================================
+       예스폼 에디터 — 프롬프트 화면 (관심사 설정 완료)
+       Figma: 예스폼-에디터 (UEFYzhh4vwD96r3A0J9TwH) / 6790:48743 "프롬프트_관심사 설정완료" (1920 × 1080)
+       구성: 왼쪽 메뉴(64) + 본문(1856)
+             본문 = 추천 프롬프트(6790:48920) → 탭·검색·필터(6790:48946) → 업종·관심 분야 체크(6790:48989) → 관심분야 프롬프트 카드(6790:49020)
+       카드 = 01_예스폼/메인_검색화면/시안01-1(전환 바 "시안01")의 AI로 초안 생성하기 카드 그대로 재사용
+       ===================================================== -->
+
+  <!-- 왼쪽 메뉴 (6790:48745) — 선택된 메뉴: 프롬프트 -->
+  <nav class="side-bar" aria-label="에디터 메뉴">
+    <div class="side-bar__inner">
+      <h1 class="side-bar__logo">
+        <a href="#" aria-label="예스폼 에디터"><img src="assets/icons/logo-form.svg" width="28" height="28" alt="" /></a>
+      </h1>
+      <div class="side-bar__menu">
+        <button type="button" class="side-item">
+          <span class="side-item__icon"><img src="assets/icons/side-new.svg" width="24" height="24" alt="" /></span>
+          새 문서
+        </button>
+        <button type="button" class="side-item">
+          <span class="side-item__icon"><img src="assets/icons/side-ai.svg" width="16" height="16" alt="" /></span>
+          예스폼 AI
+        </button>
+        <button type="button" class="side-item">
+          <span class="side-item__icon"><img src="assets/icons/side-shape.svg" width="16" height="16" alt="" /></span>
+          도형
+        </button>
+        <button type="button" class="side-item">
+          <span class="side-item__icon"><img src="assets/icons/side-template.svg" width="16" height="16" alt="" /></span>
+          템플릿
+        </button>
+        <button type="button" class="side-item is-active" aria-current="page">
+          <span class="side-item__icon"><img src="assets/icons/side-prompt-on.svg" width="16" height="16" alt="" /></span>
+          프롬프트
+        </button>
+      </div>
+    </div>
+    <div class="side-bar__user">
+      <button type="button" class="side-item" aria-label="내 정보">
+        <span class="side-item__icon"><img src="assets/icons/side-user.svg" width="24" height="24" alt="" /></span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="page">
+    <!-- 추천 프롬프트 (6790:48920) — 인사 · 제목 · 설명 + 로그인 버튼 / 추천 카드 4장씩 넘기기(4묶음) · 화살표 · 점 -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero__head">
+        <div class="hero__text">
+          <div class="hero__title-group">
+            <p class="hero__greet">🏖️ 더운 여름 8월의 박채은님을 위한 추천 프롬프트</p>
+            <h2 class="hero__title" id="hero-title">2027 상반기 채용 준비</h2>
+          </div>
+          <p class="hero__desc">프롬프트만 입력하면 AI가 간단하게 문서 초안을 생성해 드려요!</p>
+        </div>
+        <a href="#" class="hero__login">로그인하고&nbsp;<em>맞춤 프롬프트 추천</em>&nbsp;받으세요!<img src="assets/icons/ic-login-right.svg" width="20" height="20" alt="" /></a>
+      </div>
+
+      <div class="reco" aria-roledescription="carousel" aria-label="추천 프롬프트">
+        <div class="reco__row">
+          <div class="reco__viewport">
+            <ul class="reco__track" id="reco-track"></ul>
+          </div>
+          <button type="button" class="reco__arrow reco__arrow--prev" id="reco-prev" aria-label="이전 추천 프롬프트">
+            <img src="assets/icons/ic-arrow-left.svg" width="24" height="24" alt="" />
+          </button>
+          <button type="button" class="reco__arrow reco__arrow--next" id="reco-next" aria-label="다음 추천 프롬프트">
+            <img src="assets/icons/ic-arrow-right.svg" width="24" height="24" alt="" />
+          </button>
+        </div>
+        <div class="reco__dots" id="reco-dots" role="group" aria-label="추천 묶음 고르기"></div>
+      </div>
+    </section>
+
+    <!-- 탭 · 검색 · 필터 (6790:48946 Header_editor) -->
+    <div class="list-bar">
+      <div class="list-tabs" role="tablist" aria-label="프롬프트 분류">
+        <button type="button" class="list-tab is-active" role="tab" aria-selected="true" data-tab="interest" data-title="관심분야 프롬프트">관심분야</button>
+        <button type="button" class="list-tab" role="tab" aria-selected="false" data-tab="season" data-title="시즈널 프롬프트">시즈널</button>
+        <button type="button" class="list-tab" role="tab" aria-selected="false" data-tab="my" data-title="MY 프롬프트">MY</button>
+      </div>
+      <div class="list-bar__tools">
+        <form class="search-box" role="search" id="search-form">
+          <input class="search-box__input" id="search-input" type="search" placeholder="검색어를 입력하세요." aria-label="프롬프트 검색" />
+          <button type="submit" class="search-box__btn" aria-label="검색">
+            <img src="assets/icons/ic-search.svg" width="24" height="24" alt="" />
+          </button>
+        </form>
+        <button type="button" class="filter-btn" id="filter-btn" aria-expanded="true" aria-controls="interest-panel">
+          <img src="assets/icons/ic-filter.svg" width="20" height="20" alt="" />필터
+        </button>
+      </div>
+    </div>
+
+    <!-- 업종 · 관심 분야 체크 (6790:48989) — 고르면 아래 카드가 그 업종·관심 분야로 걸러짐 (필터 버튼으로 접고 펴기) -->
+    <section class="interest" id="interest-panel" aria-label="업종 · 관심 분야 고르기">
+      <div class="interest__box">
+        <fieldset class="interest__group">
+          <legend class="interest__title">업종</legend>
+          <div class="interest__options" data-group="industry"></div>
+        </fieldset>
+        <fieldset class="interest__group">
+          <legend class="interest__title">관심 분야</legend>
+          <div class="interest__options" data-group="field"></div>
+        </fieldset>
+      </div>
+    </section>
+
+    <!-- 시즈널 탭 — 관심 분야 · 월 체크 (6796:49712 "시즈널 옵션") — 시즈널 탭을 고르면 위 업종 상자 대신 이 상자가 보임
+         체크하면 아래에 고른 항목 칩이 생기고, "적용하기"를 눌러야 카드가 걸러짐 · "초기화"는 체크를 모두 풂 -->
+    <section class="interest" id="season-panel" aria-label="관심 분야 · 월 고르기" hidden>
+      <div class="interest__box">
+        <fieldset class="interest__group">
+          <legend class="interest__title">관심 분야</legend>
+          <div class="interest__options" data-group="sfield"></div>
+        </fieldset>
+        <fieldset class="interest__group">
+          <legend class="interest__title">월</legend>
+          <div class="interest__options interest__options--grid" data-group="month"></div>
+        </fieldset>
+        <div class="season-apply">
+          <div class="season-apply__chips" id="season-chips" aria-label="고른 항목"></div>
+          <div class="season-apply__btns">
+            <button type="button" class="btn-line" id="season-reset">초기화</button>
+            <button type="button" class="btn-primary" id="season-apply">적용하기 (1,234건)</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 관심분야 프롬프트 (6790:49020) — 제목 · 개수 · 인기순 / 카드 1줄 7개 × 4줄(2560은 8개) / 더보기 -->
+    <section class="prompt-list" aria-labelledby="list-title">
+      <div class="prompt-list__head">
+        <h2 class="prompt-list__title"><strong id="list-title">관심분야 프롬프트</strong><span id="list-count">1,234</span></h2>
+        <button type="button" class="sort-btn">인기순<img src="assets/icons/ic-sort-down.svg" width="12" height="20" alt="" /></button>
+      </div>
+      <ul class="package-grid" id="package-grid"></ul>
+      <p class="prompt-list__empty" id="list-empty" hidden>조건에 맞는 프롬프트가 없어요. 체크를 풀거나 다른 검색어로 찾아보세요.</p>
+      <div class="more-wrap">
+        <button type="button" class="btn-more">프롬프트 더보기 (1/3308)</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- 추천 카드 템플릿 (Figma 5098:7050 · 흰 바탕 · 테두리 #f6f7f8 · 모서리 12 · 여백 20)
+       관심분야 배지(13px) ↔ 12 ↔ 제목 16px SemiBold + 꺾쇠 16 ↔ 6 ↔ 설명 14px 1줄 -->
+  <template id="reco-card-template">
+    <li class="reco-card">
+      <span class="reco-card__badge"></span>
+      <div class="reco-card__text">
+        <p class="reco-card__title"><a href="#" class="reco-card__link"></a><img src="assets/icons/ic-next-16.svg" width="16" height="16" alt="" /></p>
+        <p class="reco-card__desc"></p>
+      </div>
+    </li>
+  </template>
+
+  <!-- 프롬프트 카드 템플릿 — 메인_검색화면 시안01-1(전환 바 "시안01") 카드 그대로 (Figma 6790:49024 "시안01 카드" · 247.6 × 164)
+       위 줄(높이 32 · 관심분야 연한 색 · 모서리 8) = 관심분야 이름(가장 진한 색)
+       흰 박스 = 제목 17px + 꺾쇠 · 설명 2줄 · 업종 글자 — 카드 아무 데나 누르면 링크로 이동 -->
+  <template id="package-card-template">
+    <li class="package-card">
+      <p class="package-card__field"></p>
+      <div class="package-card__body">
+        <div class="package-card__text">
+          <p class="package-card__title"><a href="#" class="package-card__link"></a><img class="package-card__title-icon" src="assets/icons/ic-chevron-right-16.svg" width="16" height="16" alt="" /></p>
+          <p class="package-card__desc"></p>
+        </div>
+        <div class="package-card__chips"></div>
+      </div>
+    </li>
+  </template>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
