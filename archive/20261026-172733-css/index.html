@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>예스폼싸인 메인 · 시안 비교</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<!--
+  예스폼싸인 메인 — 시안 전환 화면 (2026-10-26)
+  · 시안01 = backup/index1.html + css/style.css
+  · 시안02 = backup/index2.html + css/style2.css
+  · 메인 폴더에는 이 index.html 하나만 둠 — 시안 두 파일은 backup/ 에 있고, 그림 · 스타일 · 스크립트는 ../ 로 메인 폴더 것을 씀
+  · 시안마다 화면을 iframe 으로 따로 띄워서 스타일이 서로 섞이지 않음 (js/main.js 와 images/ 는 같이 씀)
+  · 아래 가운데 전환 바: 누르거나 ←/→ 키로 전환 · 마지막으로 본 시안을 기억 · 주소 뒤 #01 / #02 로 바로 열기
+-->
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;background:#fff}
+  .sian-frame{position:fixed;inset:0;width:100%;height:100%;border:0;background:#fff}
+  .sian-frame[hidden]{display:none}
+  /* 전환 바 — 어두운 바탕 #1D1F20(눈에 잘 띄게) · 선택 #2D62FA · 글자 #B0B8C1 → 마우스 올리면 흰색 */
+  .sian-tabs{position:fixed;left:50%;bottom:24px;z-index:10;transform:translateX(-50%);
+    display:flex;gap:4px;padding:5px;border:1px solid rgba(255,255,255,.08);border-radius:999px;background:#1D1F20;
+    box-shadow:0 10px 30px rgba(0,0,0,.28),0 2px 6px rgba(0,0,0,.16);font-family:Pretendard,'Noto Sans KR',-apple-system,sans-serif}
+  .sian-tab{height:36px;padding:0 18px;margin:0;border:0;border-radius:999px;background:transparent;cursor:pointer;
+    font-family:inherit;font-size:14px;font-weight:600;line-height:14px;color:#B0B8C1;transition:background-color .15s,color .15s}
+  .sian-tab:hover{color:#fff;background:rgba(255,255,255,.08)}
+  .sian-tab.is-on{background:#2D62FA;color:#fff}
+  .sian-tab:focus-visible{outline:2px solid #7DA2FF;outline-offset:2px}
+</style>
+</head>
+<body>
+<iframe class="sian-frame" id="sian-panel-01" data-src="backup/index1.html" title="시안01 — 예스폼싸인 메인" aria-labelledby="sian-tab-01"></iframe>
+<iframe class="sian-frame" id="sian-panel-02" data-src="backup/index2.html" title="시안02 — 예스폼싸인 메인" aria-labelledby="sian-tab-02" hidden></iframe>
+
+<div class="sian-tabs" role="tablist" aria-label="시안 전환">
+  <button class="sian-tab is-on" id="sian-tab-01" type="button" role="tab" aria-selected="true" aria-controls="sian-panel-01" data-sian="01">시안01</button>
+  <button class="sian-tab" id="sian-tab-02" type="button" role="tab" aria-selected="false" aria-controls="sian-panel-02" data-sian="02" tabindex="-1">시안02</button>
+</div>
+
+<script>
+(function(){
+  var KEY='yesform-sign-main-sian';
+  var tabs=[].slice.call(document.querySelectorAll('.sian-tab'));
+  function frame(id){ return document.getElementById('sian-panel-'+id); }
+  function select(id, focus){
+    if(!frame(id)) id='01';
+    tabs.forEach(function(t){
+      var on=t.getAttribute('data-sian')===id;
+      t.classList.toggle('is-on',on); t.setAttribute('aria-selected',on?'true':'false'); t.tabIndex=on?0:-1;
+      var f=frame(t.getAttribute('data-sian'));
+      if(on && !f.getAttribute('src')) f.setAttribute('src', f.getAttribute('data-src')); // 처음 볼 때 불러옴
+      f.hidden=!on;
+      if(on && focus) t.focus();
+    });
+    try{ localStorage.setItem(KEY,id); }catch(e){}
+    if(location.hash!=='#'+id) history.replaceState(null,'','#'+id);
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){ select(t.getAttribute('data-sian')); });
+    t.addEventListener('keydown',function(e){
+      var n=null;
+      if(e.key==='ArrowRight') n=(i+1)%tabs.length;
+      if(e.key==='ArrowLeft') n=(i-1+tabs.length)%tabs.length;
+      if(n!==null){ e.preventDefault(); select(tabs[n].getAttribute('data-sian'), true); }
+    });
+  });
+  window.addEventListener('hashchange',function(){ var h=location.hash.replace('#',''); if(frame(h)) select(h); });
+  var start=(location.hash||'').replace('#','');
+  if(!frame(start)){ try{ start=localStorage.getItem(KEY)||'01'; }catch(e){ start='01'; } }
+  select(start);
+})();
+</script>
+</body>
+</html>

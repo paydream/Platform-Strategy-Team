@@ -2,6 +2,35 @@
   "version": 2,
   "projects": [
     {
+      "id": "20261026-172733-css",
+      "title": "예스폼싸인 메인",
+      "team": "design",
+      "category": "웹 메인",
+      "desc": "",
+      "created": "2026.10.26",
+      "updated": "2026.10.26",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261026-172733-css",
+          "label": "v1",
+          "title": "예스폼싸인 메인",
+          "desc": "",
+          "created": "2026.10.26",
+          "folder": "archive/20261026-172733-css",
+          "preview": "archive/20261026-172733-css/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "v01",
+              "href": "archive/20261026-172733-css/v01/index.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "20261023-164337-assets",
       "title": "에디터 프롬프트 페이지",
       "team": "design",
