@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>예스폼싸인 메인 261027 · 시안 비교</title>
+<!--
+  예스폼싸인 메인 261027 — 시안 이미지 보기 (2026-10-27)
+  · images/sian1.png = Figma 메인_261027_시안1 (53814:29874)
+  · images/sian2.png = Figma 메인_261027_시안2 (53814:31366)
+  · 1400 프레임을 가운데 두고 좌우를 260씩 늘려 1920 으로 뽑은 PNG (1배, 무손실)
+  · 아래 가운데 버튼으로 시안 전환 · ←/→ 키 · 주소 뒤 #1 / #2 로 바로 열기 · 마지막으로 본 시안 기억
+  · 화면이 1920보다 좁으면 이미지 가운데를 기준으로 보여 줌 (좌우 여백 부분이 먼저 잘림)
+-->
+<style>
+  html,body{margin:0;background:#fff}
+  body{font-family:Pretendard,'Pretendard Variable','Noto Sans KR',-apple-system,sans-serif}
+  .stage{width:100%;overflow-x:hidden}
+  .shot{display:block;width:1920px;max-width:none;height:auto;margin-left:calc(50% - 960px)}
+  .shot[hidden]{display:none}
+  /* 1400(본문)보다 좁은 화면: 왼쪽 여백 260 만 잘라 내고 화면 전체를 가로 스크롤 */
+  @media (max-width:1399px){ .stage{overflow:visible;width:1660px} .shot{margin-left:-260px} }
+  /* 전환 바 — 어두운 바탕 #1D1F20 · 선택 #2D62FA · 모서리 8 */
+  .tabs{position:fixed;left:50%;bottom:24px;z-index:10;transform:translateX(-50%);
+    display:flex;gap:4px;padding:4px;border:1px solid rgba(255,255,255,.08);border-radius:8px;background:#1D1F20;
+    box-shadow:0 10px 30px rgba(0,0,0,.28),0 2px 6px rgba(0,0,0,.16)}
+  .tab{height:36px;padding:0 18px;margin:0;border:0;border-radius:8px;background:transparent;cursor:pointer;
+    font-family:inherit;font-size:14px;font-weight:600;line-height:14px;color:#B0B8C1;transition:background-color .15s,color .15s}
+  .tab:hover{color:#fff;background:rgba(255,255,255,.08)}
+  .tab.is-on{background:#2D62FA;color:#fff}
+  .tab:focus-visible{outline:2px solid #7DA2FF;outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="stage">
+  <img class="shot" id="panel-1" src="images/sian1.png" width="1920" height="5305" alt="예스폼싸인 메인 261027 시안1" aria-labelledby="tab-1">
+  <img class="shot" id="panel-2" src="images/sian2.png" width="1920" height="5199" alt="예스폼싸인 메인 261027 시안2" aria-labelledby="tab-2" hidden>
+</div>
+
+<div class="tabs" role="tablist" aria-label="시안 전환">
+  <button class="tab is-on" id="tab-1" type="button" role="tab" aria-selected="true" aria-controls="panel-1" data-sian="1">시안1</button>
+  <button class="tab" id="tab-2" type="button" role="tab" aria-selected="false" aria-controls="panel-2" data-sian="2" tabindex="-1">시안2</button>
+</div>
+
+<script>
+(function(){
+  var KEY='yesform-sign-main-261027-sian';
+  var tabs=[].slice.call(document.querySelectorAll('.tab'));
+  function panel(id){ return document.getElementById('panel-'+id); }
+  function select(id, focus){
+    if(!panel(id)) id='1';
+    tabs.forEach(function(t){
+      var on=t.getAttribute('data-sian')===id;
+      t.classList.toggle('is-on',on); t.setAttribute('aria-selected',on?'true':'false'); t.tabIndex=on?0:-1;
+      panel(t.getAttribute('data-sian')).hidden=!on;
+      if(on && focus) t.focus();
+    });
+    window.scrollTo(0,0);
+    try{ localStorage.setItem(KEY,id); }catch(e){}
+    if(location.hash!=='#'+id) history.replaceState(null,'','#'+id);
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){ select(t.getAttribute('data-sian')); });
+    t.addEventListener('keydown',function(e){
+      var n=null;
+      if(e.key==='ArrowRight') n=(i+1)%tabs.length;
+      if(e.key==='ArrowLeft') n=(i-1+tabs.length)%tabs.length;
+      if(n!==null){ e.preventDefault(); select(tabs[n].getAttribute('data-sian'), true); }
+    });
+  });
+  window.addEventListener('hashchange',function(){ var h=location.hash.replace('#',''); if(panel(h)) select(h); });
+  var start=(location.hash||'').replace('#','');
+  if(!panel(start)){ try{ start=localStorage.getItem(KEY)||'1'; }catch(e){ start='1'; } }
+  select(start);
+})();
+</script>
+</body>
+</html>
