@@ -1,0 +1,151 @@
+/* =========================================================
+   플로팅 버튼 (2026-10-28) — 화면 오른쪽 아래 고정
+   디자인가이드_2025 Figma › 메인페이지 › 메인 플로팅 뱃지(6248:6047) › 00_예스폼메인페이지(1920 × 1080)
+   · 위치는 Figma 프레임 오른쪽 · 아래 끝에서 잰 값 그대로 (화면 폭이 달라도 오른쪽 아래 기준)
+   · 이 페이지는 00_프롬프트/시안01-1 을 복사해서 플로팅만 더한 것 — 나머지 화면은 css/style.css 그대로
+   ========================================================= */
+
+/* ---------- 플로팅_싸인 (6248:12027) — 106 × 105 · 오른쪽 16 · 아래 106 ----------
+   말풍선(0, 0 · 106 × 29) + 폼 타일 그림 + 도장 그림
+   그림은 Figma 에서 그림자까지 넣어 3배 PNG 로 따로 뽑음 → 그림자 몫만큼 그림이 커서 자리 · 크기가 Figma 박스와 다름
+     폼 타일  assets/images/floating-sign-form@3x.png  (225 × 243) — 박스 5.12, 29 · 72.96 × 76  → 그림자 포함 3.22, 29 · 74.92 × 80.96
+     도장     assets/images/floating-sign-stamp@3x.png (166 × 165) — 박스 59.98, 29 · 38.23 × 38  → 그림자 포함 53.51, 27.47 · 55.12 × 54.89
+   (폼 타일 위에 도장이 올라감 — Figma 순서 그대로) */
+.floating-sign{
+  position:fixed;right:16px;bottom:106px;z-index:900;
+  display:block;width:106px;height:105px;
+  -webkit-tap-highlight-color:transparent;
+}
+.floating-sign__form{position:absolute;left:3.22px;top:29px;width:74.92px;height:80.96px;display:block;max-width:none;transform-origin:51% 47%}
+.floating-sign__stamp{position:absolute;left:53.51px;top:27.47px;width:55.12px;height:54.89px;display:block;max-width:none;transform-origin:46% 37%}
+
+/* 말풍선 — 바탕 #1B52ED · 모서리 4 · 안쪽 위아래 4 / 좌우 6 · 글자 12 / 16 Medium 흰색 + 아래 꼬리 27 × 5 */
+.floating-sign__tip{position:absolute;left:0;top:0;z-index:1;display:flex;flex-direction:column;align-items:center;width:106px;transform-origin:50% 100%}
+.floating-sign__tip-box{
+  position:relative;display:block;box-sizing:border-box;width:106px;padding:4px 6px;border-radius:4px;background:#1B52ED;
+  color:#fff;font:500 12px/16px "Pretendard Variable",Pretendard,-apple-system,sans-serif;letter-spacing:0;
+  white-space:nowrap;text-align:center;
+}
+.floating-sign__tip-tail{display:block;width:27px;height:5px}
+
+/* ---------- 플로팅_문의 (6248:11992) — 60 × 60 · 오른쪽 40 · 아래 40 ----------
+   흰 원 + 테두리 #EAEAEA + 말풍선 아이콘(#0472E3 → #3893F1) — assets/icons/floating-inquiry.svg */
+.floating-inquiry{position:fixed;right:40px;bottom:40px;z-index:900;display:block;width:60px;height:60px;border-radius:50%}
+.floating-inquiry img{display:block;width:60px;height:60px}
+
+.floating-sign:focus-visible,.floating-inquiry:focus-visible{outline:2px solid #2D62FA;outline-offset:3px;border-radius:8px}
+
+/* =========================================================
+   플로팅_싸인 등장 — 위쪽 검은 바의 탭으로 시안을 고름 (js/floating.js 가 data-sian 을 바꿈)
+     시안01  페이지에 들어오면 한 번 등장 (data-enter)
+     시안02  스크롤을 내리면 아래에서 위로 등장 · 맨 위로 올리면 다시 숨음 (data-scroll)
+   ========================================================= */
+
+/* =========================================================
+   시안01 — 페이지에 들어오면 한 번 (js/floating.js 가 data-enter 를 바꿈)
+     wait  그림을 불러오는 동안 숨김 (JS 가 안 돌면 3초 뒤 그냥 보임)
+     play  아래 순서로 등장
+   ---------------------------------------------------------
+   0.10초  폼 타일 · 도장 동시에 — 폼은 왼쪽 아래(-24, +28), 도장은 오른쪽 아래(+24, +28)에서 대각선으로 떠올라 제자리로
+   0.50초  말풍선 — 6px 아래에서 떠오르며 나타남
+   1.30초~ 말풍선 글자 깜빡임 — 1.6초마다 100% → 35% → 100% (계속)
+   움직임은 모두 같은 스프링 곡선(덜 튀는 쪽) — 목표 자리를 1~2px 정도만 살짝 지나쳤다 돌아옴
+     · 폼 · 도장: 위치 · 기울기 0.6초 · 크기 90% → 100% 0.45초 · 투명도 0.25초 → 약 0.2초 만에 자리에 닿고 0.5초 안에 멈춤
+     · 말풍선: 위치 0.5초 · 크기 0.3초 · 투명도 0.2초
+     · 찌그러짐(가로세로 따로 늘이기)은 쓰지 않음 — 그림이 뭉개져 보여서
+   · 뱃지에 마우스를 올리면 깜빡임을 멈추고 글자를 또렷하게 보여 줌
+   · 움직임 줄이기 설정이면 등장 · 깜빡임 없이 처음부터 그대로 보임
+   ========================================================= */
+.floating-sign[data-enter="wait"] .floating-sign__form,
+.floating-sign[data-enter="wait"] .floating-sign__stamp,
+.floating-sign[data-enter="wait"] .floating-sign__tip{opacity:0;animation:fs-show 0s linear 3s forwards}
+@keyframes fs-show{to{opacity:1}}
+
+/* 순서: 투명도, 위치 · 기울기, 크기 (셋 다 같은 순서라 아래에서 곡선을 한 번에 바꿈) */
+.floating-sign[data-enter="play"] .floating-sign__form{
+  animation:fs-fade .25s ease-out .1s backwards,fs-form-move .6s cubic-bezier(.25,1.2,.45,1) .1s backwards,fs-grow .45s cubic-bezier(.2,.7,.3,1) .1s backwards;
+}
+.floating-sign[data-enter="play"] .floating-sign__stamp{
+  animation:fs-fade .25s ease-out .1s backwards,fs-stamp-move .6s cubic-bezier(.25,1.2,.45,1) .1s backwards,fs-grow .45s cubic-bezier(.2,.7,.3,1) .1s backwards;
+}
+.floating-sign[data-enter="play"] .floating-sign__tip{
+  animation:fs-fade .2s ease-out .5s backwards,fs-tip-move .5s cubic-bezier(.25,1.2,.45,1) .5s backwards,fs-grow .3s cubic-bezier(.2,.7,.3,1) .5s backwards;
+}
+/* 위치 · 기울기 곡선 = 스프링 (지원하지 않는 브라우저는 위의 cubic-bezier 를 그대로 씀) */
+.floating-sign[data-enter="play"] :is(.floating-sign__form,.floating-sign__stamp,.floating-sign__tip){
+  animation-timing-function:ease-out,linear(0, 0.006 1.2%, 0.023 2.5%, 0.049 3.8%, 0.082 5%, 0.121 6.2%, 0.213 8.8%, 0.571 17.5%, 0.705 21.2%, 0.782 23.8%, 0.849 26.2%, 0.904 28.7%, 0.949 31.2%, 0.999 35%, 1.021 37.5%, 1.043 41.2%, 1.05 43.8%, 1.054 47.5%, 1.05 52.5%, 1.016 68.8%, 1.004 77.5%, 0.997 90%, 1),cubic-bezier(.2,.7,.3,1);
+}
+.floating-sign[data-enter="play"] .floating-sign__tip-box{animation:fs-blink 1.6s ease-in-out 1.3s infinite}
+
+@keyframes fs-fade{from{opacity:0}to{opacity:1}}
+@keyframes fs-grow{from{scale:.9}to{scale:none}}
+/* 폼 타일 — 왼쪽 아래에서 */
+@keyframes fs-form-move{from{translate:-24px 28px;rotate:-5deg}to{translate:none;rotate:none}}
+/* 도장 — 오른쪽 아래에서 */
+@keyframes fs-stamp-move{from{translate:24px 28px;rotate:8deg}to{translate:none;rotate:none}}
+/* 말풍선 — 아래에서 */
+@keyframes fs-tip-move{from{translate:0 6px}to{translate:none}}
+/* 말풍선 글자 깜빡임 — 말풍선은 그대로, 글자만 */
+@keyframes fs-blink{0%,100%{color:rgba(255,255,255,1)}50%{color:rgba(255,255,255,.35)}}
+
+/* =========================================================
+   시안02 — 스크롤하면 아래에서 위로 (js/floating.js 가 data-scroll 을 바꿈)
+     hidden  맨 위(스크롤 100px 이하) — 숨김 · 누를 수 없음
+     shown   100px 넘게 내리면 — 폼 타일 · 도장 · 말풍선이 한 덩어리로 48px 아래에서 위로 떠오름 → 말풍선 빛 지나가기
+   ---------------------------------------------------------
+   나타날 때  위치 0.6초(시안01 과 같은 스프링) · 크기 90% → 100% 0.45초 · 투명도 0.25초 — 셋 다 같이
+   빛 지나가기 올라오기 시작하고 0.4초 뒤부터 말풍선 위로 흰 빛줄기가 2.2초마다 한 번 왼쪽 → 오른쪽으로 훑고 지나감 (계속)
+              말풍선 크기 · 위치는 그대로 · 뱃지에 마우스를 올리면 빛줄기를 멈추고 감춤
+   숨을 때    셋 다 같이 0.25초 동안 아래로 빠지며 흐려짐 (점점 빨라지는 곡선)
+   ========================================================= */
+.floating-sign[data-scroll="hidden"]{visibility:hidden;pointer-events:none;transition:visibility 0s linear .35s}
+.floating-sign[data-scroll="shown"]{visibility:visible;transition:visibility 0s}
+
+/* 숨을 때 */
+.floating-sign[data-scroll="hidden"] :is(.floating-sign__form,.floating-sign__stamp,.floating-sign__tip){
+  opacity:0;translate:0 48px;scale:.9;
+  transition:opacity .25s ease-in .05s,translate .25s cubic-bezier(.4,0,1,1) .05s,scale .25s cubic-bezier(.4,0,1,1) .05s;
+}
+/* 나타날 때 — 순서: 투명도, 위치, 크기 */
+.floating-sign[data-scroll="shown"] :is(.floating-sign__form,.floating-sign__stamp,.floating-sign__tip){
+  transition:opacity .25s ease-out,translate .6s cubic-bezier(.25,1.2,.45,1),scale .45s cubic-bezier(.2,.7,.3,1);
+  transition-timing-function:ease-out,linear(0, 0.006 1.2%, 0.023 2.5%, 0.049 3.8%, 0.082 5%, 0.121 6.2%, 0.213 8.8%, 0.571 17.5%, 0.705 21.2%, 0.782 23.8%, 0.849 26.2%, 0.904 28.7%, 0.949 31.2%, 0.999 35%, 1.021 37.5%, 1.043 41.2%, 1.05 43.8%, 1.054 47.5%, 1.05 52.5%, 1.016 68.8%, 1.004 77.5%, 0.997 90%, 1),cubic-bezier(.2,.7,.3,1); /* 위치 곡선 = 스프링 (지원하지 않는 브라우저는 바로 위 cubic-bezier) */
+}
+/* 말풍선 빛 지나가기 — 말풍선(파란 박스) 안에서만 흰 빛줄기(박스 폭 40% · 20° 기울임 · 가운데 흰색 55%)가 지나감
+   2.2초 중 처음 35%(약 0.8초) 동안 왼쪽 밖 → 오른쪽 밖으로 지나가고, 나머지는 기다림
+   → 지나가는 것부터 시작하므로 0.4초에 바로 첫 빛줄기가 지나감
+   기다리는 동안 빛줄기는 말풍선 오른쪽 밖(300%)에 있어 끝에 희미하게 남지 않음 */
+.floating-sign[data-scroll="shown"] .floating-sign__tip-box{overflow:hidden}
+.floating-sign[data-scroll="shown"] .floating-sign__tip-box::after{
+  content:"";position:absolute;top:0;bottom:0;left:0;width:40%;pointer-events:none;
+  background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.55),rgba(255,255,255,0));
+  transform:translateX(-120%) skewX(-20deg);
+  animation:fs-shine 2.2s ease-in-out .4s infinite;
+}
+.floating-sign[data-scroll="shown"]:hover .floating-sign__tip-box::after,
+.floating-sign[data-scroll="shown"]:focus-visible .floating-sign__tip-box::after{animation:none}
+@keyframes fs-shine{0%{transform:translateX(-120%) skewX(-20deg)}35%,100%{transform:translateX(300%) skewX(-20deg)}}
+/* 탭을 바꿀 때는 숨김 상태로 바로 넘어감 (사라지는 움직임 없이) */
+.floating-sign.is-instant,.floating-sign.is-instant *{transition:none!important}
+
+/* ---------- 시안01 — 마우스를 올리면 글자 깜빡임을 멈추고 또렷하게 ---------- */
+.floating-sign:hover .floating-sign__tip-box,
+.floating-sign:focus-visible .floating-sign__tip-box{animation:none}
+
+@media (prefers-reduced-motion:reduce){
+  /* 시안01: 처음부터 그대로 보임 · 시안02: 움직임 없이 바로 나타나고 숨음 · 깜빡임 · 빛 지나가기 없음 */
+  .floating-sign[data-enter] .floating-sign__form,.floating-sign[data-enter] .floating-sign__stamp,
+  .floating-sign[data-enter] .floating-sign__tip{animation:none!important;opacity:1!important}
+  .floating-sign,.floating-sign *{transition:none!important}
+  .floating-sign .floating-sign__tip-box,.floating-sign .floating-sign__tip-box::after{animation:none!important}
+}
+
+/* 위쪽 검은 바 — 시안01 의 시안 전환 바(.version-switch) 모양 그대로 (검토용 · 실제 화면에는 없음)
+   시안01 · 시안02 탭 + "등장 다시 보기"(시안01 에서만 보임) */
+.version-switch{align-items:center}
+.version-switch__btn{border:0;cursor:pointer;font-family:inherit;background:transparent}
+.version-switch__sep{width:1px;height:16px;margin:0 8px;background:rgba(255,255,255,.24)}
+.version-switch__btn--replay{box-shadow:inset 0 0 0 1px rgba(255,255,255,.3)}
+/* 시안02 에서는 "등장 다시 보기"를 감추되 자리는 남겨 둠 — 탭이 옆으로 움직이지 않게 */
+.version-switch__btn[hidden]{display:inline-flex;visibility:hidden}
+.version-switch__sep[hidden]{display:block;visibility:hidden}
