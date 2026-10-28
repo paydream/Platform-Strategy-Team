@@ -2,6 +2,35 @@
   "version": 2,
   "projects": [
     {
+      "id": "20261028-150735-261028",
+      "title": "예스폼 메인페이지 싸인 플로팅 뱃지",
+      "team": "design",
+      "category": "웹 메인",
+      "desc": "",
+      "created": "2026.10.28",
+      "updated": "2026.10.28",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261028-150735-261028",
+          "label": "v1",
+          "title": "예스폼 메인페이지 싸인 플로팅 뱃지",
+          "desc": "",
+          "created": "2026.10.28",
+          "folder": "archive/20261028-150735-261028",
+          "preview": "archive/20261028-150735-261028/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261028-150735-261028/index.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "20261026-175725-261026",
       "title": "예스폼싸인 메인",
       "team": "design",
