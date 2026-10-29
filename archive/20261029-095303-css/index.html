@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>예스폼싸인 문서/계약 자료실 · 시안 비교</title>
+<!--
+  예스폼싸인 문서/계약 자료실 (2026-10-29)
+  Figma: 예스폼싸인_2025 › 수정시안_PC — 시안01 = 프레임 "01"(13255:2464, 그리드형) · 시안02 = 프레임 "02"(13255:2923, 리스트형)
+  · 왼쪽 메뉴 · 머리말 · 멤버십 배너 · 리스트형 표는 코드, 인기 서식 · 그리드형 카드 목록은 Figma 의 화면 캡처 이미지
+  · 아래 가운데 버튼으로 시안 전환 · ←/→ 키 · 주소 뒤 #1 / #2 · 마지막으로 본 시안 기억
+  · 스타일 css/style.css · 스크립트 js/main.js · 그림 images/
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="frame" id="frame">
+
+  <!-- 왼쪽 메뉴 -->
+  <aside class="nav">
+    <div class="nav__logo"><img src="images/logo-yesformsign@2x.png" width="104" height="32" alt="예스폼싸인"></div>
+    <div class="nav__user">
+      <p class="nav__name">예스폼 <em>님</em><span class="nav__grade"><b>무료</b><span>회원</span></span></p>
+      <div class="nav__btns">
+        <a class="nav__btn nav__btn--start">계약 시작하기</a>
+        <a class="nav__btn nav__btn--plan">요금제 구매</a>
+      </div>
+    </div>
+    <ul class="nav__menu">
+      <li>내 계약 현황</li>
+      <li>서명 관리</li>
+      <li class="is-on">문서/계약 자료실</li>
+      <li>주소록 관리</li>
+      <li>회원정보 관리</li>
+    </ul>
+    <div class="nav__foot"><span>고객센터</span><i></i><span>로그아웃</span></div>
+  </aside>
+
+  <!-- 머리말 -->
+  <div class="head">
+    <h1 class="head__title" style="margin:0">문서/계약 자료실</h1>
+    <p class="head__desc">다양한 인기 계약서를 예스폼싸인에서 무료로 다운받으실 수 있습니다.</p>
+    <p class="head__path">문서/계약 자료실</p>
+  </div>
+
+  <!-- 인기 서식 (화면 캡처) -->
+  <img class="popular" src="images/popular-forms.png" width="1376" height="529" alt="인기 서식 — 개인정보활용동의서 · 건물 임대차계약서 · 부동산 월세 계약서 · 부동산임대계약서 양식 · 사직서">
+
+  <!-- 멤버십 배너 -->
+  <a class="banner">
+    <span class="banner__body">
+      <img class="banner__icon" src="images/banner-membership-icon.png" width="60" height="45" alt="">
+      <span class="banner__text">예스폼 프리미엄 회원 결제 시 예스폼싸인 계약 건수 증정 혜택까지!<br>패밀리사이트 멤버십 혜택을 한 눈에 확인하세요.</span>
+    </span>
+    <span class="banner__btn">예스폼 멤버십 구경하기</span>
+  </a>
+
+  <!-- 시안01 · 그리드형 -->
+  <div class="sian" id="panel-1" role="tabpanel" aria-labelledby="tab-1">
+    <img class="grid-shot" src="images/forms-grid.png" width="1342" height="748" alt="서식 카드 목록(그리드형)">
+    <p class="grid-label grid-label--1"><img class="badge" src="images/1.png" width="16" height="16" alt="N">홍보영상물 제작계약서</p>
+    <p class="grid-label grid-label--2"><img class="badge" src="images/2.png" width="35" height="16" alt="NEW">토목측량 용역계약서</p>
+    <p class="grid-label grid-label--3"><img class="badge" src="images/Frame%20444444500.png" width="14" height="18" alt="N">표준 민간건설공사 도급계약서</p>
+  </div>
+
+  <!-- 시안02 · 리스트형 -->
+  <div class="sian" id="panel-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+    <div class="tools">
+      <img class="tools__view" src="images/view-toggle@2x.png" width="84" height="37" alt="보기 방식 — 그리드 · 리스트">
+      <div class="tools__form">
+        <div class="select">전체<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 10l5 5 5-5" stroke="#666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="search">계약서 검색<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6" stroke="#666" stroke-width="1.5"/><path d="M15.5 15.5L19 19" stroke="#666" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      </div>
+    </div>
+    <table class="list">
+      <thead><tr><th class="c-type">분류</th><th class="c-name">문서명</th><th class="c-down">다운로드</th></tr></thead>
+      <tbody id="list-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="tabs" role="tablist" aria-label="시안 전환">
+  <button class="tab is-on" id="tab-1" type="button" role="tab" aria-selected="true" aria-controls="panel-1" data-sian="1" title="그리드형">시안01</button>
+  <button class="tab" id="tab-2" type="button" role="tab" aria-selected="false" aria-controls="panel-2" data-sian="2" title="리스트형" tabindex="-1">시안02</button>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>

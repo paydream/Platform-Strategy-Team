@@ -1,0 +1,104 @@
+/* ==========================================================================
+   예스폼싸인 문서/계약 자료실 — 시안01(그리드형) · 시안02(리스트형) (2026-10-29)
+   Figma: 예스폼싸인_2025 › 수정시안_PC › 프레임 "01"(13255:2464) · "02"(13255:2923) — 1920 × 1623
+   · 글자 · 버튼 · 표처럼 코드로 그릴 수 있는 곳은 코드, 화면 캡처(인기 서식 · 서식 카드 목록)는 이미지
+   · 자리는 Figma 프레임 좌표 그대로(절대 위치) — 프레임 높이 1623 에서 잘림(Figma 와 같음)
+   ========================================================================== */
+*{box-sizing:border-box}
+html,body{margin:0;background:#fff;color:#000}
+body{font-family:Pretendard,'Pretendard Variable','Noto Sans KR',-apple-system,sans-serif;letter-spacing:-.1px;padding-bottom:84px}
+img{display:block;max-width:none}
+p{margin:0}
+
+/* 프레임 1920 × 1623 — 화면이 1920 보다 좁으면 js/main.js 가 zoom 으로 줄여서 전체가 보이게 함 */
+.frame{position:relative;width:1920px;height:1623px;margin:0 auto;overflow:hidden;background:#fff}
+
+/* ---------- 왼쪽 메뉴 (Navigation · 300 × 1623 · #F6F8FC) ---------- */
+.nav{position:absolute;left:0;top:0;width:300px;height:1623px;background:#F6F8FC;display:flex;flex-direction:column}
+.nav__logo{display:flex;justify-content:center;height:97px;padding-top:65px}
+.nav__user{height:272px;padding:50px 30px}
+.nav__name{font-size:20px;line-height:32px;font-weight:600;white-space:nowrap}
+.nav__name em{font-style:normal;font-weight:400}
+.nav__grade{font-size:16px;line-height:25.6px;color:#666;margin-left:6px}
+.nav__grade b{font-weight:600;color:#0472E3}
+.nav__grade span{font-weight:600}
+.nav__btns{display:flex;flex-direction:column;gap:10px;padding-top:30px}
+.nav__btn{display:flex;align-items:center;justify-content:center;width:240px;height:50px;border-radius:5px;font-size:16px;line-height:25.6px;font-weight:600}
+.nav__btn--start{background:linear-gradient(90deg,#3893F1,#0472E3);color:#fff}
+.nav__btn--plan{background:#fff;border:1px solid #0472E3;color:#0472E3}
+.nav__menu{flex:1;margin:0;padding:15px 0 0;list-style:none}
+.nav__menu li{padding:0 30px;font-size:16px;line-height:25.6px;font-weight:600}
+.nav__menu li+li{margin-top:30px}
+.nav__menu .is-on{color:#0472E3}
+.nav__foot{display:flex;align-items:center;justify-content:center;height:70px;padding-bottom:30px;font-size:14px;line-height:22.4px;color:#929292}
+.nav__foot i{display:block;width:1px;height:14px;margin:0 10px;background:#C2C2C2}
+
+/* ---------- 머리말 (400, 70 · 1280 · 아래 선 #EAEAEA) ---------- */
+.head{position:absolute;left:400px;top:70px;width:1280px;height:99px;padding-bottom:30px;border-bottom:1px solid #EAEAEA}
+.head__title{font-size:24px;line-height:33.6px;font-weight:600}
+.head__desc{margin-top:10px;font-size:16px;line-height:24px;color:#666}
+.head__path{position:absolute;left:1174.73px;top:42px;font-size:16px;line-height:25.6px;color:#666}
+
+/* ---------- 인기 서식 — 화면 캡처 이미지 (354, 196 · 1376 × 529) ---------- */
+.popular{position:absolute;left:354px;top:196px;width:1376px;height:529px}
+
+/* ---------- 멤버십 배너 (400, 761 · 1280 × 90 · 모서리 10) ---------- */
+.banner{position:absolute;left:400px;top:761px;width:1280px;height:90px;display:flex;align-items:center;justify-content:space-between;padding:20px 30px;
+  border-radius:10px;background:#F6F9FB url(../images/banner-membership-bg.png) center/cover no-repeat}
+.banner__body{display:flex;align-items:center;gap:47px}
+.banner__icon{width:60px;height:45.42px}
+.banner__text{font-size:16px;line-height:24px;white-space:nowrap}
+.banner__btn{display:flex;align-items:center;width:225px;height:50px;padding:0 22px 0 27px;border-radius:25px;background:#fff;font-size:16px;line-height:24px;font-weight:600;color:#0472E3;white-space:nowrap}
+
+/* ==========================================================================
+   시안01 — 그리드형: 서식 카드 목록은 화면 캡처 이미지 (356, 914 · 1342 × 748 · 보기 버튼 · 검색칸 포함)
+   카드 3장의 이름 칸만 Figma 처럼 코드로 덮음 (NEW · N 표시)
+   ========================================================================== */
+.grid-shot{position:absolute;left:356px;top:914px;width:1342px;height:748px}
+.grid-label{position:absolute;display:flex;align-items:center;justify-content:center;background:#fff;font-size:15px;line-height:21px;color:#666;white-space:nowrap}
+.grid-label--1{left:402px;top:1357px;width:232px;gap:5px}
+.grid-label--2{left:662px;top:1348px;width:236px;flex-direction:column;gap:2px}
+.grid-label--3{left:922px;top:1357px;width:236px;gap:6px}
+
+/* 표시 — 올려 주신 그림 그대로: images/1.png(N 16 × 16) · 2.png(NEW 35 × 16) · Frame 444444500.png(접힌 종이 N 14 × 18) */
+.badge{display:block;flex:0 0 auto}
+
+/* ==========================================================================
+   시안02 — 리스트형: 보기 버튼 · 분류 · 검색칸(931) + 표(998, 1280 폭)
+   ========================================================================== */
+.tools{position:absolute;left:400px;top:931px;width:1280px;height:50px;display:flex;align-items:flex-end;justify-content:space-between}
+.tools__view{width:84px;height:37px}
+.tools__form{display:flex;gap:10px}
+.select,.search{display:flex;align-items:center;height:50px;border:1px solid #C2C2C2;border-radius:5px;background:#fff;font-size:16px;color:#666}
+.select{justify-content:space-between;width:160px;padding:0 20px;line-height:25.6px}
+.search{position:relative;width:282px;padding:0 50px 0 20px}
+.select svg,.search svg{display:block;width:24px;height:24px}
+.search svg{position:absolute;left:243px;top:12px}
+
+.list{position:absolute;left:400px;top:998px;width:1280px;margin:0;border-collapse:collapse;border-top:1px solid #000;font-size:16px;line-height:24px}
+.list th{height:60px;padding:0;font-weight:600;border-bottom:1px solid #EAEAEA}
+.list td{height:59.5px;padding:0;color:#666;border-bottom:1px solid #EAEAEA}
+.list .c-type{width:125px;text-align:center}
+/* 칸 나눔 — 분류 125 · 문서명 · 다운로드 226 / 글자 시작: 문서명 269 · 아이콘 1117 (표 왼쪽 끝 기준, Figma 그대로) */
+.list th,.list td{text-align:left}
+.list .c-type{text-align:center}
+.list .c-name{padding-left:144px}
+.list th.c-name{padding-left:494px}   /* "문서명" 가운데가 640 */
+.list .c-down{width:226px}
+.list th.c-down{padding-left:91px}    /* "다운로드" 가운데가 1173 */
+.name{display:flex;align-items:center;gap:6px}
+.down{display:flex;gap:12px;padding-left:63px}
+.down img{width:28.8px;height:28.8px}
+
+/* ==========================================================================
+   시안 전환 바 — 어두운 바탕 #1D1F20 · 선택 #2D62FA · 모서리 8 (다른 시안 보기 화면과 같음)
+   ========================================================================== */
+.tabs{position:fixed;left:50%;bottom:24px;z-index:10;transform:translateX(-50%);
+  display:flex;gap:4px;padding:4px;border:1px solid rgba(255,255,255,.08);border-radius:8px;background:#1D1F20;
+  box-shadow:0 10px 30px rgba(0,0,0,.28),0 2px 6px rgba(0,0,0,.16)}
+.tab{height:36px;padding:0 18px;margin:0;border:0;border-radius:8px;background:transparent;cursor:pointer;
+  font-family:inherit;font-size:14px;font-weight:600;line-height:14px;color:#B0B8C1;letter-spacing:0;transition:background-color .15s,color .15s}
+.tab:hover{color:#fff;background:rgba(255,255,255,.08)}
+.tab.is-on{background:#2D62FA;color:#fff}
+.tab:focus-visible{outline:2px solid #7DA2FF;outline-offset:2px}
+[hidden]{display:none!important}
