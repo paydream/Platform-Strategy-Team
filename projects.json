@@ -2,35 +2,6 @@
   "version": 2,
   "projects": [
     {
-      "id": "20261029-095303-css",
-      "title": "[예스폼싸인] 문서자료실 NEW 뱃지",
-      "team": "design",
-      "category": "웹 메인",
-      "desc": "",
-      "created": "2026.10.29",
-      "updated": "2026.10.29",
-      "hidden": false,
-      "final": null,
-      "versions": [
-        {
-          "id": "20261029-095303-css",
-          "label": "v1",
-          "title": "[예스폼싸인] 문서자료실 NEW 뱃지",
-          "desc": "",
-          "created": "2026.10.29",
-          "folder": "archive/20261029-095303-css",
-          "preview": "archive/20261029-095303-css/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261029-095303-css/index.html"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "id": "20261026-175725-261026",
       "title": "[예스폼싸인] 메인 시안",
       "team": "design",
@@ -102,6 +73,51 @@
             {
               "label": "시안 01",
               "href": "archive/20261028-174942-222-1/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261029-152020-css",
+          "label": "v5",
+          "title": "[예스폼싸인] 메인 시안",
+          "desc": "",
+          "created": "2026.10.29",
+          "folder": "archive/20261029-152020-css",
+          "preview": "archive/20261029-152020-css/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261029-152020-css/index.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "20261029-095303-css",
+      "title": "[예스폼싸인] 문서자료실 NEW 뱃지",
+      "team": "design",
+      "category": "웹 메인",
+      "desc": "",
+      "created": "2026.10.29",
+      "updated": "2026.10.29",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261029-095303-css",
+          "label": "v1",
+          "title": "[예스폼싸인] 문서자료실 NEW 뱃지",
+          "desc": "",
+          "created": "2026.10.29",
+          "folder": "archive/20261029-095303-css",
+          "preview": "archive/20261029-095303-css/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261029-095303-css/index.html"
             }
           ]
         }

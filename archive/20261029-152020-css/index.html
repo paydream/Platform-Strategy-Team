@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>예스폼싸인 메인 261029 · 시안 비교</title>
+<!--
+  예스폼싸인 메인 261029 (2026-10-29) — 261028 을 그대로 가져와 히어로 아래 이미지만 바꿈
+  Figma: 싸인_디자인시스템 › 홈페이지
+    시안01 = "메인_261028_시안3"(53856:24444) · 시안02 = "메인_261028_시안4"(53862:28345)
+  · 위쪽 헤더 + 히어로는 코드 (두 시안이 같음) — css/header.css · css/main.css · js/main.js
+      배경 그라데이션 움직임 · 제목 하이라이트는 261026/최종 과 같은 방식
+      영상: 이 폴더의 "수정222 (1).mp4" — 소리 없이 자동 재생 · 반복
+  · 히어로 아래는 Figma 이미지 — images/sian1-body.png · images/sian2-body.png (1920 그대로 · 1배)
+  · 아래 가운데 버튼으로 시안 전환 · ←/→ 키 · 주소 뒤 #1 / #2 로 바로 열기 · 마지막으로 본 시안 기억
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/header.css">
+</head>
+<body>
+
+<!-- 상단 헤더 — 싸인 디자인시스템 Header_home (53149:15065) · 261026/최종 과 같음 -->
+<header class="ys-header">
+  <div class="ys-header__inner inner">
+    <div class="ys-header__logo"><img src="images/logo-sign-header@2x.png" alt="예스폼싸인" width="104" height="32"></div>
+    <nav class="ys-header__lnb" aria-label="주 메뉴">
+      <span class="ys-header__menu">서비스가이드</span>
+      <span class="ys-header__menu">전자서명 만들기</span>
+      <span class="ys-header__menu">이용요금</span>
+      <span class="ys-header__menu">고객센터</span>
+    </nav>
+    <div class="ys-header__info">
+      <span class="ys-header__trial">
+        <button class="ys-header__btn ys-header__btn--primary" type="button">1개월 무료 체험</button>
+        <!-- 말풍선 "자동결제 걱정 없이 30일 무료 체험을 시작하세요" — Figma 그대로(글자까지 그림, SVG) · 버튼 바로 아래 가운데 -->
+        <img class="ys-header__bubble" src="images/header-beta-bubble.svg" width="170" height="59" alt="자동결제 걱정 없이 30일 무료 체험을 시작하세요">
+      </span>
+      <button class="ys-header__btn" type="button">로그인</button>
+    </div>
+  </div>
+</header>
+
+<!-- 히어로 — Figma "Frame 480960322" (1920 × 1197) · 배경 그라데이션 움직임(data-hero-anim) · 제목 하이라이트(data-hl-sweep) -->
+<section class="ys-hero" data-hero-anim aria-labelledby="ys-hero-title">
+  <div class="ys-hero__inner inner">
+    <h1 class="ys-hero__title" id="ys-hero-title">
+      <span class="ys-hero__title-line">비즈니스의 시작은 예스폼</span>
+      <span class="ys-hero__title-line" data-hl-sweep>전자계약은 예스폼싸인</span>
+    </h1>
+    <p class="ys-hero__desc">출력하고, 도장 찍고 스캔하던 계약은 이제 그만<br>작성부터 보관까지 온라인에서 한 번에 끝내세요.</p>
+    <button class="ys-hero__cta" type="button">자동결제 없는 30일 무료 체험하기</button>
+    <div class="ys-hero__media">
+      <video class="ys-hero__video" src="수정222%20(1).mp4" poster="images/hero-video-poster.jpg" width="1260" height="709"
+        autoplay muted loop playsinline preload="auto" aria-label="예스폼싸인 소개 영상 (소리 없음 · 누르면 멈춤)"></video>
+      <button class="ys-hero__play" type="button" aria-label="영상 재생"><img src="images/ic-play-24.svg" width="24" height="24" alt=""></button>
+    </div>
+  </div>
+</section>
+
+<!-- 히어로 아래 — Figma 이미지 (시안 전환) -->
+<div class="stage">
+  <div class="shot shot--count" id="panel-1" role="tabpanel" aria-labelledby="tab-1">
+    <img src="images/sian1-body.png" width="1920" height="4396" alt="예스폼싸인 메인 261029 시안01(Figma 시안3) — 히어로 아래">
+    <!-- 마지막 섹션 숫자 — 이미지에서 숫자만 지우고 코드로 얹음 · 섹션에 닿으면 0부터 세어 올라감(1회) -->
+    <p class="count" data-count>
+      <span class="count__num" style="left:708.5px" data-to="100">100</span>
+      <span class="count__num" style="left:909.5px" data-to="240">240</span>
+      <span class="count__num" style="left:1108.5px" data-to="120">120</span>
+    </p>
+  </div>
+  <img class="shot" id="panel-2" src="images/sian2-body.png" width="1920" height="4500" alt="예스폼싸인 메인 261029 시안02(Figma 시안4) — 히어로 아래" aria-labelledby="tab-2" hidden>
+</div>
+
+<div class="tabs" role="tablist" aria-label="시안 전환">
+  <button class="tab is-on" id="tab-1" type="button" role="tab" aria-selected="true" aria-controls="panel-1" data-sian="1" title="Figma 시안3">시안01</button>
+  <button class="tab" id="tab-2" type="button" role="tab" aria-selected="false" aria-controls="panel-2" data-sian="2" title="Figma 시안4" tabindex="-1">시안02</button>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>
