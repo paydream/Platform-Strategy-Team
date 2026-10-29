@@ -217,9 +217,12 @@
       "category": "웹 메인",
       "desc": "",
       "created": "2026.10.21",
-      "updated": "2026.10.21",
+      "updated": "2026.10.29",
       "hidden": false,
-      "final": null,
+      "final": {
+        "version": "20261021-172807-assets-2",
+        "href": "archive/20261021-172807-assets-2/index.html"
+      },
       "versions": [
         {
           "id": "20261021-091111-assets",
