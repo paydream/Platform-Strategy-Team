@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>예스폼싸인 메인 261030 · PC</title>
+<!--
+  예스폼싸인 메인 261030 PC (2026-10-30)
+  Figma: 싸인_디자인시스템 › 홈페이지 › "메인_261030" (53928:24438 · 1920 × 5593)
+  · 헤더 · 히어로 · "별도 가입 없이 무료로 시작하세요" 섹션은 코드, 그 사이 본문과 맨 아래는 Figma 이미지
+  · 스타일 css/pc-261030.css · css/header.css · 스크립트 js/pc-261030.js · 그림 images/ · 숫자 글꼴 fonts/
+  · 영상: 이 폴더의 "수정222 (1).mp4" — 소리 없이 자동 재생 · 반복
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="css/pc-261030.css">
+<link rel="stylesheet" href="css/header.css">
+</head>
+<body>
+
+<!-- 상단 헤더 — 싸인 디자인시스템 Header_home (53149:15065) · 261026/최종 과 같음 -->
+<header class="ys-header">
+  <div class="ys-header__inner inner">
+    <div class="ys-header__logo"><img src="images/logo-sign-header@2x.png" alt="예스폼싸인" width="104" height="32"></div>
+    <nav class="ys-header__lnb" aria-label="주 메뉴">
+      <span class="ys-header__menu">서비스가이드</span>
+      <span class="ys-header__menu">전자서명 만들기</span>
+      <span class="ys-header__menu">이용요금</span>
+      <span class="ys-header__menu">고객센터</span>
+    </nav>
+    <div class="ys-header__info">
+      <span class="ys-header__trial">
+        <button class="ys-header__btn ys-header__btn--primary" type="button">1개월 무료 체험</button>
+        <!-- 말풍선 "자동결제 걱정 없이 30일 무료 체험을 시작하세요" — Figma 그대로(글자까지 그림, SVG) · 버튼 바로 아래 가운데 -->
+        <img class="ys-header__bubble" src="images/header-beta-bubble.svg" width="170" height="59" alt="자동결제 걱정 없이 30일 무료 체험을 시작하세요">
+      </span>
+      <button class="ys-header__btn" type="button">로그인</button>
+    </div>
+  </div>
+</header>
+
+<!-- 히어로 — Figma "Frame 480960322" (1920 × 1197) · 배경 그라데이션 움직임(data-hero-anim) · 제목 하이라이트(data-hl-sweep) -->
+<section class="ys-hero" data-hero-anim aria-labelledby="ys-hero-title">
+  <div class="ys-hero__inner inner">
+    <h1 class="ys-hero__title" id="ys-hero-title">
+      <span class="ys-hero__title-line">비즈니스의 시작은 예스폼</span>
+      <span class="ys-hero__title-line" data-hl-sweep>전자계약은 예스폼싸인</span>
+    </h1>
+    <p class="ys-hero__desc">출력하고, 도장 찍고 스캔하던 계약은 이제 그만<br>작성부터 보관까지 온라인에서 한 번에 끝내세요.</p>
+    <button class="ys-hero__cta" type="button">자동결제 없는 30일 무료 체험하기</button>
+    <div class="ys-hero__media">
+      <video class="ys-hero__video" src="수정222%20(1).mp4" poster="images/hero-video-poster.jpg" width="1260" height="709"
+        autoplay muted loop playsinline preload="auto" aria-label="예스폼싸인 소개 영상 (소리 없음 · 누르면 멈춤)"></video>
+      <button class="ys-hero__play" type="button" aria-label="영상 재생"><img src="images/ic-play-24.svg" width="24" height="24" alt=""></button>
+    </div>
+  </div>
+</section>
+
+<!-- 히어로 아래 본문 — Figma 이미지 (계약 4단계 ~ 온라인 도장 배너) -->
+<div class="pc-shot">
+  <img src="images/pc-261030-body.png" width="1920" height="3220" alt="예스폼싸인 메인 261030 — 계약 4단계 · 계약서 서식 · 간편결제 · 전자도장 · 진행 상태 · 법적 효력 · 온라인 도장 배너">
+</div>
+
+<!-- 무료로 시작하세요 — 배경(빛 · 상자 그림)은 이미지, 글자 · 숫자 · 버튼은 코드. 숫자는 화면에 들어오면 0부터 세어 올라감(1회) -->
+<section class="pc-free" aria-labelledby="pc-free-title">
+  <div class="pc-free__inner inner">
+    <p class="pc-free__sub">예스폼 프리미엄 회원이라면?</p>
+    <h2 class="pc-free__title" id="pc-free-title">별도 가입 없이 지금 <em>무료로 시작하세요</em></h2>
+    <ul class="pc-free__nums" data-count>
+      <li><p class="pc-free__num"><b data-to="100">100</b><span class="pc-free__unit">만</span></p><p class="pc-free__label">전문 서식 최다 보유</p></li>
+      <li><p class="pc-free__num pc-free__num--plus"><b data-to="240">240</b><span class="pc-free__plus">+</span></p><p class="pc-free__label">계약서 매주 업데이트</p></li>
+      <li><p class="pc-free__num"><b data-to="120">120</b><span class="pc-free__unit">건</span></p><p class="pc-free__label">전자계약 제공</p></li>
+    </ul>
+    <button class="ys-hero__cta" type="button">자동결제 없는 30일 무료 체험하기</button>
+  </div>
+</section>
+
+<!-- 맨 아래 — Figma 이미지 -->
+<div class="pc-shot pc-shot--bottom">
+  <img src="images/pc-261030-bottom.png" width="1920" height="434" alt="예스폼싸인 하단 정보">
+</div>
+
+<script src="js/pc-261030.js"></script>
+</body>
+</html>

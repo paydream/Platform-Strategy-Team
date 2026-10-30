@@ -1,0 +1,130 @@
+/* ==========================================================================
+   예스폼싸인 메인 261030 PC — pc-261030.html
+   Figma: 싸인_디자인시스템 › 홈페이지 › "메인_261030" (53928:24438 · 1920 × 5593)
+   · 헤더(css/header.css) · 히어로 · "별도 가입 없이 무료로 시작하세요" 섹션은 코드
+   · 그 사이 본문(images/pc-261030-body.png)과 맨 아래(images/pc-261030-bottom.png)는 Figma 이미지
+   · 히어로는 261028 · 261029 와 같음 (Figma 구성 동일)
+   ========================================================================== */
+:root{
+  color-scheme:light;
+  --ys-inner:1280px;   /* [내부] 폭 */
+  --ys-gutter:10px;    /* [내부] 좌우 여백 → 콘텐츠 1260 */
+}
+*{font-synthesis-weight:none}
+html,body{margin:0;background:#fff}
+body{min-width:var(--ys-inner);font-family:Pretendard,'Pretendard Variable','Noto Sans KR',-apple-system,sans-serif;color:#1D1F20}
+.inner{width:var(--ys-inner);margin:0 auto;padding:0 var(--ys-gutter);box-sizing:border-box}
+
+/* ==========================================================================
+   히어로 — 위 80 · 제목 56/68 · 설명 16/22 · 버튼 46 · 영상 1260 × 709 · 아래 66 → 높이 1197
+   ========================================================================== */
+.ys-hero{position:relative;z-index:1;padding:80px 0 66px}
+.ys-hero__inner{display:flex;flex-direction:column;align-items:center;text-align:center}
+
+.ys-hero__title{margin:0;font-size:56px;line-height:68px;font-weight:700;letter-spacing:-1.4px;color:#1D1F20;word-break:keep-all}
+.ys-hero__title-line{display:block}
+.ys-hero__desc{margin:20px 0 0;font-size:16px;line-height:22px;font-weight:400;color:#383B3E;word-break:keep-all}
+
+/* 버튼 — Figma button_primary · 높이 46 · 좌우 20 · 모서리 8 · 15/15 SemiBold */
+.ys-hero__cta{display:inline-flex;align-items:center;justify-content:center;min-width:80px;height:46px;margin:36px 0 0;padding:0 20px;box-sizing:border-box;
+  border:0;border-radius:8px;background:#1B52ED;color:#fff;font-family:inherit;font-size:15px;line-height:15px;font-weight:600;white-space:nowrap;cursor:pointer;
+  transition:background-color .15s cubic-bezier(.22,.61,.36,1)}
+.ys-hero__cta:hover{background:#1E4BC9}
+.ys-hero__cta:focus-visible{outline:2px solid #7DA2FF;outline-offset:2px}
+
+/* 영상 — 1260 × 709 · 모서리 12 · 버튼 아래 60 · 자동 재생(소리 없이 · 반복) */
+.ys-hero__media{position:relative;width:1260px;height:709px;margin-top:60px;border-radius:12px;overflow:hidden;background:#1D1F20}
+.ys-hero__video{display:block;width:100%;height:100%;object-fit:cover;cursor:pointer}
+/* 재생 버튼 — Figma 그대로(48 원 · 검정 60% · 재생 아이콘 24). 영상이 멈춰 있을 때만 보임 */
+.ys-hero__play{position:absolute;left:50%;top:calc(50% + .5px);width:48px;height:48px;margin:0;padding:0;border:0;border-radius:999px;
+  background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;cursor:pointer;transform:translate(-50%,-50%);
+  opacity:0;visibility:hidden;transition:opacity .2s,visibility 0s .2s}
+.ys-hero__play img{display:block;width:24px;height:24px}
+.ys-hero__media.is-paused .ys-hero__play{opacity:1;visibility:visible;transition:opacity .2s,visibility 0s}
+.ys-hero__play:focus-visible{outline:2px solid #7DA2FF;outline-offset:3px}
+
+/* ==========================================================================
+   배경 그라데이션 움직임 — 261026/최종/css/style.css 의 [data-hero-anim] 그대로
+   색 6개(#C9DCFF · #E4ECFF · #DCE1F7 · #D2F0F5 · #EBF4FF · #B9CDF2) + 바탕 #F6F8FA 는 Figma 히어로 배경과 같음
+   빛 덩어리 6개가 각자 다른 속도(7.5 ~ 19.5초)로 원을 그리며 천천히 돎
+   ========================================================================== */
+@property --angle0{syntax:"<angle>";initial-value:316deg;inherits:false}
+@keyframes rotate0{to{--angle0:-44deg}}
+@property --angle1{syntax:"<angle>";initial-value:351deg;inherits:false}
+@keyframes rotate1{to{--angle1:-9deg}}
+@property --angle2{syntax:"<angle>";initial-value:212deg;inherits:false}
+@keyframes rotate2{to{--angle2:-148deg}}
+@property --angle3{syntax:"<angle>";initial-value:305deg;inherits:false}
+@keyframes rotate3{to{--angle3:-55deg}}
+@property --angle4{syntax:"<angle>";initial-value:135deg;inherits:false}
+@keyframes rotate4{to{--angle4:-225deg}}
+@property --angle5{syntax:"<angle>";initial-value:146deg;inherits:false}
+@keyframes rotate5{to{--angle5:-214deg}}
+[data-hero-anim]{
+  background:
+    radial-gradient(circle at calc(50% * (1 + 0.5 * cos(var(--angle0)))) calc(50% * (1 + 0.5 * sin(var(--angle0)))),#C9DCFF,rgba(0,0,0,0) 35%),
+    radial-gradient(circle at calc(50% * (1 + 0.5 * cos(var(--angle1)))) calc(50% * (1 + 0.5 * sin(var(--angle1)))),#E4ECFF,rgba(0,0,0,0) 35%),
+    radial-gradient(circle at calc(50% * (1 + 0.5 * cos(var(--angle2)))) calc(50% * (1 + 0.5 * sin(var(--angle2)))),#DCE1F7,rgba(0,0,0,0) 35%),
+    radial-gradient(circle at calc(50% * (1 + 0.5 * cos(var(--angle3)))) calc(50% * (1 + 0.5 * sin(var(--angle3)))),#D2F0F5,rgba(0,0,0,0) 35%),
+    radial-gradient(circle at calc(50% * (1 + 0.5 * cos(var(--angle4)))) calc(50% * (1 + 0.5 * sin(var(--angle4)))),#EBF4FF,rgba(0,0,0,0) 35%),
+    radial-gradient(circle at calc(50% * (1 + 0.5 * cos(var(--angle5)))) calc(50% * (1 + 0.5 * sin(var(--angle5)))),#B9CDF2,rgba(0,0,0,0) 35%)
+    #F6F8FA;
+  animation:
+    rotate0 19.5s -5.655s reverse,
+    rotate1 16.5s -12.045s,
+    rotate2 10.5s -6.51s,
+    rotate3 7.5s -7.2s reverse,
+    rotate4 10.5s -1.365s,
+    rotate5 10.5s -8.295s reverse;
+  animation-timing-function:linear;
+  animation-iteration-count:infinite;
+}
+
+/* ==========================================================================
+   제목 하이라이트 — 261026/최종/css/style.css 의 [data-hl-sweep] 그대로
+   "전자계약은 예스폼싸인" 글자가 0.5초 뒤 1.4초 동안 왼쪽부터 검정(#1D1F20) → 파랑(#1B52ED)으로 칠해짐 (한 번)
+   ========================================================================== */
+@keyframes ys-hl-sweep{from{background-position:100% 0}to{background-position:0% 0}}
+[data-hl-sweep]{
+  background-image:linear-gradient(90deg,#1B52ED 0 50%,#1D1F20 50% 100%);
+  background-size:200% 100%;background-position:100% 0;background-repeat:no-repeat;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:ys-hl-sweep 1.4s cubic-bezier(.22,.61,.36,1) .5s 1 forwards;
+}
+
+@media (prefers-reduced-motion:reduce){
+  [data-hero-anim]{animation:none}
+  [data-hl-sweep]{animation:none;background-position:0% 0}
+}
+
+/* ==========================================================================
+   히어로 아래 본문 — Figma 이미지 (y 1257 ~ 4477 · 1920 × 3220 · 1배) · 화면 가운데 기준
+   맨 아래(푸터 자리) — Figma 이미지 (1920 × 434 · 바탕 #333)
+   ========================================================================== */
+.pc-shot{width:100%;overflow-x:hidden}
+.pc-shot img{display:block;width:1920px;max-width:none;height:auto;margin-left:calc(50% - 960px)}
+.pc-shot--bottom{background:#333}
+
+/* ==========================================================================
+   무료로 시작하세요 — Figma section (53928:25542 · 1920 × 682)
+   · 배경 빛 · 상자 그림은 images/pc-261030-free-bg.jpg (글자 · 숫자 · 버튼만 뺀 Figma 그림)
+   · 위아래 80 · 소제목 16/22 · 제목 32/42 · 숫자 Roboto 48 (간격 60) · 상자 260 · 버튼 46
+   · 숫자는 화면에 들어오면 0부터 세어 올라감 (1회) — js/pc-261030.js
+   ========================================================================== */
+@font-face{font-family:'Roboto Digits';font-style:normal;font-weight:600;font-display:block;src:url(../fonts/roboto-600-digits.woff2) format('woff2');unicode-range:U+30-39}
+@font-face{font-family:'Roboto Plus';font-style:normal;font-weight:500;font-display:block;src:url(../fonts/roboto-500-plus.woff2) format('woff2');unicode-range:U+2B}
+.pc-free{box-sizing:border-box;height:682px;padding:80px 0;text-align:center;background:#fff url(../images/pc-261030-free-bg.jpg) center top/1920px 682px no-repeat}
+.pc-free__inner{display:flex;flex-direction:column;align-items:center}
+.pc-free__sub{margin:0;font-size:16px;line-height:22px;font-weight:600;color:#1D1F20}
+.pc-free__title{margin:8px 0 0;font-size:32px;line-height:42px;font-weight:600;color:#000;white-space:nowrap}
+.pc-free__title em{font-style:normal;color:#1B52ED}
+.pc-free__nums{display:flex;justify-content:center;gap:60px;margin:36px 0 0;padding:0;list-style:none}
+.pc-free__nums li{display:flex;flex-direction:column;align-items:center;gap:6px;width:140px}
+.pc-free__num{display:flex;align-items:flex-end;gap:4px;margin:0;color:#000}
+/* 숫자 칸은 최종 자릿수 폭(3ch)으로 고정 · 오른쪽 맞춤 → 세는 동안에도 단위가 움직이지 않음 */
+.pc-free__num b{display:inline-block;min-width:3ch;font:600 48px/48px 'Roboto Digits',Roboto,sans-serif;text-align:right;font-variant-numeric:tabular-nums}
+.pc-free__unit{width:16px;padding-bottom:2px;font-size:18px;line-height:26px;font-weight:500;color:#1D1F20}
+.pc-free__num--plus{align-items:flex-start;padding-left:4px}
+.pc-free__plus{font:500 32px/32px 'Roboto Plus',Roboto,sans-serif}
+.pc-free__label{margin:0;font-size:16px;line-height:22px;font-weight:500;color:#383B3E;white-space:nowrap}
+.pc-free .ys-hero__cta{margin-top:292px}   /* 숫자 아래 16 + 상자 그림 260 + 16 */
