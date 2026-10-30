@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>예스폼싸인 메인 261030 · 모바일</title>
+<!--
+  예스폼싸인 메인 261030 모바일 (2026-10-30)
+  Figma: 싸인_디자인시스템 › 홈페이지 › "Frame 1171277634" (53928:26797 · 360 × 6848)
+  · 글자 · 버튼 · 카드 · 표는 코드, 그림(일러스트 · 사진 · 배경 장식)은 이미지
+  · 360 폭 그대로 만들고, 폰 화면(500 이하)에서는 화면 폭에 맞춰 늘림 — js/mobile.js
+  · 스타일 css/mobile.css · 스크립트 js/mobile.js · 그림 images/ · 숫자 글꼴 fonts/
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="css/mobile.css">
+</head>
+<body>
+<div class="m-page" id="page">
+
+  <!-- 헤더 — Header_home (Mobile) · 높이 60 -->
+  <header class="m-header">
+    <a class="m-header__logo" href="#" aria-label="예스폼싸인 홈"><img src="images/logo-sign-header@2x.png" width="104" height="32" alt="예스폼싸인"></a>
+    <div class="m-header__right">
+      <button class="m-header__login" type="button">로그인</button>
+      <button class="m-header__menu" type="button" aria-label="메뉴"><img src="images/ic-menu.svg" width="20" height="20" alt=""></button>
+    </div>
+  </header>
+
+  <!-- 히어로 — 배경 그라데이션 움직임 · 제목 하이라이트 · 영상 자동 재생 (PC 261028 과 같은 방식) -->
+  <section class="m-hero">
+    <div class="m-hero__top" data-hero-anim>
+      <h1 class="m-hero__title">
+        <span class="m-hero__line">비즈니스의 시작은 예스폼</span>
+        <span class="m-hero__line" data-hl-sweep>전자계약은 예스폼싸인</span>
+      </h1>
+      <p class="m-hero__desc">1999년부터 이어온 문서 노하우로,<br>계약서 작성부터 보관까지<br>하나의 흐름으로 완성하세요.</p>
+      <button class="m-btn m-hero__cta" type="button">자동결제 없는 30일 무료 체험하기</button>
+    </div>
+    <div class="m-hero__media">
+      <video class="m-hero__video" src="수정222%20(1).mp4" poster="images/hero-video-poster.jpg" width="360" height="202"
+        autoplay muted loop playsinline preload="auto" aria-label="예스폼싸인 소개 영상 (소리 없음 · 누르면 멈춤)"></video>
+      <button class="m-hero__play" type="button" aria-label="영상 재생"><img src="images/ic-play-24.svg" width="24" height="24" alt=""></button>
+    </div>
+  </section>
+
+  <!-- 계약 4단계 -->
+  <section class="m-steps">
+    <ol class="m-steps__list">
+      <li class="m-step">
+        <div class="m-step__art"><img src="images/step-1.png" width="298" height="180" alt=""></div>
+        <div class="m-step__body">
+          <p class="m-step__head"><span class="m-step__num">1</span>계약서 업로드</p>
+          <p class="m-step__desc">보유한 PDF 계약서를 올리거나<br>예스폼 표준 계약서를 선택합니다.</p>
+        </div>
+      </li>
+      <li class="m-step">
+        <div class="m-step__art"><img src="images/step-2.png" width="298" height="180" alt=""></div>
+        <div class="m-step__body">
+          <p class="m-step__head"><span class="m-step__num">2</span>서명 참여자 설정</p>
+          <p class="m-step__desc">이름과 이메일만 입력하면 됩니다.<br>참여자는 가입하지 않아도 됩니다.</p>
+        </div>
+      </li>
+      <li class="m-step">
+        <div class="m-step__art"><img src="images/step-3.png" width="298" height="180" alt=""></div>
+        <div class="m-step__body">
+          <p class="m-step__head"><span class="m-step__num">3</span>서명 위치 지정</p>
+          <p class="m-step__desc">서명 · 도장 · 날짜 항목을<br>계약서 위에 배치합니다.</p>
+        </div>
+      </li>
+      <li class="m-step">
+        <div class="m-step__art"><img src="images/step-4.png" width="298" height="180" alt=""></div>
+        <div class="m-step__body">
+          <p class="m-step__head"><span class="m-step__num">4</span>확인 후 전송</p>
+          <p class="m-step__desc">내용을 확인하고 전송하면<br>참여자에게 서명 요청이 전달됩니다.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- 계약서 서식 — 분류 버튼 · 카드는 옆으로 밀어서 보기 -->
+  <section class="m-tpl">
+    <h2 class="m-h2"><span class="m-blue">취업/고용 계약서</span>로<br>시작하는 전자계약</h2>
+    <p class="m-tpl__desc">채용과 퇴직 과정에 필요한 주요 계약서를 제공하여<br>안정적인 인사 관리와 법적 리스크를 예방할 수 있습니다.</p>
+    <div class="m-chips" role="tablist" aria-label="계약서 분류">
+      <button class="m-chip is-on" type="button" role="tab" aria-selected="true">취업/고용</button>
+      <button class="m-chip" type="button" role="tab" aria-selected="false">물건거래</button>
+      <button class="m-chip" type="button" role="tab" aria-selected="false">하청/용역</button>
+      <button class="m-chip" type="button" role="tab" aria-selected="false">기타문서</button>
+    </div>
+    <ul class="m-tpl__list">
+      <li class="m-tpl__item"><div class="m-tpl__thumb"><img src="images/tpl-1.png" width="183" height="261" alt="연봉계약직 고용계약서 미리보기"></div><p class="m-tpl__name">연봉계약직 고용계약서</p></li>
+      <li class="m-tpl__item"><div class="m-tpl__thumb"><img src="images/tpl-2.png" width="183" height="261" alt="표준근로계약서 미리보기"></div><p class="m-tpl__name">표준근로계약서</p></li>
+      <li class="m-tpl__item"><div class="m-tpl__thumb"><img src="images/tpl-3.png" width="183" height="261" alt="아르바이트 근로계약서 미리보기"></div><p class="m-tpl__name">아르바이트 근로계약서</p></li>
+      <li class="m-tpl__item"><div class="m-tpl__thumb"><img src="images/tpl-1.png" width="183" height="261" alt="연봉계약직 고용계약서 미리보기"></div><p class="m-tpl__name">연봉계약직 고용계약서</p></li>
+    </ul>
+  </section>
+
+  <!-- 간편결제 띠 — 배경(동전 · 네이버페이 카드)은 이미지 -->
+  <section class="m-pay">
+    <p class="m-pay__title"><span class="m-green">전자계약 서비스</span> 대한민국 최초!<br>예스폼싸인 <span class="m-green">간편결제</span> 지원</p>
+    <p class="m-pay__desc">안전하고 편리한 네이버페이 결제를 지원합니다.</p>
+  </section>
+
+  <!-- 나만의 전자도장 — 배경(빛 · 상자 · 손글씨 싸인)은 이미지, 탭 · 입력칸 · 버튼은 코드 -->
+  <section class="m-seal">
+    <h2 class="m-h2"><span class="m-blue">특허 기술</span>로 만든<br>나만의 전자도장</h2>
+    <div class="m-seal__tabs">
+      <button class="m-seal__tab is-on" type="button">싸인 만들기</button>
+      <button class="m-seal__tab" type="button">일반 도장</button>
+      <button class="m-seal__tab" type="button">서명 관리</button>
+    </div>
+    <div class="m-seal__box">
+      <p class="m-seal__title">나만의 싸인 만들기</p>
+      <p class="m-seal__desc">직접 그리거나 텍스트를 입력하여 손쉽게 싸인을 만들어보세요.</p>
+      <p class="m-seal__label">직접 그리기</p>
+      <div class="m-seal__draw" aria-label="손글씨 싸인 예시"></div>
+      <p class="m-seal__label">텍스트로 만들기</p>
+      <div class="m-seal__form">
+        <input class="m-seal__input" type="text" placeholder="홍길동" aria-label="싸인으로 만들 이름">
+        <button class="m-seal__make" type="button">싸인 만들기</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 진행 상태 -->
+  <section class="m-status">
+    <h2 class="m-h2 m-h2--dark">계약 전송부터 완료까지 한 번에<br><span class="m-blue">실시간 진행</span>을 확인할 수 있습니다</h2>
+    <ol class="m-status__box">
+      <li class="m-status__item is-on"><img src="images/ic-step-on.svg" width="24" height="24" alt=""><div><p class="m-status__name">서명 필요</p><p class="m-status__desc">계약 상대방 또는 본인의 서명이 아직 완료되지 않은 상태</p></div></li>
+      <li class="m-status__item"><img src="images/ic-step-off.svg" width="24" height="24" alt=""><div><p class="m-status__name">작성중</p><p class="m-status__desc">계약서가 임시 저장된 상태로, 내용 수정이나 보완이 가능</p></div></li>
+      <li class="m-status__item"><img src="images/ic-step-off.svg" width="24" height="24" alt=""><div><p class="m-status__name">진행중</p><p class="m-status__desc">계약서가 전송되어 서명 절차가 진행되고 있는 상태</p></div></li>
+      <li class="m-status__item"><img src="images/ic-step-off.svg" width="24" height="24" alt=""><div><p class="m-status__name">완료됨</p><p class="m-status__desc">모든 서명이 끝나 계약이 정식으로 체결된 상태</p></div></li>
+      <li class="m-status__item"><img src="images/ic-step-off.svg" width="24" height="24" alt=""><div><p class="m-status__name">취소됨</p><p class="m-status__desc">당사자 중 한명의 취소로 계약이 중단된 상태</p></div></li>
+    </ol>
+  </section>
+
+  <!-- 법적 효력 (어두운 섹션) — 배경 · 카드 모양 · 아이콘은 이미지, 글자는 코드 -->
+  <section class="m-legal">
+    <h2 class="m-h2 m-legal__title">법적 효력 100% 보장<br>종이 계약보다 더 철저하게 기록하고 안전하게 보관합니다</h2>
+    <ul class="m-legal__list">
+      <li class="m-legal__card"><p class="m-legal__name">감사추적인증서</p><p class="m-legal__desc">계약 체결 과정에서 발생하는 모든 상태를 기록하고 보관하여 계약의 무결성을 보장하고 사후 검증이 가능하도록 지원합니다.</p></li>
+      <li class="m-legal__card"><p class="m-legal__name">휴대폰 인증</p><p class="m-legal__desc">계약 당사자의 본인 확인을 위해 휴대폰 인증을 적용하여 신원을 정확하게 검증하고 위·변조를 방지합니다.</p></li>
+      <li class="m-legal__card"><p class="m-legal__name">접근 암호 설정</p><p class="m-legal__desc">계약서를 열람할 수 있는 권한을 암호로 제한하여 승인된 사용자만 접근할 수 있도록 보안성을 강화합니다.</p></li>
+      <li class="m-legal__card"><p class="m-legal__name">SSL 암호화</p><p class="m-legal__desc">데이터 전송 과정 전반을 최신 SSL&nbsp; 방식으로 암호화하여, 외부 해킹과 불법 접근으로부터 계약서를 안전하게 보호합니다.</p></li>
+    </ul>
+  </section>
+
+  <!-- 온라인 도장 배너 — 배경(파랑 → 검정 · 태블릿 사진)은 이미지 -->
+  <section class="m-banner">
+    <p class="m-banner__title">10년 동안 신청 건수 30만건!<br>예스폼의 특허 온라인 도장 서비스</p>
+    <p class="m-banner__desc">음각 도장부터 다양한 컬러 실물 도장의 감성을<br>그대로 제작하세요!</p>
+  </section>
+
+  <!-- 무료로 시작하세요 — 배경(빛 · 상자 그림)은 이미지, 숫자는 화면에 들어오면 0부터 세어 올라감(1회) -->
+  <section class="m-free">
+    <p class="m-free__sub">예스폼 프리미엄 회원이라면?</p>
+    <h2 class="m-free__title">별도 가입 없이<br>지금 <span class="m-blue">무료로 시작하세요</span></h2>
+    <ul class="m-free__nums" data-count>
+      <li><p class="m-free__num"><b data-to="100">100</b><span class="m-free__unit">만</span></p><p class="m-free__label">전문 서식 최다 보유</p></li>
+      <li><p class="m-free__num m-free__num--plus"><b data-to="240">240</b><span class="m-free__plus">+</span></p><p class="m-free__label">계약서 매주 업데이트</p></li>
+      <li><p class="m-free__num"><b data-to="120">120</b><span class="m-free__unit">건</span></p><p class="m-free__label">전자계약 제공</p></li>
+    </ul>
+    <button class="m-btn m-free__cta" type="button">자동결제 없는 30일 무료 체험하기</button>
+  </section>
+
+  <!-- 푸터 -->
+  <footer class="m-footer">
+    <p class="m-footer__copy">© yesform All rights reserved.</p>
+    <p class="m-footer__links"><a href="#">이용약관</a><i></i><a class="m-footer__wide" href="#">개인정보 처리방침</a><i></i><a href="#">고객센터</a></p>
+  </footer>
+
+</div>
+<script src="js/mobile.js"></script>
+</body>
+</html>
