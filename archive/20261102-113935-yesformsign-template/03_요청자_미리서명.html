@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>요청자 미리 서명 프로토타입</title>
+<style>[hidden]{display:none!important}body{margin:0}</style>
+</head>
+<body>
+
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Nanum+Myeongjo:wght@800&display=swap">
+<style>
+:root{
+  --bg:#eef0f3;--card:#fff;--fg:#1d2129;--sub:#5b6270;--mute:#8a919c;--line:#e3e6ea;--line2:#d7dbe1;
+  --pri:#1f5eff;--pri-d:#1f4fd6;--pri-l:#eef3ff;--err:#d93a1f;--chg:#f08c00;
+  --r1:#e5484d;--r1b:rgba(229,72,77,.08);--r2:#4f46e5;--r2b:rgba(79,70,229,.07);--r3:#0e9384;--r3b:rgba(14,147,132,.08);
+  --cm:#0f9d58;--cmb:rgba(15,157,88,.08);
+  color-scheme:light;
+}
+body{background:var(--bg);color:var(--fg);font-family:'Noto Sans KR',system-ui,sans-serif;font-size:14px}
+*{box-sizing:border-box}
+button{font-family:inherit;cursor:pointer}
+button:disabled{cursor:not-allowed}
+.wrap{padding-block:16px 32px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:14px;max-width:1720px;margin:0 auto}
+.head{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px}
+.head h1{margin:0;font-size:16px}
+.head p{margin:2px 0 0;font-size:12px;color:var(--sub)}
+.sopts{display:flex;flex-wrap:wrap;gap:10px 16px;margin-left:auto;align-items:center}
+.sopt{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--sub)}
+.ssw{display:flex;border:1px solid var(--line2);border-radius:6px;overflow:hidden}
+.ssw button{border:0;background:#fff;padding:6px 10px;font-size:12.5px;color:var(--sub);border-right:1px solid var(--line2)}
+.ssw button:last-child{border-right:0}
+.ssw button[aria-pressed="true"]{background:var(--fg);color:#fff}
+.reset{border:1px solid var(--line2);background:#fff;border-radius:6px;padding:6px 12px;font-size:12.5px}
+.main{display:flex;flex-direction:column;gap:14px;align-items:stretch}
+.fit{flex:1;min-width:0}
+.stage{width:1280px;height:860px;transform-origin:0 0;position:relative}
+.rail{width:340px;flex-shrink:0;display:flex;flex-direction:column;gap:12px}
+@media (max-width:1100px){.main{flex-direction:column}.rail{width:100%}}
+.pcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.pcard h2{margin:0;font-size:13.5px}
+.pcard.now b{font-size:15px}
+.flow{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:12.5px}
+.flow li{display:flex;align-items:center;gap:8px;color:var(--mute)}
+.flow li i{font-style:normal;width:18px;height:18px;border-radius:50%;border:1.5px solid #c5cad2;display:flex;align-items:center;justify-content:center;font-size:10.5px}
+.flow li.on{color:var(--pri-d);font-weight:700}.flow li.on i{background:var(--pri);border-color:var(--pri);color:#fff}
+.flow li.ok{color:var(--fg)}.flow li.ok i{background:var(--fg);border-color:var(--fg);color:#fff}
+.chk{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:12.5px}
+.chk li{display:flex;gap:8px;line-height:1.45;color:var(--sub)}
+.chk li span{width:16px;height:16px;border-radius:4px;border:1.5px solid #c5cad2;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff}
+.chk li.ok{color:var(--fg)}.chk li.ok span{background:var(--pri);border-color:var(--pri)}
+.q{font-size:12px;line-height:1.55;color:#7a4b00;background:#fff7ec;border-left:3px solid var(--chg);padding:6px 10px;border-radius:0 6px 6px 0}
+.log{font-size:11.5px;line-height:1.6;color:var(--sub);max-height:200px;overflow:auto;display:flex;flex-direction:column-reverse}
+
+/* ---------- screen ---------- */
+.scr{position:absolute;inset:0;background:#fff;border:1px solid #cfd3da;display:flex;flex-direction:column;overflow:hidden}
+.top{height:60px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 24px;flex-shrink:0;position:relative}
+.logo{font-weight:700;font-size:18px}
+.steps{position:absolute;left:50%;transform:translateX(-50%);display:flex;gap:28px;font-size:14.5px;color:var(--mute)}
+.steps span{display:flex;align-items:center;gap:6px}
+.steps i{font-style:normal;width:18px;height:18px;border-radius:50%;background:#aeb4bd;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center}
+.steps .on{color:var(--pri-d);font-weight:700}.steps .on i{background:var(--pri)}
+.body3{display:flex;flex:1;min-height:0}
+.lp{width:262px;padding:16px;display:flex;flex-direction:column;gap:10px;border-right:1px solid var(--line);overflow:auto;flex-shrink:0}
+.box{border:1px solid var(--line);border-radius:10px;padding:8px;display:flex;flex-direction:column;gap:5px}
+.cap{font-size:11.5px;color:#6b7280;padding:4px 2px 0}
+.it{display:flex;align-items:center;justify-content:space-between;height:32px;padding:0 12px;border:1px solid var(--line);border-radius:6px;font-size:13px}
+.role{display:flex;flex-direction:column;gap:2px;border-radius:8px;padding:8px 10px;font-size:13.5px;font-weight:500}
+.role small{font-size:12px;color:var(--sub);font-weight:400}
+.chip{display:inline-flex;align-items:center;height:19px;padding:0 6px;border-radius:4px;font-size:10.5px;font-weight:500;background:#e8efff;color:var(--pri-d);margin-left:6px}
+.mid{flex:1;background:#f3f4f6;display:flex;justify-content:center;padding-top:20px;overflow:hidden}
+.doc{background:#fff;border:1px solid var(--line);position:relative;width:540px;height:700px;padding:22px 38px;display:flex;flex-direction:column;gap:6px}
+.ln{height:5px;background:#e6e8ec;border-radius:3px}
+.art{font-size:9px;font-weight:700;margin-top:8px}
+.fld{position:absolute;border:1.5px dashed;border-radius:3px;font-size:11px;display:flex;align-items:center;padding:0 6px;gap:4px;white-space:nowrap;height:26px;background:none;font-family:inherit}
+button.fld{cursor:pointer}
+.fld.big{height:72px;align-items:flex-start;padding:4px 8px}
+.fld.on{border:1.5px solid var(--pri);box-shadow:0 0 0 3px rgba(31,94,255,.15)}
+.fld .img{position:absolute;right:10px;top:12px;width:50px;height:50px;display:flex;align-items:center;justify-content:center}
+.fld .img svg{width:100%;height:100%}
+.fld.flash{animation:fl .9s ease}
+@keyframes fl{0%{box-shadow:0 0 0 0 rgba(240,140,0,.0)}30%{box-shadow:0 0 0 6px rgba(240,140,0,.45)}100%{box-shadow:0 0 0 0 rgba(240,140,0,0)}}
+.hd{position:absolute;width:8px;height:8px;border-radius:50%;background:var(--pri)}
+.rp{width:300px;border-left:1px solid var(--line);flex-shrink:0;display:flex;flex-direction:column}
+.rph{padding:16px 18px;border-bottom:1px solid var(--line);font-size:15.5px;font-weight:500}
+.rpb{padding:14px 18px;display:flex;flex-direction:column;gap:13px;overflow:auto}
+.lbl{font-size:12.5px;color:#33373d;margin-bottom:7px}
+.inp{height:38px;border:1px solid var(--line2);border-radius:6px;padding:0 12px;font-size:13px;display:flex;align-items:center;justify-content:space-between;background:#fff;flex:1}
+.cb{width:18px;height:18px;border-radius:50%;background:var(--pri);color:#fff;font-size:11px;display:inline-flex;align-items:center;justify-content:center}
+.seg{display:flex;border:1px solid #c5cad2;border-radius:6px;overflow:hidden}
+.seg button{flex:1;border:0;background:#fff;padding:9px 0;font-size:12.5px;border-right:1px solid #c5cad2;color:#33373d}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--pri);color:#fff;font-weight:500}
+.pv{height:96px;border:1px solid var(--line2);border-radius:6px;background:#fafbfc;display:flex;align-items:center;justify-content:center;position:relative;font-size:12.5px;color:#9aa1ab}
+.pv.empty{border-style:dashed}
+.pv svg{width:60px;height:60px}
+.pv small{position:absolute;left:8px;top:6px;font-size:11px;color:var(--mute)}
+.pb{flex:1;height:40px;border-radius:6px;border:0;background:#eceef1;font-size:14px;color:#4b5260}
+.pb.p{background:var(--pri);color:#fff}
+.pb.line{background:#fff;border:1px solid var(--pri);color:var(--pri)}
+.note{display:flex;gap:6px;font-size:12.5px;color:var(--pri-d);background:var(--pri-l);border-radius:6px;padding:8px 10px;line-height:1.5}
+.hint{font-size:12px;line-height:1.55;color:var(--mute)}
+.foot{height:70px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:center;gap:10px;flex-shrink:0;background:#fff}
+.fb{width:180px;height:48px;border-radius:6px;border:1px solid var(--line2);background:#fff;font-size:15px}
+.fb.p{background:var(--pri);border-color:var(--pri);color:#fff}
+
+/* C-4 */
+.c4{flex:1;background:#f6f7f9;overflow:auto;display:flex;flex-direction:column;align-items:center;gap:16px;padding:22px 0}
+.card{width:1000px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 26px;display:flex;flex-direction:column;gap:10px}
+.card h3{margin:0;font-size:15.5px}
+.tbl{border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.tr{display:grid;grid-template-columns:44px 170px 70px 130px 1fr 170px;align-items:center;gap:8px;padding:0 16px;min-height:54px;border-bottom:1px solid #f0f1f3;font-size:13px}
+.tr:last-child{border-bottom:0}
+.tr.th{min-height:42px;font-weight:700;background:#fafbfc}
+.rchip{display:inline-flex;align-items:center;height:22px;padding:0 7px;border-radius:4px;font-size:12px}
+.msg{height:34px;border:1px solid var(--line2);border-radius:6px;padding:0 10px;font-size:12.5px;color:#9aa1ab;display:flex;align-items:center}
+.msg.off{background:#f3f5f7}
+.tag{font-size:11.5px;color:var(--pri-d);background:var(--pri-l);border-radius:3px;padding:2px 6px}
+.mine{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#c0353c}
+.mine svg{width:22px;height:22px}
+.conf{background:#f6f7f9;border-radius:8px;padding:12px 16px;font-size:13px;line-height:1.95;color:#4b5260}
+.conf .hl{color:var(--fg);font-weight:500;background:var(--pri-l);border-radius:4px;padding:1px 6px;margin-left:-6px}
+.agree{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500;border:0;background:none;padding:0;text-align:left}
+.agree i{width:22px;height:22px;border-radius:50%;border:1.5px solid #aeb4bd;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:12px;color:#fff}
+.agree[aria-pressed="true"] i{background:var(--pri);border-color:var(--pri)}
+
+/* DONE */
+.done{flex:1;background:#f6f7f9;overflow:auto;display:flex;flex-direction:column;align-items:center;gap:16px;padding:22px 0}
+.tl{display:flex;flex-direction:column}
+.tlr{display:grid;grid-template-columns:34px 190px 1fr 200px;gap:10px;align-items:center;min-height:58px;border-bottom:1px solid #f0f1f3;font-size:13px}
+.tlr:last-child{border-bottom:0}
+.st{display:inline-flex;align-items:center;height:24px;padding:0 9px;border-radius:12px;font-size:12px;font-weight:500}
+.st.ok{background:#e7f6ee;color:#0b6e3a}.st.sent{background:var(--pri-l);color:var(--pri-d)}.st.wait{background:#f1f3f5;color:#6b7280}
+.audit{font-family:ui-monospace,Menlo,monospace;font-size:12px;line-height:1.8;color:#33373d;background:#fafbfc;border:1px solid var(--line);border-radius:8px;padding:10px 14px}
+.audit b{font-weight:600}
+
+/* modal */
+.back{position:absolute;inset:0;background:rgba(20,24,31,.45);display:flex;align-items:center;justify-content:center;z-index:20}
+.modal{width:340px;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.2)}
+.mt{padding:26px 24px 22px;text-align:center;display:flex;flex-direction:column;gap:10px}
+.mt b{font-size:17px}
+.mt span{font-size:13px;line-height:1.65;color:#6b7280}
+.mb{display:flex}
+.mb button{flex:1;height:50px;border:0;font-size:15px;background:#eceef1;color:#4b5260}
+.mb button.p{background:var(--pri);color:#fff}
+.picker{width:560px;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.2);display:flex;flex-direction:column}
+.pkh{padding:18px 22px;font-size:17px;font-weight:700;border-bottom:1px solid var(--line)}
+.ptabs{display:flex;gap:4px;padding:10px 22px 0;border-bottom:1px solid var(--line)}
+.ptabs button{border:0;background:none;padding:9px 12px;font-size:13.5px;color:var(--sub);border-bottom:2px solid transparent}
+.ptabs button[aria-selected="true"]{color:var(--pri-d);font-weight:700;border-bottom-color:var(--pri)}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:18px 22px;min-height:210px;align-content:start}
+.opt{border:1.5px solid var(--line);border-radius:8px;background:#fff;padding:10px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11.5px;color:var(--sub)}
+.opt svg{width:64px;height:64px}
+.opt[aria-pressed="true"]{border-color:var(--pri);background:var(--pri-l);color:var(--pri-d)}
+.pempty{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;gap:10px;padding:30px 0;color:var(--mute);font-size:13px}
+.pf{display:flex;border-top:1px solid var(--line)}
+.pf button{flex:1;height:50px;border:0;font-size:15px;background:#eceef1;color:#4b5260}
+.pf button.p{background:var(--pri);color:#fff}
+.pf button.p:disabled{background:#b9c8f5}
+.toast{position:absolute;left:50%;bottom:90px;transform:translateX(-50%);background:#1d2129;color:#fff;border-radius:20px;padding:9px 18px;font-size:13px;z-index:30}
+.nowbar{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 12px;background:#fff;border:1px solid #e3e6ea;border-radius:10px;padding:10px 16px}
+.nowbar .nl{font-size:11.5px;color:#8a919c}.nowbar b{font-size:15px}.nowbar .ns{font-size:12.5px;color:#5b6270}
+</style>
+
+<div class="wrap">
+  <div class="head">
+    <div><h1>요청자 미리 서명 프로토타입</h1><p>계약하기 STEP 3(C-3c → C-3) → M-21 → STEP 4(C-4) → 계약 시작 후 진행 현황 · 예시 계정 김예스</p></div>
+    <div class="sopts">
+      <div class="sopt">요청자 칸<div class="ssw"><button data-a="scMany" data-v="0" id="m0">도장 1개</button><button data-a="scMany" data-v="1" id="m1">도장 2 + 싸인 1</button></div></div>
+      <div class="sopt">서명 순서<div class="ssw"><button data-a="scOrder" data-v="seq" id="oS">순서대로</button><button data-a="scOrder" data-v="par" id="oP">순서 없이</button></div></div>
+      <div class="sopt">요청자 순서<div class="ssw"><button data-a="scPos" data-v="1" id="p1">1번</button><button data-a="scPos" data-v="2" id="p2">2번</button></div></div>
+      <button class="reset" data-a="reset">처음부터</button>
+    </div>
+  </div>
+  <div class="nowbar"><span class="nl">지금 화면</span><b id="nowName"></b><span class="ns" id="nowSub"></span></div>
+  <div class="main">
+    <div class="fit" id="fit"><div class="stage" id="stage"><div id="screen"></div></div></div>
+    <div class="rail" hidden>
+      <div class="pcard" hidden><h2>흐름</h2><ol class="flow" id="flow"></ol></div>
+      <div class="pcard" hidden><h2>확인할 동작</h2><ul class="chk" id="chk"></ul></div>
+      <div class="pcard" hidden><h2>확인 필요</h2>
+        <div class="q">요청자가 뒷순서일 때 앞 참여자 화면에 요청자 서명이 미리 보여도 되는지 (프로토타입은 계약 시작 시 바로 완료로 처리)</div>
+        <div class="q">'서명 선택 필요' 모달 M 번호 미지정</div>
+        <div class="q">[계약 시 직접 서명]으로 바꿨다가 다시 [지금 서명 추가]로 오면 이전 서명을 되살릴지 (프로토타입은 해제 후 다시 선택)</div>
+      </div>
+      <div class="pcard" hidden><h2>동작 기록</h2><div class="log" id="log"></div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------- 서명 이미지 ---------- */
+const MJ="font-family=\"'Nanum Myeongjo',serif\" font-weight=\"800\" fill=\"#d0262b\" text-anchor=\"middle\" dominant-baseline=\"central\"";
+const S={
+  round:(t)=>`<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="none" stroke="#d0262b" stroke-width="4"/>${[...t].map((c,i)=>`<text x="50" y="${50+(i-(t.length-1)/2)*26}" font-size="24" ${MJ}>${c}</text>`).join('')}</svg>`,
+  oval:(t)=>`<svg viewBox="0 0 100 100"><ellipse cx="50" cy="50" rx="34" ry="46" fill="none" stroke="#d0262b" stroke-width="4"/>${[...t].map((c,i)=>`<text x="50" y="${50+(i-(t.length-1)/2)*22}" font-size="20" ${MJ}>${c}</text>`).join('')}</svg>`,
+  square:(t)=>`<svg viewBox="0 0 100 100"><rect x="7" y="7" width="86" height="86" rx="4" fill="none" stroke="#d0262b" stroke-width="5"/>${[...t].map((c,i)=>`<text x="${i<2?66:34}" y="${i%2?68:32}" font-size="28" ${MJ}>${c}</text>`).join('')}</svg>`,
+  corp:()=>`<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="none" stroke="#d0262b" stroke-width="3.5"/><circle cx="50" cy="50" r="30" fill="none" stroke="#d0262b" stroke-width="2.5"/><text x="50" y="42" font-size="15" ${MJ}>대표</text><text x="50" y="60" font-size="15" ${MJ}>이사</text><path id="cp" d="M50 50 m-38 0 a38 38 0 1 1 76 0" fill="none"/><text font-size="11" font-family="'Nanum Myeongjo',serif" font-weight="800" fill="#d0262b"><textPath href="#cp" startOffset="50%" text-anchor="middle">주식회사 예스폼</textPath></text></svg>`,
+  upload:()=>`<svg viewBox="0 0 100 100"><rect x="12" y="12" width="76" height="76" rx="38" fill="#fbe9e9" stroke="#c43c3c" stroke-width="3" stroke-dasharray="5 3"/><text x="50" y="50" font-size="22" ${MJ}>김예스</text></svg>`,
+  sig:(d)=>`<svg viewBox="0 0 100 100"><path d="${d}" fill="none" stroke="#1d2129" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+};
+const SIGP=['M8 62 C18 30 26 30 26 52 S34 74 42 48 S52 26 56 54 S66 70 72 44 S84 40 92 56','M10 58 C20 40 30 70 38 46 C44 30 52 70 60 50 C66 36 74 66 90 40 M30 72 H80','M12 60 Q24 24 34 58 T56 52 Q66 30 74 60 T94 46'];
+const OPTS={
+ '도장':{tabs:[['vault','보관함'],['gen','일반도장'],['corp','법인도장'],['up','업로드']],
+   vault:[{id:'v1',name:'김예스 원형',svg:S.round('김예스')},{id:'v2',name:'예스폼 법인인감',svg:S.square('예스폼인')}],
+   gen:[{id:'g1',name:'일반 · 원형',svg:S.round('김예스')},{id:'g2',name:'일반 · 타원',svg:S.oval('김예스인')},{id:'g3',name:'일반 · 사각',svg:S.square('김예스인')}],
+   corp:[{id:'c1',name:'법인 · 원형',svg:S.corp()}],
+   up:[{id:'u1',name:'업로드한 도장 (예시)',svg:S.upload()}]},
+ '싸인':{tabs:[['vault','보관함'],['draw','직접 그리기']],
+   vault:[{id:'s1',name:'김예스 싸인 1',svg:S.sig(SIGP[0])},{id:'s2',name:'김예스 싸인 2',svg:S.sig(SIGP[1])}],
+   draw:[{id:'s3',name:'직접 그린 싸인 (예시)',svg:S.sig(SIGP[2])}]}
+};
+
+/* ---------- 데이터 ---------- */
+const ROLES={me:{name:'담당자',person:'김예스',contact:'010-9876-5432',c:'var(--r1)',bg:'var(--r1b)',chipBg:'#fdecee',chipFg:'#c0353c',self:true},
+  wk:{name:'근로자',person:'홍길동',contact:'010-1234-5678',c:'var(--r2)',bg:'var(--r2b)',chipBg:'#eef0ff',chipFg:'#4f46e5',auth:'접근 암호 인증'},
+  hr:{name:'인사팀장',person:'김인사',contact:'010-2345-6789',c:'var(--r3)',bg:'var(--r3b)',chipBg:'#e6f6f4',chipFg:'#0e7c70',auth:'휴대폰 번호 인증'}};
+const SCREENS={C3:['C-3 STEP 3 서명 조건 설정','계약하기 3단계 · 요청자 본인 미리 서명'],C4:['C-4 STEP 4 검토','확인 사항 동의 후 [계약 작성 완료]'],DONE:['계약 진행 현황','계약 시작 후 · 서명 상태와 감사 추적 (프로토타입용 확인 화면)']};
+const CHECKS=[
+ ['c3c','처음 상태: [지금 서명 추가] + 서명 없음(자동 선택 없음)'],
+ ['pick','서명 선택 → 요청자 같은 종류 칸 전체에 반영'],
+ ['m21','칸 2개 이상에서 방식·서명 변경 → M-21'],
+ ['m21c','M-21 [취소] → 아무것도 바뀌지 않음'],
+ ['later','[계약 시 직접 서명] → 요청자 칸 전체 해제'],
+ ['need','서명 없이 [다음] → 서명 선택 필요 → 빈 칸으로 이동'],
+ ['c4','C-4 \'내 서명 적용\' + 확인 문구 한 줄'],
+ ['m14','동의 없이 [계약 작성 완료] → 안내'],
+ ['done','계약 시작 → 요청자 서명 완료 기록, 본인 요청 미발송'],
+ ['skip','순서대로 + 요청자 2번 → 요청자 차례 건너뜀'],
+];
+
+let st;
+function fresh(keepSc){
+  const sc=keepSc&&st?{many:st.many,order:st.order,pos:st.pos}:{many:true,order:'seq',pos:1};
+  st=Object.assign(sc,{screen:'C3',mode:'now',sel:{'도장':null,'싸인':null},field:'r1',modal:null,kind:null,tab:'vault',pick:null,pending:null,agree:false,flash:null,toast:null,started:null,progress:0,audit:[]});
+}
+const done=new Set(), logs=[];
+function tick(k){if(!done.has(k)){done.add(k);renderRail();}}
+function log(t){logs.push(`${clock()} ${t}`);renderRail();}
+function pad(n){return String(n).padStart(2,'0')}
+function clock(){const d=new Date();return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`}
+function stamp(){const d=new Date();return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${clock()}`}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function fields(){
+  const f=[{id:'r1',role:'me',kind:'도장',x:38,y:560,w:190}];
+  if(st.many){f.push({id:'r2',role:'me',kind:'도장',x:310,y:150,w:180},{id:'r3',role:'me',kind:'싸인',x:38,y:150,w:190});}
+  f.push({id:'h1',role:'hr',kind:'싸인',x:310,y:470,w:180,h:34},{id:'w1',role:'wk',kind:'싸인',x:310,y:560,w:180});
+  return f;
+}
+const myFields=()=>fields().filter(f=>f.role==='me');
+const myKinds=()=>[...new Set(myFields().map(f=>f.kind))];
+const missing=()=>st.mode==='now'?myKinds().filter(k=>!st.sel[k]):[];
+const order=()=>st.pos===1?['me','wk','hr']:['wk','me','hr'];
+function optById(id){for(const k in OPTS)for(const t in OPTS[k]){if(t==='tabs')continue;const o=OPTS[k][t].find(x=>x.id===id);if(o)return o;}return null}
+
+/* ---------- 화면 ---------- */
+function steps(n){return `<div class="steps">${['문서 업로드','참여자 설정','서명 조건 설정','검토'].map((l,i)=>`<span class="${i+1===n?'on':''}"><i>${i+1}</i>${l}</span>`).join('')}</div>`}
+
+function C3(){
+  const fl=fields(), sf=fl.find(f=>f.id===st.field)||fl[0], sr=ROLES[sf.role];
+  const lines=[1,2,3,4,5].map(n=>`<div class="art">제 ${n} 조</div><div class="ln" style="width:100%"></div><div class="ln" style="width:92%"></div><div class="ln" style="width:60%"></div>`).join('');
+  const G='border-color:var(--cm);background:var(--cmb);color:#0b6e3a';
+  const top=`<span class="fld" style="left:38px;top:92px;width:190px;${G}">회사명 <b style="color:var(--fg);font-weight:500">(주)예스폼</b></span><span class="fld" style="left:310px;top:92px;width:180px;border-color:var(--r2);background:var(--r2b);color:var(--r2)">근로자 성명 <b style="color:var(--fg);font-weight:500">홍길동</b></span>`;
+  const hd=['left:-4px;top:-4px','right:-4px;top:-4px','left:-4px;bottom:-4px','right:-4px;bottom:-4px'].map(p=>`<i class="hd" style="${p}"></i>`).join('');
+  const fh=fl.map(f=>{const r=ROLES[f.role],on=f.id===st.field;
+    let lab=`${r.name} · ${f.kind}`,img='';
+    if(r.self){if(st.mode==='later')lab=`${r.name} ${f.kind} · 계약 시 직접 서명`;else if(st.sel[f.kind]){img=optById(st.sel[f.kind]).svg;lab=f.kind;}}
+    const big=!f.h;
+    return `<button class="fld ${big?'big':''} ${on?'on':''} ${st.flash&&st.flash.includes(f.id)?'flash':''}" data-a="selField" data-id="${f.id}" style="left:${f.x}px;top:${f.y}px;width:${f.w}px;${f.h?`height:${f.h}px;justify-content:center;`:''}border-color:${on?'var(--pri)':r.c};background:${r.bg};color:${r.c}" aria-label="${r.name} ${f.kind} 칸"><span style="${img?'color:var(--fg)':''}">${esc(lab)}</span>${img?`<span class="img">${img}</span>`:''}${on?hd:''}</button>`+
+      (big?`<span class="fld" style="left:${f.x}px;top:${f.y+78}px;width:${f.w}px;border-color:${r.c};background:${r.bg};color:${r.c}">서명일 · 자동 완성</span>`:'');}).join('');
+  const nK=k=>myFields().filter(f=>f.kind===k).length;
+  const scope=myKinds().map(k=>`${k} ${nK(k)}개`).join(' · ');
+  let panel;
+  if(sr.self){
+    const K=sf.kind, has=st.sel[K];
+    panel=`<div><div class="lbl">서명 방식</div><div class="seg" role="group" aria-label="서명 방식"><button data-a="mode" data-v="now" aria-pressed="${st.mode==='now'}">지금 서명 추가</button><button data-a="mode" data-v="later" aria-pressed="${st.mode==='later'}">계약 시 직접 서명</button></div></div>`+
+     (st.mode==='now'?`<div style="display:flex;flex-direction:column;gap:8px"><div class="pv ${has?'':'empty'}">${has?`<small>선택한 ${K}</small>${optById(has).svg}`:'선택한 서명이 없습니다.'}</div><button class="pb ${has?'line':'p'}" style="flex:none;width:100%" data-a="openPick" data-k="${K}">${has?'서명 다시 선택하기':'서명 선택하기'}</button></div>
+       <div class="note"><span>ⓘ</span><span>요청자 본인의 모든 싸인·도장 칸에 같은 서명 방식이 적용됩니다.<br><span style="color:var(--sub)">적용 칸: ${scope}</span></span></div>
+       <div class="hint">계약을 시작하면 요청자 서명이 완료된 것으로 기록되며, 본인에게 서명 요청이 발송되지 않습니다.</div>`
+      :`<div class="note" style="color:#4b5260;background:#f3f4f6"><span>ⓘ</span><span>요청자 본인의 모든 싸인·도장 칸이 계약 시 직접 서명으로 설정됩니다.<br><span style="color:var(--sub)">적용 칸: ${scope}</span></span></div><div class="hint">계약을 시작한 뒤 요청자 차례가 되면 본인에게 서명 요청이 발송됩니다.</div>`);
+  } else panel=`<div class="hint">이 역할의 서명 참여자가 실제 계약을 받은 뒤 진행할 서명 조건입니다.</div>`;
+  const roleCard=(k)=>{const r=ROLES[k];return `<div class="role" style="background:${r.chipBg}"><span>${r.name}${r.self?'<span class="chip">요청자 본인</span>':''}</span><small>${r.person}${r.self?' · 내 정보':''}</small></div>`};
+  const items=[['싸인',nK('싸인')],['도장',nK('도장')],['텍스트',0],['자필 작성',0],['날짜',0],['체크박스',0]].map(([t,c])=>`<div class="it"><span>${t}</span><span style="color:#4b5260">${c?`(${c})`:''}</span></div>`).join('');
+  return `<div class="scr"><div class="top"><span class="logo">예스폼싸인</span>${steps(3)}</div>
+  <div class="body3">
+   <aside class="lp"><b style="font-size:15px">공통 항목</b><div class="box"><div class="cap" style="padding-top:0">입력 항목</div><div class="it">텍스트</div><div class="it">날짜</div></div>
+    <b style="font-size:15px">역할</b><div class="box">${roleCard('me')}<div class="cap">입력 항목</div>${items}</div>
+    <div class="box">${roleCard('wk')}</div><div class="box">${roleCard('hr')}</div></aside>
+   <div class="mid"><div class="doc"><div style="text-align:center;font-size:20px;margin:6px 0 12px">정규직 근로계약서</div><div class="ln" style="width:86%"></div><div class="ln" style="width:70%"></div><div style="height:190px"></div>${lines}${top}${fh}</div></div>
+   <aside class="rp"><div class="rph">${sf.kind}</div><div class="rpb">
+    <div><div class="lbl">위치</div><div style="display:flex;gap:6px"><div class="inp"><span style="color:#6b7280">X</span>${sf.x}<span style="color:#9aa1ab">px</span></div><div class="inp"><span style="color:#6b7280">Y</span>${sf.y}<span style="color:#9aa1ab">px</span></div></div></div>
+    <div><div class="lbl">역할 선택</div><div class="inp"><span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:${sr.c}"></span>${sr.name} · ${sr.person}</span><span>▾</span></div>
+     <div style="display:flex;align-items:center;gap:8px;font-size:13.5px;margin-top:10px"><span class="cb">✓</span>필수작성</div></div>
+    ${panel}
+    <div style="display:flex;gap:8px;margin-top:2px"><button class="pb" data-a="oos" data-t="칸 삭제">삭제</button><button class="pb p" data-a="oos" data-t="칸 복사">복사</button></div></div></aside>
+  </div>
+  <div class="foot"><button class="fb" data-a="oos" data-t="나가기">나가기</button><button class="fb p" data-a="next3">다음</button></div></div>`;
+}
+
+function C4(){
+  const now=st.mode==='now';
+  const rows=order().map((k,i)=>{const r=ROLES[k];
+    const auth=r.self?(now?`<span class="mine">${myKinds().map(K=>optById(st.sel[K]).svg).join('')}내 서명 적용</span>`:'<span style="color:#9aa1ab;font-size:12.5px">없음</span>'):`<span class="tag">${r.auth}</span>`;
+    return `<div class="tr"><span>${st.order==='seq'?i+1:'-'}</span><span><span class="rchip" style="background:${r.chipBg};color:${r.chipFg}">${r.name}${r.self?' · 요청자 본인':''}</span></span><span>${r.person}</span><span>${r.contact}</span><div class="msg ${r.self?'off':''}">${r.self?'본인에게는 전송하지 않음':'메시지를 입력해 주세요.'}</div><span>${auth}</span></div>`}).join('');
+  return `<div class="scr"><div class="top"><span class="logo">예스폼싸인</span>${steps(4)}</div>
+  <div class="c4"><h2 style="margin:0;font-size:22px">검토 후 전송</h2>
+   <div class="card"><h3>계약명</h3><div style="display:flex;gap:10px"><div class="inp" style="flex:none;width:420px;background:#f1f3f5;border:0">정규직 근로계약서</div><button class="pb p" style="flex:none;width:100px" data-a="oos" data-t="계약명 수정">수정하기</button></div>
+    <h3 style="margin-top:8px">참여자 정보 <span style="font-size:12.5px;color:var(--sub);font-weight:400">· ${st.order==='seq'?'순서대로 서명':'순서 없이 서명'}</span></h3>
+    <div class="tbl"><div class="tr th"><span>순서</span><span>역할</span><span>이름</span><span>연락처</span><span>전달 메시지</span><span>추가 인증</span></div>${rows}</div></div>
+   <div class="card"><h3>전송 전 확인 사항</h3><div class="conf">
+    <div>• 입력한 이메일과 전화번호로 계약서 링크가 전송됩니다.</div><div>• 정확한 이메일과 전화번호를 입력했는지 다시 한번 확인해 주세요.</div>
+    <div>• 전자서명법, 전자문서 및 전자거래기본법에 따라 서명 계약과 동일한 법적 효력을 받음을 동의합니다.</div><div>• 모든 서명자가 서명한 계약서를 원본으로 인정합니다.</div>
+    ${now?'<div class="hl">• STEP 3에서 넣은 내 서명이 계약서에 적용되며, 동의한 시점이 서명 시각으로 기록됩니다.</div>':''}
+    <div>• 자세한 내용은 이용약관 및 개인정보처리방침을 확인해 주세요.</div></div>
+    <button class="agree" data-a="agree" aria-pressed="${st.agree}"><i>✓</i>본인은 상기 사항을 확인했으며, 모두 동의합니다.</button></div>
+  </div>
+  <div class="foot"><button class="fb" data-a="back3">이전 단계 (프로토타입)</button><button class="fb p" data-a="send">계약 작성 완료</button></div></div>`;
+}
+
+function statusOf(k,idx){
+  const ord=order(), seq=st.order==='seq', now=st.mode==='now';
+  if(k==='me'&&now)return ['ok','서명 완료','계약 시작 시 미리 서명 적용 · 요청 발송 안 함'];
+  const p=st.progress; // 완료된 다른 참여자 수 (순서대로일 때)
+  if(!seq){ if(k!=='me'&&ord.indexOf(k)<0)return ['wait','',''];
+    const doneP=k!=='me'&&p>=1&&k===ord.filter(x=>x!=='me')[0];
+    return doneP?['ok','서명 완료','']:['sent',k==='me'?'서명 요청 발송 (본인)':'서명 요청 발송','계약 시작과 동시에 발송'];}
+  // 순서대로: 서명해야 할 사람 목록 (now면 요청자 제외)
+  const q=ord.filter(x=>!(x==='me'&&now));
+  const qi=q.indexOf(k);
+  if(qi<p)return ['ok','서명 완료',''];
+  if(qi===p)return ['sent',k==='me'?'서명 요청 발송 (본인)':'서명 요청 발송',k!=='me'&&now&&ord.indexOf(k)>ord.indexOf('me')&&ord.indexOf('me')>0?'요청자 차례 건너뜀 → 바로 발송':''];
+  return ['wait','대기',`${q[qi-1]?ROLES[q[qi-1]].name:''} 서명 후 발송`];
+}
+function DONE(){
+  const ord=order(), now=st.mode==='now', seq=st.order==='seq';
+  const q=ord.filter(x=>!(x==='me'&&now)), allDone=seq?st.progress>=q.length:st.progress>=1;
+  const rows=ord.map((k,i)=>{const r=ROLES[k],[cls,lab,sub]=statusOf(k,i);
+    return `<div class="tlr"><span style="color:var(--mute)">${seq?i+1:'-'}</span><span><span class="rchip" style="background:${r.chipBg};color:${r.chipFg}">${r.name}${r.self?' · 요청자 본인':''}</span> ${r.person}</span><span style="font-size:12.5px;color:var(--sub)">${sub}</span><span>${lab?`<span class="st ${cls}">${lab}</span>`:''}</span></div>`}).join('');
+  const nextName=seq?(q[st.progress]?ROLES[q[st.progress]]:null):ROLES[ord.filter(x=>x!=='me')[0]];
+  const canAdv=seq?!!nextName:st.progress<1;
+  return `<div class="scr"><div class="top"><span class="logo">예스폼싸인</span><span style="margin-left:auto;font-size:12.5px;color:var(--chg);font-weight:500">프로토타입 확인용 화면 (실제 화면 아님)</span></div>
+  <div class="done"><h2 style="margin:0;font-size:22px">정규직 근로계약서 · 서명 진행 중</h2>
+   <div class="card"><h3>서명 상태 <span style="font-size:12.5px;color:var(--sub);font-weight:400">· ${seq?'순서대로':'순서 없이'} · 요청자 ${st.pos}번 · ${now?'지금 서명 추가':'계약 시 직접 서명'}</span></h3><div class="tl">${rows}</div>
+    ${canAdv&&nextName?`<div><button class="pb line" style="flex:none;padding:0 16px" data-a="adv">${seq?nextName.name:'근로자'}${nextName.self?'(본인)':''} 서명 완료 처리하기 (시뮬레이션)</button></div>`:''}</div>
+   <div class="card"><h3>감사 추적</h3><div class="audit">${st.audit.map(a=>`<div>${a}</div>`).join('')}</div></div>
+  </div></div>`;
+}
+
+/* ---------- 모달 ---------- */
+function simple(t,b,btns){return `<div class="back"><div class="modal" role="dialog" aria-modal="true"><div class="mt"><b>${t}</b><span>${b}</span></div><div class="mb">${btns}</div></div></div>`}
+function modal(){
+  const m=st.modal; if(!m)return '';
+  if(m==='m21')return simple('서명 방식 변경','변경하면 요청자 본인의 다른 싸인·도장 칸에도<br>동일하게 반영됩니다.<br>진행하시겠습니까?','<button data-a="m21no">취소</button><button class="p" data-a="m21yes">변경하기</button>');
+  if(m==='need')return simple('서명 선택 필요',`요청자 본인 서명 칸에 넣을 서명을 선택해 주세요.<br>계약을 보낼 때 서명하려면 서명 방식을<br>[계약 시 직접 서명]으로 바꿔 주세요.`,'<button class="p" data-a="needOk">확인</button>');
+  if(m==='m14')return simple(st.mode==='now'?'서명 동의 필요':'동의 필요',st.mode==='now'?'저장된 서명으로 서명하려면<br>동의 항목을 체크해 주세요.':'확인 사항에 동의해 주세요.','<button class="p" data-a="close">확인</button>');
+  if(m==='pick'){const K=st.kind,o=OPTS[K],list=o[st.tab]||[];
+    return `<div class="back"><div class="picker" role="dialog" aria-modal="true"><div class="pkh">${K==='도장'?'도장 삽입하기':'싸인 삽입하기'}</div>
+     <div class="ptabs" role="tablist">${o.tabs.map(([id,l])=>`<button role="tab" data-a="ptab" data-v="${id}" aria-selected="${st.tab===id}">${l}</button>`).join('')}</div>
+     <div class="pgrid">${list.map(x=>`<button class="opt" data-a="popt" data-id="${x.id}" aria-pressed="${st.pick===x.id}">${x.svg}<span>${x.name}</span></button>`).join('')}</div>
+     <div class="pf"><button data-a="close">닫기</button><button class="p" data-a="insert" ${st.pick?'':'disabled'}>삽입하기</button></div></div></div>`;}
+  return '';
+}
+
+/* ---------- 렌더 ---------- */
+function render(){
+  const v=st.screen==='C3'?C3():st.screen==='C4'?C4():DONE();
+  document.getElementById('screen').innerHTML=v+modal()+(st.toast?`<div class="toast">${st.toast}</div>`:'');
+  st.flash=null;
+  if(st.screen==='C3'&&st.mode==='now'){const f=fields().find(x=>x.id===st.field);if(f&&ROLES[f.role].self&&!st.sel[f.kind])tick('c3c');}
+  renderRail();fit();
+}
+function renderRail(){
+  const [n,s]=SCREENS[st.screen];document.getElementById('nowName').textContent=n;document.getElementById('nowSub').textContent=s;
+  const fl=[['C3','C-3 서명 조건 설정 · 미리 서명'],['C4','C-4 검토 · [계약 작성 완료]'],['DONE','계약 진행 현황 · 감사 추적']];
+  const idx=fl.findIndex(x=>x[0]===st.screen);
+  document.getElementById('flow').innerHTML=fl.map(([k,l],i)=>`<li class="${i===idx?'on':i<idx?'ok':''}"><i>${i<idx?'✓':i+1}</i>${l}</li>`).join('');
+  document.getElementById('chk').innerHTML=CHECKS.map(([k,l])=>`<li class="${done.has(k)?'ok':''}"><span>${done.has(k)?'✓':''}</span>${l}</li>`).join('');
+  document.getElementById('log').innerHTML=logs.map(l=>`<div>${esc(l)}</div>`).join('');
+  const set=(id,on)=>document.getElementById(id).setAttribute('aria-pressed',on);
+  set('m0',!st.many);set('m1',st.many);set('oS',st.order==='seq');set('oP',st.order==='par');set('p1',st.pos===1);set('p2',st.pos===2);
+}
+function fit(){const f=document.getElementById('fit'),s=document.getElementById('stage');const sc=f.clientWidth/1280;s.style.transform=`scale(${sc})`;f.style.height=(860*sc)+'px';}
+let tt;function toast(t){st.toast=t;render();clearTimeout(tt);tt=setTimeout(()=>{st.toast=null;render();},1600);}
+
+function applySel(K,id){st.sel[K]=id;st.flash=myFields().filter(f=>f.kind===K).map(f=>f.id);const n=st.flash.length;log(`서명 적용: ${optById(id).name} → 요청자 ${K} 칸 ${n}개`);tick('pick');}
+function applyMode(v){st.mode=v;if(v==='later'){st.sel={'도장':null,'싸인':null};tick('later');log('서명 방식: 계약 시 직접 서명 → 요청자 칸 전체 해제');}else{log('서명 방식: 지금 서명 추가 (서명 다시 선택 필요)');tick('c3c');}st.flash=myFields().map(f=>f.id);}
+
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a;
+  switch(a){
+   case 'reset':fresh(true);done.clear();logs.length=0;log('처음부터');render();break;
+   case 'scMany':st.many=b.dataset.v==='1';fresh(true);log(`시나리오: 요청자 칸 ${st.many?'도장 2 + 싸인 1':'도장 1개'}`);render();break;
+   case 'scOrder':st.order=b.dataset.v;fresh(true);log(`시나리오: ${st.order==='seq'?'순서대로':'순서 없이'} 서명`);render();break;
+   case 'scPos':st.pos=+b.dataset.v;fresh(true);log(`시나리오: 요청자 ${st.pos}번`);render();break;
+   case 'selField':{st.field=b.dataset.id;const f=fields().find(x=>x.id===st.field);if(ROLES[f.role].self&&st.mode==='now'&&!st.sel[f.kind])tick('c3c');render();break;}
+   case 'mode':{const v=b.dataset.v;if(st.mode===v)break;if(myFields().length>=2){st.pending={type:'mode',v};st.modal='m21';log('서명 방식 변경 시도 → M-21');}else applyMode(v);render();break;}
+   case 'openPick':st.kind=b.dataset.k;st.tab='vault';st.pick=null;st.modal='pick';log(`[${st.sel[st.kind]?'서명 다시 선택하기':'서명 선택하기'}] → ${st.kind} 삽입 모달(보관함 탭)`);render();break;
+   case 'ptab':st.tab=b.dataset.v;st.pick=null;render();break;
+   case 'popt':st.pick=b.dataset.id;render();break;
+   case 'insert':{const K=st.kind,id=st.pick;st.modal=null;
+     if(st.sel[K]&&st.sel[K]!==id&&myFields().length>=2){st.pending={type:'sel',K,id};st.modal='m21';log('서명 변경 시도 → M-21');}
+     else if(st.sel[K]===id){log('같은 서명 선택 · 변경 없음');}
+     else applySel(K,id);
+     render();break;}
+   case 'm21yes':{const p=st.pending;st.pending=null;st.modal=null;tick('m21');if(p.type==='mode')applyMode(p.v);else applySel(p.K,p.id);render();break;}
+   case 'm21no':st.pending=null;st.modal=null;tick('m21');tick('m21c');log('M-21 [취소] → 변경 없음');render();break;
+   case 'next3':{const m=missing();if(m.length){st.modal='need';tick('need');log(`[다음] 서명 미선택(${m.join('·')}) → 서명 선택 필요`);}else{st.screen='C4';st.agree=false;if(st.mode==='now')tick('c4');log('[다음] → C-4');}render();break;}
+   case 'needOk':{const K=missing()[0];const f=myFields().find(x=>x.kind===K);st.modal=null;st.field=f.id;st.flash=[f.id];log(`[확인] → 요청자 ${K} 칸으로 이동`);render();break;}
+   case 'back3':st.screen='C3';log('C-3으로 돌아감 (프로토타입 편의)');render();break;
+   case 'agree':st.agree=!st.agree;render();break;
+   case 'send':{if(!st.agree){st.modal='m14';tick('m14');log('동의 없이 [계약 작성 완료] → 안내');render();break;}
+     const t=stamp(),now=st.mode==='now',ord=order(),seq=st.order==='seq';
+     st.audit=[`${t}  <b>계약 생성</b>  계정 yes@yesform.com · IP 203.0.113.24`];
+     if(now)st.audit.push(`${t}  <b>요청자 서명 완료</b>  김예스 · 계약 시작 시 미리 서명 (${myKinds().map(K=>`${K}: ${optById(st.sel[K]).name}`).join(', ')}) · 서명 요청 발송 안 함`);
+     const q=ord.filter(x=>!(x==='me'&&now));
+     (seq?[q[0]]:q).forEach(k=>st.audit.push(`${t}  <b>서명 요청 발송</b>  ${ROLES[k].name} ${ROLES[k].person}${k==='me'?' (본인)':''}`));
+     st.screen='DONE';st.progress=0;st.modal=null;
+     if(now)tick('done');if(now&&seq&&st.pos===2)tick('skip');
+     log(`[계약 작성 완료] → ${now?'요청자 서명 완료 기록, 본인 요청 미발송':'요청자는 차례에 서명 요청'}`);render();break;}
+   case 'adv':{const now=st.mode==='now',ord=order(),seq=st.order==='seq',q=ord.filter(x=>!(x==='me'&&now));const t=stamp();
+     if(seq){const k=q[st.progress];st.audit.push(`${t}  <b>서명 완료</b>  ${ROLES[k].name} ${ROLES[k].person}`);st.progress++;const nx=q[st.progress];
+       if(nx){const skipped=ord.indexOf(nx)-ord.indexOf(k)>1;st.audit.push(`${t}  <b>서명 요청 발송</b>  ${ROLES[nx].name} ${ROLES[nx].person}${nx==='me'?' (본인)':''}${skipped?' · 요청자 차례 건너뜀':''}`);if(skipped)tick('skip');log(`${ROLES[k].name} 서명 → ${ROLES[nx].name}에게 발송${skipped?' (요청자 건너뜀)':''}`);}
+       else{st.audit.push(`${t}  <b>계약 완료</b>  모든 참여자 서명`);log('모든 참여자 서명 → 계약 완료');}}
+     else{st.progress=1;const k=ord.filter(x=>x!=='me')[0];st.audit.push(`${t}  <b>서명 완료</b>  ${ROLES[k].name} ${ROLES[k].person}`);log(`${ROLES[k].name} 서명 완료`);}
+     render();break;}
+   case 'close':st.modal=null;st.pending=null;render();break;
+   case 'oos':toast(`'${b.dataset.t}'은(는) 이 프로토타입 범위 밖입니다.`);break;
+  }
+});
+addEventListener('resize',fit);
+fresh(false);log('시작: C-3, 요청자 도장 칸 선택 상태');render();
+</script>
+
+</body>
+</html>

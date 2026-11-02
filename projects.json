@@ -2,6 +2,43 @@
   "version": 2,
   "projects": [
     {
+      "id": "20261102-113935-yesformsign-template",
+      "title": "예스폼싸인 고도화 2차",
+      "team": "planning",
+      "category": "템플릿",
+      "desc": "예스폼싸인 고도화 2차_템플릿 기능",
+      "created": "2026.11.02",
+      "updated": "2026.11.02",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261102-113935-yesformsign-template",
+          "label": "v1",
+          "title": "예스폼싸인 고도화 2차",
+          "desc": "",
+          "created": "2026.11.02",
+          "folder": "archive/20261102-113935-yesformsign-template",
+          "preview": "archive/20261102-113935-yesformsign-template/01_템플릿_전체흐름.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "01_템플릿_전체흐름",
+              "href": "archive/20261102-113935-yesformsign-template/01_템플릿_전체흐름.html"
+            },
+            {
+              "label": "02_템플릿_만들기",
+              "href": "archive/20261102-113935-yesformsign-template/02_템플릿_만들기.html"
+            },
+            {
+              "label": "03_요청자_미리서명",
+              "href": "archive/20261102-113935-yesformsign-template/03_요청자_미리서명.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "20261030-171420-css",
       "title": "[예스폼싸인] 메인시안 모바일",
       "team": "design",

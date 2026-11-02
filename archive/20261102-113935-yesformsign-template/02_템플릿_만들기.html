@@ -1,0 +1,730 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>템플릿 만들기 프로토타입</title>
+<style>[hidden]{display:none!important}body{margin:0}</style>
+</head>
+<body>
+
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Nanum+Myeongjo:wght@700;800&family=Nanum+Brush+Script&family=Black+Han+Sans&display=swap">
+<style>
+/* 레이아웃: 위 시나리오 바 · 왼쪽 1280×900 실제 화면(폭에 맞춰 축소) · 오른쪽 흐름/체크리스트 레일 */
+:root{
+  --ink:#1d2129; --sub:#5b6270; --mute:#8a919c; --line:#e3e6ea; --line2:#d7dbe1;
+  --blue:#1f5eff; --blue-ink:#1f4fd6; --blue-bg:#e8efff;
+  --ground:#eef0f3; --paper:#fff; --soft:#f3f4f6; --page:#f6f7f9;
+  --err:#e5484d; --warn-bg:#fff6e8; --warn:#8a4000;
+  --ui:'Noto Sans KR',system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--ground);color:var(--ink);font-family:var(--ui);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 40px}
+button{font-family:inherit;cursor:pointer;color:inherit}
+button:disabled{cursor:not-allowed}
+input{font-family:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.wrap{max-width:1660px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.sbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+.sbar h1{margin:0;font-size:16px;text-wrap:balance}
+.sbar .rid{font-size:12px;color:var(--sub)}
+.grow{flex:1 1 auto}
+.sopt{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--sub)}
+.ssw{display:flex;border:1px solid var(--line2);border-radius:6px;overflow:hidden}
+.ssw button{border:0;background:var(--paper);padding:6px 10px;font-size:12.5px;color:var(--sub);border-right:1px solid var(--line2)}
+.ssw button:last-child{border-right:0}
+.ssw button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.ghost{border:1px solid var(--line2);background:var(--paper);border-radius:6px;padding:6px 12px;font-size:12.5px}
+.main{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;align-items:start}
+@media (max-width:1100px){.main{grid-template-columns:minmax(0,1fr)}}
+.fit{position:relative;overflow:hidden;border:1px solid #cfd3da;background:var(--paper)}
+.stage{width:1280px;height:900px;transform-origin:0 0;position:absolute;left:0;top:0;background:var(--paper);overflow:hidden}
+.scr{position:absolute;inset:0;display:flex;flex-direction:column}
+.rail{display:flex;flex-direction:column;gap:12px}
+.pcard{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;font-size:12.5px;line-height:1.55;color:#33373d}
+.pcard h2{margin:0;font-size:13.5px;color:var(--ink)}
+.now b{font-size:15px;color:var(--ink)}
+.flow{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+.flow li{display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:6px;color:var(--mute)}
+.flow li i{font-style:normal;width:18px;height:18px;border-radius:50%;border:1.5px solid #c5cad2;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.flow li.past{color:#33373d}.flow li.past i{background:#33373d;border-color:#33373d;color:#fff}
+.flow li.cur{background:var(--blue-bg);color:var(--blue-ink);font-weight:700}.flow li.cur i{background:var(--blue);border-color:var(--blue);color:#fff}
+.chk{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.chk li{display:flex;gap:8px;align-items:flex-start}
+.chk i{font-style:normal;flex-shrink:0;width:16px;height:16px;border-radius:4px;border:1.5px solid #b8bec7;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff}
+.chk li.ok i{background:var(--blue);border-color:var(--blue)}
+.chk li.ok span{color:var(--mute)}
+.q{border-left:3px solid #f0b429;padding-left:10px;color:#5c4813}
+.log{font-size:11.5px;color:var(--sub);max-height:160px;overflow:auto;display:flex;flex-direction:column;gap:2px;font-variant-numeric:tabular-nums}
+
+/* ===== 공통 화면 요소 ===== */
+.ico{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.ico.s{width:16px;height:16px}
+.top{height:64px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 24px;flex-shrink:0;position:relative}
+.logo{font-weight:700;font-size:18px}
+.steps{position:absolute;left:50%;transform:translateX(-50%);display:flex;gap:30px;font-size:15px;color:var(--mute)}
+.steps span{display:flex;align-items:center;gap:6px}
+.steps i{font-style:normal;width:18px;height:18px;border-radius:50%;background:#aeb4bd;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center}
+.steps .on{color:var(--blue-ink);font-weight:700}.steps .on i{background:var(--blue)}
+.steps .past{color:#4b5260}.steps .past i{background:#4b5260}
+.foot{height:76px;background:#fff;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:center;gap:10px;flex-shrink:0}
+.fb{width:190px;height:50px;border-radius:6px;border:1px solid var(--line2);background:#fff;font-size:15px}
+.fb.p{background:var(--blue);border-color:var(--blue);color:#fff}
+.fb.p:disabled{background:#c9d6fb;border-color:#c9d6fb}
+.scroll{flex-grow:1;overflow:auto;background:var(--page)}
+.toast{position:absolute;left:50%;bottom:96px;transform:translateX(-50%);background:#1d2129;color:#fff;font-size:13px;padding:10px 16px;border-radius:20px;z-index:40;white-space:nowrap}
+@media (prefers-reduced-motion:no-preference){.toast{animation:t .2s ease-out}@keyframes t{from{opacity:0;transform:translate(-50%,6px)}}}
+.errt{font-size:12px;color:var(--err);margin-top:5px}
+
+/* ===== A-1 템플릿 목록 ===== */
+.nav{width:200px;background:#fff;border-right:1px solid var(--line);display:flex;flex-direction:column;flex-shrink:0;font-size:14.5px}
+.nav .grp{padding:12px 14px;border-bottom:1px solid #eceef1;display:flex;flex-direction:column;gap:2px}
+.nav .cap{font-size:12px;color:var(--mute);padding:6px 8px}
+.nav span.a{display:block;padding:8px;border-radius:6px;color:#33373d}
+.nav span.a.on{background:#eaf1ff;color:var(--blue-ink)}
+.btnd{height:38px;padding:0 16px;border:0;border-radius:6px;background:#4b5563;color:#fff;font-size:14px}
+.btnd:disabled{background:#c5cad2}
+.tipw{position:relative;display:inline-flex}
+.tip{position:absolute;right:0;bottom:calc(100% + 10px);background:#1d2129;color:#fff;font-size:12px;border-radius:6px;padding:7px 10px;white-space:nowrap;z-index:8;display:none;font-weight:400}
+.tip::after{content:"";position:absolute;right:30px;bottom:-5px;width:10px;height:10px;background:#1d2129;transform:rotate(45deg)}
+.tip.l{left:0;right:auto}.tip.l::after{left:30px;right:auto}
+.tipw:hover .tip,.tipw:focus-within .tip{display:block}
+.lcard{background:#fff;border:1px solid var(--line);border-radius:12px}
+.ltbl{width:100%;border-collapse:collapse;font-size:14px}
+.ltbl th{color:#33373d;font-weight:700;text-align:left;padding:14px 16px;border-bottom:1px solid #eceef1;font-size:13.5px}
+.ltbl td{padding:12px 16px;border-bottom:1px solid #f0f1f3;vertical-align:middle}
+.ltbl tr.row{cursor:pointer}
+.ltbl tr.row:hover td{background:#fafbfc}
+.ltbl tr.sel td{border-bottom:0}
+.ltbl tr.new td{background:#f4f7ff}
+.lchip{display:inline-flex;align-items:center;height:24px;padding:0 8px;border-radius:4px;font-size:12px;font-weight:500;background:#f1f3f5;color:#3d4450;white-space:nowrap}
+.lchip.b{background:var(--blue-bg);color:var(--blue-ink)}
+.lchip.e{background:#fff;color:#8a4000;border:1px dashed #d97000}
+.heart{border:0;background:none;padding:4px;display:inline-flex}
+.bar td{background:#fff;padding:0 16px 14px 70px;border-bottom:1px solid #f0f1f3}
+.bar .in{display:flex;align-items:center;height:48px;gap:4px;background:var(--page);border:1px solid #eceef1;border-radius:8px;padding:0 8px;position:relative}
+.act{display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 12px;border-radius:6px;font-size:13.5px;color:#33373d;border:0;background:transparent}
+.act:hover:not(:disabled){background:#eceef1}
+.act.pr{color:var(--blue-ink);font-weight:700}
+.act:disabled{color:#aeb4bd}
+.vsep{width:1px;height:18px;background:var(--line2);margin:0 6px}
+.nm{font-weight:500}.sub2{font-size:12px;color:#6b7280;margin-top:2px}
+
+/* ===== B-1 ===== */
+.ucard{width:660px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px}
+.dz{width:100%;height:170px;border:1.5px dashed #c5cad2;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-size:14px;color:#33373d;text-align:center;cursor:pointer}
+.dz.dzoff{color:var(--mute);cursor:not-allowed;background:#fafbfc}
+.dz.over{border-color:var(--blue);background:#f6f8ff}
+.doccard{width:100%;display:flex;align-items:center;gap:14px;background:var(--page);border-radius:10px;padding:16px 18px}
+.grip{color:#9aa1ab;font-size:14px;letter-spacing:-2px}
+.sb:disabled,.ghost:disabled{color:#c0c5cc;border-color:var(--line);background:#fafbfc}
+.dtabs{display:flex;border-bottom:1px solid var(--line);margin-bottom:14px}
+.dtabs button{flex:1;border:0;background:none;padding:0 2px 12px;font-size:16px;color:var(--mute);display:flex;align-items:center;justify-content:center;gap:6px;border-bottom:2px solid transparent;margin-bottom:-1px}
+.dtabs button[aria-selected="true"]{color:var(--ink);font-weight:700;border-bottom-color:var(--ink)}
+.cnt{display:inline-flex;align-items:center;height:18px;font-size:12px;background:var(--blue-bg);color:var(--blue-ink);border-radius:10px;padding:0 7px;font-weight:500}
+.utbl{border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.uth,.utr{display:grid;grid-template-columns:1fr 140px 70px 90px;align-items:center;padding:0 14px;font-size:13.5px}
+.uth{height:44px;font-weight:700;font-size:13px;border-bottom:1px solid #eceef1}
+.utr{height:56px;border-bottom:1px solid #f0f1f3}
+.utr:last-child{border-bottom:0}
+.utr.sel{background:#f4f7ff}
+.sb{height:28px;padding:0 9px;border:1px solid var(--line2);border-radius:4px;font-size:12px;background:#fff;display:inline-flex;align-items:center;justify-content:center}
+.sb.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.iconb{border:0;background:none;padding:4px;color:#6b7280;display:inline-flex}
+.sub{font-size:11.5px;color:var(--mute)}
+.srch{height:38px;border:1px solid var(--line2);border-radius:6px;padding:0 12px;font-size:13.5px;display:flex;align-items:center;gap:8px;background:#fff;margin-bottom:12px}
+.srch input{border:0;outline:0;flex:1;font-size:13.5px;min-width:0}
+
+/* ===== B-2 ===== */
+.opt{flex:1;background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px 22px;display:flex;gap:12px;text-align:left}
+.opt[aria-pressed="true"]{border:1.5px solid var(--blue)}
+.ck{width:22px;height:22px;border-radius:50%;border:1.5px solid #aeb4bd;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;color:transparent;font-size:12px}
+.opt[aria-pressed="true"] .ck{background:var(--blue);border-color:var(--blue);color:#fff}
+.panel{background:#fff;border:1px solid var(--line);border-radius:12px;width:960px}
+.ph{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid #eceef1}
+.bulk{font-size:12px;color:var(--warn);background:#fbeee6;border-radius:4px;padding:3px 8px}
+.pc{border:1px solid var(--line);border-radius:10px;background:#fff}
+.pch{display:flex;align-items:center;gap:10px;padding:13px 22px;border-bottom:1px solid #eceef1;font-size:14.5px}
+.rchip{display:inline-flex;align-items:center;height:22px;padding:0 7px;border-radius:4px;font-size:12px}
+.rgrid{display:grid;grid-template-columns:200px 200px 300px;gap:14px;padding:16px 22px 14px;align-items:start}
+.f label{display:flex;justify-content:space-between;align-items:center;height:20px;font-size:12.5px;color:#33373d;margin-bottom:6px}
+.f label em{color:var(--err);font-style:normal}
+.xb{border:0;background:none;color:#6b7280;font-size:13px;padding:0 2px}
+.rinp{height:46px;border:1px solid var(--line2);border-radius:6px;padding:0 12px;font-size:14.5px;display:flex;align-items:center;background:#fff;gap:8px;width:100%}
+.rinp input{border:0;outline:0;flex:1;min-width:0;font-size:14.5px;background:transparent}
+.rinp.ro{background:#f1f3f5;color:#4b5260}
+.rinp.bad{border-color:var(--err)}
+.rinp select{border:0;background:transparent;font-family:inherit;font-size:13px;color:#4b5260;outline:0}
+.addb{height:46px;width:100%;margin-top:26px;padding:0 14px;border:1px dashed #6b8dff;border-radius:6px;background:#eef3ff;color:var(--blue-ink);font-size:14px;display:inline-flex;align-items:center;justify-content:center}
+.pcf{display:flex;align-items:center;gap:10px;margin:0 22px;padding:14px 0 16px;border-top:1px solid #eceef1;font-size:14px;flex-wrap:wrap}
+.sq{display:inline-flex;align-items:center;gap:8px;border:0;background:none;font-size:14px;padding:0;color:#33373d}
+.sq i{font-style:normal;width:20px;height:20px;border-radius:4px;border:1.5px solid #c5cad2;display:inline-flex;align-items:center;justify-content:center;font-size:12px;color:#fff}
+.sq[aria-pressed="true"] i{background:var(--blue);border-color:var(--blue)}
+.sq:disabled{color:#aeb4bd}.sq:disabled i{background:#f1f3f5;border-color:var(--line)}
+.tg{display:inline-flex;align-items:center;width:38px;height:22px;border-radius:11px;background:#6b7280;padding:2px;border:0}
+.tg span{width:18px;height:18px;border-radius:50%;background:#fff}
+.tg[aria-pressed="true"]{background:var(--blue);justify-content:flex-end}
+.trash{border:0;background:none;color:#6b7280;display:inline-flex;padding:2px}
+.trash:disabled{color:#d0d4da}
+.addrole{height:48px;padding:0 18px;border:1px solid var(--blue);border-radius:6px;background:#fff;color:var(--blue-ink);font-size:15px}
+.addrole:disabled{border-color:var(--line2);color:#aeb4bd}
+
+/* ===== B-3 ===== */
+.body3{display:flex;flex-grow:1;min-height:0}
+.lp{width:276px;padding:18px;display:flex;flex-direction:column;gap:12px;flex-shrink:0;border-right:1px solid var(--line);overflow:auto;background:#fff}
+.box{border:1px solid var(--line);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:6px}
+.rolesel{display:flex;gap:8px;border-radius:8px;padding:10px 12px;border:0;text-align:left;width:100%;align-items:flex-start}
+.rmenu{border:1px solid var(--line);border-radius:8px;overflow:hidden;display:flex;flex-direction:column}
+.rmenu button{border:0;background:#fff;text-align:left;padding:9px 12px;font-size:13.5px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #f0f1f3}
+.rmenu button:last-child{border-bottom:0}
+.rmenu button:hover{background:var(--soft)}
+.chip3{display:inline-flex;align-items:center;height:20px;padding:0 6px;border-radius:4px;font-size:11px;font-weight:500;background:var(--blue-bg);color:var(--blue-ink)}
+.cap3{font-size:12px;color:#6b7280;padding:6px 2px 0}
+.it{display:flex;align-items:center;gap:10px;height:38px;padding:0 14px;border:1px solid var(--line);border-radius:6px;font-size:14px;background:#fff}
+.mid{flex-grow:1;background:var(--soft);display:flex;justify-content:center;padding-top:24px;overflow:hidden}
+.doc{background:#fff;border:1px solid var(--line);position:relative;width:560px;height:720px;padding:24px 40px;display:flex;flex-direction:column;gap:6px}
+.ln{height:5px;background:#e6e8ec;border-radius:3px}
+.art{font-size:9px;font-weight:700;margin-top:8px}
+.fld{position:absolute;border:1.5px dashed;border-radius:3px;font-size:11px;display:flex;align-items:center;padding:0 6px;gap:4px;white-space:nowrap;height:26px;font-family:inherit;text-align:left;overflow:hidden}
+.fld.on{border-color:var(--blue)!important;border-style:solid}
+.hd{position:absolute;width:8px;height:8px;border-radius:50%;background:var(--blue)}
+.sig{width:200px;height:64px;align-items:flex-start;padding:4px 8px;overflow:visible}
+.sig .img{position:absolute;inset:6px 0 4px;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.sig .img svg,.sig .img img{height:54px;width:auto;max-width:120px}
+.rp{width:280px;border-left:1px solid var(--line);flex-shrink:0;display:flex;flex-direction:column;background:#fff;overflow:auto}
+.rph{padding:20px 18px;border-bottom:1px solid var(--line);font-size:16px;font-weight:500}
+.rpb{padding:16px 18px;display:flex;flex-direction:column;gap:14px}
+.lbl{font-size:13px;color:#33373d;margin-bottom:8px}
+.inp3{height:40px;border:1px solid var(--line2);border-radius:6px;padding:0 12px;font-size:13.5px;display:flex;align-items:center;justify-content:space-between;background:#fff;flex:1;gap:6px}
+.cb{width:18px;height:18px;border-radius:50%;background:var(--blue);color:#fff;font-size:11px;display:inline-flex;align-items:center;justify-content:center;border:0;padding:0;flex-shrink:0}
+.cb[aria-pressed="false"]{background:#fff;border:1.5px solid #b8bec7;color:transparent}
+.seg{display:flex;border:1px solid #c5cad2;border-radius:6px;overflow:hidden}
+.seg button{flex:1;text-align:center;padding:8px 0;font-size:12.5px;border:0;border-right:1px solid #c5cad2;background:#fff;color:#33373d}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--blue);color:#fff;font-weight:500}
+.pv{height:96px;border:1px dashed #c5cad2;border-radius:6px;background:#fafbfc;display:flex;align-items:center;justify-content:center;font-size:12.5px;color:#9aa1ab}
+.pv.has{border-style:solid;border-color:var(--line)}
+.pv svg,.pv img{height:78px;width:auto;max-width:200px}
+.pb{flex:1;height:40px;border-radius:6px;border:0;background:#eceef1;font-size:14px;color:#4b5260}
+.pb.p{background:var(--blue);color:#fff}
+.pb.line{background:#fff;border:1px solid var(--blue);color:var(--blue)}
+.hint{font-size:12px;line-height:1.55;color:var(--mute)}
+
+/* ===== B-4 ===== */
+.ncard{width:1000px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px 28px;display:flex;flex-direction:column;gap:12px}
+.h4{font-size:16px;font-weight:700}
+.ninp{height:46px;border:1px solid var(--line2);border-radius:6px;padding:0 14px;display:flex;align-items:center;gap:8px;background:#fff;width:440px}
+.ninp input{border:0;outline:0;flex:1;font-size:14.5px;min-width:0}
+.ninp.bad{border-color:var(--err)}
+.favb{display:flex;align-items:center;gap:6px;font-size:14px;color:#33373d;border:0;background:none}
+.vt{border:1px solid var(--line);border-radius:10px}
+.vr{display:flex;align-items:center;min-height:50px;padding:8px 20px;border-bottom:1px solid #eceef1;font-size:14px;gap:12px}
+.vr:last-child{border-bottom:0}
+.vr .k{width:120px;color:#33373d;flex-shrink:0}
+.vr .v{flex-grow:1;display:flex;justify-content:flex-end;align-items:center;gap:6px;flex-wrap:wrap;text-align:right}
+.rcard{width:218px;border:1px solid var(--line);border-radius:8px;padding:12px 14px;background:#fff;display:flex;flex-direction:column;gap:8px;text-align:left}
+.atag{font-size:12px;color:var(--blue-ink);background:#eef3ff;border-radius:3px;padding:2px 6px}
+.warn{display:inline-flex;align-items:center;gap:5px;font-size:13px;color:var(--warn);background:var(--warn-bg);border-radius:4px;padding:3px 8px}
+.okw{display:inline-flex;align-items:center;gap:5px;font-size:13px;color:#0b6e3a;background:#e7f6ee;border-radius:4px;padding:3px 8px}
+.att{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:4px;padding:3px 8px;font-size:13px}
+.attadd{display:inline-flex;align-items:center;height:30px;padding:0 10px;border:1px dashed #9db5ff;border-radius:6px;color:var(--blue-ink);font-size:13px;background:#f7f9ff;cursor:pointer}
+.attadd.dis{color:#aeb4bd;border-color:var(--line2);background:#fafbfc;cursor:not-allowed}
+
+/* ===== 모달 ===== */
+.dim{position:absolute;inset:0;background:rgba(29,33,41,.55);display:flex;align-items:center;justify-content:center;z-index:30}
+.modal{background:#fff;border-radius:10px;overflow:hidden;display:flex;flex-direction:column;width:340px}
+.mt{padding:30px 22px 24px;display:flex;flex-direction:column;gap:12px;text-align:center}
+.mt b{font-size:18px}
+.mt span{font-size:13.5px;color:var(--mute);line-height:1.6}
+.mb{display:flex}
+.mb button{flex:1;height:52px;border:0;font-size:15px;background:#eceef1;color:#6b7280}
+.mb button.p{background:var(--blue);color:#fff}
+.mb button:disabled{background:#eceef1;color:#b8bec7}
+.sm{width:560px}
+.smh{padding:24px 24px 0;font-size:18px;font-weight:700}
+.stabs{display:flex;gap:24px;padding:0 24px;border-bottom:1px solid var(--line);margin-top:16px}
+.stabs button{border:0;background:none;padding:10px 0 12px;font-size:15px;color:var(--mute);border-bottom:2px solid transparent;margin-bottom:-1px}
+.stabs button[aria-selected="true"]{color:var(--ink);font-weight:700;border-bottom-color:var(--blue)}
+.smb{height:380px;overflow:auto;padding:20px 24px}
+.sgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.tile{position:relative;height:120px;border:1px solid var(--line);border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;padding:8px}
+.tile:hover{border-color:#aeb4bd}
+.tile svg,.tile img{height:92px;width:auto;max-width:100%}
+.tile[aria-pressed="true"]{border:2px solid var(--blue);background:#f6f8ff}
+.tile[aria-pressed="true"]::after{content:"✓";position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:50%;background:var(--blue);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center}
+.empty{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--mute);font-size:13.5px;text-align:center;line-height:1.6}
+.drop{height:150px;border:1.5px dashed #c5cad2;border-radius:8px;background:#fafbfc;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-size:13.5px;color:#4b5260;text-align:center;cursor:pointer}
+.drop.over{border-color:var(--blue);background:#f6f8ff}
+.drop small{font-size:12px;color:var(--mute)}
+.minp{height:40px;border:1px solid #c5cad2;border-radius:6px;padding:0 12px;display:flex;align-items:center;gap:8px;margin-top:6px}
+.minp input{border:0;outline:0;flex:1;font-size:14px;min-width:0}
+.nowbar{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 12px;background:#fff;border:1px solid #e3e6ea;border-radius:10px;padding:10px 16px}
+.nowbar .nl{font-size:11.5px;color:#8a919c}.nowbar b{font-size:15px}.nowbar .ns{font-size:12.5px;color:#5b6270}
+</style>
+
+<div class="wrap">
+  <div class="sbar">
+    <div><h1>템플릿 만들기 프로토타입</h1><div class="rid">A-1 템플릿 목록 → B-1 ~ B-4 → 저장 → A-1 · 예시 계정 김예스</div></div>
+    <span class="grow"></span>
+    <div class="sopt">잔여 건수<div class="ssw"><button data-a="scCredit" data-v="1" id="scC1">있음</button><button data-a="scCredit" data-v="0" id="scC0">없음</button></div></div>
+    <div class="sopt">템플릿 수<div class="ssw"><button data-a="scFull" data-v="0" id="scF0">실제 개수</button><button data-a="scFull" data-v="1" id="scF1">20개(가정)</button></div></div>
+    <div class="sopt" hidden>도장 보관함<div class="ssw"><button data-a="scVault" data-v="1" id="scV1">있음</button><button data-a="scVault" data-v="0" id="scV0">비어 있음</button></div></div>
+    <button class="ghost" data-a="resetAll">처음부터</button>
+  </div>
+  <div class="nowbar"><span class="nl">지금 화면</span><b id="nowName"></b><span class="ns" id="nowSub"></span></div>
+  <div class="main">
+    <div class="fit" id="fit"><div class="stage" id="stage"><div id="screen"></div><div id="layer"></div></div></div>
+    <div class="rail" hidden>
+      <div class="pcard" hidden><h2>흐름</h2><ol class="flow" id="flow"></ol></div>
+      <div class="pcard" hidden><h2>확인할 동작</h2><ul class="chk" id="chk"></ul></div>
+      <div class="pcard" hidden><h2>확인 필요</h2>
+        <div class="q">B-1에서 PC 업로드·샘플 문서로 시작하면 B-2에 빈 역할 카드 1개를 두었습니다. 기본 카드 수 확인이 필요합니다.</div>
+        <div class="q">요청자 본인 미리 서명은 계약하기 STEP 3(C-3)에서만 넣기로 해서, 이 프로토타입(템플릿 만들기)에는 없습니다.</div>
+        <div class="q">휴대폰 번호 인증을 켤 때 연락처가 이미 이메일이면 어떻게 할지 정책이 없습니다. 지금은 그대로 둡니다.</div>
+        <div class="q">B-3 문서 칸은 역할마다 싸인(요청자 본인은 도장) 칸 1개씩 자동 배치한 예시입니다(최대 4개). 칸 추가·이동은 범위 밖입니다.</div>
+      </div>
+      <div class="pcard" hidden><h2>동작 기록</h2><div class="log" id="log"></div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+/* ---------- 도장 그래픽 ---------- */
+const RED='#d0262b';
+const MJ="'Nanum Myeongjo',serif", BR="'Nanum Brush Script',cursive", GD="'Black Han Sans','Noto Sans KR',sans-serif";
+const vt=(ch,x,y0,st,sz,f,c=RED)=>ch.map((t,i)=>`<text x="${x}" y="${y0+i*st}" font-family="${f}" font-size="${sz}" font-weight="800" fill="${c}" text-anchor="middle" dominant-baseline="central">${t}</text>`).join('');
+const sv=(w,h,i)=>`<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg">${i}</svg>`;
+const S={
+  round:f=>sv(100,100,`<circle cx="50" cy="50" r="45" fill="none" stroke="${RED}" stroke-width="4"/>${vt([...'김예스'],50,24,26,24,f)}`),
+  oval:f=>sv(80,104,`<ellipse cx="40" cy="52" rx="35" ry="48" fill="none" stroke="${RED}" stroke-width="4"/>${vt([...'김예스'],40,24,28,25,f)}`),
+  square:f=>sv(100,100,`<rect x="6" y="6" width="88" height="88" rx="6" fill="none" stroke="${RED}" stroke-width="5"/>`+[['예',70,32],['스',70,68],['김',30,32],['인',30,68]].map(([c,x,y])=>`<text x="${x}" y="${y}" font-family="${f}" font-size="30" font-weight="800" fill="${RED}" text-anchor="middle" dominant-baseline="central">${c}</text>`).join('')),
+  corpRound:id=>sv(120,120,`<defs><path id="${id}" d="M60,60 m-41,0 a41,41 0 1,1 82,0 a41,41 0 1,1 -82,0"/></defs><circle cx="60" cy="60" r="56" fill="none" stroke="${RED}" stroke-width="4"/><circle cx="60" cy="60" r="28" fill="none" stroke="${RED}" stroke-width="3"/><text font-family="${MJ}" font-size="15" font-weight="800" fill="${RED}" letter-spacing="3"><textPath href="#${id}" startOffset="2%">주식회사 예스폼 · 주식회사 예스폼 ·</textPath></text>${vt(['대표','이사'],60,50,20,13,MJ)}`),
+  corpSquare:()=>sv(110,110,`<rect x="5" y="5" width="100" height="100" fill="none" stroke="${RED}" stroke-width="5"/>`+[['주',82,25],['식',82,55],['회',82,85],['사',55,25],['예',55,55],['스',55,85],['폼',28,25],['대',28,55],['표',28,85]].map(([c,x,y])=>`<text x="${x}" y="${y}" font-family="${MJ}" font-size="24" font-weight="800" fill="${RED}" text-anchor="middle" dominant-baseline="central">${c}</text>`).join('')),
+  corpRect:()=>sv(150,90,`<rect x="5" y="5" width="140" height="80" rx="4" fill="none" stroke="${RED}" stroke-width="4"/><text x="75" y="32" font-family="${GD}" font-size="22" fill="${RED}" text-anchor="middle" dominant-baseline="central">(주)예스폼</text><text x="75" y="62" font-family="${MJ}" font-size="16" font-weight="800" fill="${RED}" text-anchor="middle" dominant-baseline="central">대표이사 사용인</text>`),
+  scan:()=>sv(100,100,`<g transform="rotate(-8 50 50)" opacity=".82"><circle cx="50" cy="50" r="44" fill="none" stroke="#b5161c" stroke-width="5" stroke-dasharray="60 3 90 2 70 4"/>${vt([...'김예스'],50,25,25,25,MJ,'#b5161c')}</g>`)
+};
+const VAULT=[{id:'v1',name:'김예스 원형(보관함)',svg:S.round(MJ)},{id:'v2',name:'(주)예스폼 법인인감(보관함)',svg:S.corpRound('vp2')},{id:'v3',name:'스캔한 개인 도장(보관함)',svg:S.scan()}];
+const STABS=[
+  {k:'vault',label:'보관함'},
+  {k:'normal',label:'일반도장',items:[{id:'n1',name:'일반도장 원형 명조',svg:S.round(MJ)},{id:'n2',name:'일반도장 원형 고딕',svg:S.round(GD)},{id:'n3',name:'일반도장 원형 붓글씨',svg:S.round(BR)},{id:'n4',name:'일반도장 타원 명조',svg:S.oval(MJ)},{id:'n5',name:'일반도장 타원 고딕',svg:S.oval(GD)},{id:'n6',name:'일반도장 사각 명조',svg:S.square(MJ)}]},
+  {k:'corp',label:'법인도장',items:[{id:'c1',name:'법인도장 원형',svg:S.corpRound('cp1')},{id:'c2',name:'법인도장 사각',svg:S.corpSquare()},{id:'c3',name:'법인도장 직사각',svg:S.corpRect()}]},
+  {k:'upload',label:'업로드'}
+];
+const SAMPLE_UP={id:'u-sample',name:'업로드한 이미지(sample.png)',svg:S.corpRect()};
+
+/* ---------- 데이터 ---------- */
+const ME={name:'김예스',phone:'010-1234-5678'};
+const COLORS=[['#e5484d','#fdecee'],['#d97000','#fdf0e1'],['#4f46e5','#eceafd'],['#0e9384','#e6f6f4'],['#c026d3','#fbe9fd'],['#2563eb','#e8efff'],['#65a30d','#eef7e2'],['#db2777','#fde8f1'],['#0891b2','#e3f6fa'],['#7c3aed','#f3e8ff']];
+const role=(o={})=>Object.assign({name:'',self:false,hasName:false,nm:'',hasContact:false,ctype:'phone',contact:'',authPw:false,authPhone:false},o);
+const INIT_TPL=()=>[
+  {id:'t1',name:'정규직 근로계약서',file:'근로계약서.pdf',fav:true,favAt:2,mod:'2026-10-15 11:27:43',order:'seq',
+   roles:[role({name:'회사',self:true}),role({name:'인사팀장',hasName:true,nm:'김인사',hasContact:true,contact:'010-2222-3333'}),role({name:'근로자',authPhone:true})]},
+  {id:'t2',name:'아르바이트 근로계약서',file:'알바계약서.hwp',fav:true,favAt:1,mod:'2026-10-02 09:14:08',order:'seq',roles:[role({name:'회사',self:true}),role({name:'근로자'})]},
+  {id:'t3',name:'프리랜서 용역계약서',file:'용역계약서.docx',fav:false,mod:'2026-09-10 16:40:52',order:'seq',roles:[role({name:'발주자',self:true}),role({name:'수급인'})]},
+  {id:'t4',name:'부동산 임대차계약서',file:'임대차계약서.pdf',fav:false,mod:'2026-08-30 13:05:19',order:'any',roles:[role({name:'임대인'}),role({name:'임차인'})]}
+];
+const SAMPLES=[{name:'표준 근로계약서',file:'표준근로계약서.hwp'},{name:'비밀유지 서약서',file:'비밀유지서약서.docx'},{name:'물품 공급 계약서',file:'물품공급계약서.pdf'}];
+
+let st;
+function freshDraft(){return {docs:[],dtab:'tpl',q:'',order:'seq',roles:[],errs:{},cur:0,menu:false,field:null,
+  sign:{mode:'now',sel:null,keep:null,apply:true},name:'',fav:false,att:[],nameErr:false};}
+function initState(){st={screen:'A1',templates:INIT_TPL(),open:null,newId:null,credit:true,full:false,vault:true,modal:null,mctx:null,
+  d:freshDraft(),stab:'vault',pick:null,uploads:[]};}
+initState();
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const clone=o=>JSON.parse(JSON.stringify(o));
+const art=it=>it.src?`<img src="${it.src}" alt="">`:it.svg;
+const nowStr=()=>{const d=new Date(),p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;};
+function log(t){const d=new Date(),p=n=>String(n).padStart(2,'0');const el=document.createElement('div');el.textContent=`${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}  ${t}`;$('log').prepend(el);}
+function toast(t){const el=document.createElement('div');el.className='toast';el.textContent=t;$('stage').appendChild(el);setTimeout(()=>el.remove(),2200);}
+
+/* ---------- 체크리스트 ---------- */
+const CHECKS=[
+ ['create','[+ 템플릿 만들기]로 시작'],['disabled','잔여 건수 없음·20개일 때 비활성 툴팁'],
+ ['pickTpl','B-1 내 템플릿 선택(1개만) → 역할까지 복사'],['upload','B-1 샘플·업로드 여러 개 추가, 최대 10개'],
+ ['bulk','B-2 대량 전송 불가 안내가 조건에 따라 바뀜'],['self','B-2 서명 요청자 본인 토글(1개만)'],
+ ['m18','휴대폰 번호 인증 역할 → 이메일 변경 시 M-18'],['roleErr','역할명 비우고 [다음] → 오류'],
+ ['selfInfo','B-3 요청자 본인 칸: 서명 미저장 안내'],['nameErr','B-4 템플릿명 비우고 저장 → 오류'],
+ ['saved','[저장하기] → 모달 없이 목록에 새 템플릿'],['exit','[나가기] → 작성 중단 모달'],
+];
+const done=new Set();
+function tick(k){if(done.has(k))return;done.add(k);renderRail();}
+
+/* ---------- 계산 ---------- */
+const selfIdx=()=>st.d.roles.findIndex(r=>r.self);
+function bulkInfo(roles){
+  if(roles.length!==1)return {ok:false,why:`역할 ${roles.length}개`};
+  if(roles[0].self)return {ok:false,why:'서명 요청자 본인 역할'};
+  if(roles[0].hasName&&roles[0].nm.trim())return {ok:false,why:'이름을 미리 입력한 역할'};
+  return {ok:true};}
+function chipsOf(roles){return roles.map(r=>{const n=esc(r.name||'역할명 미입력');
+  if(r.self)return `<span class="lchip b">${n} · ${ME.name}</span>`;
+  if(r.hasName&&r.nm.trim())return `<span class="lchip">${n} · ${esc(r.nm)}</span>`;
+  return `<span class="lchip e">${n}</span>`;}).join('');}
+function sorted(){return [...st.templates].sort((a,b)=>{if(a.fav!==b.fav)return a.fav?-1:1;if(a.fav)return b.favAt-a.favAt;return b.mod.localeCompare(a.mod);});}
+const createBlocked=()=>!st.credit?'요금제 구매 후 템플릿 사용이 가능합니다.':(st.full||st.templates.length>=20)?'최대 20개까지 생성할 수 있습니다. 사용하지 않는 템플릿은 삭제 후 생성해 주세요.':null;
+
+const I={
+ heart:(on,sz=20)=>`<svg viewBox="0 0 24 24" style="width:${sz}px;height:${sz}px;stroke-width:1.6;fill:${on?'#ff4d6d':'none'};stroke:${on?'#ff4d6d':'#6b7280'};flex-shrink:0"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/></svg>`,
+ file:'<svg viewBox="0 0 24 24" style="width:24px;height:24px;fill:none;stroke:#6b7280;stroke-width:1.4;flex-shrink:0"><path d="M6 3h8l5 5v13H6z"/><path d="M14 3v5h5"/></svg>',
+ trash:'<svg class="ico s" viewBox="0 0 24 24"><path d="M5 7h14M10 11v6M14 11v6M7 7l1 13h8l1-13M9 7V4h6v3"/></svg>',
+ search:'<svg class="ico" viewBox="0 0 24 24" style="color:#4b5260"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>',
+ shield:'<svg class="ico s" viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6z"/><path d="M12 8v4"/></svg>',
+ phone:'<svg class="ico s" viewBox="0 0 24 24" style="color:#8a919c"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 18h2"/></svg>',
+ mail:'<svg class="ico s" viewBox="0 0 24 24" style="color:#8a919c"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>',
+ preview:'<svg class="ico" viewBox="0 0 24 24"><rect x="4" y="4" width="13" height="16" rx="1"/><circle cx="16" cy="15" r="3"/><path d="M18.5 17.5l2 2"/></svg>',
+ chev:'<svg class="ico s" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>',
+ chevU:'<svg class="ico s" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg>',
+ arrow:'<svg class="ico" viewBox="0 0 24 24" style="color:#aeb4bd"><path d="M9 6l6 6-6 6"/></svg>'
+};
+const steps=n=>`<div class="steps">${['문서 업로드','참여자 설정','서명 조건 설정','검토'].map((t,i)=>`<span class="${i+1===n?'on':i+1<n?'past':''}"><i>${i+1}</i>${t}</span>`).join('')}</div>`;
+const NOC='요금제 구매 후 템플릿 사용이 가능합니다.';
+
+/* ---------- A-1 ---------- */
+function A1(){
+  const blk=createBlocked();
+  const rows=sorted().map(t=>{
+    const isOpen=st.open===t.id, b=bulkInfo(t.roles), noC=!st.credit;
+    const tip=txt=>`<span class="tip l">${esc(txt)}</span>`;
+    const bar=isOpen?`<tr class="bar"><td colspan="5"><div class="in">
+      <span class="tipw"><button class="act pr" data-a="tplContract" ${noC?'disabled':''}><svg class="ico s" viewBox="0 0 24 24"><path d="M4 12l16-8-6 16-2-6z"/></svg>계약하기</button>${noC?tip(NOC):''}</span>
+      <span class="tipw"><button class="act" data-a="tplBulk" ${(!b.ok||noC)?'disabled':''}><svg class="ico s" viewBox="0 0 24 24"><path d="M4 5h16v14H4z"/><path d="M4 10h16M9 10v9"/></svg>대량 전송하기</button>${noC?tip(NOC):!b.ok?tip('미리 입력되지 않은 역할 1개를 가진 템플릿만 대량 전송할 수 있습니다.'):''}</span>
+      <span class="grow"></span>
+      <span class="tipw"><button class="act" data-a="tplEdit" ${noC?'disabled':''}><svg class="ico s" viewBox="0 0 24 24"><path d="M4 20h4l10-10-4-4L4 16z"/></svg>수정하기</button>${noC?tip(NOC):''}</span>
+      <button class="act" data-a="tplRename" data-id="${t.id}"><svg class="ico s" viewBox="0 0 24 24"><path d="M4 7V5h16v2M12 5v14M9 19h6"/></svg>이름 변경</button>
+      <span class="vsep"></span>
+      <button class="act" data-a="tplDelete" data-id="${t.id}">${I.trash}템플릿 삭제</button></div></td></tr>`:'';
+    return `<tr class="row ${isOpen?'sel':''} ${st.newId===t.id?'new':''}" data-a="toggleRow" data-id="${t.id}">
+      <td style="text-align:center"><button class="heart" data-a="fav" data-id="${t.id}" aria-label="자주 사용하는 템플릿 ${t.fav?'해제':'추가'}">${I.heart(t.fav)}</button></td>
+      <td><div style="display:flex;align-items:center;gap:12px">${I.file}<div><div class="nm">${esc(t.name)}${st.newId===t.id?' <span class="chip3" style="margin-left:4px">방금 저장</span>':''}</div><div class="sub2">${esc(t.file)}</div></div></div></td>
+      <td><div style="display:flex;flex-wrap:wrap;gap:4px">${chipsOf(t.roles)}</div></td>
+      <td style="color:#6b7280;font-variant-numeric:tabular-nums">${t.mod}</td>
+      <td style="color:#6b7280;text-align:center">${isOpen?I.chevU:I.chev}</td></tr>${bar}`;}).join('');
+  return `<div class="scr" style="flex-direction:row;background:var(--page)">
+  <nav class="nav"><div class="grp" style="gap:8px;padding:18px 18px 16px"><div style="display:flex;align-items:center;gap:8px;font-size:15px;font-weight:500">${ME.name} 님<span style="font-size:11.5px;color:var(--blue-ink);background:#eaf1ff;border-radius:4px;padding:1px 6px">${st.credit?'정기 회원':'무료회원'}</span></div><div style="font-size:12.5px;color:var(--mute)">잔여 건수 ${st.credit?'29건 | D-484':'0건'}</div><button style="height:44px;border:0;border-radius:6px;background:var(--blue);color:#fff;font-size:15px;margin-top:6px" data-a="oos" data-t="계약 시작하기">계약 시작하기</button></div>
+   <div class="grp"><div class="cap">내 계약 현황</div>${['모든 계약','내 서명 필요','진행 중인 계약','작성 중인 계약','완료된 계약','취소된 계약'].map(t=>`<span class="a">${t}</span>`).join('')}</div>
+   <div class="grp"><span class="a on">템플릿 관리</span><span class="a">서명 관리</span><span class="a">문서/계약 자료실</span><span class="a">주소록 관리</span></div>
+   <div class="grp" style="border:0"><div class="cap">회원정보 관리</div><span class="a">계정 관리</span><span class="a">결제 관리</span></div></nav>
+  <main style="flex-grow:1;display:flex;flex-direction:column;min-width:0"><div style="height:56px;background:#fff;border-bottom:1px solid var(--line);display:flex;justify-content:flex-end;align-items:center;padding:0 20px;flex-shrink:0"><button style="height:36px;padding:0 14px;border:1px solid var(--blue);border-radius:6px;background:#fff;color:var(--blue-ink);font-size:14px" data-a="oos" data-t="요금제 구매하기">요금제 구매하기</button></div>
+  <div class="scroll" style="padding:30px 40px;display:flex;flex-direction:column;gap:18px">
+   <div><h1 style="margin:0;font-size:24px">템플릿 관리</h1><p style="margin:8px 0 0;font-size:13.5px;color:#4b5260">자주 쓰는 계약서를 템플릿으로 저장하고, 참여자 정보만 입력해 간편하게 계약하세요.</p></div>
+   <div style="display:flex;justify-content:flex-end;gap:10px"><span class="tipw"><button class="btnd" data-a="create" ${blk?'disabled':''}>+ 템플릿 만들기</button>${blk?`<span class="tip">${esc(blk)}</span>`:''}</span><div style="width:280px;height:38px;border:1px solid var(--line2);border-radius:6px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:13px;color:#9aa1ab">템플릿명 검색${I.search}</div></div>
+   <div class="lcard"><table class="ltbl"><thead><tr><th style="width:52px"></th><th>이름</th><th style="width:250px">역할</th><th style="width:180px">최종 수정일시</th><th style="width:48px"></th></tr></thead><tbody>${rows||'<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--mute)">저장된 템플릿이 없습니다.</td></tr>'}</tbody></table></div>
+   <div style="display:flex;gap:14px;font-size:12px;color:#4b5260;align-items:center"><span style="display:flex;gap:5px;align-items:center"><span class="lchip b">역할</span>요청자 본인</span><span style="display:flex;gap:5px;align-items:center"><span class="lchip">역할</span>고정 (정보 입력됨)</span><span style="display:flex;gap:5px;align-items:center"><span class="lchip e">역할</span>보낼 때 입력</span></div>
+  </div></main></div>`;
+}
+
+/* ---------- B-1 ---------- */
+const MAXDOC=10;
+const tplDoc=()=>st.d.docs.find(x=>x.src==='tpl');
+const fmtMB=b=>(b/1048576).toFixed(2)+' MB';
+const PDFI='<svg viewBox="0 0 24 28" style="width:24px;height:28px;flex-shrink:0"><path d="M3 1h12l6 6v19a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z" fill="#fff" stroke="#d93a1f" stroke-width="1.4"/><path d="M15 1v6h6" fill="none" stroke="#d93a1f" stroke-width="1.4"/><text x="11.5" y="22" font-size="5.5" font-weight="700" fill="#d93a1f" text-anchor="middle" font-family="sans-serif">DOC</text></svg>';
+function docSub(x){return x.src==='tpl'?`역할 ${x.roles.length}개 · 서명 조건 포함`:x.src==='sample'?`샘플 문서 · ${esc(x.file)}`:fmtMB(x.size||0);}
+function B1(){
+  const d=st.d, n=d.docs.length, full=n>=MAXDOC;
+  const list=n?`<div style="width:100%;display:flex;flex-direction:column;gap:8px">${d.docs.map((x,k)=>`<div class="doccard"><span class="grip" title="순서 변경(범위 밖)">⋮⋮</span>${PDFI}<div style="flex-grow:1;min-width:0"><div style="font-weight:700;font-size:14.5px;display:flex;align-items:center;gap:6px">${x.src==='tpl'?'<span class="chip3">템플릿</span>':''}${esc(x.src==='tpl'?x.tplName:(x.title||x.file))}</div><div class="sub" style="font-size:12px;margin-top:3px">${docSub(x)}</div></div><button class="xb" data-a="docRm" data-i="${k}" aria-label="문서 빼기" style="font-size:16px;color:var(--mute)">✕</button></div>`).join('')}</div>`:'';
+  const dz=`<label class="dz ${full?'dzoff':''}" id="dz" for="${full?'':'docFile'}" style="height:${n?110:170}px"><svg class="ico" viewBox="0 0 24 24" style="width:22px;height:22px;color:#6b7280"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg>${full?'문서는 최대 10개까지 올릴 수 있습니다.':'파일을 여기로 끌어 놓거나<br>PC 업로드를 클릭하여 선택해 주세요.'}</label>`;
+  const q=d.q.trim();
+  const tpls=sorted().filter(t=>!q||t.name.includes(q));
+  const curT=tplDoc();
+  const tab=d.dtab==='tpl'?`<div class="sub" style="font-size:12.5px;margin:-6px 0 10px">내 템플릿은 한 개만 선택할 수 있습니다.</div><label class="srch" for="tplQ"><input id="tplQ" data-f="q" placeholder="템플릿명 검색" value="${esc(d.q)}">${I.search}</label>
+   <div class="utbl"><div class="uth"><span>템플릿명</span><span>역할</span><span style="text-align:center">미리보기</span><span style="text-align:center">업로드</span></div>
+   ${tpls.length?tpls.map(t=>{const on=curT&&curT.tplId===t.id;const dis=!on&&full&&!curT;const others=t.roles.length-1;return `<div class="utr ${on?'sel':''}"><span><div style="font-weight:500;display:flex;align-items:center;gap:5px">${t.fav?I.heart(true,14):''}${esc(t.name)}</div><div class="sub">${esc(t.file)} · ${t.mod.slice(5,10).replace('-','.')} 수정</div></span><span style="font-size:12.5px;color:#4b5260">${esc(t.roles[0].name)}${others?` 외 ${others}개 역할`:''}</span><span style="text-align:center"><button class="iconb" data-a="oos" data-t="미리보기(B-5)" aria-label="미리보기">${I.preview}</button></span><span style="text-align:center"><button class="sb ${on?'on':''}" data-a="pickTpl" data-id="${t.id}" ${dis?'disabled':''}>${on?'선택됨':'선택하기'}</button></span></div>`;}).join(''):`<div style="padding:28px;text-align:center;color:var(--mute);font-size:13.5px">검색 결과가 없습니다.</div>`}</div>`
+   :`<div class="utbl"><div class="uth" style="grid-template-columns:1fr 70px 90px"><span>문서명</span><span style="text-align:center">미리보기</span><span style="text-align:center">업로드</span></div>${SAMPLES.map((s,i)=>{const on=d.docs.some(x=>x.src==='sample'&&x.file===s.file);return `<div class="utr ${on?'sel':''}" style="grid-template-columns:1fr 70px 90px"><span><div style="font-weight:500">${s.name}</div><div class="sub">${s.file}</div></span><span style="text-align:center"><button class="iconb" data-a="oos" data-t="샘플 미리보기" aria-label="미리보기">${I.preview}</button></span><span style="text-align:center"><button class="sb ${on?'on':''}" data-a="pickSample" data-i="${i}" ${!on&&full?'disabled':''}>${on?'선택됨':'선택하기'}</button></span></div>`;}).join('')}</div>
+   <div class="sub" style="font-size:12px;margin-top:8px">샘플 문서는 여러 개 선택할 수 있습니다.</div>`;
+  return `<div class="scr"><div class="top"><span class="logo">예스폼싸인</span>${steps(1)}</div>
+  <div class="scroll"><main style="display:flex;flex-direction:column;align-items:center;gap:20px;padding:28px 0 24px">
+   <div class="ucard" style="display:flex;flex-direction:column;align-items:center;gap:14px"><h1 style="margin:0;font-size:22px">템플릿으로 사용할 문서를 업로드해 주세요.</h1>
+    ${n?`<div style="align-self:stretch;display:flex;justify-content:space-between;font-size:13px;color:#4b5260"><span>선택한 문서</span><span style="font-variant-numeric:tabular-nums"><b style="color:${full?'var(--err)':'var(--blue-ink)'}">${n}</b> / ${MAXDOC}</span></div>`:''}${list}${n?'':dz}
+    <input type="file" id="docFile" multiple hidden>
+    <div style="display:flex;gap:8px"><button style="width:162px;height:38px;border:0;border-radius:6px;background:${full?'#c9d6fb':'var(--blue)'};color:#fff;font-size:14px" data-a="pcUpload" ${full?'disabled':''}>내 PC 업로드</button><button class="ghost" data-a="sampleDoc" ${full?'disabled':''}>예시 파일로 올려 보기</button></div>
+    <div style="align-self:flex-start;font-size:12.5px;color:#33373d;line-height:1.9">• 업로드 가능 형식 <span class="sub" style="font-size:12.5px">hwp, doc, docx, xls, xlsx, ppt, pptx, pdf, jpg, jpeg, png 등</span><br>• 업로드 가능 용량 <span class="sub" style="font-size:12.5px">파일당 최대 5MB</span><br>• 문서 개수 <span class="sub" style="font-size:12.5px">가져온 템플릿 포함 최대 10개</span></div></div>
+   <div class="ucard"><div style="font-size:18px;font-weight:700;margin-bottom:14px">문서 가져오기</div>
+    <div class="dtabs" role="tablist"><button role="tab" aria-selected="${d.dtab==='tpl'}" data-a="dtab" data-k="tpl">내 템플릿 <span class="cnt">${st.templates.length}</span></button><button role="tab" aria-selected="${d.dtab==='sample'}" data-a="dtab" data-k="sample">샘플 문서</button></div>${tab}</div>
+  </main></div>
+  <div class="foot"><button class="fb" data-a="exit">나가기</button><button class="fb p" data-a="next1" ${n?'':'disabled'}>다음</button></div></div>`;
+}
+
+/* ---------- B-2 ---------- */
+function roleCard(r,i,n){
+  const [c,bg]=COLORS[i%10], e=st.d.errs[i];
+  const chip=r.name.trim()?`<span class="rchip" id="chip${i}" style="background:${bg};color:${c}">${esc(r.name)}</span>`:`<span class="rchip" id="chip${i}" style="background:#fdecee;color:#d93a1f">역할명 미입력</span>`;
+  const roleF=`<div class="f"><label for="rn${i}"><span>역할 <em>*</em></span></label><div class="rinp ${e?'bad':''}" id="rbox${i}"><input id="rn${i}" data-f="rname" data-i="${i}" maxlength="20" placeholder="역할명" value="${esc(r.name)}"></div>${e?`<div class="errt" id="rerr${i}">역할명을 입력해 주세요.</div>`:''}</div>`;
+  let mid;
+  if(r.self){mid=`${roleF}<div class="f"><label>이름</label><div class="rinp ro">${ME.name}</div></div><div class="f"><label>연락처</label><div class="rinp ro">${I.phone}${ME.phone}</div></div>`;}
+  else{
+    const nameF=r.hasName?`<div class="f"><label for="nm${i}">이름<button class="xb" data-a="rmName" data-i="${i}" aria-label="이름 삭제">x</button></label><div class="rinp"><input id="nm${i}" data-f="nm" data-i="${i}" placeholder="이름" value="${esc(r.nm)}"></div></div>`:`<button class="addb" data-a="addName" data-i="${i}">+ 이름 추가하기</button>`;
+    const conF=r.hasContact?`<div class="f"><label for="ct${i}">연락처<button class="xb" data-a="rmContact" data-i="${i}" aria-label="연락처 삭제">x</button></label><div class="rinp">${r.ctype==='phone'?I.phone:I.mail}<select data-f="ctype" data-i="${i}" aria-label="연락처 유형"><option value="phone" ${r.ctype==='phone'?'selected':''}>휴대폰</option><option value="email" ${r.ctype==='email'?'selected':''}>이메일</option></select><span style="width:1px;height:18px;background:var(--line2)"></span><input id="ct${i}" data-f="contact" data-i="${i}" placeholder="${r.ctype==='phone'?'010-0000-0000':'name@example.com'}" value="${esc(r.contact)}"></div></div>`:`<button class="addb" data-a="addContact" data-i="${i}">+ 연락처 추가하기</button>`;
+    mid=`${roleF}${nameF}${conF}`;
+  }
+  const dis=r.self?'disabled':'';
+  return `<div class="pc"><div class="pch"><span style="color:#9aa1ab" title="순서 변경(범위 밖)">⋮⋮</span><span>${i+1}번째 참여자</span>${chip}${r.self?'<span class="rchip" style="background:#eaf1ff;color:var(--blue-ink)">서명 요청자 본인</span>':''}<span class="grow"></span><span style="font-size:14px;color:#33373d">서명 요청자 본인</span><button class="tg" data-a="self" data-i="${i}" aria-pressed="${r.self}" aria-label="서명 요청자 본인"><span></span></button><span style="color:#aeb4bd">|</span><button class="trash" data-a="delRole" data-i="${i}" ${n<=1?'disabled':''} aria-label="역할 삭제">${I.trash}</button></div>
+   <div class="rgrid">${mid}</div>
+   <div class="pcf">${I.shield}<b style="font-weight:500">추가 인증</b><button class="sq" data-a="authPw" data-i="${i}" aria-pressed="${r.authPw}" ${dis}><i>✓</i>접근 암호 인증</button><button class="sq" data-a="authPhone" data-i="${i}" aria-pressed="${r.authPhone}" ${dis}><i>✓</i>휴대폰 번호 인증</button></div></div>`;
+}
+function bulkBadge(){return bulkInfo(st.d.roles).ok?'':`<span class="bulk" title="미리 입력되지 않은 역할 1개를 가진 템플릿만 대량 전송할 수 있습니다.">(i) 대량 전송 불가 템플릿</span>`;}
+function B2(){
+  const d=st.d,n=d.roles.length;
+  return `<div class="scr"><div class="top"><span class="logo">예스폼싸인</span>${steps(2)}</div>
+  <div class="scroll" id="b2scroll"><main style="display:flex;flex-direction:column;align-items:center;gap:20px;padding:28px 0 28px"><h1 style="margin:0;font-size:24px">템플릿에서 서명할 역할을 설정해 주세요.</h1>
+   <div style="width:960px;display:flex;gap:14px">
+    <button class="opt" data-a="order" data-v="seq" aria-pressed="${d.order==='seq'}"><span class="ck">✓</span><div><div style="font-size:16px;font-weight:500">순서대로 서명하기</div><div style="font-size:12.5px;color:#6b7280;margin-top:4px">이전 서명 참여자가 완료해야 다음 서명 참여자가 서명할 수 있습니다.</div></div></button>
+    <button class="opt" data-a="order" data-v="any" aria-pressed="${d.order==='any'}"><span class="ck">✓</span><div><div style="font-size:16px;font-weight:500">순서없이 서명하기</div><div style="font-size:12.5px;color:#6b7280;margin-top:4px">서명 참여자 모두가 순서와 관계없이 서명할 수 있습니다.</div></div></button></div>
+   <div class="panel"><div class="ph"><b style="font-size:16px">역할 정보 입력</b><span id="bulkBadge">${bulkBadge()}</span></div>
+    <div style="padding:22px;display:flex;flex-direction:column;gap:20px">${d.roles.map((r,i)=>roleCard(r,i,n)).join('')}
+     <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><button class="addrole" data-a="addRole" ${n>=10?'disabled':''}>서명 참여자 추가하기</button><span class="sub" style="font-size:12px">${n}/10</span></div></div></div>
+  </main></div>
+  <div class="foot"><button class="fb" data-a="exit">나가기</button><button class="fb p" data-a="next2">다음</button></div></div>`;
+}
+
+/* ---------- B-3 ---------- */
+const SLOTS=[[40,460],[300,460],[40,575],[300,575]];
+function fieldsB3(){return st.d.roles.slice(0,4).map((r,i)=>({id:'s'+i,ri:i,x:SLOTS[i][0],y:SLOTS[i][1],kind:r.self?'도장':'싸인'}));}
+function B3(){
+  const d=st.d, roles=d.roles, si=selfIdx(), sg=d.sign;
+  if(d.cur>=roles.length)d.cur=0;
+  const cur=roles[d.cur], [cc,cbg]=COLORS[d.cur%10];
+  const fl=fieldsB3(); if(!d.field||!fl.find(f=>f.id===d.field))d.field=(si>=0&&si<4)?'s'+si:'s0';
+  const firstOther=roles.findIndex(r=>!r.self);
+  const G='border-color:#0f9d58;background:rgba(15,157,88,.08);color:#0b6e3a';
+  const top=`<button class="fld" data-a="oosF" style="left:40px;top:96px;width:200px;${G}">회사명 · 공통</button><button class="fld" data-a="oosF" style="left:40px;top:130px;width:200px;${G}">계약 시작일 · 공통 날짜</button>`+
+   (firstOther>=0?(()=>{const [c,bg]=COLORS[firstOther%10];const r=roles[firstOther];return `<button class="fld" data-a="oosF" style="left:300px;top:96px;width:220px;border-color:${c};background:${bg};color:${c}">${esc(r.name)} 성명 · 자동 완성(이름)</button><button class="fld" data-a="oosF" style="left:300px;top:130px;width:220px;border-color:${c};background:${bg};color:${c}">${esc(r.name)} 주소 · 텍스트</button>`;})():'');
+  const sigs=fl.map(f=>{const r=roles[f.ri],[c,bg]=COLORS[f.ri%10],on=d.field===f.id;
+    const showImg=false;
+    const lab=`${esc(r.name)} · ${f.kind}`;
+    return `<button class="fld sig ${on?'on':''}" data-a="selField" data-id="${f.id}" style="left:${f.x}px;top:${f.y}px;border-color:${c};background:${bg};color:${c}"><span>${lab}</span><span class="img">${showImg?art(sg.sel):''}</span>${on?'<i class="hd" style="left:-4px;top:-4px"></i><i class="hd" style="right:-4px;top:-4px"></i><i class="hd" style="left:-4px;bottom:-4px"></i><i class="hd" style="right:-4px;bottom:-4px"></i>':''}</button>
+    <span class="fld" style="left:${f.x}px;top:${f.y+72}px;width:200px;border-color:${c};background:${bg};color:${c}">서명일 · 자동 완성</span>`;}).join('');
+  const sf=fl.find(f=>f.id===d.field), sr=roles[sf.ri], [sc]=COLORS[sf.ri%10];
+  const signPanel=sr.self?`<div style="display:flex;gap:6px;font-size:12.5px;color:#4b5260;background:#f3f4f6;border-radius:6px;padding:8px 10px;line-height:1.5"><span>ⓘ</span><span>요청자 본인의 서명은 실제 계약을 생성할 때 미리 추가할 수 있습니다.</span></div>`
+   :`<div class="hint">이 역할의 서명 참여자가 실제 계약을 받은 뒤 진행할 서명 조건입니다.</div>`;
+  const menu=d.menu&&roles.length>1?`<div class="rmenu">${roles.map((r,i)=>i===d.cur?'':`<button data-a="pickRole" data-i="${i}"><span style="width:8px;height:8px;border-radius:50%;background:${COLORS[i%10][0]}"></span>${esc(r.name)}${r.self?' <span class="chip3">요청자 본인</span>':''}</button>`).join('')}</div>`:'';
+  const nOf=(ri,k)=>fl.filter(f=>f.ri===ri&&f.kind===k).length;
+  const d0=d.docs[0];const title=(d0.src==='tpl'?d0.tplName:d0.file.replace(/\.[^.]+$/,''))+(d.docs.length>1?` (문서 1/${d.docs.length})`:'');
+  return `<div class="scr"><div class="top"><span class="logo">예스폼싸인</span>${steps(3)}<span class="grow"></span><div style="display:flex;align-items:center;gap:14px;font-size:13px;color:#33373d"><span>100% ▾</span><span>⊕</span><span>⊖</span><span style="color:#6b7280">ⓘ 도움말</span></div></div>
+  <div class="body3">
+   <aside class="lp"><b style="font-size:16px">공통 항목</b><div class="box"><div class="cap3" style="padding-top:0">입력 항목</div><div class="it">텍스트</div><div class="it">날짜</div></div>
+    <b style="font-size:16px;margin-top:4px">역할</b><div class="box">
+     <button class="rolesel" data-a="${roles.length>1?'roleMenu':'noop'}" style="background:${cbg};cursor:${roles.length>1?'pointer':'default'}"><span style="width:8px;height:8px;border-radius:50%;background:${cc};margin-top:7px;flex-shrink:0"></span><div style="flex-grow:1"><div style="display:flex;align-items:center;gap:6px;font-size:14.5px;font-weight:500">${esc(cur.name)}${cur.self?'<span class="chip3">요청자 본인</span>':''}</div><div style="font-size:12.5px;color:var(--sub);margin-top:2px">${cur.self?`${ME.name} · 내 정보`:cur.hasName&&cur.nm?esc(cur.nm):'보낼 때 입력'}</div></div>${roles.length>1?(d.menu?I.chevU:I.chev):''}</button>${menu}
+     <div class="cap3">입력 항목</div>${[['싸인',nOf(d.cur,'싸인')],['도장',nOf(d.cur,'도장')],['텍스트',0],['자필 작성',0],['날짜',0],['체크박스',0]].map(([t,c])=>`<div class="it">${t}<span class="grow"></span><span style="color:#4b5260">${c?`(${c})`:''}</span></div>`).join('')}</div></aside>
+   <div class="mid"><div class="doc"><div style="text-align:center;font-size:20px;margin:8px 0 14px">${esc(title)}</div><div class="ln" style="width:86%"></div><div class="ln" style="width:70%"></div><div style="height:84px"></div>
+    ${[1,2,3,4].map(n=>`<div class="art">제 ${n} 조</div><div class="ln" style="width:100%"></div><div class="ln" style="width:92%"></div><div class="ln" style="width:60%"></div>`).join('')}
+    ${top}${sigs}${roles.length>4?`<span style="position:absolute;left:40px;bottom:8px;font-size:11px;color:var(--mute)">5번째 역할부터는 칸 배치 예시에서 생략했습니다.</span>`:''}</div></div>
+   <aside class="rp"><div class="rph">${sf.kind}</div><div class="rpb">
+    <div><div class="lbl">위치</div><div style="display:flex;gap:6px"><div class="inp3"><span style="color:#6b7280">X</span>${sf.x}<span style="color:#9aa1ab">px</span></div><div class="inp3"><span style="color:#6b7280">Y</span>${sf.y}<span style="color:#9aa1ab">px</span></div></div></div>
+    <div><div class="lbl">역할 선택</div><div class="inp3"><span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:${sc}"></span>${esc(sr.name)}${sr.self?' · 요청자 본인':''}</span>${I.chev}</div>
+     <div style="display:flex;align-items:center;gap:8px;font-size:14px;margin-top:10px"><span class="cb">✓</span>필수작성</div></div>
+    ${signPanel}
+    <div style="display:flex;gap:8px;margin-top:4px"><button class="pb" data-a="oos" data-t="칸 삭제">삭제</button><button class="pb p" data-a="oos" data-t="칸 복사">복사</button></div></div></aside>
+  </div>
+  <div class="foot"><button class="fb" data-a="exit">나가기</button><button class="fb p" data-a="next3">다음</button></div></div>`;
+}
+
+/* ---------- B-4 ---------- */
+function B4(){
+  const d=st.d, b=bulkInfo(d.roles), seq=d.order==='seq';
+  const cards=d.roles.map((r,i)=>{const [c,bg]=COLORS[i%10];
+    const status=r.self?'서명 요청자 본인':(r.hasName&&r.nm.trim()?esc(r.nm):'보낼 때 입력');
+    const tags=[r.authPw&&'접근 암호',r.authPhone&&'휴대폰 번호'].filter(Boolean);
+    const pre='';
+    return `${seq&&i?I.arrow:''}<div class="rcard" style="border-top:3px solid ${c}"><div style="display:flex;align-items:center;gap:8px">${seq?`<span style="width:22px;height:22px;border-radius:50%;background:${bg};color:${c};font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center">${i+1}</span>`:''}<b style="font-size:14.5px;font-weight:500">${esc(r.name)}</b></div><div style="font-size:12.5px;color:#6b7280;${seq?'margin-left:30px':''}">${status}</div><div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;border-top:1px solid #f0f1f3;padding-top:8px;color:#6b7280">${I.shield}${tags.length?tags.map(t=>`<span class="atag">${t}</span>`).join(''):'<span style="font-size:12px;color:#9aa1ab">추가 인증 없음</span>'}${pre}</div></div>`;}).join('');
+  return `<div class="scr"><div class="top"><span class="logo">예스폼싸인</span>${steps(4)}</div>
+  <div class="scroll"><main style="display:flex;flex-direction:column;align-items:center;gap:20px;padding:26px 0 24px"><h1 style="margin:0;font-size:24px">템플릿 정보를 입력하고 저장해 주세요.</h1>
+   <div class="ncard"><label class="h4" for="tplName">템플릿명 <span style="color:var(--err)">*</span></label>
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap"><div><div class="ninp ${d.nameErr?'bad':''}" id="nbox"><input id="tplName" data-f="tname" maxlength="50" value="${esc(d.name)}" placeholder="템플릿명을 입력해 주세요."><span style="font-size:12px;color:var(--mute)" id="ncnt">${d.name.length}/50</span></div>${d.nameErr?'<div class="errt" id="nerr">템플릿명을 입력해 주세요.</div>':''}</div>
+     <button class="favb" data-a="draftFav" aria-pressed="${d.fav}">${I.heart(d.fav)}자주 사용하는 템플릿에 추가</button></div>
+    <div class="h4" style="margin-top:14px">템플릿 정보</div>
+    <div class="vt"><div class="vr" style="align-items:flex-start;padding:14px 20px"><span class="k">문서 (${d.docs.length})</span><span class="v" style="flex-direction:column;align-items:flex-end;gap:4px">${d.docs.map(x=>`<span>${esc(x.file)}${x.src==='tpl'?' <span class="chip3">템플릿</span>':''}</span>`).join('')}<button class="xb" style="color:var(--blue-ink);font-size:14px" data-a="oos" data-t="미리보기(B-5)">미리보기</button></span></div>
+     <div class="vr"><span class="k">서명 순서</span><span class="v">${seq?'순서대로 서명하기':'순서없이 서명하기'}</span></div>
+     <div class="vr" style="padding:16px 20px;align-items:flex-start"><span class="k" style="padding-top:2px">역할 (${d.roles.length})</span><span class="v"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end;max-width:740px">${cards}</div></span></div>
+     <div class="vr"><span class="k">대량 전송</span><span class="v">${b.ok?'<span class="okw">대량 전송 가능</span>':`<span class="warn">대량 전송 불가 · ${b.why}</span>`}</span></div>
+     <div class="vr"><span class="k">고정 첨부 문서</span><span class="v">${d.att.map((a,i)=>`<span class="att">${esc(a)} <button class="xb" data-a="rmAtt" data-i="${i}" aria-label="첨부 삭제">×</button></span>`).join('')}<input type="file" id="attFile" hidden>${d.att.length<5?`<label class="attadd" for="attFile">＋ 파일 추가 (${d.att.length}/5)</label>`:`<span class="attadd dis">＋ 파일 추가 (5/5)</span>`}</span></div></div></div>
+  </main></div>
+  <div class="foot"><button class="fb" data-a="exit">나가기</button><button class="fb p" data-a="save">저장하기</button></div></div>`;
+}
+
+/* ---------- 모달 ---------- */
+function simple(title,body,btns){return `<div class="dim"><div class="modal" role="dialog" aria-modal="true"><div class="mt"><b>${title}</b>${body}</div><div class="mb">${btns}</div></div></div>`;}
+function stampItems(k){if(k==='vault')return st.vault?VAULT:[];if(k==='upload')return st.uploads;return STABS.find(t=>t.k===k).items;}
+function tile(it){return `<button class="tile" data-a="pick" data-id="${it.id}" aria-pressed="${!!(st.pick&&st.pick.id===it.id)}" aria-label="${esc(it.name)}">${art(it)}</button>`;}
+function Modal(){
+  const m=st.modal;
+  if(!m)return '';
+  if(m==='exit')return simple('작성 중단','<span>작성 중인 내용은 저장되지 않습니다.<br>페이지를 나가시겠습니까?</span>','<button data-a="close">닫기</button><button class="p" data-a="doExit">나가기</button>');
+  if(m==='need')return simple('서명 선택 필요','<span>요청자 본인 서명 칸에 넣을 서명을 선택해 주세요.<br>계약을 보낼 때 서명하려면 서명 방식을<br>[계약 시 직접 서명]으로 바꿔 주세요.</span>','<button class="p" data-a="close">확인</button>');
+  if(m==='m18')return simple('연락처 변경','<span>휴대폰 번호 인증을 사용하는 역할입니다.<br>이메일로 바꾸면 휴대폰 인증이 해제됩니다.<br>변경하시겠습니까?</span>','<button data-a="close18">취소</button><button class="p" data-a="do18">변경하기</button>');
+  if(m==='m07')return simple('역할 삭제','<span>해당 역할에 배치된 입력란도<br>함께 삭제됩니다.</span>','<button data-a="close">닫기</button><button class="p" data-a="doDelRole">삭제하기</button>');
+  if(m==='m03')return simple('템플릿 삭제','<span>삭제한 템플릿은 복구할 수 없습니다.<br>이미 요청한 계약에는 영향이 없습니다.</span>','<button data-a="close">닫기</button><button class="p" data-a="doDelTpl">삭제하기</button>');
+  if(m==='m17'){const t=st.templates.find(x=>x.id===st.mctx);return `<div class="dim"><div class="modal" role="dialog" aria-modal="true"><div class="mt" style="text-align:left"><b style="text-align:center">이름 변경</b><label class="minp" for="renm"><input id="renm" maxlength="50" value="${esc(t.name)}"><span style="font-size:12px;color:#6b7280" id="rencnt">${t.name.length}/50</span></label><div class="errt" id="renErr" hidden>템플릿명을 입력해 주세요.</div></div><div class="mb"><button data-a="close">닫기</button><button class="p" data-a="doRename">변경하기</button></div></div></div>`;}
+  if(m==='stamp'){
+    const items=stampItems(st.stab);let body;
+    if(st.stab==='upload')body=`<div style="display:flex;flex-direction:column;gap:16px"><label class="drop" id="sdrop" for="stFile"><span>도장 이미지를 끌어다 놓거나 클릭해서 올려 주세요.</span><small>PNG, JPG · 배경이 투명한 이미지를 권장합니다.</small></label><input type="file" id="stFile" accept="image/png,image/jpeg" hidden><div style="display:flex;justify-content:center"><button class="ghost" data-a="sampleUp">샘플 이미지로 올려 보기</button></div>${items.length?`<div class="sgrid">${items.map(tile).join('')}</div>`:''}</div>`;
+    else if(!items.length)body=`<div class="empty"><span>보관함에 저장된 도장이 없습니다.<br>일반도장·법인도장에서 고르거나 이미지를 업로드해 주세요.</span><button class="ghost" data-a="stab" data-k="normal">일반도장 보기</button></div>`;
+    else body=`<div class="sgrid">${items.map(tile).join('')}</div>`;
+    return `<div class="dim"><div class="modal sm" role="dialog" aria-modal="true" aria-labelledby="smt"><div class="smh" id="smt">도장 삽입하기</div><div class="stabs" role="tablist">${STABS.map(t=>`<button role="tab" aria-selected="${t.k===st.stab}" data-a="stab" data-k="${t.k}">${t.label}</button>`).join('')}</div><div class="smb">${body}</div><div class="mb"><button data-a="closeStamp">닫기</button><button class="p" data-a="insert" ${st.pick?'':'disabled'}>삽입하기</button></div></div></div>`;
+  }
+  return '';
+}
+
+/* ---------- 렌더 ---------- */
+const SCREENS={A1:['A-1 템플릿 목록','템플릿 관리'],B1:['B-1 문서 업로드','템플릿 만들기 1단계'],B2:['B-2 참여자 설정','템플릿 만들기 2단계'],B3:['B-3 서명 조건 설정','템플릿 만들기 3단계'],B4:['B-4 검토','템플릿 만들기 4단계']};
+const MODALN={exit:'M-08 작성 중단',need:'서명 선택 필요 안내',m18:'M-18 연락처 변경',m07:'M-07 역할 삭제',m03:'M-03 템플릿 삭제',m17:'M-17 이름 변경',stamp:'M-19 도장 삽입하기'};
+const FLOW=[['A1','A-1 템플릿 목록'],['B1','B-1 문서 업로드'],['B2','B-2 참여자 설정'],['B3','B-3 서명 조건 설정'],['B4','B-4 검토 · [저장하기]'],['SAVED','저장 → A-1 목록 반영']];
+function renderRail(){
+  const s=SCREENS[st.screen];
+  $('nowName').textContent=st.modal?MODALN[st.modal]:s[0];
+  $('nowSub').textContent=st.modal?`${s[0]} 위 모달`:s[1];
+  const ci=FLOW.findIndex(f=>f[0]===st.screen);
+  $('flow').innerHTML=FLOW.map(([k,n],i)=>{const cls=i===ci?'cur':(ci>0&&i<ci)?'past':'';return `<li class="${cls}"><i>${cls==='past'?'✓':i+1}</i>${n}</li>`;}).join('');
+  $('chk').innerHTML=CHECKS.map(([k,t])=>`<li class="${done.has(k)?'ok':''}"><i>✓</i><span>${t}</span></li>`).join('');
+  $('scC1').setAttribute('aria-pressed',st.credit);$('scC0').setAttribute('aria-pressed',!st.credit);
+  $('scF0').setAttribute('aria-pressed',!st.full);$('scF1').setAttribute('aria-pressed',st.full);
+  $('scV1').setAttribute('aria-pressed',st.vault);$('scV0').setAttribute('aria-pressed',!st.vault);
+}
+function render(keepScroll){
+  const sc=document.querySelector('#screen .scroll');const top=sc?sc.scrollTop:0;
+  $('screen').innerHTML=({A1,B1,B2,B3,B4})[st.screen]();
+  $('layer').innerHTML=Modal();
+  if(keepScroll){const n=document.querySelector('#screen .scroll');if(n)n.scrollTop=top;}
+  bindFiles();renderRail();
+}
+function go(scr){st.screen=scr;st.modal=null;log(`화면 이동: ${SCREENS[scr][0]}`);render();}
+
+/* ---------- 파일 입력 ---------- */
+function bindFiles(){
+  const df=$('docFile');if(df)df.onchange=e=>addPcDocs([...e.target.files]);
+  const dz=$('dz');if(dz){dz.ondragover=e=>{e.preventDefault();dz.classList.add('over');};dz.ondragleave=()=>dz.classList.remove('over');dz.ondrop=e=>{e.preventDefault();dz.classList.remove('over');addPcDocs([...e.dataTransfer.files]);};}
+  const af=$('attFile');if(af)af.onchange=e=>{const f=e.target.files[0];if(!f)return;if(f.size>5*1024*1024){toast('5MB 이하 파일만 첨부할 수 있습니다.');return;}st.d.att.push(f.name);log('고정 첨부 추가: '+f.name);render(true);};
+  const sf=$('stFile');if(sf)sf.onchange=e=>readStamp(e.target.files[0]);
+  const sd=$('sdrop');if(sd){sd.ondragover=e=>{e.preventDefault();sd.classList.add('over');};sd.ondragleave=()=>sd.classList.remove('over');sd.ondrop=e=>{e.preventDefault();sd.classList.remove('over');readStamp(e.dataTransfer.files[0]);};}
+  const rn=$('renm');if(rn){rn.oninput=()=>{$('rencnt').textContent=rn.value.length+'/50';$('renErr').hidden=true;};rn.focus();}
+}
+let uid=0;
+function addPcDocs(files){
+  const d=st.d;let added=0,over=0,big=0;
+  for(const f of files){if(f.size>5*1024*1024){big++;continue;}if(d.docs.length>=MAXDOC){over++;continue;}d.docs.push({id:'d'+(++uid),src:'pc',file:f.name,size:f.size,roles:[]});added++;log('PC 업로드: '+f.name);}
+  if(big)toast('5MB 이하 문서만 올릴 수 있습니다.');
+  else if(over)toast(`문서는 템플릿 포함 최대 ${MAXDOC}개까지 올릴 수 있습니다. ${over}개는 추가되지 않았습니다.`);
+  if(added&&d.docs.length>1)tick('upload');render(true);}
+function readStamp(f){
+  if(!f)return;if(!/^image\/(png|jpeg)$/.test(f.type)){toast('PNG 또는 JPG 이미지만 올릴 수 있습니다.');return;}
+  const r=new FileReader();r.onload=()=>{const it={id:'u'+Date.now(),name:'업로드한 이미지('+f.name+')',src:r.result};st.uploads.unshift(it);st.pick=it;log('도장 이미지 업로드: '+f.name);render();};r.readAsDataURL(f);}
+
+/* ---------- 입력 ---------- */
+document.addEventListener('input',e=>{
+  const t=e.target,f=t.dataset.f;if(!f)return;const i=+t.dataset.i;const d=st.d;
+  if(f==='q'){d.q=t.value;const pos=t.selectionStart;render(true);const n=$('tplQ');n.focus();n.setSelectionRange(pos,pos);return;}
+  if(f==='rname'){d.roles[i].name=t.value;const [c,bg]=COLORS[i%10];const ch=$('chip'+i);
+    if(t.value.trim()){ch.textContent=t.value;ch.style.background=bg;ch.style.color=c;}else{ch.textContent='역할명 미입력';ch.style.background='#fdecee';ch.style.color='#d93a1f';}
+    if(d.errs[i]&&t.value.trim()){delete d.errs[i];$('rbox'+i).classList.remove('bad');const er=$('rerr'+i);if(er)er.remove();}return;}
+  if(f==='nm'){const before=bulkInfo(d.roles).ok;d.roles[i].nm=t.value;const after=bulkInfo(d.roles).ok;if(before!==after){$('bulkBadge').innerHTML=bulkBadge();log('대량 전송 안내 '+(after?'숨김':'표시'));tick('bulk');}return;}
+  if(f==='contact'){d.roles[i].contact=t.value;return;}
+  if(f==='tname'){d.name=t.value;$('ncnt').textContent=t.value.length+'/50';if(d.nameErr&&t.value.trim()){d.nameErr=false;$('nbox').classList.remove('bad');const er=$('nerr');if(er)er.remove();}return;}
+});
+document.addEventListener('change',e=>{
+  const t=e.target;if(t.dataset.f!=='ctype')return;const i=+t.dataset.i,r=st.d.roles[i];
+  if(t.value==='email'&&r.authPhone){t.value='phone';st.modal='m18';st.mctx=i;log('연락처 → 이메일 시도 (휴대폰 인증 역할) → M-18');tick('m18');render(true);return;}
+  r.ctype=t.value;r.contact='';log(`연락처 유형: ${t.value==='phone'?'휴대폰':'이메일'}`);render(true);
+});
+
+/* ---------- 클릭 ---------- */
+function bulkCheck(before){const after=bulkInfo(st.d.roles).ok;if(before!==after){log('대량 전송 안내 '+(after?'숨김':'표시'));tick('bulk');}}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-a]');if(!b||b.disabled)return;
+  const a=b.dataset.a,d=st.d,i=b.dataset.i!=null?+b.dataset.i:null;
+  const bulk0=st.screen==='B2'?bulkInfo(d.roles).ok:null;
+  switch(a){
+  /* 시나리오 */
+  case 'scCredit':st.credit=b.dataset.v==='1';log('시나리오: 잔여 건수 '+(st.credit?'있음':'없음'));if(!st.credit)tick('disabled');render(true);break;
+  case 'scFull':st.full=b.dataset.v==='1';log('시나리오: 템플릿 '+(st.full?'20개 보유(가정)':'실제 개수'));if(st.full)tick('disabled');render(true);break;
+  case 'scVault':st.vault=b.dataset.v==='1';if(st.modal==='stamp'&&st.stab==='vault')st.pick=null;log('시나리오: 도장 보관함 '+(st.vault?'있음':'비어 있음'));render(true);break;
+  case 'resetAll':initState();done.clear();$('log').innerHTML='';log('처음부터 다시 시작');render();break;
+  case 'oos':toast(`${b.dataset.t}: 이 프로토타입 범위 밖입니다.`);break;
+  case 'oosF':toast('텍스트·날짜 칸 설정은 이 프로토타입 범위 밖입니다.');break;
+  /* A-1 */
+  case 'create':st.d=freshDraft();st.newId=null;st.open=null;tick('create');go('B1');break;
+  case 'toggleRow':st.open=st.open===b.dataset.id?null:b.dataset.id;render(true);break;
+  case 'fav':{const t=st.templates.find(x=>x.id===b.dataset.id);t.fav=!t.fav;t.favAt=Date.now();log(`자주 사용하는 템플릿 ${t.fav?'추가':'해제'}: ${t.name}`);render(true);break;}
+  case 'tplContract':toast('계약하기 STEP 1(이 템플릿 선택된 상태)로 이동합니다. C 흐름은 범위 밖입니다.');log('[계약하기] 클릭');break;
+  case 'tplBulk':toast('대량 전송은 이번 범위에서 제외되었습니다.');break;
+  case 'tplEdit':toast('수정하기는 같은 B-1~B-4 흐름을 수정 모드로 진행합니다(범위 밖).');break;
+  case 'tplRename':st.modal='m17';st.mctx=b.dataset.id;render(true);break;
+  case 'doRename':{const v=$('renm').value.trim();if(!v){$('renErr').hidden=false;break;}const t=st.templates.find(x=>x.id===st.mctx);log(`이름 변경: ${t.name} → ${v}`);t.name=v;st.modal=null;render(true);toast('이름을 변경했습니다.');break;}
+  case 'tplDelete':st.modal='m03';st.mctx=b.dataset.id;render(true);break;
+  case 'doDelTpl':{const t=st.templates.find(x=>x.id===st.mctx);st.templates=st.templates.filter(x=>x.id!==st.mctx);st.open=null;st.modal=null;log('템플릿 삭제: '+t.name);render(true);toast('템플릿을 삭제했습니다.');break;}
+  /* B-1 */
+  case 'pcUpload':$('docFile').click();break;
+  case 'sampleDoc':{const k=st.d.docs.filter(x=>x.src==='pc').length;addPcDocs([{name:k?`부속 합의서_${k}.pdf`:'계약서명.pdf',size:k?1210000:4173332}]);break;}
+  case 'docRm':{const x=d.docs.splice(i,1)[0];log('문서 빼기: '+(x.tplName||x.file));render(true);break;}
+  case 'dtab':d.dtab=b.dataset.k;render(true);break;
+  case 'pickTpl':{const t=st.templates.find(x=>x.id===b.dataset.id);const cur=tplDoc();if(cur&&cur.tplId===t.id){d.docs=d.docs.filter(x=>x!==cur);log('템플릿 선택 해제: '+t.name);render(true);break;}
+    const nd={id:'d'+(++uid),src:'tpl',tplId:t.id,tplName:t.name,file:t.file,roles:clone(t.roles),order:t.order};d.docs=d.docs.filter(x=>x.src!=='tpl');d.docs.unshift(nd);log(`내 템플릿 ${cur?'교체':'선택'}: ${t.name} (역할 ${t.roles.length}개 복사)`);tick('pickTpl');render(true);break;}
+  case 'pickSample':{const s=SAMPLES[i];const k=d.docs.findIndex(x=>x.src==='sample'&&x.file===s.file);if(k>=0){d.docs.splice(k,1);log('샘플 문서 해제: '+s.name);}else{if(d.docs.length>=MAXDOC)break;d.docs.push({id:'d'+(++uid),src:'sample',file:s.file,title:s.name,roles:[]});log('샘플 문서 추가: '+s.name);if(d.docs.length>1)tick('upload');}render(true);break;}
+  case 'next1':
+    {const t=tplDoc();d.roles=t?clone(t.roles):[role()];d.order=t?t.order:'seq';d.name=t?t.tplName:d.docs[0].file.replace(/\.[^.]+$/,'');}
+    go('B2');break;
+  /* B-2 */
+  case 'order':d.order=b.dataset.v;log('서명 순서: '+(d.order==='seq'?'순서대로':'순서없이'));render(true);break;
+  case 'self':{const r=d.roles[i];const on=!r.self;d.roles.forEach(x=>{x.self=false;});if(on)Object.assign(r,{self:true,hasName:false,nm:'',hasContact:false,contact:'',ctype:'phone',authPw:false,authPhone:false});
+    log(`서명 요청자 본인 ${on?'켬':'끔'}: ${r.name||(i+1)+'번째 참여자'}`);tick('self');bulkCheck(bulk0);render(true);break;}
+  case 'addName':d.roles[i].hasName=true;render(true);setTimeout(()=>{const n=$('nm'+i);n&&n.focus();});break;
+  case 'addContact':d.roles[i].hasName=true;d.roles[i].hasContact=true;render(true);setTimeout(()=>{const n=$('ct'+i);n&&n.focus();});break;
+  case 'rmName':Object.assign(d.roles[i],{hasName:false,nm:'',hasContact:false,contact:''});bulkCheck(bulk0);render(true);break;
+  case 'rmContact':Object.assign(d.roles[i],{hasContact:false,contact:''});render(true);break;
+  case 'authPw':d.roles[i].authPw=!d.roles[i].authPw;render(true);break;
+  case 'authPhone':{const r=d.roles[i];r.authPhone=!r.authPhone;log(`휴대폰 번호 인증 ${r.authPhone?'켬':'끔'}: ${r.name||'역할'}`);render(true);break;}
+  case 'close18':st.modal=null;log('M-18 취소: 휴대폰 유지');render(true);break;
+  case 'do18':{const r=d.roles[st.mctx];r.ctype='email';r.contact='';r.authPhone=false;st.modal=null;log('M-18 변경: 이메일로 바꾸고 휴대폰 인증 해제');render(true);break;}
+  case 'delRole':if(d.roles.length<=1)break;if(tplDoc()){st.modal='m07';st.mctx=i;render(true);}else{const nm=d.roles[i].name;d.roles.splice(i,1);d.errs={};log('역할 삭제: '+(nm||'이름 없는 역할'));bulkCheck(bulk0);render(true);}break;
+  case 'doDelRole':{const nm=d.roles[st.mctx].name;d.roles.splice(st.mctx,1);d.errs={};st.modal=null;log('M-07 역할 삭제(배치된 입력란 함께): '+nm);bulkCheck(bulk0);render(true);break;}
+  case 'addRole':if(d.roles.length>=10)break;d.roles.push(role());log(`역할 추가 (${d.roles.length}/10)`);bulkCheck(bulk0);render(true);setTimeout(()=>{const sc=$('b2scroll');sc.scrollTop=sc.scrollHeight;$('rn'+(d.roles.length-1)).focus();});break;
+  case 'next2':{d.errs={};d.roles.forEach((r,k)=>{if(!r.name.trim())d.errs[k]=true;});
+    const bad=Object.keys(d.errs);
+    if(bad.length){log('[다음] 역할명 미입력 '+bad.length+'개');tick('roleErr');render(true);setTimeout(()=>{const n=$('rn'+bad[0]);n.scrollIntoView({block:'center'});n.focus();});break;}
+    const si=selfIdx();d.cur=si>=0?si:0;d.field=null;d.menu=false;go('B3');break;}
+  /* B-3 */
+  case 'noop':break;
+  case 'roleMenu':d.menu=!d.menu;render();break;
+  case 'pickRole':d.cur=i;d.menu=false;render();break;
+  case 'selField':{d.field=b.dataset.id;const f=fieldsB3().find(x=>x.id===d.field);d.cur=f.ri;if(st.d.roles[f.ri].self)tick('selfInfo');render();break;}
+  case 'mode':{const v=b.dataset.v;if(d.sign.mode===v)break;d.sign.mode=v;if(v==='now')d.sign.sel=d.sign.keep;log('서명 방식: '+(v==='now'?'지금 서명 추가':'계약 시 직접 서명'));if(v==='later')tick('later');render();break;}
+  case 'openStamp':st.modal='stamp';st.stab='vault';st.pick=null;log((d.sign.sel?'[서명 다시 선택하기]':'[서명 선택하기]')+' → M-19 보관함 탭');render();break;
+  case 'stab':if(st.stab!==b.dataset.k){st.stab=b.dataset.k;st.pick=null;}render();break;
+  case 'pick':{const it=stampItems(st.stab).find(x=>x.id===b.dataset.id);st.pick=(st.pick&&st.pick.id===it.id)?null:it;render();break;}
+  case 'sampleUp':if(!st.uploads.find(x=>x.id===SAMPLE_UP.id))st.uploads.unshift(SAMPLE_UP);st.pick=SAMPLE_UP;render();break;
+  case 'insert':d.sign.sel=st.pick;d.sign.keep=st.pick;st.modal=null;log('삽입하기: '+st.pick.name);tick('stamp');render();toast('도장을 넣었습니다.');break;
+  case 'closeStamp':st.modal=null;st.pick=null;render();break;
+  case 'next3':go('B4');break;
+  /* B-4 */
+  case 'draftFav':d.fav=!d.fav;render(true);break;
+  case 'rmAtt':d.att.splice(i,1);render(true);break;
+  case 'save':if(!d.name.trim()){d.nameErr=true;log('[저장하기] 템플릿명 비어 있음');tick('nameErr');render(true);setTimeout(()=>$('tplName').focus());break;}
+    {
+    const id='n'+Date.now();
+    st.templates.push({id,name:d.name.trim(),file:d.docs[0].file+(d.docs.length>1?` 외 ${d.docs.length-1}개`:''),fav:d.fav,favAt:Date.now(),mod:nowStr(),order:d.order,roles:clone(d.roles)});
+    st.newId=id;st.open=id;tick('saved');log(`[저장하기] 바로 저장: ${d.name.trim()} → A-1 목록`);st.d=freshDraft();go('A1');
+    toast('템플릿을 저장했습니다.');break;}
+  /* 공통 */
+  case 'exit':st.modal='exit';tick('exit');render(true);break;
+  case 'doExit':st.d=freshDraft();log('[나가기] 작성 내용 저장 안 됨');go('A1');break;
+  case 'close':st.modal=null;render(true);break;
+  }
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&st.modal){if(st.modal==='stamp')st.pick=null;st.modal=null;render(true);}});
+
+/* ---------- 축소 ---------- */
+const fit=$('fit'),stage=$('stage');
+function scale(){const s=fit.clientWidth/1280;stage.style.transform=`scale(${s})`;fit.style.height=(900*s)+'px';}
+new ResizeObserver(scale).observe(fit);scale();
+log('A-1 템플릿 목록에서 시작');
+render();
+})();
+</script>
+
+</body>
+</html>
