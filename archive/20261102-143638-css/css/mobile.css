@@ -1,0 +1,194 @@
+/* ==========================================================================
+   예스폼싸인 메인 261030 — 모바일 (360 × 6848)
+   Figma: 싸인_디자인시스템 › 홈페이지 › "Frame 1171277634" (53928:26797)
+   · 글자 · 버튼 · 카드는 코드, 그림 · 사진 · 배경 장식은 images/ (2배 그림)
+   · 360 폭 그대로 만들고 폰 화면(500 이하)에서는 js/mobile.js 가 화면 폭에 맞춰 늘림
+   · PC 에서 열면 가운데 360 폭으로 보임
+   ========================================================================== */
+:root{color-scheme:light}
+*{box-sizing:border-box;font-synthesis-weight:none}
+html,body{margin:0}
+body{background:#EEF0F3;font-family:Pretendard,'Pretendard Variable','Noto Sans KR',-apple-system,sans-serif;color:#1D1F20;letter-spacing:0;
+  -webkit-text-size-adjust:100%;text-size-adjust:100%}
+body.is-phone{background:#fff}
+p,h1,h2,ol,ul{margin:0;padding:0}
+ol,ul{list-style:none}
+img{display:block;max-width:none}
+a{color:inherit;text-decoration:none}
+button,input{font-family:inherit;letter-spacing:0}
+button{cursor:pointer}
+:focus-visible{outline:2px solid #7DA2FF;outline-offset:2px}
+
+.m-page{position:relative;width:360px;margin:0 auto;background:#fff;overflow-x:clip;box-shadow:0 0 0 1px rgba(0,0,0,.04),0 12px 40px rgba(0,0,0,.08)}
+body.is-phone .m-page{box-shadow:none}
+
+/* 공통 */
+.m-blue{color:#1B52ED}
+.m-green{color:#09AA5C}
+.m-h2{font-size:22px;line-height:30px;font-weight:700;color:#000}
+.m-h2--dark{color:#1D1F20}
+/* 버튼 — button_primary · 높이 46 · 좌우 20 · 모서리 8 · 15/15 SemiBold */
+.m-btn{display:inline-flex;align-items:center;justify-content:center;min-width:80px;height:46px;padding:0 20px;border:0;border-radius:8px;
+  background:#1B52ED;color:#fff;font-size:15px;line-height:15px;font-weight:600;white-space:nowrap;transition:background-color .15s}
+.m-btn:hover{background:#1E4BC9}
+
+/* ---------- 헤더 (60 · 아래 선 #EBEDEF) ---------- */
+.m-header{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;height:60px;padding:0 20px;
+  background:#fff;box-shadow:inset 0 -1px 0 #EBEDEF}
+.m-header__logo{display:flex;align-items:center;width:121px;height:60px;padding-bottom:6px}
+.m-header__logo img{width:104px;height:32px}
+.m-header__right{display:flex;align-items:center;gap:20px}
+.m-header__login{display:flex;align-items:center;height:30px;padding:0 10px;border:1px solid #2D62FA;border-radius:8px;background:#fff;
+  color:#1B52ED;font-size:15px;line-height:15px;font-weight:600;white-space:nowrap}
+.m-header__menu{display:flex;align-items:center;justify-content:center;width:24px;height:24px;padding:0;border:0;background:none}
+
+/* ---------- 히어로 (글자 350 + 영상 202) ---------- */
+.m-hero__top{display:flex;flex-direction:column;align-items:center;padding:60px 20px;text-align:center;background-size:900px 418px;background-position:center}
+.m-hero__title{font-size:28px;line-height:38px;font-weight:700;color:#1D1F20}
+.m-hero__line{display:block}
+.m-hero__desc{margin-top:16px;font-size:14px;line-height:20px;color:#383B3E}
+.m-hero__cta{margin-top:32px}
+.m-hero__media{position:relative;width:360px;height:202px;overflow:hidden;background:#1D1F20}
+.m-hero__video{display:block;width:100%;height:100%;object-fit:cover;cursor:pointer}
+/* 재생 버튼 — 48 원 · 검정 60% · 아이콘 24. 영상이 멈춰 있을 때만 보임 */
+.m-hero__play{position:absolute;left:50%;top:50%;display:flex;align-items:center;justify-content:center;width:48px;height:48px;margin:0;padding:0;border:0;
+  border-radius:999px;background:rgba(0,0,0,.6);transform:translate(-50%,-50%);opacity:0;visibility:hidden;transition:opacity .2s,visibility 0s .2s}
+.m-hero__media.is-paused .m-hero__play{opacity:1;visibility:visible;transition:opacity .2s,visibility 0s}
+
+/* 배경 그라데이션 움직임 — PC 261028 의 [data-hero-anim] 그대로 (색 6개 + 바탕 #F6F8FA)
+   모바일 Figma 배경 효과 크기(900 × 418, 가운데)에 맞춰 background-size 만 바꿈 */
+@property --angle0{syntax:"<angle>";initial-value:316deg;inherits:false}
+@keyframes rotate0{to{--angle0:-44deg}}
+@property --angle1{syntax:"<angle>";initial-value:351deg;inherits:false}
+@keyframes rotate1{to{--angle1:-9deg}}
+@property --angle2{syntax:"<angle>";initial-value:212deg;inherits:false}
+@keyframes rotate2{to{--angle2:-148deg}}
+@property --angle3{syntax:"<angle>";initial-value:305deg;inherits:false}
+@keyframes rotate3{to{--angle3:-55deg}}
+@property --angle4{syntax:"<angle>";initial-value:135deg;inherits:false}
+@keyframes rotate4{to{--angle4:-225deg}}
+@property --angle5{syntax:"<angle>";initial-value:146deg;inherits:false}
+@keyframes rotate5{to{--angle5:-214deg}}
+[data-hero-anim]{
+  background-image:
+    radial-gradient(circle at calc(50% * (1 + 0.5 * cos(var(--angle0)))) calc(50% * (1 + 0.5 * sin(var(--angle0)))),#C9DCFF,rgba(0,0,0,0) 35%),
+    radial-gradient(circle at calc(50% * (1 + 0.5 * cos(var(--angle1)))) calc(50% * (1 + 0.5 * sin(var(--angle1)))),#E4ECFF,rgba(0,0,0,0) 35%),
+    radial-gradient(circle at calc(50% * (1 + 0.5 * cos(var(--angle2)))) calc(50% * (1 + 0.5 * sin(var(--angle2)))),#DCE1F7,rgba(0,0,0,0) 35%),
+    radial-gradient(circle at calc(50% * (1 + 0.5 * cos(var(--angle3)))) calc(50% * (1 + 0.5 * sin(var(--angle3)))),#D2F0F5,rgba(0,0,0,0) 35%),
+    radial-gradient(circle at calc(50% * (1 + 0.5 * cos(var(--angle4)))) calc(50% * (1 + 0.5 * sin(var(--angle4)))),#EBF4FF,rgba(0,0,0,0) 35%),
+    radial-gradient(circle at calc(50% * (1 + 0.5 * cos(var(--angle5)))) calc(50% * (1 + 0.5 * sin(var(--angle5)))),#B9CDF2,rgba(0,0,0,0) 35%);
+  background-color:#F6F8FA;background-repeat:no-repeat;
+  animation:rotate0 19.5s -5.655s reverse,rotate1 16.5s -12.045s,rotate2 10.5s -6.51s,rotate3 7.5s -7.2s reverse,rotate4 10.5s -1.365s,rotate5 10.5s -8.295s reverse;
+  animation-timing-function:linear;animation-iteration-count:infinite;
+}
+/* 제목 하이라이트 — "전자계약은 예스폼싸인" 이 0.5초 뒤 1.4초 동안 왼쪽부터 검정 → 파랑(#1B52ED) (한 번) */
+@keyframes ys-hl-sweep{from{background-position:100% 0}to{background-position:0% 0}}
+[data-hl-sweep]{
+  background-image:linear-gradient(90deg,#1B52ED 0 50%,#1D1F20 50% 100%);
+  background-size:200% 100%;background-position:100% 0;background-repeat:no-repeat;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:ys-hl-sweep 1.4s cubic-bezier(.22,.61,.36,1) .5s 1 forwards;
+}
+
+/* ---------- 계약 4단계 (위 60 · 좌우 16 · 카드 328 × 309 · 간격 16) ---------- */
+.m-steps{padding:60px 16px 0}
+.m-steps__list{display:flex;flex-direction:column;gap:16px}
+.m-step{border:1px solid #E3E5E8;border-radius:16px;overflow:hidden;background:#fff}   /* 테두리 1 포함 309 */
+.m-step__art{height:181px;background:linear-gradient(#EEF4FF,#F7F9FF);box-shadow:inset 0 -1px 0 #EEF1F6}
+.m-step__art img{width:298px;height:180px}
+.m-step__body{padding:22px 24px 26px}
+.m-step__head{display:flex;align-items:center;gap:10px;font-size:18px;line-height:26px;font-weight:600;color:#1D1F20}
+.m-step__num{display:flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:12px;background:#1B52ED;color:#fff;font-size:13px;line-height:13px;font-weight:700}
+.m-step__desc{padding-top:10px;font-size:15px;line-height:21px;color:#383B3E}
+
+/* ---------- 계약서 서식 (위아래 60 · 분류 버튼 · 카드 185 × 265 → 옆으로 밀어서 보기) ---------- */
+.m-tpl{padding:60px 16px}
+.m-tpl__desc{padding-top:12px;font-size:15px;line-height:21px;color:#383B3E}
+.m-chips,.m-tpl__list{display:flex;margin-right:-16px;padding-right:16px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.m-chips::-webkit-scrollbar,.m-tpl__list::-webkit-scrollbar{display:none}
+.m-chips{gap:12px;margin-top:36px}
+.m-chip{flex:none;height:42px;padding:0 16px;border:0;border-radius:100px;background:#F6F7F8;color:#383B3E;font-size:15px;line-height:15px;font-weight:600;white-space:nowrap;transition:background-color .15s,color .15s}
+.m-chip.is-on{background:#1B52ED;color:#fff}
+.m-tpl__list{gap:20px;margin-top:20px}
+.m-tpl__item{flex:none;width:185px}
+.m-tpl__thumb{width:185px;height:265px;border:1px solid #E3E5E8;border-radius:8px;overflow:hidden;background:#fff}
+.m-tpl__thumb img{width:183px;height:261px}
+.m-tpl__name{height:36px;padding-top:14px;font-size:15px;line-height:20px;font-weight:500;color:#000;white-space:nowrap}
+
+/* ---------- 간편결제 (200 · 배경 #F5F9FF + 동전 · 네이버페이 그림 = images/m-fix-bg.jpg) ---------- */
+.m-pay{height:200px;padding:24px 10px;text-align:center;background:#F5F9FF url(../images/m-fix-bg.jpg) 0 0/360px 200px no-repeat}
+.m-pay__title{font-size:20px;line-height:28px;font-weight:600;color:#1D1F20}
+.m-pay__desc{margin-top:4px;font-size:15px;line-height:21px;color:#888F95}
+
+/* ---------- 나만의 전자도장 (624 · 빛 · 회색 상자 · 손글씨 싸인 = images/m-seal-bg.jpg) ---------- */
+.m-seal{height:624px;padding:60px 20px;background:#fff url(../images/m-seal-bg.jpg) 0 0/360px 624px no-repeat}
+.m-seal__tabs{display:flex;gap:8px;margin-top:36px}
+.m-seal__tab{flex:1 1 0;height:48px;padding:0;border:2px solid #fff;border-radius:12px;background:#F6F8FA;color:#000;font-size:16px;line-height:22px;font-weight:600;white-space:nowrap}
+.m-seal__tab.is-on{border-color:#1B52ED}
+.m-seal__box{height:348px;margin-top:12px;padding:20px}
+.m-seal__title{font-size:18px;line-height:26px;font-weight:700;color:#1B52ED}
+.m-seal__desc{margin-top:4px;font-size:15px;line-height:21px;color:#383B3E}
+.m-seal__label{margin-top:24px;font-size:14px;line-height:17px;font-weight:600;color:#000}
+.m-seal__draw{height:103.125px;margin-top:8px}   /* 손글씨 칸은 배경 그림 */
+.m-seal__form{display:flex;gap:8px;margin-top:8px}
+.m-seal__input{flex:1 1 0;min-width:0;height:42px;padding:0 12px;border:1px solid #E3E5E8;border-radius:8px;background:#fff;color:#1D1F20;font-size:14px;line-height:20px}
+.m-seal__input::placeholder{color:#A0A6AC;opacity:1}
+.m-seal__input:focus{outline:none;border-color:#1B52ED}
+.m-seal__make{flex:none;width:100px;height:42px;padding:0;border:0;border-radius:8px;background:#1B52ED;color:#fff;font-size:14px;line-height:14px;font-weight:500}
+
+/* ---------- 진행 상태 (위아래 60 · 회색 상자 패딩 24 · 세로선 회색 430 / 파랑 70) ---------- */
+.m-status{padding:60px 20px}
+.m-status__box{position:relative;margin-top:36px;padding:24px;border-radius:16px;background:#F6F8FA;overflow:hidden}
+.m-status__box::before,.m-status__box::after{content:"";position:absolute;left:35px;top:45px;width:2px}
+.m-status__box::before{height:430px;background:#D0D4D7}
+.m-status__box::after{height:70px;background:#1B52ED}
+.m-status__item{position:relative;z-index:1;display:flex;align-items:flex-start;gap:12px;padding:20px 0}
+.m-status__item img{flex:none;width:24px;height:24px}
+.m-status__item div{flex:1 1 0;min-width:0}
+.m-status__name{font-size:16px;line-height:22px;font-weight:600;color:#888F95}
+.m-status__desc{margin-top:2px;font-size:15px;line-height:21px;color:#888F95}
+.m-status__item.is-on .m-status__name{color:#1B52ED}
+.m-status__item.is-on .m-status__desc{color:#383B3E}
+
+/* ---------- 법적 효력 (1238 · 배경 · 카드 모양 · 아이콘 = images/m-dark-bg.jpg) ---------- */
+.m-legal{height:1238px;padding:60px 16px;background:#0F1010 url(../images/m-dark-bg.jpg) 0 0/360px 1238px no-repeat}
+.m-legal__title{height:90px;color:#fff}
+.m-legal__list{display:flex;flex-direction:column;gap:24px;margin-top:36px}
+.m-legal__card{height:230px;padding:96px 24px 24px}   /* 위 24 + 아이콘 48 + 간격 24 */
+.m-legal__name{font-size:20px;line-height:26px;font-weight:700;color:#fff}
+.m-legal__desc{margin-top:8px;font-size:14px;line-height:20px;color:#A0A6AC}
+
+/* ---------- 온라인 도장 배너 (300 · 파랑 → 검정 + 태블릿 사진 = images/m-banner-bg.jpg) ---------- */
+.m-banner{height:300px;padding:24px 16px;text-align:center;color:#fff;background:#1B52ED url(../images/m-banner-bg.jpg) 0 0/360px 300px no-repeat}
+.m-banner__title{font-size:20px;line-height:26px;font-weight:700}
+.m-banner__desc{margin-top:4px;font-size:15px;line-height:21px}
+
+/* ---------- 무료로 시작하세요 (956 · 빛 · 상자 그림 = images/m-free-bg.jpg) ---------- */
+/* 숫자 글꼴 — Figma 그대로 Roboto (SemiBold 숫자 · Medium '+') · 필요한 글자만 담은 파일 */
+@font-face{font-family:'Roboto Digits';font-style:normal;font-weight:600;font-display:block;src:url(../fonts/roboto-600-digits.woff2) format('woff2');unicode-range:U+30-39}
+@font-face{font-family:'Roboto Plus';font-style:normal;font-weight:500;font-display:block;src:url(../fonts/roboto-500-plus.woff2) format('woff2');unicode-range:U+2B}
+.m-free{display:flex;flex-direction:column;align-items:center;height:956px;padding:80px 16px;text-align:center;background:#fff url(../images/m-free-bg.jpg) 0 0/360px 956px no-repeat}
+.m-free__sub{font-size:16px;line-height:22px;font-weight:600;color:#1D1F20;white-space:nowrap}
+.m-free__title{margin-top:8px;font-size:32px;line-height:42px;font-weight:600;color:#000;white-space:nowrap}
+.m-free__nums{display:flex;flex-direction:column;align-items:center;gap:40px;margin-top:36px}
+.m-free__nums li{display:flex;flex-direction:column;align-items:center;gap:6px;width:140px}
+.m-free__num{display:flex;align-items:flex-end;gap:4px;color:#000}
+/* 숫자 칸은 최종 자릿수 폭(3ch)으로 고정 · 오른쪽 맞춤 → 세는 동안에도 단위가 움직이지 않음 */
+.m-free__num b{display:inline-block;min-width:3ch;font:600 48px/48px 'Roboto Digits',Roboto,sans-serif;text-align:right;font-variant-numeric:tabular-nums}
+.m-free__unit{width:16px;padding-bottom:2px;font-size:18px;line-height:26px;font-weight:500;color:#1D1F20}
+.m-free__num--plus{align-items:flex-start;padding-left:4px}
+.m-free__plus{font:500 32px/32px 'Roboto Plus',Roboto,sans-serif}
+.m-free__label{font-size:16px;line-height:22px;font-weight:500;color:#383B3E;white-space:nowrap}
+.m-free__cta{margin-top:292px}   /* 숫자 아래 16 + 상자 그림 260 + 16 */
+
+/* ---------- 푸터 (126 · 위 선 #EAEAEA) ---------- */
+.m-footer{display:flex;flex-direction:column;align-items:center;gap:10px;padding:40px 0;background:#fff;box-shadow:inset 0 1px 0 #EAEAEA;
+  font-size:13px;line-height:18px;font-weight:500;color:#666;text-align:center}
+.m-footer__links{display:flex;align-items:center}
+.m-footer__links i{display:block;width:1px;height:15px;margin:0 9px;background:#C2C2C2}
+.m-footer__wide{width:108px}
+
+@media (prefers-reduced-motion:reduce){
+  [data-hero-anim]{animation:none}
+  [data-hl-sweep]{animation:none;background-position:0% 0}
+}

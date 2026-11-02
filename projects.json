@@ -2,6 +2,51 @@
   "version": 2,
   "projects": [
     {
+      "id": "20261030-171420-css",
+      "title": "[예스폼싸인] 메인시안 모바일",
+      "team": "design",
+      "category": "웹 메인",
+      "desc": "",
+      "created": "2026.10.30",
+      "updated": "2026.11.02",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261030-171420-css",
+          "label": "v1",
+          "title": "[예스폼싸인] 메인시안 모바일",
+          "desc": "",
+          "created": "2026.10.30",
+          "folder": "archive/20261030-171420-css",
+          "preview": "archive/20261030-171420-css/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261030-171420-css/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261102-143638-css",
+          "label": "v2",
+          "title": "[예스폼싸인] 메인시안 모바일",
+          "desc": "",
+          "created": "2026.11.02",
+          "folder": "archive/20261102-143638-css",
+          "preview": "archive/20261102-143638-css/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261102-143638-css/index.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "20261102-134849-images",
       "title": "[예스폼] 상세페이지 HTML 다운로드 추가",
       "team": "design",
@@ -94,35 +139,6 @@
             {
               "label": "03_요청자_미리서명",
               "href": "archive/20261102-113935-yesformsign-template/03_요청자_미리서명.html"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "20261030-171420-css",
-      "title": "[예스폼싸인] 메인시안 모바일",
-      "team": "design",
-      "category": "웹 메인",
-      "desc": "",
-      "created": "2026.10.30",
-      "updated": "2026.10.30",
-      "hidden": false,
-      "final": null,
-      "versions": [
-        {
-          "id": "20261030-171420-css",
-          "label": "v1",
-          "title": "[예스폼싸인] 메인시안 모바일",
-          "desc": "",
-          "created": "2026.10.30",
-          "folder": "archive/20261030-171420-css",
-          "preview": "archive/20261030-171420-css/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261030-171420-css/index.html"
             }
           ]
         }
