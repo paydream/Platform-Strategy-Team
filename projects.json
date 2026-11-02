@@ -27,6 +27,22 @@
               "href": "archive/20261102-134849-images/index.html"
             }
           ]
+        },
+        {
+          "id": "20261102-135318-images",
+          "label": "v2",
+          "title": "[예스폼] 상세페이지 HTML 다운로드 추가",
+          "desc": "",
+          "created": "2026.11.02",
+          "folder": "archive/20261102-135318-images",
+          "preview": "archive/20261102-135318-images/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261102-135318-images/index.html"
+            }
+          ]
         }
       ]
     },

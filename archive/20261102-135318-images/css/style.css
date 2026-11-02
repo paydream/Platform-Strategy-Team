@@ -1,0 +1,187 @@
+/* ==========================================================================
+   예스폼 서식 상세페이지 — 포맷_HTML (2026-11-02)
+   Figma: 맞춤-큐레이션 › "상세페이지_서식" (1873:28420)
+   · 본문 폭 1600 (왼쪽 980 · 간격 70 · 오른쪽 550) · 헤더 110 · 헤더와 본문 사이 55
+   · Figma 의 '안쪽 선'(테두리가 크기 안에 들어가는 선)은 대부분 CSS border(box-sizing:border-box)로 맞춤
+   ========================================================================== */
+:root{color-scheme:light}
+*{box-sizing:border-box;font-synthesis-weight:none}
+html,body{margin:0;background:#fff}
+body{min-width:1640px;font-family:Pretendard,'Pretendard Variable','Noto Sans KR',-apple-system,sans-serif;color:#000;letter-spacing:0;-webkit-font-smoothing:antialiased}
+p,h1,h2,h3,ol,ul{margin:0;padding:0}
+ol,ul{list-style:none}
+img{display:block;max-width:none}
+a{color:inherit;text-decoration:none}
+button,input{margin:0;font-family:inherit;letter-spacing:0;color:inherit}
+button{padding:0;border:0;background:none;cursor:pointer}
+em{font-style:normal}
+:focus-visible{outline:2px solid #7DB6F2;outline-offset:2px}
+
+/* ---------- 헤더 (110 · 아래 선 #EAEAEA · 그림자) ---------- */
+.hd{position:relative;z-index:10;display:flex;justify-content:center;height:110px;padding:0 20px;background:#fff;border-bottom:1px solid #EAEAEA;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.1))}
+.hd__inner{display:flex;align-items:center;gap:100px;flex:1 0 0;max-width:1600px;min-width:984px;height:100%}
+.hd__left{display:flex;align-items:center;flex:1 0 0;min-width:0}
+.hd__brand{display:flex;align-items:center;gap:15px;padding-right:30px;font-size:20px;line-height:28px;font-weight:600;white-space:nowrap}
+.hd__brand img{width:78px;height:34px}
+.hd__search{display:flex;align-items:center;gap:10px;width:400px;height:48px;padding:8px 10px;border-bottom:2px solid #0472E3}
+.hd__search input{flex:1 0 0;min-width:0;height:26px;padding:0;border:0;background:none;font-size:16px;line-height:26px;font-weight:500;color:#000;outline:none}
+.hd__search input::-webkit-search-cancel-button{display:none}
+.hd__search button{flex:none;width:30px;height:30px}
+.hd__all{display:flex;align-items:center;gap:5px;padding-left:30px;font-size:15px;line-height:24px;font-weight:500;white-space:nowrap;cursor:pointer}
+.hd__all input{position:absolute;opacity:0;width:1px;height:1px}
+.hd__check{position:relative;width:24px;height:24px}
+.hd__check::before{content:"";position:absolute;left:2px;top:2px;width:20px;height:20px;border:1px solid #C2C2C2;border-radius:5px;background:#fff}
+.hd__all input:checked+.hd__check::before{border-color:#0472E3;background:#0472E3 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5.5 10.2l3 3 6-6.4' fill='none' stroke='%23fff' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/18px no-repeat}
+.hd__all input:focus-visible+.hd__check::before{outline:2px solid #7DB6F2;outline-offset:2px}
+.hd__util{display:flex;align-items:center;gap:25px}
+.hd__util a{display:flex;flex-direction:column;align-items:center;gap:5px;width:45px;font-size:13px;line-height:18px;font-weight:500;white-space:nowrap}
+.hd__util a.is-w46{width:46px}
+
+/* ---------- 본문 틀 ---------- */
+.wrap{width:1600px;margin:55px auto 0}
+
+/* 경로 · 제목 (98) */
+.title{padding:0 8px 32px}
+.crumb{display:flex;align-items:center;gap:4px}
+.crumb li{display:flex;align-items:center;gap:4px;font-size:15px;line-height:22px;font-weight:500;color:#464A4E;white-space:nowrap}
+.crumb li+li::before{content:"";width:16px;height:16px;background:url(../images/ic-crumb.svg) center/16px no-repeat}
+.title__h{margin-top:8px;font-size:28px;line-height:36px;font-weight:700}
+
+.cols{display:flex;align-items:flex-start;gap:70px}
+.col-l{display:flex;flex-direction:column;gap:32px;width:980px}
+.col-r{display:flex;flex-direction:column;gap:30px;width:550px}   /* 포맷 카드 그림자가 잘리지 않게 넘침 허용 */
+
+/* ---------- 미리보기 (카드 · 썸네일 106 · 큰 화면 711 × 400) ---------- */
+.viewer{display:flex;flex-direction:column;align-items:center;padding:31px 0;border:1px solid #EBEDEF;border-radius:8px;background:#fff;overflow:hidden}
+.viewer__row{display:flex;align-items:flex-start;gap:16px;height:480px;overflow:hidden}
+.viewer__side{display:flex;flex-direction:column;gap:8px;width:106px;height:100%}
+.thumbs{flex:1 0 0;min-height:0;display:flex;flex-direction:column;gap:4px;overflow:hidden;scroll-behavior:smooth}
+.thumb{display:block;width:106px;height:106px;border:1px solid #EBEDEF;border-radius:6px;background:#F6F7F8;overflow:hidden}
+.thumb img{width:100%;height:100%;object-fit:contain}
+.thumb--cover img{object-fit:cover}
+.thumb.is-on{border-color:#1D1F20}
+.thumb:hover:not(.is-on){border-color:#C2C2C2}
+.thumbs-nav{display:flex;flex:none;height:24px;border:1px solid #EBEDEF;border-radius:4px;background:#fff}
+.thumbs-nav button{display:flex;align-items:center;justify-content:center;flex:1 0 0;padding:0 8px}
+.thumbs-nav button:first-child{border-right:1px solid #F1F2F4}
+.thumbs-nav button:disabled{cursor:default}
+.viewer__main{position:relative;display:flex;align-items:center;justify-content:center;width:711px;height:400px;border:1px solid #F1F2F4;border-radius:8px;background:#F6F7F8;overflow:hidden}
+.viewer__img{flex:none;border:1px solid rgba(0,0,0,.05);object-fit:contain;background:#fff}
+.viewer__img.is-portrait{width:341px;height:480px}
+.viewer__img.is-landscape{width:auto;height:auto;max-width:100%;max-height:100%}
+.like{position:absolute;right:9px;top:9px;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border:1px solid #F1F2F4;border-radius:27.5px;background:#fff;
+  filter:drop-shadow(0 0 12.5px rgba(0,0,0,.15))}
+.like[aria-pressed="true"] img{filter:invert(27%) sepia(85%) saturate(3000%) hue-rotate(330deg) brightness(92%)}
+.notice{position:absolute;left:480.5px;top:67px;width:224px;height:56px;pointer-events:none}
+.pager{display:flex;align-items:center;justify-content:center;gap:2px;width:110px;height:25px;margin-top:12px;border-radius:12.5px;background:#EAEAEA;
+  font-size:15px;line-height:24px;font-weight:500;color:#666;white-space:nowrap}
+.pager b{font-weight:500;color:#000}
+
+/* 태그 */
+.tags{display:flex;flex-wrap:wrap;gap:5px;padding-top:20px}
+.tags li{display:flex;align-items:center;height:34px;padding:0 24px;border:1px solid #EAEAEA;border-radius:17px;background:#fff;font-size:15px;line-height:22px;font-weight:500;color:#666;white-space:nowrap}
+
+/* ---------- 함께 많이 확인한 서식 (카드 220 × 4) ---------- */
+.related__h{display:flex;align-items:center;height:48px;padding-bottom:8px;font-size:15px;line-height:22px;font-weight:600}
+.related__box{position:relative}
+.related__list{display:flex;justify-content:space-between;width:980px;overflow:hidden}
+.card{position:relative;display:flex;flex-direction:column;flex:none;width:220px;border-radius:5px;background:#fff;overflow:hidden}
+.card::after{content:"";position:absolute;inset:0;border:1px solid #EAEAEA;border-radius:5px;pointer-events:none}   /* 안쪽 선 */
+.card__img{position:relative;display:flex;justify-content:center;padding:10px 20px}
+.card__img>img{width:146px;height:205px;object-fit:contain}
+.card__fav{position:absolute;right:0;top:0;display:flex;align-items:center;justify-content:center;width:56px;height:56px}
+.card__txt{display:flex;flex-direction:column;justify-content:space-between;height:110px;padding:18px 20px;background:#fff;filter:drop-shadow(1px 1px 5px rgba(0,0,0,.16))}
+.card__name{height:44px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;   /* Figma: 44 칸에 다 들어가는 1줄만 보이고 … 처리 */
+  font-size:15px;line-height:24px;font-weight:500;color:#444;text-align:center}
+.card__meta{display:flex;align-items:center;justify-content:space-between}
+.grade{display:flex;align-items:center;justify-content:center;width:55px;height:20px;border:1px solid #E12B5F;border-radius:3px;font-size:12px;line-height:16px;font-weight:500;color:#E12B5F;white-space:nowrap}
+.views{display:flex;align-items:center;gap:3px;font-size:13px;line-height:18px;font-weight:500;color:#979797}
+.related__arrow{position:absolute;top:128px;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border:1px solid #C2C2C2;border-radius:20px;background:#fff}
+.related__arrow--prev{left:-19px;border-color:rgba(194,194,194,.4)}
+.related__arrow--next{left:960px}
+.related__arrow:disabled{cursor:default}
+
+/* ---------- 오른쪽 정보 (550) ---------- */
+.author{display:flex;align-items:center;padding:4px 0 20px;box-shadow:inset 0 -1px 0 #EAEAEA}
+.author__pic{flex:none;width:48px;height:48px;margin:0 16px 0 4px;border-radius:100px;background:#E5ECF5;overflow:hidden}
+.author__pic img{width:48px;height:48px}
+.author__info{display:flex;flex-direction:column;gap:8px}
+.author__name{display:flex;align-items:center;gap:4px;font-size:18px;line-height:28px;font-weight:600;color:#292B2D;white-space:nowrap}
+.author__team{display:flex;align-items:center;gap:3px;padding:1px 5px 1px 3px;border-radius:4px;background:#F7F9FC;font-size:12px;line-height:16px;font-weight:500;color:#0472E3}
+.author__meta{display:flex;align-items:center;gap:12px}
+.author__badges{display:flex;gap:5px}
+.badge{display:flex;align-items:center;justify-content:center;height:20px;border-radius:4px;font-size:12px;line-height:16px;font-weight:500;white-space:nowrap}
+.badge--premium{width:55px;border:1px solid rgba(225,43,95,.5);color:#E12B5F}
+.badge--review{padding:0 4px;border:1px solid rgba(110,63,253,.5);color:#6E3FFD}
+.dot{width:3px;height:3px;border-radius:100px;background:#D0D4D7}
+.author__nums{display:flex;align-items:center;gap:12px;font-size:13px;line-height:18px;font-weight:500;color:#464A4E}
+.author__nums span{display:flex;align-items:center;gap:4px}
+.author__nums .is-gap5{gap:5px}
+
+.info{display:flex;flex-direction:column;gap:5px}
+.info--g8{gap:8px}
+.info--g7{gap:7px}
+.info__h{font-size:15px;line-height:22px;font-weight:600}
+.info__purpose{font-size:15px;line-height:24px;font-weight:500;color:#6D7379}
+
+/* 다운로드 가능한 포맷 — 한글 · PNG · PDF 74 × 92, HTML 68 × 94 (Figma 그대로) */
+.formats{display:flex;align-items:center;gap:6px}
+.fmt{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:68px;height:94px;padding-bottom:8px;border:1px solid #EBEDEF;border-radius:12px;background:#fff;overflow:hidden;
+  font-size:12px;line-height:16px;font-weight:500;color:#888F95;white-space:nowrap}
+.fmt--wide{width:74px;height:92px}
+/* 마우스를 올리면 카드 뒤로 그림자가 천천히 퍼져 나옴 (0.3초) — 내리면 다시 천천히 사라짐 */
+.fmt{box-shadow:0 0 0 rgba(17,24,39,0),0 0 0 rgba(17,24,39,0);transition:box-shadow .3s cubic-bezier(.22,.61,.36,1)}
+.fmt:hover{box-shadow:0 6px 16px rgba(17,24,39,.08),0 1px 3px rgba(17,24,39,.05)}
+@media (prefers-reduced-motion:reduce){.fmt{transition:none}}
+.fmt__icon{display:flex;align-items:center;justify-content:center;width:100%;height:64px;flex:none;background:#F6F7F8}
+
+.users{display:flex;flex-wrap:wrap;gap:6px}
+.users li{padding:10px 18px;border-radius:100px;background:#F6F7F8;font-size:15px;line-height:24px;font-weight:500;color:#464A4E;white-space:nowrap}
+
+.seasons{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.seasons a{display:flex;align-items:center;gap:8px;padding:9px 15px;border:1px solid #EBEDEF;border-radius:100px;background:#fff;white-space:nowrap;transition:border-color .15s}
+.seasons a:hover{border-color:#C2C2C2}
+.seasons b{font-size:15px;line-height:22px;font-weight:600;color:#0472E3}
+.seasons span{font-size:15px;line-height:24px;font-weight:500;color:#666}
+.seasons .is-w253{width:253px}
+
+.situation{position:relative;display:flex;width:550px;height:74px;border-radius:10px;background:#fff;overflow:hidden}
+.situation::after{content:"";position:absolute;inset:0;border:1px solid #EAEAEA;border-radius:10px;pointer-events:none}   /* 안쪽 선 — 왼쪽 그림 칸 위에 그려짐 */
+.situation__icon{display:flex;align-items:center;justify-content:center;flex:none;width:74px;height:74px;background:#F3EEE5}
+.situation__body{display:flex;align-items:center;justify-content:space-between;flex:1 0 0;min-width:0;padding:0 20px}
+.situation__body>span{display:flex;flex-direction:column;font-size:15px;line-height:24px;font-weight:500;color:#000;white-space:nowrap}
+.situation__body em{color:#929292}
+
+.monthly{display:flex;align-items:center;justify-content:space-between;width:550px;height:74px;padding:0 29px;border:1px solid #EAEAEA;border-radius:10px;background:#fff;
+  filter:drop-shadow(4px 3px 10px rgba(0,0,0,.05))}
+.monthly__txt{display:flex;flex-direction:column;font-size:15px;line-height:24px;font-weight:500;color:#666}
+.monthly__txt b{font-weight:500;color:#000}
+.monthly__price{display:flex;align-items:center;gap:3px;font-size:15px;line-height:24px;font-weight:500;color:#666;white-space:nowrap}
+.monthly__price b{font-size:24px;line-height:34px;font-weight:600;color:#000}
+
+/* 이용후기 */
+.review{display:flex;flex-direction:column;gap:30px;padding-top:48px}
+.review__top{display:flex;flex-direction:column;align-items:flex-start}
+.review__h{display:flex;align-items:flex-end;gap:5px;font-size:24px;line-height:34px;font-weight:600;white-space:nowrap}
+.review__h span{font-size:15px;line-height:24px;color:#0472E3}
+.review__event{display:flex;gap:3px;margin-top:10px;font-size:15px;line-height:24px;font-weight:500;white-space:nowrap}
+.review__event em{color:#03C75A}
+.review__write{width:110px;height:40px;margin-top:15px;border:1px solid #0472E3;border-radius:20px;background:#fff;font-size:15px;line-height:22px;font-weight:600;color:#0472E3;transition:background-color .15s}
+.review__write:hover{background:#F2F8FE}
+.review__empty{padding:25px 0;box-shadow:inset 0 1px 0 #EAEAEA,inset 0 -1px 0 #EAEAEA;font-size:15px;line-height:24px;font-weight:500;color:#666;text-align:center}
+
+/* ---------- PPT 사용법 안내 (위 60 · 왼쪽 980 · 높이 866) ---------- */
+.guide{padding-top:60px}
+.guide__l{position:relative;width:980px;height:866.25px}
+.guide__h{display:flex;align-items:center;height:48px;padding-bottom:20px;font-size:24px;line-height:34px;font-weight:600;white-space:nowrap}
+.guide__tabs{display:flex;padding:1px;border-radius:5px;box-shadow:inset 0 0 0 1px #EAEAEA,3.94px 3.078px 20px rgba(0,0,0,.05)}   /* 선이 크기 안에 들어감 → 높이 47 */
+.gtab{display:flex;align-items:center;justify-content:center;gap:5px;width:326.219px;height:45px;padding-bottom:3px;border-bottom:3px solid #EAEAEA;border-right:1px solid #EAEAEA;
+  font-size:15px;line-height:24px;font-weight:600;color:#666;white-space:nowrap}
+.gtab:last-child{width:325.563px;border-right:0}
+.gtab.is-on{border-bottom-color:#FB8D6D;color:#EB654D}
+.gtab img{width:18px;height:18px}
+.guide__video{position:relative;height:553.25px;margin-top:30px;border:1px solid #EAEAEA;border-radius:10px;background:#EEE;overflow:hidden}
+.guide__video img{position:absolute;left:calc(-1px - 980px * .0174);top:calc(-1px - 554px * .1949);width:calc(980px * 1.0582);height:calc(554px * 1.2148)}
+.guide__banner{position:absolute;left:0;top:728.25px;width:980px;height:138px;border-radius:10px;background:#fff;overflow:hidden}
+.guide__banner img{position:absolute;left:-44px;top:-26px;width:1066px;height:181px}
