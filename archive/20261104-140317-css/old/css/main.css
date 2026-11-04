@@ -1,0 +1,125 @@
+/* ==========================================================================
+   예스폼싸인 메인 261029 — 화면 공통 · 히어로 · 시안 전환 (261028 그대로)
+   · 위쪽(헤더 + 히어로)은 코드, 그 아래는 Figma 이미지(시안01 · 시안02 탭으로 전환)
+   · 히어로는 두 시안이 같음 — Figma 53856:24446 · 53862:28347 "Frame 480960322" (1920 × 1197, 261028 과도 같음)
+   ========================================================================== */
+:root{
+  color-scheme:light;
+  --ys-inner:1280px;   /* [내부] 폭 */
+  --ys-gutter:10px;    /* [내부] 좌우 여백 → 콘텐츠 1260 */
+}
+*{font-synthesis-weight:none}
+html,body{margin:0;background:#fff}
+body{min-width:var(--ys-inner);font-family:Pretendard,'Pretendard Variable','Noto Sans KR',-apple-system,sans-serif;color:#1D1F20}
+.inner{width:var(--ys-inner);margin:0 auto;padding:0 var(--ys-gutter);box-sizing:border-box}
+
+/* ==========================================================================
+   히어로 — 위 80 · 제목 56/68 · 설명 16/22 · 버튼 46 · 영상 1260 × 709 · 아래 66 → 높이 1197
+   ========================================================================== */
+.ys-hero{position:relative;z-index:1;padding:80px 0 66px}
+.ys-hero__inner{display:flex;flex-direction:column;align-items:center;text-align:center}
+
+.ys-hero__title{margin:0;font-size:56px;line-height:68px;font-weight:700;letter-spacing:-1.4px;color:#1D1F20;word-break:keep-all}
+.ys-hero__title-line{display:block}
+.ys-hero__desc{margin:20px 0 0;font-size:16px;line-height:22px;font-weight:400;color:#383B3E;word-break:keep-all}
+
+/* 버튼 — Figma button_primary · 높이 46 · 좌우 20 · 모서리 8 · 15/15 SemiBold */
+.ys-hero__cta{display:inline-flex;align-items:center;justify-content:center;min-width:80px;height:46px;margin:36px 0 0;padding:0 20px;box-sizing:border-box;
+  border:0;border-radius:8px;background:#1B52ED;color:#fff;font-family:inherit;font-size:15px;line-height:15px;font-weight:600;white-space:nowrap;cursor:pointer;
+  transition:background-color .15s cubic-bezier(.22,.61,.36,1)}
+.ys-hero__cta:hover{background:#1E4BC9}
+.ys-hero__cta:focus-visible{outline:2px solid #7DA2FF;outline-offset:2px}
+
+/* 영상 — 1260 × 709 · 모서리 12 · 버튼 아래 60 · 자동 재생(소리 없이 · 반복) */
+.ys-hero__media{position:relative;width:1260px;height:709px;margin-top:60px;border-radius:12px;overflow:hidden;background:#1D1F20}
+.ys-hero__video{display:block;width:100%;height:100%;object-fit:cover;cursor:pointer}
+/* 재생 버튼 — Figma 그대로(48 원 · 검정 60% · 재생 아이콘 24). 영상이 멈춰 있을 때만 보임 */
+.ys-hero__play{position:absolute;left:50%;top:calc(50% + .5px);width:48px;height:48px;margin:0;padding:0;border:0;border-radius:999px;
+  background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;cursor:pointer;transform:translate(-50%,-50%);
+  opacity:0;visibility:hidden;transition:opacity .2s,visibility 0s .2s}
+.ys-hero__play img{display:block;width:24px;height:24px}
+.ys-hero__media.is-paused .ys-hero__play{opacity:1;visibility:visible;transition:opacity .2s,visibility 0s}
+.ys-hero__play:focus-visible{outline:2px solid #7DA2FF;outline-offset:3px}
+
+/* ==========================================================================
+   배경 그라데이션 움직임 — 261026/최종/css/style.css 의 [data-hero-anim] 그대로
+   색 6개(#C9DCFF · #E4ECFF · #DCE1F7 · #D2F0F5 · #EBF4FF · #B9CDF2) + 바탕 #F6F8FA 는 Figma 히어로 배경과 같음
+   빛 덩어리 6개가 각자 다른 속도(7.5 ~ 19.5초)로 원을 그리며 천천히 돎
+   ========================================================================== */
+@property --angle0{syntax:"<angle>";initial-value:316deg;inherits:false}
+@keyframes rotate0{to{--angle0:-44deg}}
+@property --angle1{syntax:"<angle>";initial-value:351deg;inherits:false}
+@keyframes rotate1{to{--angle1:-9deg}}
+@property --angle2{syntax:"<angle>";initial-value:212deg;inherits:false}
+@keyframes rotate2{to{--angle2:-148deg}}
+@property --angle3{syntax:"<angle>";initial-value:305deg;inherits:false}
+@keyframes rotate3{to{--angle3:-55deg}}
+@property --angle4{syntax:"<angle>";initial-value:135deg;inherits:false}
+@keyframes rotate4{to{--angle4:-225deg}}
+@property --angle5{syntax:"<angle>";initial-value:146deg;inherits:false}
+@keyframes rotate5{to{--angle5:-214deg}}
+[data-hero-anim]{
+  background:
+    radial-gradient(circle at calc(50% * (1 + 0.5 * cos(var(--angle0)))) calc(50% * (1 + 0.5 * sin(var(--angle0)))),#C9DCFF,rgba(0,0,0,0) 35%),
+    radial-gradient(circle at calc(50% * (1 + 0.5 * cos(var(--angle1)))) calc(50% * (1 + 0.5 * sin(var(--angle1)))),#E4ECFF,rgba(0,0,0,0) 35%),
+    radial-gradient(circle at calc(50% * (1 + 0.5 * cos(var(--angle2)))) calc(50% * (1 + 0.5 * sin(var(--angle2)))),#DCE1F7,rgba(0,0,0,0) 35%),
+    radial-gradient(circle at calc(50% * (1 + 0.5 * cos(var(--angle3)))) calc(50% * (1 + 0.5 * sin(var(--angle3)))),#D2F0F5,rgba(0,0,0,0) 35%),
+    radial-gradient(circle at calc(50% * (1 + 0.5 * cos(var(--angle4)))) calc(50% * (1 + 0.5 * sin(var(--angle4)))),#EBF4FF,rgba(0,0,0,0) 35%),
+    radial-gradient(circle at calc(50% * (1 + 0.5 * cos(var(--angle5)))) calc(50% * (1 + 0.5 * sin(var(--angle5)))),#B9CDF2,rgba(0,0,0,0) 35%)
+    #F6F8FA;
+  animation:
+    rotate0 19.5s -5.655s reverse,
+    rotate1 16.5s -12.045s,
+    rotate2 10.5s -6.51s,
+    rotate3 7.5s -7.2s reverse,
+    rotate4 10.5s -1.365s,
+    rotate5 10.5s -8.295s reverse;
+  animation-timing-function:linear;
+  animation-iteration-count:infinite;
+}
+
+/* ==========================================================================
+   제목 하이라이트 — 261026/최종/css/style.css 의 [data-hl-sweep] 그대로
+   "전자계약은 예스폼싸인" 글자가 0.5초 뒤 1.4초 동안 왼쪽부터 검정(#1D1F20) → 파랑(#1B52ED)으로 칠해짐 (한 번)
+   ========================================================================== */
+@keyframes ys-hl-sweep{from{background-position:100% 0}to{background-position:0% 0}}
+[data-hl-sweep]{
+  background-image:linear-gradient(90deg,#1B52ED 0 50%,#1D1F20 50% 100%);
+  background-size:200% 100%;background-position:100% 0;background-repeat:no-repeat;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:ys-hl-sweep 1.4s cubic-bezier(.22,.61,.36,1) .5s 1 forwards;
+}
+
+@media (prefers-reduced-motion:reduce){
+  [data-hero-anim]{animation:none}
+  [data-hl-sweep]{animation:none;background-position:0% 0}
+}
+
+/* ==========================================================================
+   히어로 아래 — Figma 이미지 (1920 그대로, 화면 가운데 기준 · 좁은 화면은 좌우 여백부터 잘림)
+   ========================================================================== */
+.stage{width:100%;overflow-x:hidden}
+.shot{display:block;width:1920px;max-width:none;height:auto;margin-left:calc(50% - 960px)}
+.shot[hidden]{display:none}
+
+/* 시안01 마지막 섹션 숫자 (100 · 240 · 120) — Figma Roboto SemiBold 48 · 줄 높이 100% · 검정
+   이미지(images/sian1-body.png)에는 숫자만 지워져 있고 단위(만 · + · 건)와 설명은 그대로 있음
+   자리: 이미지 기준 위 3468(Figma y 4725) · 칸 폭 83 — 오른쪽 맞춤이라 세는 동안에도 단위 옆에 붙어 있음 */
+@font-face{font-family:'Roboto Digits';font-style:normal;font-weight:600;font-display:block;
+  src:url(../fonts/roboto-600-digits.woff2) format('woff2');unicode-range:U+30-39}
+.shot--count{position:relative}
+.shot--count>img{display:block;width:1920px;height:auto}
+.count{position:absolute;left:0;top:3468px;width:1920px;height:48px;margin:0}
+.count__num{position:absolute;top:0;width:83px;height:48px;
+  font:600 48px/48px 'Roboto Digits',Roboto,Pretendard,sans-serif;letter-spacing:0;color:#000;text-align:right;
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* 시안 전환 바 — 어두운 바탕 #1D1F20 · 선택 #2D62FA · 모서리 8 */
+.tabs{position:fixed;left:50%;bottom:24px;z-index:30;transform:translateX(-50%);
+  display:flex;gap:4px;padding:4px;border:1px solid rgba(255,255,255,.08);border-radius:8px;background:#1D1F20;
+  box-shadow:0 10px 30px rgba(0,0,0,.28),0 2px 6px rgba(0,0,0,.16)}
+.tab{height:36px;padding:0 18px;margin:0;border:0;border-radius:8px;background:transparent;cursor:pointer;
+  font-family:inherit;font-size:14px;font-weight:600;line-height:14px;color:#B0B8C1;transition:background-color .15s,color .15s}
+.tab:hover{color:#fff;background:rgba(255,255,255,.08)}
+.tab.is-on{background:#2D62FA;color:#fff}
+.tab:focus-visible{outline:2px solid #7DA2FF;outline-offset:2px}
