@@ -123,6 +123,22 @@
               "href": "archive/20261104-135027-css/old/index.html"
             }
           ]
+        },
+        {
+          "id": "20261104-152642-css",
+          "label": "v8",
+          "title": "[예스폼싸인] 메인 시안",
+          "desc": "",
+          "created": "2026.11.04",
+          "folder": "archive/20261104-152642-css",
+          "preview": "archive/20261104-152642-css/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261104-152642-css/index.html"
+            }
+          ]
         }
       ]
     },
