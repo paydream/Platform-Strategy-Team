@@ -1,0 +1,7 @@
+/* 씽크존 시안 이미지 보기 — index.html
+   · 그림 1920 × 1080 을 1배 크기 그대로, 화면 가운데 기준으로 띄움 (밝은 화면 고정) */
+:root{color-scheme:light}
+html,body{margin:0;background:#fff}
+body{min-width:1280px}
+.shot{width:100%;overflow-x:hidden}
+.shot img{display:block;width:1920px;max-width:none;height:auto;margin-left:calc(50% - 960px)}
