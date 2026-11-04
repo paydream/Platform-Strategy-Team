@@ -2,6 +2,131 @@
   "version": 2,
   "projects": [
     {
+      "id": "20261026-175725-261026",
+      "title": "[예스폼싸인] 메인 시안",
+      "team": "design",
+      "category": "웹 메인",
+      "desc": "",
+      "created": "2026.10.26",
+      "updated": "2026.11.04",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261026-175725-261026",
+          "label": "v1",
+          "title": "예스폼싸인 메인",
+          "desc": "",
+          "created": "2026.10.26",
+          "folder": "archive/20261026-175725-261026",
+          "preview": "archive/20261026-175725-261026/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261026-175725-261026/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261027-105534-261027",
+          "label": "v2",
+          "title": "예스폼싸인 메인",
+          "desc": "",
+          "created": "2026.10.27",
+          "folder": "archive/20261027-105534-261027",
+          "preview": "archive/20261027-105534-261027/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261027-105534-261027/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261027-170011-images",
+          "label": "v3",
+          "title": "예스폼싸인 메인",
+          "desc": "",
+          "created": "2026.10.27",
+          "folder": "archive/20261027-170011-images",
+          "preview": "archive/20261027-170011-images/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261027-170011-images/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261028-174942-222-1",
+          "label": "v4",
+          "title": "예스폼싸인 메인",
+          "desc": "",
+          "created": "2026.10.28",
+          "folder": "archive/20261028-174942-222-1",
+          "preview": "archive/20261028-174942-222-1/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261028-174942-222-1/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261029-152020-css",
+          "label": "v5",
+          "title": "[예스폼싸인] 메인 시안",
+          "desc": "",
+          "created": "2026.10.29",
+          "folder": "archive/20261029-152020-css",
+          "preview": "archive/20261029-152020-css/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261029-152020-css/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261030-171157-fonts",
+          "label": "v6",
+          "title": "[예스폼싸인] 메인 시안",
+          "desc": "",
+          "created": "2026.10.30",
+          "folder": "archive/20261030-171157-fonts",
+          "preview": "archive/20261030-171157-fonts/pc-261030.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "pc-261030",
+              "href": "archive/20261030-171157-fonts/pc-261030.html"
+            }
+          ]
+        },
+        {
+          "id": "20261104-135027-css",
+          "label": "v7",
+          "title": "[예스폼싸인] 메인 시안",
+          "desc": "",
+          "created": "2026.11.04",
+          "folder": "archive/20261104-135027-css",
+          "preview": "archive/20261104-135027-css/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "old",
+              "href": "archive/20261104-135027-css/old/index.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "20261030-171420-css",
       "title": "[예스폼싸인] 메인시안 모바일",
       "team": "design",
@@ -139,115 +264,6 @@
             {
               "label": "03_요청자_미리서명",
               "href": "archive/20261102-113935-yesformsign-template/03_요청자_미리서명.html"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "20261026-175725-261026",
-      "title": "[예스폼싸인] 메인 시안",
-      "team": "design",
-      "category": "웹 메인",
-      "desc": "",
-      "created": "2026.10.26",
-      "updated": "2026.10.30",
-      "hidden": false,
-      "final": null,
-      "versions": [
-        {
-          "id": "20261026-175725-261026",
-          "label": "v1",
-          "title": "예스폼싸인 메인",
-          "desc": "",
-          "created": "2026.10.26",
-          "folder": "archive/20261026-175725-261026",
-          "preview": "archive/20261026-175725-261026/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261026-175725-261026/index.html"
-            }
-          ]
-        },
-        {
-          "id": "20261027-105534-261027",
-          "label": "v2",
-          "title": "예스폼싸인 메인",
-          "desc": "",
-          "created": "2026.10.27",
-          "folder": "archive/20261027-105534-261027",
-          "preview": "archive/20261027-105534-261027/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261027-105534-261027/index.html"
-            }
-          ]
-        },
-        {
-          "id": "20261027-170011-images",
-          "label": "v3",
-          "title": "예스폼싸인 메인",
-          "desc": "",
-          "created": "2026.10.27",
-          "folder": "archive/20261027-170011-images",
-          "preview": "archive/20261027-170011-images/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261027-170011-images/index.html"
-            }
-          ]
-        },
-        {
-          "id": "20261028-174942-222-1",
-          "label": "v4",
-          "title": "예스폼싸인 메인",
-          "desc": "",
-          "created": "2026.10.28",
-          "folder": "archive/20261028-174942-222-1",
-          "preview": "archive/20261028-174942-222-1/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261028-174942-222-1/index.html"
-            }
-          ]
-        },
-        {
-          "id": "20261029-152020-css",
-          "label": "v5",
-          "title": "[예스폼싸인] 메인 시안",
-          "desc": "",
-          "created": "2026.10.29",
-          "folder": "archive/20261029-152020-css",
-          "preview": "archive/20261029-152020-css/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261029-152020-css/index.html"
-            }
-          ]
-        },
-        {
-          "id": "20261030-171157-fonts",
-          "label": "v6",
-          "title": "[예스폼싸인] 메인 시안",
-          "desc": "",
-          "created": "2026.10.30",
-          "folder": "archive/20261030-171157-fonts",
-          "preview": "archive/20261030-171157-fonts/pc-261030.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "pc-261030",
-              "href": "archive/20261030-171157-fonts/pc-261030.html"
             }
           ]
         }

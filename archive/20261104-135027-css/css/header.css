@@ -1,0 +1,44 @@
+/* ==========================================================================
+   상단 헤더 — 싸인 디자인시스템 Header_home (Type=logout · PC(web) · Default)
+   Figma: 싸인_디자인시스템 53149:15065 (2026-10-27)
+   · 261026/최종/css/header.css 를 그대로 가져옴 (261028 · 261029 · 261030 PC 같음)
+   · 높이 60 · 흰 바탕 · 아래 선 1px #EBEDEF(선 두께가 높이 안에 들어감)
+   · 폭은 본문과 같은 [내부] 그리드 — 안쪽에 .inner 를 같이 붙여 1280 · 좌우 10 → 콘텐츠 1260
+     (Figma 원본은 좌우 24 · 최대 1600 이지만 본문 폭에 맞춤, 2026-10-27)
+     폭은 css/main.css 의 --ys-inner · --ys-gutter 를 따라감
+   · 모서리: 버튼 모두 8 (Figma 의 '1개월 무료 체험'은 6 → 버튼 8 통일 규칙을 따름)
+   ========================================================================== */
+.ys-header{
+  position:relative;z-index:20;
+  height:60px;box-sizing:border-box;
+  background:#fff;box-shadow:inset 0 -1px 0 #EBEDEF;
+  font-family:Pretendard,'Pretendard Variable','Noto Sans KR',-apple-system,sans-serif;
+}
+/* 폭 · 좌우 여백 · 가운데 정렬은 .inner([내부]) 규칙이 맡음 */
+.ys-header__inner{display:flex;align-items:center;height:60px}
+
+/* 로고 칸 181 (로고 104 × 32 + 오른쪽 60) · 아래 9 여백으로 로고가 살짝 위에 앉음 */
+.ys-header__logo{flex:0 0 auto;display:flex;align-items:center;width:181px;height:100%;padding:0 60px 9px 0;box-sizing:border-box}
+.ys-header__logo img{display:block;width:104px;height:32px}   /* 그림은 2배(208 × 64) → 절반 크기로 표시 */
+
+/* 메뉴 — 16 / 22 SemiBold #1D1F20 · 간격 48 · 위 2 */
+.ys-header__lnb{flex:0 0 auto;display:flex;align-items:center;gap:48px;height:100%;padding-top:2px;box-sizing:border-box}
+.ys-header__menu{font-size:16px;line-height:22px;font-weight:600;color:#1D1F20;white-space:nowrap;cursor:pointer;transition:color .15s}
+.ys-header__menu:hover{color:#2D62FA}
+
+/* 오른쪽 버튼 — 높이 36 · 좌우 14 · 14 / 14 Medium · 간격 8 */
+.ys-header__info{flex:1 0 0;min-width:1px;display:flex;align-items:center;justify-content:flex-end;gap:8px;height:100%}
+.ys-header__btn{display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 14px;margin:0;box-sizing:border-box;
+  border:1px solid #E3E5E8;border-radius:8px;background:#fff;
+  font-family:inherit;font-size:14px;line-height:14px;font-weight:500;color:#031228;white-space:nowrap;cursor:pointer;
+  transition:background-color .15s,border-color .15s}
+.ys-header__btn:hover{background:#F6F8FA}
+.ys-header__btn--primary{border-color:#2D62FA;color:#1B52ED}
+.ys-header__btn--primary:hover{background:#F3F7FF}
+.ys-header__btn:focus-visible{outline:2px solid #7DA2FF;outline-offset:2px}
+
+/* 1개월 무료 체험 말풍선 (Figma header__right-betaBubble · 170 × 59 · 글자까지 그림 SVG)
+   Figma 에서 '1개월 무료 체험' 버튼(114 × 36) 바로 아래 가운데 — 버튼 위 끝에서 41 아래, 꼬리 끝이 버튼 가운데
+   → 버튼에 붙여 두어서 헤더 폭(내부 1280)이 Figma(좌우 24)와 달라도 버튼을 따라 같이 움직임 · 히어로 위에 떠 있음 */
+.ys-header__trial{position:relative;display:inline-flex}
+.ys-header__bubble{position:absolute;left:50%;top:41px;width:170px;height:59px;margin-left:-85px;display:block;max-width:none;pointer-events:none}
