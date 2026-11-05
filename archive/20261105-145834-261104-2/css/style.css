@@ -1,0 +1,19 @@
+/* 씽크존 261105 시안 비교 — index.html
+   · 시안 그림 1920 × 1080 을 1배 크기 그대로, 화면 가운데 기준으로 띄움 (밝은 화면 고정)
+   · 화면이 1920 보다 좁으면 양옆이 잘리고, 1280 보다 좁으면 가로 스크롤이 생김 */
+:root{color-scheme:light}
+html,body{margin:0;background:#fff}
+body{min-width:1280px;font-family:Pretendard,'Pretendard Variable','Noto Sans KR',-apple-system,sans-serif}
+.shot{width:100%;overflow-x:hidden}
+.shot[hidden]{display:none}
+.shot img{display:block;width:1920px;max-width:none;height:auto;margin-left:calc(50% - 960px)}
+
+/* 시안 전환 바 — 메인 261029 시안 비교와 같은 모양 · 어두운 바탕 #1D1F20 · 선택 #2D62FA · 모서리 8 */
+.tabs{position:fixed;left:50%;bottom:24px;z-index:30;transform:translateX(-50%);
+  display:flex;gap:4px;padding:4px;border:1px solid rgba(255,255,255,.08);border-radius:8px;background:#1D1F20;
+  box-shadow:0 10px 30px rgba(0,0,0,.28),0 2px 6px rgba(0,0,0,.16)}
+.tab{height:36px;padding:0 18px;margin:0;border:0;border-radius:8px;background:transparent;cursor:pointer;
+  font-family:inherit;font-size:14px;font-weight:600;line-height:14px;color:#B0B8C1;transition:background-color .15s,color .15s}
+.tab:hover{color:#fff;background:rgba(255,255,255,.08)}
+.tab.is-on{background:#2D62FA;color:#fff}
+.tab:focus-visible{outline:2px solid #7DA2FF;outline-offset:2px}

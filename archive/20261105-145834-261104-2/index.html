@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>씽크존 261105 · 시안 비교</title>
+<!--
+  씽크존 시안 비교 (2026-11-05)
+  · 시안01 = 261104_심현지2.png · 시안02 = 261104_심현지3.png (둘 다 1920 × 1080 · 1배 · 화면 가운데 기준)
+  · 아래 가운데 탭으로 전환 · ←/→ 키 · 주소 뒤 #1 / #2 로 바로 열기 · 마지막으로 본 시안 기억
+  · 스타일 css/style.css · 스크립트 js/main.js
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<main>
+  <div class="shot" id="panel-1" role="tabpanel" aria-labelledby="tab-1">
+    <img src="261104_심현지2.png" width="1920" height="1080" alt="씽크존 시안01">
+  </div>
+  <div class="shot" id="panel-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+    <img src="261104_심현지3.png" width="1920" height="1080" alt="씽크존 시안02">
+  </div>
+</main>
+
+<div class="tabs" role="tablist" aria-label="시안 전환">
+  <button class="tab is-on" id="tab-1" type="button" role="tab" aria-selected="true" aria-controls="panel-1" data-sian="1" title="261104_심현지2.png">시안01</button>
+  <button class="tab" id="tab-2" type="button" role="tab" aria-selected="false" aria-controls="panel-2" data-sian="2" title="261104_심현지3.png" tabindex="-1">시안02</button>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -8,7 +8,7 @@
       "category": "웹 메인",
       "desc": "",
       "created": "2026.11.04",
-      "updated": "2026.11.04",
+      "updated": "2026.11.05",
       "hidden": false,
       "final": null,
       "versions": [
@@ -25,6 +25,22 @@
             {
               "label": "시안 01",
               "href": "archive/20261104-152921-css/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261105-145834-261104-2",
+          "label": "v2",
+          "title": "[씽크존] 예스폼싸인 유입 확대 개선",
+          "desc": "",
+          "created": "2026.11.05",
+          "folder": "archive/20261105-145834-261104-2",
+          "preview": "archive/20261105-145834-261104-2/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261105-145834-261104-2/index.html"
             }
           ]
         }
