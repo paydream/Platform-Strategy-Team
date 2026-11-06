@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>예스폼 메인 로그인 모달 · 시안 6</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:Pretendard,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:#fff;overflow:hidden}
+.bg{position:fixed;inset:0;overflow:hidden}
+.bg img{display:block;width:100%;min-width:1024px}
+.dim{position:fixed;inset:0;background:rgba(0,0,0,.5)}
+.bar{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:20;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.96);border-radius:999px;padding:6px 8px;box-shadow:0 6px 24px rgba(0,0,0,.18);white-space:nowrap}
+.bar .lbl{font-size:12px;font-weight:600;color:#6b7280;padding:0 6px 0 10px}
+.seg{display:flex;gap:2px}
+.seg button{border:0;background:transparent;font:inherit;font-size:13px;font-weight:600;color:#4b5563;padding:7px 12px;border-radius:999px;cursor:pointer}
+.seg button:hover{background:#f1f3f6}
+.seg button[aria-selected=true]{background:#2F7BF5;color:#fff}
+.sep{width:1px;height:20px;background:#e5e7eb}
+.seg.sub button[aria-selected=true]{background:#1D2433}
+.stage{position:fixed;left:0;right:0;top:64px;bottom:0;display:flex;align-items:center;justify-content:center;z-index:10}
+.stage img{display:block;transform-origin:center center;user-select:none}
+.hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);z-index:20;color:#fff;font-size:12px;background:rgba(17,24,39,.72);padding:6px 12px;border-radius:999px;white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="bg"><img src="../img/yesform-main-bg.jpg" alt="예스폼 메인 화면(로그인 상태)"></div>
+<div class="dim"></div>
+<nav class="bar" aria-label="시안 선택" title="← → 시안 이동 · ↑ ↓ 화면 전환">
+  <span class="lbl">로그인 모달 · 시안 6</span>
+  <div class="seg" id="segMain" role="tablist"></div>
+  <span class="sep" id="sepSub"></span>
+  <div class="seg sub" id="segSub" role="tablist"></div>
+</nav>
+<main class="stage"><img id="modalImg" alt=""></main>
+<script>
+const GROUPS = [{"label":"시안 1","screens":[{"name":"달라지는 법령","src":"../img/sian1-1.png","w":720,"h":680},{"name":"실무 체크리스트","src":"../img/sian1-2.png","w":720,"h":680}]},{"label":"시안 2","screens":[{"name":"달라지는 법령","src":"../img/sian2-1.png","w":792,"h":843}]},{"label":"시안 3","screens":[{"name":"다가오는 일정","src":"../img/sian3-1.png","w":746,"h":706},{"name":"법령 변경","src":"../img/sian3-2.png","w":746,"h":706}]},{"label":"시안 4","screens":[{"name":"다가오는 일정","src":"../img/sian4-1.png","w":746,"h":706},{"name":"법령 변경","src":"../img/sian4-2.png","w":746,"h":706}]},{"label":"시안 5","screens":[{"name":"다가오는 일정","src":"../img/sian5-1.png","w":720,"h":680},{"name":"법령 변경","src":"../img/sian5-2.png","w":720,"h":680}]},{"label":"시안 6","screens":[{"name":"다가오는 일정","src":"../img/sian6-1.png","w":720,"h":680},{"name":"법령 변경","src":"../img/sian6-2.png","w":720,"h":680}]}];
+let gi = 5, si = 0; const LOCK = true;
+const segMain = document.getElementById('segMain'), segSub = document.getElementById('segSub'), sepSub = document.getElementById('sepSub'), mImg = document.getElementById('modalImg');
+function fitModal(){
+  const sc = GROUPS[gi].screens[si];
+  const availH = window.innerHeight - 64 - 28, availW = window.innerWidth - 24;
+  const k = Math.min(1, availH / sc.h, availW / sc.w);
+  mImg.style.width = (sc.w * k) + 'px'; mImg.style.height = (sc.h * k) + 'px';
+}
+function renderAll(){
+  segMain.innerHTML = ''; segMain.style.display='none';
+  GROUPS.forEach((g, i) => { const b = document.createElement('button'); b.textContent = g.label; b.setAttribute('role','tab'); b.setAttribute('aria-selected', i===gi); b.onclick = () => { gi = i; si = 0; renderAll(); }; segMain.appendChild(b); });
+  const scr = GROUPS[gi].screens;
+  segSub.innerHTML = '';
+  scr.forEach((s, i) => { const b = document.createElement('button'); b.textContent = s.name; b.setAttribute('role','tab'); b.setAttribute('aria-selected', i===si); b.onclick = () => { si = i; renderAll(); }; segSub.appendChild(b); });
+  const hasSub = scr.length > 1; segSub.style.display = hasSub ? '' : 'none'; sepSub.style.display = hasSub ? '' : 'none';
+  mImg.src = scr[si].src; mImg.alt = GROUPS[gi].label + ' · ' + scr[si].name;
+  history.replaceState(null, '', '#' + (gi+1) + '-' + (si+1));
+  fitModal();
+}
+const hm = null && location.hash.match(/^#(\d)-(\d)$/);
+if (hm) { const a = +hm[1]-1, b = +hm[2]-1; if (GROUPS[a]) { gi = a; si = GROUPS[a].screens[b] ? b : 0; } }
+GROUPS.forEach(g => g.screens.forEach(s => { const p = new Image(); p.src = s.src; }));
+window.addEventListener('resize', fitModal);
+window.addEventListener('keydown', e => {
+  if (false) { gi = (gi+1) % GROUPS.length; si = 0; renderAll(); }
+  else if (false) { gi = (gi-1+GROUPS.length) % GROUPS.length; si = 0; renderAll(); }
+  else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { const n = GROUPS[gi].screens.length; si = (si + (e.key==='ArrowDown'?1:n-1)) % n; renderAll(); }
+});
+renderAll();
+</script>
+</body>
+</html>
