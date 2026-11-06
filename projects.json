@@ -47,6 +47,42 @@
               "href": "archive/20261106-180001-yesform-login-modal/sian6/index.html"
             }
           ]
+        },
+        {
+          "id": "20261106-180234-yesform-login-modal",
+          "label": "v2",
+          "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
+          "desc": "시안 1~6 전환 버튼을 시안 화면 안에 추가 (아카이브 뷰어에서 바로 이동)",
+          "created": "2026.11.06",
+          "folder": "archive/20261106-180234-yesform-login-modal",
+          "preview": "archive/20261106-180234-yesform-login-modal/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 1",
+              "href": "archive/20261106-180234-yesform-login-modal/sian1/index.html"
+            },
+            {
+              "label": "시안 2",
+              "href": "archive/20261106-180234-yesform-login-modal/sian2/index.html"
+            },
+            {
+              "label": "시안 3",
+              "href": "archive/20261106-180234-yesform-login-modal/sian3/index.html"
+            },
+            {
+              "label": "시안 4",
+              "href": "archive/20261106-180234-yesform-login-modal/sian4/index.html"
+            },
+            {
+              "label": "시안 5",
+              "href": "archive/20261106-180234-yesform-login-modal/sian5/index.html"
+            },
+            {
+              "label": "시안 6",
+              "href": "archive/20261106-180234-yesform-login-modal/sian6/index.html"
+            }
+          ]
         }
       ]
     },
