@@ -2,6 +2,43 @@
   "version": 2,
   "projects": [
     {
+      "id": "20261109-170909-downloads",
+      "title": "서식뱅크 종료",
+      "team": "planning",
+      "category": "웹 메인",
+      "desc": "서식 뱅크 종료 관련 안내 메일 및 모달",
+      "created": "2026.11.09",
+      "updated": "2026.11.09",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261109-170909-downloads",
+          "label": "v1",
+          "title": "서식뱅크 종료",
+          "desc": "",
+          "created": "2026.11.09",
+          "folder": "archive/20261109-170909-downloads",
+          "preview": "archive/20261109-170909-downloads/mail_A_membership.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "결제 사용자",
+              "href": "archive/20261109-170909-downloads/mail_A_membership.html"
+            },
+            {
+              "label": "일반 사용자",
+              "href": "archive/20261109-170909-downloads/mail_B_general.html"
+            },
+            {
+              "label": "안내 모달",
+              "href": "archive/20261109-170909-downloads/shutdown_modal.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "20261106-180001-yesform-login-modal",
       "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
       "team": "design",
