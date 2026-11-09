@@ -275,6 +275,22 @@
               "href": "archive/20261110-061836-yesform-brief-final-v13/index.html"
             }
           ]
+        },
+        {
+          "id": "20261110-063019-yesform-brief-final-v14",
+          "label": "v14 · 최종안 (법령 카드: 서식 있으면 서식, 없으면 법령 링크)",
+          "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
+          "desc": "법령 카드 하단 동작 분기: 매칭 서식이 있으면 \"서식 보기\" 펼침(8건), 없으면 \"관련 법령 보기 ↗\" 새창 링크(5건, 예시 데이터)",
+          "created": "2026.11.10",
+          "folder": "archive/20261110-063019-yesform-brief-final-v14",
+          "preview": "archive/20261110-063019-yesform-brief-final-v14/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "최종안 · 업무 브리핑 모달",
+              "href": "archive/20261110-063019-yesform-brief-final-v14/index.html"
+            }
+          ]
         }
       ]
     },
