@@ -163,6 +163,22 @@
               "href": "archive/20261109-155211-yesform-brief-proto-realmain/sian3/index.html"
             }
           ]
+        },
+        {
+          "id": "20261109-164459-yesform-brief-final",
+          "label": "v7 · 연말연초 브리핑 모달 (최종 시안)",
+          "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
+          "desc": "탭명 변경(지금 준비해야할 필수 업무 n건 / 27년 달라지는 법령 n건), 월별 타임라인+일러스트 카드형으로 재디자인, 로그인 상태 실제 예스폼 메인 배경, 로그인 화면 없음·등급 무관 공통",
+          "created": "2026.11.09",
+          "folder": "archive/20261109-164459-yesform-brief-final",
+          "preview": "archive/20261109-164459-yesform-brief-final/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "연말연초 브리핑 모달 · 최종 시안",
+              "href": "archive/20261109-164459-yesform-brief-final/index.html"
+            }
+          ]
         }
       ]
     },
