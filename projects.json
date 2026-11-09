@@ -143,6 +143,26 @@
               "href": "archive/20261109-154624-yesform-brief-proto-direct/sian3/index.html"
             }
           ]
+        },
+        {
+          "id": "20261109-155211-yesform-brief-proto-realmain",
+          "label": "v6 · 워킹 프로토타입 (예스폼 메인 실제 캡처)",
+          "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
+          "desc": "딤드 뒤 화면을 로그인 상태의 실제 예스폼 메인 캡처로 교체(목업 헤더 제거). 모달 닫으면 우하단 \"업무 브리핑 다시 열기\" 버튼으로 재열기. 로그인 화면 없음, 등급 무관 공통 모달",
+          "created": "2026.11.09",
+          "folder": "archive/20261109-155211-yesform-brief-proto-realmain",
+          "preview": "archive/20261109-155211-yesform-brief-proto-realmain/sian1/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 1 · 템플릿 컬렉션",
+              "href": "archive/20261109-155211-yesform-brief-proto-realmain/sian1/index.html"
+            },
+            {
+              "label": "시안 3 · 캘린더 보드",
+              "href": "archive/20261109-155211-yesform-brief-proto-realmain/sian3/index.html"
+            }
+          ]
         }
       ]
     },
