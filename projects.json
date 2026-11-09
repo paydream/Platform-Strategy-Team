@@ -195,6 +195,22 @@
               "href": "archive/20261109-171703-yesform-brief-final-calendar/index.html"
             }
           ]
+        },
+        {
+          "id": "20261109-172044-yesform-brief-final-v9",
+          "label": "v9 · 최종안 (고객명 예스폼 님 · 출처 문구 제거)",
+          "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
+          "desc": "v8 기준. 고객명을 예스폼 님으로 변경, 룰북·원문·출처 관련 문구와 링크 전부 제거",
+          "created": "2026.11.09",
+          "folder": "archive/20261109-172044-yesform-brief-final-v9",
+          "preview": "archive/20261109-172044-yesform-brief-final-v9/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "최종안 · 업무 브리핑 모달",
+              "href": "archive/20261109-172044-yesform-brief-final-v9/index.html"
+            }
+          ]
         }
       ]
     },
