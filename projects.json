@@ -211,6 +211,22 @@
               "href": "archive/20261109-172044-yesform-brief-final-v9/index.html"
             }
           ]
+        },
+        {
+          "id": "20261109-175347-yesform-brief-final-v10",
+          "label": "v10 · 최종안 (법령 탭 레이아웃 수정)",
+          "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
+          "desc": "v9 기준. 27년 달라지는 법령 탭의 카드가 모달 가장자리에 붙던 문제 수정(좌우 32px 여백 컨테이너로 감쌈)",
+          "created": "2026.11.09",
+          "folder": "archive/20261109-175347-yesform-brief-final-v10",
+          "preview": "archive/20261109-175347-yesform-brief-final-v10/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "최종안 · 업무 브리핑 모달",
+              "href": "archive/20261109-175347-yesform-brief-final-v10/index.html"
+            }
+          ]
         }
       ]
     },
