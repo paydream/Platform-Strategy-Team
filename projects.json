@@ -103,6 +103,26 @@
               "href": "archive/20261109-151842-yesform-brief-working-proto/sian3/index.html"
             }
           ]
+        },
+        {
+          "id": "20261109-153912-yesform-brief-proto-mainbg",
+          "label": "v4 · 워킹 프로토타입 (예스폼 메인 배경)",
+          "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
+          "desc": "로그인 후 배경을 마이페이지에서 예스폼 메인 화면으로 변경. 모달·담기·작성 흐름은 v3와 동일",
+          "created": "2026.11.09",
+          "folder": "archive/20261109-153912-yesform-brief-proto-mainbg",
+          "preview": "archive/20261109-153912-yesform-brief-proto-mainbg/sian1/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 1 · 템플릿 컬렉션 (예스폼 메인 배경)",
+              "href": "archive/20261109-153912-yesform-brief-proto-mainbg/sian1/index.html"
+            },
+            {
+              "label": "시안 3 · 캘린더 보드 (예스폼 메인 배경)",
+              "href": "archive/20261109-153912-yesform-brief-proto-mainbg/sian3/index.html"
+            }
+          ]
         }
       ]
     },
