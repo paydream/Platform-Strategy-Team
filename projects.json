@@ -2,6 +2,35 @@
   "version": 2,
   "projects": [
     {
+      "id": "20261110-164447-css",
+      "title": "[예스폼싸인] 2차 고도화 템플릿",
+      "team": "design",
+      "category": "웹 메인",
+      "desc": "",
+      "created": "2026.11.10",
+      "updated": "2026.11.10",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261110-164447-css",
+          "label": "v1",
+          "title": "[예스폼싸인] 2차 고도화 템플릿",
+          "desc": "",
+          "created": "2026.11.10",
+          "folder": "archive/20261110-164447-css",
+          "preview": "archive/20261110-164447-css/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261110-164447-css/index.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "20261109-170909-downloads",
       "title": "서식뱅크 종료",
       "team": "planning",

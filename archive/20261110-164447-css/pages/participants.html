@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>예스폼싸인 · 참여자 설정</title>
+<!--
+  예스폼싸인 2차 고도화 — 대량 전송 2단계 참여자 설정 (2026-11-10)
+  Figma: 싸인_디자인시스템 › 02_03_참여자 설정 (54277:30727 · 1280 × 800)
+  · 템플릿 관리 "템플릿 만들기" 모달에서 대량 전송 → 문서 업로드 → [다음] 일 때만 이 화면으로 옴
+    ([계약하기]로 온 경우는 participants-send.html) · 위쪽 2단계 이름은 "역할 설정" (Figma 54361:34379)
+  · [다음] → 역할을 적었으면 3단계 서명 조건 설정(signing.html)으로 이동, 입력한 역할이 그 화면 "역할"에 들어감 (js/participants.js)
+  · 스타일 css/style.css (아래쪽 "참여자 설정" 부분) · 체크박스는 CSS 만으로 켜고 끔 · 나가기 모달 js/step.js
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="page-step">
+
+<header class="hd hd--step">
+  <div class="hd__logo hd__logo--step"><img src="../images/logo-sign-header@2x.png" width="104" height="32" alt="예스폼싸인"></div>
+  <ol class="steps" aria-label="계약 단계">
+    <li class="steps__item"><span class="steps__num">1</span>문서 업로드</li>
+    <li class="steps__item is-on" aria-current="step"><span class="steps__num">2</span>역할 설정</li>
+    <li class="steps__item"><span class="steps__num">3</span>서명 조건 설정</li>
+    <li class="steps__item"><span class="steps__num">4</span>검토</li>
+  </ol>
+  <span class="hd__empty" aria-hidden="true"></span>
+</header>
+
+<main class="pt">
+  <h1 class="pt__title">대량 전송할 역할을 설정해 주세요</h1>
+
+  <div class="pt-info">
+    <img src="../images/ic-info-blue-16.svg" width="16" height="16" alt="">
+    <p>대량 전송용 템플릿은 서명 참여자 역할 1개만 설정할 수 있습니다.<br>서명 참여자의 이름 · 연락처는 대량 전송할 때 입력합니다.</p>
+  </div>
+
+  <section class="pt-card" aria-labelledby="pt-card-title">
+    <div class="pt-card__hd">
+      <h2 class="pt-card__title" id="pt-card-title">참여자 정보 입력</h2>
+      <span class="type type--bulk">대량 전송</span>
+    </div>
+    <div class="pt-card__body">
+      <div class="pt-item">
+        <div class="pt-item__hd"><img src="../images/ic-grip-16.svg" width="16" height="16" alt="">참여자</div>
+        <div class="pt-item__body">
+          <div class="pt-item__row">
+            <div class="field">
+              <label class="field__label" for="pt-role">역할<span class="field__req" aria-hidden="true">*</span></label>
+              <input class="field__input" id="pt-role" type="text" placeholder="근로자, 임대인 등" required aria-describedby="pt-role-help">
+              <p class="field__help" id="pt-role-help">역할 지정 설명을 적는 힌트 텍스트</p>
+            </div>
+            <p class="pt-item__later">이름 · 연락처는 대량 전송 시 입력할 수 있습니다.</p>
+          </div>
+          <div class="pt-auth">
+            <span class="pt-auth__title"><img src="../images/ic-shield-16.svg" width="16" height="16" alt="">추가 인증</span>
+            <label class="chk"><input type="checkbox"><span class="chk__icon" aria-hidden="true"></span>접근 암호 인증</label>
+            <label class="chk"><input type="checkbox"><span class="chk__icon" aria-hidden="true"></span>휴대폰 번호 인증</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wfooter">
+  <button class="btn btn--out" type="button" data-exit>나가기</button>
+  <button class="btn btn--primary btn--next" type="button" data-next>다음</button>
+</footer>
+
+<!-- 나가기 확인 모달 (Figma 54347:35246) -->
+<div class="dim" id="exit-modal" hidden>
+  <div class="modal modal--sm" role="alertdialog" aria-modal="true" aria-labelledby="exit-title" aria-describedby="exit-desc">
+    <div class="modal__top">
+      <h2 class="modal__title" id="exit-title">나가기</h2>
+      <p class="modal__desc" id="exit-desc">현재 작성하신 계약이 저장되지 않습니다.<br>정말 나가시겠습니까?</p>
+    </div>
+    <div class="modal__btns">
+      <button class="modal__btn" type="button" data-exit-cancel>취소</button>
+      <a class="modal__btn modal__btn--primary" href="../index.html">나가기</a>
+    </div>
+  </div>
+</div>
+<script src="../js/step.js"></script>
+<script src="../js/participants.js"></script>
+</body>
+</html>

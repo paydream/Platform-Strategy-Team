@@ -1,0 +1,673 @@
+/* ==========================================================================
+   예스폼싸인 2차 고도화 — 템플릿 관리 (index.html)
+   Figma: 싸인_디자인시스템 › 01_01_템플릿목록 (54255:26690 · 54279:31909) · 01_04_템플릿 유형선택 (54268:34098)
+   · 1280 화면 기준 (헤더 60 · 왼쪽 메뉴 280 · 본문 안쪽 920) · 밝은 화면 고정
+   · Figma 안쪽 테두리(inside stroke)는 box-shadow inset 으로 그려 높이가 Figma 와 같게 맞춤
+   ========================================================================== */
+:root{
+  color-scheme:light;
+  --blue:#1B52ED;
+  --text:#1D1F20;
+  --text-2:#383B3E;
+  --text-3:#888F95;
+  --line:#E3E5E8;
+  --line-light:#F1F2F4;
+  --line-mid:#EBEDEF;
+  --bg:#F6F8FA;
+}
+*{box-sizing:border-box;font-synthesis-weight:none}
+html,body{margin:0;background:var(--bg)}
+body{min-width:1280px;font-family:Pretendard,'Pretendard Variable','Noto Sans KR',-apple-system,sans-serif;color:var(--text);-webkit-font-smoothing:antialiased}
+p,h1,h2{margin:0}
+ul{margin:0;padding:0;list-style:none}
+button{font-family:inherit;cursor:pointer}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid #7DA2FF;outline-offset:2px}
+[hidden]{display:none!important}
+
+/* 공통 버튼 */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:4px;height:36px;margin:0;padding:0 14px;border:0;border-radius:8px;
+  font-size:14px;line-height:14px;font-weight:500;white-space:nowrap;transition:background-color .15s}
+.btn img{display:block}
+.btn--line{background:#fff;color:#031228;box-shadow:inset 0 0 0 1px var(--line)}
+.btn--line:hover{background:var(--bg)}
+.btn--dark{background:#4E5968;color:#fff}
+.btn--dark:hover{background:#3F4855}
+.btn--primary{height:46px;padding:0 20px;background:var(--blue);color:#fff;font-size:15px;line-height:15px;font-weight:600}
+.btn--primary:hover{background:#1E4BC9}
+.btn--block{width:100%}
+
+/* ==========================================================================
+   상단 헤더 — 높이 60 (아래 선 포함) · 좌우 24 · 로고 104 × 32
+   · 화면 위에 고정 (스크롤해도 그대로) — 아래 본문은 헤더 높이만큼 띄움
+   ========================================================================== */
+.hd{position:fixed;top:0;left:0;right:0;z-index:50;min-width:1280px;display:flex;align-items:center;justify-content:space-between;height:60px;padding:0 24px;background:#fff;box-shadow:inset 0 -1px 0 var(--line-mid)}
+.hd__logo{display:flex;align-items:center;width:180px;height:100%;padding-bottom:8px}
+.hd__logo img{display:block}
+
+/* ==========================================================================
+   왼쪽 메뉴 — 폭 280 (오른쪽 선 포함)
+   ========================================================================== */
+.body{display:flex;min-height:100vh;padding-top:60px}
+.snb{display:flex;flex-direction:column;flex:none;width:280px;background:#fff;box-shadow:inset -1px 0 0 var(--line-mid)}
+.snb__user{display:flex;flex-direction:column;gap:16px;padding:20px 24px;box-shadow:inset 0 -1px 0 var(--line-light)}
+.snb__profile{display:flex;flex-direction:column;gap:4px}
+.snb__name{display:flex;align-items:center;font-size:16px;line-height:22px;font-weight:500}
+.snb__name b{margin-right:2px;font-weight:600;line-height:16px}
+.tag{display:inline-flex;align-items:center;height:20px;margin-left:6px;padding:0 8px;border-radius:4px;font-size:12px;line-height:12px;font-weight:500}
+.tag--blue{background:#EDF1FE;color:var(--blue)}
+.snb__meta{display:flex;align-items:center;gap:8px;font-size:13px;line-height:18px;font-weight:500;color:var(--text-3);white-space:nowrap}
+.snb__meta i,.snb__foot i{display:block;width:1px;height:12px;background:var(--line-mid)}
+.snb__menu{flex:1}
+.snb__group{display:flex;flex-direction:column;padding:12px;box-shadow:inset 0 -1px 0 var(--line-light)}
+.snb__label{padding:6px 12px;font-size:13px;line-height:18px;font-weight:500;color:var(--text-3)}
+.snb__item{display:block;width:256px;padding:8px 12px;border-radius:4px;font-size:16px;line-height:22px;font-weight:500;color:var(--text);transition:background-color .15s}
+.snb__item:hover{background:var(--bg)}
+.snb__item.is-on{background:#EBF4FF;color:var(--blue)}
+.snb__foot{display:flex;align-items:center;justify-content:center;gap:16px;padding:32px 24px;font-size:14px;line-height:20px;color:var(--text-3)}
+.snb__foot i{background:var(--line-light)}
+
+/* ==========================================================================
+   본문 — 안쪽 여백 40 · 안쪽 최대 1100 (1280 화면에서 920)
+   ========================================================================== */
+.content{display:flex;flex-direction:column;align-items:center;flex:1;min-width:0;padding:40px}
+.content__inner{display:flex;flex-direction:column;gap:32px;width:100%;max-width:1100px}
+.page-hd{display:flex;flex-direction:column;gap:6px}
+.page-hd__title{font-size:24px;line-height:34px;font-weight:700;color:var(--text)}
+.page-hd__desc{font-size:14px;line-height:20px;color:var(--text-2)}
+.list{display:flex;flex-direction:column;gap:8px}
+
+/* 템플릿 만들기 · 검색 */
+.tools{display:flex;justify-content:flex-end;gap:8px}
+.search{display:flex;align-items:center;gap:8px;width:260px;height:36px;padding:6px 12px 6px 14px;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--line);cursor:text;transition:box-shadow .15s}
+.search:focus-within{box-shadow:inset 0 0 0 1px var(--blue)}
+.search input{flex:1;min-width:0;height:20px;margin:0;padding:0;border:0;outline:0;background:transparent;font:inherit;font-size:14px;line-height:20px;color:var(--text)}
+.search input::placeholder{color:#A0A6AC}
+.search input::-webkit-search-cancel-button{display:none}
+.search img{display:block;flex:none}
+
+/* ==========================================================================
+   템플릿 표 — 모서리 12 · 테두리 #E3E5E8 · 머리 48 · 행 67 (펼치면 135)
+   칸: 아이콘 26 | 템플릿명 (남은 폭) | 유형 90 | 역할 160 | 최종 수정 일시 160 | 펼치기 26 · 간격 16
+   ========================================================================== */
+.table{position:relative;border-radius:12px;background:#fff}
+.table::after{content:"";position:absolute;inset:0;z-index:3;border:1px solid var(--line);border-radius:12px;pointer-events:none}
+.table__hd{display:flex;align-items:center;gap:16px;height:48px;padding:12px 20px;border-radius:12px 12px 0 0;box-shadow:inset 0 -1px 0 var(--line);
+  font-size:13px;line-height:16px;font-weight:600;color:var(--text-2)}
+.table__hd .col-name{flex:1;min-width:0}
+.table__hd .col-type{padding:0 2px}
+.table__hd .col-role{display:flex;align-items:center}
+.table__hd .col-date{width:202px}
+.col-type{flex:none;width:90px}
+.col-role{flex:none;width:160px}
+.table__empty{padding:40px 20px;font-size:14px;line-height:20px;color:var(--text-3);text-align:center}
+
+/* 행 */
+.row{box-shadow:inset 0 -1px 0 var(--line-light)}
+.row:last-child{border-radius:0 0 12px 12px}
+.row__main{display:flex;align-items:center;gap:16px;padding:16px 20px;cursor:pointer}
+.row__name{flex:1;min-width:0}
+.row__title{overflow:hidden;font-size:14px;line-height:17px;font-weight:600;color:var(--text);white-space:nowrap;text-overflow:ellipsis}
+.row__file{margin-top:2px;overflow:hidden;font-size:12px;line-height:16px;color:var(--text-3);white-space:nowrap;text-overflow:ellipsis}
+.row .col-role{display:flex;flex-wrap:wrap;align-content:flex-start;gap:4px}
+.row__date{flex:none;width:160px;font-size:13px;line-height:18px;color:var(--text-3)}
+
+/* 고정 핀 · 펼치기 화살표 (26 칸 가운데) */
+.pin,.row__toggle{flex:none;width:26px;height:26px;margin:0;padding:0;border:0;border-radius:6px;background:transparent center/20px 20px no-repeat}
+.pin{background-image:url(../images/ic-pin-20.svg)}
+.pin.is-on{background-image:url(../images/ic-pin-on-20.svg)}
+.pin:hover{background-color:#F1F4FA}
+.row__toggle{background-image:url(../images/ic-down-16.svg);background-size:16px 16px;transition:transform .2s cubic-bezier(.22,.61,.36,1)}
+.row.is-open .row__toggle{transform:rotate(180deg)}
+
+/* 유형 라벨 — 11/14 Medium · 높이 20 */
+.type{display:inline-flex;align-items:center;max-width:112px;padding:3px 4px;border-radius:4px;font-size:11px;line-height:14px;font-weight:500;white-space:nowrap}
+.type--bulk{background:#EBF4FF;color:#1E4BC9}
+.type--normal{background:#EFF1F6;color:var(--text-2)}
+
+/* 역할 라벨 — 정보 입력됨: 흰 바탕 실선 / 보낼 때 입력: 회색 바탕 점선 · 높이 20 */
+.role{display:inline-flex;align-items:center;gap:2px;max-width:112px;padding:2px 3px;border:1px solid var(--line);border-radius:4px;background:#fff;
+  font-size:11px;line-height:14px;font-weight:500;color:var(--text-2);white-space:nowrap}
+.role img{display:block;flex:none}
+.role--empty{border-style:dashed;background:var(--bg);color:var(--text-3)}
+
+/* 펼친 행 메뉴 — 왼쪽 62 (핀 칸 아래부터) · 바탕 #F5F9FF · 높이 52 */
+.row__actions{padding:0 20px 16px 62px;cursor:default}
+.actions{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:8px;background:#F5F9FF}
+.actions__right,.actions__pair{display:flex;align-items:center}
+.actions__right{gap:4px}
+.actions__bar{display:block;width:1px;height:16px;background:var(--line-mid)}
+.act{display:inline-flex;align-items:center;gap:2px;height:36px;margin:0;padding:0 14px;border:0;border-radius:8px;background:transparent;
+  font-size:14px;line-height:14px;font-weight:500;color:#4D5066;white-space:nowrap;transition:background-color .15s}
+.act img{display:block}
+.act:hover{background:rgba(27,82,237,.06)}
+.act--send{gap:4px;border-radius:6px;color:var(--blue)}
+
+/* ==========================================================================
+   "역할" 안내 툴팁 — Figma tooltip (54287:32451)
+   안내 아이콘에 마우스를 올리거나 키보드로 초점이 가면 보임 · 폭 300 · 화살표 끝이 아이콘 가운데
+   ========================================================================== */
+.tip{position:relative;display:inline-flex;margin-left:2px;vertical-align:top}
+.tip__btn{display:block;width:14px;height:16px;margin:0;padding:1px 0;border:0;background:transparent;cursor:help}
+.tip__btn img{display:block}
+.tip__box{position:absolute;left:-15px;top:20px;z-index:10;width:300px;padding-top:8px;
+  background:url(../images/tooltip-arrow.svg) 0 0/44px 8px no-repeat;
+  opacity:0;visibility:hidden;transform:translateY(-2px);transition:opacity .15s,transform .15s,visibility 0s .15s}
+.tip:hover .tip__box,.tip:focus-within .tip__box{opacity:1;visibility:visible;transform:none;transition:opacity .15s,transform .15s,visibility 0s}
+.tip__inner{display:flex;flex-direction:column;gap:16px;padding:16px;border-radius:8px;background:#292B2D;text-align:left;cursor:default}
+.tip__head{display:flex;flex-direction:column;gap:4px;font-size:14px}
+.tip__title{font-size:14px;line-height:17px;font-weight:600;color:#fff}
+.tip__desc{font-size:14px;line-height:20px;font-weight:400;color:#E3E5E8;word-break:keep-all}
+.tip__list{display:flex;flex-direction:column;gap:8px}
+.tip__row{display:flex;align-items:center;gap:4px;font-size:13px;line-height:18px;font-weight:400;color:#E3E5E8;white-space:nowrap}
+
+/* ==========================================================================
+   서비스 개선 제안하기 — 오른쪽 아래 20 · 높이 50
+   ========================================================================== */
+.feedback{position:fixed;right:20px;bottom:20px;z-index:30;display:inline-flex;align-items:center;gap:6px;margin:0;padding:12px 16px;
+  border:1px solid rgba(27,82,237,.4);border-radius:100px;background:#fff;font-size:14px;line-height:14px;font-weight:600;color:var(--blue);transition:background-color .15s}
+.feedback:hover{background:#F5F9FF}
+.feedback img{display:block}
+
+/* ==========================================================================
+   템플릿 유형 선택 모달 — Figma dim (54268:34595)
+   바탕 검정 50% · 폭 420 · 모서리 10 · 선택 카드 148 · 아래 버튼 50
+   ========================================================================== */
+.dim{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding-top:1px;background:rgba(0,0,0,.5);animation:dim-in .2s ease-out}
+.dim[hidden]{display:none}
+@keyframes dim-in{from{opacity:0}}
+@keyframes modal-in{from{opacity:0;transform:translateY(8px) scale(.98)}}
+.modal{width:420px;overflow:hidden;border-radius:10px;background:#fff;animation:modal-in .2s cubic-bezier(.22,.61,.36,1)}
+.modal__top{display:flex;flex-direction:column;gap:12px;padding:24px;text-align:center}
+.modal__title{font-size:20px;line-height:26px;font-weight:700;color:var(--text)}
+.modal__desc{font-size:15px;line-height:21px;color:var(--text-3)}
+.modal__body{display:flex;flex-direction:column;gap:12px;padding:0 24px 24px}
+
+/* 선택 카드 (라디오_옵션카드) — 고르면 파란 테두리 · 파란 제목 · 파란 체크 */
+.opt{position:relative;display:flex;gap:16px;padding:20px 24px 24px;border-radius:12px;background:#fff;box-shadow:inset 0 0 0 1px var(--line);cursor:pointer;transition:box-shadow .15s}
+.opt:hover{box-shadow:inset 0 0 0 1px #C5D3F8}
+.opt input{position:absolute;width:1px;height:1px;margin:0;opacity:0;pointer-events:none}
+.opt__check{flex:none;width:20px;height:20px;margin:5px 0;background:url(../images/ic-check-off-20.svg) 0 0/20px 20px no-repeat}
+.opt__text{display:flex;flex-direction:column;flex:1;min-width:0}
+.opt__title{font-size:16px;line-height:22px;font-weight:600;color:var(--text)}
+.opt__desc{margin-top:2px;font-size:13px;line-height:18px;color:var(--text-3)}
+.opt__list{margin-top:8px;font-size:13px;line-height:18px;color:var(--text-2)}
+.opt:has(input:checked){box-shadow:inset 0 0 0 1px var(--blue)}
+.opt:has(input:checked) .opt__check{background-image:url(../images/ic-check-on-20.svg)}
+.opt:has(input:checked) .opt__title{color:var(--blue)}
+.opt:has(input:focus-visible){outline:2px solid #7DA2FF;outline-offset:2px}
+
+.modal__btns{display:flex}
+.modal__btn{flex:1;height:50px;margin:0;padding:0 16px;border:0;background:var(--line-mid);font-size:16px;line-height:22px;font-weight:500;color:var(--text-3);transition:background-color .15s}
+.modal__btn:hover{background:#E1E4E7}
+.modal__btn--primary{background:var(--blue);color:#fff}
+.modal__btn--primary:hover{background:#1E4BC9}
+.modal__btn:focus-visible{outline-offset:-3px}
+
+@media (prefers-reduced-motion:reduce){
+  .dim,.modal{animation:none}
+  .row__toggle,.tip__box{transition:none}
+}
+
+/* ==========================================================================
+   단계 화면 공통 (upload.html · participants.html)
+   Figma Header_mycontract · wfooter — 헤더(위)와 아래 버튼 줄은 화면에 고정
+   ========================================================================== */
+.page-step{padding:60px 0 62px}
+.hd--step{min-width:1280px}
+.hd__logo--step{width:104px;padding-bottom:6px}
+.hd__empty{display:block;width:104px;height:100%}
+.steps{display:flex;align-items:center;height:60px;margin:0;padding:0;list-style:none}
+.steps__item{display:flex;align-items:center;gap:6px;padding:0 16px;font-size:16px;line-height:16px;font-weight:600;color:#A0A6AC;white-space:nowrap}
+.steps__num{display:flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:100px;background:#BABFC4;font-size:11px;line-height:14px;font-weight:500;color:#fff}
+.steps__item.is-on{color:var(--blue)}
+.steps__item.is-on .steps__num{background:var(--blue)}
+
+.wfooter{position:fixed;left:0;right:0;bottom:0;z-index:40;min-width:1280px;display:flex;justify-content:center;gap:8px;padding:8px 24px;background:#fff;box-shadow:inset 0 1px 0 var(--line-mid)}
+.wfooter .btn{width:160px;height:46px;padding:0 20px;font-size:15px;line-height:15px;font-weight:600}
+.btn--out{background:#fff;color:var(--text-2);box-shadow:inset 0 0 0 1px var(--line)}
+.btn--out:hover{background:var(--bg)}
+.btn--next:disabled{opacity:.6;cursor:default}
+.btn--next:disabled:hover{background:var(--blue)}
+
+/* ==========================================================================
+   1단계 문서 업로드 — Figma 02_02_문서 업로드 (54192:35435 · 고른 뒤 54169:29231)
+   카드 폭 600 · 위아래 여백 40 · 카드 사이 24
+   ========================================================================== */
+.up{display:flex;flex-direction:column;align-items:center;gap:24px;padding:40px 0}
+.card{width:600px;padding:24px 20px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.card--upload{display:flex;flex-direction:column;gap:20px}
+.card--upload.is-drag{border-color:var(--blue)}
+.up__title{padding-top:8px;font-size:22px;line-height:30px;font-weight:700;text-align:center;color:var(--text)}
+
+.drop{display:flex;flex-direction:column;align-items:center;gap:12px}
+.drop__box{display:flex;align-items:center;justify-content:center;width:100%;height:260px;padding:16px 12px;border:1px dashed #BABFC4;border-radius:8px;background:var(--bg);transition:background-color .15s,border-color .15s}
+.card--upload.is-drag .drop__box{border-color:var(--blue);background:#F5F9FF}
+.drop__guide{display:flex;flex-direction:column;align-items:center;gap:8px;padding-bottom:6px;text-align:center}
+.drop__guide img{display:block}
+.drop__guide p{font-size:15px;line-height:21px;color:var(--text-2)}
+.btn--upload{position:relative;width:160px;overflow:hidden;height:36px;padding:0 14px;cursor:pointer}
+.btn--upload input{position:absolute;inset:0;opacity:0;cursor:pointer;font-size:0}
+.btn--upload:focus-within{outline:2px solid #7DA2FF;outline-offset:2px}
+
+/* 선택한 문서 */
+.picked{display:flex;flex-direction:column;gap:12px;width:100%}
+.picked[hidden]{display:none}
+.picked__hd{display:flex;justify-content:space-between;padding:0 4px;font-size:13px;line-height:18px;color:var(--text-2)}
+.picked__count{display:flex;gap:1px}
+.picked__count b{font-weight:500}
+.picked__count i{font-style:normal;color:#A0A6AC}
+.picked__list{display:flex;flex-direction:column;gap:8px}
+.picked__item{display:flex;align-items:center;gap:20px;padding:16px 20px;border:1px solid #F6F7F8;border-radius:12px;background:#F9FAFB}
+.picked__main{display:flex;align-items:center;gap:16px;flex:1;min-width:0}
+.picked__main > img{display:block;flex:none}
+.picked__doc{display:flex;align-items:center;gap:8px;min-width:0;padding-right:20px}
+.picked__text{display:flex;flex-direction:column;gap:2px;min-width:0}
+.picked__name{display:flex;align-items:center;gap:4px;min-width:0;font-size:14px;line-height:17px;font-weight:600;color:var(--text)}
+.picked__name span:first-child{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.picked__tag{flex:none;padding:2px 7px;border:1px solid #E3EFFF;border-radius:99px;background:#fff;font-size:11px;line-height:14px;font-weight:500;color:var(--blue)}
+.picked__size{font-size:12px;line-height:16px;color:var(--text-3)}
+.picked__del{flex:none;width:16px;height:16px;margin:0;padding:0;border:0;background:url(../images/ic-close-16.svg) center/16px 16px no-repeat}
+.picked__del:hover{opacity:.7}
+
+/* 업로드 안내 */
+.up-info{display:flex;flex-direction:column;gap:4px;font-size:13px;line-height:18px;color:var(--text-3)}
+.up-info li{display:flex;gap:8px;white-space:nowrap}
+.up-info__key{position:relative;flex:none;width:100px;padding-left:11px;color:var(--text-2)}
+.up-info__key::before{content:"";position:absolute;left:3px;top:50%;width:3px;height:3px;margin-top:-1.5px;border-radius:100px;background:var(--text-2)}
+
+/* 문서 가져오기 */
+.card--import{display:flex;flex-direction:column;align-items:center;gap:8px}
+.imp__title{width:100%;padding:0 2px;font-size:18px;line-height:26px;font-weight:700;color:var(--text)}
+.imp{display:flex;flex-direction:column;gap:16px;width:100%}
+.imp-tabs{display:flex;box-shadow:inset 0 -1px 0 var(--line-light)}
+.imp-tabs__tab{position:relative;display:flex;align-items:center;justify-content:center;gap:4px;flex:1;height:46px;margin:0;padding:10px 0;border:0;background:transparent;
+  font-size:16px;line-height:16px;font-weight:600;color:#A0A6AC;cursor:default}
+.imp-tabs__tab.is-on{color:var(--text)}
+.imp-tabs__tab.is-on::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--text)}
+.imp-tabs__count{display:inline-flex;align-items:center;height:20px;padding:0 8px;border-radius:100px;background:#EDF1FE;font-size:12px;line-height:15px;font-weight:600;color:var(--blue)}
+.imp__list{display:flex;flex-direction:column;gap:8px}
+.search--full{width:100%}
+.imp-table{position:relative;overflow:hidden;border-radius:12px;background:#fff}
+.imp-table__hd{display:flex;align-items:center;gap:16px;height:48px;padding:12px 20px;box-shadow:inset 0 -1px 0 var(--line);font-size:13px;line-height:16px;font-weight:600;color:var(--text-2)}
+.imp-col-name{flex:1;min-width:0}
+.imp-col-role{flex:none;width:100px}
+.imp-col-btn{display:flex;align-items:center;justify-content:center;flex:none;width:70px;text-align:center}
+.imp-row{display:flex;align-items:center;gap:16px;padding:16px 20px;box-shadow:inset 0 -1px 0 var(--line-light);transition:background-color .15s}
+.imp-row:last-child{box-shadow:none}
+.imp-row:hover{background:#F6F7F8}
+.imp-row__name{display:flex;align-items:center;gap:8px;flex:none;width:230px;padding-right:20px}
+.imp-row__pin{flex:none;width:24px;height:35px;background:url(../images/ic-pin-20.svg) center/20px 20px no-repeat}
+.imp-row__title{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;min-width:0;font-size:14px;line-height:21px;font-weight:500;color:var(--text);word-break:keep-all}
+.imp-row .imp-col-role{overflow:hidden;font-size:13px;line-height:18px;color:var(--text-3);white-space:nowrap;text-overflow:ellipsis}
+.imp-row__preview{width:20px;height:26px;margin:0;padding:0;border:0;background:url(../images/ic-preview-20.svg) center/20px 20px no-repeat}
+.imp-row__select{height:22px;margin:0;padding:0 6px;border:1px solid var(--line);border-radius:4px;background:#fff;font-size:12px;line-height:16px;color:var(--text);white-space:nowrap;transition:background-color .15s,color .15s,border-color .15s}
+.imp-row__select:hover{border-color:#C9CDD2}
+.imp-row__select.is-on{width:54px;border-color:var(--blue);background:var(--blue);color:#fff}
+.imp__note{padding:0 4px;font-size:12px;line-height:16px;color:var(--text-3)}
+
+.pager{display:flex;align-items:center;justify-content:center;gap:10px;height:46px}
+.pager__arrow{display:flex;width:16px;height:16px;margin:0;padding:0;border:0;background:transparent}
+.pager__arrow:disabled{cursor:default}
+.pager__arrow img{display:block}
+.pager__now{display:flex;align-items:center;justify-content:center;width:48px;height:36px;border-radius:8px;background:var(--line-light);font-size:14px;line-height:20px;color:var(--text)}
+.pager__total{display:flex;gap:7px;font-size:14px;font-weight:500;color:#30323A}
+
+/* ==========================================================================
+   2단계 참여자 설정 — Figma 02_03_참여자 설정 (54277:30727) · 본문 폭 900
+   ========================================================================== */
+.pt{display:flex;flex-direction:column;gap:24px;width:980px;margin:0 auto;padding:40px}
+.pt__title{padding-top:8px;font-size:22px;line-height:30px;font-weight:700;text-align:center;color:var(--text)}
+.pt-info{display:flex;align-items:flex-start;gap:16px;height:86px;padding:22px 24px 20px;border:1px solid rgba(27,82,237,.1);border-radius:12px;background:#F5F9FF}
+.pt-info img{display:block;flex:none;margin-top:2px}
+.pt-info p{font-size:14px;line-height:20px;color:var(--blue)}
+.pt-card{position:relative;overflow:hidden;border-radius:12px;background:#fff}
+.pt-card__hd{display:flex;align-items:center;gap:10px;height:54px;padding:2px 20px 0 24px;box-shadow:inset 0 -1px 0 var(--line-light)}
+.pt-card__title{flex:1;min-width:0;font-size:16px;line-height:22px;font-weight:600;color:var(--text)}
+.pt-card__body{padding:20px}
+.pt-item{position:relative;overflow:hidden;border-radius:12px}
+/* Figma 안쪽 테두리 — 높이에 더해지지 않게 위에 덧그림 */
+.imp-table::after,.pt-card::after,.pt-item::after{content:"";position:absolute;inset:0;z-index:2;border:1px solid var(--line);border-radius:inherit;pointer-events:none}
+.pt-item__hd{display:flex;align-items:center;gap:8px;height:48px;padding:12px 20px;box-shadow:inset 0 -1px 0 var(--line-light);font-size:14px;line-height:14px;font-weight:500;color:var(--text-2)}
+.pt-item__hd img{display:block}
+.pt-item__body{display:flex;flex-direction:column;gap:16px;padding:20px 20px 4px}
+.pt-item__row{display:flex;align-items:flex-start;gap:12px}
+.pt-item__later{display:flex;align-items:center;flex:1;min-width:0;height:42px;margin-top:19px;padding:0 16px;border:1px dashed var(--line);border-radius:8px;background:var(--bg);font-size:14px;line-height:20px;color:#6D7379}
+
+/* 입력칸 (Input/textfield) — 라벨 13 · 칸 42 · 도움말 12 */
+.field{display:flex;flex-direction:column;gap:6px;flex:none;width:200px}
+.field__label{display:flex;gap:2px;padding:0 1px;font-size:13px;line-height:13px;font-weight:500;color:var(--text-2)}
+.field__req{font-size:12px;line-height:13px;font-weight:600;color:#FF4E33}
+.field__input{width:100%;height:42px;margin:0;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;font:inherit;font-size:15px;line-height:21px;color:var(--text);outline:0;transition:border-color .15s}
+.field__input::placeholder{color:#A0A6AC}
+.field__input:focus{border-color:var(--blue)}
+.field__help{padding:0 1px;overflow:hidden;font-size:12px;line-height:16px;color:var(--text-3);white-space:nowrap;text-overflow:ellipsis}
+
+/* 추가 인증 */
+.pt-auth{display:flex;align-items:center;gap:8px;height:53px;padding:16px 4px;box-shadow:inset 0 1px 0 var(--line-light)}
+.pt-auth__title{display:flex;align-items:center;gap:4px;margin-right:8px;font-size:14px;line-height:14px;font-weight:500;color:var(--text)}
+.pt-auth__title img{display:block}
+.chk{position:relative;display:flex;align-items:center;gap:4px;font-size:14px;line-height:20px;color:var(--text-2);cursor:pointer}
+.chk input{position:absolute;width:1px;height:1px;margin:0;opacity:0;pointer-events:none}
+.chk__icon{width:20px;height:20px;background:url(../images/ic-check-off-16.svg) center/16px 16px no-repeat}
+.chk input:checked + .chk__icon{background-image:url(../images/ic-check-on-16.svg)}
+.chk:has(input:focus-visible){outline:2px solid #7DA2FF;outline-offset:2px;border-radius:4px}
+
+/* ==========================================================================
+   일반 계약 2단계 참여자 설정 — Figma 02_03_참여자 설정 (54202:37896)
+   서명 순서 카드 2개(각 444 × 86) · 참여자 카드 860 × 224 · 카드 사이 20
+   ========================================================================== */
+.pt-order{display:flex;gap:12px}
+.opt--row{flex:1;min-width:0}
+.pt-card__body--list{display:flex;flex-direction:column;align-items:center;gap:20px}
+.pt-list{display:flex;flex-direction:column;gap:20px;width:100%}
+.pt-add{width:156px;height:42px;margin:0;padding:0 16px;border:1px solid #2D62FA;border-radius:8px;background:#fff;
+  font-size:15px;line-height:15px;font-weight:600;color:var(--blue);white-space:nowrap;transition:background-color .15s}
+.pt-add:hover{background:#F5F9FF}
+.pt-add:disabled{opacity:.4;cursor:default}
+
+/* 카드 머리 — 순번 · 역할 라벨 · 서명 요청자 본인 · 휴지통 */
+.pt-item__no{white-space:nowrap}
+.pt-item__chips{display:flex;align-items:center;gap:4px}
+.self-tag{display:inline-flex;align-items:center;padding:2px 3px;border:1px solid rgba(27,82,237,.1);border-radius:4px;background:#F5F9FF;
+  font-size:11px;line-height:14px;font-weight:500;color:var(--blue);white-space:nowrap}
+.pt-item__tools{display:flex;align-items:center;gap:8px;margin-left:auto}
+.pt-item__bar{display:block;width:1px;height:16px;background:var(--line)}
+.pt-item__del{width:16px;height:16px;margin:0;padding:0;border:0;background:url(../images/ic-trash-gray-16.svg) center/16px 16px no-repeat}
+.pt-item__del:hover{opacity:.7}
+.pt-item__del:disabled{opacity:.3;cursor:default}
+
+/* 서명 요청자 본인 스위치 — 32 × 20 · 꺼짐 #E3E5E8 · 켜짐 #1B52ED */
+.tgl{position:relative;display:flex;align-items:center;gap:4px;font-size:13px;line-height:18px;font-weight:400;color:var(--text-3);cursor:pointer;white-space:nowrap}
+.tgl input{position:absolute;width:1px;height:1px;margin:0;opacity:0;pointer-events:none}
+.tgl__track{display:flex;align-items:center;width:32px;height:20px;padding:2px;border-radius:1000px;background:#E3E5E8;transition:background-color .2s}
+.tgl__knob{width:16px;height:16px;border-radius:1000px;background:#fff url(../images/ic-toggle-x-8.svg) center/8px 8px no-repeat;transition:transform .2s cubic-bezier(.22,.61,.36,1)}
+.tgl input:checked + .tgl__track{background:var(--blue)}
+.tgl input:checked + .tgl__track .tgl__knob{transform:translateX(12px);background-image:url(../images/ic-toggle-check-8.svg)}
+.tgl:has(input:focus-visible) .tgl__track{outline:2px solid #7DA2FF;outline-offset:2px}
+
+/* 이름 · 연락처 칸 · 추가하기 버튼 */
+.field--name{width:200px}
+.field--phone{width:280px}
+.field__input.is-locked{border-color:var(--line-mid);background:var(--line-light);color:var(--text-2)}
+.field__input.is-locked:focus{border-color:var(--line-mid)}
+.field.is-error .field__input{border-color:#F04452}
+.field.is-error .field__help{color:#FF4E33}
+.phone{display:flex;height:42px;overflow:hidden;border:1px solid var(--line);border-radius:8px;background:#fff;transition:border-color .15s}
+.phone:focus-within{border-color:var(--blue)}
+.phone__type{display:flex;align-items:center;gap:4px;flex:none;padding:8px 12px;border-right:1px solid var(--line-mid)}
+.phone__type img{display:block}
+.phone__type img:first-child{margin-right:8px}
+.phone__input{flex:1;min-width:0;margin:0;padding:8px 12px;border:0;outline:0;background:transparent;font:inherit;font-size:15px;line-height:21px;color:var(--text)}
+.phone__input::placeholder{color:#A0A6AC}
+.phone.is-locked{background:var(--line-light)}
+.phone.is-locked:focus-within{border-color:var(--line)}
+.phone.is-locked .phone__input{color:var(--text-2)}
+.add-fields{display:flex;gap:10px;padding-top:19px}
+.add-field{display:flex;align-items:center;justify-content:center;gap:5px;height:42px;margin:0;padding:0 16px;border:1px dashed rgba(45,98,250,.2);border-radius:8px;background:#F5F9FF;
+  font-size:15px;line-height:15px;font-weight:600;color:var(--blue);white-space:nowrap;transition:background-color .15s}
+.add-field img{display:block}
+.add-field:hover{background:#EBF3FF}
+.add-field--name{width:135px}
+.add-field--phone{width:148px}
+
+/* ==========================================================================
+   나가기 확인 모달 — Figma 54347:35246 · 폭 300
+   ========================================================================== */
+.modal--sm{width:300px}
+a.modal__btn{display:flex;align-items:center;justify-content:center;text-decoration:none}
+
+/* ==========================================================================
+   3단계 서명 조건 설정 — Figma 서명조건설정 (54279:31589)
+   왼쪽 260 · 가운데 계약서 600 × 849 · 오른쪽 260 · 아래 버튼 줄은 화면 아래에 덮여 고정
+   ========================================================================== */
+.page-editor{height:100vh;padding:60px 0 0;overflow:hidden}
+.hd--editor{display:grid;grid-template-columns:1fr auto 1fr}
+.hd--editor .hd__logo{justify-self:start}
+.ed-tools{display:flex;align-items:center;justify-self:end;gap:8px;padding-left:12px}
+.ed-tools__group{display:flex;align-items:center;gap:12px}
+.ed-tools__bar{display:block;width:1px;height:16px;background:var(--line)}
+.ed-zoom{display:inline-flex;align-items:center;gap:4px;font-size:12px;line-height:16px;color:var(--text-2)}
+.ed-zoom img{display:block}
+.ed-tool{display:flex;align-items:center;justify-content:center;width:24px;height:24px;margin:0;padding:0;border:0;border-radius:4px;background:transparent}
+.ed-tool:hover{background:#F6F7F8}
+.ed-tool img{display:block;max-width:none}
+.ed-help{display:flex;align-items:center;gap:4px;margin:0;padding:0;border:0;background:transparent;font-size:13px;line-height:13px;font-weight:500;color:var(--text-3)}
+.ed-help img{display:block}
+
+.ed{display:flex;height:100%;min-width:1280px}
+
+/* 왼쪽 */
+/* 왼쪽 · 오른쪽 칸은 스크롤바를 감춤 (휠로는 스크롤됨) — 스크롤바가 칸 폭을 줄이지 않게 */
+.ed-left,.ed-right{scrollbar-width:none}
+.ed-left::-webkit-scrollbar,.ed-right::-webkit-scrollbar{display:none}
+.ed-left{display:flex;flex-direction:column;gap:20px;flex:none;width:260px;padding:16px 16px 78px;overflow-y:auto;background:#fff}
+.ed-sec{display:flex;flex-direction:column;gap:10px}
+.ed-sec__title{display:flex;align-items:center;gap:4px;margin:0;padding:4px 2px 0;font-size:16px;line-height:16px;font-weight:600;color:var(--text)}
+.ed-sec__icon{display:block}
+.ed-tip{display:flex}
+.ed-tip__btn{display:block;width:16px;height:16px;margin:0;padding:0;border:0;background:transparent;cursor:help}
+.ed-tip__btn img{display:block}
+/* 툴팁은 왼쪽 칸 스크롤에 잘리지 않게 화면 기준으로 띄움 (자리는 js/signing.js) */
+.ed-tip__box{position:fixed;z-index:60;display:flex;align-items:center;width:260px;padding-left:6px;
+  background:url(../images/tooltip-arrow-left.svg) 0 0/6px 34px no-repeat;opacity:0;visibility:hidden;transition:opacity .15s,visibility 0s .15s;pointer-events:none}
+.ed-tip__box--fit{width:auto}
+.ed-tip__box--fit .ed-tip__inner{white-space:nowrap}
+.ed-tip.is-on .ed-tip__box{opacity:1;visibility:visible;transition:opacity .15s,visibility 0s}
+.ed-tip__inner{display:flex;flex-direction:column;gap:4px;padding:12px;border-radius:8px;background:#292B2D}
+.ed-tip__inner strong{font-size:13px;line-height:16px;font-weight:600;color:#fff}
+.ed-tip__inner span{font-size:12px;line-height:16px;font-weight:400;color:#E3E5E8}
+.ed-box{display:flex;flex-direction:column;gap:4px;padding:8px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.ed-box--role{gap:12px}
+/* 왼쪽 역할 목록 — 참여자마다 카드(li) 하나, 사이 10 (Figma 53693:29199) */
+.role-list{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
+.ed-box__group{display:flex;flex-direction:column;gap:4px}
+.ed-box__label{padding:0 2px;font-size:12px;line-height:16px;color:var(--text-3)}
+.ed-items{display:flex;flex-direction:column;gap:4px}
+.ed-item{display:flex;align-items:center;gap:4px;width:100%;height:36px;margin:0;padding:4px 12px;border:1px solid var(--line-mid);border-radius:8px;background:#fff;
+  font-size:15px;line-height:21px;color:var(--text-2);text-align:left;transition:background-color .15s,border-color .15s}
+.ed-item img{display:block;flex:none}
+.ed-item:hover{background:#F6F7F8}
+.ed-item.is-on{border-color:#6D7379;color:var(--text);font-weight:500}
+.ed-item__count{margin-left:auto;font-size:14px;line-height:20px;font-weight:500}
+.ed-preview{display:inline-flex;align-items:center;align-self:flex-start;gap:4px;height:36px;margin:0;padding:0 14px;border:1px solid var(--line);border-radius:8px;background:#fff;
+  font-size:14px;line-height:14px;font-weight:500;color:#031228}
+.ed-preview img{display:block}
+.ed-preview:hover{background:var(--bg)}
+
+/* 역할 고르는 상자 — 큰 상자(왼쪽 h84) · 작은 상자(오른쪽 h36) · 펼친 목록 */
+.role-pick{position:relative}
+/* 큰 상자 — Figma Select box (54287:33348): 역할 + 이름 · 연락처 h60 · 서명 요청자 본인 라벨이 붙으면 h84 */
+.role-sel{display:flex;align-items:center;gap:10px;width:100%;min-height:60px;margin:0;padding:10px 12px 11px;border:0;border-radius:8px;background:rgba(239,86,93,.1);text-align:left}
+.role-sel__dot{flex:none;width:8px;height:8px;border-radius:4px;background:#EF565D}
+.role-sel__text{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:2px;flex:1;min-width:0;padding-left:18px}
+.role-sel__text > .role-sel__dot{position:absolute;left:0;top:7.5px}
+.role-sel__name{max-width:100%;overflow:hidden;font-size:15px;line-height:21px;font-weight:500;color:var(--text);white-space:nowrap;text-overflow:ellipsis}
+.role-sel__meta{display:flex;align-items:center;width:100%;font-size:12px;line-height:16px;color:var(--text-3);white-space:nowrap}
+.role-sel__meta > span{overflow:hidden;text-overflow:ellipsis}
+.role-sel__meta .role-sel__contact{flex:1;min-width:0}
+.role-sel__meta i{flex:none;width:9px;height:9px;background:radial-gradient(circle at 4.5px 4.5px,#D0D4D7 1.5px,transparent 1.6px)}
+.role-sel__text > .self-tag{margin-top:2px}
+/* [계약하기] 서명 참여자 카드 — 이름 · 연락처 아래 역할 라벨 · 서명 요청자 본인 (사이 2) */
+.role-sel__chips{display:flex;flex-wrap:wrap;gap:2px;margin-top:2px}
+.role-sel__arrow{display:flex;align-items:center;justify-content:center;flex:none;width:16px;height:16px}
+.role-sel__arrow img{display:block}
+.role-sel[aria-expanded="true"] .role-sel__arrow img{transform:rotate(180deg)}
+.role-sel--person[aria-expanded] .role-sel__arrow img{transform:none} /* [계약하기] 카드는 Figma 처럼 펼쳐져도 아래 화살표 */
+.role-sel--sm{gap:8px;min-height:0;height:36px;padding:4px 12px 4px 14px;border:1px solid var(--line);background:#fff}
+.role-sel--sm > .role-sel__dot{align-self:center}
+.role-sel__line{display:flex;align-items:center;gap:4px;flex:1;min-width:0;font-size:14px;line-height:20px;white-space:nowrap}
+.role-sel--sm .role-sel__name{font-size:14px;line-height:20px;font-weight:400}
+.role-sel__sub{flex:none;font-size:14px;line-height:20px;color:var(--text-3)}
+.role-menu{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:30;max-height:240px;margin:0;padding:4px;overflow-y:auto;list-style:none;
+  border:1px solid var(--line);border-radius:8px;background:#fff;box-shadow:0 8px 24px rgba(17,24,39,.12)}
+.role-menu__item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:6px;font-size:14px;line-height:20px;color:var(--text);cursor:pointer;outline:0}
+.role-menu__item:hover,.role-menu__item:focus{background:#F6F7F8}
+.role-menu__item.is-on{font-weight:600}
+.role-menu__name{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.role-menu .role-sel__sub{font-size:13px;font-weight:400}
+.role-menu__who{margin-left:auto;padding-left:8px;overflow:hidden;font-size:12px;font-weight:400;color:var(--text-3);white-space:nowrap;text-overflow:ellipsis}
+
+/* 가운데 — 계약서 */
+.ed-center{flex:1;min-width:0;padding:40px 0 102px;overflow:auto;background:var(--bg)}
+.ed-doc{position:relative;width:600px;height:849px;margin:0 auto;overflow:hidden;border:1px solid var(--line);background:#fff}
+.ed-doc__img{position:absolute;left:-6.03%;top:-3.17%;width:109.53%;height:106.36%;max-width:none;pointer-events:none;user-select:none}
+.ed-field{position:absolute;left:411.5px;top:12px;width:154px;height:117px}
+.ed-field__btns{position:absolute;left:0;top:0;display:flex;gap:5px}
+.ed-field__btns button{display:flex;align-items:center;width:70px;height:30px;margin:0;padding:0 10px;border:0;border-radius:15px;background:#000;
+  font-size:14px;line-height:20px;font-weight:600;color:#fff;white-space:nowrap}
+.ed-field__btns img{display:block}
+.ed-field__box{position:absolute;left:2px;top:35px;width:150px;height:80px;border:1px dashed var(--blue);background:rgba(239,86,93,.16)}
+.ed-field__label{position:absolute;left:9px;top:4px;font-size:13px;line-height:16px;font-weight:600;color:#000}
+.ed-field__stamp{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+.ed-field__h{position:absolute;width:6px;height:6px;border-radius:50%;background:var(--blue)}
+.ed-field--text{left:380.5px;top:404px;width:160px;height:68px}
+.ed-field__text{position:absolute;left:0;top:34px;display:flex;align-items:center;width:160px;height:34px;padding:0 9px;overflow:hidden;border:1px solid var(--blue);background:rgba(239,86,93,.16);
+  font-size:15px;line-height:21px;font-weight:500;color:#A0A6AC;white-space:nowrap;text-overflow:ellipsis}
+.ed-field__h--tl{left:-3px;top:-3px}.ed-field__h--tr{right:-3px;top:-3px}.ed-field__h--bl{left:-3px;bottom:-3px}.ed-field__h--br{right:-3px;bottom:-3px}
+
+/* 오른쪽 — 고른 입력 항목 설정 */
+.ed-right{display:flex;flex-direction:column;flex:none;width:260px;overflow-y:auto;background:#fff}
+.ed-right__title{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0;padding:16px 20px;font-size:15px;line-height:21px;font-weight:500;color:var(--text)}
+.ed-right__body{display:flex;flex-direction:column;gap:24px;flex:1;padding:20px 16px 82px;box-shadow:inset 0 1px 0 var(--line-light)}
+.ed-group{display:flex;flex-direction:column;gap:8px}
+.ed-group--role,.ed-group--tight{gap:6px}
+.ed-label{padding:0 1px;font-size:13px;line-height:13px;font-weight:500;color:var(--text-2)}
+.ed-xy{display:flex;gap:6px}
+.ed-num{display:flex;align-items:center;flex:1;min-width:100px;height:36px;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:13px;line-height:18px;color:#6D7379;transition:border-color .15s}
+.ed-num:focus-within{border-color:var(--blue)}
+.ed-num span{padding-right:8px}
+.ed-num input{flex:1;min-width:0;margin:0;padding:0;border:0;outline:0;background:transparent;font:inherit;color:var(--text);text-align:right}
+.ed-num em{margin-left:6px;font-style:normal}
+.ed-note{display:flex;align-items:flex-start;gap:6px;padding:12px;border-radius:4px;background:var(--bg);font-size:13px;line-height:18px;font-weight:500;color:var(--text-3)}
+.ed-note img{display:block;flex:none;margin-top:1px}
+.ed-right__btns{display:flex;gap:8px}
+.ed-btn{flex:1;height:36px;margin:0;padding:0 14px;border:0;border-radius:8px;background:var(--line-mid);font-size:15px;line-height:15px;font-weight:600;color:var(--text-3)}
+.ed-btn--primary{background:var(--blue);color:#fff}
+.ed-btn:hover{filter:brightness(.97)}
+
+/* 오른쪽 설정 칸 — 도장 · 텍스트(공통 항목) · 텍스트(역할) 중 하나만 보임
+   Figma 54279:31589 · 54320:48376 · 54293:37247 */
+.ed-panel{display:flex;flex-direction:column;flex:1 0 auto}
+.ed-badge{display:inline-flex;align-items:center;flex:none;padding:3px 10px;border-radius:100px;background:#4D5066;font-size:12px;line-height:12px;font-weight:600;color:#EFF1F6;white-space:nowrap}
+.ed-label--lg{font-size:14px;line-height:20px}
+.ed-select{display:block;width:100%;height:36px;margin:0;padding:4px 36px 4px 14px;border:1px solid var(--line);border-radius:8px;
+  background:#fff url(../images/ic-trailing-9.svg) right 14.5px center/9px 6px no-repeat;font:inherit;font-size:14px;line-height:20px;color:var(--text);
+  -webkit-appearance:none;appearance:none;cursor:pointer;outline:0;transition:border-color .15s}
+.ed-select:focus-visible{border-color:var(--blue)}
+.ed-select:disabled{background-color:var(--line-light);color:var(--text-2);opacity:1;cursor:default}
+.ed-select--size{flex:1;min-width:0;padding:6px 44px 6px 12px;font-size:13px;line-height:18px;background-image:url(../images/ic-down-arrow-18.svg);background-position:right 14px center;background-size:18px 18px}
+.ed-checks{display:flex;flex-direction:column;gap:4px}
+.chk:has(input:disabled){color:#D0D4D7;cursor:default}
+.chk input:disabled:checked + .chk__icon{background-image:url(../images/ic-check-on-disabled-16.svg)}
+.ed-text{display:flex;flex-direction:column;gap:6px}
+.ed-input{width:100%;height:36px;margin:0;padding:6px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;font:inherit;font-size:14px;line-height:20px;color:var(--text);outline:0;transition:border-color .15s}
+.ed-input::placeholder{color:#A0A6AC}
+.ed-input:focus{border-color:var(--blue)}
+.ed-help{padding:0 1px;font-size:12px;line-height:16px;color:var(--text-3)}
+.ed-text.is-error .ed-input{border-color:#F04452}
+.ed-text.is-error .ed-help{color:#FF4E33}
+.ed-font{display:flex;flex-direction:column;gap:12px}
+.ed-font__row{display:flex;gap:6px}
+.ed-font__note{font-size:13px;line-height:18px;color:#A0A6AC}
+.ed-color{position:relative;display:flex;align-items:center;gap:6px;flex:1;min-width:100px;height:36px;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;
+  font-size:13px;line-height:18px;color:var(--text);cursor:pointer;transition:border-color .15s}
+.ed-color:has(input:focus-visible){border-color:var(--blue)}
+.ed-color__chip{flex:none;width:12px;height:12px;border:1px solid rgba(0,0,0,.05);border-radius:6px;background:#fff}
+.ed-color input{position:absolute;left:12px;bottom:0;width:1px;height:1px;margin:0;padding:0;border:0;opacity:0}
+.ed-align{display:flex;height:36px;padding:2px;border-radius:8px;background:#F6F7F8}
+.ed-align__btn{display:flex;align-items:center;justify-content:center;flex:1;min-width:0;height:32px;margin:0;padding:0;border:0;border-radius:6px;background:transparent}
+.ed-align__btn img{display:block}
+.ed-align__btn .ed-align__on{display:none}
+.ed-align__btn.is-on{background:#fff;filter:drop-shadow(.2px .2px 1px rgba(54,59,72,.1))}
+.ed-align__btn.is-on .ed-align__off{display:none}
+.ed-align__btn.is-on .ed-align__on{display:block}
+
+/* ==========================================================================
+   계약하기 2단계 참여자 설정 — Figma 참여자 설정 (54347:36467)
+   참여자 카드 858 × 203 · 칸 이름 180 · 연락처 250 · 서명 유효기간 90 · 전달 메시지 나머지
+   ========================================================================== */
+.pt-card__hd--send{padding-left:20px}
+.pt-card__hd--send .pt-card__title{display:flex;align-items:center;gap:8px}
+.btn-sm{flex:none;height:30px;margin:0;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:13px;line-height:13px;font-weight:500;color:var(--text)}
+.btn-sm:hover{background:var(--bg)}
+.field--w180{width:180px}
+.field--w250{width:250px}
+.field--w90{width:90px}
+.field--grow{flex:1;min-width:0;width:auto}
+.field__label--12{padding:0 2px;font-size:12px;line-height:14px;font-weight:600}
+.field__label--12 .field__req{line-height:14px}
+.days{display:flex;align-items:center;gap:8px;height:42px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:14px;line-height:20px;font-weight:500;color:var(--text);transition:border-color .15s}
+.days:focus-within{border-color:var(--blue)}
+.days__input{flex:1;min-width:0;margin:0;padding:0;border:0;outline:0;background:transparent;font:inherit;font-weight:400;color:var(--text)}
+.field.is-error .phone,.field.is-error .days{border-color:#F04452}
+.pt-auth--send .pt-auth__title{margin-right:0}
+.pt-auth__note{font-size:13px;line-height:18px;color:var(--text-3);white-space:nowrap}
+.auth-tags{display:flex;align-items:center;gap:4px}
+.auth-tag{display:inline-flex;align-items:center;padding:3px 4px;border-radius:4px;background:#F5F9FF;font-size:11px;line-height:14px;font-weight:500;color:var(--blue);white-space:nowrap}
+.pt-auth__set{display:flex;align-items:center;margin:0 0 0 auto;padding:0;border:0;background:none;font-size:12px;line-height:12px;font-weight:500;color:#FA7500}
+.pt-auth__set img{display:block}
+
+/* 문서 업로드 — 샘플 문서 탭 (Figma 54192:37529)
+   카테고리 160 + 검색 · 표: 문서명(제목 14 · 카테고리 12) · 미리보기 · 업로드 / 행 높이 70 */
+.imp__filter{display:flex;gap:8px}
+.imp__filter .search{flex:1}
+.imp__cat{flex:none;width:160px;height:36px;margin:0;padding:4px 36px 4px 14px;border:1px solid var(--line);border-radius:8px;
+  background:#fff url(../images/ic-trailing-9.svg) right 14.5px center/9px 6px no-repeat;font:inherit;font-size:14px;line-height:20px;color:var(--text-3);
+  -webkit-appearance:none;appearance:none;cursor:pointer;outline:0;transition:border-color .15s}
+.imp__cat.is-set{color:var(--text)}
+.imp__cat:focus-visible{border-color:var(--blue)}
+.imp__cat option{color:var(--text)}
+.imp-row__doc{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+.imp-row__doc .imp-row__title{display:block;overflow:hidden;line-height:20px;white-space:nowrap;text-overflow:ellipsis}
+.imp-row__cat{font-size:12px;line-height:16px;color:var(--text-3)}
+
+/* 날짜 · 공통 항목 설정 (Figma 54293:44177) — 자동 완성(입력 방식) 라디오 */
+.ed-radios{display:flex;flex-direction:column;gap:4px}
+.radio{position:relative;display:flex;align-items:center;gap:6px;font-size:14px;line-height:20px;color:var(--text-2);cursor:pointer}
+.radio input{position:absolute;width:1px;height:1px;margin:0;opacity:0;pointer-events:none}
+.radio__icon{flex:none;width:20px;height:20px;background:url(../images/ic-radio-off-16.svg) center/16px 16px no-repeat}
+.radio input:checked + .radio__icon{background-image:url(../images/ic-radio-on-16.svg)}
+.radio:has(input:focus-visible){outline:2px solid #7DA2FF;outline-offset:2px;border-radius:4px}
+
+/* ==========================================================================
+   템플릿 만들기 4단계 검토 — Figma 검토 (54320:48060 · 1280 × 1214)
+   카드 900 (안쪽 24) · 템플릿명 칸 300 · 정보 표 850 (행 58 · 이름 칸 120) · 역할 카드 214 × 104 (3열 · 사이 16)
+   ========================================================================== */
+.rv-card{display:flex;flex-direction:column;gap:36px;padding:24px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.rv-h{display:block;font-size:16px;line-height:22px;font-weight:600;color:var(--text)}
+.rv-name{display:flex;flex-direction:column;gap:8px}
+.rv-name__row{display:flex;align-items:flex-start;gap:8px}
+.rv-name__field{display:flex;flex-direction:column;gap:6px;width:300px}
+.rv-name__count{padding:0 1px;font-size:12px;line-height:16px;color:var(--text-3)}
+.rv-fav{display:flex;align-items:center;gap:2px;height:42px;margin:0;padding:0 16px;border:0;border-radius:8px;background:#fff;font-size:15px;line-height:15px;font-weight:600;color:var(--text-3)}
+.rv-fav img{display:block}
+.rv-fav .rv-fav__on{display:none}
+.rv-fav[aria-pressed="true"]{color:var(--blue)}
+.rv-fav[aria-pressed="true"] .rv-fav__off{display:none}
+.rv-fav[aria-pressed="true"] .rv-fav__on{display:block}
+.rv-info{display:flex;flex-direction:column;gap:12px}
+.rv-info .rv-h{line-height:24px}
+.rv-grid{margin:0;border-radius:12px;box-shadow:inset 0 0 0 1px var(--line)}
+.rv-row{display:flex;align-items:center;gap:16px;min-height:58px;padding:0 20px}
+.rv-row + .rv-row{box-shadow:inset 0 1px 0 var(--line-light)}
+.rv-row dt{flex:none;width:120px;font-size:14px;line-height:17px;font-weight:600;color:var(--text-3)}
+.rv-row dd{display:flex;align-items:center;flex:1;min-width:0;margin:0;font-size:14px;line-height:20px;color:var(--text)}
+.rv-row--roles{align-items:flex-start;padding:19px 20px}
+.rv-row--roles dt{padding:4px 0}
+.rv-doc{gap:4px}
+.btn-xs{display:inline-flex;align-items:center;gap:2px;height:22px;margin:0;padding:0 6px;border:1px solid var(--line);border-radius:4px;background:#fff;font-size:12px;line-height:16px;color:var(--text);white-space:nowrap}
+.rv-file__del{display:flex;margin:0;padding:0;border:0;background:none}
+.rv-file__del img{display:block}
+.rv-roles{display:grid;grid-template-columns:repeat(3,214px);gap:16px;margin:0;padding:0;list-style:none}
+.rv-role{overflow:hidden;border:1px solid var(--line);border-top:0;border-radius:8px;background:#fff;box-shadow:inset 0 4px 0 var(--c,#EF565D)} /* 위 띠 4 = 역할 색 */
+.rv-role__body{display:flex;flex-direction:column;gap:8px;padding:16px 12px 11px}
+.rv-role__head{display:flex;align-items:flex-start;gap:6px}
+.rv-role__num{display:flex;align-items:center;justify-content:center;flex:none;width:20px;height:20px;border-radius:99px;font-size:13px;line-height:13px;font-weight:600}
+.rv-role__text{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+.rv-role__name{overflow:hidden;font-size:15px;line-height:21px;font-weight:500;color:var(--text);white-space:nowrap;text-overflow:ellipsis}
+.rv-role__sub{overflow:hidden;font-size:12px;line-height:16px;color:var(--text-3);white-space:nowrap;text-overflow:ellipsis}
+.rv-role__line{display:block;height:1px;background:var(--line-light)}
+.rv-role__auth{display:flex;align-items:center;gap:4px;height:20px}
+.rv-role__auth img{display:block;flex:none}
+.rv-role__none{font-size:12px;line-height:16px;color:var(--text-3)}
