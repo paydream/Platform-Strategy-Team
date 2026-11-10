@@ -323,6 +323,22 @@
               "href": "archive/20261110-133342-yesform-brief-final-v16/index.html"
             }
           ]
+        },
+        {
+          "id": "20261110-133848-yesform-brief-final-v17",
+          "label": "v17 · 최종안 (법령 카드 높이 통일·하단 정렬)",
+          "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
+          "desc": "법령 카드 그리드: 같은 행 카드 높이를 동일하게 맞추고 하단 서식/링크 영역을 카드 바닥에 고정해 구분선이 가지런히 보이도록 수정",
+          "created": "2026.11.10",
+          "folder": "archive/20261110-133848-yesform-brief-final-v17",
+          "preview": "archive/20261110-133848-yesform-brief-final-v17/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "최종안 · 업무 브리핑 모달",
+              "href": "archive/20261110-133848-yesform-brief-final-v17/index.html"
+            }
+          ]
         }
       ]
     },
