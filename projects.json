@@ -107,6 +107,22 @@
               "href": "archive/20261110-165612-downloads-2/shutdown_modal.html"
             }
           ]
+        },
+        {
+          "id": "20261110-165802-preview-tabs",
+          "label": "v5",
+          "title": "서식뱅크 종료",
+          "desc": "",
+          "created": "2026.11.10",
+          "folder": "archive/20261110-165802-preview-tabs",
+          "preview": "archive/20261110-165802-preview-tabs/preview_tabs.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "preview_tabs",
+              "href": "archive/20261110-165802-preview-tabs/preview_tabs.html"
+            }
+          ]
         }
       ]
     },
