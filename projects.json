@@ -454,6 +454,22 @@
               "href": "archive/20261111-165744-yesform-brief-final-v24/index.html"
             }
           ]
+        },
+        {
+          "id": "20261111-172535-yesform-brief-final-v25",
+          "label": "v25 · 최종안 (헤더 요약 숫자)",
+          "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
+          "desc": "헤더 오른쪽 빈 공간에 요약 타일 2개 추가: 이번 달 업무 n건(접속 월 기준 자동), 27년 법령 13건. 타일을 누르면 해당 탭으로 이동하고, 업무 타일은 이번 달 위치로 스크롤. 헤더 높이 101px 유지. 나머지는 v24와 동일.",
+          "created": "2026.11.11",
+          "folder": "archive/20261111-172535-yesform-brief-final-v25",
+          "preview": "archive/20261111-172535-yesform-brief-final-v25/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "최종안 · 업무 브리핑 모달",
+              "href": "archive/20261111-172535-yesform-brief-final-v25/index.html"
+            }
+          ]
         }
       ]
     },
