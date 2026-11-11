@@ -8,7 +8,7 @@
       "category": "웹 메인",
       "desc": "예스폼 메인 화면에 로그인했을 때 딤드 위에 뜨는 업무 브리핑 모달 시안 6종 (Figma 예스폼_신규디자인_261105 > 모달 디자인)",
       "created": "2026.11.06",
-      "updated": "2026.11.10",
+      "updated": "2026.11.11",
       "hidden": false,
       "final": null,
       "versions": [
@@ -353,6 +353,22 @@
             {
               "label": "최종안 · 업무 브리핑 모달",
               "href": "archive/20261110-181045-yesform-brief-final-v18/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261111-134407-yesform-brief-final-v19",
+          "label": "v19 · 최종안 (피그마 최종 디자인 프로토타입)",
+          "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
+          "desc": "피그마 최종안(600×720) 기준 워킹 프로토타입. 파란 상단, 월별 서식 카드 정리, 법령 카드 3열·관련 서식 박스, 하단 \"오늘 다시 보지 않기 / 닫기\". 탭 전환·월 이동·분야 필터·서식/법령 링크(새 탭)·닫기 후 다시 보기 동작.",
+          "created": "2026.11.11",
+          "folder": "archive/20261111-134407-yesform-brief-final-v19",
+          "preview": "archive/20261111-134407-yesform-brief-final-v19/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "최종안 · 업무 브리핑 모달",
+              "href": "archive/20261111-134407-yesform-brief-final-v19/index.html"
             }
           ]
         }
