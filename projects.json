@@ -10,7 +10,10 @@
       "created": "2026.11.06",
       "updated": "2026.11.11",
       "hidden": false,
-      "final": null,
+      "final": {
+        "version": "20261111-134407-yesform-brief-final-v19",
+        "href": "archive/20261111-134407-yesform-brief-final-v19/index.html"
+      },
       "versions": [
         {
           "id": "20261106-180001-yesform-login-modal",
