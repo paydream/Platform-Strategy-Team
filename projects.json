@@ -422,6 +422,22 @@
               "href": "archive/20261111-155002-yesform-brief-final-v22/index.html"
             }
           ]
+        },
+        {
+          "id": "20261111-161056-yesform-brief-final-v23",
+          "label": "v23 · 최종안 (피그마 디자인 변경 반영)",
+          "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
+          "desc": "피그마 최종안 디자인 변경 반영: 모달 모서리 16px, 상단 여백 조정, 서식 행의 서식명과 「서식 보기」 사이 간격 확대, 탭 영역 높이 피그마와 동일하게 맞춤. 내용은 v22와 동일.",
+          "created": "2026.11.11",
+          "folder": "archive/20261111-161056-yesform-brief-final-v23",
+          "preview": "archive/20261111-161056-yesform-brief-final-v23/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "최종안 · 업무 브리핑 모달",
+              "href": "archive/20261111-161056-yesform-brief-final-v23/index.html"
+            }
+          ]
         }
       ]
     },
