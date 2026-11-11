@@ -438,6 +438,22 @@
               "href": "archive/20261111-161056-yesform-brief-final-v23/index.html"
             }
           ]
+        },
+        {
+          "id": "20261111-165744-yesform-brief-final-v24",
+          "label": "v24 · 최종안 (서식 구분 배지 추가)",
+          "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
+          "desc": "필수 업무 탭 서식 33건의 일정 줄 앞에 구분 배지 추가: 국세 20 / 노무·4대보험 11 / 지방세 1 / 기타 1. 배지는 회색 한 가지 스타일. 나머지는 v23과 동일.",
+          "created": "2026.11.11",
+          "folder": "archive/20261111-165744-yesform-brief-final-v24",
+          "preview": "archive/20261111-165744-yesform-brief-final-v24/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "최종안 · 업무 브리핑 모달",
+              "href": "archive/20261111-165744-yesform-brief-final-v24/index.html"
+            }
+          ]
         }
       ]
     },
