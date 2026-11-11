@@ -374,6 +374,22 @@
               "href": "archive/20261111-134407-yesform-brief-final-v19/index.html"
             }
           ]
+        },
+        {
+          "id": "20261111-135413-yesform-brief-final-v20",
+          "label": "v20 · 최종안 (12월~2월 카드 정리, 월별 33건)",
+          "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
+          "desc": "피그마 반영: 12월·1월·2월 카드를 11월 디자인으로 통일, 1월 12건·2월 7건 추가(필수 업무 총 33건). 피그마 컴포넌트도 같은 내용으로 수정.",
+          "created": "2026.11.11",
+          "folder": "archive/20261111-135413-yesform-brief-final-v20",
+          "preview": "archive/20261111-135413-yesform-brief-final-v20/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "최종안 · 업무 브리핑 모달",
+              "href": "archive/20261111-135413-yesform-brief-final-v20/index.html"
+            }
+          ]
         }
       ]
     },
