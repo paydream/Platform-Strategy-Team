@@ -694,6 +694,22 @@
               "href": "archive/20261112-142758-yesform-brief-final-v39/index.html"
             }
           ]
+        },
+        {
+          "id": "20261112-144953-yesform-brief-wave-refine-v40",
+          "label": "v40 · 레이어드 웨이브 헤더 다듬기",
+          "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
+          "desc": "v38 D(레이어드 웨이브) 기반으로 쉐입 정리: 부드러운 S자 곡선 3겹, 왼쪽으로 사라지는 그라데이션 면, 각 면 위 가는 하이라이트 선, 오른쪽 위 은은한 빛. 웨이브는 요약 타일 아래로 내려 겹침 정리. D-1 레이어드 / D-2 위아래 웨이브 / D-3 면+라인. 데이터는 v39 확정안과 동일(필수 업무 27건). 기본값 D-1.",
+          "created": "2026.11.12",
+          "folder": "archive/20261112-144953-yesform-brief-wave-refine-v40",
+          "preview": "archive/20261112-144953-yesform-brief-wave-refine-v40/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "모달 디자인 베리에이션",
+              "href": "archive/20261112-144953-yesform-brief-wave-refine-v40/index.html"
+            }
+          ]
         }
       ]
     },
