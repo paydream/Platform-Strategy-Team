@@ -74,7 +74,7 @@
    "id": "r008",
    "change": "추가",
    "requester": "유영경",
-   "worker": "유영경 (Aside 작업)",
+   "worker": "유영경",
    "note": "GA4 맞춤 정의 10개 같은 날 등록. 그중 「가입 진입 위치」 매개변수가 member_typeentry_point로 잘못 들어가 entry_point 값이 안 보임 → 다시 등록 필요. preview_document는 상세에 미리보기가 없어 미설치.",
    "events": [
     "view_promotion",
@@ -107,7 +107,7 @@
    "id": "r014",
    "change": "추가",
    "requester": "유영경",
-   "worker": "유영경 (Aside 작업)",
+   "worker": "유영경",
    "note": "싸인은 CSP 때문에 맞춤 JS 변수가 안 돼서, 맞춤 HTML 수집기 태그가 sg_* 이벤트를 만들고 GA4 태그가 받는 구조. GA4 맞춤 정의 13개 같은 날 등록.",
    "events": [
     "signup_start",
@@ -164,7 +164,7 @@
    "id": "r026",
    "change": "추가",
    "requester": "유영경",
-   "worker": "유영경 (Aside 작업)",
+   "worker": "유영경",
    "note": "가입 요금제 유형(member_type), 가입 진입 위치(member_typeentry_point), 검색 카테고리(search_category), 다운로드 차단 사유(block_reason), 다운로드 파일 형식(file_type), 로그인 여부(is_logged_in), 서식 ID(item_id), 서식 카테고리(item_category), 서식명(item_name), 회원 등급(user_grade)",
    "events": [],
    "gtm": null,
@@ -197,7 +197,7 @@
    "id": "r027",
    "change": "추가",
    "requester": "유영경",
-   "worker": "유영경 (Aside 작업)",
+   "worker": "유영경",
    "note": "FAQ 질문 ID(question_id), 디바이스 구분(device_class), 문의 유형(contact_type), 소진 유형(quota_type), 요금제 ID(plan_id), 요금제 건수(quantity), 유입 위치(entry_point), 이동 목적지(destination), 이전 단계(from_step), 인증 노출 계기(trigger_point), 잔여 건수(quota_remaining), 차단 동작(blocked_action), 회원 유형(user_type)",
    "events": [],
    "gtm": null,
@@ -233,7 +233,7 @@
    "id": "r007",
    "change": "추가",
    "requester": "유영경",
-   "worker": "유영경 (Aside 작업)",
+   "worker": "유영경",
    "note": "에디터에서 넘어온 방문에 30일 쿠키(yf_editor_ref), 그 사용자 결제 시 editor_purchase. 사용자 속성 editor_user=Y. 맞춤 정의 8개 같은 날 등록.",
    "events": [
     "editor_referral",
@@ -260,7 +260,7 @@
    "id": "r025",
    "change": "추가",
    "requester": "유영경",
-   "worker": "유영경 (Aside 작업)",
+   "worker": "유영경",
    "note": "에디터 결제 거래ID(editor_tx_id), 에디터 결제 경로(editor_path), 에디터 결제 금액(editor_tx_value), 에디터 결제 상품명(editor_tx_items), 에디터 마지막 방문일(editor_last_visit), 에디터 유입 도착 페이지(editor_ref_page), 에디터 유입 후 경과일(editor_ref_days), 에디터 이용자(editor_user, 사용자 범위)",
    "events": [],
    "gtm": null,
@@ -918,17 +918,17 @@
  "gtmNotes": {
   "GTM-5GQJFRS:33": {
    "requester": "유영경",
-   "worker": "유영경 (Aside 작업)",
+   "worker": "유영경",
    "note": ""
   },
   "GTM-TKCL5VCQ:10": {
    "requester": "유영경",
-   "worker": "유영경 (Aside 작업)",
+   "worker": "유영경",
    "note": ""
   },
   "GTM-5GQJFRS:32": {
    "requester": "유영경",
-   "worker": "유영경 (Aside 작업)",
+   "worker": "유영경",
    "note": ""
   },
   "GTM-5GQJFRS:28": {
@@ -948,7 +948,7 @@
   },
   "GTM-5GQJFRS:31": {
    "requester": "유영경",
-   "worker": "유영경 (Aside 작업)",
+   "worker": "유영경",
    "note": "PostHog 이벤트 절감 — 대상 페이지에서만 로드 (GA4와 무관)"
   },
   "GTM-TKCL5VCQ:5": {
