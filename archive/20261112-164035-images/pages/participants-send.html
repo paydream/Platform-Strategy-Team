@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>예스폼싸인 · 참여자 설정</title>
+<!--
+  예스폼싸인 2차 고도화 — 계약하기 2단계 참여자 설정 (2026-11-10)
+  Figma: 싸인_디자인시스템 › 참여자 설정 (54347:36467 · 1280 × 1179)
+  · 템플릿 관리에서 [계약하기] → 문서 업로드(upload.html?…&tpl=템플릿명) → [다음] → 이 화면
+    (템플릿 만들기로 왔을 때는 participants.html · participants-normal.html 로 감)
+  · 템플릿의 역할마다 참여자 카드가 하나씩 생김 (주소 뒤 ?type=bulk|normal&roles=[…])
+    - 이름까지 정해진 역할(실선 라벨) → 템플릿의 이름 · 연락처가 읽기 전용(회색)으로 채워져 있음
+    - 역할만 있는 역할(점선 라벨) → 이름 · 연락처 빈 칸
+    - 카드 머리에 템플릿 유형(대량 전송 · 일반 계약) 라벨
+    주소에 역할이 없으면 Figma 예시 3명(서명 요청자 본인 · 근로자 · 역할 미입력)으로 보임
+  · 참여자 카드는 js/participants-send.js 가 그림
+  · [다음] → 이름 · 연락처 · 서명 유효기간이 빈 칸은 빨간 테두리, 모두 채웠으면 3단계 서명 조건 설정(signing.html)
+  · 스타일 css/style.css (아래쪽 "계약하기 참여자 설정" 부분)
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="page-step">
+
+<header class="hd hd--step">
+  <div class="hd__logo hd__logo--step"><img src="../images/logo-sign-header@2x.png" width="104" height="32" alt="예스폼싸인"></div>
+  <ol class="steps" aria-label="계약 단계">
+    <li class="steps__item"><span class="steps__num">1</span>문서 업로드</li>
+    <li class="steps__item is-on" aria-current="step"><span class="steps__num">2</span>참여자 설정</li>
+    <li class="steps__item"><span class="steps__num">3</span>서명 조건 설정</li>
+    <li class="steps__item"><span class="steps__num">4</span>검토</li>
+  </ol>
+  <span class="hd__empty" aria-hidden="true"></span>
+</header>
+
+<main class="pt">
+  <h1 class="pt__title">서명 진행 방식과 참여자 정보를 설정해 주세요</h1>
+
+  <!-- 서명 순서 -->
+  <div class="pt-order" role="radiogroup" aria-label="서명 순서">
+    <label class="opt opt--row">
+      <input type="radio" name="sign-order" value="order" checked>
+      <span class="opt__check" aria-hidden="true"></span>
+      <span class="opt__text">
+        <span class="opt__title">순서대로 서명하기</span>
+        <span class="opt__desc">이전 서명 참여자가 완료해야 다음 서명 참여자가 서명할 수 있습니다.</span>
+      </span>
+    </label>
+    <label class="opt opt--row">
+      <input type="radio" name="sign-order" value="any">
+      <span class="opt__check" aria-hidden="true"></span>
+      <span class="opt__text">
+        <span class="opt__title">순서없이 서명하기</span>
+        <span class="opt__desc">서명 참여자 모두가 순서와 관계없이 서명할 수 있습니다.</span>
+      </span>
+    </label>
+  </div>
+
+  <section class="pt-card" aria-labelledby="pt-card-title">
+    <div class="pt-card__hd pt-card__hd--send">
+      <h2 class="pt-card__title" id="pt-card-title">참여자 정보 입력<span class="type type--normal" data-type-chip>일반 계약</span></h2>
+      <button class="btn-sm" type="button">주소록에서 불러오기</button>
+    </div>
+    <div class="pt-card__body pt-card__body--list">
+      <div class="pt-list" data-people></div>
+      <button class="pt-add" type="button" data-add-person>서명 참여자 추가하기</button>
+    </div>
+  </section>
+</main>
+
+<footer class="wfooter">
+  <button class="btn btn--out" type="button" data-exit>나가기</button>
+  <button class="btn btn--primary btn--next" type="button" data-next-check>다음</button>
+</footer>
+
+<!-- 나가기 확인 모달 (Figma 54347:35246) -->
+<div class="dim" id="exit-modal" hidden>
+  <div class="modal modal--sm" role="alertdialog" aria-modal="true" aria-labelledby="exit-title" aria-describedby="exit-desc">
+    <div class="modal__top">
+      <h2 class="modal__title" id="exit-title">나가기</h2>
+      <p class="modal__desc" id="exit-desc">현재 작성하신 계약이 저장되지 않습니다.<br>정말 나가시겠습니까?</p>
+    </div>
+    <div class="modal__btns">
+      <button class="modal__btn" type="button" data-exit-cancel>취소</button>
+      <a class="modal__btn modal__btn--primary" href="../index.html">나가기</a>
+    </div>
+  </div>
+</div>
+
+<script src="../js/step.js"></script>
+<script src="../js/participants-send.js"></script>
+<script src="../js/proto-bar.js"></script>
+</body>
+</html>

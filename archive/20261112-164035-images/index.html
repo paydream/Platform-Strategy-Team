@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>예스폼싸인 · 템플릿 관리</title>
+<!--
+  예스폼싸인 2차 고도화 — 템플릿 관리 (2026-11-10)
+  Figma: 싸인_디자인시스템
+  · 01_01_템플릿목록 (54255:26690) — 목록 · 펼친 행 (2026-11-11 갱신: 표 머리 핀 · [계약 시작하기] · 템플릿명 변경 · 처음엔 모든 행 닫힘 / 2026-11-12: 기울어진 핀 · 역할 칸 200 · "외 N개" 역할 라벨)
+  · 01_01_템플릿목록 (54279:31909) — "역할" 옆 안내 아이콘에 마우스를 올리면 툴팁
+  · 01_02_템플릿 빈화면 (54169:29120) — 템플릿이 없을 때 · index.html?empty 로 열면 바로 보임
+  · 01_04_템플릿 유형선택 (54268:34098) — "템플릿 만들기"를 누르면 모달
+  · 문서 업로드(pages/upload.html)로 이동: 모달에서 유형을 고르고 [다음] / 행의 [계약 시작하기] — 대량 전송 ?type=bulk · 일반 계약 ?type=normal
+  · 스타일 css/style.css · 동작 js/main.js · 아이콘 images/
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- 상단 헤더 (Header_home) -->
+<header class="hd">
+  <div class="hd__logo"><img src="images/logo-sign-header@2x.png" width="104" height="32" alt="예스폼싸인"></div>
+  <button class="btn btn--line" type="button">계약 현황</button>
+</header>
+
+<div class="body">
+
+  <!-- 왼쪽 메뉴 (side_navigation) -->
+  <nav class="snb" aria-label="계약 메뉴">
+    <div class="snb__user">
+      <div class="snb__profile">
+        <p class="snb__name"><b>예스폼</b>님<span class="tag tag--blue">무료회원</span></p>
+        <p class="snb__meta"><span>잔여 건수 29건</span><i></i><span>D-484</span></p>
+      </div>
+      <button class="btn btn--primary btn--block" type="button">계약 시작하기</button>
+    </div>
+    <div class="snb__menu">
+      <div class="snb__group">
+        <p class="snb__label">내 계약 현황</p>
+        <a class="snb__item" href="#">모든 계약</a>
+        <a class="snb__item" href="#">내 서명 필요</a>
+        <a class="snb__item" href="#">진행 중인 계약</a>
+        <a class="snb__item" href="#">작성 중인 계약</a>
+        <a class="snb__item" href="#">완료된 계약</a>
+        <a class="snb__item" href="#">취소된 계약</a>
+      </div>
+      <div class="snb__group">
+        <p class="snb__label">계약 준비</p>
+        <a class="snb__item is-on" href="#" aria-current="page">템플릿 관리</a>
+        <a class="snb__item" href="#">서명 관리</a>
+        <a class="snb__item" href="#">문서/계약 자료실</a>
+        <a class="snb__item" href="#">주소록 관리</a>
+      </div>
+      <div class="snb__group">
+        <p class="snb__label">회원정보 관리</p>
+        <a class="snb__item" href="#">계정 관리</a>
+        <a class="snb__item" href="#">결제 관리</a>
+      </div>
+    </div>
+    <p class="snb__foot"><a href="#">고객센터</a><i></i><a href="#">로그아웃</a></p>
+  </nav>
+
+  <!-- 본문 (Content-Area) -->
+  <main class="content">
+    <div class="content__inner">
+      <div class="page-hd">
+        <h1 class="page-hd__title">템플릿 관리</h1>
+        <p class="page-hd__desc">자주 쓰는 계약서를 템플릿으로 저장하고, 참여자 정보만 입력해 간편하게 계약하세요.</p>
+      </div>
+
+      <div class="list">
+      <div class="tools">
+        <button class="btn btn--dark" type="button" data-modal-open="tpl-type"><img src="images/ic-plus-16.svg" width="16" height="16" alt="">템플릿 만들기</button>
+        <label class="search">
+          <input type="search" placeholder="템플릿명 검색" aria-label="템플릿명 검색" data-search>
+          <img src="images/ic-search-24.svg" width="24" height="24" alt="">
+        </label>
+      </div>
+
+      <!-- 템플릿 표 (Table-Card) -->
+      <div class="table">
+        <div class="table__hd" role="presentation">
+          <span class="table__pin"><img src="images/ic-pin-26.svg" width="26" height="26" alt=""></span>
+          <span class="col-name">템플릿명</span>
+          <span class="col-type">유형</span>
+          <span class="col-role">
+            역할
+            <span class="tip">
+              <button class="tip__btn" type="button" aria-label="역할 안내" aria-describedby="tip-role"><img src="images/ic-info-14.svg" width="14" height="14" alt=""></button>
+              <span class="tip__box" id="tip-role" role="tooltip">
+                <span class="tip__inner">
+                <span class="tip__head">
+                  <strong class="tip__title">역할이 무엇인가요?</strong>
+                  <span class="tip__desc">역할은 계약을 보낼 때 서명 참여자 정보를 넣을 자리입니다.</span>
+                </span>
+                <span class="tip__list">
+                  <span class="tip__row"><span class="role"><img src="images/ic-user-on-12.svg" width="12" height="12" alt="">역할</span>서명 참여자 정보를 미리 입력한 역할입니다.</span>
+                  <span class="tip__row"><span class="role role--empty"><img src="images/ic-user-off-12.svg" width="12" height="12" alt="">역할</span>계약을 보낼 때 정보를 입력하는 역할입니다.</span>
+                </span>
+                </span>
+              </span>
+            </span>
+          </span>
+          <span class="col-date">최종 수정 일시</span>
+        </div>
+
+        <!-- 행 — 역할 라벨: role(서명 참여자 정보를 미리 입력한 역할 — data-name · data-contact 에 이름 · 연락처, data-auth 에 켠 추가 인증, data-self="true" 면 서명 요청자 본인) · role role--empty(보낼 때 이름 · 연락처를 입력, 점선)
+             같은 종류(미리 입력 · 보낼 때 입력) 역할이 2개 이상이면 js/main.js 가 "첫 역할 외 N개" 라벨 하나로 묶어 보임 (나머지는 숨김 · 마우스를 올리면 전체 역할 이름)
+             유형: type--bulk(대량 전송) · type--normal(일반 계약) -->
+        <ul class="table__rows" data-rows>
+          <li class="row">
+            <div class="row__main">
+              <button class="pin is-on" type="button" aria-pressed="true" aria-label="상단 고정"></button>
+              <div class="row__name"><p class="row__title">부동산 매매 계약서(특약사항 포함)</p><p class="row__file">매매계약서20261110.hwp</p></div>
+              <div class="col-type"><span class="type type--bulk">대량 전송</span></div>
+              <div class="col-role"><span class="role" data-name="홍길동" data-contact="010-1234-1234" data-auth="접근 암호 인증,휴대폰 번호 인증" data-self="true" title="홍길동 · 010-1234-1234"><img src="images/ic-user-on-12.svg" width="12" height="12" alt="">계약자</span><span class="role role--empty"><img src="images/ic-user-off-12.svg" width="12" height="12" alt="">매수인</span></div>
+              <p class="row__date">2025-11-26 11:27:34</p>
+              <button class="row__toggle" type="button" aria-expanded="false" aria-label="메뉴 펼치기"></button>
+            </div>
+          </li>
+          <li class="row">
+            <div class="row__main">
+              <button class="pin" type="button" aria-pressed="false" aria-label="상단 고정"></button>
+              <div class="row__name"><p class="row__title">계약서명 정규직 근로계약서</p><p class="row__file">근로계약서.pdf</p></div>
+              <div class="col-type"><span class="type type--normal">일반 계약</span></div>
+              <div class="col-role"><span class="role" data-name="김민준" data-contact="010-2345-6789" title="김민준 · 010-2345-6789"><img src="images/ic-user-on-12.svg" width="12" height="12" alt="">근로자</span></div>
+              <p class="row__date">2025-11-26 11:27:34</p>
+              <button class="row__toggle" type="button" aria-expanded="false" aria-label="메뉴 펼치기"></button>
+            </div>
+          </li>
+          <li class="row">
+            <div class="row__main">
+              <button class="pin" type="button" aria-pressed="false" aria-label="상단 고정"></button>
+              <div class="row__name"><p class="row__title">아르바이트 근로계약서</p><p class="row__file">근로계약서.pdf</p></div>
+              <div class="col-type"><span class="type type--normal">일반 계약</span></div>
+              <div class="col-role"><span class="role" data-name="이서연" data-contact="010-3456-7890" title="이서연 · 010-3456-7890"><img src="images/ic-user-on-12.svg" width="12" height="12" alt="">프리랜서</span></div>
+              <p class="row__date">2025-11-26 11:27:34</p>
+              <button class="row__toggle" type="button" aria-expanded="false" aria-label="메뉴 펼치기"></button>
+            </div>
+          </li>
+          <li class="row">
+            <div class="row__main">
+              <button class="pin is-on" type="button" aria-pressed="true" aria-label="상단 고정"></button>
+              <div class="row__name"><p class="row__title">계약서명 정규직 근로계약서</p><p class="row__file">근로계약서.pdf</p></div>
+              <div class="col-type"><span class="type type--bulk">대량 전송</span></div>
+              <div class="col-role"><span class="role" data-name="박지훈" data-contact="010-4567-8901" title="박지훈 · 010-4567-8901"><img src="images/ic-user-on-12.svg" width="12" height="12" alt="">매도인</span><span class="role role--empty"><img src="images/ic-user-off-12.svg" width="12" height="12" alt="">매수인</span></div>
+              <p class="row__date">2025-11-26 11:27:34</p>
+              <button class="row__toggle" type="button" aria-expanded="false" aria-label="메뉴 펼치기"></button>
+            </div>
+          </li>
+          <li class="row">
+            <div class="row__main">
+              <button class="pin is-on" type="button" aria-pressed="true" aria-label="상단 고정"></button>
+              <div class="row__name"><p class="row__title">아르바이트 근로계약서</p><p class="row__file">알바계약서.hwp</p></div>
+              <div class="col-type"><span class="type type--bulk">대량 전송</span></div>
+              <div class="col-role"><span class="role" data-name="최수아" data-contact="010-5678-9012" title="최수아 · 010-5678-9012"><img src="images/ic-user-on-12.svg" width="12" height="12" alt="">매도인</span><span class="role role--empty"><img src="images/ic-user-off-12.svg" width="12" height="12" alt="">매수인</span></div>
+              <p class="row__date">2025-11-26 11:27:34</p>
+              <button class="row__toggle" type="button" aria-expanded="false" aria-label="메뉴 펼치기"></button>
+            </div>
+          </li>
+          <li class="row">
+            <div class="row__main">
+              <button class="pin" type="button" aria-pressed="false" aria-label="상단 고정"></button>
+              <div class="row__name"><p class="row__title">계약서명 정규직 근로계약서</p><p class="row__file">근로계약서.pdf</p></div>
+              <div class="col-type"><span class="type type--normal">일반 계약</span></div>
+              <div class="col-role"><span class="role" data-name="정우진" data-contact="010-6789-0123" title="정우진 · 010-6789-0123"><img src="images/ic-user-on-12.svg" width="12" height="12" alt="">매도인</span><span class="role role--empty"><img src="images/ic-user-off-12.svg" width="12" height="12" alt="">매수인</span></div>
+              <p class="row__date">2025-11-26 11:27:34</p>
+              <button class="row__toggle" type="button" aria-expanded="false" aria-label="메뉴 펼치기"></button>
+            </div>
+          </li>
+          <li class="row">
+            <div class="row__main">
+              <button class="pin" type="button" aria-pressed="false" aria-label="상단 고정"></button>
+              <div class="row__name"><p class="row__title">계약서명 정규직 근로계약서</p><p class="row__file">근로계약서.pdf</p></div>
+              <div class="col-type"><span class="type type--bulk">대량 전송</span></div>
+              <div class="col-role"><span class="role" data-name="강하은" data-contact="010-7890-1234" title="강하은 · 010-7890-1234"><img src="images/ic-user-on-12.svg" width="12" height="12" alt="">매도인</span><span class="role role--empty"><img src="images/ic-user-off-12.svg" width="12" height="12" alt="">매수인</span></div>
+              <p class="row__date">2025-11-26 11:27:34</p>
+              <button class="row__toggle" type="button" aria-expanded="false" aria-label="메뉴 펼치기"></button>
+            </div>
+          </li>
+          <li class="row">
+            <div class="row__main">
+              <button class="pin" type="button" aria-pressed="false" aria-label="상단 고정"></button>
+              <div class="row__name"><p class="row__title">계약서명 정규직 근로계약서</p><p class="row__file">근로계약서.pdf</p></div>
+              <div class="col-type"><span class="type type--normal">일반 계약</span></div>
+              <div class="col-role"><span class="role" data-name="윤도윤" data-contact="010-8901-2345" title="윤도윤 · 010-8901-2345"><img src="images/ic-user-on-12.svg" width="12" height="12" alt="">매도인</span><span class="role" data-name="한지민" data-contact="010-9012-3456" title="한지민 · 010-9012-3456"><img src="images/ic-user-on-12.svg" width="12" height="12" alt="">공동 매도인</span><span class="role" data-name="오세훈" data-contact="010-0123-4567" title="오세훈 · 010-0123-4567"><img src="images/ic-user-on-12.svg" width="12" height="12" alt="">중개사</span><span class="role" data-name="서지우" data-contact="010-1357-2468" title="서지우 · 010-1357-2468"><img src="images/ic-user-on-12.svg" width="12" height="12" alt="">보증인</span><span class="role" data-name="임하준" data-contact="010-2468-1357" title="임하준 · 010-2468-1357"><img src="images/ic-user-on-12.svg" width="12" height="12" alt="">대리인</span><span class="role" data-name="장서윤" data-contact="010-3579-2468" title="장서윤 · 010-3579-2468"><img src="images/ic-user-on-12.svg" width="12" height="12" alt="">입회인</span><span class="role role--empty"><img src="images/ic-user-off-12.svg" width="12" height="12" alt="">매수인</span><span class="role role--empty"><img src="images/ic-user-off-12.svg" width="12" height="12" alt="">공동 매수인</span></div>
+              <p class="row__date">2025-11-26 11:27:34</p>
+              <button class="row__toggle" type="button" aria-expanded="false" aria-label="메뉴 펼치기"></button>
+            </div>
+          </li>
+        </ul>
+        <p class="table__empty" data-empty hidden>검색 결과가 없습니다.</p>
+      </div>
+
+      <!-- 템플릿이 없을 때 (Figma 01_02_템플릿 빈화면 54169:29120)
+           표 대신 이 상자가 보임 — 표에 행이 하나도 없거나 주소 뒤에 ?empty 를 붙여 열면 (index.html?empty) -->
+      <section class="tpl-empty" data-tpl-empty hidden aria-labelledby="tpl-empty-title">
+        <div class="tpl-empty__head">
+          <h2 class="tpl-empty__title" id="tpl-empty-title">아직 저장된 템플릿이 없습니다</h2>
+          <p class="tpl-empty__desc">자주 보내는 계약서를 템플릿으로 저장해 두면,<br>다음부터는 참여자 정보만 입력해 바로 서명을 요청할 수 있습니다.</p>
+        </div>
+        <ol class="tpl-empty__steps" aria-label="템플릿 만드는 순서">
+          <li class="tpl-empty__step">
+            <img class="tpl-empty__thumb" src="images/empty-upload@2x.png" width="260" height="150" alt="">
+            <div class="tpl-empty__text">
+              <p class="tpl-empty__name">문서 업로드</p>
+              <p class="tpl-empty__info">자주 쓰는 계약서를 업로드하세요.<br>준비된 문서가 없다면 예스폼싸인 샘플 문서로 간편하게 시작할 수 있습니다.</p>
+            </div>
+          </li>
+          <li class="tpl-empty__step">
+            <img class="tpl-empty__thumb" src="images/empty-participants@2x.png" width="260" height="150" alt="">
+            <div class="tpl-empty__text">
+              <p class="tpl-empty__name">참여자 설정</p>
+              <p class="tpl-empty__info">서명할 역할을 설정해 주세요.<br>계약할 때 바로 입력만 하거나, 매번 같은 사람이면 이름·연락처를 미리 입력하세요.</p>
+            </div>
+          </li>
+          <li class="tpl-empty__step">
+            <img class="tpl-empty__thumb" src="images/empty-signing@2x.png" width="260" height="150" alt="">
+            <div class="tpl-empty__text">
+              <p class="tpl-empty__name">서명 조건 설정</p>
+              <p class="tpl-empty__info">역할별로 서명·입력 칸을 배치해 주세요.<br>자동으로 서명 참여자의 정보도 추가할 수 있습니다.</p>
+            </div>
+          </li>
+        </ol>
+      </section>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- 행을 펼쳤을 때 나오는 메뉴 — js/main.js 가 펼친 행 아래에 붙임 -->
+<template id="row-actions">
+  <div class="row__actions">
+    <div class="actions">
+      <button class="act act--send" type="button">계약 시작하기</button>
+      <div class="actions__right">
+        <button class="act" type="button"><img src="images/ic-pencil-16.svg" width="16" height="16" alt="">수정하기</button>
+        <i class="actions__bar"></i>
+        <button class="act" type="button"><img src="images/ic-rename-16.svg" width="16" height="16" alt="">템플릿명 변경</button>
+        <i class="actions__bar"></i>
+        <button class="act" type="button"><img src="images/ic-trash-16.svg" width="16" height="16" alt="">삭제</button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<!-- 서비스 개선 제안하기 (의견보내기) -->
+<button class="feedback" type="button"><img src="images/ic-feedback-24.svg" width="24" height="24" alt="">서비스 개선 제안하기</button>
+
+<!-- 템플릿 유형 선택 모달 — "템플릿 만들기"를 누르면 열림 -->
+<div class="dim" id="tpl-type" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="tpl-type-title" aria-describedby="tpl-type-desc">
+    <div class="modal__top">
+      <h2 class="modal__title" id="tpl-type-title">어떤 템플릿을 만들까요?</h2>
+      <p class="modal__desc" id="tpl-type-desc">용도에 맞는 템플릿 유형을 선택해 주세요.</p>
+    </div>
+    <div class="modal__body" role="radiogroup" aria-labelledby="tpl-type-title">
+      <label class="opt">
+        <input type="radio" name="tpl-type" value="normal" checked>
+        <span class="opt__check" aria-hidden="true"></span>
+        <span class="opt__text">
+          <span class="opt__title">일반 계약</span>
+          <span class="opt__desc">서명 참여자가 여러 명인 계약에 사용합니다.</span>
+          <span class="opt__list">역할 최대 10개<br>서명 요청자 본인 역할 사용 가능<br>이름·연락처 미리 입력 가능</span>
+        </span>
+      </label>
+      <label class="opt">
+        <input type="radio" name="tpl-type" value="bulk">
+        <span class="opt__check" aria-hidden="true"></span>
+        <span class="opt__text">
+          <span class="opt__title">대량 전송</span>
+          <span class="opt__desc">같은 계약서를 여러 명에게 보낼 때 사용합니다.</span>
+          <span class="opt__list">서명 참여자 역할 1개<br>이름·연락처는 보낼 때 입력<br>대량 전송·일반 계약 모두 사용 가능</span>
+        </span>
+      </label>
+    </div>
+    <div class="modal__btns">
+      <button class="modal__btn" type="button" data-modal-close>취소</button>
+      <button class="modal__btn modal__btn--primary" type="button" data-modal-next>다음</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script src="js/proto-bar.js"></script>
+</body>
+</html>

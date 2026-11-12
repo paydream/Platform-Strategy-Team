@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>예스폼싸인 · 문서 업로드</title>
+<!--
+  예스폼싸인 2차 고도화 — 대량 전송 1단계 문서 업로드 (2026-11-10)
+  Figma: 싸인_디자인시스템 › 02_02_문서 업로드 (54192:35435 · 1280 × 1434)
+  · 템플릿 관리(index.html)에서 이 화면으로 오는 경우
+    1) "템플릿 만들기" 모달에서 대량 전송을 고르고 다음
+    2) 템플릿 목록의 "계약하기" — 그 템플릿이 처음부터 선택된 상태로 열림 (주소 뒤 &tpl=템플릿명)
+  · 템플릿 "선택하기"를 누르면 위 업로드 칸에 선택한 문서로 들어감 (Figma 54169:29231) — 템플릿은 한 개만
+  · "샘플 문서" 탭 (Figma 54192:37529) — 카테고리 · 문서명 검색 · 여러 개 선택 (아래 쪽 번호는 디자인대로 / 48 만 보임)
+  · 문서를 하나라도 고르면 아래 [다음]이 켜지고, 누르면 2단계 참여자 설정으로 이동
+    주소 뒤 ?type=bulk(대량 전송) → participants.html · ?type=normal(일반 계약) → participants-normal.html
+  · 아래 [나가기] → 나가기 확인 모달 (js/step.js)
+  · 스타일 css/style.css (아래쪽 "문서 업로드" 부분) · 동작 js/upload.js
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="page-step">
+
+<!-- 상단 헤더 (Header_mycontract) — 로고 · 단계 · 오른쪽 빈칸 104 -->
+<header class="hd hd--step">
+  <div class="hd__logo hd__logo--step"><img src="../images/logo-sign-header@2x.png" width="104" height="32" alt="예스폼싸인"></div>
+  <ol class="steps" aria-label="계약 단계">
+    <li class="steps__item is-on" aria-current="step"><span class="steps__num">1</span>문서 업로드</li>
+    <li class="steps__item"><span class="steps__num">2</span>참여자 설정</li>
+    <li class="steps__item"><span class="steps__num">3</span>서명 조건 설정</li>
+    <li class="steps__item"><span class="steps__num">4</span>검토</li>
+  </ol>
+  <span class="hd__empty" aria-hidden="true"></span>
+</header>
+
+<main class="up">
+
+  <!-- 문서 업로드 -->
+  <section class="card card--upload" aria-labelledby="up-title" data-drop>
+    <h1 class="up__title" id="up-title">계약에 사용할 문서를<br>업로드하세요</h1>
+    <div class="drop">
+      <!-- 아무것도 고르지 않았을 때 -->
+      <div class="drop__box" data-drop-box>
+        <div class="drop__guide">
+          <img src="../images/ic-upload-30.svg" width="30" height="30" alt="">
+          <p>파일을 여기로 끌어 놓거나<br>PC 업로드를 클릭하여 선택해 주세요.</p>
+        </div>
+      </div>
+      <!-- 문서를 고르면 (Figma 54169:29231) — 템플릿 · 내 PC 파일이 여기 쌓임 · X 로 빼기 -->
+      <div class="picked" data-picked hidden>
+        <p class="picked__hd"><span>선택한 문서</span><span class="picked__count"><b data-picked-count>0</b><i>/</i><i>10</i></span></p>
+        <ul class="picked__list" data-picked-list></ul>
+      </div>
+      <label class="btn btn--primary btn--upload">
+        내 PC 업로드
+        <input type="file" multiple accept=".hwp,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.pdf,.jpg,.jpeg,.png" data-file>
+      </label>
+    </div>
+    <ul class="up-info">
+      <li><span class="up-info__key">업로드 가능 형식</span>hwp, doc, docx, xls, xlsx, ppt, pptx, pdf, jpg, jpeg, png 등</li>
+      <li><span class="up-info__key">업로드 가능 용량</span>최대 5MB</li>
+      <li><span class="up-info__key">문서 개수</span>가져온 템플릿 포함 최대 10개</li>
+      <li><span class="up-info__key">업로드 불가 문서</span>암호화된 문서, hwp 3.0 이하 버전 문서</li>
+    </ul>
+  </section>
+
+  <!-- 문서 가져오기 -->
+  <section class="card card--import" aria-labelledby="imp-title">
+    <h2 class="imp__title" id="imp-title">문서 가져오기</h2>
+    <div class="imp">
+      <div class="imp-tabs" role="tablist">
+        <button class="imp-tabs__tab is-on" type="button" role="tab" aria-selected="true" aria-controls="imp-mine" data-tab="mine">내 템플릿<span class="imp-tabs__count">5</span></button>
+        <button class="imp-tabs__tab" type="button" role="tab" aria-selected="false" aria-controls="imp-sample" data-tab="sample">샘플 문서</button>
+      </div>
+      <!-- 내 템플릿 탭 -->
+      <div class="imp__list" id="imp-mine" role="tabpanel" data-panel="mine" data-pages="1">
+        <label class="search search--full">
+          <input type="search" placeholder="문서명 검색" aria-label="문서명 검색" data-search>
+          <img src="../images/ic-search-24.svg" width="24" height="24" alt="">
+        </label>
+        <div class="imp-table">
+          <div class="imp-table__hd" role="presentation">
+            <span class="imp-col-name">템플릿명</span>
+            <span class="imp-col-role">역할</span>
+            <span class="imp-col-btn">미리보기</span>
+            <span class="imp-col-btn">업로드</span>
+          </div>
+          <ul data-rows>
+            <li class="imp-row" data-size="3.98 MB">
+              <div class="imp-row__name"><span class="imp-row__pin"></span><p class="imp-row__title">아르바이트 근로계약서</p></div>
+              <p class="imp-col-role">회사 외 2개 역할</p>
+              <div class="imp-col-btn"><button class="imp-row__preview" type="button" aria-label="미리보기"></button></div>
+              <div class="imp-col-btn"><button class="imp-row__select" type="button" aria-pressed="false">선택하기</button></div>
+            </li>
+            <li class="imp-row" data-size="2.41 MB">
+              <div class="imp-row__name"><span class="imp-row__pin"></span><p class="imp-row__title">아르바이트 근로계약서</p></div>
+              <p class="imp-col-role">회사 외 2개 역할</p>
+              <div class="imp-col-btn"><button class="imp-row__preview" type="button" aria-label="미리보기"></button></div>
+              <div class="imp-col-btn"><button class="imp-row__select" type="button" aria-pressed="false">선택하기</button></div>
+            </li>
+            <li class="imp-row" data-size="1.87 MB">
+              <div class="imp-row__name"><span class="imp-row__pin"></span><p class="imp-row__title">부동산 아파트 매매 계약서(공인중개사항 포함) 2줄이 넘어가면 이렇게 말줄임으로 표시합니다</p></div>
+              <p class="imp-col-role">회사 외 2개 역할</p>
+              <div class="imp-col-btn"><button class="imp-row__preview" type="button" aria-label="미리보기"></button></div>
+              <div class="imp-col-btn"><button class="imp-row__select" type="button" aria-pressed="false">선택하기</button></div>
+            </li>
+            <li class="imp-row" data-size="3.12 MB">
+              <div class="imp-row__name"><span class="imp-row__pin"></span><p class="imp-row__title">아르바이트 근로계약서</p></div>
+              <p class="imp-col-role">회사 외 2개 역할</p>
+              <div class="imp-col-btn"><button class="imp-row__preview" type="button" aria-label="미리보기"></button></div>
+              <div class="imp-col-btn"><button class="imp-row__select" type="button" aria-pressed="false">선택하기</button></div>
+            </li>
+            <li class="imp-row" data-size="2.76 MB">
+              <div class="imp-row__name"><span class="imp-row__pin"></span><p class="imp-row__title">아르바이트 근로계약서</p></div>
+              <p class="imp-col-role">회사 외 2개 역할</p>
+              <div class="imp-col-btn"><button class="imp-row__preview" type="button" aria-label="미리보기"></button></div>
+              <div class="imp-col-btn"><button class="imp-row__select" type="button" aria-pressed="false">선택하기</button></div>
+            </li>
+          </ul>
+          <p class="table__empty" data-empty hidden>검색 결과가 없습니다.</p>
+        </div>
+        <p class="imp__note">내 템플릿은 한 개만 선택할 수 있습니다.</p>
+      </div>
+      <!-- 샘플 문서 탭 (Figma 54192:37529) — 카테고리 · 검색 · 여러 개 선택 -->
+      <div class="imp__list" id="imp-sample" role="tabpanel" data-panel="sample" data-pages="48" hidden>
+        <div class="imp__filter">
+          <select class="imp__cat" aria-label="카테고리" data-cat>
+            <option value="">카테고리</option>
+            <option>기타 문서</option>
+          </select>
+          <label class="search search--full">
+            <input type="search" placeholder="문서명 검색" aria-label="샘플 문서명 검색" data-search>
+            <img src="../images/ic-search-24.svg" width="24" height="24" alt="">
+          </label>
+        </div>
+        <div class="imp-table">
+          <div class="imp-table__hd" role="presentation">
+            <span class="imp-col-name">문서명</span>
+            <span class="imp-col-btn">미리보기</span>
+            <span class="imp-col-btn">업로드</span>
+          </div>
+          <ul data-rows>
+            <li class="imp-row imp-row--sample" data-size="1.12 MB">
+              <div class="imp-row__doc"><p class="imp-row__title">세대 인테리어 공사 주민 동의서</p><p class="imp-row__cat">기타 문서</p></div>
+              <div class="imp-col-btn"><button class="imp-row__preview" type="button" aria-label="미리보기"></button></div>
+              <div class="imp-col-btn"><button class="imp-row__select" type="button" aria-pressed="false">선택하기</button></div>
+            </li>
+            <li class="imp-row imp-row--sample" data-size="2.05 MB">
+              <div class="imp-row__doc"><p class="imp-row__title">상품공급 거래계약서(매장 대리점)</p><p class="imp-row__cat">기타 문서</p></div>
+              <div class="imp-col-btn"><button class="imp-row__preview" type="button" aria-label="미리보기"></button></div>
+              <div class="imp-col-btn"><button class="imp-row__select" type="button" aria-pressed="false">선택하기</button></div>
+            </li>
+            <li class="imp-row imp-row--sample" data-size="1.48 MB">
+              <div class="imp-row__doc"><p class="imp-row__title">양도담보 계약서(대여금채권을 위한)</p><p class="imp-row__cat">기타 문서</p></div>
+              <div class="imp-col-btn"><button class="imp-row__preview" type="button" aria-label="미리보기"></button></div>
+              <div class="imp-col-btn"><button class="imp-row__select" type="button" aria-pressed="false">선택하기</button></div>
+            </li>
+            <li class="imp-row imp-row--sample" data-size="2.31 MB">
+              <div class="imp-row__doc"><p class="imp-row__title">영문 수출계약서(제3자 물품공급)</p><p class="imp-row__cat">기타 문서</p></div>
+              <div class="imp-col-btn"><button class="imp-row__preview" type="button" aria-label="미리보기"></button></div>
+              <div class="imp-col-btn"><button class="imp-row__select" type="button" aria-pressed="false">선택하기</button></div>
+            </li>
+            <li class="imp-row imp-row--sample" data-size="1.12 MB">
+              <div class="imp-row__doc"><p class="imp-row__title">세대 인테리어 공사 주민 동의서</p><p class="imp-row__cat">기타 문서</p></div>
+              <div class="imp-col-btn"><button class="imp-row__preview" type="button" aria-label="미리보기"></button></div>
+              <div class="imp-col-btn"><button class="imp-row__select" type="button" aria-pressed="false">선택하기</button></div>
+            </li>
+          </ul>
+          <p class="table__empty" data-empty hidden>검색 결과가 없습니다.</p>
+        </div>
+        <p class="imp__note">샘플 문서는 여러 개 선택할 수 있습니다.</p>
+      </div>
+    </div>
+    <nav class="pager" aria-label="페이지">
+      <button class="pager__arrow" type="button" aria-label="이전 페이지" disabled><img src="../images/ic-chevron-left-16.svg" width="16" height="16" alt=""></button>
+      <span class="pager__now">1</span>
+      <span class="pager__total">/<span data-pager-total>1</span></span>
+      <button class="pager__arrow" type="button" aria-label="다음 페이지" disabled><img src="../images/ic-chevron-right-16.svg" width="16" height="16" alt=""></button>
+    </nav>
+  </section>
+</main>
+
+<!-- 아래 버튼 (wfooter) — 화면 아래에 고정 -->
+<footer class="wfooter">
+  <button class="btn btn--out" type="button" data-exit>나가기</button>
+  <button class="btn btn--primary btn--next" type="button" disabled data-next>다음</button>
+</footer>
+
+<!-- 나가기 확인 모달 (Figma 54347:35246) -->
+<div class="dim" id="exit-modal" hidden>
+  <div class="modal modal--sm" role="alertdialog" aria-modal="true" aria-labelledby="exit-title" aria-describedby="exit-desc">
+    <div class="modal__top">
+      <h2 class="modal__title" id="exit-title">나가기</h2>
+      <p class="modal__desc" id="exit-desc">현재 작성하신 계약이 저장되지 않습니다.<br>정말 나가시겠습니까?</p>
+    </div>
+    <div class="modal__btns">
+      <button class="modal__btn" type="button" data-exit-cancel>취소</button>
+      <a class="modal__btn modal__btn--primary" href="../index.html">나가기</a>
+    </div>
+  </div>
+</div>
+
+<script src="../js/step.js"></script>
+<script src="../js/upload.js"></script>
+<script src="../js/proto-bar.js"></script>
+</body>
+</html>
