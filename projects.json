@@ -518,6 +518,22 @@
               "href": "archive/20261112-092148-yesform-brief-header-bg-v28/index.html"
             }
           ]
+        },
+        {
+          "id": "20261112-092556-yesform-brief-header-shape-v29",
+          "label": "v29 · 헤더 쉐이프 배경 (참고 이미지 스타일)",
+          "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
+          "desc": "참고 이미지 2종 스타일로 헤더 배경 재작업: A 플루티드 글라스(세로 결 + 블루 번짐, 라이트) / B 실크 그레인(흰 곡선 광택 + 블루 번짐 + 노이즈, 라이트) / C·D 같은 스타일의 블루 버전. 왼쪽 아래 스위처로 비교, v25 원본 포함. 기본값 A.",
+          "created": "2026.11.12",
+          "folder": "archive/20261112-092556-yesform-brief-header-shape-v29",
+          "preview": "archive/20261112-092556-yesform-brief-header-shape-v29/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "헤더 쉐이프 배경 시안",
+              "href": "archive/20261112-092556-yesform-brief-header-shape-v29/index.html"
+            }
+          ]
         }
       ]
     },
