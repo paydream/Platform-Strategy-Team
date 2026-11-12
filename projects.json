@@ -486,6 +486,22 @@
               "href": "archive/20261112-091442-yesform-brief-header-bg-v26/index.html"
             }
           ]
+        },
+        {
+          "id": "20261112-091807-yesform-brief-header-color-v27",
+          "label": "v27 · 헤더 컬러 배경 시안 5종",
+          "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
+          "desc": "헤더 색을 기존 파랑에서 벗어나 5종 비교: A 라이트 블루(서식·달력 라인) / B 쿨 그레이(도트) / C 민트 블루(동심원) / D 네이비(블루 글로우) / E 블루 퍼플 그라데이션. 밝은 배경(A~C)은 글자 진한 색, 타일 흰색으로 전환. 왼쪽 아래 스위처로 비교, 현재 파랑도 포함. 기본값 A.",
+          "created": "2026.11.12",
+          "folder": "archive/20261112-091807-yesform-brief-header-color-v27",
+          "preview": "archive/20261112-091807-yesform-brief-header-color-v27/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "헤더 컬러 시안",
+              "href": "archive/20261112-091807-yesform-brief-header-color-v27/index.html"
+            }
+          ]
         }
       ]
     },
