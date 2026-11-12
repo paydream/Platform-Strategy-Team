@@ -566,6 +566,22 @@
               "href": "archive/20261112-101828-yesform-brief-header-clean-v31/index.html"
             }
           ]
+        },
+        {
+          "id": "20261112-102452-yesform-brief-header-wave-v32",
+          "label": "v32 · 헤더 실크 웨이브 추가",
+          "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
+          "desc": "실크 웨이브 2종 추가(코드로 직접 그림, 노이즈 없음). 텍스트 강조를 위해 제목 영역은 짙고 차분한 색으로 비우고, 곡선 광택 라인이 제목과 타일 사이를 지나 오른쪽을 밝게 채움. 타일은 어두운 반투명 유리. G 인디고 / H 블루. 기본값 G.",
+          "created": "2026.11.12",
+          "folder": "archive/20261112-102452-yesform-brief-header-wave-v32",
+          "preview": "archive/20261112-102452-yesform-brief-header-wave-v32/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "헤더 쉐이프 배경 시안",
+              "href": "archive/20261112-102452-yesform-brief-header-wave-v32/index.html"
+            }
+          ]
         }
       ]
     },
