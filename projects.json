@@ -534,6 +534,22 @@
               "href": "archive/20261112-092556-yesform-brief-header-shape-v29/index.html"
             }
           ]
+        },
+        {
+          "id": "20261112-101519-yesform-brief-header-film-v30",
+          "label": "v30 · 헤더 배경 필름 그레인 추가",
+          "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
+          "desc": "v29 쉐이프 배경 4종에 필름 그레인 스타일 2종 추가(코드로 직접 그림): E 필름 그레인(네이비→블루 번짐 + 오른쪽 위 밝은 원 + 거친 입자·먼지, 타일 흰색) / F 필름 그레인 · 딥(밝은 원을 줄여 파랑 위주, 유리 타일). 기본값 E. 왼쪽 아래 스위처로 A~F, v25 원본 비교.",
+          "created": "2026.11.12",
+          "folder": "archive/20261112-101519-yesform-brief-header-film-v30",
+          "preview": "archive/20261112-101519-yesform-brief-header-film-v30/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "헤더 쉐이프 배경 시안",
+              "href": "archive/20261112-101519-yesform-brief-header-film-v30/index.html"
+            }
+          ]
         }
       ]
     },
