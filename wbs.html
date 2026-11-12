@@ -167,7 +167,6 @@
   <div class="hero">
     <div>
       <h1>팀 WBS</h1>
-      <p>디자인 <b>심현지</b> · 기획 <b>박채은</b>의 개인 일정이에요. 지금 하는 일과 비는 날을 보고 새 일정을 잡을 때 써요.</p>
     </div>
     <div class="src" id="src"><span><span class="dot warn"></span>불러오는 중…</span></div>
   </div>
@@ -341,8 +340,7 @@
         return `<td class="c ${n?'':'l0'}" style="${bg}" title="${esc(tip)}" data-w="${iso(w)}">${n||'–'}<small>${n?(fr?`빈 날 ${fr}일`:'꽉 참'):'여유'}</small></td>`;
       }).join('')}</tr>`;
     }).join('');
-    return `<div class="heat-wrap"><table class="heat">${head}${rows}</table></div>
-      <div class="legend"><span>칸 숫자 = 그 주(월~금)에 걸친 업무 수, 아래는 업무가 하나도 없는 평일 수예요. 칸을 누르면 위에서 그 주를 확인해요.</span></div>`;
+    return `<div class="heat-wrap"><table class="heat">${head}${rows}</table></div>`;
   }
 
   function ganttBlock(){
@@ -395,7 +393,7 @@
       <div class="people">${PEOPLE.map(personCard).join('')}</div>
 
       <section class="blk">
-        <h2>새 일정 잡기 전에 확인<small>기간을 고르면 두 사람의 겹치는 업무와 빈 평일을 보여줘요</small></h2>
+        <h2>새 일정 잡기 전에 확인</h2>
         <div class="card">
           <div class="plan-ctrl">
             <label>기간</label><input type="date" id="pa" value="${iso(ui.a)}"><span>~</span><input type="date" id="pb" value="${iso(ui.b)}">
@@ -410,7 +408,7 @@
       </section>
 
       <section class="blk">
-        <h2>전체 일정<small>현황판 원본 시트 기준 · 막대가 연하면 예정, 빗금은 기간 지남(완료 표시 없음)</small></h2>
+        <h2>전체 일정</h2>
         <div class="g-ctrl">
           <div class="seg" role="tablist">
             <button role="tab" data-who="all" aria-selected="${ui.who==='all'}">전체</button>
@@ -419,18 +417,6 @@
           <label class="chk"><input type="checkbox" id="hd" ${ui.hideDone?'checked':''}> 완료 숨기기</label>
         </div>
         <div class="card gantt" id="gantt">${ganttBlock()}</div>
-      </section>
-
-      <section class="blk">
-        <h2>이렇게 정리했어요</h2>
-        <div class="card rules"><ul>
-          <li>데이터는 <a class="lnk" href="${BOARD}" target="_blank" rel="noopener">예스폼 주요 사업일정 현황판</a>의 원본 시트(예스폼 에디터 · 예스폼싸인 WBS 등)를 열 때마다 바로 불러와요. 시트를 고치면 여기도 바로 바뀌어요.</li>
-          <li><b>심현지(디자인)</b>: 담당자가 <code>hyunji sim</code>인 업무, 담당자 칸이 비어 있고 업무명이 ‘디자인’인 업무(디자인 시스템·토큰·가이드 제외), 그 하위 업무.</li>
-          <li><b>박채은(기획)</b>: 담당자가 <code>PARK CHAEEUN</code>인 업무(공동 담당 포함), 담당자 칸이 비어 있고 업무명에 ‘기획’이 들어간 업무, 그 하위 업무.</li>
-          <li><b>웹 업무자동화</b>는 다른 기획자(박지훈) 업무라 뺐어요. ‘에디터·싸인 통합’ 시트는 상세 시트와 겹쳐서 상세 시트만 썼어요.</li>
-          <li>상태는 오늘 날짜로 다시 계산해요. 종료일이 지났는데 시트에 ‘완료’가 없으면 <span class="st over">기간 지남</span>으로 표시하고, 시트 상태가 다르면 옆에 ‘시트: …’로 같이 보여줘요.</li>
-          <li>빈 날 계산은 완료가 아닌 가장 하위 업무만 세고, 주말은 빼요. 상위 업무 기간이 하위 일정보다 길면 남는 기간도 일정으로 봐요(예: 싸인 디자인 하위 일정이 11/20에 끝나도 상위 기간 12/11까지는 일정 있음). 공휴일은 따로 빼지 않아요.</li>
-        </ul></div>
       </section>`;
     bind();
   }
