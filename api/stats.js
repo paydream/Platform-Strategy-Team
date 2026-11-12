@@ -7,8 +7,8 @@ const crypto = require('crypto');
 const LIST = [
   {
     id: 'yesform-age',
-    title: '예스폼 한국 사용자 연령별 분포',
-    desc: '연령대별 활성 사용자 · 월별 비중 추이 · 연도별 참여 지표',
+    title: '예스폼 한국 사용자 연령·해상도',
+    desc: '연령대별 사용자 추이 · 연령별 기기·해상도 분포 · 많이 쓰는 해상도',
     product: '예스폼',
     period: '2022.09 ~ 2026.10 (4년 2개월)',
     source: 'GA4',
