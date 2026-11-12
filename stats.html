@@ -203,7 +203,7 @@ const won = n => n == null ? '-' : fmt(n) + '원';
 const pct = (a, b) => b ? a / b * 100 : null;
 const pctTxt = v => v == null ? '-' : v > 0 && v < 0.1 ? '0.1% 미만' : (v >= 10 ? v.toFixed(0) : v.toFixed(1)) + '%';
 const KEY = 'pst_stats_pw';
-let D = null, month = null, prod = 'editor', view = 'week', pkey = { day: null, week: null };
+let D = null, month = null, prod = 'sign', view = 'day', pkey = { day: null, week: null };
 // 보기별 비교 기준 (render에서 설정)
 let CMP = { short: '전월', label: '전월 대비', avg: true, note: '전월 비교는 일평균 기준' }, SEL = { s: '', e: '' };
 const dayAvg = col => { const i = D.dailyCols.indexOf(col), r = D.daily.filter(x => x[0] >= SEL.s && x[0] <= SEL.e); return r.length ? r.reduce((a, x) => a + (x[i] || 0), 0) / r.length : null; };
@@ -273,10 +273,10 @@ function stale() {
 function start() {
   $('#gate').hidden = true; $('#app').hidden = false; $('#logout').hidden = false;
   const h = new URLSearchParams(location.hash.slice(1));
-  prod = h.get('p') === 'sign' ? 'sign' : 'editor';
+  prod = h.get('p') === 'editor' ? 'editor' : 'sign'; // 첫 화면: 싸인
   month = D.months.some(x => x.m === h.get('m')) ? h.get('m') : D.months[D.months.length - 1].m;
   const v = h.get('v');
-  view = hasP() ? (v === 'day' || v === 'week' || v === 'month' ? v : h.get('m') ? 'month' : 'week') : 'month';
+  view = hasP() ? (v === 'day' || v === 'week' || v === 'month' ? v : h.get('m') ? 'month' : 'day') : 'month'; // 첫 화면: 데일리
   if (hasP()) {
     const dk = D.periods.day.slice(-7).map(x => x.k), wk = wPick().map(x => x.k);
     pkey.day = view === 'day' && dk.includes(h.get('k')) ? h.get('k') : dk[dk.length - 1];
