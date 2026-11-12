@@ -1,0 +1,9 @@
+# 플랫폼전략팀 내부용 사이트 - 모든 검색엔진 수집 금지
+User-agent: *
+Disallow: /
+
+User-agent: Yeti
+Disallow: /
+
+User-agent: Googlebot
+Disallow: /
