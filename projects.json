@@ -582,6 +582,22 @@
               "href": "archive/20261112-102452-yesform-brief-header-wave-v32/index.html"
             }
           ]
+        },
+        {
+          "id": "20261112-103015-yesform-brief-header-wash-v33",
+          "label": "v33 · 헤더 화이트 워시",
+          "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
+          "desc": "답답하지 않은 은은한 배경: 흰 바탕에 오른쪽 위에서 연한 하늘색이 번지는 워시(+아래 연보라 힌트). 제목 진한 글자 + \"연말연초\"만 파란 강조. I는 옅은 원형 선과 서식·달력 아이콘을 흐리게 추가, J는 워시만. 타일은 반투명 흰 카드. 기본값 I. 노이즈 없음.",
+          "created": "2026.11.12",
+          "folder": "archive/20261112-103015-yesform-brief-header-wash-v33",
+          "preview": "archive/20261112-103015-yesform-brief-header-wash-v33/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "헤더 쉐이프 배경 시안",
+              "href": "archive/20261112-103015-yesform-brief-header-wash-v33/index.html"
+            }
+          ]
         }
       ]
     },
