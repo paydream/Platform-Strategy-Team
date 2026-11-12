@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>예스폼 연령·해상도 상세 데이터 | 플랫폼전략팀 업무 아카이브</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--line:#e5e8ec;--text:#191f28;--sub:#6b7684;--faint:#98a1ad;--accent:#2f6bff;--chip:#eef3ff;
+    --c:#2f6bff;--c-bg:#eef3ff;--c-soft:#c9d8ff;--up:#e5484d;--up-bg:#fdecec;--down:#2f6bff;--down-bg:#eaf0ff}
+  body.sign{--c:#12a150;--c-bg:#e8f7ee;--c-soft:#bfe6cd}
+  *{box-sizing:border-box;margin:0;padding:0}
+  [hidden]{display:none!important}
+  body{font-family:"Pretendard Variable",Pretendard,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  header{background:var(--card);border-bottom:1px solid var(--line)}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+  .top{display:flex;align-items:center;justify-content:space-between;height:64px;gap:10px}
+  .top strong{font-size:17px;white-space:nowrap}
+  .top-right{display:flex;align-items:center;gap:8px}
+  .hbtn{font-size:12px;color:var(--sub);text-decoration:none;border:1px solid var(--line);border-radius:6px;padding:4px 10px;background:#fff;cursor:pointer;font-family:inherit;white-space:nowrap}
+  .hbtn:hover{border-color:var(--accent);color:var(--accent)}
+  .hbtn.on{border-color:var(--accent);color:var(--accent);background:var(--chip)}
+
+  /* 비밀번호 */
+  .gate{min-height:calc(100vh - 65px);display:flex;align-items:center;justify-content:center;padding:20px}
+  .gate form{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:32px 28px;width:100%;max-width:360px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.04)}
+  .gate .lock{width:44px;height:44px;border-radius:12px;background:var(--chip);color:var(--accent);display:grid;place-items:center;margin:0 auto 14px}
+  .gate h1{font-size:19px}
+  .gate p{font-size:13px;color:var(--sub);margin-top:4px}
+  .gate input{margin-top:20px;width:100%;height:48px;border:1px solid var(--line);border-radius:10px;padding:0 14px;font:inherit;font-size:18px;letter-spacing:.3em;text-align:center}
+  .gate input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(47,107,255,.15)}
+  .gate button{margin-top:10px;width:100%;height:46px;border:0;border-radius:10px;background:var(--accent);color:#fff;font:inherit;font-weight:600;font-size:15px;cursor:pointer}
+  .gate button:disabled{opacity:.6;cursor:default}
+  .gate .err{color:var(--up);font-size:13px;margin-top:10px;min-height:20px}
+
+  /* 상단 */
+  .hero{padding:30px 0 0}
+  .hero h1{font-size:26px;letter-spacing:-.01em}
+  .hero p{color:var(--sub);margin-top:4px;font-size:14px}
+  .ctrl{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:20px;position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0}
+  .ptabs{display:flex;gap:8px}
+  .ptab{display:flex;align-items:center;gap:8px;font:inherit;font-size:16px;font-weight:600;border:1px solid var(--line);background:#fff;color:var(--sub);padding:10px 18px;border-radius:12px;cursor:pointer}
+  .ptab i{width:10px;height:10px;border-radius:50%;background:#c9ced6}
+  .ptab[aria-selected="true"]{color:#fff;border-color:transparent}
+  .ptab[data-p="editor"][aria-selected="true"]{background:#2f6bff}
+  .ptab[data-p="sign"][aria-selected="true"]{background:#12a150}
+  .ptab[aria-selected="true"] i{background:#fff}
+  .seg{display:flex;gap:4px;background:#eceef1;border-radius:10px;padding:4px}
+  .seg button{font:inherit;font-size:14px;border:0;background:none;padding:6px 14px;border-radius:7px;cursor:pointer;color:var(--sub);white-space:nowrap}
+  .seg button[aria-selected="true"]{background:#fff;color:var(--text);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+
+  /* 요약 */
+  .headline{margin-top:14px;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--c);border-radius:14px;padding:18px 22px}
+  .headline .t{font-size:13px;font-weight:600;color:var(--c)}
+  .headline .s{font-size:19px;font-weight:600;margin-top:4px;line-height:1.5;letter-spacing:-.01em}
+  .headline .s b{color:var(--c)}
+  .headline ul{margin-top:8px;font-size:14px;color:#4e5968;list-style:none;display:flex;flex-direction:column;gap:2px}
+  .headline li::before{content:"·";margin-right:6px;color:var(--faint)}
+
+  section.blk{margin-top:30px}
+  .blk > h2{font-size:18px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .blk > h2 small{font-size:13px;font-weight:400;color:var(--sub)}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .kpi.main{border-color:var(--c-soft);background:linear-gradient(180deg,var(--c-bg),#fff 70%)}
+  .kpi .l{font-size:14px;color:var(--sub);font-weight:500}
+  .kpi .v{font-size:32px;font-weight:700;margin-top:6px;letter-spacing:-.02em;line-height:1.2}
+  .kpi .v small{font-size:15px;font-weight:500;color:var(--sub);margin-left:3px}
+  .kpi .sub{font-size:12px;color:var(--sub);margin-top:6px}
+  .pill{display:inline-flex;align-items:center;gap:3px;font-size:13px;font-weight:600;border-radius:99px;padding:2px 9px;margin-top:8px}
+  .pill.up{background:var(--up-bg);color:var(--up)} .pill.down{background:var(--down-bg);color:var(--down)} .pill.flat{background:#f2f4f6;color:var(--sub)}
+  .pill span{font-weight:400;color:var(--sub);margin-left:4px;font-size:12px}
+
+  /* 퍼널 */
+  .funnel{display:grid;gap:0;margin-top:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .step{padding:18px 16px;position:relative;border-right:1px solid var(--line)}
+  .step:last-child{border-right:0}
+  .step .n{font-size:13px;color:var(--sub);font-weight:500}
+  .step .v{font-size:24px;font-weight:700;margin-top:4px;letter-spacing:-.02em}
+  .step .bar{height:8px;border-radius:99px;background:#f1f3f6;margin-top:10px;overflow:hidden}
+  .step .bar span{display:block;height:100%;background:var(--c);border-radius:99px;min-width:3px}
+  .step .r{font-size:12px;color:var(--sub);margin-top:8px}
+  .step .r b{color:var(--c);font-size:14px}
+  .step:not(:first-child)::before{content:"";position:absolute;left:-9px;top:50%;width:16px;height:16px;background:#fff;border-top:1px solid var(--line);border-right:1px solid var(--line);transform:translateY(-50%) rotate(45deg);z-index:1}
+
+  /* 표 */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-top:12px;overflow:hidden}
+  .card .hd{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .card .hd b{font-size:15px}
+  .card .hd span{font-size:12px;color:var(--sub)}
+  .scroll{overflow-x:auto}
+  .tbl{width:100%;border-collapse:collapse;font-size:14px}
+  .tbl th,.tbl td{padding:11px 14px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+  .tbl tr:last-child td{border-bottom:0}
+  .tbl th:first-child,.tbl td:first-child{text-align:left}
+  .tbl thead th{color:var(--sub);font-weight:500;font-size:12px;background:#fafbfc}
+  .tbl tbody tr:hover{background:#fafbfc}
+  .tbl td.name{font-weight:600}
+  .tbl td.name small{display:block;font-weight:400;font-size:11px;color:var(--faint);white-space:normal;max-width:340px}
+  .tbl .share{display:flex;align-items:center;gap:8px;justify-content:flex-end}
+  .tbl .share i{display:block;height:8px;border-radius:99px;background:var(--c);opacity:.85}
+  .tbl .share em{font-style:normal;min-width:44px;text-align:right;color:var(--sub);font-size:12px}
+  .tbl .best{color:var(--c);font-weight:700}
+  .tbl .muted{color:var(--faint)}
+  .tbl tfoot td{font-weight:700;background:#fafbfc;border-top:1px solid var(--line)}
+  .delta{font-size:12px;font-weight:600}
+  .delta.up{color:var(--up)} .delta.down{color:var(--down)} .delta.flat{color:var(--faint)}
+  .two{display:grid;grid-template-columns:3fr 2fr;gap:16px}
+  .two > .card{margin-top:12px}
+  .toplist{list-style:none}
+  .toplist li{display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--line)}
+  .toplist li:last-child{border-bottom:0}
+  .toplist em{font-style:normal;font-size:12px;font-weight:700;color:var(--faint);text-align:center}
+  .toplist li:nth-child(-n+3) em{color:var(--c)}
+  .toplist .nm b{display:block;font-size:13px;font-weight:600;line-height:1.4;word-break:break-all}
+  .toplist .nm small,.toplist .nv small{display:block;font-size:11px;color:var(--faint)}
+  .toplist .nv{text-align:right;white-space:nowrap;font-size:13px}
+  .toplist .best{color:var(--c);font-weight:700}
+  .toplist .muted{color:var(--faint)}
+
+  /* 차트 */
+  .chartbox{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-top:12px;position:relative}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--sub);align-items:center}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+  svg.chart{width:100%;height:260px;display:block;margin-top:8px}
+  .tip{position:absolute;pointer-events:none;background:#191f28;color:#fff;font-size:12px;border-radius:8px;padding:8px 10px;line-height:1.6;white-space:nowrap;display:none;z-index:2}
+
+  .notes{margin:30px 0 60px;font-size:12px;color:var(--sub);background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .notes b{color:var(--text)}
+  .notes li{margin-left:16px;margin-top:3px}
+  @media (max-width:960px){.kpis{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.funnel{grid-template-columns:1fr!important}.step{border-right:0;border-bottom:1px solid var(--line)}.step:last-child{border-bottom:0}.step:not(:first-child)::before{display:none}}
+  @media (max-width:520px){.kpis{grid-template-columns:1fr}.hero h1{font-size:22px}.headline .s{font-size:17px}.ptab{font-size:15px;padding:9px 14px}.kpi .v{font-size:28px}.top-right .hbtn:first-child{display:none}}
+  .kpi .v.age{font-size:28px}
+  .seg2{display:flex;gap:4px;background:#eceef1;border-radius:10px;padding:4px}
+  .seg2 button{font:inherit;font-size:13px;border:0;background:none;padding:5px 12px;border-radius:7px;cursor:pointer;color:var(--sub);white-space:nowrap}
+  .seg2 button[aria-selected="true"]{background:#fff;color:var(--text);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+  .chartbox .row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+  .legend button{font:inherit;font-size:13px;border:0;background:none;color:var(--sub);cursor:pointer;padding:2px 4px;border-radius:6px}
+  .legend button.off{opacity:.35}
+  .legend button.focus{color:var(--text);font-weight:600}
+  .cmp{list-style:none;padding:8px 18px 14px}
+  .cmp li{display:grid;grid-template-columns:64px 1fr 120px;gap:12px;align-items:center;padding:7px 0;font-size:13px}
+  .cmp .bars{display:flex;flex-direction:column;gap:3px}
+  .cmp .bars i{display:block;height:9px;border-radius:3px;min-width:2px}
+  .cmp .bars i.a{background:#c9d8ff} .cmp .bars i.b{background:var(--c)}
+  .cmp .nv{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .cmp .nv small{display:block;color:var(--faint);font-size:11px}
+  .tbl td,.tbl th{font-variant-numeric:tabular-nums}
+  .tbl td small{color:var(--faint);font-size:11px;margin-left:4px}
+  .tbl tr.yr td{border-top:2px solid var(--line)}
+  .dl{font:inherit;font-size:12px;border:1px solid var(--line);background:#fff;border-radius:6px;padding:4px 10px;cursor:pointer;color:var(--sub)}
+  .dl:hover{border-color:var(--accent);color:var(--accent)}
+  .hd .tools{display:flex;gap:8px;align-items:center}
+  .rx-seg{margin-left:auto}
+  .rx-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+  .rx-head .seg2{margin-left:auto}
+  .dev{list-style:none;padding:10px 18px 14px}
+  .dev li{display:grid;grid-template-columns:72px 1fr 150px;gap:12px;align-items:center;padding:7px 0;font-size:13px}
+  .dev .stack{display:flex;height:14px;border-radius:4px;overflow:hidden;background:#f1f3f6}
+  .dev .stack i{display:block;height:100%}
+  .dev .nv{text-align:right;color:var(--sub);font-variant-numeric:tabular-nums;white-space:nowrap;font-size:12px}
+  .dev .nv b{color:var(--text)}
+  .dev li.unk{color:var(--faint)}
+  .dev.wide li{grid-template-columns:120px 1fr 130px}
+  .dlg{display:flex;gap:12px;font-size:12px;color:var(--sub);padding:0 18px 14px;flex-wrap:wrap}
+  .dlg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+  .heat td.h{text-align:center;font-size:13px;min-width:64px}
+  .heat td.gname{font-weight:600}
+  .heat td.gname small{display:block;font-weight:400;color:var(--faint);font-size:11px}
+  .heat tr.sep td{border-top:2px solid var(--line)}
+  .agebar{display:flex;height:12px;border-radius:3px;overflow:hidden;min-width:160px;background:#f1f3f6}
+  .agebar i{display:block;height:100%}
+  .noage{font-size:12px;color:var(--faint)}
+  .alg{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--sub);padding:12px 18px 0}
+  .alg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+  @media (max-width:640px){.dev li,.dev.wide li{grid-template-columns:100px 1fr;}.dev .nv{grid-column:1/-1;text-align:left}}
+</style>
+</head>
+<body>
+<header><div class="wrap top"><strong>플랫폼전략팀</strong><div class="top-right">
+  <a class="hbtn" href="./">업무 아카이브</a><a class="hbtn" href="stats-age.html">요약으로</a><a class="hbtn on" href="./#stats">통계</a><a class="hbtn" href="admin/">관리자</a>
+  <button class="hbtn" id="logout" hidden>잠그기</button>
+</div></div></header>
+
+<div class="gate" id="gate">
+  <form id="gateForm" autocomplete="off">
+    <div class="lock"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+    <h1>예스폼 연령·해상도</h1>
+    <p>비밀번호를 입력해 주세요.</p>
+    <input id="pw" type="password" inputmode="numeric" maxlength="20" aria-label="통계 비밀번호" autofocus>
+    <button id="pwBtn" type="submit">확인</button>
+    <div class="err" id="pwErr" role="alert"></div>
+  </form>
+</div>
+
+<main class="wrap" id="app" hidden></main>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = n => n == null || isNaN(n) ? '-' : Math.round(n).toLocaleString('ko-KR');
+const p1 = v => v == null || isNaN(v) ? '-' : v.toFixed(1) + '%';
+const man = n => n >= 10000 ? (n / 10000).toFixed(n >= 100000 ? 0 : 1) + '만' : fmt(n);
+const KEY = 'pst_stats_pw', ID = 'yesform-age';
+const COLORS = ['#7aa7ff', '#2f6bff', '#12a150', '#8a4dff', '#f08c00', '#e5484d'];
+let D = null;
+
+/* ---------- 비밀번호 ---------- */
+async function unlock(pw, silent) {
+  const btn = $('#pwBtn'), err = $('#pwErr');
+  btn.disabled = true; err.textContent = silent ? '' : '확인 중…';
+  try {
+    const r = await fetch('/api/stats', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pw, id: ID }), cache: 'no-store' });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) { if (r.status === 401) sessionStorage.removeItem(KEY); err.textContent = silent && r.status === 401 ? '' : (j.error || `오류가 났습니다 (${r.status})`); return; }
+    sessionStorage.setItem(KEY, pw); D = j; start();
+  } catch (e) { err.textContent = '서버에 연결하지 못했습니다.'; }
+  finally { btn.disabled = false; }
+}
+$('#gateForm').addEventListener('submit', e => { e.preventDefault(); const v = $('#pw').value.trim(); if (v) unlock(v); });
+$('#logout').onclick = () => { sessionStorage.removeItem(KEY); location.reload(); };
+if (sessionStorage.getItem(KEY)) unlock(sessionStorage.getItem(KEY), true);
+
+/* ---------- 계산 ---------- */
+const sum = a => a.reduce((s, x) => s + x, 0);
+const shares = u => { const k = sum(u); return u.map(x => k ? x / k * 100 : 0); };
+const knownRate = r => { const k = sum(r.users); return k / (k + r.unknown) * 100; };
+// 연령 미확인 사용자를 같은 비율로 나눈 연령대별 추정 사용자 수
+const est = (users, total) => { const k = sum(users); return users.map(x => k ? x / k * total : 0); };
+const mLab = m => `${m.slice(2, 4)}.${m.slice(5)}`;
+const mFull = m => `${m.slice(0, 4)}년 ${+m.slice(5)}월`;
+
+function start() {
+  $('#gate').hidden = true; $('#app').hidden = false; $('#logout').hidden = false;
+  const A = D.ages, M = D.monthly, Y = D.yearly;
+  const y0 = Y[0], yN = Y[Y.length - 1];
+  const s0 = shares(y0.users), sN = shares(yN.users);
+  const top0 = A[s0.indexOf(Math.max(...s0))], topN = A[sN.indexOf(Math.max(...sN))];
+  const young = s => s[0] + s[1] + s[2], old = s => s[3] + s[4] + s[5];
+  // 같은 달(10월) 비교: 첫 해 10월 vs 마지막 달
+  const mA = M.find(r => r.m.endsWith('-10')) || M[0], mB = M[M.length - 1];
+  const eA = est(mA.users, mA.mau), eB = est(mB.users, mB.mau);
+  const chg = eA.map((a, i) => (eB[i] / a - 1) * 100);
+  const worst = chg.indexOf(Math.min(...chg)), best = chg.indexOf(Math.max(...chg));
+  // 비중이 한 달에 가장 크게 바뀐 달
+  let jump = { i: 1, d: 0 };
+  for (let i = 1; i < M.length; i++) { const a = shares(M[i - 1].users), b = shares(M[i].users); const d = sum(a.map((x, k) => Math.abs(b[k] - x))); if (d > jump.d) jump = { i, d }; }
+  const jA = shares(M[jump.i - 1].users), jB = shares(M[jump.i].users);
+  const kr = sum(Y.map(y => sum(y.users))) / sum(Y.map(y => sum(y.users) + y.unknown)) * 100;
+
+  $('#app').innerHTML = `
+  <section class="hero">
+    <h1>${esc(D.title)}</h1>
+    <p>${D.period.start.slice(0, 7).replace('-', '.')} ~ ${D.period.end.slice(0, 7).replace('-', '.')} (${M.length}개월) · ${esc(D.source)} · 업데이트 ${esc(D.updated)}</p>
+  </section>
+  <div class="headline">
+    <div class="t">한 줄 요약</div>
+    <div class="s">주 사용층이 <b>${top0}세</b>에서 <b>${topN}세</b>로 바뀌었고, 45세 이상 비중이 <b>${p1(old(s0))} → ${p1(old(sN))}</b>로 커졌어요.</div>
+    <ul>
+      <li>18~44세 비중은 ${p1(young(s0))}에서 ${p1(young(sN))}로 줄었어요 (${y0.range} → ${yN.range}).</li>
+      <li>변화는 ${mFull(M[jump.i].m)}에 한 번에 일어났어요. 45-54세 ${p1(jA[3])} → ${p1(jB[3])}, 25-34세 ${p1(jA[1])} → ${p1(jB[1])}. 그 뒤로는 비중이 거의 그대로예요.</li>
+      <li>전체 월 사용자가 ${man(mA.mau)} → ${man(mB.mau)}명으로 줄어드는 동안 ${A[worst]}세가 가장 많이 빠졌고(${chg[worst].toFixed(0)}%), ${A[best]}세는 가장 잘 남았어요(${chg[best].toFixed(0)}%).</li>
+    </ul>
+  </div>
+
+  <section class="blk">
+    <h2>핵심 지표 <small>${y0.range} 대비 ${yN.range}, 연령 미확인 제외 비중</small></h2>
+    <div class="kpis">
+      <div class="kpi main"><div class="l">가장 많은 연령대</div><div class="v age">${topN}<small>세</small></div><div class="sub">${p1(Math.max(...sN))} · ${y0.range}엔 ${top0}세(${p1(Math.max(...s0))})</div></div>
+      <div class="kpi"><div class="l">45세 이상 비중</div><div class="v">${old(sN).toFixed(1)}<small>%</small></div><div class="pill up">▲ ${(old(sN) - old(s0)).toFixed(1)}%p<span>${y0.y}년 대비</span></div></div>
+      <div class="kpi"><div class="l">18~44세 비중</div><div class="v">${young(sN).toFixed(1)}<small>%</small></div><div class="pill down">▼ ${(young(s0) - young(sN)).toFixed(1)}%p<span>${y0.y}년 대비</span></div></div>
+      <div class="kpi"><div class="l">연령 확인 비율</div><div class="v">${kr.toFixed(0)}<small>%</small></div><div class="sub">나머지는 GA4가 연령을 알 수 없는 사용자예요</div></div>
+    </div>
+  </section>
+
+  <section class="blk">
+    <h2>월별 연령대 추이 <small>연령 미확인 제외 · 연령대를 누르면 강조돼요</small></h2>
+    <div class="chartbox">
+      <div class="row"><div class="legend" id="lg"></div>
+        <div class="seg2" id="mode"><button data-v="share" aria-selected="true">비중 %</button><button data-v="est" aria-selected="false">추정 사용자 수</button></div></div>
+      <svg class="chart" id="ch" style="height:300px"></svg>
+      <div class="tip" id="tip"></div>
+    </div>
+  </section>
+
+  <section class="blk">
+    <h2>연도별 연령대 분포</h2>
+    <div class="card"><div class="scroll"><table class="tbl">
+      <thead><tr><th>연도 (기간)</th>${A.map(a => `<th>${a}세</th>`).join('')}<th>연령 확인 비율</th><th>활성 사용자</th></tr></thead>
+      <tbody>${Y.map(y => { const s = shares(y.users), mx = Math.max(...s); return `<tr><td class="name">${y.y}년<small>${esc(y.range)}</small></td>${s.map((v, i) => `<td class="${v === mx ? 'best' : ''}">${p1(v)}<small>${man(y.users[i])}</small></td>`).join('')}<td>${p1(knownRate(y))}</td><td>${fmt(y.total)}</td></tr>`; }).join('')}</tbody>
+    </table></div></div>
+  </section>
+
+  <section class="two">
+    <div class="card"><div class="hd"><b>연령대별 월 사용자 추정치</b><span>${mFull(mA.m)} vs ${mFull(mB.m)}</span></div>
+      <ul class="cmp">${A.map((a, i) => { const mx = Math.max(...eA, ...eB); return `<li><b>${a}세</b><div class="bars"><i class="a" style="width:${eA[i] / mx * 100}%"></i><i class="b" style="width:${eB[i] / mx * 100}%"></i></div><div class="nv">${fmt(eA[i])} → ${fmt(eB[i])}<small class="delta down">${chg[i].toFixed(0)}%</small></div></li>`; }).join('')}</ul>
+      <div class="hd" style="border-top:1px solid var(--line);border-bottom:0"><span><i style="display:inline-block;width:10px;height:8px;background:#c9d8ff;border-radius:2px"></i> ${mFull(mA.m)} (월 ${man(mA.mau)}명) &nbsp; <i style="display:inline-block;width:10px;height:8px;background:var(--c);border-radius:2px"></i> ${mFull(mB.m)} (월 ${man(mB.mau)}명)</span></div>
+    </div>
+    <div class="card"><div class="hd"><b>연령대별 이용 행태</b><span>${yN.y}년 (${esc(yN.range)})</span></div>
+      <div class="scroll"><table class="tbl"><thead><tr><th>연령대</th><th>참여율</th><th>1인당 참여 시간</th><th>1인당 세션</th></tr></thead>
+      <tbody>${A.map((a, i) => `<tr><td class="name">${a}세</td><td>${p1(yN.engaged[i] / yN.sessions[i] * 100)}</td><td>${Math.round(yN.duration[i] / yN.users[i])}초</td><td>${(yN.sessions[i] / yN.users[i]).toFixed(2)}회</td></tr>`).join('')}</tbody></table></div>
+    </div>
+  </section>
+
+  <section class="blk" id="rx">
+    <div class="rx-head"><h2>연령 × 해상도 <small>연령대별로 어떤 화면에서 보는지 · 기간을 바꿔 볼 수 있어요</small></h2>
+      <div class="seg2" id="rxp">${(D.res || []).map((p, i) => `<button data-i="${i}" aria-selected="${i === 0}">${esc(p.lab)}</button>`).join('')}</div></div>
+    <div id="rxBody"></div>
+  </section>
+
+  <section class="blk">
+    <h2>월별 데이터 <small>${M.length}개월 전체</small></h2>
+    <div class="card"><div class="hd"><b>연령대별 활성 사용자</b><div class="tools"><div class="seg2" id="tmode"><button data-v="n" aria-selected="true">사용자 수</button><button data-v="s" aria-selected="false">비중 %</button></div><button class="dl" id="csv">CSV 다운로드</button></div></div>
+      <div class="scroll"><table class="tbl" id="mtbl"></table></div></div>
+  </section>
+
+  <div class="notes"><b>데이터 기준</b><ul>
+    <li>${esc(D.source)}. 월별 수치는 그 달의 순 활성 사용자예요(연간 수치는 그 기간의 순 사용자라 월별 합과 다릅니다).</li>
+    <li>GA4 연령은 Google 신호로 추정한 값이라 연령 미확인 사용자가 많아요. 비중은 연령이 확인된 사용자만으로 계산했어요.</li>
+    <li>추정 사용자 수는 연령 미확인 사용자도 같은 비율로 나뉜다고 가정해 전체 활성 사용자에 비중을 곱한 값이에요.</li>
+    <li>연령 데이터는 2022년 9월부터 수집돼, 그 이전 기간은 없어요.</li>
+    <li>참여율은 2025년부터 모든 연령대가 함께 크게 올라 측정 방식이 바뀐 것으로 보여요. 그래서 연도끼리가 아니라 같은 해 연령대끼리만 비교해 주세요.</li>
+    <li>${mFull(M[jump.i].m)}의 급변이 실제 사용자 변화인지, GA4 추정 방식이나 유입 채널 변화 때문인지는 아직 확인하지 못했어요.</li>
+    <li><b>해상도</b>는 GA4의 화면 해상도(CSS 픽셀 기준)예요. 윈도우 배율 125%인 1920×1080 모니터는 1536×864로 잡혀요.</li>
+    <li>iPhone(390×844, 393×852, 402×874 등)은 GA4가 연령을 주지 않아 연령 × 해상도에서 빠져요. 그래서 모바일의 연령 분포는 안드로이드 위주이고, 젊은 층의 모바일 비중이 실제보다 낮게 보일 수 있어요.</li>
+    <li>연령 × 해상도 표는 GA4가 아주 적은 조합을 빼고 주기 때문에, 연령대 합이 해상도 전체 사용자보다 작아요. 해상도 그룹의 '전체 사용자'는 연령과 상관없이 센 값이에요.</li>
+  </ul></div>`;
+
+  /* ---- 차트 ---- */
+  let mode = 'share', focus = null;
+  const series = () => A.map((a, i) => M.map(r => mode === 'share' ? shares(r.users)[i] : est(r.users, r.mau)[i]));
+  const lg = $('#lg');
+  function legend() { lg.innerHTML = A.map((a, i) => `<button data-i="${i}" class="${focus == null ? '' : focus === i ? 'focus' : 'off'}"><i style="background:${COLORS[i]}"></i>${a}세</button>`).join(''); }
+  lg.onclick = e => { const b = e.target.closest('button'); if (!b) return; focus = focus === +b.dataset.i ? null : +b.dataset.i; draw(); };
+  $('#mode').onclick = e => { const b = e.target.closest('button'); if (!b) return; mode = b.dataset.v; $('#mode').querySelectorAll('button').forEach(x => x.setAttribute('aria-selected', x === b)); draw(); };
+  const svg = $('#ch'), tip = $('#tip');
+  function draw() {
+    legend();
+    const S = series(), W = svg.clientWidth, H = 300, p = { l: 44, r: 10, t: 14, b: 24 }, iw = W - p.l - p.r, ih = H - p.t - p.b;
+    const raw = Math.max(...S.flat()), step = mode === 'share' ? 10 : (raw > 300000 ? 100000 : 50000), max = Math.ceil(raw / step) * step;
+    const x = i => p.l + i * iw / (M.length - 1), y = v => p.t + ih - v / max * ih;
+    let h = '';
+    for (let v = 0; v <= max; v += step) h += `<line x1="${p.l}" x2="${W - p.r}" y1="${y(v)}" y2="${y(v)}" stroke="#eef0f3"/><text x="${p.l - 6}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="#98a1ad">${mode === 'share' ? v + '%' : man(v)}</text>`;
+    M.forEach((r, i) => { if (r.m.endsWith('-01')) h += `<text x="${x(i)}" y="${H - 6}" text-anchor="middle" font-size="11" fill="#98a1ad">${r.m.slice(0, 4)}</text>`; });
+    h += `<line x1="${x(jump.i)}" x2="${x(jump.i)}" y1="${p.t}" y2="${p.t + ih}" stroke="#98a1ad" stroke-dasharray="3 3"/><text x="${x(jump.i) + 5}" y="${p.t + 10}" font-size="11" fill="#6b7684">${mLab(M[jump.i].m)} 급변</text>`;
+    S.forEach((s, i) => { const d = s.map((v, k) => (k ? 'L' : 'M') + x(k).toFixed(1) + ' ' + y(v).toFixed(1)).join(' '); h += `<path d="${d}" fill="none" stroke="${COLORS[i]}" stroke-width="${focus === i ? 3 : 2}" opacity="${focus == null || focus === i ? 1 : .12}" stroke-linejoin="round"/>`; });
+    h += `<line id="xh" y1="${p.t}" y2="${p.t + ih}" stroke="#191f28" opacity="0"/><rect id="hv" x="${p.l}" y="${p.t}" width="${iw}" height="${ih}" fill="transparent"/>`;
+    svg.innerHTML = h;
+    const hv = svg.querySelector('#hv'), xh = svg.querySelector('#xh');
+    hv.onmousemove = e => {
+      const rc = svg.getBoundingClientRect(), i = Math.max(0, Math.min(M.length - 1, Math.round((e.clientX - rc.left - p.l) / iw * (M.length - 1))));
+      xh.setAttribute('x1', x(i)); xh.setAttribute('x2', x(i)); xh.setAttribute('opacity', .25);
+      tip.innerHTML = `<b>${mFull(M[i].m)}</b> · 월 ${fmt(M[i].mau)}명<br>` + A.map((a, k) => `<span style="color:${COLORS[k]}">●</span> ${a}세 ${mode === 'share' ? p1(S[k][i]) : fmt(S[k][i]) + '명'}`).join('<br>');
+      tip.style.display = 'block'; const tx = x(i) + 30; tip.style.left = (tx + 170 > W ? x(i) - 170 : tx) + 'px'; tip.style.top = '50px';
+    };
+    hv.onmouseleave = () => { tip.style.display = 'none'; xh.setAttribute('opacity', 0); };
+  }
+  draw(); new ResizeObserver(draw).observe(svg);
+
+  /* ---- 월별 표 ---- */
+  let tm = 'n';
+  function table() {
+    const rows = [...M].reverse();
+    $('#mtbl').innerHTML = `<thead><tr><th>월</th>${A.map(a => `<th>${a}세</th>`).join('')}<th>연령 미확인</th><th>연령 확인 비율</th><th>활성 사용자</th></tr></thead><tbody>` +
+      rows.map((r, k) => { const s = shares(r.users), mx = Math.max(...s); const yr = k && r.m.endsWith('-12'); return `<tr class="${yr ? 'yr' : ''}"><td class="name">${mFull(r.m)}</td>${r.users.map((v, i) => `<td class="${s[i] === mx ? 'best' : ''}">${tm === 'n' ? fmt(v) : p1(s[i])}</td>`).join('')}<td class="muted">${fmt(r.unknown)}</td><td>${p1(knownRate(r))}</td><td>${fmt(r.mau)}</td></tr>`; }).join('') + '</tbody>';
+  }
+  $('#tmode').onclick = e => { const b = e.target.closest('button'); if (!b) return; tm = b.dataset.v; $('#tmode').querySelectorAll('button').forEach(x => x.setAttribute('aria-selected', x === b)); table(); };
+  table();
+  $('#csv').onclick = () => {
+    const head = ['월', ...A.map(a => a + '세'), '연령 미확인', '활성 사용자', ...A.map(a => a + '세 비중(%)')];
+    const lines = [head, ...M.map(r => [r.m, ...r.users, r.unknown, r.mau, ...shares(r.users).map(v => v.toFixed(1))])].map(l => l.join(','));
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob(['\ufeff' + lines.join('\n')], { type: 'text/csv;charset=utf-8' }));
+    a.download = `예스폼_연령별_사용자_${D.period.start.slice(0, 7)}_${D.period.end.slice(0, 7)}.csv`; a.click();
+  };
+  /* ---- 연령 × 해상도 ---- */
+  if (D.res && D.res.length) {
+    const DEVC = { desktop: '#2f6bff', mobile: '#12a150', tablet: '#f08c00' }, DEVN = { desktop: 'PC', mobile: '모바일', tablet: '태블릿' };
+    const GDESC = { 'PC ~1280': '1280×720 등', 'PC 1281~1440': '1366×768, 1440×900', 'PC 1441~1599': '1536×864 (1920 화면 125% 배율)', 'PC 1600~1800': '1600×900, 1707×1067', 'PC 1801~2000': '1920×1080 등', 'PC 2001~': '2560×1440 등', '모바일 ~360': '360×780, 360×800', '모바일 361~389': '384×832, 375×812', '모바일 390~399': '390×844, 393×852 (iPhone)', '모바일 400~419': '412×892, 402×874', '모바일 420~': '430×932 등', '태블릿': '' };
+    let rp = 0, hm = 'col';
+    const rxBody = $('#rxBody');
+    function rx() {
+      const P = D.res[rp];
+      const devKnown = A.map((a, i) => ['desktop', 'mobile', 'tablet'].map(d => P.devices[d][i]));
+      const mob = devKnown.map(v => v[1] / sum(v) * 100);
+      const hiM = mob.indexOf(Math.max(...mob)), loM = mob.indexOf(Math.min(...mob));
+      const G = P.groups.filter(g => g.total > 0);
+      const gTot = sum(G.map(g => g.total));
+      const topG = [...G].sort((a, b) => b.total - a.total)[0];
+      const colSum = A.map((a, i) => sum(G.map(g => g.users[i])));
+      const colShare = g => g.users.slice(0, 6).map((v, i) => colSum[i] ? v / colSum[i] * 100 : 0);
+      const rowShare = g => { const k = sum(g.users.slice(0, 6)); return g.users.slice(0, 6).map(v => k ? v / k * 100 : 0); };
+      const mainAge = 3; // 45-54
+      const mainTop = [...G].sort((a, b) => colShare(b)[mainAge] - colShare(a)[mainAge])[0];
+      const thin = g => sum(g.users.slice(0, 6)) < g.total * 0.02; // 연령 정보가 거의 없는 그룹(iPhone 등)
+      const cells = G.map(g => thin(g) ? g.users.slice(0, 6).map(() => 0) : hm === 'col' ? colShare(g) : rowShare(g));
+      const mx = Math.max(...cells.flat());
+      rxBody.innerHTML = `
+      <div class="headline" style="margin-top:12px">
+        <div class="t">${esc(P.lab)} (${esc(P.range)}) 요약</div>
+        <div class="s">가장 많이 쓰는 화면은 <b>${esc(topG.g)}</b>로 전체의 <b>${p1(topG.total / gTot * 100)}</b>예요.</div>
+        <ul>
+          <li>모바일 비중은 ${A[hiM]}세가 가장 높고(${p1(mob[hiM])}), ${A[loM]}세가 가장 낮아요(${p1(mob[loM])}).</li>
+          <li>주 사용층인 ${A[mainAge]}세는 ${esc(mainTop.g)} 화면이 ${p1(colShare(mainTop)[mainAge])}로 가장 많아요.</li>
+          <li>iPhone은 연령 정보가 없어, 모바일 비율은 안드로이드 기준이에요.</li>
+        </ul>
+      </div>
+      <div class="two">
+        <div class="card"><div class="hd"><b>연령대별 기기 비율</b><span>활성 사용자 기준</span></div>
+          <ul class="dev">${A.concat(['연령 미확인']).map((a, i) => { const v = ['desktop', 'mobile', 'tablet'].map(d => P.devices[d][i]), t = sum(v); return `<li class="${i === 6 ? 'unk' : ''}"><b>${i === 6 ? a : a + '세'}</b><div class="stack">${v.map((x, k) => `<i style="width:${x / t * 100}%;background:${Object.values(DEVC)[k]}" title="${Object.values(DEVN)[k]} ${p1(x / t * 100)}"></i>`).join('')}</div><div class="nv">PC <b>${p1(v[0] / t * 100)}</b> · 모바일 <b>${p1(v[1] / t * 100)}</b></div></li>`; }).join('')}</ul>
+          <div class="dlg">${Object.keys(DEVC).map(d => `<span><i style="background:${DEVC[d]}"></i>${DEVN[d]}</span>`).join('')}</div>
+        </div>
+        <div class="card"><div class="hd"><b>해상도 그룹별 전체 사용자</b><span>연령 무관</span></div>
+          <ul class="dev wide">${G.map(g => `<li><b style="font-size:12px">${esc(g.g)}</b><div class="stack"><i style="width:${g.total / topG.total * 100}%;background:${g.g.startsWith('PC') ? DEVC.desktop : g.g.startsWith('모바일') ? DEVC.mobile : DEVC.tablet}"></i></div><div class="nv"><b>${fmt(g.total)}</b> · ${p1(g.total / gTot * 100)}</div></li>`).join('')}</ul>
+        </div>
+      </div>
+      <div class="card"><div class="hd"><b>연령대별 해상도 분포</b><div class="tools"><div class="seg2" id="hmode"><button data-v="col" aria-selected="${hm === 'col'}">연령대 안 비중</button><button data-v="row" aria-selected="${hm === 'row'}">해상도 안 연령 구성</button></div></div></div>
+        <div class="scroll"><table class="tbl heat"><thead><tr><th>해상도 그룹</th>${A.map(a => `<th style="text-align:center">${a}세</th>`).join('')}<th>전체 사용자</th></tr></thead><tbody>
+        ${G.map((g, r) => `<tr class="${r && !g.g.startsWith(G[r - 1].g.slice(0, 2)) ? 'sep' : ''}"><td class="gname">${esc(g.g)}<small>${esc(GDESC[g.g] || '')}${thin(g) ? ' · 연령 정보 거의 없음' : ''}</small></td>${cells[r].map(v => `<td class="h" style="background:rgba(47,107,255,${(v / mx * .55).toFixed(3)});color:${v / mx > .6 ? '#fff' : 'inherit'}">${v < 0.05 ? '-' : p1(v)}</td>`).join('')}<td>${fmt(g.total)}</td></tr>`).join('')}
+        </tbody></table></div>
+        <div class="hd" style="border-top:1px solid var(--line);border-bottom:0"><span>${hm === 'col' ? '각 연령대 사용자가 어떤 해상도 그룹에 나뉘어 있는지예요(세로 합 100%).' : '각 해상도 그룹 사용자의 연령 구성이에요(가로 합 100%).'} 연령이 확인된 사용자만 계산했어요.</span></div>
+      </div>
+      <div class="card"><div class="hd"><b>많이 쓰는 해상도 TOP ${P.top.length}</b><span>${esc(P.range)} · 연령 구성은 연령 확인 사용자 기준</span></div>
+        <div class="alg">${A.map((a, i) => `<span><i style="background:${COLORS[i]}"></i>${a}세</span>`).join('')}</div>
+        <div class="scroll"><table class="tbl"><thead><tr><th>해상도</th><th>기기</th><th>사용자</th><th>비중</th><th style="text-align:left">연령 구성</th><th>가장 많은 연령대</th></tr></thead><tbody>
+        ${P.top.map((t, i) => { const k = sum(t.users.slice(0, 6)), sh = t.users.slice(0, 6).map(v => k ? v / k * 100 : 0), b = sh.indexOf(Math.max(...sh)); return `<tr><td class="name">${i + 1}. ${esc(t.r.replace('x', '×'))}</td><td>${DEVN[t.dev] || t.dev}</td><td>${fmt(t.total)}</td><td>${p1(t.total / P.resTotal * 100)}</td><td style="text-align:left">${k ? `<div class="agebar">${sh.map((v, j) => `<i style="width:${v}%;background:${COLORS[j]}" title="${A[j]}세 ${p1(v)}"></i>`).join('')}</div>` : '<span class="noage">연령 정보 없음 (iPhone)</span>'}</td><td>${k ? `${A[b]}세 <small>${p1(sh[b])}</small>` : '-'}</td></tr>`; }).join('')}
+        </tbody></table></div>
+      </div>`;
+      $('#hmode').onclick = e => { const b = e.target.closest('button'); if (!b) return; hm = b.dataset.v; rx(); };
+    }
+    $('#rxp').onclick = e => { const b = e.target.closest('button'); if (!b) return; rp = +b.dataset.i; $('#rxp').querySelectorAll('button').forEach(x => x.setAttribute('aria-selected', x === b)); rx(); };
+    rx();
+  }
+}
+</script>
+</body>
+</html>
