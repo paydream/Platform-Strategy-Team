@@ -46,6 +46,13 @@
   .stale{margin-top:10px;padding:10px 14px;border-radius:10px;background:#fff4e5;color:#b45309;font-size:13px;border:1px solid #fcd9a8}
   .ctrl{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:20px;position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0}
   .ptabs{display:flex;gap:8px}
+  .subsel{margin-top:2px;display:flex;justify-content:flex-end}
+  .seg.sub{max-width:100%;overflow-x:auto;scrollbar-width:thin}
+  .seg.sub.day button{display:flex;flex-direction:column;align-items:center;padding:5px 10px;line-height:1.25}
+  .seg.sub.day button small{font-size:11px;color:var(--faint);font-weight:400}
+  .tbl tbody tr.sel{background:var(--chip)}
+  .tbl tbody tr.sel td:first-child{font-weight:700;color:var(--accent)}
+  .tbl tbody tr.we td:first-child{color:#e5484d}
   .ptab{display:flex;align-items:center;gap:8px;font:inherit;font-size:16px;font-weight:600;border:1px solid var(--line);background:#fff;color:var(--sub);padding:10px 18px;border-radius:12px;cursor:pointer}
   .ptab i{width:10px;height:10px;border-radius:50%;background:#c9ced6}
   .ptab[aria-selected="true"]{color:#fff;border-color:transparent}
@@ -166,7 +173,14 @@ const won = n => n == null ? '-' : fmt(n) + '원';
 const pct = (a, b) => b ? a / b * 100 : null;
 const pctTxt = v => v == null ? '-' : v > 0 && v < 0.1 ? '0.1% 미만' : (v >= 10 ? v.toFixed(0) : v.toFixed(1)) + '%';
 const KEY = 'pst_stats_pw';
-let D = null, month = null, prod = 'editor';
+let D = null, month = null, prod = 'editor', view = 'week', pkey = { day: null, week: null };
+// 보기별 비교 기준 (render에서 설정)
+let CMP = { short: '전월', label: '전월 대비', avg: true, note: '전월 비교는 일평균 기준' }, SEL = { s: '', e: '' };
+const dayAvg = col => { const i = D.dailyCols.indexOf(col), r = D.daily.filter(x => x[0] >= SEL.s && x[0] <= SEL.e); return r.length ? r.reduce((a, x) => a + (x[i] || 0), 0) / r.length : null; };
+const VIEWS = [['day', '데일리'], ['week', '주간 (직전 7일)'], ['month', '월간']];
+const WD = '일월화수목금토';
+const wday = s => WD[new Date(s + 'T00:00:00').getDay()];
+const hasP = () => !!(D.periods && D.periods.day && D.periods.day.length);
 
 /* ---------- 비밀번호 ---------- */
 async function unlock(pw, silent) {
@@ -191,22 +205,23 @@ const mLabel = m => { const sd = +mStart(m).slice(8), ed = +m.end.slice(8), full
 const days = m => +m.end.slice(8) - +mStart(m).slice(8) + 1;
 const dRange = (s, e) => `${+s.slice(5, 7)}.${+s.slice(8)} ~ ${+e.slice(5, 7)}.${+e.slice(8)}`;
 const D0 = s => s.replace(/-/g, '.');
+const MD = s => `${+s.slice(5, 7)}.${+s.slice(8, 10)}`;
 // 전월 대비: 기간 길이가 달라도 일평균으로 비교
 function diff(cur, prev, cd, pd) {
   if (cur == null || !prev) return null;
   return ((cur / cd) - (prev / pd)) / (prev / pd) * 100;
 }
-function pill(d, label = '전월 대비') {
-  if (d == null) return `<div class="pill flat">전월 비교 없음</div>`;
+function pill(d, label = CMP.label) {
+  if (d == null) return `<div class="pill flat">${CMP.short} 비교 없음</div>`;
   const c = d > 0.5 ? 'up' : d < -0.5 ? 'down' : 'flat';
-  return `<div class="pill ${c}">${c === 'up' ? '▲' : c === 'down' ? '▼' : ''} ${Math.abs(d).toFixed(0)}%<span>${label} (일평균)</span></div>`;
+  return `<div class="pill ${c}">${c === 'up' ? '▲' : c === 'down' ? '▼' : ''} ${Math.abs(d).toFixed(0)}%<span>${label}${CMP.avg ? ' (일평균)' : ''}</span></div>`;
 }
 function dtxt(d) {
   if (d == null) return '<span class="delta flat">-</span>';
   const c = d > 0.5 ? 'up' : d < -0.5 ? 'down' : 'flat';
   return `<span class="delta ${c}">${c === 'up' ? '▲' : c === 'down' ? '▼' : ''}${Math.abs(d).toFixed(0)}%</span>`;
 }
-const updown = d => d == null ? '' : d >= 0 ? `늘었어요 (일평균 ${Math.abs(d).toFixed(0)}%↑)` : `줄었어요 (일평균 ${Math.abs(d).toFixed(0)}%↓)`;
+const updown = d => { if (d == null) return ''; const a = CMP.avg ? '일평균 ' : ''; return d >= 0 ? `늘었어요 (${a}${Math.abs(d).toFixed(0)}%↑)` : `줄었어요 (${a}${Math.abs(d).toFixed(0)}%↓)`; };
 
 // 매일 아침 자동 갱신(전날까지). 갱신 시각과, 이틀 넘게 멈췄을 때 안내
 function upd() {
@@ -225,14 +240,40 @@ function start() {
   const h = new URLSearchParams(location.hash.slice(1));
   prod = h.get('p') === 'sign' ? 'sign' : 'editor';
   month = D.months.some(x => x.m === h.get('m')) ? h.get('m') : D.months[D.months.length - 1].m;
+  const v = h.get('v');
+  view = hasP() ? (v === 'day' || v === 'week' || v === 'month' ? v : h.get('m') ? 'month' : 'week') : 'month';
+  if (hasP()) {
+    const dk = D.periods.day.slice(7).map(x => x.k), wk = D.periods.week.slice(1).map(x => x.k);
+    pkey.day = view === 'day' && dk.includes(h.get('k')) ? h.get('k') : dk[dk.length - 1];
+    pkey.week = view === 'week' && wk.includes(h.get('k')) ? h.get('k') : wk[wk.length - 1];
+  }
   render();
 }
 
 function render() {
   document.body.className = prod;
-  history.replaceState(null, '', `#p=${prod}&m=${month}`);
-  const i = D.months.findIndex(x => x.m === month), m = D.months[i], pm = D.months[i - 1] || null;
-  const ctx = { m, pm, cd: days(m), pd: pm ? days(pm) : 0, mk: D.mkt[prod][m.m], pmk: pm ? D.mkt[prod][pm.m] : null };
+  let ctx, sub;
+  if (view === 'month') {
+    history.replaceState(null, '', `#p=${prod}&v=month&m=${month}`);
+    const i = D.months.findIndex(x => x.m === month), m = D.months[i], pm = D.months[i - 1] || null;
+    CMP = { short: '전월', label: '전월 대비', avg: true, note: pm ? '전월 비교는 일평균 기준' : '', col: '전월 대비' };
+    ctx = { m, pm, cd: days(m), pd: pm ? days(pm) : 0, mk: D.mkt[prod][m.m], pmk: pm ? D.mkt[prod][pm.m] : null, label: mLabel(m) };
+    SEL = { s: mStart(m), e: m.end };
+    sub = D.months.map(x => `<button role="tab" data-m="${x.m}" aria-selected="${x.m === month}">${mLabel(x)}</button>`).join('');
+  } else {
+    const L = D.periods[view], k = pkey[view], i = L.findIndex(x => x.k === k), m = L[i];
+    const pm = view === 'day' ? L[i - 7] || null : L[i - 1] || null;
+    history.replaceState(null, '', `#p=${prod}&v=${view}&k=${k}`);
+    CMP = view === 'day'
+      ? { short: '지난주 같은 요일', label: `지난주 ${wday(m.s)}요일 대비`, avg: false, note: pm ? `지난주 같은 요일(${MD(pm.s)})과 비교` : '', col: '지난주 대비' }
+      : { short: '이전 7일', label: '이전 7일 대비', avg: false, note: pm ? `이전 7일(${dRange(pm.s, pm.e)})과 비교` : '', col: '이전 7일 대비' };
+    const label = view === 'day' ? `${MD(m.s)} (${wday(m.s)})` : (i === L.length - 1 ? `직전 7일 (${dRange(m.s, m.e)})` : dRange(m.s, m.e));
+    ctx = { m, pm, cd: 1, pd: 1, mk: m.mkt[prod], pmk: pm ? pm.mkt[prod] : null, label };
+    SEL = { s: m.s, e: m.e };
+    sub = view === 'day'
+      ? L.slice(7).map(x => `<button role="tab" data-k="${x.k}" aria-selected="${x.k === k}">${+x.k.slice(5, 7)}.${+x.k.slice(8)}<small>${wday(x.k)}</small></button>`).join('')
+      : L.slice(1).map((x, j, a) => `<button role="tab" data-k="${x.k}" aria-selected="${x.k === k}">${j === a.length - 1 ? '직전 7일' : dRange(x.s, x.e)}</button>`).join('');
+  }
   $('#app').innerHTML = `
   <section class="hero">
     <h1>에디터/싸인 지표</h1>
@@ -244,12 +285,16 @@ function render() {
       <button class="ptab" role="tab" data-p="editor" aria-selected="${prod === 'editor'}"><i></i>예스폼 에디터</button>
       <button class="ptab" role="tab" data-p="sign" aria-selected="${prod === 'sign'}"><i></i>예스폼싸인</button>
     </div>
-    <div class="seg" role="tablist">${D.months.map(x => `<button role="tab" data-m="${x.m}" aria-selected="${x.m === month}">${mLabel(x)}</button>`).join('')}</div>
+    ${hasP() ? `<div class="seg vseg" role="tablist" aria-label="보기">${VIEWS.map(([v, l]) => `<button role="tab" data-v="${v}" aria-selected="${v === view}">${l}</button>`).join('')}</div>` : ''}
   </div>
+  <div class="subsel"><div class="seg sub ${view}" role="tablist" aria-label="기간">${sub}</div></div>
   ${prod === 'editor' ? editorView(ctx) : signView(ctx)}
   ${notes()}`;
   document.querySelectorAll('.ptab').forEach(b => b.onclick = () => { prod = b.dataset.p; render(); });
   document.querySelectorAll('.seg button[data-m]').forEach(b => b.onclick = () => { month = b.dataset.m; render(); });
+  document.querySelectorAll('.seg button[data-k]').forEach(b => b.onclick = () => { pkey[view] = b.dataset.k; render(); });
+  document.querySelectorAll('.vseg button[data-v]').forEach(b => b.onclick = () => { view = b.dataset.v; render(); });
+  const on = document.querySelector('.seg.sub button[aria-selected="true"]'); if (on) on.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   drawChart();
 }
 
@@ -264,7 +309,7 @@ function funnel(steps) {
 const shareCell = (v, tot, max) => `<div class="share"><i style="width:${Math.max(3, v / max * 90)}px"></i><em>${pctTxt(pct(v, tot))}</em></div>`;
 
 /* ---------- 에디터 ---------- */
-function editorView({ m, pm, cd, pd, mk, pmk }) {
+function editorView({ m, pm, cd, pd, mk, pmk, label }) {
   const E = m.editor, P = pm && pm.editor, ev = (x, k) => x && (x.ev[k] || [0, 0])[1];
   const act = E.active, crt = ev(E, 'document_create'), sgn = ev(E, 'sign_entry'), ent = ev(E, 'editor_entry'), exp = ev(E, 'export_document');
   const dAct = diff(act, P && P.active, cd, pd), dCrt = diff(crt, ev(P, 'document_create'), cd, pd);
@@ -279,13 +324,13 @@ function editorView({ m, pm, cd, pd, mk, pmk }) {
   ];
   if (ads && ads[1] > 0) bullets.push(`메타 광고 유입 ${fmt(ads[1])}명 중 문서 생성 ${fmt(ads[4])}명 (${pctTxt(pct(ads[4], ads[1]))})`);
   return `
-  <div class="headline"><div class="t">${mLabel(m)} 요약 · 예스폼 에디터</div>
-    <div class="s">활성 사용자 <b>${fmt(act)}명</b>, 그중 <b>${fmt(crt)}명(${pctTxt(pct(crt, act))})</b>이 문서를 만들었어요.${pm ? ` 전월보다 사용자가 ${updown(dAct)}` : ''}</div>
+  <div class="headline"><div class="t">${label} 요약 · 예스폼 에디터</div>
+    <div class="s">활성 사용자 <b>${fmt(act)}명</b>, 그중 <b>${fmt(crt)}명(${pctTxt(pct(crt, act))})</b>이 문서를 만들었어요.${pm ? ` ${CMP.short}보다 사용자가 ${updown(dAct)}` : ''}</div>
     <ul>${bullets.map(b => `<li>${b}</li>`).join('')}</ul></div>
 
-  <section class="blk"><h2>핵심 지표 <small>${pm ? '전월 비교는 일평균 기준' : ''}</small></h2>
+  <section class="blk"><h2>핵심 지표 <small>${CMP.note}</small></h2>
     <div class="kpis">
-      ${kpi('활성 사용자', act, '명', dAct, `일평균 ${fmt(act / cd)}명`, true)}
+      ${kpi('활성 사용자', act, '명', dAct, (cd > 1 ? `일평균 ${fmt(act / cd)}명` : view === 'week' ? `하루 평균 ${fmt(dayAvg('editorActive'))}명` : `${CMP.short} ${fmt(P && P.active)}명`), true)}
       ${kpi('신규 사용자', E.new, '명', diff(E.new, P && P.new, cd, pd), `활성 사용자의 ${pctTxt(pct(E.new, act))}`)}
       ${kpi('문서 생성 사용자', crt, '명', dCrt, `생성률 ${pctTxt(pct(crt, act))} (활성 대비)`)}
       ${kpi('싸인 연결 사용자', sgn, '명', diff(sgn, ev(P, 'sign_entry'), cd, pd), `문서 생성자의 ${pctTxt(pct(sgn, crt))}`)}
@@ -296,7 +341,7 @@ function editorView({ m, pm, cd, pd, mk, pmk }) {
 
   <section class="blk"><h2>채널별 성과 <small>어느 채널이 사용자와 문서 생성을 만들었나</small></h2>
     <div class="card"><div class="scroll"><table class="tbl">
-      <thead><tr><th>유입 채널</th><th>사용자</th><th>비중</th><th>전월 대비</th><th>문서 생성</th><th>생성률</th><th>내보내기</th><th>싸인 연결</th></tr></thead>
+      <thead><tr><th>유입 채널</th><th>사용자</th><th>비중</th><th>${CMP.col}</th><th>문서 생성</th><th>생성률</th><th>내보내기</th><th>싸인 연결</th></tr></thead>
       <tbody>${ch.map(r => { const p = prevCh[r[0]]; const rate = r[1] ? r[4] / r[1] : 0;
         return `<tr><td class="name">${esc(r[0])}</td><td>${fmt(r[1])}</td><td>${shareCell(r[1], chTot, chMax)}</td><td>${pm ? dtxt(diff(r[1], p && p[1], cd, pd)) : '-'}</td>
           <td>${fmt(r[4])}</td><td class="${r[1] >= 50 && rate === bestRate ? 'best' : ''}">${pctTxt(pct(r[4], r[1]))}</td><td>${fmt(r[5])}</td><td>${fmt(r[6])}</td></tr>`; }).join('')}</tbody>
@@ -304,14 +349,13 @@ function editorView({ m, pm, cd, pd, mk, pmk }) {
     </table></div></div>
     <p style="font-size:12px;color:var(--sub);margin-top:6px">사용자 50명 이상 채널 중 생성률이 가장 높은 곳을 색으로 표시했어요. 한 사람이 여러 채널로 들어오면 채널마다 세므로 합계가 활성 사용자보다 클 수 있어요.</p></section>
 
-  <section class="blk"><h2>일별 추이</h2><div class="chartbox"><div class="legend" id="legend"></div><svg class="chart" id="chart" role="img" aria-label="일별 추이"></svg></div></section>
+  <section class="blk"><h2>일별 추이 ${view === 'day' ? '<small>최근 3주</small>' : view === 'week' ? '<small>최근 5주</small>' : ''}</h2><div class="chartbox"><div class="legend" id="legend"></div><svg class="chart" id="chart" role="img" aria-label="일별 추이"></svg></div></section>
 
-  ${weekTable('editor')}
-  ${monthTable('editor')}`;
+  ${trendTables('editor')}`;
 }
 
 /* ---------- 싸인 ---------- */
-function signView({ m, pm, cd, pd, mk, pmk }) {
+function signView({ m, pm, cd, pd, mk, pmk, label }) {
   const S = m.sign, P = pm && pm.sign;
   const pay = mk.pay || [0, 0], ppay = pmk && pmk.pay;
   const dVisit = diff(S.visit, P && P.visit, cd, pd), dSign = diff(S.signup, P && P.signup, cd, pd), dPay = diff(pay[0], ppay && ppay[0], cd, pd);
@@ -325,16 +369,16 @@ function signView({ m, pm, cd, pd, mk, pmk }) {
   bullets.push(`등록된 지면을 통한 결제는 전체 결제 ${fmt(pay[0])}건 중 <b>${fmt(plTot[1])}건</b>이에요`);
   bullets.push(`GA4 기준 가장 많이 들어온 채널은 <b>${esc(ch[0][0])}</b> (${fmt(ch[0][1])}명, ${pctTxt(pct(ch[0][1], chTot))})`);
   return `
-  <div class="headline"><div class="t">${mLabel(m)} 요약 · 예스폼싸인</div>
-    <div class="s">결제 <b>${fmt(pay[0])}건 · ${won(pay[1])}</b>, 신규 가입 <b>${fmt(S.signup)}명</b>이에요.${pm ? ` 가입은 전월보다 ${updown(dSign)}` : ''}</div>
+  <div class="headline"><div class="t">${label} 요약 · 예스폼싸인</div>
+    <div class="s">결제 <b>${fmt(pay[0])}건 · ${won(pay[1])}</b>, 신규 가입 <b>${fmt(S.signup)}명</b>이에요.${pm ? ` 가입은 ${CMP.short}보다 ${updown(dSign)}` : ''}</div>
     <ul>${bullets.map(b => `<li>${b}</li>`).join('')}</ul></div>
 
-  <section class="blk"><h2>핵심 지표 <small>${pm ? '전월 비교는 일평균 기준' : ''}</small></h2>
+  <section class="blk"><h2>핵심 지표 <small>${CMP.note}</small></h2>
     <div class="kpis">
       ${kpi('결제 건수', pay[0], '건', dPay, `결제 금액 ${won(pay[1])}`, true)}
       ${kpi('신규 가입', S.signup, '명', dSign, `방문자의 ${pctTxt(pct(S.signup, S.visit))}`)}
-      ${kpi('방문자', S.visit, '명', dVisit, `일평균 ${fmt(S.visit / cd)}명 · 일별 합계`)}
-      ${kpi('전자계약 실사용자', S.users, '명', diff(S.users, P && P.users, cd, pd), `에디터 경유 ${fmt(S.editorUsers)}명`)}
+      ${kpi('방문자', S.visit, '명', dVisit, (cd > 1 ? `일평균 ${fmt(S.visit / cd)}명 · 일별 합계` : view === 'week' ? `하루 평균 ${fmt(S.visit / 7)}명 · 일별 합계` : `${CMP.short} ${fmt(P && P.visit)}명`))}
+      ${kpi('전자계약 실사용자', S.users, '명', diff(S.users, P && P.users, cd, pd), `에디터 경유 ${fmt(S.editorUsers)}명${view === 'week' ? ' · 일별 합계' : ''}`)}
     </div></section>
 
   <section class="blk"><h2>전환 흐름 <small>방문에서 결제까지</small></h2>
@@ -343,7 +387,7 @@ function signView({ m, pm, cd, pd, mk, pmk }) {
   <section class="blk"><h2>지면·캠페인별 성과 <small>관리자 유입 결제 통계 (등록된 유입 경로만)</small></h2>
     <div class="two">
       <div class="card"><div class="hd"><b>그룹별 방문 · 결제</b><span>등록 경로 방문 ${fmt(plTot[0])} · 결제 ${fmt(plTot[1])}건</span></div><div class="scroll"><table class="tbl">
-        <thead><tr><th>지면 그룹</th><th>방문</th><th>비중</th><th>전월 대비</th><th>결제</th><th>결제 금액</th><th>전환율</th></tr></thead>
+        <thead><tr><th>지면 그룹</th><th>방문</th><th>비중</th><th>${CMP.col}</th><th>결제</th><th>결제 금액</th><th>전환율</th></tr></thead>
         <tbody>${pl.map(r => { const p = prevPl[r[0]]; return `<tr><td class="name">${esc(r[0])}</td><td>${fmt(r[1])}</td><td>${shareCell(r[1], plTot[0], plMax)}</td><td>${pm ? dtxt(diff(r[1], p && p[1], cd, pd)) : '-'}</td><td class="${r[2] ? 'best' : 'muted'}">${fmt(r[2])}</td><td>${r[3] ? won(r[3]) : '<span class="muted">-</span>'}</td><td>${pctTxt(pct(r[2], r[1]))}</td></tr>`; }).join('')}</tbody>
       </table></div></div>
       <div class="card"><div class="hd"><b>상위 지면</b><span>결제 많은 순 → 방문 많은 순</span></div>
@@ -353,17 +397,29 @@ function signView({ m, pm, cd, pd, mk, pmk }) {
 
   <section class="blk"><h2>유입 채널별 사용자 <small>GA4 · 광고·검색·블로그 등 전체 채널</small></h2>
     <div class="card"><div class="scroll"><table class="tbl">
-      <thead><tr><th>유입 채널</th><th>사용자</th><th>비중</th><th>전월 대비</th><th>신규 사용자</th></tr></thead>
+      <thead><tr><th>유입 채널</th><th>사용자</th><th>비중</th><th>${CMP.col}</th><th>신규 사용자</th></tr></thead>
       <tbody>${ch.map(r => { const p = prevCh[r[0]]; return `<tr><td class="name">${esc(r[0])}</td><td>${fmt(r[1])}</td><td>${shareCell(r[1], chTot, chMax)}</td><td>${pm ? dtxt(diff(r[1], p && p[1], cd, pd)) : '-'}</td><td>${fmt(r[2])}</td></tr>`; }).join('')}</tbody>
     </table></div></div></section>
 
-  <section class="blk"><h2>일별 추이</h2><div class="chartbox"><div class="legend" id="legend"></div><svg class="chart" id="chart" role="img" aria-label="일별 추이"></svg></div></section>
+  <section class="blk"><h2>일별 추이 ${view === 'day' ? '<small>최근 3주</small>' : view === 'week' ? '<small>최근 5주</small>' : ''}</h2><div class="chartbox"><div class="legend" id="legend"></div><svg class="chart" id="chart" role="img" aria-label="일별 추이"></svg></div></section>
 
-  ${weekTable('sign')}
-  ${monthTable('sign')}`;
+  ${trendTables('sign')}`;
 }
 
 /* ---------- 주간 · 월별 ---------- */
+function trendTables(p) { return view === 'month' ? weekTable(p) + monthTable(p) : periodTable(p); }
+// 데일리: 최근 14일 / 주간: 직전 7일 블록. 선택한 기간 행을 강조
+function periodTable(p) {
+  const L = D.periods[view].slice(view === 'day' ? 7 : 1).reverse();
+  const ev = (x, k) => (x.editor.ev[k] || [0, 0])[1];
+  const head = p === 'editor' ? ['활성 사용자', '신규 사용자', '문서 생성', '내보내기', '싸인 연결'] : ['방문자', '신규 가입', '결제', '결제 금액', '전자계약 실사용자', 'GA4 사용자'];
+  const row = x => p === 'editor' ? [x.editor.active, x.editor.new, ev(x, 'document_create'), ev(x, 'export_document'), ev(x, 'sign_entry')].map(fmt)
+    : [fmt(x.sign.visit), fmt(x.sign.signup), fmt(x.mkt.sign.pay[0]), won(x.mkt.sign.pay[1]), fmt(x.sign.users), fmt(x.sign.active)];
+  const lbl = x => view === 'day' ? `${MD(x.k)} (${wday(x.k)})` : dRange(x.s, x.e);
+  return `<section class="blk"><h2>${view === 'day' ? '일별 추이 표 <small>최근 14일 · 사용자는 하루 순 사용자</small>' : '7일 단위 추이 <small>어제부터 7일씩 끊어서 · 사용자는 7일 순 사용자, 방문자·실사용자는 일별 합계</small>'}</h2>
+    <div class="card"><div class="scroll"><table class="tbl"><thead><tr><th>${view === 'day' ? '날짜' : '기간'}</th>${head.map(h => `<th>${h}</th>`).join('')}</tr></thead>
+    <tbody>${L.map(x => `<tr class="${x.k === pkey[view] ? 'sel' : ''}${view === 'day' && /[일토]/.test(wday(x.k)) ? ' we' : ''}"><td>${lbl(x)}</td>${row(x).map(v => `<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div></section>`;
+}
 function weekTable(p) {
   const W = D.weeks.slice().reverse();
   const head = p === 'editor' ? ['활성 사용자', '신규 사용자', '문서 생성', '내보내기', '싸인 연결'] : ['방문자', '신규 가입', '결제', '결제 금액', 'GA4 사용자'];
@@ -395,7 +451,8 @@ function notes() {
     <li>지면·캠페인별 성과는 관리자 유입 결제 통계로, 유입 URL로 등록된 경로만 잡혀요. 직접 방문이나 검색 유입은 이 표에 없어요.</li>
     <li>유입 채널별 사용자는 GA4 예스폼싸인 속성(전체 국가)의 세션 소스/매체를 묶은 거예요. 매출은 GA4를 쓰지 않아요.</li>
     <li>${last} 전자계약 실사용자는 관리자 월간 값이라 업데이트 당일이 일부 들어 있을 수 있어요.</li>`}
-    <li>매일 아침 전날 데이터까지 자동으로 갱신돼요. 나머지 수치는 ${D0(D.range.end)}까지예요. 전월 비교는 기간 길이가 달라도 비교할 수 있게 일평균으로 계산했어요.</li></ul></div>`;
+    <li>매일 아침 전날 데이터까지 자동으로 갱신돼요. 나머지 수치는 ${D0(D.range.end)}까지예요. 월간의 전월 비교는 기간 길이가 달라도 비교할 수 있게 일평균으로 계산했어요.</li>
+    <li>데일리는 지난주 같은 요일과, 주간은 어제까지 직전 7일을 그 전 7일과 비교해요. 사용자 수는 그 기간의 순 사용자이고, 싸인 방문자·전자계약 실사용자는 관리자 일별 값의 합계예요.</li></ul></div>`;
 }
 
 /* ---------- 일별 차트 (SVG) ---------- */
@@ -403,7 +460,7 @@ function drawChart() {
   const svg = $('#chart'); if (!svg) return;
   const cb = svg.parentElement;
   const tip = cb.querySelector('.tip') || cb.appendChild(Object.assign(document.createElement('div'), { className: 'tip' }));
-  const cols = D.dailyCols, rows = D.daily, idx = k => cols.indexOf(k);
+  const cols = D.dailyCols, from = view === 'month' || !hasP() ? '' : D.periods[view][0].s, rows = D.daily.filter(r => r[0] >= from), idx = k => cols.indexOf(k);
   const series = prod === 'editor'
     ? [['활성 사용자', 'editorActive', '#2f6bff'], ['신규 사용자', 'editorNew', '#9db8ff']]
     : [['방문자', 'signVisit', '#12a150'], ['신규 가입', 'signSignup', '#f59e0b']];
@@ -415,10 +472,12 @@ function drawChart() {
   const y = v => pt + (H - pt - pb) * (1 - v / nice);
   let g = '';
   // 선택 월 배경
-  const si = rows.findIndex(r => r[0].startsWith(month)), ei = rows.map(r => r[0].startsWith(month)).lastIndexOf(true);
-  if (si >= 0) g += `<rect x="${x(si)}" y="${pt}" width="${Math.max(2, x(ei) - x(si))}" height="${H - pt - pb}" fill="${prod === 'editor' ? '#eef3ff' : '#e8f7ee'}"/>`;
+  const inSel = r => r[0] >= SEL.s && r[0] <= SEL.e; const si = rows.findIndex(inSel), ei = rows.map(inSel).lastIndexOf(true);
+  const hw = rows.length > 1 ? (W - pl - pr) / (rows.length - 1) / 2 : 4;
+  if (si >= 0) g += `<rect x="${Math.max(pl, x(si) - (si === ei ? hw : 0))}" y="${pt}" width="${si === ei ? Math.min(hw * 2, W - pr - Math.max(pl, x(si) - hw)) : Math.max(2, x(ei) - x(si))}" height="${H - pt - pb}" fill="${prod === 'editor' ? '#eef3ff' : '#e8f7ee'}"/>`;
   for (let k = 0; k <= 4; k++) { const v = nice * k / 4; g += `<line x1="${pl}" x2="${W - pr}" y1="${y(v)}" y2="${y(v)}" stroke="#eef0f3"/><text x="${pl - 8}" y="${y(v) + 4}" font-size="11" fill="#98a1ad" text-anchor="end">${fmt(v)}</text>`; }
-  rows.forEach((r, i) => { if (r[0].endsWith('-01')) g += `<text x="${x(i) + 4}" y="${H - 10}" font-size="11" fill="#6b7684">${+r[0].slice(5, 7)}월</text>`; });
+  if (rows.length <= 40) rows.forEach((r, i) => { if (new Date(r[0] + 'T00:00:00').getDay() === 1) g += `<text x="${x(i)}" y="${H - 10}" font-size="11" fill="#98a1ad" text-anchor="middle">${+r[0].slice(5, 7)}.${+r[0].slice(8)}</text>`; });
+  else rows.forEach((r, i) => { if (r[0].endsWith('-01')) g += `<text x="${x(i) + 4}" y="${H - 10}" font-size="11" fill="#6b7684">${+r[0].slice(5, 7)}월</text>`; });
   const li = rows.findIndex(r => r[0] === '2026-10-19');
   if (prod === 'editor' && li >= 0) g += `<line x1="${x(li)}" x2="${x(li)}" y1="${pt}" y2="${H - pb}" stroke="#2f6bff" stroke-opacity=".4" stroke-dasharray="3 3"/><text x="${x(li) - 4}" y="${pt + 10}" font-size="11" fill="#2f6bff" text-anchor="end">10/19 정식 런칭</text>`;
   series.forEach(([, k, c]) => { const pts = rows.map((r, i) => `${x(i).toFixed(1)},${y(r[idx(k)] || 0).toFixed(1)}`).join(' '); g += `<polyline points="${pts}" fill="none" stroke="${c}" stroke-width="2" stroke-linejoin="round"/>`; });
