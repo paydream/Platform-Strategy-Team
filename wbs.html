@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>팀 WBS | 플랫폼전략팀 업무 아카이브</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--line:#e5e8ec;--line2:#eef0f3;--text:#191f28;--sub:#6b7684;--faint:#98a1ad;--accent:#2f6bff;--chip:#eef3ff;
+    --sim:#7c3aed;--sim-bg:#f3edff;--sim-soft:#d9c8fb;--park:#0b8a7a;--park-bg:#e3f5f1;--park-soft:#b5e3d9;
+    --now:#2f6bff;--now-bg:#eaf0ff;--done:#12a150;--done-bg:#e8f7ee;--over:#c2410c;--over-bg:#fff1e6;--plan:#4e5968;--plan-bg:#f0f2f5}
+  *{box-sizing:border-box;margin:0;padding:0}
+  [hidden]{display:none!important}
+  body{font-family:"Pretendard Variable",Pretendard,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  button{font-family:inherit}
+  header{background:var(--card);border-bottom:1px solid var(--line)}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+  .top{display:flex;align-items:center;justify-content:space-between;height:64px;gap:10px}
+  .top strong{font-size:17px;white-space:nowrap}
+  .top strong a{text-decoration:none}
+  .top-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+  .hbtn{font-size:12px;color:var(--sub);text-decoration:none;border:1px solid var(--line);border-radius:6px;padding:4px 10px;background:#fff;cursor:pointer;font-family:inherit;white-space:nowrap}
+  .hbtn:hover{border-color:var(--accent);color:var(--accent)}
+  .hbtn.on{border-color:var(--accent);color:var(--accent);background:var(--chip)}
+  .hbtn.daily{color:var(--accent);font-weight:600;display:inline-flex;align-items:center;gap:5px}
+  .hbtn.daily::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent)}
+  @media (max-width:640px){.top{height:auto;min-height:64px;padding-top:10px;padding-bottom:10px;gap:12px}.top-right{gap:6px}.top strong{flex:none;white-space:nowrap}}
+
+  main{padding-bottom:60px}
+  .hero{padding:30px 0 0;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+  .hero h1{font-size:26px;letter-spacing:-.01em}
+  .hero p{color:var(--sub);margin-top:4px;font-size:14px}
+  .src{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--sub)}
+  .src .dot{width:7px;height:7px;border-radius:50%;background:var(--done);display:inline-block;margin-right:5px}
+  .src .dot.warn{background:#f59e0b}
+  .src .lnk{color:var(--accent);text-decoration:none;font-weight:600}
+  .notice{margin-top:12px;padding:10px 14px;border-radius:10px;background:#fff4e5;color:#b45309;font-size:13px;border:1px solid #fcd9a8}
+
+  /* 사람 카드 */
+  .people{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
+  @media (max-width:860px){.people{grid-template-columns:1fr}}
+  .pc{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;border-top:4px solid var(--pc)}
+  .pc[data-p="sim"]{--pc:var(--sim);--pc-bg:var(--sim-bg);--pc-soft:var(--sim-soft)}
+  .pc[data-p="park"]{--pc:var(--park);--pc-bg:var(--park-bg);--pc-soft:var(--park-soft)}
+  .pc-head{display:flex;align-items:center;gap:12px}
+  .av{width:44px;height:44px;border-radius:50%;background:var(--pc-bg);color:var(--pc);display:grid;place-items:center;font-weight:700;font-size:17px;flex:none}
+  .pc-head h2{font-size:19px;line-height:1.3}
+  .pc-head h2 small{font-size:12px;color:var(--faint);font-weight:500;margin-left:6px}
+  .role{display:inline-block;font-size:12px;font-weight:600;color:var(--pc);background:var(--pc-bg);border-radius:6px;padding:1px 8px;margin-top:2px}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}
+  .kpi{background:#f8f9fb;border-radius:10px;padding:9px 10px}
+  .kpi b{display:block;font-size:20px;line-height:1.2}
+  .kpi span{font-size:12px;color:var(--sub)}
+  .kpi.warn b{color:var(--over)}
+  .free{margin-top:12px;font-size:14px;background:var(--pc-bg);border-radius:10px;padding:10px 12px;line-height:1.55}
+  .free b{color:var(--pc)}
+  .pc h3{font-size:13px;color:var(--sub);font-weight:600;margin-top:16px;margin-bottom:6px}
+  .tl{list-style:none;display:flex;flex-direction:column;gap:6px}
+  .tl li{border:1px solid var(--line2);border-radius:10px;padding:9px 12px;display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+  .tl .nm{font-weight:600;font-size:14px;line-height:1.4}
+  .tl .pj{font-size:12px;color:var(--faint)}
+  .tl .rt{text-align:right;font-size:12px;color:var(--sub);white-space:nowrap}
+  .tl .rt b{display:block;font-size:13px;color:var(--text)}
+  .tl .empty{color:var(--faint);font-size:13px;border-style:dashed;justify-content:center}
+
+  section.blk{margin-top:34px}
+  .blk > h2{font-size:18px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .blk > h2 small{font-size:13px;color:var(--sub);font-weight:400}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-top:12px}
+
+  /* 일정 잡기 */
+  .plan-ctrl{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:16px 18px;border-bottom:1px solid var(--line2)}
+  .plan-ctrl label{font-size:13px;color:var(--sub)}
+  .plan-ctrl input[type=date]{font:inherit;font-size:14px;border:1px solid var(--line);border-radius:8px;padding:6px 10px;background:#fff}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+  .chipb{font-size:13px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 12px;cursor:pointer;color:var(--sub)}
+  .chipb:hover,.chipb.on{border-color:var(--accent);color:var(--accent);background:var(--chip)}
+  .plan-res{display:grid;grid-template-columns:1fr 1fr}
+  @media (max-width:860px){.plan-res{grid-template-columns:1fr}}
+  .pr{padding:16px 18px}
+  .pr + .pr{border-left:1px solid var(--line2)}
+  @media (max-width:860px){.pr + .pr{border-left:0;border-top:1px solid var(--line2)}}
+  .pr h4{font-size:15px;display:flex;align-items:center;gap:8px}
+  .pr h4 i{width:9px;height:9px;border-radius:50%}
+  .pr .verdict{margin-top:6px;font-size:14px}
+  .pr .verdict b.ok{color:var(--done)}
+  .pr .verdict b.busy{color:var(--over)}
+  .pr ul{list-style:none;margin-top:8px;display:flex;flex-direction:column;gap:4px;font-size:13px}
+  .pr li{display:flex;justify-content:space-between;gap:10px;color:#4e5968}
+  .pr li span:last-child{color:var(--faint);white-space:nowrap}
+  .pr .freed{margin-top:8px;font-size:13px;color:var(--sub)}
+  .pr .freed b{color:var(--done)}
+
+  /* 주별 부하 */
+  .heat-wrap{overflow-x:auto;padding:14px 18px 18px}
+  table.heat{border-collapse:separate;border-spacing:4px;min-width:820px;width:100%}
+  table.heat th{font-size:11px;color:var(--faint);font-weight:500;text-align:center;white-space:nowrap}
+  table.heat th.me{color:var(--accent);font-weight:700}
+  table.heat td.who{font-size:13px;font-weight:600;white-space:nowrap;padding-right:6px;text-align:left}
+  table.heat td.c{height:46px;border-radius:8px;text-align:center;cursor:pointer;font-size:15px;font-weight:700;line-height:1.1;border:1px solid transparent}
+  table.heat td.c small{display:block;font-size:10px;font-weight:500;opacity:.85;margin-top:2px}
+  table.heat td.c:hover{border-color:var(--text)}
+  table.heat td.c.l0{background:#f3f5f7;color:var(--faint)}
+  .legend{display:flex;gap:12px;align-items:center;font-size:12px;color:var(--sub);padding:0 18px 14px;flex-wrap:wrap}
+  .legend i{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-3px;margin-right:4px}
+
+  /* 간트 */
+  .g-ctrl{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px}
+  .seg{display:flex;gap:4px;background:#eceef1;border-radius:10px;padding:4px}
+  .seg button{font-size:14px;border:0;background:none;padding:6px 14px;border-radius:7px;cursor:pointer;color:var(--sub);white-space:nowrap}
+  .seg button[aria-selected="true"]{background:#fff;color:var(--text);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+  .chk{font-size:13px;color:var(--sub);display:flex;align-items:center;gap:6px;cursor:pointer}
+  .gantt{overflow-x:auto}
+  .g-in{min-width:1000px}
+  .gr{display:grid;grid-template-columns:360px 1fr;border-bottom:1px solid var(--line2)}
+  .gr:last-child{border-bottom:0}
+  .gl{padding:9px 14px;min-width:0;border-right:1px solid var(--line2)}
+  .gt{position:relative;background-image:repeating-linear-gradient(90deg,transparent 0,transparent calc(var(--wk) - 1px),var(--line2) calc(var(--wk) - 1px),var(--line2) var(--wk))}
+  .gr.hd{position:sticky;top:0;background:#fff;z-index:2;border-bottom:1px solid var(--line)}
+  .gr.hd .gl{font-size:12px;color:var(--faint);display:flex;align-items:flex-end}
+  .gr.hd .gt{height:46px;background-image:none}
+  .mth{position:absolute;top:6px;font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;padding-left:4px;border-left:1px solid var(--line)}
+  .wkl{position:absolute;bottom:5px;font-size:11px;color:var(--faint);white-space:nowrap;padding-left:3px}
+  .gr.person .gl{font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px;background:#fafbfc}
+  .gr.person .gt{background-color:#fafbfc}
+  .gr.person i{width:10px;height:10px;border-radius:50%}
+  .gr.grp .gl{font-size:12px;color:var(--sub);font-weight:600;padding-top:12px;padding-bottom:4px}
+  .gr.grp{border-bottom:0}
+  .tn{font-size:14px;line-height:1.4;display:flex;gap:6px;align-items:baseline}
+  .tn .no{color:var(--faint);font-size:12px;flex:none}
+  .tn a{text-decoration:none;color:var(--faint);font-size:12px;margin-left:auto;flex:none}
+  .tn a:hover{color:var(--accent)}
+  .gr.parent .tn{font-weight:700}
+  .gr.child .gl{padding-left:30px}
+  .tm{font-size:12px;color:var(--sub);margin-top:2px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .st{font-size:11px;font-weight:600;border-radius:5px;padding:0 6px;line-height:18px;white-space:nowrap}
+  .st.now{color:var(--now);background:var(--now-bg)}
+  .st.plan{color:var(--plan);background:var(--plan-bg)}
+  .st.done{color:var(--done);background:var(--done-bg)}
+  .st.over{color:var(--over);background:var(--over-bg)}
+  .st.tbd{color:var(--faint);background:#f3f5f7}
+  .sheet{font-size:11px;color:var(--faint)}
+  .bar{position:absolute;top:50%;height:16px;margin-top:-8px;border-radius:5px;background:var(--bc);min-width:6px}
+  .bar.parent{height:6px;margin-top:-3px;opacity:.55}
+  .bar.done{opacity:.35}
+  .bar.plan{background:var(--bs)}
+  .bar.over{background:repeating-linear-gradient(135deg,var(--bc) 0 6px,var(--bs) 6px 10px)}
+  .bar .lb{position:absolute;left:calc(100% + 6px);top:50%;transform:translateY(-50%);font-size:11px;color:var(--sub);white-space:nowrap}
+  .bar.parent .lb{display:none}
+  .todayln{position:absolute;top:0;bottom:0;width:2px;background:#e5484d;opacity:.75;z-index:1}
+  .todaytag{position:absolute;top:24px;transform:translateX(-50%);font-size:10px;font-weight:700;color:#fff;background:#e5484d;border-radius:4px;padding:0 4px;z-index:3;white-space:nowrap}
+  .tbd-list{padding:14px 18px;font-size:13px;color:var(--sub);border-top:1px solid var(--line)}
+  .tbd-list b{color:var(--text)}
+
+  .rules{margin-top:12px;padding:16px 20px;font-size:13px;color:#4e5968}
+  .rules ul{padding-left:18px;display:flex;flex-direction:column;gap:4px}
+  .rules code{background:#f3f5f7;border-radius:4px;padding:0 5px;font-size:12px}
+  .loading{padding:60px 0;text-align:center;color:var(--sub)}
+</style>
+</head>
+<body>
+<header><div class="wrap top"><strong><a href="./">플랫폼전략팀</a></strong><div class="top-right"><a class="hbtn" href="./">업무 아카이브</a><a class="hbtn daily" href="stats.html" title="매일 자동 갱신">에디터/싸인 지표</a><a class="hbtn on" href="wbs.html" aria-current="page">팀 WBS</a><a class="hbtn" href="tracking.html">측정 관리</a><a class="hbtn" href="./#stats">통계</a><a class="hbtn" href="admin/">관리자</a></div></div></header>
+
+<main class="wrap">
+  <div class="hero">
+    <div>
+      <h1>팀 WBS</h1>
+      <p>디자인 <b>심현지</b> · 기획 <b>박채은</b>의 개인 일정이에요. 지금 하는 일과 비는 날을 보고 새 일정을 잡을 때 써요.</p>
+    </div>
+    <div class="src" id="src"><span><span class="dot warn"></span>불러오는 중…</span></div>
+  </div>
+  <div id="notice" class="notice" hidden></div>
+
+  <div id="app"><div class="loading">현황판에서 일정을 불러오고 있어요…</div></div>
+</main>
+
+<script>
+(function(){
+  const API = 'https://yesform-bs-dashboard.vercel.app/api/master?tab=';
+  const BOARD = 'https://yesform-schedule-board.vercel.app/';
+  const PEOPLE = [
+    { id:'sim',  name:'심현지', en:'hyunji sim',   role:'디자인', re:/hyunji\s*sim|심현지/i,
+      byName: s => /디자인/.test(s) && !/디자인\s*(시스템|토큰|가이드)/.test(s) },
+    { id:'park', name:'박채은', en:'PARK CHAEEUN', role:'기획',   re:/park\s*chae\s*eun|박채은/i,
+      byName: s => /기획/.test(s) }
+  ];
+  const COLOR = { sim:['#7c3aed','#d9c8fb'], park:['#0b8a7a','#b5e3d9'] };
+  // 웹 업무자동화는 다른 기획자(박지훈) 업무라 제외. 에디터·싸인 통합은 상세 시트와 중복이라 제외.
+  const SKIP = new Set(['웹 업무자동화','에디터·싸인 통합','예스폼','마케팅','주요 콘텐츠']);
+  const ST_LABEL = { now:'진행 중', plan:'예정', done:'완료', over:'기간 지남', tbd:'일정 미정' };
+  const WD = '일월화수목금토';
+
+  /* 현황판 수집본(2026-11-12 15:47 기준). 현황판 API를 못 불러올 때만 쓴다. */
+  const SNAPSHOT = {"at":"2026-11-12 15:47","rows":[{"프로젝트":"예스폼 에디터","그룹":"에디터","업무명":"1 오픈 모니터링 및 개선","담당자":"","시작일":"2026-10-19","종료일":"2026-10-23","상태":"완료","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B11"},{"프로젝트":"예스폼 에디터","그룹":"에디터","업무명":"1.1 모니터링","담당자":"다솜윤, 민영진","시작일":"2026-10-19","종료일":"2026-10-23","상태":"완료","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B12"},{"프로젝트":"예스폼 에디터","그룹":"에디터","업무명":"1.2 마케팅 페이지 개발","담당자":"다솜윤","시작일":"2026-10-19","종료일":"2026-10-20","상태":"완료","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B13"},{"프로젝트":"예스폼 에디터","그룹":"에디터","업무명":"1.3 메인 프롬프트 개발","담당자":"민영진","시작일":"2026-10-19","종료일":"2026-10-20","상태":"완료","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B14"},{"프로젝트":"예스폼 에디터","그룹":"에디터","업무명":"2 프롬프트","담당자":"","시작일":"2026-10-27","종료일":"2026-12-16","상태":"진행","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B15"},{"프로젝트":"예스폼 에디터","그룹":"에디터","업무명":"2.1 개인화/시즈널 프롬프트 API","담당자":"민영진","시작일":"2026-11-09","종료일":"2026-11-18","상태":"진행","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B16"},{"프로젝트":"예스폼 에디터","그룹":"에디터","업무명":"2.2 시즈널/개인화 체크박스 API","담당자":"민영진","시작일":"2026-11-19","종료일":"2026-12-02","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B17"},{"프로젝트":"예스폼 에디터","그룹":"에디터","업무명":"2.3 개인화/시즈널 검색 API","담당자":"민영진","시작일":"2026-12-03","종료일":"2026-12-11","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B18"},{"프로젝트":"예스폼 에디터","그룹":"에디터","업무명":"2.4 프롬프트 메인 페이지 퍼블리싱","담당자":"다솜윤","시작일":"2026-10-27","종료일":"2026-11-06","상태":"완료","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B19"},{"프로젝트":"예스폼 에디터","그룹":"에디터","업무명":"2.5 프롬프트 메인 페이지 기능 구현 및 api연동","담당자":"다솜윤","시작일":"2026-12-04","종료일":"2026-12-16","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B20"},{"프로젝트":"예스폼 에디터","그룹":"에디터","업무명":"스마트스토어 마이그레이션","담당자":"민영진","시작일":"2026-11-09","종료일":"2026-12-09","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B21"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"2차 고도화","담당자":"","시작일":"2026-11-02","종료일":"2027-03-03","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B22"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"1 기획","담당자":"","시작일":"2026-11-09","종료일":"2026-11-27","상태":"진행","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B23"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"1.1 도장/서명 삽입하기","담당자":"PARK CHAEEUN","시작일":"2026-11-09","종료일":"2026-11-13","상태":"진행","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B24"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"1.2 저장하기","담당자":"PARK CHAEEUN","시작일":"2026-11-18","종료일":"2026-11-27","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B25"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"1.3 파일 내보내기","담당자":"PARK CHAEEUN","시작일":"2026-11-19","종료일":"2026-11-27","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B26"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"2 디자인","담당자":"","시작일":"2026-11-23","종료일":"2026-12-09","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B27"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"2.1 도장/서명 삽입하기","담당자":"hyunji sim","시작일":"2026-11-23","종료일":"2026-11-27","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B28"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"2.2 저장하기","담당자":"hyunji sim","시작일":"2026-11-30","종료일":"2026-12-03","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B29"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"2.3 파일 내보내기","담당자":"hyunji sim","시작일":"2026-11-30","종료일":"2026-12-03","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B30"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"2.4 전체 피드백","담당자":"hyunji sim","시작일":"2026-12-04","종료일":"2026-12-09","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B31"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"3 도장/서명 삽입하기","담당자":"","시작일":"2026-11-30","종료일":"2026-12-31","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B32"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"3.1 도장/서명 삽입 퍼블리싱","담당자":"다솜윤","시작일":"2026-11-30","종료일":"2026-12-04","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B33"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"3.2 도장/서명 삽입 기능구현","담당자":"다솜윤","시작일":"2026-12-07","종료일":"2026-12-31","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B34"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"4 파일 내보내기","담당자":"","시작일":"2027-01-04","종료일":"2027-03-03","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B35"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"4.1 퍼블리싱","담당자":"다솜윤","시작일":"2027-01-04","종료일":"2027-01-05","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B36"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"4.2 .docx 내보내기 기능 구현","담당자":"다솜윤, 민영진","시작일":"2027-01-06","종료일":"2027-01-25","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B37"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"4.3 .hwp 내보내기 기능 구현","담당자":"다솜윤, 민영진","시작일":"2027-01-26","종료일":"2027-02-15","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B38"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"4.4 API 설계 및 문서화 작업","담당자":"다솜윤, 민영진","시작일":"2027-02-16","종료일":"2027-02-16","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B39"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"4.5 API 기능 구현","담당자":"다솜윤, 민영진","시작일":"2027-02-18","종료일":"2027-02-18","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B40"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"4.6 API 연동","담당자":"다솜윤, 민영진","시작일":"2027-02-22","종료일":"2027-02-22","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B41"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"4.7 테스트 및 수정","담당자":"다솜윤, 민영진","시작일":"2027-02-23","종료일":"2027-03-02","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B42"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"4.8 배포","담당자":"다솜윤, 민영진","시작일":"2027-03-03","종료일":"2027-03-03","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B43"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"5 저장하기","담당자":"","시작일":"2026-12-14","종료일":"2027-01-21","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B44"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"5.1 퍼블리싱","담당자":"다솜윤","시작일":"2027-01-04","종료일":"2027-01-06","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B45"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"5.2 DB 스키마 설계","담당자":"민영진","시작일":"2026-12-14","종료일":"2026-12-18","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B46"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"5.3 썸네일 추출 기능 설계","담당자":"민영진","시작일":"2026-12-21","종료일":"2026-12-24","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B47"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"썸네일 추츨 인프라 구축","담당자":"민영진","시작일":"2026-12-28","종료일":"2026-12-30","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B48"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"5.4 썸네일 추출 기능 구현","담당자":"민영진","시작일":"2026-12-31","종료일":"2027-01-04","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B49"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"5.5 저장 API 설계","담당자":"민영진","시작일":"2027-01-05","종료일":"2027-01-06","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B50"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"5.6 저장 API 기능 구현","담당자":"민영진","시작일":"2027-01-07","종료일":"2027-01-11","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B51"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"5.7 저장 API 기능 연동","담당자":"다솜윤, 민영진","시작일":"2027-01-12","종료일":"2027-01-13","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B52"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"5.8 테스트 및 수정","담당자":"민영진","시작일":"2027-01-14","종료일":"2027-01-20","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B53"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"5.9 배포","담당자":"다솜윤, 민영진","시작일":"2027-01-21","종료일":"2027-01-21","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B54"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"6 에디터 기능 추가","담당자":"","시작일":"2026-11-02","종료일":"2026-11-27","상태":"진행","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B55"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"6.1 페이지별 분할 기능 구현","담당자":"다솜윤","시작일":"2026-11-02","종료일":"2026-11-27","상태":"진행","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B56"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"6.2 문서 여백 설정 기능 구현","담당자":"다솜윤","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B57"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"6.3 글머리 기호 및 페이지 번호 기능 구현","담당자":"다솜윤","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B58"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"6.4 페이지별 용지 방향 혼합 처리","담당자":"다솜윤","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B59"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"6.5 문서 용지 크기 조정 기능 구현","담당자":"다솜윤","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B60"},{"프로젝트":"예스폼 에디터","그룹":"2차 고도화","업무명":"페이존 마이그레이션","담당자":"","시작일":"2026-12-01","종료일":"2027-02-26","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B61"},{"프로젝트":"예스폼 에디터","그룹":"공유하기","업무명":"3.1 목록","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B63"},{"프로젝트":"예스폼 에디터","그룹":"공유하기","업무명":"3.2 문서함","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B64"},{"프로젝트":"예스폼 에디터","그룹":"공유하기","업무명":"3.3 최대 개수·건수 안내","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B65"},{"프로젝트":"예스폼 에디터","그룹":"공유하기","업무명":"3.4 문서 업로드","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B66"},{"프로젝트":"예스폼 에디터","그룹":"공유하기","업무명":"3.5 역할 설정","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B67"},{"프로젝트":"예스폼 에디터","그룹":"공유하기","업무명":"3.6 입력란","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B68"},{"프로젝트":"예스폼 에디터","그룹":"공유하기","업무명":"3.7 본인 미리 서명","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B69"},{"프로젝트":"예스폼 에디터","그룹":"공유하기","업무명":"3.8 첨부파일","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B70"},{"프로젝트":"예스폼 에디터","그룹":"공유하기","업무명":"3.9 미리보기","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=2094902879&range=B71"},{"프로젝트":"예스폼싸인","그룹":"디자인 시스템 도입","업무명":"디자인 시스템 도입","담당자":"","시작일":"2026-10-12","종료일":"2026-12-11","상태":"진행","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B11"},{"프로젝트":"예스폼싸인","그룹":"디자인 시스템 도입","업무명":"1 퍼블리싱","담당자":"sujin lee","시작일":"2026-10-12","종료일":"2026-11-06","상태":"진행","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B12"},{"프로젝트":"예스폼싸인","그룹":"디자인 시스템 도입","업무명":"1.1 컴포넌트 라이브러리 제작","담당자":"","시작일":"2026-10-12","종료일":"2026-10-23","상태":"진행","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B13"},{"프로젝트":"예스폼싸인","그룹":"디자인 시스템 도입","업무명":"1.2 사이트 퍼블리싱","담당자":"","시작일":"2026-10-26","종료일":"2026-11-06","상태":"진행","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B14"},{"프로젝트":"예스폼싸인","그룹":"디자인 시스템 도입","업무명":"2 개발","담당자":"이인국","시작일":"2026-11-02","종료일":"2026-12-11","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B15"},{"프로젝트":"예스폼싸인","그룹":"디자인 시스템 도입","업무명":"1.3 디자인 토큰 연동","담당자":"","시작일":"2026-11-02","종료일":"2026-12-11","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B16"},{"프로젝트":"예스폼싸인","그룹":"PHP 버전 업그레이드","업무명":"PHP 버전 업그레이드","담당자":"","시작일":"2026-10-23","종료일":"2026-10-30","상태":"완료","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B17"},{"프로젝트":"예스폼싸인","그룹":"PHP 버전 업그레이드","업무명":"1 업그레이드 작업","담당자":"","시작일":"2026-10-23","종료일":"2026-10-30","상태":"완료","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B18"},{"프로젝트":"예스폼싸인","그룹":"PHP 버전 업그레이드","업무명":"1.1 개발","담당자":"이인국","시작일":"2026-10-23","종료일":"2026-10-26","상태":"완료","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B19"},{"프로젝트":"예스폼싸인","그룹":"PHP 버전 업그레이드","업무명":"1.2 기능 테스트","담당자":"PARK CHAEEUN, 이인국","시작일":"2026-10-26","종료일":"2026-10-30","상태":"완료","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B20"},{"프로젝트":"예스폼싸인","그룹":"개발 코드 점검 및 코드 리뷰 스킬 구축","업무명":"개발 코드 점검 및 코드 리뷰 스킬 구축","담당자":"","시작일":"2026-11-03","종료일":"2026-12-04","상태":"진행","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B21"},{"프로젝트":"예스폼싸인","그룹":"개발 코드 점검 및 코드 리뷰 스킬 구축","업무명":"1 업그레이드 작업","담당자":"이인국","시작일":"2026-10-12","종료일":"2026-12-04","상태":"진행","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B22"},{"프로젝트":"예스폼싸인","그룹":"개발 코드 점검 및 코드 리뷰 스킬 구축","업무명":"1.1 코드 리뷰 스킬 제작","담당자":"","시작일":"2026-11-03","종료일":"2026-11-17","상태":"진행","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B23"},{"프로젝트":"예스폼싸인","그룹":"개발 코드 점검 및 코드 리뷰 스킬 구축","업무명":"1.2 스킬 검증 및 코드 검증","담당자":"","시작일":"2026-11-18","종료일":"2026-12-04","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B24"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"2차 고도화","담당자":"","시작일":"2026-10-12","종료일":"2027-04-15","상태":"진행","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B25"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"1 기획","담당자":"PARK CHAEEUN","시작일":"2026-10-12","종료일":"2026-11-11","상태":"진행","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B26"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"1.1 요구사항 정리","담당자":"","시작일":"2026-10-12","종료일":"2026-10-16","상태":"완료","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B27"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"1.2 래퍼런스 탐색","담당자":"","시작일":"2026-10-19","종료일":"2026-10-23","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B28"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"1.3 템플릿 기능(템플릿 및 개선사항) 기획","담당자":"","시작일":"2026-10-26","종료일":"2026-10-30","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B29"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"1.4 대량 전송 기획","담당자":"","시작일":"2026-10-26","종료일":"2026-11-11","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B30"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"1.5 최종 피드백","담당자":"","시작일":"2026-10-30","종료일":"2026-11-11","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B31"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"2 디자인","담당자":"hyunji sim","시작일":"2026-11-02","종료일":"2026-12-11","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B32"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"2.1 개선 항목","담당자":"","시작일":"2026-11-02","종료일":"2026-11-06","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B33"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"2.2 템플릿","담당자":"","시작일":"2026-11-06","종료일":"2026-11-13","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B34"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"2.3 대량전송","담당자":"","시작일":"2026-11-13","종료일":"2026-11-18","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B35"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"2.4 최종 피드백","담당자":"","시작일":"2026-11-18","종료일":"2026-11-20","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B36"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"3 퍼블리싱","담당자":"sujin lee","시작일":"2026-11-23","종료일":"2026-12-11","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B37"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"3.1 개선 항목","담당자":"","시작일":"2026-11-23","종료일":"2026-11-27","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B38"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"3.2 템플릿","담당자":"","시작일":"2026-11-30","종료일":"2026-12-04","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B39"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"3.3 대량전송","담당자":"","시작일":"2026-12-07","종료일":"2026-12-11","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B40"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"3.4 최종 피드백","담당자":"","시작일":"2026-12-11","종료일":"2026-12-11","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B41"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"3.4 문서 업로드","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B42"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"3.5 역할 설정","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B43"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"3.6 입력란","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B44"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"3.7 본인 미리 서명","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B45"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"3.8 첨부파일","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B46"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"3.9 미리보기","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B47"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"3.10 계약하기·대량전송 분기","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B48"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"3.11 수정·삭제","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B49"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"4 대량전송 페이지","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B50"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"4.1 엑셀 업로드","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B51"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"4.2 직접 입력","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B52"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"4.3 공통 설정","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B53"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"4.4 개인화 입력","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B54"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"4.5 오류 검증","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B55"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"4.6 전송 전 확인","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B56"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"4.7 라벨","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B57"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"4.8 현황","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B58"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"4.9 상세","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B59"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"4.10 실패 다시 보내기","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B60"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"4.11 일괄 취소·리마인드","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B61"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"5 기존 화면 수정","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B62"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"5.1 Step3 공통항목","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B63"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"5.2 Step4 라벨","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B64"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"5.3 완료 페이지 주소록 저장","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B65"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"5.4 계약 목록 대량전송 표시","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B66"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"4 개선","담당자":"이인국","시작일":"2026-12-14","종료일":"2026-12-24","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B67"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"4.1 공통항목 추가","담당자":"","시작일":"2026-12-14","종료일":"2026-12-18","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B68"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"4.2 Step4 라벨 설정","담당자":"","시작일":"2026-12-21","종료일":"2026-12-22","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B69"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"4.3 주소록 자동 추가","담당자":"","시작일":"2026-12-23","종료일":"2026-12-24","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B70"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"5 템플릿","담당자":"이인국","시작일":"2026-12-28","종료일":"2027-02-18","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B71"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"5.1 템플릿 관리","담당자":"","시작일":"2026-12-28","종료일":"2026-12-31","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B72"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"5.2 최대 개수 제한","담당자":"","시작일":"2027-01-04","종료일":"2027-01-04","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B73"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"5.3 템플릿 생성","담당자":"","시작일":"2027-01-05","종료일":"2027-01-15","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B74"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"5.4 역할 설정","담당자":"","시작일":"2027-01-18","종료일":"2027-01-21","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B75"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"5.5 계약 순서","담당자":"","시작일":"2027-01-22","종료일":"2027-01-25","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B76"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"5.6 본인 미리 서명","담당자":"","시작일":"2027-01-26","종료일":"2027-01-28","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B77"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"5.7 미리보기","담당자":"","시작일":"2027-01-29","종료일":"2027-02-01","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B78"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"5.8 첨부파일","담당자":"","시작일":"2027-02-02","종료일":"2027-02-03","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B79"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"5.9 템플릿 문서함","담당자":"","시작일":"2027-02-04","종료일":"2027-02-05","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B80"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"5.10 템플릿 수정","담당자":"","시작일":"2027-02-10","종료일":"2027-02-11","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B81"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"5.11 템플릿 삭제","담당자":"","시작일":"2027-02-12","종료일":"2027-02-12","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B82"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"5.12 템플릿 생성 조건","담당자":"","시작일":"2027-02-15","종료일":"2027-02-15","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B83"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"5.13 AI QA 테스트","담당자":"","시작일":"2027-02-16","종료일":"2027-02-16","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B84"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"5.14 테스트 사항 수정","담당자":"","시작일":"2027-02-17","종료일":"2027-02-17","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B85"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"5.15 배포","담당자":"","시작일":"2027-02-18","종료일":"2027-02-18","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B86"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"6 대량전송","담당자":"이인국","시작일":"2027-02-16","종료일":"2027-04-11","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B87"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"6.1 엑셀 파일 기반","담당자":"","시작일":"2027-02-16","종료일":"2027-02-22","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B88"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"6.2 공통 설정","담당자":"","시작일":"2027-02-23","종료일":"2027-02-24","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B89"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"6.3 직접 입력","담당자":"","시작일":"2027-02-25","종료일":"2027-03-03","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B90"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"6.4 개인화 입력","담당자":"","시작일":"2027-03-04","종료일":"2027-03-05","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B91"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"6.5 건수 차감","담당자":"","시작일":"2027-03-08","종료일":"2027-03-09","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B92"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"6.6 최대 발송","담당자":"","시작일":"2027-03-10","종료일":"2027-03-10","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B93"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"6.7 발송 후 라벨 관리","담당자":"","시작일":"2027-03-11","종료일":"2027-03-12","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B94"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"6.8 오류 검증","담당자":"","시작일":"2027-03-15","종료일":"2027-03-17","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B95"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"6.9 미리보기","담당자":"","시작일":"2027-03-18","종료일":"2027-03-19","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B96"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"6.10 전송 전 검증","담당자":"","시작일":"2027-03-22","종료일":"2027-03-23","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B97"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"6.11 대량 발송 현황","담당자":"","시작일":"2027-03-24","종료일":"2027-03-30","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B98"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"6.12 요약 알림","담당자":"","시작일":"2027-03-31","종료일":"2027-04-06","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B99"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"6.13 일괄 취소·리마인드","담당자":"","시작일":"2027-04-07","종료일":"2027-04-09","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B100"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"6.14 사내 테스트","담당자":"","시작일":"2027-04-08","종료일":"2027-04-10","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B101"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"6.15 수정","담당자":"","시작일":"2027-04-09","종료일":"2027-04-11","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B102"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"6.16 배포","담당자":"","시작일":"2027-02-18","종료일":"2027-02-18","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B103"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"7 CSV 파일 다운로드","담당자":"이인국","시작일":"2027-04-09","종료일":"2027-04-15","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B104"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"7.1 계약 목록 - 계약 진행 필터 기준 엑셀 다운로드","담당자":"","시작일":"2027-04-09","종료일":"2027-04-12","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B105"},{"프로젝트":"예스폼싸인","그룹":"2차 고도화","업무명":"7.2 대량전송 결과 다운로드","담당자":"","시작일":"2027-04-13","종료일":"2027-04-15","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B106"},{"프로젝트":"예스폼싸인","그룹":"예스폼싸인-에디터 연동 (공통)","업무명":"8 기획","담당자":"","시작일":"","종료일":"","상태":"대기","원본링크":"https://docs.google.com/spreadsheets/d/16DOocjWyjZpLPIK29gT70FGAxxp-a7E-/edit#gid=917858273&range=B108"}]};
+
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const D = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); };
+  const addD = (d,n) => new Date(d.getFullYear(), d.getMonth(), d.getDate()+n);
+  const mon = d => addD(d, -((d.getDay()+6)%7));
+  const diff = (a,b) => Math.round((b-a)/864e5);
+  const iso = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const now0 = new Date(); const TODAY = new Date(now0.getFullYear(), now0.getMonth(), now0.getDate());
+  const md = d => (d.getFullYear()!==TODAY.getFullYear() ? String(d.getFullYear()).slice(2)+'.' : '') + `${d.getMonth()+1}/${d.getDate()}`;
+  const mdw = d => `${md(d)}(${WD[d.getDay()]})`;
+  const isWd = d => d.getDay()>0 && d.getDay()<6;
+  const wdCount = (a,b) => { let n=0; for(let d=a; d<=b; d=addD(d,1)) if(isWd(d)) n++; return n; };
+
+  function parseCSV(t){ const rows=[]; let row=[], f='', q=false;
+    for (let i=0;i<t.length;i++){ const c=t[i];
+      if(q){ if(c==='"'){ if(t[i+1]==='"'){f+='"';i++;} else q=false; } else f+=c; }
+      else if(c==='"') q=true; else if(c===','){row.push(f);f='';} else if(c==='\n'){row.push(f);rows.push(row);row=[];f='';} else if(c!=='\r') f+=c; }
+    if(f||row.length){row.push(f);rows.push(row);} return rows; }
+  function toRecords(csv){ const r=parseCSV(csv); const h=r[0]; return r.slice(1).filter(x=>x.length>1).map(x=>Object.fromEntries(h.map((k,i)=>[k,x[i]||'']))); }
+
+  /* 사람별 업무 분류: 담당자 이름 → 업무명(디자인/기획) → 상위 업무 순서 */
+  function classify(rows){
+    const out=[], ctx={};
+    rows.forEach((r,i)=>{
+      const proj=r['프로젝트'], grp=r['그룹'];
+      if(SKIP.has(proj)) return;
+      const raw=(r['업무명']||'').trim(); if(!raw) return;
+      const m=raw.match(/^(\d+(?:\.\d+)*)\.?\s+(.*)$/);
+      const no=m?m[1]:null, name=m?m[2]:raw;
+      const map=ctx[proj+'|'+grp] || (ctx[proj+'|'+grp]={});
+      const parent = no && no.includes('.') ? (map[no.split('.').slice(0,-1).join('.')]||null) : null;
+      const owner=(r['담당자']||'').trim();
+      let who=null, why='';
+      const direct=PEOPLE.find(p=>p.re.test(owner));
+      if(direct){ who=direct.id; why='담당자 지정'; }
+      else if(!owner){
+        const bn=PEOPLE.find(p=>p.byName(name));
+        if(bn){ who=bn.id; why='업무명('+bn.role+')'; }
+        else if(parent && parent.who){ who=parent.who; why='상위 업무'; }
+      }
+      const s=(r['시작일']||'').trim(), e=(r['종료일']||'').trim()||s;
+      const t={ i, proj, grp, no, name, owner, who, why, s, e, st:(r['상태']||'').trim(), note:r['비고']||'', link:r['원본링크']||'', parent: parent&&parent.who===who ? parent : null, kids:[], raw:r };
+      if(no) map[no]=t;
+      if(who){ out.push(t); if(t.parent) t.parent.kids.push(t); }
+    });
+    out.forEach(t=>{ t.leaf = !t.kids.some(k=>k.s); t.state = state(t); });
+    // 상위 업무 기간이 하위 일정보다 길면, 남는 기간도 그 사람 일정으로 본다
+    out.forEach(t=>{
+      if(t.leaf || !t.s) return;
+      const ke=t.kids.filter(k=>k.s).reduce((m,k)=>D(k.e)>m?D(k.e):m, new Date(0));
+      if(D(t.e)>ke){ let rs=addD(ke,1); while(!isWd(rs) && rs<D(t.e)) rs=addD(rs,1);
+        const r={...t, name:t.name+' (하위 일정 이후 기간)', s:iso(rs), leaf:true, rest:true, parent:null, kids:[]};
+        r.state=state(r); t.rest=r; }
+    });
+    return out;
+  }
+  function state(t){
+    if(!t.s) return 'tbd';
+    if(t.st==='완료') return 'done';
+    if(TODAY < D(t.s)) return 'plan';
+    if(TODAY > D(t.e)) return 'over';
+    return 'now';
+  }
+  const units = (tasks,pid) => { const r=[]; tasks.forEach(t=>{ if(t.who!==pid) return; if(t.leaf) r.push(t); else if(t.rest) r.push(t.rest); }); return r; };
+  const busyTasks = (tasks,pid) => units(tasks,pid).filter(t=>t.s && t.st!=='완료');
+  const overlap = (t,a,b) => D(t.s)<=b && D(t.e)>=a;
+
+  function freeRanges(tasks,pid,a,b){
+    const bt=busyTasks(tasks,pid), days=[];
+    for(let d=a; d<=b; d=addD(d,1)) if(isWd(d) && !bt.some(t=>overlap(t,d,d))) days.push(d);
+    const rs=[]; days.forEach(d=>{ const last=rs[rs.length-1];
+      if(last && wdCount(addD(last.e,1), addD(d,-1))===0) last.e=d; else rs.push({s:d,e:d}); });
+    return {days, rs};
+  }
+  const rangeTxt = r => +r.s===+r.e ? mdw(r.s) : `${mdw(r.s)}~${mdw(r.e)}`;
+
+  let TASKS=[], META={};
+  const ui = { who:'all', hideDone:false, a:null, b:null };
+
+  function personCard(p){
+    const mine=TASKS.filter(t=>t.who===p.id), leaves=units(TASKS,p.id);
+    const now=leaves.filter(t=>t.state==='now').sort((x,y)=>D(x.e)-D(y.e));
+    const next=leaves.filter(t=>t.state==='plan').sort((x,y)=>D(x.s)-D(y.s)||D(x.e)-D(y.e));
+    const over=leaves.filter(t=>t.state==='over'), tbd=mine.filter(t=>t.state==='tbd');
+    const bt=busyTasks(TASKS,p.id);
+    // 다음 빈 평일, 이후 완전히 비는 날
+    let firstFree=null; for(let d=TODAY,k=0;k<200;d=addD(d,1),k++){ if(isWd(d) && !bt.some(t=>overlap(t,d,d))){ firstFree=d; break; } }
+    const lastEnd=bt.reduce((m,t)=>D(t.e)>m?D(t.e):m, addD(TODAY,-1));
+    let open=addD(lastEnd,1); while(!isWd(open)) open=addD(open,1);
+    const freeTxt = !bt.some(t=>D(t.e)>=TODAY)
+      ? `오늘 이후 등록된 일정이 없어요.`
+      : (firstFree && +firstFree<+open
+          ? `가장 빠른 빈 날은 <b>${mdw(firstFree)}</b>, 등록된 일정은 <b>${mdw(lastEnd)}</b>에 끝나요.`
+          : `등록된 일정이 <b>${mdw(lastEnd)}</b>까지 이어져요. <b>${mdw(open)}</b>부터 비어 있어요.`);
+    const li = (t,mode) => {
+      const s=D(t.s), e=D(t.e), left=diff(TODAY,e), start=diff(TODAY,s);
+      const rt = mode==='now' ? `<b>${md(e)}까지</b>${left===0?'오늘 마감':left+'일 남음'}` : `<b>${mdw(s)} 시작</b>${start}일 뒤 · ${wdCount(s,e)}일`;
+      return `<li><div><div class="pj">${esc(t.proj)} · ${esc(t.parent?t.parent.name:t.grp)}</div><div class="nm">${esc(t.name)}</div></div><div class="rt">${rt}</div></li>`;
+    };
+    return `<div class="pc" data-p="${p.id}">
+      <div class="pc-head"><div class="av">${p.name.slice(1,2)}</div><div><h2>${p.name}<small>${p.en}</small></h2><span class="role">${p.role}</span></div></div>
+      <div class="kpis">
+        <div class="kpi"><b>${now.length}</b><span>진행 중</span></div>
+        <div class="kpi"><b>${next.length}</b><span>예정</span></div>
+        <div class="kpi ${over.length?'warn':''}" title="종료일이 지났는데 시트에 완료 표시가 없는 업무"><b>${over.length}</b><span>확인 필요</span></div>
+        <div class="kpi"><b>${tbd.length}</b><span>일정 미정</span></div>
+      </div>
+      <div class="free">${freeTxt}</div>
+      <h3>지금 하는 일 · ${mdw(TODAY)}</h3>
+      <ul class="tl">${now.length?now.map(t=>li(t,'now')).join(''):'<li class="empty">오늘 날짜에 걸린 업무가 없어요</li>'}</ul>
+      <h3>다음 일정</h3>
+      <ul class="tl">${next.length?next.slice(0,4).map(t=>li(t,'plan')).join(''):'<li class="empty">예정된 업무가 없어요</li>'}</ul>
+    </div>`;
+  }
+
+  function planBlock(){
+    const a=ui.a, b=ui.b;
+    const res = PEOPLE.map(p=>{
+      const ov=busyTasks(TASKS,p.id).filter(t=>overlap(t,a,b)).sort((x,y)=>D(x.s)-D(y.s));
+      const fr=freeRanges(TASKS,p.id,a,b), tot=wdCount(a,b);
+      const v = ov.length===0 ? `<b class="ok">비어 있어요</b> · 평일 ${tot}일 모두 가능` :
+        (fr.days.length ? `겹치는 업무 <b class="busy">${ov.length}건</b> · 빈 평일 <b class="ok">${fr.days.length}일</b> / ${tot}일` : `겹치는 업무 <b class="busy">${ov.length}건</b> · 빈 평일 없음`);
+      return `<div class="pr"><h4><i style="background:${COLOR[p.id][0]}"></i>${p.name} <span style="font-weight:400;color:var(--sub);font-size:13px">${p.role}</span></h4>
+        <div class="verdict">${v}</div>
+        ${ov.length?`<ul>${ov.map(t=>`<li><span>${esc(t.proj)} · ${esc(t.name)}</span><span>${mdw(D(t.s))}~${mdw(D(t.e))}</span></li>`).join('')}</ul>`:''}
+        ${ov.length && fr.rs.length?`<div class="freed">빈 날: <b>${fr.rs.map(rangeTxt).join(', ')}</b></div>`:''}
+      </div>`;
+    }).join('');
+    return res;
+  }
+
+  function heatBlock(){
+    const W=16, w0=mon(TODAY);
+    const weeks=[...Array(W)].map((_,k)=>addD(w0,7*k));
+    const head = `<tr><th></th>${weeks.map((w,k)=>`<th class="${k===0?'me':''}">${k===0?'이번 주':md(w)+'~'}</th>`).join('')}</tr>`;
+    const rows = PEOPLE.map(p=>{
+      const bt=busyTasks(TASKS,p.id), [c1]=COLOR[p.id];
+      return `<tr><td class="who">${p.name}</td>${weeks.map(w=>{
+        const f=addD(w,4), ov=bt.filter(t=>overlap(t,w,f));
+        const fr=freeRanges(TASKS,p.id,w,f).days.length;
+        const n=ov.length, lv=Math.min(n,3);
+        const bg = n===0 ? '' : `background:${c1}${['','26','55','99'][lv]};color:${lv>=3?'#fff':c1}`;
+        const tip = n ? ov.map(t=>`${t.name} (${md(D(t.s))}~${md(D(t.e))})`).join('\n') : '등록된 업무 없음';
+        return `<td class="c ${n?'':'l0'}" style="${bg}" title="${esc(tip)}" data-w="${iso(w)}">${n||'–'}<small>${n?(fr?`빈 날 ${fr}일`:'꽉 참'):'여유'}</small></td>`;
+      }).join('')}</tr>`;
+    }).join('');
+    return `<div class="heat-wrap"><table class="heat">${head}${rows}</table></div>
+      <div class="legend"><span>칸 숫자 = 그 주(월~금)에 걸친 업무 수, 아래는 업무가 하나도 없는 평일 수예요. 칸을 누르면 위에서 그 주를 확인해요.</span></div>`;
+  }
+
+  function ganttBlock(){
+    let list=TASKS.filter(t=>(ui.who==='all'||t.who===ui.who));
+    if(ui.hideDone) list=list.filter(t=>t.state!=='done' && !(t.kids.length && t.kids.every(k=>k.state==='done')));
+    const dated=list.filter(t=>t.s);
+    if(!dated.length) return '<div class="loading">표시할 업무가 없어요</div>';
+    let a=dated.reduce((m,t)=>D(t.s)<m?D(t.s):m, addD(TODAY,-7));
+    let b=dated.reduce((m,t)=>D(t.e)>m?D(t.e):m, addD(TODAY,28));
+    a=mon(a); b=addD(mon(addD(b,10)),6);
+    const N=diff(a,b)+1, pct=d=>diff(a,d)/N*100;
+    let hdr='';
+    for(let d=a; d<=b; d=addD(d,1)){
+      if(d.getDate()===1 || +d===+a) hdr+=`<span class="mth" style="left:${pct(d)}%">${d.getFullYear()!==TODAY.getFullYear()?String(d.getFullYear()).slice(2)+'년 ':''}${d.getMonth()+1}월</span>`;
+      if(d.getDay()===1) hdr+=`<span class="wkl" style="left:${pct(d)}%">${d.getDate()}</span>`;
+    }
+    const tl=(pct(TODAY)+50/N);
+    const todayLn=`<span class="todayln" style="left:${tl}%"></span>`;
+    let html=`<div class="g-in" style="--wk:${700/N}%">
+      <div class="gr hd"><div class="gl">업무 · 기간 · 상태</div><div class="gt">${hdr}${todayLn}<span class="todaytag" style="left:${tl}%">오늘</span></div></div>`;
+    const tbd=[];
+    PEOPLE.forEach(p=>{
+      const mine=dated.filter(t=>t.who===p.id); if(!mine.length && ui.who!=='all') return;
+      if(!mine.length) return;
+      const [c1,c2]=COLOR[p.id];
+      html+=`<div class="gr person"><div class="gl"><i style="background:${c1}"></i>${p.name} <span style="font-weight:400;font-size:13px;color:var(--sub)">${p.role}</span></div><div class="gt">${todayLn}</div></div>`;
+      const groups=[]; mine.forEach(t=>{ const k=t.proj+' · '+t.grp; let g=groups.find(x=>x.k===k); if(!g) groups.push(g={k,items:[]}); g.items.push(t); });
+      groups.forEach(g=>{
+        html+=`<div class="gr grp"><div class="gl">${esc(g.k)}</div><div class="gt">${todayLn}</div></div>`;
+        g.items.forEach(t=>{
+          const isPar=!t.leaf, isChild=!!t.parent && g.items.includes(t.parent);
+          const s=D(t.s), e=D(t.e), days=wdCount(s,e);
+          const sheet = t.st && ((t.state==='now'&&t.st!=='진행')||(t.state==='over')||(t.state==='plan'&&t.st!=='대기')) ? `<span class="sheet">시트: ${esc(t.st)}</span>` : '';
+          const why = t.why!=='담당자 지정' ? `<span class="sheet" title="담당자 칸이 비어 있어 ${esc(t.why)} 기준으로 넣었어요">· ${esc(t.why)} 기준</span>` : (t.owner.includes(',') ? `<span class="sheet">· 공동: ${esc(t.owner)}</span>` : '');
+          html+=`<div class="gr ${isPar?'parent':''} ${isChild?'child':''}"><div class="gl">
+              <div class="tn">${t.no?`<span class="no">${esc(t.no)}</span>`:''}<span>${esc(t.name)}</span>${t.link?`<a href="${esc(t.link)}" target="_blank" rel="noopener" title="원본 시트">원본↗</a>`:''}</div>
+              <div class="tm">${mdw(s)}${+s!==+e?' ~ '+mdw(e):''} · ${days}일 <span class="st ${t.state}">${ST_LABEL[t.state]}</span>${sheet}${why}</div>
+            </div><div class="gt">${todayLn}<span class="bar ${isPar?'parent':''} ${t.state}" style="--bc:${c1};--bs:${c2};left:${pct(s)}%;width:${(diff(s,e)+1)/N*100}%" title="${esc(t.name)} ${md(s)}~${md(e)}">${isPar?'':`<span class="lb">${esc(t.name)}</span>`}</span></div></div>`;
+        });
+      });
+    });
+    html+='</div>';
+    const tbdItems=TASKS.filter(t=>t.state==='tbd' && (ui.who==='all'||t.who===ui.who));
+    if(tbdItems.length) html+=`<div class="tbd-list">일정 미정: ${tbdItems.map(t=>`<b>${PEOPLE.find(p=>p.id===t.who).name}</b> ${esc(t.proj)} · ${esc(t.grp)} · ${esc((t.no?t.no+' ':'')+t.name)}`).join(' / ')}</div>`;
+    return html;
+  }
+
+  function render(){
+    $('#app').innerHTML = `
+      <div class="people">${PEOPLE.map(personCard).join('')}</div>
+
+      <section class="blk">
+        <h2>새 일정 잡기 전에 확인<small>기간을 고르면 두 사람의 겹치는 업무와 빈 평일을 보여줘요</small></h2>
+        <div class="card">
+          <div class="plan-ctrl">
+            <label>기간</label><input type="date" id="pa" value="${iso(ui.a)}"><span>~</span><input type="date" id="pb" value="${iso(ui.b)}">
+            <div class="chips">
+              <button class="chipb" data-q="this">이번 주</button><button class="chipb" data-q="next">다음 주</button>
+              <button class="chipb" data-q="next2">다음 2주</button><button class="chipb" data-q="month">다음 달</button>
+            </div>
+          </div>
+          <div class="plan-res" id="planres">${planBlock()}</div>
+        </div>
+        <div class="card">${heatBlock()}</div>
+      </section>
+
+      <section class="blk">
+        <h2>전체 일정<small>현황판 원본 시트 기준 · 막대가 연하면 예정, 빗금은 기간 지남(완료 표시 없음)</small></h2>
+        <div class="g-ctrl">
+          <div class="seg" role="tablist">
+            <button role="tab" data-who="all" aria-selected="${ui.who==='all'}">전체</button>
+            ${PEOPLE.map(p=>`<button role="tab" data-who="${p.id}" aria-selected="${ui.who===p.id}">${p.name} · ${p.role}</button>`).join('')}
+          </div>
+          <label class="chk"><input type="checkbox" id="hd" ${ui.hideDone?'checked':''}> 완료 숨기기</label>
+        </div>
+        <div class="card gantt" id="gantt">${ganttBlock()}</div>
+      </section>
+
+      <section class="blk">
+        <h2>이렇게 정리했어요</h2>
+        <div class="card rules"><ul>
+          <li>데이터는 <a class="lnk" href="${BOARD}" target="_blank" rel="noopener">예스폼 주요 사업일정 현황판</a>의 원본 시트(예스폼 에디터 · 예스폼싸인 WBS 등)를 열 때마다 바로 불러와요. 시트를 고치면 여기도 바로 바뀌어요.</li>
+          <li><b>심현지(디자인)</b>: 담당자가 <code>hyunji sim</code>인 업무, 담당자 칸이 비어 있고 업무명이 ‘디자인’인 업무(디자인 시스템·토큰·가이드 제외), 그 하위 업무.</li>
+          <li><b>박채은(기획)</b>: 담당자가 <code>PARK CHAEEUN</code>인 업무(공동 담당 포함), 담당자 칸이 비어 있고 업무명에 ‘기획’이 들어간 업무, 그 하위 업무.</li>
+          <li><b>웹 업무자동화</b>는 다른 기획자(박지훈) 업무라 뺐어요. ‘에디터·싸인 통합’ 시트는 상세 시트와 겹쳐서 상세 시트만 썼어요.</li>
+          <li>상태는 오늘 날짜로 다시 계산해요. 종료일이 지났는데 시트에 ‘완료’가 없으면 <span class="st over">기간 지남</span>으로 표시하고, 시트 상태가 다르면 옆에 ‘시트: …’로 같이 보여줘요.</li>
+          <li>빈 날 계산은 완료가 아닌 가장 하위 업무만 세고, 주말은 빼요. 상위 업무 기간이 하위 일정보다 길면 남는 기간도 일정으로 봐요(예: 싸인 디자인 하위 일정이 11/20에 끝나도 상위 기간 12/11까지는 일정 있음). 공휴일은 따로 빼지 않아요.</li>
+        </ul></div>
+      </section>`;
+    bind();
+  }
+
+  function setQuick(q){
+    const w=mon(TODAY);
+    if(q==='this'){ ui.a=TODAY; ui.b=addD(w,4); }
+    if(q==='next'){ ui.a=addD(w,7); ui.b=addD(w,11); }
+    if(q==='next2'){ ui.a=addD(w,7); ui.b=addD(w,18); }
+    if(q==='month'){ ui.a=new Date(TODAY.getFullYear(),TODAY.getMonth()+1,1); ui.b=new Date(TODAY.getFullYear(),TODAY.getMonth()+2,0); }
+  }
+  function refreshPlan(){
+    $('#pa').value=iso(ui.a); $('#pb').value=iso(ui.b);
+    $('#planres').innerHTML=planBlock();
+  }
+  function bind(){
+    document.querySelectorAll('.chipb').forEach(b=>b.onclick=()=>{ setQuick(b.dataset.q); document.querySelectorAll('.chipb').forEach(x=>x.classList.toggle('on',x===b)); refreshPlan(); });
+    ['#pa','#pb'].forEach(id=>$(id).onchange=()=>{ const a=$('#pa').value, b=$('#pb').value; if(!a||!b) return; ui.a=D(a); ui.b=D(b); if(ui.b<ui.a){ const t=ui.a; ui.a=ui.b; ui.b=t; } document.querySelectorAll('.chipb').forEach(x=>x.classList.remove('on')); refreshPlan(); });
+    document.querySelectorAll('td.c').forEach(td=>td.onclick=()=>{ ui.a=D(td.dataset.w); ui.b=addD(ui.a,4); document.querySelectorAll('.chipb').forEach(x=>x.classList.remove('on')); refreshPlan(); document.querySelector('.plan-ctrl').scrollIntoView({behavior:'smooth',block:'center'}); });
+    document.querySelectorAll('[data-who]').forEach(b=>b.onclick=()=>{ ui.who=b.dataset.who; document.querySelectorAll('[data-who]').forEach(x=>x.setAttribute('aria-selected',x===b)); $('#gantt').innerHTML=ganttBlock(); });
+    $('#hd').onchange=e=>{ ui.hideDone=e.target.checked; $('#gantt').innerHTML=ganttBlock(); };
+  }
+
+  async function getTab(tab){
+    const ctl=new AbortController(); const tm=setTimeout(()=>ctl.abort(),9000);
+    try{ const r=await fetch(API+encodeURIComponent(tab),{cache:'no-store',signal:ctl.signal}); if(!r.ok) throw new Error('HTTP '+r.status); return await r.text(); }
+    finally{ clearTimeout(tm); }
+  }
+  async function load(){
+    $('#src').innerHTML='<span><span class="dot warn"></span>불러오는 중…</span>';
+    let rows, live=true, srcInfo='';
+    try{
+      const [csv, cfg] = await Promise.all([getTab('통합일정'), getTab('소스설정').catch(()=> '')]);
+      rows=toRecords(csv);
+      if(!rows.length || !('담당자' in rows[0])) throw new Error('형식이 달라요');
+      if(cfg){ const c=toRecords(cfg); const hit=c.find(x=>x['프로젝트명']==='예스폼 에디터')||c.find(x=>x['프로젝트명']==='예스폼싸인'); const m=hit&&hit['마지막 수집 결과'].match(/(\d+\/\d+\s+\d+:\d+)/); if(m) srcInfo=m[1]; }
+    }catch(err){
+      live=false; rows=SNAPSHOT.rows;
+      $('#notice').hidden=false;
+      $('#notice').textContent=`현황판에서 일정을 불러오지 못해 저장본(${SNAPSHOT.at} 기준)을 보여줘요. 잠시 뒤 새로고침해 주세요. (${err.message||err})`;
+    }
+    TASKS=classify(rows);
+    if(live) $('#notice').hidden=true;
+    const t=new Date();
+    $('#src').innerHTML = live
+      ? `<span><span class="dot"></span>현황판 원본에서 실시간 · ${t.getMonth()+1}/${t.getDate()} ${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')} 불러옴${srcInfo?` (시트 수집 ${srcInfo})`:''}</span><button class="hbtn" id="rl">새로고침</button><a class="lnk" href="${BOARD}" target="_blank" rel="noopener">현황판 열기 ↗</a>`
+      : `<span><span class="dot warn"></span>저장본 · ${SNAPSHOT.at}</span><button class="hbtn" id="rl">다시 불러오기</button><a class="lnk" href="${BOARD}" target="_blank" rel="noopener">현황판 열기 ↗</a>`;
+    $('#rl').onclick=load;
+    if(!ui.a){ setQuick('next'); }
+    render();
+  }
+  load();
+})();
+</script>
+</body>
+</html>
