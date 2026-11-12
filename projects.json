@@ -710,6 +710,22 @@
               "href": "archive/20261112-144953-yesform-brief-wave-refine-v40/index.html"
             }
           ]
+        },
+        {
+          "id": "20261112-154634-yesform-brief-final-v41",
+          "label": "v41 · 최종안 (말줄임 제거)",
+          "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
+          "desc": "v39 확정안에서 말줄임(…) 되던 5곳 문구 정리. 필수 업무 일정 줄 3개 단축, 법령 카드 관련 서식명 2개에서 부가 설명 괄호 축약. 1440·1280px 모두 말줄임 0건 확인. 디자인은 v39와 동일(헤더 시안 비교 버튼 유지).",
+          "created": "2026.11.12",
+          "folder": "archive/20261112-154634-yesform-brief-final-v41",
+          "preview": "archive/20261112-154634-yesform-brief-final-v41/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "최종안 · 업무 브리핑 모달",
+              "href": "archive/20261112-154634-yesform-brief-final-v41/index.html"
+            }
+          ]
         }
       ]
     },
