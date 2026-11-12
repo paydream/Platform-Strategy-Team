@@ -46,7 +46,10 @@
   .stale{margin-top:10px;padding:10px 14px;border-radius:10px;background:#fff4e5;color:#b45309;font-size:13px;border:1px solid #fcd9a8}
   .ctrl{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:20px;position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0}
   .ptabs{display:flex;gap:8px}
-  .subsel{margin-top:2px;display:flex;justify-content:flex-end}
+  .subsel{margin-top:2px;display:flex;justify-content:flex-end;align-items:center;gap:10px;flex-wrap:wrap}
+  .wpick{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--sub);background:#fff;border:1px solid var(--line);border-radius:10px;padding:6px 10px}
+  .wpick input{font:inherit;font-size:14px;color:var(--text);border:1px solid var(--line);border-radius:7px;padding:4px 8px;background:#fff}
+  .wpick span{color:var(--text);font-weight:600}
   .seg.sub{max-width:100%;overflow-x:auto;scrollbar-width:thin}
   .seg.sub.day button{display:flex;flex-direction:column;align-items:center;padding:5px 10px;line-height:1.25}
   .seg.sub.day button small{font-size:11px;color:var(--faint);font-weight:400}
@@ -177,6 +180,11 @@ let D = null, month = null, prod = 'editor', view = 'week', pkey = { day: null, 
 // 보기별 비교 기준 (render에서 설정)
 let CMP = { short: '전월', label: '전월 대비', avg: true, note: '전월 비교는 일평균 기준' }, SEL = { s: '', e: '' };
 const dayAvg = col => { const i = D.dailyCols.indexOf(col), r = D.daily.filter(x => x[0] >= SEL.s && x[0] <= SEL.e); return r.length ? r.reduce((a, x) => a + (x[i] || 0), 0) / r.length : null; };
+const addDay = (s, n) => new Date(Date.parse(s + 'T00:00:00Z') + n * 864e5).toISOString().slice(0, 10);
+// 주간: 하루씩 밀린 7일 구간들. 비교 = 7일 앞 구간, 고를 수 있는 건 비교 구간이 있는 것만
+const wFind = e => D.periods.week.find(x => x.e === e) || null;
+const wPick = () => D.periods.week.filter(x => wFind(addDay(x.e, -7)));
+const wAligned = n => { const last = D.periods.week[D.periods.week.length - 1].e, out = []; for (let i = 0; i < n; i++) { const w = wFind(addDay(last, -7 * i)); if (w) out.push(w); } return out; };
 const VIEWS = [['day', '데일리'], ['week', '주간 (직전 7일)'], ['month', '월간']];
 const WD = '일월화수목금토';
 const wday = s => WD[new Date(s + 'T00:00:00').getDay()];
@@ -243,7 +251,7 @@ function start() {
   const v = h.get('v');
   view = hasP() ? (v === 'day' || v === 'week' || v === 'month' ? v : h.get('m') ? 'month' : 'week') : 'month';
   if (hasP()) {
-    const dk = D.periods.day.slice(-7).map(x => x.k), wk = D.periods.week.slice(1).map(x => x.k);
+    const dk = D.periods.day.slice(-7).map(x => x.k), wk = wPick().map(x => x.k);
     pkey.day = view === 'day' && dk.includes(h.get('k')) ? h.get('k') : dk[dk.length - 1];
     pkey.week = view === 'week' && wk.includes(h.get('k')) ? h.get('k') : wk[wk.length - 1];
   }
@@ -262,17 +270,17 @@ function render() {
     sub = D.months.map(x => `<button role="tab" data-m="${x.m}" aria-selected="${x.m === month}">${mLabel(x)}</button>`).join('');
   } else {
     const L = D.periods[view], k = pkey[view], i = L.findIndex(x => x.k === k), m = L[i];
-    const pm = view === 'day' ? L[i - 7] || null : L[i - 1] || null;
+    const pm = view === 'day' ? L[i - 7] || null : wFind(addDay(m.e, -7));
     history.replaceState(null, '', `#p=${prod}&v=${view}&k=${k}`);
     CMP = view === 'day'
       ? { short: '지난주 같은 요일', label: `지난주 ${wday(m.s)}요일 대비`, avg: false, note: pm ? `지난주 같은 요일(${MD(pm.s)})과 비교` : '', col: '지난주 대비' }
       : { short: '이전 7일', label: '이전 7일 대비', avg: false, note: pm ? `이전 7일(${dRange(pm.s, pm.e)})과 비교` : '', col: '이전 7일 대비' };
-    const label = view === 'day' ? `${MD(m.s)} (${wday(m.s)})` : (i === L.length - 1 ? `직전 7일 (${dRange(m.s, m.e)})` : dRange(m.s, m.e));
+    const label = view === 'day' ? `${MD(m.s)} (${wday(m.s)})` : (i === L.length - 1 ? `직전 7일 (${dRange(m.s, m.e)})` : `${dRange(m.s, m.e)} (7일)`);
     ctx = { m, pm, cd: 1, pd: 1, mk: m.mkt[prod], pmk: pm ? pm.mkt[prod] : null, label };
     SEL = { s: m.s, e: m.e };
     sub = view === 'day'
       ? L.slice(-7).map(x => `<button role="tab" data-k="${x.k}" aria-selected="${x.k === k}">${+x.k.slice(5, 7)}.${+x.k.slice(8)}<small>${wday(x.k)}</small></button>`).join('')
-      : L.slice(1).map((x, j, a) => `<button role="tab" data-k="${x.k}" aria-selected="${x.k === k}">${j === a.length - 1 ? '직전 7일' : dRange(x.s, x.e)}</button>`).join('');
+      : wAligned(4).filter(x => wFind(addDay(x.e, -7))).reverse().map((x, j, a) => `<button role="tab" data-k="${x.k}" aria-selected="${x.k === k}">${j === a.length - 1 ? '직전 7일' : dRange(x.s, x.e)}</button>`).join('');
   }
   $('#app').innerHTML = `
   <section class="hero">
@@ -287,12 +295,13 @@ function render() {
     </div>
     ${hasP() ? `<div class="seg vseg" role="tablist" aria-label="보기">${VIEWS.map(([v, l]) => `<button role="tab" data-v="${v}" aria-selected="${v === view}">${l}</button>`).join('')}</div>` : ''}
   </div>
-  <div class="subsel"><div class="seg sub ${view}" role="tablist" aria-label="기간">${sub}</div></div>
+  <div class="subsel">${view === 'week' ? wPicker() : ''}<div class="seg sub ${view}" role="tablist" aria-label="기간">${sub}</div></div>
   ${prod === 'editor' ? editorView(ctx) : signView(ctx)}
   ${notes()}`;
   document.querySelectorAll('.ptab').forEach(b => b.onclick = () => { prod = b.dataset.p; render(); });
   document.querySelectorAll('.seg button[data-m]').forEach(b => b.onclick = () => { month = b.dataset.m; render(); });
   document.querySelectorAll('.seg button[data-k]').forEach(b => b.onclick = () => { pkey[view] = b.dataset.k; render(); });
+  const ws = $('#wStart'); if (ws) ws.onchange = () => { const w = ws.value && wFind(addDay(ws.value, 6)); if (w && wFind(addDay(w.e, -7))) { pkey.week = w.k; render(); } else { ws.value = wFind(pkey.week).s; } };
   document.querySelectorAll('.vseg button[data-v]').forEach(b => b.onclick = () => { view = b.dataset.v; render(); });
   const on = document.querySelector('.seg.sub button[aria-selected="true"]'); if (on) on.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   drawChart();
@@ -407,10 +416,16 @@ function signView({ m, pm, cd, pd, mk, pmk, label }) {
 }
 
 /* ---------- 주간 · 월별 ---------- */
+// 주간 기간 직접 선택: 시작일을 고르면 7일(시작일~+6일)
+function wPicker() {
+  const P = wPick(), cur = wFind(pkey.week);
+  return `<label class="wpick">기간 직접 선택 <input type="date" id="wStart" value="${cur.s}" min="${P[0].s}" max="${P[P.length - 1].s}" aria-label="주간 시작일"><span>~ ${MD(cur.e)} (${wday(cur.e)})</span></label>`;
+}
 function trendTables(p) { return view === 'month' ? weekTable(p) + monthTable(p) : periodTable(p); }
 // 데일리: 최근 14일 / 주간: 직전 7일 블록. 선택한 기간 행을 강조
 function periodTable(p) {
-  const L = D.periods[view].slice(view === 'day' ? -7 : 1).reverse();
+  let L = view === 'day' ? D.periods.day.slice(-7).reverse() : wAligned(12);
+  if (view === 'week' && !L.some(x => x.k === pkey.week)) L = [wFind(pkey.week), ...L];
   const ev = (x, k) => (x.editor.ev[k] || [0, 0])[1];
   const head = p === 'editor' ? ['활성 사용자', '신규 사용자', '문서 생성', '내보내기', '싸인 연결'] : ['방문자', '신규 가입', '결제', '결제 금액', '전자계약 실사용자', 'GA4 사용자'];
   const row = x => p === 'editor' ? [x.editor.active, x.editor.new, ev(x, 'document_create'), ev(x, 'export_document'), ev(x, 'sign_entry')].map(fmt)
@@ -452,7 +467,7 @@ function notes() {
     <li>유입 채널별 사용자는 GA4 예스폼싸인 속성(전체 국가)의 세션 소스/매체를 묶은 거예요. 매출은 GA4를 쓰지 않아요.</li>
     <li>${last} 전자계약 실사용자는 관리자 월간 값이라 업데이트 당일이 일부 들어 있을 수 있어요.</li>`}
     <li>매일 아침 전날 데이터까지 자동으로 갱신돼요. 나머지 수치는 ${D0(D.range.end)}까지예요. 월간의 전월 비교는 기간 길이가 달라도 비교할 수 있게 일평균으로 계산했어요.</li>
-    <li>데일리는 지난주 같은 요일과, 주간은 어제까지 직전 7일을 그 전 7일과 비교해요. 사용자 수는 그 기간의 순 사용자이고, 싸인 방문자·전자계약 실사용자는 관리자 일별 값의 합계예요.</li></ul></div>`;
+    <li>데일리는 지난주 같은 요일과, 주간은 7일 구간을 그 바로 앞 7일과 비교해요(기본은 어제까지 직전 7일, 시작일을 바꾸면 최근 12주 안에서 아무 7일이나 볼 수 있어요). 사용자 수는 그 기간의 순 사용자이고, 싸인 방문자·전자계약 실사용자는 관리자 일별 값의 합계예요.</li></ul></div>`;
 }
 
 /* ---------- 일별 차트 (SVG) ---------- */
@@ -460,7 +475,7 @@ function drawChart() {
   const svg = $('#chart'); if (!svg) return;
   const cb = svg.parentElement;
   const tip = cb.querySelector('.tip') || cb.appendChild(Object.assign(document.createElement('div'), { className: 'tip' }));
-  const cols = D.dailyCols, from = view === 'month' || !hasP() ? '' : view === 'day' ? D.periods.day.slice(-7)[0].s : D.periods[view][0].s, rows = D.daily.filter(r => r[0] >= from), idx = k => cols.indexOf(k);
+  const cols = D.dailyCols, from = view === 'month' || !hasP() ? '' : view === 'day' ? D.periods.day.slice(-7)[0].s : [addDay(D.range.end, -34), addDay(SEL.s, -7)].sort()[0], rows = D.daily.filter(r => r[0] >= from), idx = k => cols.indexOf(k);
   const series = prod === 'editor'
     ? [['활성 사용자', 'editorActive', '#2f6bff'], ['신규 사용자', 'editorNew', '#9db8ff']]
     : [['방문자', 'signVisit', '#12a150'], ['신규 가입', 'signSignup', '#f59e0b']];
