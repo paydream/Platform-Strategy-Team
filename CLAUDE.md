@@ -39,8 +39,8 @@
 - 스냅샷: `data/tracking-snapshot.json` = GTM 컨테이너(태그·트리거·게시 이력), GA4 이벤트별 일별 수집량(최근 28일), GA4 맞춤 정의 목록. 자동 갱신 안 됨 — GTM 내부 API·GA4에서 다시 뽑아 이 파일을 덮어쓰면 갱신(재배포됨).
 - 원본 설계는 Google 시트 「GA4개선(WBS포함)」(01 예스폼 신규 · 02 제거·수정 · 03 싸인 신규 · 04 개발 필수 · WBS). 2026-11-12에 시트 내용으로 처음 채움.
 
-## 통계 · 마케팅 성과 (`/stats.html`, 매일 자동 갱신)
-- 헤더 GNB의 "마케팅 성과" 버튼(매일 보는 메뉴라 고정). 에디터·예스폼싸인 탭 × 월 탭. 통계 비밀번호(`STATS_PASSWORD`)로 열람.
+## 통계 · 에디터/싸인 지표 (`/stats.html`, 매일 자동 갱신)
+- 헤더 GNB의 "에디터/싸인 지표" 버튼(매일 보는 메뉴라 고정). 에디터·예스폼싸인 탭 × 월 탭. 통계 비밀번호(`STATS_PASSWORD`)로 열람.
 - 데이터: `data/stats/marketing.enc.json` — 저장소가 공개라 AES-256-GCM으로 암호화(`api/_statsfile.js`, 키는 `STATS_UPDATE_KEY`에서 파생). `meta`(업데이트 날짜·기간)만 평문. 파일이 없으면 env `STATS_DATA`(예전 스냅샷)를 쓴다.
 - 갱신: 매일 아침 Aside 루틴이 GA4(에디터·싸인 속성)와 싸인 관리자 통계에서 전날까지 다시 뽑아 `POST /api/stats-update` `{ key, id:'marketing', data }`로 보낸다(키 = `STATS_UPDATE_KEY`). API가 암호화해 GitHub에 커밋. 이 파일만 바뀐 커밋은 재배포 안 함(ignoreCommand), `/api/stats`가 GitHub에서 바로 읽는다(60초 캐시).
 - 목록(사이드바)의 기간·업데이트 날짜는 `auto: true` 항목이면 파일 meta로 자동 표시된다.

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>마케팅 성과 | 플랫폼전략팀 업무 아카이브</title>
+<title>에디터/싸인 지표 | 플랫폼전략팀 업무 아카이브</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
   :root{--bg:#f6f7f9;--card:#fff;--line:#e5e8ec;--text:#191f28;--sub:#6b7684;--faint:#98a1ad;--accent:#2f6bff;--chip:#eef3ff;
@@ -141,7 +141,7 @@
 </head>
 <body>
 <header><div class="wrap top"><strong>플랫폼전략팀</strong><div class="top-right">
-  <a class="hbtn" href="./">업무 아카이브</a><a class="hbtn daily on" href="stats.html" aria-current="page">마케팅 성과</a><a class="hbtn" href="tracking.html">측정 관리</a><a class="hbtn" href="./#stats">통계</a><a class="hbtn" href="admin/">관리자</a>
+  <a class="hbtn" href="./">업무 아카이브</a><a class="hbtn daily on" href="stats.html" aria-current="page">에디터/싸인 지표</a><a class="hbtn" href="tracking.html">측정 관리</a><a class="hbtn" href="./#stats">통계</a><a class="hbtn" href="admin/">관리자</a>
   <button class="hbtn" id="logout" hidden>잠그기</button>
 </div></div></header>
 
@@ -235,7 +235,7 @@ function render() {
   const ctx = { m, pm, cd: days(m), pd: pm ? days(pm) : 0, mk: D.mkt[prod][m.m], pmk: pm ? D.mkt[prod][pm.m] : null };
   $('#app').innerHTML = `
   <section class="hero">
-    <h1>마케팅 성과</h1>
+    <h1>에디터/싸인 지표</h1>
     <p>예스폼 에디터 · 예스폼싸인 | 데이터 ${D0(D.range.start)} ~ ${D0(D.range.end)} · ${upd()}</p>
     ${stale()}
   </section>
