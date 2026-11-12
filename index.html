@@ -19,6 +19,10 @@
   .top-right span{font-size:13px;color:var(--sub)}
   .admin-btn{font-size:12px;color:var(--sub);text-decoration:none;border:1px solid var(--line);border-radius:6px;padding:4px 10px}
   .admin-btn:hover{border-color:var(--accent);color:var(--accent)}
+  .admin-btn.daily{color:var(--accent);border-color:#c9d8ff;background:var(--chip);font-weight:600;display:inline-flex;align-items:center;gap:5px}
+  .admin-btn.daily::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent)}
+  .top-right{flex-wrap:wrap;justify-content:flex-end}
+  @media (max-width:640px){.top{height:auto;min-height:64px;padding-top:10px;padding-bottom:10px;gap:12px}.top-right{gap:6px}.top strong{flex:none;white-space:nowrap}}
   .hero{padding:36px 0 20px}
   .hero h1{font-size:26px}
   .hero p{color:var(--sub);margin-top:4px}
@@ -86,7 +90,7 @@
 </style>
 </head>
 <body>
-<header><div class="wrap top"><strong>플랫폼전략팀</strong><div class="top-right"><span>업무 아카이브</span><a class="admin-btn" href="tracking.html">측정 관리</a><a class="admin-btn" href="#stats">통계</a><a class="admin-btn" href="admin/">관리자</a></div></div></header>
+<header><div class="wrap top"><strong>플랫폼전략팀</strong><div class="top-right"><span>업무 아카이브</span><a class="admin-btn daily" href="stats.html" title="매일 자동 갱신">마케팅 성과</a><a class="admin-btn" href="tracking.html">측정 관리</a><a class="admin-btn" href="#stats">통계</a><a class="admin-btn" href="admin/">관리자</a></div></div></header>
 <main class="wrap">
   <section class="hero">
     <h1>업무 아카이브</h1>

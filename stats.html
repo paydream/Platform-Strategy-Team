@@ -22,6 +22,10 @@
   .hbtn{font-size:12px;color:var(--sub);text-decoration:none;border:1px solid var(--line);border-radius:6px;padding:4px 10px;background:#fff;cursor:pointer;font-family:inherit;white-space:nowrap}
   .hbtn:hover{border-color:var(--accent);color:var(--accent)}
   .hbtn.on{border-color:var(--accent);color:var(--accent);background:var(--chip)}
+  .hbtn.daily{color:var(--accent);font-weight:600;display:inline-flex;align-items:center;gap:5px}
+  .hbtn.daily::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent)}
+  .top-right{flex-wrap:wrap;justify-content:flex-end}
+  @media (max-width:640px){.top{height:auto;min-height:64px;padding-top:10px;padding-bottom:10px;gap:12px}.top-right{gap:6px}.top strong{flex:none;white-space:nowrap}}
 
   /* 비밀번호 */
   .gate{min-height:calc(100vh - 65px);display:flex;align-items:center;justify-content:center;padding:20px}
@@ -39,6 +43,7 @@
   .hero{padding:30px 0 0}
   .hero h1{font-size:26px;letter-spacing:-.01em}
   .hero p{color:var(--sub);margin-top:4px;font-size:14px}
+  .stale{margin-top:10px;padding:10px 14px;border-radius:10px;background:#fff4e5;color:#b45309;font-size:13px;border:1px solid #fcd9a8}
   .ctrl{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:20px;position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0}
   .ptabs{display:flex;gap:8px}
   .ptab{display:flex;align-items:center;gap:8px;font:inherit;font-size:16px;font-weight:600;border:1px solid var(--line);background:#fff;color:var(--sub);padding:10px 18px;border-radius:12px;cursor:pointer}
@@ -136,7 +141,7 @@
 </head>
 <body>
 <header><div class="wrap top"><strong>플랫폼전략팀</strong><div class="top-right">
-  <a class="hbtn" href="./">업무 아카이브</a><a class="hbtn on" href="stats.html" aria-current="page">통계</a><a class="hbtn" href="admin/">관리자</a>
+  <a class="hbtn" href="./">업무 아카이브</a><a class="hbtn daily on" href="stats.html" aria-current="page">마케팅 성과</a><a class="hbtn" href="tracking.html">측정 관리</a><a class="hbtn" href="./#stats">통계</a><a class="hbtn" href="admin/">관리자</a>
   <button class="hbtn" id="logout" hidden>잠그기</button>
 </div></div></header>
 
@@ -180,8 +185,10 @@ $('#logout').onclick = () => { sessionStorage.removeItem(KEY); location.reload()
 if (sessionStorage.getItem(KEY)) unlock(sessionStorage.getItem(KEY), true);
 
 /* ---------- 공통 ---------- */
-const mLabel = m => { const full = +m.end.slice(8) >= 28; return `${+m.m.slice(5)}월` + (full ? '' : ` (1~${+m.end.slice(8)}일)`); };
-const days = m => +m.end.slice(8);
+const mStart = m => m.start || m.m + '-01';
+const lastDay = m => new Date(+m.m.slice(0, 4), +m.m.slice(5, 7), 0).getDate();
+const mLabel = m => { const sd = +mStart(m).slice(8), ed = +m.end.slice(8), full = sd === 1 && ed === lastDay(m); return `${+m.m.slice(5)}월` + (full ? '' : ` (${sd}~${ed}일)`); };
+const days = m => +m.end.slice(8) - +mStart(m).slice(8) + 1;
 const dRange = (s, e) => `${+s.slice(5, 7)}.${+s.slice(8)} ~ ${+e.slice(5, 7)}.${+e.slice(8)}`;
 const D0 = s => s.replace(/-/g, '.');
 // 전월 대비: 기간 길이가 달라도 일평균으로 비교
@@ -201,6 +208,18 @@ function dtxt(d) {
 }
 const updown = d => d == null ? '' : d >= 0 ? `늘었어요 (일평균 ${Math.abs(d).toFixed(0)}%↑)` : `줄었어요 (일평균 ${Math.abs(d).toFixed(0)}%↓)`;
 
+// 매일 아침 자동 갱신(전날까지). 갱신 시각과, 이틀 넘게 멈췄을 때 안내
+function upd() {
+  if (!D.updatedAt) return `업데이트 ${D0(D.updated)}`;
+  const t = new Date(D.updatedAt), k = new Date(t.getTime() + 9 * 3600e3);
+  return `매일 자동 갱신 · 마지막 갱신 ${k.getUTCMonth() + 1}.${k.getUTCDate()} ${String(k.getUTCHours()).padStart(2, '0')}:${String(k.getUTCMinutes()).padStart(2, '0')}`;
+}
+function stale() {
+  const today = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
+  const lag = Math.round((Date.parse(today) - Date.parse(D.range.end)) / 864e5);
+  return lag > 2 ? `<div class="stale" role="status">데이터가 ${D0(D.range.end)}에 멈춰 있어요. 자동 갱신이 ${lag - 1}일째 안 됐어요 (GA4·싸인 관리자 로그인 만료 가능성).</div>` : '';
+}
+
 function start() {
   $('#gate').hidden = true; $('#app').hidden = false; $('#logout').hidden = false;
   const h = new URLSearchParams(location.hash.slice(1));
@@ -217,7 +236,8 @@ function render() {
   $('#app').innerHTML = `
   <section class="hero">
     <h1>마케팅 성과</h1>
-    <p>예스폼 에디터 · 예스폼싸인 | 데이터 ${D0(D.range.start)} ~ ${D0(D.range.end)} · 업데이트 ${D0(D.updated)}</p>
+    <p>예스폼 에디터 · 예스폼싸인 | 데이터 ${D0(D.range.start)} ~ ${D0(D.range.end)} · ${upd()}</p>
+    ${stale()}
   </section>
   <div class="ctrl">
     <div class="ptabs" role="tablist">
@@ -375,7 +395,7 @@ function notes() {
     <li>지면·캠페인별 성과는 관리자 유입 결제 통계로, 유입 URL로 등록된 경로만 잡혀요. 직접 방문이나 검색 유입은 이 표에 없어요.</li>
     <li>유입 채널별 사용자는 GA4 예스폼싸인 속성(전체 국가)의 세션 소스/매체를 묶은 거예요. 매출은 GA4를 쓰지 않아요.</li>
     <li>${last} 전자계약 실사용자는 관리자 월간 값이라 업데이트 당일이 일부 들어 있을 수 있어요.</li>`}
-    <li>나머지 수치는 ${D0(D.range.end)}까지예요. 전월 비교는 기간 길이가 달라도 비교할 수 있게 일평균으로 계산했어요.</li></ul></div>`;
+    <li>매일 아침 전날 데이터까지 자동으로 갱신돼요. 나머지 수치는 ${D0(D.range.end)}까지예요. 전월 비교는 기간 길이가 달라도 비교할 수 있게 일평균으로 계산했어요.</li></ul></div>`;
 }
 
 /* ---------- 일별 차트 (SVG) ---------- */
