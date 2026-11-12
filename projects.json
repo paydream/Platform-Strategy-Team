@@ -2,80 +2,6 @@
   "version": 2,
   "projects": [
     {
-      "id": "20261110-164447-css",
-      "title": "[예스폼싸인] 2차 고도화 템플릿",
-      "team": "design",
-      "category": "웹 메인",
-      "desc": "",
-      "created": "2026.11.10",
-      "updated": "2026.11.12",
-      "hidden": false,
-      "final": null,
-      "versions": [
-        {
-          "id": "20261110-164447-css",
-          "label": "v1",
-          "title": "[예스폼싸인] 2차 고도화 템플릿",
-          "desc": "",
-          "created": "2026.11.10",
-          "folder": "archive/20261110-164447-css",
-          "preview": "archive/20261110-164447-css/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261110-164447-css/index.html"
-            }
-          ]
-        },
-        {
-          "id": "20261112-164035-images",
-          "label": "v2",
-          "title": "[예스폼싸인] 2차 고도화 템플릿",
-          "desc": "",
-          "created": "2026.11.12",
-          "folder": "archive/20261112-164035-images",
-          "preview": "archive/20261112-164035-images/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261112-164035-images/index.html"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "20261112-163526-design",
-      "title": "에디터 서명 추가",
-      "team": "design",
-      "category": "웹 메인",
-      "desc": "",
-      "created": "2026.11.12",
-      "updated": "2026.11.12",
-      "hidden": false,
-      "final": null,
-      "versions": [
-        {
-          "id": "20261112-163526-design",
-          "label": "v1",
-          "title": "에디터 서명 추가",
-          "desc": "",
-          "created": "2026.11.12",
-          "folder": "archive/20261112-163526-design",
-          "preview": "archive/20261112-163526-design/에디터_서명삽입_프로토타입.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "에디터_서명삽입_프로토타입",
-              "href": "archive/20261112-163526-design/에디터_서명삽입_프로토타입.html"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "id": "20261106-180001-yesform-login-modal",
       "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
       "team": "design",
@@ -830,6 +756,96 @@
             {
               "label": "최종안 · 업무 브리핑 모달",
               "href": "archive/20261112-162929-yesform-brief-final-v43/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261112-175214-yesform-brief-final-v44",
+          "label": "v44 · 최종안 (서식명 시트 최종본)",
+          "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
+          "desc": "필수 업무 서식명을 룰북_모달용 시트 최종본으로 교체(8건 변경). 관리자 링크클릭 링크명도 같은 이름으로 수정. 추적번호·링크·디자인은 v43과 동일.",
+          "created": "2026.11.12",
+          "folder": "archive/20261112-175214-yesform-brief-final-v44",
+          "preview": "archive/20261112-175214-yesform-brief-final-v44/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "최종안 · 업무 브리핑 모달",
+              "href": "archive/20261112-175214-yesform-brief-final-v44/index.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "20261110-164447-css",
+      "title": "[예스폼싸인] 2차 고도화 템플릿",
+      "team": "design",
+      "category": "웹 메인",
+      "desc": "",
+      "created": "2026.11.10",
+      "updated": "2026.11.12",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261110-164447-css",
+          "label": "v1",
+          "title": "[예스폼싸인] 2차 고도화 템플릿",
+          "desc": "",
+          "created": "2026.11.10",
+          "folder": "archive/20261110-164447-css",
+          "preview": "archive/20261110-164447-css/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261110-164447-css/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261112-164035-images",
+          "label": "v2",
+          "title": "[예스폼싸인] 2차 고도화 템플릿",
+          "desc": "",
+          "created": "2026.11.12",
+          "folder": "archive/20261112-164035-images",
+          "preview": "archive/20261112-164035-images/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261112-164035-images/index.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "20261112-163526-design",
+      "title": "에디터 서명 추가",
+      "team": "design",
+      "category": "웹 메인",
+      "desc": "",
+      "created": "2026.11.12",
+      "updated": "2026.11.12",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261112-163526-design",
+          "label": "v1",
+          "title": "에디터 서명 추가",
+          "desc": "",
+          "created": "2026.11.12",
+          "folder": "archive/20261112-163526-design",
+          "preview": "archive/20261112-163526-design/에디터_서명삽입_프로토타입.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "에디터_서명삽입_프로토타입",
+              "href": "archive/20261112-163526-design/에디터_서명삽입_프로토타입.html"
             }
           ]
         }
