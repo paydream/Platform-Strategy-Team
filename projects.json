@@ -502,6 +502,22 @@
               "href": "archive/20261112-091807-yesform-brief-header-color-v27/index.html"
             }
           ]
+        },
+        {
+          "id": "20261112-092148-yesform-brief-header-bg-v28",
+          "label": "v28 · 헤더 배경 디자인 재작업 5종",
+          "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
+          "desc": "헤더 배경을 새 콘셉트로 다시 디자인: A 오로라(파스텔 블러) / B 2027 대형 타이포 / C 서식·달력 페이퍼 / D 방안지 그리드 / E 새해 일출(네이비+해·별). 왼쪽 아래 스위처로 비교, v25 원본 포함. 기본값 A.",
+          "created": "2026.11.12",
+          "folder": "archive/20261112-092148-yesform-brief-header-bg-v28",
+          "preview": "archive/20261112-092148-yesform-brief-header-bg-v28/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "헤더 배경 디자인 시안",
+              "href": "archive/20261112-092148-yesform-brief-header-bg-v28/index.html"
+            }
+          ]
         }
       ]
     },
