@@ -46,6 +46,22 @@
   .stale{margin-top:10px;padding:10px 14px;border-radius:10px;background:#fff4e5;color:#b45309;font-size:13px;border:1px solid #fcd9a8}
   .ctrl{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:20px;position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0}
   .ptabs{display:flex;gap:8px}
+  .goals{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .gh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .gh b{font-size:16px}.gh span{font-size:12px;color:var(--sub)}
+  .gl{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+  @media (max-width:860px){.gl{grid-template-columns:1fr}}
+  .gc{border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .gt{font-size:13px;color:var(--sub);display:flex;align-items:center;gap:6px}
+  .gp{font-weight:700;color:#2f6bff}.gc.sign .gp{color:#12a150}
+  .gs{margin-left:auto;font-style:normal;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px}
+  .gs.done,.gs.ahead{background:#e8f7ee;color:#12a150}.gs.near{background:#fff4e5;color:#b45309}.gs.behind{background:#fdecec;color:#e5484d}
+  .gv{display:flex;align-items:baseline;gap:6px;margin-top:6px}.gv b{font-size:26px;letter-spacing:-.01em}.gv small{color:var(--sub);font-size:13px}.gv strong{margin-left:auto;font-size:18px}
+  .gb{position:relative;height:8px;background:#eef0f3;border-radius:99px;margin-top:10px}
+  .gb span{display:block;height:100%;border-radius:99px;background:#2f6bff}.gc.sign .gb span{background:#12a150}
+  .gb i{position:absolute;top:-4px;width:2px;height:16px;margin-left:-1px;background:#191f28;opacity:.4;border-radius:1px}
+  .gn{font-size:12px;color:var(--sub);margin-top:8px;line-height:1.6}
+  .gf{font-size:11px;color:var(--faint,#98a1ad);margin-top:10px}
   .subsel{margin-top:2px;display:flex;justify-content:flex-end;align-items:center;gap:10px;flex-wrap:wrap}
   .wpick{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--sub);background:#fff;border:1px solid var(--line);border-radius:10px;padding:6px 10px}
   .wpick input{font:inherit;font-size:14px;color:var(--text);border:1px solid var(--line);border-radius:7px;padding:4px 8px;background:#fff}
@@ -151,7 +167,7 @@
 </head>
 <body>
 <header><div class="wrap top"><strong>플랫폼전략팀</strong><div class="top-right">
-  <a class="hbtn" href="./">업무 아카이브</a><a class="hbtn daily on" href="stats.html" aria-current="page">에디터/싸인 지표</a><a class="hbtn" href="wbs.html">팀 WBS</a><a class="hbtn" href="tracking.html">측정 관리</a><a class="hbtn" href="./#stats">통계</a><a class="hbtn" href="admin/">관리자</a>
+  <a class="hbtn" href="./">업무 아카이브</a><a class="hbtn daily on" href="stats.html" aria-current="page">에디터/싸인 지표</a><a class="hbtn" href="tracking.html">측정 관리</a><a class="hbtn" href="./#stats">통계</a><a class="hbtn" href="admin/">관리자</a>
   <button class="hbtn" id="logout" hidden>잠그기</button>
 </div></div></header>
 
@@ -288,6 +304,7 @@ function render() {
     <p>예스폼 에디터 · 예스폼싸인 | 데이터 ${D0(D.range.start)} ~ ${D0(D.range.end)} · ${upd()}</p>
     ${stale()}
   </section>
+  ${goalPanel()}
   <div class="ctrl">
     <div class="ptabs" role="tablist">
       <button class="ptab" role="tab" data-p="editor" aria-selected="${prod === 'editor'}"><i></i>예스폼 에디터</button>
@@ -420,6 +437,25 @@ function signView({ m, pm, cd, pd, mk, pmk, label }) {
 function wPicker() {
   const P = wPick(), cur = wFind(pkey.week);
   return `<label class="wpick">기간 직접 선택 <input type="date" id="wStart" value="${cur.s}" min="${P[0].s}" max="${P[P.length - 1].s}" aria-label="주간 시작일"><span>~ ${MD(cur.e)} (${wday(cur.e)})</span></label>`;
+}
+// 월간 목표 달성 현황 — 데이터 마지막 달 기준, 에디터·싸인을 한 번에 (목표값은 암호화 데이터의 goals)
+function goalPanel() {
+  const m = D.months[D.months.length - 1], g = (D.goals || {})[m.m];
+  if (!g) return '';
+  const total = lastDay(m), done = days(m), tp = done / total * 100, left = total - done;
+  const items = [];
+  if (g.editor && g.editor.active) items.push(['editor', '에디터', '활성 사용자', m.editor.active, g.editor.active, '명']);
+  if (g.sign && g.sign.active) items.push(['sign', '싸인', '활성 사용자', m.sign.active, g.sign.active, '명']);
+  if (g.sign && g.sign.pay) items.push(['sign', '싸인', '결제 건수', ((D.mkt.sign[m.m] || {}).pay || [0])[0], g.sign.pay, '건']);
+  return `<section class="goals" aria-label="월간 목표 달성 현황"><div class="gh"><b>${+m.m.slice(5)}월 목표 달성 현황</b><span>${MD(m.end)}까지 · ${total}일 중 ${done}일 지남 (${tp.toFixed(0)}%) · 막대의 세로선이 오늘까지 기준선</span></div>
+    <div class="gl">${items.map(([p, pn, label, cur, goal, unit]) => {
+      const r = cur / goal * 100, proj = cur / done * total, need = left > 0 ? Math.max(0, goal - cur) / left : 0;
+      const st = r >= 100 ? ['done', '달성'] : r >= tp ? ['ahead', '순항'] : r >= tp * 0.8 ? ['near', '조금 부족'] : ['behind', '부족'];
+      return `<div class="gc ${p}"><div class="gt"><span class="gp">${pn}</span>${label}<em class="gs ${st[0]}">${st[1]}</em></div>
+        <div class="gv"><b>${fmt(cur)}</b><small>/ ${fmt(goal)}${unit}</small><strong>${r.toFixed(0)}%</strong></div>
+        <div class="gb"><span style="width:${Math.min(100, r)}%"></span><i style="left:${Math.min(100, tp)}%"></i></div>
+        <div class="gn">${r >= 100 ? `목표보다 ${fmt(cur - goal)}${unit} 더 했어요` : `남은 ${fmt(goal - cur)}${unit} · 남은 ${left}일 동안 하루 ${fmt(Math.ceil(need))}${unit}씩`}<br>지금 속도면 월말 약 ${fmt(proj)}${unit} (단순 환산)</div></div>`; }).join('')}</div>
+    <p class="gf">활성 사용자는 GA4 월 순 사용자예요. 같은 사람이 다시 와도 한 번만 세서 날짜에 비례해 늘지 않으니, 단순 환산은 실제보다 높게 나올 수 있어요. 결제 건수는 싸인 관리자 기준이에요.</p></section>`;
 }
 function trendTables(p) { return view === 'month' ? weekTable(p) + monthTable(p) : periodTable(p); }
 // 데일리: 최근 14일 / 주간: 직전 7일 블록. 선택한 기간 행을 강조
