@@ -243,7 +243,7 @@ function start() {
   const v = h.get('v');
   view = hasP() ? (v === 'day' || v === 'week' || v === 'month' ? v : h.get('m') ? 'month' : 'week') : 'month';
   if (hasP()) {
-    const dk = D.periods.day.slice(7).map(x => x.k), wk = D.periods.week.slice(1).map(x => x.k);
+    const dk = D.periods.day.slice(-7).map(x => x.k), wk = D.periods.week.slice(1).map(x => x.k);
     pkey.day = view === 'day' && dk.includes(h.get('k')) ? h.get('k') : dk[dk.length - 1];
     pkey.week = view === 'week' && wk.includes(h.get('k')) ? h.get('k') : wk[wk.length - 1];
   }
@@ -271,7 +271,7 @@ function render() {
     ctx = { m, pm, cd: 1, pd: 1, mk: m.mkt[prod], pmk: pm ? pm.mkt[prod] : null, label };
     SEL = { s: m.s, e: m.e };
     sub = view === 'day'
-      ? L.slice(7).map(x => `<button role="tab" data-k="${x.k}" aria-selected="${x.k === k}">${+x.k.slice(5, 7)}.${+x.k.slice(8)}<small>${wday(x.k)}</small></button>`).join('')
+      ? L.slice(-7).map(x => `<button role="tab" data-k="${x.k}" aria-selected="${x.k === k}">${+x.k.slice(5, 7)}.${+x.k.slice(8)}<small>${wday(x.k)}</small></button>`).join('')
       : L.slice(1).map((x, j, a) => `<button role="tab" data-k="${x.k}" aria-selected="${x.k === k}">${j === a.length - 1 ? '직전 7일' : dRange(x.s, x.e)}</button>`).join('');
   }
   $('#app').innerHTML = `
@@ -349,7 +349,7 @@ function editorView({ m, pm, cd, pd, mk, pmk, label }) {
     </table></div></div>
     <p style="font-size:12px;color:var(--sub);margin-top:6px">사용자 50명 이상 채널 중 생성률이 가장 높은 곳을 색으로 표시했어요. 한 사람이 여러 채널로 들어오면 채널마다 세므로 합계가 활성 사용자보다 클 수 있어요.</p></section>
 
-  <section class="blk"><h2>일별 추이 ${view === 'day' ? '<small>최근 3주</small>' : view === 'week' ? '<small>최근 5주</small>' : ''}</h2><div class="chartbox"><div class="legend" id="legend"></div><svg class="chart" id="chart" role="img" aria-label="일별 추이"></svg></div></section>
+  <section class="blk"><h2>일별 추이 ${view === 'day' ? '<small>최근 7일</small>' : view === 'week' ? '<small>최근 5주</small>' : ''}</h2><div class="chartbox"><div class="legend" id="legend"></div><svg class="chart" id="chart" role="img" aria-label="일별 추이"></svg></div></section>
 
   ${trendTables('editor')}`;
 }
@@ -410,13 +410,13 @@ function signView({ m, pm, cd, pd, mk, pmk, label }) {
 function trendTables(p) { return view === 'month' ? weekTable(p) + monthTable(p) : periodTable(p); }
 // 데일리: 최근 14일 / 주간: 직전 7일 블록. 선택한 기간 행을 강조
 function periodTable(p) {
-  const L = D.periods[view].slice(view === 'day' ? 7 : 1).reverse();
+  const L = D.periods[view].slice(view === 'day' ? -7 : 1).reverse();
   const ev = (x, k) => (x.editor.ev[k] || [0, 0])[1];
   const head = p === 'editor' ? ['활성 사용자', '신규 사용자', '문서 생성', '내보내기', '싸인 연결'] : ['방문자', '신규 가입', '결제', '결제 금액', '전자계약 실사용자', 'GA4 사용자'];
   const row = x => p === 'editor' ? [x.editor.active, x.editor.new, ev(x, 'document_create'), ev(x, 'export_document'), ev(x, 'sign_entry')].map(fmt)
     : [fmt(x.sign.visit), fmt(x.sign.signup), fmt(x.mkt.sign.pay[0]), won(x.mkt.sign.pay[1]), fmt(x.sign.users), fmt(x.sign.active)];
   const lbl = x => view === 'day' ? `${MD(x.k)} (${wday(x.k)})` : dRange(x.s, x.e);
-  return `<section class="blk"><h2>${view === 'day' ? '일별 추이 표 <small>최근 14일 · 사용자는 하루 순 사용자</small>' : '7일 단위 추이 <small>어제부터 7일씩 끊어서 · 사용자는 7일 순 사용자, 방문자·실사용자는 일별 합계</small>'}</h2>
+  return `<section class="blk"><h2>${view === 'day' ? '일별 추이 표 <small>최근 7일 · 사용자는 하루 순 사용자</small>' : '7일 단위 추이 <small>어제부터 7일씩 끊어서 · 사용자는 7일 순 사용자, 방문자·실사용자는 일별 합계</small>'}</h2>
     <div class="card"><div class="scroll"><table class="tbl"><thead><tr><th>${view === 'day' ? '날짜' : '기간'}</th>${head.map(h => `<th>${h}</th>`).join('')}</tr></thead>
     <tbody>${L.map(x => `<tr class="${x.k === pkey[view] ? 'sel' : ''}${view === 'day' && /[일토]/.test(wday(x.k)) ? ' we' : ''}"><td>${lbl(x)}</td>${row(x).map(v => `<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div></section>`;
 }
@@ -460,7 +460,7 @@ function drawChart() {
   const svg = $('#chart'); if (!svg) return;
   const cb = svg.parentElement;
   const tip = cb.querySelector('.tip') || cb.appendChild(Object.assign(document.createElement('div'), { className: 'tip' }));
-  const cols = D.dailyCols, from = view === 'month' || !hasP() ? '' : D.periods[view][0].s, rows = D.daily.filter(r => r[0] >= from), idx = k => cols.indexOf(k);
+  const cols = D.dailyCols, from = view === 'month' || !hasP() ? '' : view === 'day' ? D.periods.day.slice(-7)[0].s : D.periods[view][0].s, rows = D.daily.filter(r => r[0] >= from), idx = k => cols.indexOf(k);
   const series = prod === 'editor'
     ? [['활성 사용자', 'editorActive', '#2f6bff'], ['신규 사용자', 'editorNew', '#9db8ff']]
     : [['방문자', 'signVisit', '#12a150'], ['신규 가입', 'signSignup', '#f59e0b']];
