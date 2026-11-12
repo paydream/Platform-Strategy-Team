@@ -2,6 +2,35 @@
   "version": 2,
   "projects": [
     {
+      "id": "20261112-163526-design",
+      "title": "에디터 서명 추가",
+      "team": "design",
+      "category": "웹 메인",
+      "desc": "",
+      "created": "2026.11.12",
+      "updated": "2026.11.12",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261112-163526-design",
+          "label": "v1",
+          "title": "에디터 서명 추가",
+          "desc": "",
+          "created": "2026.11.12",
+          "folder": "archive/20261112-163526-design",
+          "preview": "archive/20261112-163526-design/에디터_서명삽입_프로토타입.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "에디터_서명삽입_프로토타입",
+              "href": "archive/20261112-163526-design/에디터_서명삽입_프로토타입.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "20261106-180001-yesform-login-modal",
       "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
       "team": "design",
