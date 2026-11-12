@@ -11,7 +11,7 @@
   body{font-family:"Pretendard Variable",Pretendard,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
   a{color:inherit}
   header{background:var(--card);border-bottom:1px solid var(--line)}
-  .wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+  .wrap{max-width:1320px;margin:0 auto;padding:0 20px}
   .top{display:flex;align-items:center;justify-content:space-between;height:64px}
   .top strong{font-size:17px}
   .top-right{display:flex;align-items:center;gap:12px}
@@ -42,16 +42,57 @@
   .card p{font-size:13px;color:var(--sub);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   .meta{margin-top:auto;padding-top:6px;font-size:12px;color:var(--sub);display:flex;gap:10px;flex-wrap:wrap}
   .empty{text-align:center;color:var(--sub);padding:40px 0;display:none}
+  .layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:28px;align-items:start}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+  [hidden]{display:none!important}
+  /* 오른쪽 사이드바: 통계 데이터 */
+  .side{position:sticky;top:20px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 16px 12px;margin-bottom:40px}
+  .side-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:0 4px}
+  .side-h h2{font-size:16px}
+  .side-h span{font-size:12px;color:var(--sub)}
+  .side-note{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--sub);margin:6px 4px 12px}
+  .side-note svg{flex:none}
+  .slist{list-style:none;display:flex;flex-direction:column;gap:2px;max-height:calc(100vh - 170px);overflow:auto}
+  .sitem{width:100%;text-align:left;font:inherit;color:inherit;background:none;border:0;border-radius:10px;padding:12px;cursor:pointer;display:flex;gap:10px;align-items:flex-start}
+  .sitem:hover,.sitem:focus-visible{background:#f2f5fb;outline:none}
+  .sitem .ic{flex:none;width:34px;height:34px;border-radius:9px;background:var(--chip);color:var(--accent);display:grid;place-items:center}
+  .sitem .tx{min-width:0;flex:1}
+  .sitem .pd{font-size:12px;color:var(--accent);font-weight:600}
+  .sitem strong{display:block;font-size:14px;line-height:1.4;margin-top:1px}
+  .sitem .ds{font-size:12px;color:var(--sub);margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .sitem .mt{font-size:11px;color:#98a1ad;margin-top:6px;display:flex;flex-wrap:wrap;gap:2px 8px}
+  .sitem .lk{flex:none;color:#b0b8c1;margin-top:2px}
+  .sitem.open .lk{color:var(--final)}
+  .side-empty{font-size:13px;color:var(--sub);padding:12px 4px}
+  .side-lock{display:block;width:100%;margin-top:8px;border:0;border-top:1px solid var(--line);background:none;font:inherit;font-size:12px;color:var(--sub);padding:10px 4px 2px;text-align:left;cursor:pointer}
+  .side-lock:hover{color:var(--accent)}
+  /* 비밀번호 창 */
+  .pw-back{position:fixed;inset:0;background:rgba(17,24,39,.45);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}
+  .pw-box{background:#fff;border-radius:16px;width:100%;max-width:360px;padding:28px 24px 22px;text-align:center;position:relative}
+  .pw-box .lock{width:44px;height:44px;border-radius:12px;background:var(--chip);color:var(--accent);display:grid;place-items:center;margin:0 auto 12px}
+  .pw-box h3{font-size:17px}
+  .pw-box p{font-size:13px;color:var(--sub);margin-top:4px;word-break:keep-all}
+  .pw-box input{margin-top:18px;width:100%;height:48px;border:1px solid var(--line);border-radius:10px;padding:0 14px;font:inherit;font-size:18px;letter-spacing:.3em;text-align:center}
+  .pw-box input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(47,107,255,.15)}
+  .pw-btns{display:flex;gap:8px;margin-top:10px}
+  .pw-btns button{flex:1;height:46px;border-radius:10px;font:inherit;font-weight:600;font-size:15px;cursor:pointer}
+  .pw-btns .cancel{background:#f2f4f6;border:0;color:var(--sub)}
+  .pw-btns .ok{background:var(--accent);border:0;color:#fff}
+  .pw-btns .ok:disabled{opacity:.6;cursor:default}
+  .pw-err{color:#e5484d;font-size:13px;margin-top:10px;min-height:20px}
+  @media (max-width:960px){.layout{grid-template-columns:1fr;gap:0}.side{position:static;order:-1;margin-bottom:20px}.slist{max-height:none}}
   @media (max-width:640px){.grid{grid-template-columns:1fr}.top-right span{display:none}}
 </style>
 </head>
 <body>
-<header><div class="wrap top"><strong>플랫폼전략팀</strong><div class="top-right"><span>업무 아카이브</span><a class="admin-btn" href="stats.html">통계</a><a class="admin-btn" href="admin/">관리자</a></div></div></header>
+<header><div class="wrap top"><strong>플랫폼전략팀</strong><div class="top-right"><span>업무 아카이브</span><a class="admin-btn" href="#stats">통계</a><a class="admin-btn" href="admin/">관리자</a></div></div></header>
 <main class="wrap">
   <section class="hero">
     <h1>업무 아카이브</h1>
     <p>디자인 시안과 기획서를 프로젝트별로 모아두고, 버전마다 코멘트를 남깁니다.</p>
   </section>
+  <div class="layout">
+  <div class="content">
   <div class="toolbar">
     <div class="tabs" role="tablist">
       <button role="tab" data-team="" aria-selected="true">전체</button>
@@ -63,7 +104,25 @@
   </div>
   <div class="grid" id="list"></div>
   <p class="empty" id="empty">찾는 프로젝트가 없습니다.</p>
+  </div>
+  <aside class="side" id="stats" aria-labelledby="statsTitle">
+    <div class="side-h"><h2 id="statsTitle">통계 데이터</h2><span id="scount"></span></div>
+    <p class="side-note"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>목록은 공개, 데이터 열람은 비밀번호 필요</p>
+    <ul class="slist" id="slist"><li class="side-empty">불러오는 중…</li></ul>
+    <button class="side-lock" id="slock" hidden>열람 잠그기</button>
+  </aside>
+  </div>
 </main>
+<div class="pw-back" id="pwBack" hidden>
+  <form class="pw-box" id="pwForm" autocomplete="off" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
+    <div class="lock"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+    <h3 id="pwTitle">비밀번호를 입력해 주세요</h3>
+    <p id="pwDesc"></p>
+    <input id="pwIn" type="password" inputmode="numeric" maxlength="20" aria-label="통계 비밀번호">
+    <div class="pw-btns"><button type="button" class="cancel" id="pwCancel">취소</button><button type="submit" class="ok" id="pwOk">열람하기</button></div>
+    <div class="pw-err" id="pwErr" role="alert"></div>
+  </form>
+</div>
 <script>
 const TEAMS = { design: '디자인', planning: '기획' };
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -114,6 +173,56 @@ document.querySelector('.tabs').addEventListener('click', e => {
 document.getElementById('q').addEventListener('input', e => { q = e.target.value.trim(); render(); });
 fetch('projects.json', { cache: 'no-store' }).then(r => r.json()).then(d => { projects = d.projects || []; render(); });
 fetch('api/comments?summary=1', { cache: 'no-store' }).then(r => r.ok ? r.json() : {}).then(d => { counts = d.counts || {}; if (projects.length) render(); }).catch(() => {});
+// ---- 오른쪽 사이드바: 통계 데이터 목록 (목록은 공개, 열람은 통계 비밀번호) ----
+const SKEY = 'pst_stats_pw';
+let stats = [], pending = null;
+const icChart = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>';
+const icLock = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
+const icOpen = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.5-2"/></svg>';
+function renderStats() {
+  const open = !!sessionStorage.getItem(SKEY);
+  document.getElementById('scount').textContent = stats.length ? `${stats.length}건` : '';
+  document.getElementById('slock').hidden = !open;
+  document.getElementById('slist').innerHTML = stats.length ? stats.map((s, i) => `<li><button class="sitem${open ? ' open' : ''}" data-i="${i}" aria-label="${esc(s.title)} (${open ? '열람 가능' : '비밀번호 필요'})">
+      <span class="ic">${icChart}</span>
+      <span class="tx"><span class="pd">${esc(s.product)}</span><strong>${esc(s.title)}</strong>
+        ${s.desc ? `<span class="ds">${esc(s.desc)}</span>` : ''}
+        <span class="mt"><span>${esc(s.period)}</span><span>${esc(s.source)}</span><span>업데이트 ${esc(s.updated)}</span></span></span>
+      <span class="lk" aria-hidden="true" title="${open ? '열람 가능' : '비밀번호 필요'}">${open ? icOpen : icLock}</span></button></li>`).join('')
+    : '<li class="side-empty">아직 올라온 통계가 없습니다.</li>';
+}
+function openPw(s) {
+  pending = s;
+  document.getElementById('pwDesc').textContent = `「${s.title}」을(를) 보려면 통계 비밀번호가 필요합니다.`;
+  document.getElementById('pwErr').textContent = '';
+  const inp = document.getElementById('pwIn'); inp.value = '';
+  document.getElementById('pwBack').hidden = false; inp.focus();
+}
+const closePw = () => { document.getElementById('pwBack').hidden = true; pending = null; };
+document.getElementById('slist').addEventListener('click', e => {
+  const b = e.target.closest('.sitem'); if (!b) return;
+  const s = stats[+b.dataset.i];
+  if (sessionStorage.getItem(SKEY)) location.href = s.href; else openPw(s);
+});
+document.getElementById('pwCancel').onclick = closePw;
+document.getElementById('pwBack').addEventListener('click', e => { if (e.target.id === 'pwBack') closePw(); });
+addEventListener('keydown', e => { if (e.key === 'Escape' && !document.getElementById('pwBack').hidden) closePw(); });
+document.getElementById('pwForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const pw = document.getElementById('pwIn').value.trim(), err = document.getElementById('pwErr'), ok = document.getElementById('pwOk');
+  if (!pw || !pending) return;
+  ok.disabled = true; err.textContent = '확인 중…';
+  try {
+    const r = await fetch('api/stats', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pw, check: true }), cache: 'no-store' });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) { err.textContent = j.error || `오류가 났습니다 (${r.status})`; return; }
+    sessionStorage.setItem(SKEY, pw); location.href = pending.href;
+  } catch { err.textContent = '서버에 연결하지 못했습니다.'; }
+  finally { ok.disabled = false; }
+});
+document.getElementById('slock').onclick = () => { sessionStorage.removeItem(SKEY); renderStats(); };
+fetch('api/stats', { cache: 'no-store' }).then(r => r.ok ? r.json() : { list: [] }).then(d => { stats = d.list || []; renderStats(); })
+  .catch(() => { document.getElementById('slist').innerHTML = '<li class="side-empty">통계 목록을 불러오지 못했습니다.</li>'; });
 </script>
 </body>
 </html>
