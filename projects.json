@@ -598,6 +598,22 @@
               "href": "archive/20261112-103015-yesform-brief-header-wash-v33/index.html"
             }
           ]
+        },
+        {
+          "id": "20261112-111400-yesform-brief-final-v34",
+          "label": "v34 · 최종안 (필수 업무 데이터 시트 기준 교체)",
+          "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
+          "desc": "필수 업무 탭 데이터를 룰북_모달용.xlsx 월별 필수 서식 탭(gid 663860280) 기준으로 교체: 33건 → 24건(11월 5 / 12월 6 / 1월 6 / 2월 7). 서식명·링크는 시트 그대로, 날짜·내용 줄은 시트의 시행 시점·법령 내용을 요약. 구분 배지는 법령 탭 분야(임금·4대보험 / 휴가·근로시간 / 기타)로 통일. 법령 탭 그대로. 헤더는 v25 원본(배경 시안 스위처 유지).",
+          "created": "2026.11.12",
+          "folder": "archive/20261112-111400-yesform-brief-final-v34",
+          "preview": "archive/20261112-111400-yesform-brief-final-v34/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "최종안 · 업무 브리핑 모달",
+              "href": "archive/20261112-111400-yesform-brief-final-v34/index.html"
+            }
+          ]
         }
       ]
     },
