@@ -662,6 +662,22 @@
               "href": "archive/20261112-132241-yesform-brief-silk1-variations-v37/index.html"
             }
           ]
+        },
+        {
+          "id": "20261112-135121-yesform-brief-blue-simple-v38",
+          "label": "v38 · 블루 심플 쉐입 시안 4종",
+          "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
+          "desc": "보라 톤 제거, 예스폼 블루(#0472E3)에서 파생한 파랑 계열로 헤더·강조색 전체 변경. 쉐입 단순화(흐림·광택 최소화): A 심플 커브 / B 원형 겹침 / C 아크 링 / D 레이어드 웨이브. 탭·월 선택·링크·칩·닫기 버튼도 #0472E3 계열. 기본값 A.",
+          "created": "2026.11.12",
+          "folder": "archive/20261112-135121-yesform-brief-blue-simple-v38",
+          "preview": "archive/20261112-135121-yesform-brief-blue-simple-v38/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "모달 디자인 베리에이션",
+              "href": "archive/20261112-135121-yesform-brief-blue-simple-v38/index.html"
+            }
+          ]
         }
       ]
     },
