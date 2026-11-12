@@ -8,7 +8,7 @@
       "category": "웹 메인",
       "desc": "예스폼 메인 화면에 로그인했을 때 딤드 위에 뜨는 업무 브리핑 모달 시안 6종 (Figma 예스폼_신규디자인_261105 > 모달 디자인)",
       "created": "2026.11.06",
-      "updated": "2026.11.11",
+      "updated": "2026.11.12",
       "hidden": false,
       "final": {
         "version": "20261111-172535-yesform-brief-final-v25",
@@ -468,6 +468,22 @@
             {
               "label": "최종안 · 업무 브리핑 모달",
               "href": "archive/20261111-172535-yesform-brief-final-v25/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261112-091442-yesform-brief-header-bg-v26",
+          "label": "v26 · 헤더 배경 시안 (A 광원 / B 서식·달력 / C 동심원)",
+          "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
+          "desc": "v25 기준으로 헤더 뒤에 은은한 배경 3종 시안 추가. 화면 왼쪽 아래 스위처로 A 광원(그라데이션) / B 서식·달력 라인 일러스트 / C 동심원+도트 / 배경 없음 비교. 기본값 A. ?bg=b 처럼 주소로 지정 가능.",
+          "created": "2026.11.12",
+          "folder": "archive/20261112-091442-yesform-brief-header-bg-v26",
+          "preview": "archive/20261112-091442-yesform-brief-header-bg-v26/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "헤더 배경 시안",
+              "href": "archive/20261112-091442-yesform-brief-header-bg-v26/index.html"
             }
           ]
         }
