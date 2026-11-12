@@ -8,7 +8,7 @@
 - 새 파일은 `archive/YYYYMMDD-HHMMSS-영문이름/` 새 폴더에 넣는다. 폴더가 이미 있으면 멈춘다.
 - 목록에서 빼려면 숨기기(`hidden: true`)나 휴지통(`trash`)을 쓴다. 시안 파일은 그대로 둔다.
 - 버전의 `folder`·`preview`·시안 `href`는 한 번 정해지면 바뀌지 않는다(`admin/model.js`의 `checkSave`가 막음).
-- 바꿔도 되는 파일은 관리용뿐이다: `projects.json`, `data/comments.json`, 루트 `index.html`, `project.html`, `vercel.json`, `admin/`, `api/`, `README.md`, `CLAUDE.md`, `.github/`.
+- 바꿔도 되는 파일은 관리용뿐이다: `projects.json`, `data/comments.json`, 루트 `index.html`, `project.html`, `tracking.html`, `vercel.json`, `admin/`, `api/`, `data/`, `README.md`, `CLAUDE.md`, `.github/`.
 - `.github/workflows/no-overwrite.yml`이 push마다 이 규칙을 검사한다.
 
 ## 데이터 (`projects.json`, version 2)
@@ -30,3 +30,11 @@
 ## 예전 위치(2026.10.07~08에 올린 것, 그대로 유지)
 - 루트 `yesform-main.html`, `v01-1/`, `v02/`, `v03/`, `css/`, `js/`, `assets/`
 - `yesform-main-1008/`, `yesform-main-1008-2/`
+
+## GA4·GTM 측정 관리 (`/tracking.html`)
+- GA4에 넣는 이벤트를 설계 → GTM·개발 구현 → 수집 확인까지 관리하는 화면. 헤더 "측정 관리" 버튼.
+- 측정 항목: `data/tracking.json` (`{ version, updated, products[], sources[], wbs[], items[] }`). `items[]`: `{ id, product(yesform|sign|editor), kind(new|fix|existing), funnel, event, eventType, title, metrics, fire, dedupe, paramsReq[], paramsOpt[], impl(처리 주체), how, status, owner, due, gtm{container,version,tags[]}, note, log[{date,by,text}], updated }`.
+- 상태: plan(계획) · gtm(GTM 작업 중) · dev(개발 요청) · verify(검증 필요) · live(수집 중) · done(완료, 제거·수정) · hold(보류).
+- 쓰기: `/api/tracking` — 추가·수정·이력은 팀 비밀번호, 삭제는 관리자 비밀번호. 이 파일만 바뀐 커밋은 재배포 안 함(ignoreCommand), 화면은 API로 GitHub에서 바로 읽음.
+- 스냅샷: `data/tracking-snapshot.json` = GTM 컨테이너(태그·트리거·게시 이력), GA4 이벤트별 일별 수집량(최근 28일), GA4 맞춤 정의 목록. 자동 갱신 안 됨 — GTM 내부 API·GA4에서 다시 뽑아 이 파일을 덮어쓰면 갱신(재배포됨).
+- 원본 설계는 Google 시트 「GA4개선(WBS포함)」(01 예스폼 신규 · 02 제거·수정 · 03 싸인 신규 · 04 개발 필수 · WBS). 2026-11-12에 시트 내용으로 처음 채움.
