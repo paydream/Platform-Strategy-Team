@@ -550,6 +550,22 @@
               "href": "archive/20261112-101519-yesform-brief-header-film-v30/index.html"
             }
           ]
+        },
+        {
+          "id": "20261112-101828-yesform-brief-header-clean-v31",
+          "label": "v31 · 헤더 배경 노이즈 제거",
+          "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
+          "desc": "v30에서 노이즈 입자·먼지·실선을 모두 제거. 실크(B·D)의 노이즈도 제거. E·F 이름을 블루 글로우로 변경. 색 번짐과 밝은 원은 그대로. 기본값 E.",
+          "created": "2026.11.12",
+          "folder": "archive/20261112-101828-yesform-brief-header-clean-v31",
+          "preview": "archive/20261112-101828-yesform-brief-header-clean-v31/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "헤더 쉐이프 배경 시안",
+              "href": "archive/20261112-101828-yesform-brief-header-clean-v31/index.html"
+            }
+          ]
         }
       ]
     },
