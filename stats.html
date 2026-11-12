@@ -247,11 +247,11 @@ function dtxt(d) {
 }
 const updown = d => { if (d == null) return ''; const a = CMP.avg ? '일평균 ' : ''; return d >= 0 ? `늘었어요 (${a}${Math.abs(d).toFixed(0)}%↑)` : `줄었어요 (${a}${Math.abs(d).toFixed(0)}%↓)`; };
 
-// 매일 아침 자동 갱신(전날까지). 갱신 시각과, 이틀 넘게 멈췄을 때 안내
+// 매일 오후 5시 자동 갱신(전날까지). 갱신 시각과, 이틀 넘게 멈췄을 때 안내
 function upd() {
   if (!D.updatedAt) return `업데이트 ${D0(D.updated)}`;
   const t = new Date(D.updatedAt), k = new Date(t.getTime() + 9 * 3600e3);
-  return `매일 자동 갱신 · 마지막 갱신 ${k.getUTCMonth() + 1}.${k.getUTCDate()} ${String(k.getUTCHours()).padStart(2, '0')}:${String(k.getUTCMinutes()).padStart(2, '0')}`;
+  return `매일 오후 5시 자동 갱신 · 마지막 갱신 ${k.getUTCMonth() + 1}.${k.getUTCDate()} ${String(k.getUTCHours()).padStart(2, '0')}:${String(k.getUTCMinutes()).padStart(2, '0')}`;
 }
 function stale() {
   const today = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
@@ -502,7 +502,7 @@ function notes() {
     <li>지면·캠페인별 성과는 관리자 유입 결제 통계로, 유입 URL로 등록된 경로만 잡혀요. 직접 방문이나 검색 유입은 이 표에 없어요.</li>
     <li>유입 채널별 사용자는 GA4 예스폼싸인 속성(전체 국가)의 세션 소스/매체를 묶은 거예요. 매출은 GA4를 쓰지 않아요.</li>
     <li>${last} 전자계약 실사용자는 관리자 월간 값이라 업데이트 당일이 일부 들어 있을 수 있어요.</li>`}
-    <li>매일 아침 전날 데이터까지 자동으로 갱신돼요. 나머지 수치는 ${D0(D.range.end)}까지예요. 월간의 전월 비교는 기간 길이가 달라도 비교할 수 있게 일평균으로 계산했어요.</li>
+    <li>매일 오후 5시에 전날 데이터까지 자동으로 갱신돼요. 나머지 수치는 ${D0(D.range.end)}까지예요. 월간의 전월 비교는 기간 길이가 달라도 비교할 수 있게 일평균으로 계산했어요.</li>
     <li>데일리는 지난주 같은 요일과, 주간은 7일 구간을 그 바로 앞 7일과 비교해요(기본은 어제까지 직전 7일, 시작일을 바꾸면 최근 12주 안에서 아무 7일이나 볼 수 있어요). 사용자 수는 그 기간의 순 사용자이고, 싸인 방문자·전자계약 실사용자는 관리자 일별 값의 합계예요.</li></ul></div>`;
 }
 
