@@ -180,7 +180,7 @@
           "created": "2026.11.13",
           "folder": "archive/20261113-162802-yesform-membership-dashboard-teams",
           "preview": "archive/20261113-162802-yesform-membership-dashboard-teams/index.html",
-          "hidden": false,
+          "hidden": true,
           "items": [
             {
               "label": "대시보드",
