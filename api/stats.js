@@ -6,6 +6,7 @@
 // file: true 인 항목(비밀번호 걸린 문서 등)은 data/stats/<id>.enc.json 에서만 읽는다. sidebar: false 면 사이드바 목록에 안 나온다.
 const crypto = require('crypto');
 const F = require('./_statsfile');
+const { siteOk } = require('./_lib'); // 사이트 비밀번호로 로그인했으면 통계 비밀번호 없이 통과
 
 // 메인 오른쪽 사이드바 "통계 데이터" 목록. 새 통계를 올리면 맨 앞에 추가하고, 데이터는 env에 넣는다.
 const LIST = [
@@ -70,10 +71,11 @@ module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
   if (req.method === 'GET') return res.status(200).json({ list: await Promise.all(LIST.filter(x => x.sidebar !== false).map(withMeta)) });
   if (req.method !== 'POST') return res.status(405).json({ error: '허용되지 않는 요청입니다.' });
-  if (!process.env.STATS_PASSWORD) return res.status(503).json({ error: '통계 비밀번호가 아직 설정되지 않았습니다.' });
+  const site = siteOk(req);
+  if (!site && !process.env.STATS_PASSWORD) return res.status(503).json({ error: '통계 비밀번호가 아직 설정되지 않았습니다.' });
   let b;
   try { b = body(req); } catch { return res.status(400).json({ error: '요청 형식이 올바르지 않습니다.' }); }
-  if (!same(String(b.password ?? ''), process.env.STATS_PASSWORD)) {
+  if (!site && !same(String(b.password ?? ''), process.env.STATS_PASSWORD)) {
     await wait(800); // 무작위 대입을 느리게
     return res.status(401).json({ error: '비밀번호가 맞지 않습니다.' });
   }

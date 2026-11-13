@@ -26,7 +26,7 @@ module.exports = async (req, res) => {
     const b = L.body(req);
 
     if (b.action === 'add') {
-      if (!L.teamOk(b.password)) return res.status(401).json({ error: '팀 비밀번호가 맞지 않습니다.' });
+      if (!L.teamOk(b.password) && !L.siteOk(req)) return res.status(401).json({ error: '팀 비밀번호가 맞지 않습니다.' });
       const author = String(b.author || '').trim(), text = String(b.text || '').trim();
       if (!author) return res.status(400).json({ error: '작성자 이름을 넣어 주세요.' });
       if (author.length > MAX_NAME) return res.status(400).json({ error: `이름은 ${MAX_NAME}자까지 쓸 수 있습니다.` });
