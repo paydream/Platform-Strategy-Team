@@ -152,6 +152,9 @@
   .tbl .best{color:var(--c);font-weight:700}
   .tbl .muted{color:var(--faint)}
   .tbl tfoot td{font-weight:700;background:#fafbfc;border-top:1px solid var(--line)}
+  .ti{display:inline-grid;place-items:center;width:15px;height:15px;margin-left:4px;border-radius:50%;border:1px solid #c4cad2;color:#8b95a1;font:italic 700 10px/1 Georgia,"Times New Roman",serif;vertical-align:1px;cursor:help;flex:none;user-select:none;-webkit-user-select:none}
+  .ti:hover,.ti:focus-visible{border-color:var(--c);color:var(--c);outline:none}
+  .tipbox{position:fixed;z-index:100;max-width:300px;background:#191f28;color:#fff;font-size:12.5px;font-weight:400;line-height:1.55;padding:9px 12px;border-radius:9px;box-shadow:0 8px 24px rgba(0,0,0,.18);pointer-events:none;white-space:normal;text-align:left;letter-spacing:0}
   .delta{font-size:12px;font-weight:600}
   .delta.up{color:var(--up)} .delta.down{color:var(--down)} .delta.flat{color:var(--faint)}
   .two{display:grid;grid-template-columns:3fr 2fr;gap:16px}
@@ -204,6 +207,73 @@ const fmt = n => n == null || isNaN(n) ? '-' : Math.round(n).toLocaleString('ko-
 const won = n => n == null ? '-' : fmt(n) + '원';
 const pct = (a, b) => b ? a / b * 100 : null;
 const pctTxt = v => v == null ? '-' : v > 0 && v < 0.1 ? '0.1% 미만' : (v >= 10 ? v.toFixed(0) : v.toFixed(1)) + '%';
+// 지표 설명 툴팁 (i 아이콘에 마우스를 올리거나 포커스하면 보임)
+const TIP = {
+  // 에디터
+  '활성 사용자': 'GA4 예스폼 에디터 속성(전체 국가)의 활성 사용자예요. 기간 안에 여러 번 와도 1명으로 세요.',
+  '신규 사용자': '이 기간에 처음 방문한 사용자예요(GA4 기준).',
+  '에디터 진입': '에디터 화면에 들어온(editor_entry) 사용자 수예요.',
+  '문서 생성': '문서를 1번 이상 만든(document_create) 사용자 수예요.',
+  '문서 생성 사용자': '문서를 1번 이상 만든(document_create) 사용자 수예요.',
+  '문서 생성률': '문서 생성 사용자 ÷ 활성 사용자예요.',
+  '생성률': '문서 생성 사용자 ÷ 사용자예요. 사용자 50명 이상 채널 중 가장 높은 곳을 색으로 표시해요.',
+  '문서 내보내기': '문서를 내보내기(다운로드)한(export_document) 사용자 수예요.',
+  '내보내기': '문서를 내보내기(다운로드)한(export_document) 사용자 수예요.',
+  '싸인 연결': '에디터에서 예스폼싸인으로 넘어간(sign_entry) 사용자 수예요.',
+  '싸인 연결 사용자': '에디터에서 예스폼싸인으로 넘어간(sign_entry) 사용자 수예요.',
+  '로그인 성공': '로그인에 성공한(login_success) 사용자 수예요.',
+  '채널별 성과': 'GA4 세션 소스/매체를 묶은 채널이에요. 예스폼 서식 페이지(yesform/referral), 메인 프롬프트(www_prompt), 사이드바(sidebar), 메타 광고(meta/cpc), 네이버 브랜드검색(naverbs) 등. 한 사람이 여러 채널로 들어오면 채널마다 세서 합계가 활성 사용자보다 클 수 있어요.',
+  '유입 채널': 'GA4 세션 소스/매체를 묶은 채널이에요.',
+  // 싸인
+  '결제 건수': '예스폼싸인 관리자 결제 통계의 결제 건수예요. 매출·결제는 GA4를 쓰지 않아요.',
+  '결제': '예스폼싸인 관리자 결제 통계의 결제 건수예요.',
+  '결제 금액': '예스폼싸인 관리자 결제 통계의 결제 금액 합계예요.',
+  '예스폼 기여 결제': '관리자 「예스폼 기여통계」의 기여 결제(금액·건수)예요. 싸인 이용자가 예스폼 플랜(1WB~1ME)을 결제한 것으로, 싸인 결제와는 따로 세요.',
+  '신규 가입': '예스폼싸인 관리자 회원 통계의 신규 가입자 수예요. 내부 테스트 계정이 섞일 수 있어요.',
+  '방문자': '예스폼싸인 관리자 방문 통계예요. 여러 날을 볼 때는 일별 방문자를 더한 값이라, 같은 사람이 다른 날 오면 따로 세요.',
+  '전자계약 실사용자': '관리자 이용 통계에서 전자계약을 실제로 쓴 사용자 수예요. 데일리·주간은 일별 값의 합계, 월간은 관리자 월간 값이라 업데이트 당일이 일부 들어갈 수 있어요.',
+  '에디터 경유 실사용자': '전자계약 실사용자 중 예스폼 에디터를 거쳐 온 사용자예요.',
+  'GA4 사용자': 'GA4 예스폼싸인 속성(전체 국가)의 활성 사용자예요. 관리자 방문자와 집계 기준이 달라 수치가 달라요.',
+  'GA4 활성 사용자': 'GA4 예스폼싸인 속성(전체 국가)의 활성 사용자예요. 관리자 방문자와 집계 기준이 달라 수치가 달라요.',
+  '가입률 (방문 대비)': '신규 가입 ÷ 방문자예요.',
+  '결제 출처': "결제 1건마다 들어온 경로예요. ① 관리자 유입 결제 통계(등록된 유입 링크)에 잡힌 결제면 그 지면 이름(같은 날짜·금액으로 맞춤), ② 아니면 결제 목록의 주문번호와 GA4 결제(purchase) 이벤트를 맞춰 그 방문의 유입 경로(소스/매체·캠페인·첫 페이지)로 정했어요. 건별 목록의 회색 글씨가 근거예요. GA4 경로가 없으면 '출처 미상', 10/6 이전 일부 결제는 '출처 기록 없음'이에요. 네이버 광고 태그(NaPm)가 붙은 방문은 네이버 검색광고로 분류해요.",
+  '지면·캠페인별 성과': '관리자 유입 결제 통계예요. 유입 URL로 등록된 경로만 잡혀서, 직접 방문이나 검색 유입은 이 표에 없어요.',
+  '지면 그룹': '등록된 유입 경로를 지면 성격별로 묶은 그룹이에요.',
+  '전환율': '결제 ÷ 방문이에요.',
+  '유입 채널별 사용자': 'GA4 예스폼싸인 속성(전체 국가)의 세션 소스/매체를 묶은 채널별 사용자예요.',
+  // 공통
+  '비중': '표 전체 합계에서 이 행이 차지하는 비율이에요.',
+  '전월 대비': '하루 평균으로 바꿔 전월과 비교해요. 이번 달은 진행 중이라 기간 길이가 달라도 비교할 수 있게 했어요.',
+  '지난주 대비': '지난주 같은 요일과 비교해요.',
+  '이전 7일 대비': '바로 앞 7일 구간과 비교해요.',
+  '일별 추이 표': '사용자는 하루 순 사용자예요.',
+  '7일 단위 추이': '어제부터 7일씩 끊은 구간이에요. 사용자는 7일 순 사용자, 방문자·실사용자는 일별 값의 합계예요.',
+  '주간 추이': '월~일 기준이에요. 사용자는 주간 순 사용자, 방문자는 일별 값의 합계예요.',
+  '월별 비교': '월별 값이에요. 마지막 달은 데이터 마지막 날까지예요.',
+  '목표': '오늘까지 지난 날짜 비율(막대의 세로선) 대비 달성률이에요. 달성: 100% 이상, 순항: 기준선 이상, 조금 부족: 기준선의 80% 이상, 부족: 그 아래.',
+  '목표 활성 사용자': "GA4 월 순 사용자예요. 같은 사람이 다시 와도 한 번만 세서 날짜에 비례해 늘지 않아, '지금 속도면 월말' 환산은 실제보다 높게 나올 수 있어요.",
+  '목표 결제 건수': '예스폼싸인 관리자 결제 통계 기준이에요.'
+};
+const ti = (k, t) => { const s = t || TIP[k]; return s ? `<span class="ti" tabindex="0" role="button" aria-label="${esc(k)} 설명" data-tip="${esc(s)}">i</span>` : ''; };
+const L = k => `${k}${ti(k)}`;
+(function () {
+  const box = document.createElement('div'); box.className = 'tipbox'; box.setAttribute('role', 'tooltip'); box.hidden = true; document.body.appendChild(box);
+  let cur = null;
+  const show = el => {
+    cur = el; box.textContent = el.dataset.tip; box.hidden = false;
+    const r = el.getBoundingClientRect(), bw = box.offsetWidth, bh = box.offsetHeight;
+    let x = r.left + r.width / 2 - bw / 2; x = Math.max(8, Math.min(x, innerWidth - bw - 8));
+    let y = r.top - bh - 8; box.classList.toggle('below', y < 8); if (y < 8) y = r.bottom + 8;
+    box.style.left = x + 'px'; box.style.top = y + 'px';
+  };
+  const hide = () => { cur = null; box.hidden = true; };
+  document.addEventListener('mouseover', e => { const t = e.target.closest && e.target.closest('.ti'); if (t) show(t); else if (cur) hide(); });
+  document.addEventListener('focusin', e => { const t = e.target.closest && e.target.closest('.ti'); if (t) show(t); });
+  document.addEventListener('focusout', e => { if (e.target === cur) hide(); });
+  document.addEventListener('click', e => { const t = e.target.closest && e.target.closest('.ti'); if (t) { e.preventDefault(); e.stopPropagation(); cur === t && !box.hidden ? hide() : show(t); } }, true);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') hide(); });
+  addEventListener('scroll', hide, true); addEventListener('resize', hide);
+})();
 const KEY = 'pst_stats_pw';
 let D = null, month = null, prod = 'sign', view = 'day', pkey = { day: null, week: null };
 // 보기별 비교 기준 (render에서 설정)
@@ -337,11 +407,11 @@ function render() {
   drawChart();
 }
 
-const kpi = (label, v, unit, d, sub, main) => `<div class="kpi${main ? ' main' : ''}"><div class="l">${label}</div><div class="v">${fmt(v)}<small>${unit}</small></div>${pill(d)}${sub ? `<div class="sub">${sub}</div>` : ''}</div>`;
+const kpi = (label, v, unit, d, sub, main) => `<div class="kpi${main ? ' main' : ''}"><div class="l">${L(label)}</div><div class="v">${fmt(v)}<small>${unit}</small></div>${pill(d)}${sub ? `<div class="sub">${sub}</div>` : ''}</div>`;
 function funnel(steps) {
   const top = steps[0][1] || 1;
   return `<div class="funnel" style="grid-template-columns:repeat(${steps.length},1fr)">${steps.map(([n, v, note], k) => `
-    <div class="step"><div class="n">${n}</div><div class="v">${fmt(v)}</div>
+    <div class="step"><div class="n">${L(n)}</div><div class="v">${fmt(v)}</div>
       <div class="bar"><span style="width:${Math.min(100, v / top * 100)}%"></span></div>
       <div class="r">${k === 0 ? (note || '기준') : `이전 단계의 <b>${pctTxt(pct(v, steps[k - 1][1]))}</b>`}${k > 0 && note ? ` · ${note}` : ''}</div></div>`).join('')}</div>`;
 }
@@ -378,9 +448,9 @@ function editorView({ m, pm, cd, pd, mk, pmk, label }) {
   <section class="blk"><h2>전환 흐름</h2>
     ${funnel([['활성 사용자', act, 'GA4 전체'], ['에디터 진입', ent], ['문서 생성', crt], ['문서 내보내기', exp], ['싸인 연결', sgn]])}</section>
 
-  <section class="blk"><h2>채널별 성과</h2>
+  <section class="blk"><h2>채널별 성과${ti('채널별 성과')}</h2>
     <div class="card"><div class="scroll"><table class="tbl">
-      <thead><tr><th>유입 채널</th><th>사용자</th><th>비중</th><th>${CMP.col}</th><th>문서 생성</th><th>생성률</th><th>내보내기</th><th>싸인 연결</th></tr></thead>
+      <thead><tr><th>${L('유입 채널')}</th><th>사용자</th><th>${L('비중')}</th><th>${L(CMP.col)}</th><th>${L('문서 생성')}</th><th>${L('생성률')}</th><th>${L('내보내기')}</th><th>${L('싸인 연결')}</th></tr></thead>
       <tbody>${ch.map(r => { const p = prevCh[r[0]]; const rate = r[1] ? r[4] / r[1] : 0;
         return `<tr><td class="name">${esc(r[0])}</td><td>${fmt(r[1])}</td><td>${shareCell(r[1], chTot, chMax)}</td><td>${pm ? dtxt(diff(r[1], p && p[1], cd, pd)) : '-'}</td>
           <td>${fmt(r[4])}</td><td class="${r[1] >= 50 && rate === bestRate ? 'best' : ''}">${pctTxt(pct(r[4], r[1]))}</td><td>${fmt(r[5])}</td><td>${fmt(r[6])}</td></tr>`; }).join('')}</tbody>
@@ -403,11 +473,11 @@ function paySection(pay) {
   if (!D.payments) return '';
   const list = paysIn(SEL.s, SEL.e), g = srcGroup(list), tot = list.length, max = Math.max(...g.map(x => x[1][0]), 1);
   const note = tot !== pay[0] ? `<p class="pnote">관리자 결제 통계는 ${fmt(pay[0])}건, 결제 목록은 ${fmt(tot)}건이에요.</p>` : '';
-  if (!tot) return `<section class="blk"><h2>결제 출처</h2><div class="card"><p class="pempty">이 기간에는 결제가 없어요.</p></div></section>`;
-  return `<section class="blk"><h2>결제 출처</h2>
+  if (!tot) return `<section class="blk"><h2>결제 출처${ti('결제 출처')}</h2><div class="card"><p class="pempty">이 기간에는 결제가 없어요.</p></div></section>`;
+  return `<section class="blk"><h2>결제 출처${ti('결제 출처')}</h2>
     <div class="two">
       <div class="card"><div class="hd"><b>출처별</b><span>${fmt(tot)}건 · ${won(list.reduce((a, p) => a + p[2], 0))}</span></div><div class="scroll"><table class="tbl">
-        <thead><tr><th>출처</th><th>결제</th><th>비중</th><th>결제 금액</th></tr></thead>
+        <thead><tr><th>출처</th><th>결제</th><th>${L('비중')}</th><th>결제 금액</th></tr></thead>
         <tbody>${g.map(([k, [n, a]]) => `<tr><td class="name">${esc(k)}</td><td>${fmt(n)}건</td><td>${shareCell(n, tot, max)}</td><td>${won(a)}</td></tr>`).join('')}</tbody></table></div></div>
       <div class="card"><div class="hd"><b>결제 건별</b><span>최근 순</span></div>
         <ol class="paylist">${list.slice().reverse().map(p => `<li><span class="pt">${MD(p[0])} ${p[0].slice(11, 16)}</span><div class="pn"><b>${esc(p[3])}</b><small>${esc(p[4])}</small></div><div class="pa">${won(p[2])}<small>${esc(prodName(p[1]))}</small></div></li>`).join('')}</ol></div>
@@ -447,10 +517,10 @@ function signView({ m, pm, cd, pd, mk, pmk, label }) {
 
   ${paySection(pay)}
 
-  <section class="blk"><h2>지면·캠페인별 성과 <small>관리자 유입 결제 통계</small></h2>
+  <section class="blk"><h2>지면·캠페인별 성과${ti('지면·캠페인별 성과')} <small>관리자 유입 결제 통계</small></h2>
     <div class="two">
       <div class="card"><div class="hd"><b>그룹별 방문 · 결제</b><span>등록 경로 방문 ${fmt(plTot[0])} · 결제 ${fmt(plTot[1])}건</span></div><div class="scroll"><table class="tbl">
-        <thead><tr><th>지면 그룹</th><th>방문</th><th>비중</th><th>${CMP.col}</th><th>결제</th><th>결제 금액</th><th>전환율</th></tr></thead>
+        <thead><tr><th>${L('지면 그룹')}</th><th>방문</th><th>${L('비중')}</th><th>${L(CMP.col)}</th><th>${L('결제')}</th><th>${L('결제 금액')}</th><th>${L('전환율')}</th></tr></thead>
         <tbody>${pl.map(r => { const p = prevPl[r[0]]; return `<tr><td class="name">${esc(r[0])}</td><td>${fmt(r[1])}</td><td>${shareCell(r[1], plTot[0], plMax)}</td><td>${pm ? dtxt(diff(r[1], p && p[1], cd, pd)) : '-'}</td><td class="${r[2] ? 'best' : 'muted'}">${fmt(r[2])}</td><td>${r[3] ? won(r[3]) : '<span class="muted">-</span>'}</td><td>${pctTxt(pct(r[2], r[1]))}</td></tr>`; }).join('')}</tbody>
       </table></div></div>
       <div class="card"><div class="hd"><b>상위 지면</b><span>결제 많은 순 → 방문 많은 순</span></div>
@@ -458,9 +528,9 @@ function signView({ m, pm, cd, pd, mk, pmk, label }) {
           <div class="nv"><span class="${r[3] ? 'best' : 'muted'}">결제 ${fmt(r[3])}건</span><small>${r[4] ? won(r[4]) + ' · ' : ''}방문 ${fmt(r[2])}</small></div></li>`).join('')}</ol></div>
     </div></section>
 
-  <section class="blk"><h2>유입 채널별 사용자 <small>GA4</small></h2>
+  <section class="blk"><h2>유입 채널별 사용자${ti('유입 채널별 사용자')} <small>GA4</small></h2>
     <div class="card"><div class="scroll"><table class="tbl">
-      <thead><tr><th>유입 채널</th><th>사용자</th><th>비중</th><th>${CMP.col}</th><th>신규 사용자</th></tr></thead>
+      <thead><tr><th>${L('유입 채널')}</th><th>사용자</th><th>${L('비중')}</th><th>${L(CMP.col)}</th><th>${L('신규 사용자')}</th></tr></thead>
       <tbody>${ch.map(r => { const p = prevCh[r[0]]; return `<tr><td class="name">${esc(r[0])}</td><td>${fmt(r[1])}</td><td>${shareCell(r[1], chTot, chMax)}</td><td>${pm ? dtxt(diff(r[1], p && p[1], cd, pd)) : '-'}</td><td>${fmt(r[2])}</td></tr>`; }).join('')}</tbody>
     </table></div></div></section>
 
@@ -484,11 +554,11 @@ function goalPanel() {
   if (g.editor && g.editor.active) items.push(['editor', '에디터', '활성 사용자', m.editor.active, g.editor.active, '명']);
   if (g.sign && g.sign.active) items.push(['sign', '싸인', '활성 사용자', m.sign.active, g.sign.active, '명']);
   if (g.sign && g.sign.pay) items.push(['sign', '싸인', '결제 건수', ((D.mkt.sign[m.m] || {}).pay || [0])[0], g.sign.pay, '건']);
-  return `<section class="goals" aria-label="월간 목표 달성 현황"><div class="gh"><b>${+m.m.slice(5)}월 목표 달성 현황</b><span>${MD(m.end)}까지 · ${total}일 중 ${done}일 지남 (${tp.toFixed(0)}%)</span></div>
+  return `<section class="goals" aria-label="월간 목표 달성 현황"><div class="gh"><b>${+m.m.slice(5)}월 목표 달성 현황${ti('목표')}</b><span>${MD(m.end)}까지 · ${total}일 중 ${done}일 지남 (${tp.toFixed(0)}%)</span></div>
     <div class="gl">${items.map(([p, pn, label, cur, goal, unit]) => {
       const r = cur / goal * 100, proj = cur / done * total, need = left > 0 ? Math.max(0, goal - cur) / left : 0;
       const st = r >= 100 ? ['done', '달성'] : r >= tp ? ['ahead', '순항'] : r >= tp * 0.8 ? ['near', '조금 부족'] : ['behind', '부족'];
-      return `<div class="gc ${p}"><div class="gt"><span class="gp">${pn}</span>${label}<em class="gs ${st[0]}">${st[1]}</em></div>
+      return `<div class="gc ${p}"><div class="gt"><span class="gp">${pn}</span>${label}${ti(label, TIP['목표 ' + label])}<em class="gs ${st[0]}">${st[1]}</em></div>
         <div class="gv"><b>${fmt(cur)}</b><small>/ ${fmt(goal)}${unit}</small><strong>${r.toFixed(0)}%</strong></div>
         <div class="gb"><span style="width:${Math.min(100, r)}%"></span><i style="left:${Math.min(100, tp)}%"></i></div>
         <div class="gn">${r >= 100 ? `목표보다 ${fmt(cur - goal)}${unit} 더 했어요` : `남은 ${fmt(goal - cur)}${unit} · 남은 ${left}일 동안 하루 ${fmt(Math.ceil(need))}${unit}씩`}<br>지금 속도면 월말 약 ${fmt(proj)}${unit} (단순 환산)</div></div>`; }).join('')}</div></section>`;
@@ -503,8 +573,8 @@ function periodTable(p) {
   const row = x => p === 'editor' ? [x.editor.active, x.editor.new, ev(x, 'document_create'), ev(x, 'export_document'), ev(x, 'sign_entry')].map(fmt)
     : [fmt(x.sign.visit), fmt(x.sign.signup), paySrcCell(x.mkt.sign.pay[0], x.s, x.e), won(x.mkt.sign.pay[1]), x.sign.contrib ? `${won(x.sign.contrib[1])}<span class="psm">${fmt(x.sign.contrib[0])}건</span>` : '-', fmt(x.sign.users), fmt(x.sign.active)];
   const lbl = x => view === 'day' ? `${MD(x.k)} (${wday(x.k)})` : dRange(x.s, x.e);
-  return `<section class="blk"><h2>${view === 'day' ? '일별 추이 표 <small>최근 7일</small>' : '7일 단위 추이'}</h2>
-    <div class="card"><div class="scroll"><table class="tbl"><thead><tr><th>${view === 'day' ? '날짜' : '기간'}</th>${head.map(h => `<th>${h}</th>`).join('')}</tr></thead>
+  return `<section class="blk"><h2>${view === 'day' ? '일별 추이 표' + ti('일별 추이 표') + ' <small>최근 7일</small>' : '7일 단위 추이' + ti('7일 단위 추이')}</h2>
+    <div class="card"><div class="scroll"><table class="tbl"><thead><tr><th>${view === 'day' ? '날짜' : '기간'}</th>${head.map(h => `<th>${L(h)}</th>`).join('')}</tr></thead>
     <tbody>${L.map(x => `<tr class="${x.k === pkey[view] ? 'sel' : ''}${view === 'day' && /[일토]/.test(wday(x.k)) ? ' we' : ''}"><td>${lbl(x)}</td>${row(x).map(v => `<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div></section>`;
 }
 function weekTable(p) {
@@ -513,8 +583,8 @@ function weekTable(p) {
   const row = w => { const u = k => (w.editor.ev[k] || [0, 0])[1];
     return p === 'editor' ? [w.editor.active, w.editor.new, u('document_create'), u('export_document'), u('sign_entry')].map(fmt)
       : [fmt(w.sign.visit), fmt(w.sign.signup), paySrcCell(w.sign.pay[0], w.s, w.e), won(w.sign.pay[1]), w.sign.contrib ? `${won(w.sign.contrib[1])}<span class="psm">${fmt(w.sign.contrib[0])}건</span>` : '-', fmt(w.sign.active)]; };
-  return `<section class="blk"><h2>주간 추이 <small>월~일</small></h2>
-    <div class="card"><div class="scroll"><table class="tbl"><thead><tr><th>주</th>${head.map(h => `<th>${h}</th>`).join('')}</tr></thead>
+  return `<section class="blk"><h2>주간 추이${ti('주간 추이')} <small>월~일</small></h2>
+    <div class="card"><div class="scroll"><table class="tbl"><thead><tr><th>주</th>${head.map(h => `<th>${L(h)}</th>`).join('')}</tr></thead>
     <tbody>${W.map(w => { const part = (new Date(w.e) - new Date(w.s)) / 864e5 < 6; return `<tr><td>${dRange(w.s, w.e)}${part ? ' <span class="muted">(진행 중)</span>' : ''}</td>${row(w).map(v => `<td>${v}</td>`).join('')}</tr>`; }).join('')}</tbody></table></div></div></section>`;
 }
 function monthTable(p) {
@@ -524,9 +594,9 @@ function monthTable(p) {
        ['문서 생성률', x => pctTxt(pct(ev(x, 'document_create'), x.editor.active))], ['문서 내보내기', x => fmt(ev(x, 'export_document'))], ['싸인 연결', x => fmt(ev(x, 'sign_entry'))], ['로그인 성공', x => fmt(ev(x, 'login_success'))]]
     : [['예스폼 기여 결제', x => x.sign.contrib ? `${won(x.sign.contrib[1])} (${fmt(x.sign.contrib[0])}건)` : '-'], ['결제 건수', x => fmt((D.mkt.sign[x.m].pay || [])[0])], ['결제 금액', x => won((D.mkt.sign[x.m].pay || [])[1])], ['신규 가입', x => fmt(x.sign.signup)], ['방문자', x => fmt(x.sign.visit)],
        ['가입률 (방문 대비)', x => pctTxt(pct(x.sign.signup, x.sign.visit))], ['전자계약 실사용자', x => fmt(x.sign.users)], ['에디터 경유 실사용자', x => fmt(x.sign.editorUsers)], ['GA4 활성 사용자', x => fmt(x.sign.active)]];
-  return `<section class="blk"><h2>월별 비교</h2><div class="card"><div class="scroll"><table class="tbl">
+  return `<section class="blk"><h2>월별 비교${ti('월별 비교')}</h2><div class="card"><div class="scroll"><table class="tbl">
     <thead><tr><th>지표</th>${D.months.map(x => `<th>${mLabel(x)}</th>`).join('')}</tr></thead>
-    <tbody>${rows.map(([l, f]) => `<tr><td class="name">${l}</td>${D.months.map(x => `<td>${f(x)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div></section>`;
+    <tbody>${rows.map(([l, f]) => `<tr><td class="name">${L(l)}</td>${D.months.map(x => `<td>${f(x)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div></section>`;
 }
 
 /* ---------- 일별 차트 (SVG) ---------- */
