@@ -43,6 +43,22 @@
               "href": "archive/20261113-141552-yesform-membership-plan-v2/index.html"
             }
           ]
+        },
+        {
+          "id": "20261113-143712-yesform-membership-plan-v3",
+          "label": "최종본",
+          "title": "예스폼 멤버십 요금제 변경 계획안 (2027)",
+          "desc": "최종 요금제 시안(yesform-custom.vercel.app/pricing) 기준: 요금제 카드·지금→개편·포함 내용 비교표·기존 회원 전환 추가",
+          "created": "2026.11.13",
+          "folder": "archive/20261113-143712-yesform-membership-plan-v3",
+          "preview": "archive/20261113-143712-yesform-membership-plan-v3/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "실행안",
+              "href": "archive/20261113-143712-yesform-membership-plan-v3/index.html"
+            }
+          ]
         }
       ]
     },
