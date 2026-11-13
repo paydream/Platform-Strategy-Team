@@ -386,7 +386,8 @@ function figmaFromText(t) {
   const k = t.match(/Figma[^\n]{0,80}?\b([A-Za-z0-9]{22})\b\)?\s*(?:\/\s*)?(\d+:\d+)?/);
   return k ? `https://www.figma.com/design/${k[1]}/${k[2] ? '?node-id=' + k[2].replace(':', '-') : ''}` : '';
 }
-function projFigma(p) { if (!p) return ''; return (p.versions || []).slice().reverse().map(v => v.figma).find(Boolean) || p.figma || ''; }
+// 마지막 버전 링크 → 프로젝트 링크 → 그보다 이전 버전 링크 순
+function projFigma(p) { if (!p) return ''; const vs = p.versions || []; return (vs.length && vs[vs.length - 1].figma) || p.figma || vs.slice().reverse().map(v => v.figma).find(Boolean) || ''; }
 function autoFigma() {
   if (!figAuto) return;
   const add = document.querySelector('input[name="dest"]:checked').value === 'add';

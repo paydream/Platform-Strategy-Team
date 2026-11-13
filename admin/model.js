@@ -87,8 +87,8 @@
       created: s(up.version.created, 20) || today, folder: up.folder, preview: inFolder(up.version.preview) ? up.version.preview : items[0].href,
       hidden: false, items,
     });
-    // 피그마 링크: 올릴 때 넣은 것 → 없으면 이 프로젝트의 마지막 버전 링크 → 프로젝트 링크를 이어받음
-    const prevFig = p.versions.slice(0, -1).reverse().map(v => v.figma).find(Boolean) || p.figma || '';
+    // 피그마 링크: 올릴 때 넣은 것 → 없으면 직전 버전 링크 → 프로젝트 링크 → 더 이전 버전 링크를 이어받음
+    const olds = p.versions.slice(0, -1), prevFig = (olds.length && olds[olds.length - 1].figma) || p.figma || olds.slice().reverse().map(v => v.figma).find(Boolean) || '';
     const fg = s(up.version.figma, 600) || (FIGMA_RE.test(prevFig) ? prevFig : '');
     if (fg) { if (!FIGMA_RE.test(fg)) throw new Error('피그마 링크는 https://www.figma.com/ 으로 시작해야 합니다.'); p.versions[p.versions.length - 1].figma = fg; }
     p.updated = today;
