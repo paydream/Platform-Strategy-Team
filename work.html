@@ -8,23 +8,129 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="gnb.css">
 <style>
-  :root{--bg:#f6f7f9;--card:#fff;--line:#e5e8ec;--text:#191f28;--sub:#6b7684;--accent:#2f6bff}
+  :root{--bg:#f6f7f9;--card:#fff;--line:#e5e8ec;--text:#191f28;--sub:#6b7684;--accent:#2f6bff;--chip:#eef3ff;--final:#12a150;--final-bg:#e8f7ee;--plan:#8a4dff;--plan-bg:#f3edff;--pin:#0d9488;--pin-bg:#e1f5f2}
   *{box-sizing:border-box;margin:0;padding:0}
   [hidden]{display:none!important}
   body{font-family:"Pretendard Variable",Pretendard,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased}
   a{color:inherit}
   header{background:var(--card);border-bottom:1px solid var(--line)}
-  .wrap{max-width:1200px;margin:0 auto;padding:0 20px}
-  .hero{padding:36px 0 20px}
+  .wrap{max-width:1320px;margin:0 auto;padding:0 20px}
+  .hero{padding:36px 0 20px;display:flex;align-items:baseline;gap:10px}
   .hero h1{font-size:26px}
+  .hero span{font-size:13px;color:var(--sub)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;padding-bottom:60px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;text-decoration:none;display:flex;flex-direction:column;transition:border-color .15s,box-shadow .15s,opacity .2s}
+  .card:hover{border-color:#c9d3e6;box-shadow:0 4px 14px rgba(0,0,0,.05)}
+  .card.off{opacity:.45}
+  .thumb{aspect-ratio:16/10;background:#eef0f3;overflow:hidden;position:relative;border-bottom:1px solid var(--line)}
+  .thumb iframe{position:absolute;top:0;left:0;width:1440px;height:900px;border:0;transform-origin:0 0;pointer-events:none}
+  .pin{position:absolute;top:10px;right:10px;z-index:2;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:#fff;color:#98a1ad;display:grid;place-items:center;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+  .pin.on{background:var(--pin);border-color:var(--pin);color:#fff}
+  .pin.on svg{fill:currentColor}
+  .pin:hover{transform:scale(1.06)}
+  .pin:disabled{opacity:.6;cursor:default}
+  .body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+  .chips{display:flex;gap:6px;flex-wrap:wrap}
+  .chip{font-size:12px;padding:2px 8px;border-radius:99px;background:var(--chip);color:var(--accent)}
+  .chip.plan{background:var(--plan-bg);color:var(--plan)}
+  .chip.gray{background:#f2f4f6;color:var(--sub)}
+  .chip.final{background:var(--final-bg);color:var(--final);font-weight:600}
+  .card h2{font-size:16px;line-height:1.4}
+  .card p{font-size:13px;color:var(--sub);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .meta{margin-top:auto;padding-top:6px;font-size:12px;color:var(--sub);display:flex;gap:10px;flex-wrap:wrap}
   .empty{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:56px 20px;text-align:center;color:var(--sub);font-size:14px;margin-bottom:60px}
+  .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#191f28;color:#fff;font-size:14px;border-radius:10px;padding:12px 16px;display:flex;gap:14px;align-items:center;box-shadow:0 8px 24px rgba(0,0,0,.2);z-index:20}
+  .toast button{border:0;background:none;color:#8fb0ff;font:inherit;font-weight:600;cursor:pointer}
+  @media (max-width:640px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <header class="gnb"><div class="wrap gnb-top"><a class="gnb-logo" href="./" title="메인 홈으로"><strong>플랫폼전략팀</strong></a><div class="gnb-util"></div></div><nav class="wrap gnb-nav" data-current="work" aria-label="주요 메뉴"></nav><script src="gnb.js"></script></header>
 <main class="wrap">
-  <section class="hero"><h1>주요 업무</h1></section>
-  <div class="empty">아직 등록된 주요 업무가 없어요.</div>
+  <section class="hero"><h1>주요 업무</h1><span id="count"></span></section>
+  <div class="grid" id="list"></div>
+  <div class="empty" id="empty" hidden>아직 주요 업무가 없어요. 업무 아카이브 프로젝트 화면 상단의 「주요 업무에 추가」로 넣을 수 있어요.</div>
 </main>
+<div class="toast" id="toast" hidden><span id="toastMsg"></span><button id="undo" type="button">되돌리기</button></div>
+<script>
+const TEAMS = { design: '디자인', planning: '기획' };
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const PIN = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg>';
+const day = iso => { const d = new Date(new Date(iso).getTime() + 9 * 3600e3); return isNaN(d) ? '' : d.toISOString().slice(0, 10).replace(/-/g, '.'); };
+let projects = [], pins = [], counts = {}, loaded = 0;
+
+// 카드에 보여줄 화면: 확정안 → 없으면 최신 버전 (메인과 같음)
+function cover(p) {
+  const vs = p.versions.filter(v => !v.hidden);
+  const fv = p.final && vs.find(v => v.id === p.final.version);
+  const v = fv || vs[vs.length - 1];
+  return { v, href: fv ? (p.final.href || fv.preview) : v && v.preview };
+}
+function render() {
+  if (loaded < 2) return;
+  const byId = new Map(projects.map(p => [p.id, p]));
+  const rows = pins.map(x => ({ pin: x, p: byId.get(x.id) })).filter(r => r.p && r.p.versions.some(v => !v.hidden));
+  document.getElementById('list').innerHTML = rows.map(({ pin, p }) => {
+    const { v, href } = cover(p), n = p.versions.filter(x => !x.hidden).length;
+    return `<a class="card" href="project.html?id=${encodeURIComponent(p.id)}" data-id="${esc(p.id)}">
+      <div class="thumb"><button class="pin on" type="button" data-pin="${esc(p.id)}" title="핀을 끄면 주요 업무에서 빠져요" aria-label="주요 업무에서 빼기" aria-pressed="true">${PIN}</button>
+        <iframe data-src="${esc(encodeURI(href))}" loading="lazy" tabindex="-1" title="${esc(p.title)} 미리보기"></iframe></div>
+      <div class="body">
+        <div class="chips"><span class="chip ${p.team === 'planning' ? 'plan' : ''}">${TEAMS[p.team] || '디자인'}</span>
+          ${p.category ? `<span class="chip gray">${esc(p.category)}</span>` : ''}
+          ${p.final ? '<span class="chip final">확정안</span>' : ''}</div>
+        <h2>${esc(p.title)}</h2>
+        ${p.desc ? `<p>${esc(p.desc)}</p>` : ''}
+        <div class="meta"><span>버전 ${n}개 · 최신 ${esc(v.label)} (${esc(v.created)})</span><span>코멘트 ${counts[p.id] || 0}</span><span>주요 업무 추가 ${day(pin.at)}</span></div>
+      </div></a>`;
+  }).join('');
+  document.getElementById('count').textContent = rows.length ? `${rows.length}개` : '';
+  document.getElementById('empty').hidden = rows.length > 0;
+  fitThumbs();
+}
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { const f = e.target; f.src = f.dataset.src; io.unobserve(f); } }), { rootMargin: '200px' });
+function fitThumbs() {
+  document.querySelectorAll('.thumb').forEach(t => {
+    const f = t.querySelector('iframe'); f.style.transform = `scale(${t.clientWidth / 1440})`;
+    if (!f.src) io.observe(f);
+  });
+}
+addEventListener('resize', fitThumbs);
+
+// 핀 끄기 → 주요 업무에서 빠짐 (되돌리기 가능)
+async function setPin(id, on) {
+  const r = await fetch('api/work', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: on ? 'pin' : 'unpin', project: id }) });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.error || `저장하지 못했습니다 (${r.status})`);
+  return j.pins || [];
+}
+let toastTimer = null, lastOff = null;
+function toast(msg, undoable) {
+  document.getElementById('toastMsg').textContent = msg;
+  document.getElementById('undo').hidden = !undoable;
+  document.getElementById('toast').hidden = false;
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { document.getElementById('toast').hidden = true; }, 5000);
+}
+document.getElementById('list').addEventListener('click', async e => {
+  const b = e.target.closest('[data-pin]'); if (!b) return;
+  e.preventDefault(); e.stopPropagation();
+  const id = b.dataset.pin, card = b.closest('.card'), p = projects.find(x => x.id === id);
+  b.disabled = true; card.classList.add('off');
+  try {
+    const old = pins.find(x => x.id === id);
+    pins = await setPin(id, false); lastOff = old;
+    render(); toast(`「${p ? p.title : id}」을(를) 주요 업무에서 뺐어요.`, true);
+  } catch (err) { card.classList.remove('off'); b.disabled = false; toast(err.message, false); }
+});
+document.getElementById('undo').onclick = async () => {
+  if (!lastOff) return;
+  const id = lastOff.id; lastOff = null; document.getElementById('toast').hidden = true;
+  try { pins = await setPin(id, true); render(); } catch (err) { toast(err.message, false); }
+};
+
+fetch('projects.json', { cache: 'no-store' }).then(r => r.json()).then(d => { projects = d.projects || []; loaded++; render(); });
+fetch('api/work', { cache: 'no-store' }).then(r => r.ok ? r.json() : { pins: [] }).then(d => { pins = d.pins || []; loaded++; render(); }).catch(() => { loaded++; render(); });
+fetch('api/comments?summary=1', { cache: 'no-store' }).then(r => r.ok ? r.json() : {}).then(d => { counts = d.counts || {}; render(); }).catch(() => {});
+</script>
 </body>
 </html>

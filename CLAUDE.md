@@ -26,6 +26,10 @@
 - `trash[]`: `{type:'version', projectId, deleted, version}` 또는 `{type:'project', deleted, project}`.
 - 규칙 코드는 `admin/model.js` 한 곳(관리자 페이지와 서버 API가 같이 씀).
 
+## 주요 업무 (`/work.html`, `data/work.json`)
+- 프로젝트 화면(project.html) 헤더 「주요 업무에 추가」 버튼 → 핀. 다시 누르면 해제. 주요 업무 화면은 핀 꽂힌 프로젝트를 최근 추가 순 카드(메인과 같은 썸네일)로 보여주고, 썸네일 오른쪽 위 핀을 끄면 빠진다(되돌리기 가능).
+- 저장: `data/work.json` `{ pins: [{ id, at }] }` ← `/api/work` (GET 목록, POST `{action:'pin'|'unpin', project}`, 사이트 로그인 쿠키만 있으면 누구나). 이 파일만 바뀐 커밋은 재배포 안 함(ignoreCommand).
+
 ## 코멘트 (`data/comments.json`)
 - `{ comments: [{ id, project, version, href, author(30자), text(500자), created(ISO) }] }`
 - 작성: 팀 비밀번호(`TEAM_PASSWORD`, 없으면 `ADMIN_PASSWORD`). 삭제: 관리자 비밀번호.

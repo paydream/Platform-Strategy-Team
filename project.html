@@ -31,6 +31,9 @@
   .hbtn.primary:hover{background:#1f5be8}
   .hbtn .n{font-size:11px;background:rgba(255,255,255,.25);border-radius:99px;padding:0 6px}
   .hbtn.list .n{background:#eef0f3;color:var(--sub)}
+  .hbtn.pin.on{background:#e1f5f2;border-color:#0d9488;color:#0d9488;font-weight:600}
+  .hbtn.pin.on svg{fill:currentColor}
+  .hbtn:disabled{opacity:.6;cursor:default}
 
   /* 왼쪽 버전 사이드바: 버전이 2개 이상일 때, 최근 3개까지 */
   .vside{width:220px;flex:none;background:var(--card);border-right:1px solid var(--line);overflow:auto;padding:14px 10px}
@@ -132,6 +135,7 @@ function shell() {
         <span id="finalChip"></span></div>
       <div class="actions">
         <span id="finalBtnBox"></span>
+        <button class="hbtn pin" id="pinBtn" type="button" style="display:none"></button>
         <a class="hbtn" id="figmaLink" target="_blank" rel="noopener" style="display:none" title="이 시안의 피그마 원본 열기"><svg width="10" height="15" viewBox="0 0 38 57" aria-hidden="true"><path fill="#1abcfe" d="M19 28.5a9.5 9.5 0 1 1 19 0 9.5 9.5 0 0 1-19 0z"/><path fill="#0acf83" d="M0 47.5A9.5 9.5 0 0 1 9.5 38H19v9.5a9.5 9.5 0 1 1-19 0z"/><path fill="#ff7262" d="M19 0v19h9.5a9.5 9.5 0 1 0 0-19H19z"/><path fill="#f24e1e" d="M0 9.5A9.5 9.5 0 0 0 9.5 19H19V0H9.5A9.5 9.5 0 0 0 0 9.5z"/><path fill="#a259ff" d="M0 28.5A9.5 9.5 0 0 0 9.5 38H19V19H9.5A9.5 9.5 0 0 0 0 28.5z"/></svg>피그마로 가기 ↗</a>
         <a class="hbtn" id="newWin" target="_blank" rel="noopener">새 창 ↗</a>
         <button class="hbtn list" id="openSide" title="코멘트 보기" style="display:none">💬 <span class="n" id="sideN">0</span></button>
@@ -150,6 +154,7 @@ function shell() {
   const fu = [V.figma, P.figma].find(u => typeof u === 'string' && /^https:\/\/(www\.)?figma\.com\//.test(u));
   if (fu) { $('figmaLink').href = fu; $('figmaLink').style.display = ''; }
   renderVersions();
+  $('pinBtn').onclick = togglePin; loadPin();
   $('openModal').onclick = openModal;
   $('openSide').onclick = () => openSide(true);
   $('closeSide').onclick = () => openSide(false);
@@ -166,6 +171,28 @@ function renderVersions() {
       ${(v.desc || v.title) ? `<span class="vd">${esc(v.desc || v.title)}</span>` : ''}</a>`;
   box.innerHTML = `<h3><span>버전</span><span>${vs.length > 3 ? `최근 3개 · 전체 ${vs.length}개` : `${vs.length}개`}</span></h3>${recent.map(row).join('')}${extra ? '<div class="vgap">보고 있는 버전</div>' + row(extra) : ''}`;
   box.hidden = false;
+}
+/* ---------- 주요 업무 핀 (api/work, 사이트 로그인만 있으면 누구나) ---------- */
+const PIN_SVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg>';
+let pinned = false;
+function renderPin() {
+  const b = $('pinBtn'); b.style.display = '';
+  b.classList.toggle('on', pinned);
+  b.innerHTML = PIN_SVG + (pinned ? '주요 업무' : '주요 업무에 추가');
+  b.title = pinned ? '누르면 주요 업무에서 뺍니다' : '이 프로젝트를 주요 업무에 추가합니다';
+}
+async function loadPin() {
+  try { const r = await fetch('api/work', { cache: 'no-store' }); if (!r.ok) return; const j = await r.json(); pinned = (j.pins || []).some(x => x.id === P.id); renderPin(); } catch {}
+}
+async function togglePin() {
+  const b = $('pinBtn'), want = !pinned; b.disabled = true;
+  try {
+    const r = await fetch('api/work', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: want ? 'pin' : 'unpin', project: P.id }) });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(j.error || `저장하지 못했습니다 (${r.status})`);
+    pinned = (j.pins || []).some(x => x.id === P.id); renderPin();
+  } catch (e) { alert(e.message); }
+  finally { b.disabled = false; }
 }
 function renderHeader() {
   const label = (V.items.find(i => i.href === href) || {}).label || decodeURI(href.split('/').slice(-2).join('/'));

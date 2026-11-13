@@ -1,5 +1,5 @@
 {
-  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- . ':(exclude)data/comments.json' ':(exclude)data/tracking.json' ':(exclude)data/stats'",
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- . ':(exclude)data/comments.json' ':(exclude)data/tracking.json' ':(exclude)data/work.json' ':(exclude)data/stats'",
   "headers": [
     {
       "source": "/(.*)",
