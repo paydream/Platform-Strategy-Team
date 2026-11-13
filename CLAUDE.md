@@ -53,7 +53,7 @@
 - 분류: 담당자 `hyunji sim`/`PARK CHAEEUN` → 해당 사람. 담당자 칸이 비면 업무명 ‘디자인’(시스템·토큰·가이드 제외) → 심현지, ‘기획’ → 박채은, 그 하위 업무도 같은 사람. 제외 프로젝트: 웹 업무자동화(박지훈), 에디터·싸인 통합(상세 시트와 중복), 예스폼(주간 회의), 마케팅, 주요 콘텐츠. 규칙은 `wbs.html`의 `PEOPLE`/`SKIP`.
 
 ## 공통 GNB (`gnb.css` · `gnb.js`)
-- 업무 아카이브(`/`) · 에디터/싸인 지표 · 팀 WBS · 측정 관리 · 통계 · 관리자를 아이콘+메뉴명으로 보여주는 상단 메뉴. 왼쪽 "플랫폼전략팀" 로고를 누르면 메인 홈(`./`)으로 간다.
+- 로고 · 메뉴(업무 아카이브 · 에디터/싸인 지표 · 팀 WBS · 측정 관리 · 통계 · 관리자, 아이콘+메뉴명) · 화면별 버튼을 높이 60px(아래 테두리 포함) 한 줄로 보여준다. 왼쪽 "플랫폼전략팀" 로고를 누르면 메인 홈(`./`)으로 간다.
 - 메뉴 추가·순서·아이콘·배지 변경은 `gnb.js`의 `MENU`만 고치면 모든 화면에 반영된다. 스타일은 `gnb.css`.
-- 화면 마크업: `<header class="gnb"><div class="wrap gnb-top">로고 <div class="gnb-util">화면별 버튼(잠그기 등)</div></div><nav class="wrap gnb-nav" data-current="메뉴id"></nav><script src="gnb.js"></script></header>`, `<head>`에 `<link rel="stylesheet" href="gnb.css">`.
-- 메뉴 id: `archive`, `metrics`(stats.html), `wbs`, `tracking`, `stats`(stats-age*.html·홈 사이드바 `#stats`), `admin`. 새 화면을 만들면 같은 마크업을 쓴다.
+- 화면 마크업: `<header class="gnb"><div class="wrap gnb-top">로고 <div class="gnb-util">화면별 버튼(잠그기 등)</div></div><nav class="wrap gnb-nav" data-current="메뉴id"></nav><script src="gnb.js"></script></header>`, `<head>`에 `<link rel="stylesheet" href="gnb.css">`. `gnb.js`가 실행되면서 nav를 `.gnb-top` 안(로고와 `.gnb-util` 사이)으로 옮긴다.
+- 메뉴 id: `archive`, `metrics`(stats.html), `wbs`, `tracking`, `stats`(stats-age.html·stats-age-detail.html, 자체 비밀번호), `admin`. 홈 통계 사이드바를 없앤 뒤 「통계」 메뉴는 `stats-age.html`로 바로 간다. 새 화면을 만들면 같은 마크업을 쓴다.

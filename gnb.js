@@ -13,7 +13,7 @@
       svg: '<rect x="3" y="4.5" width="18" height="16" rx="2.5"' + F + '/><path d="M3 9.5h18M8 3v3M16 3v3"/><path d="M7 13.2h6M10 16.8h7" stroke-width="2.6"/>' },
     { id: 'tracking', href: 'tracking.html', label: '측정 관리', fg: '#f07800', bg: '#fff1e0',
       svg: '<circle cx="12" cy="12" r="9"' + F + '/><circle cx="12" cy="12" r="5.2"/><circle cx="12" cy="12" r="1.8" fill="currentColor"/>' },
-    { id: 'stats', href: './#stats', label: '통계', fg: '#e5457a', bg: '#fdeaf1', lock: true, title: '비밀번호로 열람',
+    { id: 'stats', href: 'stats-age.html', label: '통계', fg: '#e5457a', bg: '#fdeaf1', lock: true, title: '비밀번호로 열람',
       svg: '<path d="M11 4.5a8.5 8.5 0 1 0 8.5 8.5H11z"' + F + '/><path d="M14 2.5a7.5 7.5 0 0 1 7.5 7.5H14z" fill="currentColor"/>' },
     { id: 'admin', href: 'admin/', label: '관리자', fg: '#4e5968', bg: '#eef0f3',
       svg: '<path d="M4 7h9M18 7h2M4 17h3M12 17h8"/><circle cx="15.5" cy="7" r="2.4"' + F + '/><circle cx="9.5" cy="17" r="2.4"' + F + '/>' }
@@ -26,7 +26,7 @@
     if (!nav.getAttribute('aria-label')) nav.setAttribute('aria-label', '주요 메뉴');
     nav.innerHTML = MENU.map(function (m) {
       var on = m.id === cur;
-      var href = (m.id === 'stats' && cur === 'archive') ? '#stats' : m.href;
+      var href = m.href;
       return '<a class="gnb-item' + (on ? ' on' : '') + '" href="' + href + '"' + (on ? ' aria-current="page"' : '') +
         (m.title ? ' title="' + m.title + '"' : '') + ' style="--gfg:' + m.fg + ';--gbg:' + m.bg + '">' +
         '<span class="gnb-ic" aria-hidden="true">' +
