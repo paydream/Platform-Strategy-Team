@@ -45,7 +45,9 @@
 - 갱신: 매일 아침 Aside 루틴이 GA4(에디터·싸인 속성)와 싸인 관리자 통계에서 전날까지 다시 뽑아 `POST /api/stats-update` `{ key, id:'marketing', data }`로 보낸다(키 = `STATS_UPDATE_KEY`). API가 암호화해 GitHub에 커밋. 이 파일만 바뀐 커밋은 재배포 안 함(ignoreCommand), `/api/stats`가 GitHub에서 바로 읽는다(60초 캐시).
 - 목록(사이드바)의 기간·업데이트 날짜는 `auto: true` 항목이면 파일 meta로 자동 표시된다.
 
-## 팀 WBS (`/wbs.html`, 비밀번호 없음)
-- 헤더 GNB "팀 WBS". 디자인 심현지 · 기획 박채은 개인 일정(지금 하는 일, 다음 일정, 주별 부하, 기간별 빈 평일, 간트).
-- 데이터: 예스폼 주요 사업일정 현황판(yesform-schedule-board.vercel.app)이 쓰는 `https://yesform-bs-dashboard.vercel.app/api/master?tab=통합일정`(CSV, CORS 허용)을 화면이 열릴 때 바로 불러온다. 저장소에 따로 저장하지 않음. 실패하면 파일 안의 저장본(2026-11-12 15:47)을 보여준다.
+## 팀 WBS (`/wbs.html`, 비밀번호 없음, 매일 17:00 갱신)
+- 헤더 GNB "팀 WBS". 디자인 심현지 · 기획 박채은 개인 일정(지금 하는 일, 다음 일정, 휴가, 주별 부하, 기간별 빈 평일, 간트).
+- 데이터: `data/stats/wbs.enc.json`(암호화, `api/_statsfile.js` 재사용, 재배포 없음). 화면은 `GET /api/wbs`로 읽는다. 실패하면 현황판 API를 바로 부르고(휴가 없음), 그것도 실패하면 파일 안 저장본.
+- 갱신: 매일 17시 Aside 루틴이 (1) 현황판 `https://yesform-bs-dashboard.vercel.app/api/master?tab=통합일정` WBS와 (2) 예스폼 관리자 연차/휴가 달력(`formadmin.yesform.com/admin/admin/newVacation/huga_calendar.php?Year=&Month=`, 이번 달~+2달, 심현지·박채은만)을 모아 `POST /api/wbs` `{ key, data }`(키 = `STATS_UPDATE_KEY`). 데이터: `{ updated, updatedAt, wbs{fetchedAt, sheetCollected, rows[]}, leaves{ok, fetchedAt, months[], items[{date,team,name,type}]} }`.
+- 휴가 계산: 반반차 0.25일, 반차 0.5일, 그 외는 하루. 하루 휴가는 빈 날에서 뺀다.
 - 분류: 담당자 `hyunji sim`/`PARK CHAEEUN` → 해당 사람. 담당자 칸이 비면 업무명 ‘디자인’(시스템·토큰·가이드 제외) → 심현지, ‘기획’ → 박채은, 그 하위 업무도 같은 사람. 제외 프로젝트: 웹 업무자동화(박지훈), 에디터·싸인 통합(상세 시트와 중복), 예스폼(주간 회의), 마케팅, 주요 콘텐츠. 규칙은 `wbs.html`의 `PEOPLE`/`SKIP`.

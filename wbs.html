@@ -154,6 +154,17 @@
   .tbd-list{padding:14px 18px;font-size:13px;color:var(--sub);border-top:1px solid var(--line)}
   .tbd-list b{color:var(--text)}
 
+  .lvline{margin-top:8px;font-size:13px;color:#4e5968;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  .lvline .lt{font-weight:600;color:var(--sub);margin-right:2px}
+  .lvc{display:inline-block;font-size:12px;font-weight:600;border-radius:6px;padding:1px 8px;background:#fff1f2;color:#be123c;white-space:nowrap}
+  .lvc.half{background:#fff7ed;color:#c2410c}
+  .lvc.today{background:#be123c;color:#fff}
+  .lvn{font-size:11px;color:#be123c;font-weight:600}
+  .lv{position:absolute;top:6px;bottom:6px;background:#fecdd3;border-radius:3px;z-index:1}
+  .lv.half{background:#fed7aa}
+  .lv b{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:10px;color:#9f1239;white-space:nowrap;font-weight:700}
+  .lvcol{position:absolute;top:0;bottom:0;background:repeating-linear-gradient(135deg,rgba(225,29,72,.13) 0 3px,transparent 3px 6px)}
+  .lvcol.half{background:repeating-linear-gradient(135deg,rgba(234,88,12,.10) 0 3px,transparent 3px 7px)}
   .rules{margin-top:12px;padding:16px 20px;font-size:13px;color:#4e5968}
   .rules ul{padding-left:18px;display:flex;flex-direction:column;gap:4px}
   .rules code{background:#f3f5f7;border-radius:4px;padding:0 5px;font-size:12px}
@@ -177,6 +188,7 @@
 
 <script>
 (function(){
+  const STORE = '/api/wbs';   // 매일 17:00 루틴이 갱신하는 저장본(현황판 WBS + 예스폼 관리자 휴가)
   const API = 'https://yesform-bs-dashboard.vercel.app/api/master?tab=';
   const BOARD = 'https://yesform-schedule-board.vercel.app/';
   const PEOPLE = [
@@ -263,12 +275,30 @@
 
   function freeRanges(tasks,pid,a,b){
     const bt=busyTasks(tasks,pid), days=[];
-    for(let d=a; d<=b; d=addD(d,1)) if(isWd(d) && !bt.some(t=>overlap(t,d,d))) days.push(d);
+    for(let d=a; d<=b; d=addD(d,1)) if(isWd(d) && offOn(pid,d)<1 && !bt.some(t=>overlap(t,d,d))) days.push(d);
     const rs=[]; days.forEach(d=>{ const last=rs[rs.length-1];
       if(last && wdCount(addD(last.e,1), addD(d,-1))===0) last.e=d; else rs.push({s:d,e:d}); });
     return {days, rs};
   }
   const rangeTxt = r => +r.s===+r.e ? mdw(r.s) : `${mdw(r.s)}~${mdw(r.e)}`;
+
+  /* 휴가: 예스폼 관리자 연차/휴가 달력. 반반차 0.25일, 반차 0.5일, 그 외(연차·예비군·교육 등)는 하루 전체 */
+  let LEAVES = {};          // pid -> { 'YYYY-MM-DD': [{type, frac}] }
+  const fracOf = t => /반반차/.test(t) ? .25 : /반차/.test(t) ? .5 : 1;
+  function setLeaves(items){
+    LEAVES = {}; PEOPLE.forEach(p=>LEAVES[p.id]={});
+    (items||[]).forEach(x=>{ const p=PEOPLE.find(p=>p.name===x.name); if(!p) return;
+      (LEAVES[p.id][x.date] ||= []).push({ type:x.type, frac:fracOf(x.type) }); });
+  }
+  const leaveOn = (pid,d) => (LEAVES[pid]||{})[iso(d)] || null;
+  const offOn = (pid,d) => (leaveOn(pid,d)||[]).reduce((m,x)=>Math.max(m,x.frac),0);
+  const leaveTxt = l => l.map(x=>x.type).join(', ');
+  function leavesIn(pid,a,b){ const out=[]; for(let d=a; d<=b; d=addD(d,1)){ const l=leaveOn(pid,d); if(l && isWd(d)) out.push({d, l, frac:offOn(pid,d)}); } return out; }
+  // 연속된 같은 종류 휴가는 묶어서 보여준다
+  function leaveGroups(list){ const g=[]; list.forEach(x=>{ const last=g[g.length-1], t=leaveTxt(x.l);
+      if(last && last.t===t && wdCount(addD(last.e,1), addD(x.d,-1))===0) last.e=x.d; else g.push({s:x.d,e:x.d,t,frac:x.frac}); }); return g; }
+  const lvChip = (g,today) => `<span class="lvc ${g.frac<1?'half':''} ${today?'today':''}">${+g.s===+g.e?mdw(g.s):`${mdw(g.s)}~${mdw(g.e)}`} ${esc(g.t)}</span>`;
+  const fullOffIn = (pid,s,e) => leavesIn(pid,s,e).filter(x=>x.frac>=1).length;
 
   let TASKS=[], META={};
   const ui = { who:'all', hideDone:false, a:null, b:null };
@@ -280,9 +310,9 @@
     const over=leaves.filter(t=>t.state==='over'), tbd=mine.filter(t=>t.state==='tbd');
     const bt=busyTasks(TASKS,p.id);
     // 다음 빈 평일, 이후 완전히 비는 날
-    let firstFree=null; for(let d=TODAY,k=0;k<200;d=addD(d,1),k++){ if(isWd(d) && !bt.some(t=>overlap(t,d,d))){ firstFree=d; break; } }
+    let firstFree=null; for(let d=TODAY,k=0;k<200;d=addD(d,1),k++){ if(isWd(d) && offOn(p.id,d)<1 && !bt.some(t=>overlap(t,d,d))){ firstFree=d; break; } }
     const lastEnd=bt.reduce((m,t)=>D(t.e)>m?D(t.e):m, addD(TODAY,-1));
-    let open=addD(lastEnd,1); while(!isWd(open)) open=addD(open,1);
+    let open=addD(lastEnd,1); while(!isWd(open) || offOn(p.id,open)>=1) open=addD(open,1);
     const freeTxt = !bt.some(t=>D(t.e)>=TODAY)
       ? `오늘 이후 등록된 일정이 없어요.`
       : (firstFree && +firstFree<+open
@@ -291,7 +321,8 @@
     const li = (t,mode) => {
       const s=D(t.s), e=D(t.e), left=diff(TODAY,e), start=diff(TODAY,s);
       const rt = mode==='now' ? `<b>${md(e)}까지</b>${left===0?'오늘 마감':left+'일 남음'}` : `<b>${mdw(s)} 시작</b>${start}일 뒤 · ${wdCount(s,e)}일`;
-      return `<li><div><div class="pj">${esc(t.proj)} · ${esc(t.parent?t.parent.name:t.grp)}</div><div class="nm">${esc(t.name)}</div></div><div class="rt">${rt}</div></li>`;
+      const lv = leavesIn(p.id, mode==='now'?TODAY:s, e); const lvd = lv.reduce((m,x)=>m+x.frac,0);
+      return `<li><div><div class="pj">${esc(t.proj)} · ${esc(t.parent?t.parent.name:t.grp)}</div><div class="nm">${esc(t.name)}</div>${lv.length?`<div class="lvn">기간 중 휴가 ${lvd}일 (${lv.map(x=>md(x.d)+' '+esc(leaveTxt(x.l))).join(', ')})</div>`:''}</div><div class="rt">${rt}</div></li>`;
     };
     return `<div class="pc" data-p="${p.id}">
       <div class="pc-head"><div class="av">${p.name.slice(1,2)}</div><div><h2>${p.name}<small>${p.en}</small></h2><span class="role">${p.role}</span></div></div>
@@ -302,7 +333,8 @@
         <div class="kpi"><b>${tbd.length}</b><span>일정 미정</span></div>
       </div>
       <div class="free">${freeTxt}</div>
-      <h3>지금 하는 일 · ${mdw(TODAY)}</h3>
+      ${(()=>{ const g=leaveGroups(leavesIn(p.id,TODAY,addD(TODAY,92))); return `<div class="lvline"><span class="lt">휴가</span>${g.length?g.map(x=>lvChip(x,+x.s===+TODAY)).join(''):'<span style="color:var(--faint)">예정된 휴가 없음</span>'}</div>`; })()}
+      <h3>지금 하는 일 · ${mdw(TODAY)}${leaveOn(p.id,TODAY)?` <span class="lvc today">오늘 ${esc(leaveTxt(leaveOn(p.id,TODAY)))}</span>`:''}</h3>
       <ul class="tl">${now.length?now.map(t=>li(t,'now')).join(''):'<li class="empty">오늘 날짜에 걸린 업무가 없어요</li>'}</ul>
       <h3>다음 일정</h3>
       <ul class="tl">${next.length?next.slice(0,4).map(t=>li(t,'plan')).join(''):'<li class="empty">예정된 업무가 없어요</li>'}</ul>
@@ -313,13 +345,14 @@
     const a=ui.a, b=ui.b;
     const res = PEOPLE.map(p=>{
       const ov=busyTasks(TASKS,p.id).filter(t=>overlap(t,a,b)).sort((x,y)=>D(x.s)-D(y.s));
-      const fr=freeRanges(TASKS,p.id,a,b), tot=wdCount(a,b);
-      const v = ov.length===0 ? `<b class="ok">비어 있어요</b> · 평일 ${tot}일 모두 가능` :
+      const fr=freeRanges(TASKS,p.id,a,b), tot=wdCount(a,b), lg=leaveGroups(leavesIn(p.id,a,b));
+      const v = ov.length===0 ? (fr.days.length===tot ? `<b class="ok">비어 있어요</b> · 평일 ${tot}일 모두 가능` : `업무 없음 · 휴가 빼고 가능한 평일 <b class="ok">${fr.days.length}일</b> / ${tot}일`) :
         (fr.days.length ? `겹치는 업무 <b class="busy">${ov.length}건</b> · 빈 평일 <b class="ok">${fr.days.length}일</b> / ${tot}일` : `겹치는 업무 <b class="busy">${ov.length}건</b> · 빈 평일 없음`);
       return `<div class="pr"><h4><i style="background:${COLOR[p.id][0]}"></i>${p.name} <span style="font-weight:400;color:var(--sub);font-size:13px">${p.role}</span></h4>
         <div class="verdict">${v}</div>
         ${ov.length?`<ul>${ov.map(t=>`<li><span>${esc(t.proj)} · ${esc(t.name)}</span><span>${mdw(D(t.s))}~${mdw(D(t.e))}</span></li>`).join('')}</ul>`:''}
-        ${ov.length && fr.rs.length?`<div class="freed">빈 날: <b>${fr.rs.map(rangeTxt).join(', ')}</b></div>`:''}
+        ${lg.length?`<div class="lvline"><span class="lt">휴가</span>${lg.map(x=>lvChip(x)).join('')}</div>`:''}
+        ${(ov.length||lg.length) && fr.rs.length?`<div class="freed">빈 날: <b>${fr.rs.map(rangeTxt).join(', ')}</b></div>`:''}
       </div>`;
     }).join('');
     return res;
@@ -334,10 +367,11 @@
       return `<tr><td class="who">${p.name}</td>${weeks.map(w=>{
         const f=addD(w,4), ov=bt.filter(t=>overlap(t,w,f));
         const fr=freeRanges(TASKS,p.id,w,f).days.length;
-        const n=ov.length, lv=Math.min(n,3);
+        const n=ov.length, lv=Math.min(n,3), off=leavesIn(p.id,w,f).reduce((m,x)=>m+x.frac,0);
         const bg = n===0 ? '' : `background:${c1}${['','26','55','99'][lv]};color:${lv>=3?'#fff':c1}`;
-        const tip = n ? ov.map(t=>`${t.name} (${md(D(t.s))}~${md(D(t.e))})`).join('\n') : '등록된 업무 없음';
-        return `<td class="c ${n?'':'l0'}" style="${bg}" title="${esc(tip)}" data-w="${iso(w)}">${n||'–'}<small>${n?(fr?`빈 날 ${fr}일`:'꽉 참'):'여유'}</small></td>`;
+        const tip = (n ? ov.map(t=>`${t.name} (${md(D(t.s))}~${md(D(t.e))})`).join('\n') : '등록된 업무 없음') + (off ? '\n휴가: '+leavesIn(p.id,w,f).map(x=>md(x.d)+' '+leaveTxt(x.l)).join(', ') : '');
+        const sub = n ? (fr?`빈 날 ${fr}일`:'꽉 참') : (off?`가능 ${fr}일`:'여유');
+        return `<td class="c ${n?'':'l0'}" style="${bg}" title="${esc(tip)}" data-w="${iso(w)}">${n||'–'}<small>${sub}${off?` · 휴가 ${off}일`:''}</small></td>`;
       }).join('')}</tr>`;
     }).join('');
     return `<div class="heat-wrap"><table class="heat">${head}${rows}</table></div>`;
@@ -358,6 +392,8 @@
       if(d.getDay()===1) hdr+=`<span class="wkl" style="left:${pct(d)}%">${d.getDate()}</span>`;
     }
     const tl=(pct(TODAY)+50/N);
+    const lvCols = pid => { let h=''; for(let d=a; d<=b; d=addD(d,1)){ const f=offOn(pid,d); if(f && isWd(d)) h+=`<span class="lvcol ${f<1?'half':''}" style="left:${pct(d)}%;width:${100/N}%"></span>`; } return h; };
+    const lvMarks = pid => { let h=''; for(let d=a; d<=b; d=addD(d,1)){ const l=leaveOn(pid,d); if(l && isWd(d)){ const f=offOn(pid,d); h+=`<span class="lv ${f<1?'half':''}" style="left:${pct(d)}%;width:${100/N}%" title="${mdw(d)} ${esc(leaveTxt(l))}"></span>`; } } return h; };
     const todayLn=`<span class="todayln" style="left:${tl}%"></span>`;
     let html=`<div class="g-in" style="--wk:${700/N}%">
       <div class="gr hd"><div class="gl">업무 · 기간 · 상태</div><div class="gt">${hdr}${todayLn}<span class="todaytag" style="left:${tl}%">오늘</span></div></div>`;
@@ -366,19 +402,21 @@
       const mine=dated.filter(t=>t.who===p.id); if(!mine.length && ui.who!=='all') return;
       if(!mine.length) return;
       const [c1,c2]=COLOR[p.id];
-      html+=`<div class="gr person"><div class="gl"><i style="background:${c1}"></i>${p.name} <span style="font-weight:400;font-size:13px;color:var(--sub)">${p.role}</span></div><div class="gt">${todayLn}</div></div>`;
+      const LC=lvCols(p.id);
+      html+=`<div class="gr person"><div class="gl"><i style="background:${c1}"></i>${p.name} <span style="font-weight:400;font-size:13px;color:var(--sub)">${p.role}</span><span style="margin-left:auto;font-size:11px;font-weight:500;color:#be123c">■ 휴가</span></div><div class="gt">${lvMarks(p.id)}${todayLn}</div></div>`;
       const groups=[]; mine.forEach(t=>{ const k=t.proj+' · '+t.grp; let g=groups.find(x=>x.k===k); if(!g) groups.push(g={k,items:[]}); g.items.push(t); });
       groups.forEach(g=>{
-        html+=`<div class="gr grp"><div class="gl">${esc(g.k)}</div><div class="gt">${todayLn}</div></div>`;
+        html+=`<div class="gr grp"><div class="gl">${esc(g.k)}</div><div class="gt">${LC}${todayLn}</div></div>`;
         g.items.forEach(t=>{
           const isPar=!t.leaf, isChild=!!t.parent && g.items.includes(t.parent);
           const s=D(t.s), e=D(t.e), days=wdCount(s,e);
           const sheet = t.st && ((t.state==='now'&&t.st!=='진행')||(t.state==='over')||(t.state==='plan'&&t.st!=='대기')) ? `<span class="sheet">시트: ${esc(t.st)}</span>` : '';
+          const lvd = t.leaf ? leavesIn(p.id,s,e).reduce((m,x)=>m+x.frac,0) : 0;
           const why = t.why!=='담당자 지정' ? `<span class="sheet" title="담당자 칸이 비어 있어 ${esc(t.why)} 기준으로 넣었어요">· ${esc(t.why)} 기준</span>` : (t.owner.includes(',') ? `<span class="sheet">· 공동: ${esc(t.owner)}</span>` : '');
           html+=`<div class="gr ${isPar?'parent':''} ${isChild?'child':''}"><div class="gl">
               <div class="tn">${t.no?`<span class="no">${esc(t.no)}</span>`:''}<span>${esc(t.name)}</span>${t.link?`<a href="${esc(t.link)}" target="_blank" rel="noopener" title="원본 시트">원본↗</a>`:''}</div>
-              <div class="tm">${mdw(s)}${+s!==+e?' ~ '+mdw(e):''} · ${days}일 <span class="st ${t.state}">${ST_LABEL[t.state]}</span>${sheet}${why}</div>
-            </div><div class="gt">${todayLn}<span class="bar ${isPar?'parent':''} ${t.state}" style="--bc:${c1};--bs:${c2};left:${pct(s)}%;width:${(diff(s,e)+1)/N*100}%" title="${esc(t.name)} ${md(s)}~${md(e)}">${isPar?'':`<span class="lb">${esc(t.name)}</span>`}</span></div></div>`;
+              <div class="tm">${mdw(s)}${+s!==+e?' ~ '+mdw(e):''} · ${days}일 <span class="st ${t.state}">${ST_LABEL[t.state]}</span>${lvd?`<span class="lvn">휴가 ${lvd}일 포함</span>`:''}${sheet}${why}</div>
+            </div><div class="gt">${LC}${todayLn}<span class="bar ${isPar?'parent':''} ${t.state}" style="--bc:${c1};--bs:${c2};left:${pct(s)}%;width:${(diff(s,e)+1)/N*100}%" title="${esc(t.name)} ${md(s)}~${md(e)}">${isPar?'':`<span class="lb">${esc(t.name)}</span>`}</span></div></div>`;
         });
       });
     });
@@ -447,23 +485,31 @@
   }
   async function load(){
     $('#src').innerHTML='<span><span class="dot warn"></span>불러오는 중…</span>';
-    let rows, live=true, srcInfo='';
+    let rows=null, mode='store', info={}, warn='';
     try{
-      const [csv, cfg] = await Promise.all([getTab('통합일정'), getTab('소스설정').catch(()=> '')]);
-      rows=toRecords(csv);
-      if(!rows.length || !('담당자' in rows[0])) throw new Error('형식이 달라요');
-      if(cfg){ const c=toRecords(cfg); const hit=c.find(x=>x['프로젝트명']==='예스폼 에디터')||c.find(x=>x['프로젝트명']==='예스폼싸인'); const m=hit&&hit['마지막 수집 결과'].match(/(\d+\/\d+\s+\d+:\d+)/); if(m) srcInfo=m[1]; }
+      const ctl=new AbortController(); const tm=setTimeout(()=>ctl.abort(),9000);
+      const r=await fetch(STORE,{cache:'no-store',signal:ctl.signal}); clearTimeout(tm);
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      const d=await r.json();
+      rows=d.wbs.rows; setLeaves(d.leaves.items);
+      info={ at:d.updatedAt, sheet:d.wbs.sheetCollected||'', leavesAt:d.leaves.fetchedAt||'' };
+      if(d.leaves.ok===false) warn='예스폼 관리자 휴가 일정을 이번 갱신에서 못 가져와 이전 휴가 정보를 보여줘요.';
+      const age=(Date.now()-new Date(d.updatedAt))/36e5; if(age>48) warn=(warn?warn+' ':'')+`마지막 갱신이 ${Math.floor(age/24)}일 전이에요. 매일 17:00 자동 갱신이 멈췄는지 확인이 필요해요.`;
     }catch(err){
-      live=false; rows=SNAPSHOT.rows;
-      $('#notice').hidden=false;
-      $('#notice').textContent=`현황판에서 일정을 불러오지 못해 저장본(${SNAPSHOT.at} 기준)을 보여줘요. 잠시 뒤 새로고침해 주세요. (${err.message||err})`;
+      mode='live'; setLeaves([]);
+      try{
+        const csv=await getTab('통합일정'); rows=toRecords(csv);
+        if(!rows.length || !('담당자' in rows[0])) throw new Error('형식이 달라요');
+        warn='저장된 갱신본을 못 불러와 현황판에서 바로 가져왔어요. 휴가 일정은 빠져 있어요.';
+      }catch(e2){ mode='snap'; rows=SNAPSHOT.rows; warn=`일정을 불러오지 못해 ${SNAPSHOT.at} 저장본을 보여줘요. 휴가 일정은 빠져 있어요.`; }
     }
     TASKS=classify(rows);
-    if(live) $('#notice').hidden=true;
-    const t=new Date();
-    $('#src').innerHTML = live
-      ? `<span><span class="dot"></span>현황판 원본에서 실시간 · ${t.getMonth()+1}/${t.getDate()} ${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')} 불러옴${srcInfo?` (시트 수집 ${srcInfo})`:''}</span><button class="hbtn" id="rl">새로고침</button><a class="lnk" href="${BOARD}" target="_blank" rel="noopener">현황판 열기 ↗</a>`
-      : `<span><span class="dot warn"></span>저장본 · ${SNAPSHOT.at}</span><button class="hbtn" id="rl">다시 불러오기</button><a class="lnk" href="${BOARD}" target="_blank" rel="noopener">현황판 열기 ↗</a>`;
+    $('#notice').hidden=!warn; $('#notice').textContent=warn;
+    const f=x=>{ const t=new Date(x); return `${t.getMonth()+1}/${t.getDate()} ${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')}`; };
+    $('#src').innerHTML = (mode==='store'
+      ? `<span><span class="dot ${warn?'warn':''}"></span>매일 17:00 갱신 · 마지막 ${f(info.at)} (현황판 WBS + 예스폼 관리자 휴가)</span>`
+      : `<span><span class="dot warn"></span>${mode==='live'?'현황판 실시간':'저장본 '+SNAPSHOT.at}</span>`)
+      + `<button class="hbtn" id="rl">새로고침</button><a class="lnk" href="${BOARD}" target="_blank" rel="noopener">현황판 열기 ↗</a>`;
     $('#rl').onclick=load;
     if(!ui.a){ setQuick('next'); }
     render();
