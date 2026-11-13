@@ -59,7 +59,7 @@ module.exports = async (req, res) => {
       const out = await mutate(d => { const n = d.records.length; d.records = d.records.filter(x => x.id !== b.id); return d.records.length === n ? { error: '이미 지워진 기록입니다.', status: 404 } : { ok: true }; }, () => `측정 기록 삭제: ${b.id}`);
       return res.status(out.error ? out.status : 200).json(out);
     }
-    if (!L.teamOk(b.password)) { await wait(800); return res.status(401).json({ error: '팀 비밀번호가 맞지 않습니다.' }); }
+    if (!L.teamOk(b.password) && !L.siteOk(req)) { await wait(800); return res.status(401).json({ error: '팀 비밀번호가 맞지 않습니다.' }); }
     if (b.action === 'check') return res.status(200).json({ ok: true });
     if (!author) return res.status(400).json({ error: '이름을 넣어 주세요.' });
     if (b.action === 'save') {

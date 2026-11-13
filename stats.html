@@ -184,7 +184,7 @@
 <body>
 <header class="gnb"><div class="wrap gnb-top"><a class="gnb-logo" href="./" title="메인 홈으로"><strong>플랫폼전략팀</strong></a><div class="gnb-util"><button class="hbtn" id="logout" hidden>잠그기</button></div></div><nav class="wrap gnb-nav" data-current="metrics" aria-label="주요 메뉴"></nav><script src="gnb.js"></script></header>
 
-<div class="gate" id="gate">
+<div class="gate" id="gate" hidden>
   <form id="gateForm" autocomplete="off">
     <div class="lock"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
     <h1>통계 메뉴</h1>
@@ -226,14 +226,14 @@ async function unlock(pw, silent) {
   try {
     const r = await fetch('/api/stats', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pw }), cache: 'no-store' });
     const j = await r.json().catch(() => ({}));
-    if (!r.ok) { sessionStorage.removeItem(KEY); err.textContent = silent ? '' : (j.error || `오류가 났습니다 (${r.status})`); return; }
+    if (!r.ok) { $('#gate').hidden = false; sessionStorage.removeItem(KEY); err.textContent = silent ? '' : (j.error || `오류가 났습니다 (${r.status})`); return; }
     sessionStorage.setItem(KEY, pw); D = j; start();
-  } catch (e) { err.textContent = '서버에 연결하지 못했습니다.'; }
+  } catch (e) { $('#gate').hidden = false; err.textContent = '서버에 연결하지 못했습니다.'; }
   finally { btn.disabled = false; }
 }
 $('#gateForm').addEventListener('submit', e => { e.preventDefault(); const v = $('#pw').value.trim(); if (v) unlock(v); });
-$('#logout').onclick = () => { sessionStorage.removeItem(KEY); location.reload(); };
-if (sessionStorage.getItem(KEY)) unlock(sessionStorage.getItem(KEY), true);
+$('#logout').onclick = () => { sessionStorage.removeItem(KEY); location.href = '/__logout'; }; // 사이트 전체 잠그기
+unlock(sessionStorage.getItem(KEY) || 'site', true); // 사이트 비밀번호로 로그인했으면 바로 열림. 실패할 때만 비밀번호 화면
 
 /* ---------- 공통 ---------- */
 const mStart = m => m.start || m.m + '-01';

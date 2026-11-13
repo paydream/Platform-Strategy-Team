@@ -1,5 +1,6 @@
 // 서버 API 공용: GitHub 호출, 비밀번호 확인
 // Vercel 환경변수: GITHUB_TOKEN, ADMIN_PASSWORD, TEAM_PASSWORD(코멘트용, 없으면 ADMIN_PASSWORD 사용)
+// 사이트 비밀번호(SITE_PASSWORD, 없으면 STATS_PASSWORD)로 로그인한 쿠키가 있으면 팀 비밀번호·통계 비밀번호 없이 통과(siteOk). middleware.js 와 같은 계산.
 const crypto = require('crypto');
 const REPO = process.env.GITHUB_REPO || 'paydream/Platform-Strategy-Team';
 const BRANCH = process.env.GITHUB_BRANCH || 'main';
@@ -41,6 +42,15 @@ function same(given, secret) {
 }
 const adminOk = pw => same(pw, process.env.ADMIN_PASSWORD);
 const teamOk = pw => same(pw, process.env.TEAM_PASSWORD || process.env.ADMIN_PASSWORD) || adminOk(pw);
+// 사이트 로그인 쿠키 확인 (middleware.js 의 token 과 같은 값)
+function siteOk(req) {
+  const pw = process.env.SITE_PASSWORD || process.env.STATS_PASSWORD;
+  if (!pw || !req || !req.headers) return false;
+  const m = String(req.headers.cookie || '').match(/(?:^|;\s*)pst_site=([0-9a-f]{64})/);
+  if (!m) return false;
+  const tk = crypto.createHmac('sha256', pw).update('pst-site-v1').digest('hex');
+  return crypto.timingSafeEqual(Buffer.from(m[1]), Buffer.from(tk));
+}
 const configured = () => Boolean(TOKEN && process.env.ADMIN_PASSWORD);
 
 function body(req) { return typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {}); }
@@ -51,4 +61,4 @@ function ghError(e) {
     : e.message && !e.status ? e.message : '처리 중 오류가 났습니다.';
 }
 
-module.exports = { REPO, BRANCH, gh, enc, readJson, writeJson, adminOk, teamOk, configured, body, ghError };
+module.exports = { REPO, BRANCH, gh, enc, readJson, writeJson, adminOk, teamOk, siteOk, configured, body, ghError };

@@ -193,8 +193,8 @@
 
 <div class="mback" id="pBack" hidden>
   <form class="modal sm" id="pForm" autocomplete="off">
-    <h3>팀 비밀번호</h3>
-    <p class="desc" id="pDesc">기록을 남기려면 팀 비밀번호(코멘트 작성용과 같음)가 필요합니다.</p>
+    <h3 id="pTitle">편집자 이름</h3>
+    <p class="desc" id="pDesc">수정 이력에 남길 이름을 넣어 주세요.</p>
     <input class="pwin" id="pIn" type="password" aria-label="비밀번호" placeholder="비밀번호">
     <input class="pwname" id="pName" maxlength="30" aria-label="이름" placeholder="내 이름 (수정 이력에 남음)">
     <div class="mfoot" style="justify-content:center"><button type="button" class="btn sm" id="pCancel">취소</button><button type="submit" class="btn primary sm">확인</button></div>
@@ -304,12 +304,13 @@ function closeDrawer() { document.getElementById('drawer').hidden = true; docume
 
 // ----- 비밀번호·저장 -----
 let pwResolve = null;
-function askPw(desc) { return new Promise(res => { pwResolve = res; document.getElementById('pDesc').textContent = desc || '기록을 남기려면 팀 비밀번호(코멘트 작성용과 같음)가 필요합니다.';
+function askPw(desc, admin) { return new Promise(res => { pwResolve = res; pwResolve.admin = !!admin; document.getElementById('pDesc').textContent = desc || '수정 이력에 남길 이름을 넣어 주세요.';
+  document.getElementById('pTitle').textContent = admin ? '관리자 비밀번호' : '편집자 이름'; document.getElementById('pIn').hidden = !admin;
   document.getElementById('pErr').textContent = ''; document.getElementById('pIn').value = ''; document.getElementById('pName').value = localStorage.getItem(NM) || '';
-  document.getElementById('pBack').hidden = false; document.getElementById('pIn').focus(); }); }
+  document.getElementById('pBack').hidden = false; document.getElementById(admin ? 'pIn' : 'pName').focus(); }); }
 document.getElementById('pCancel').onclick = () => { document.getElementById('pBack').hidden = true; pwResolve && pwResolve(null); };
 document.getElementById('pForm').onsubmit = async e => { e.preventDefault();
-  const pw = document.getElementById('pIn').value.trim(), nm = document.getElementById('pName').value.trim(), err = document.getElementById('pErr');
+  const pw = pwResolve && pwResolve.admin ? document.getElementById('pIn').value.trim() : 'site', nm = document.getElementById('pName').value.trim(), err = document.getElementById('pErr');
   if (!pw) return; if (!nm) { err.textContent = '이름을 넣어 주세요.'; return; }
   if (pwResolve && pwResolve.admin) { localStorage.setItem(NM, nm); document.getElementById('pBack').hidden = true; pwResolve(pw); return; }
   err.textContent = '확인 중…';
@@ -321,7 +322,7 @@ function updUnlock() { const on = !!sessionStorage.getItem(PW); document.getElem
 document.getElementById('unlockBtn').onclick = async () => { if (sessionStorage.getItem(PW)) { sessionStorage.removeItem(PW); updUnlock(); toast('편집을 잠갔습니다.'); } else await askPw(); };
 async function call(body, admin) {
   let pw = admin ? null : sessionStorage.getItem(PW);
-  if (!pw) { const p = askPw(admin ? '삭제는 관리자 비밀번호가 필요합니다.' : ''); if (admin) pwResolve.admin = true; pw = await p; }
+  if (!pw) { const p = askPw(admin ? '삭제는 관리자 비밀번호가 필요합니다.' : '', admin); pw = await p; }
   if (!pw) return null;
   const r = await fetch('api/tracking', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...body, password: pw, author: localStorage.getItem(NM) || '' }) }).catch(() => null);
   const j = r ? await r.json().catch(() => ({})) : { error: '서버에 연결하지 못했습니다.' };
