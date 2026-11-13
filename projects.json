@@ -139,6 +139,22 @@
               "href": "archive/20261113-154522-yesform-membership-dashboard-layout/index.html"
             }
           ]
+        },
+        {
+          "id": "20261113-161738-yesform-membership-dashboard-todo",
+          "label": "최종본",
+          "title": "예스폼 멤버십 요금제 변경 계획안 (2027)",
+          "desc": "해야 할 일(시트 기준 34건) 메뉴, 홈은 일정표만, 업무 공유 메뉴 삭제",
+          "created": "2026.11.13",
+          "folder": "archive/20261113-161738-yesform-membership-dashboard-todo",
+          "preview": "archive/20261113-161738-yesform-membership-dashboard-todo/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "대시보드",
+              "href": "archive/20261113-161738-yesform-membership-dashboard-todo/index.html"
+            }
+          ]
         }
       ]
     },
