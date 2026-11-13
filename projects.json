@@ -68,7 +68,7 @@
           "created": "2026.11.13",
           "folder": "archive/20261113-145943-yesform-membership-dashboard",
           "preview": "archive/20261113-145943-yesform-membership-dashboard/index.html",
-          "hidden": false,
+          "hidden": true,
           "items": [
             {
               "label": "대시보드",
