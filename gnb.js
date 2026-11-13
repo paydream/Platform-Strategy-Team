@@ -1,4 +1,5 @@
 /* 플랫폼전략팀 공통 GNB 메뉴. 메뉴 추가·순서 변경은 이 파일의 MENU만 고치면 모든 화면에 반영된다.
+   각 화면 마크업은 그대로 두고, 스크립트가 nav를 로고와 .gnb-util 사이로 옮겨 한 줄(60px)로 만든다.
    각 화면: <nav class="wrap gnb-nav" data-current="메뉴id"></nav><script src="gnb.js"></script> */
 (function () {
   var S = ' fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"';
@@ -28,10 +29,12 @@
       var href = (m.id === 'stats' && cur === 'archive') ? '#stats' : m.href;
       return '<a class="gnb-item' + (on ? ' on' : '') + '" href="' + href + '"' + (on ? ' aria-current="page"' : '') +
         (m.title ? ' title="' + m.title + '"' : '') + ' style="--gfg:' + m.fg + ';--gbg:' + m.bg + '">' +
-        '<span class="gnb-ic" aria-hidden="true">' + (m.badge ? '<span class="gnb-badge">' + m.badge + '</span>' : '') +
+        '<span class="gnb-ic" aria-hidden="true">' +
         '<svg viewBox="0 0 24 24"' + S + '>' + m.svg + '</svg>' + (m.lock ? '<span class="gnb-lock">' + LOCK + '</span>' : '') + '</span>' +
-        '<span class="gnb-label">' + m.label + '</span></a>';
+        '<span class="gnb-label">' + m.label + '</span>' + (m.badge ? '<span class="gnb-badge">' + m.badge + '</span>' : '') + '</a>';
     }).join('');
+    var top = nav.parentNode && nav.parentNode.querySelector('.gnb-top');
+    if (top) { nav.classList.remove('wrap'); top.insertBefore(nav, top.querySelector('.gnb-util')); }
     nav.setAttribute('data-done', '1');
   }
 })();
