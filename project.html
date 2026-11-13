@@ -118,6 +118,7 @@ function shell() {
         <span id="finalChip"></span></div>
       <div class="actions">
         <span id="finalBtnBox"></span>
+        <a class="hbtn" id="figmaLink" target="_blank" rel="noopener" style="display:none" title="이 시안의 피그마 원본 열기"><svg width="10" height="15" viewBox="0 0 38 57" aria-hidden="true"><path fill="#1abcfe" d="M19 28.5a9.5 9.5 0 1 1 19 0 9.5 9.5 0 0 1-19 0z"/><path fill="#0acf83" d="M0 47.5A9.5 9.5 0 0 1 9.5 38H19v9.5a9.5 9.5 0 1 1-19 0z"/><path fill="#ff7262" d="M19 0v19h9.5a9.5 9.5 0 1 0 0-19H19z"/><path fill="#f24e1e" d="M0 9.5A9.5 9.5 0 0 0 9.5 19H19V0H9.5A9.5 9.5 0 0 0 0 9.5z"/><path fill="#a259ff" d="M0 28.5A9.5 9.5 0 0 0 9.5 38H19V19H9.5A9.5 9.5 0 0 0 0 28.5z"/></svg>피그마로 가기 ↗</a>
         <a class="hbtn" id="newWin" target="_blank" rel="noopener">새 창 ↗</a>
         <button class="hbtn list" id="openSide" title="코멘트 보기" style="display:none">💬 <span class="n" id="sideN">0</span></button>
         <button class="hbtn primary" id="openModal">코멘트</button>
@@ -130,6 +131,9 @@ function shell() {
         <div class="clist" id="clist"></div>
       </aside>
     </div>`;
+  // 피그마 원본 링크: 보고 있는 버전의 figma → 없으면 프로젝트의 figma
+  const fu = [V.figma, P.figma].find(u => typeof u === 'string' && /^https:\/\/(www\.)?figma\.com\//.test(u));
+  if (fu) { $('figmaLink').href = fu; $('figmaLink').style.display = ''; }
   $('openModal').onclick = openModal;
   $('openSide').onclick = () => openSide(true);
   $('closeSide').onclick = () => openSide(false);
