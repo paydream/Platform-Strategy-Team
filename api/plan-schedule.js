@@ -6,6 +6,7 @@
 // POST { doc, password, action:'delete', id, by }       → 일정 삭제
 // POST { doc, password, action:'note', note }           → 업무 공유 글 쓰기 { team, author, text }
 // POST { doc, password, action:'note-delete', id }      → 업무 공유 글 지우기
+// POST { doc, password, action:'check', key, done, by }  → 변경 화면·항목 체크 (key: 목록 항목 id)
 const crypto = require('crypto');
 const L = require('./_lib');
 const F = require('./_statsfile');
@@ -30,7 +31,7 @@ const fid = doc => `${doc}-schedule`;
 async function readRows(doc) {
   const r = await L.readJson(F.pathOf(fid(doc)), null);
   const d = r.data ? F.open(r.data) : null;
-  return { sha: r.sha, rows: d ? d.rows || [] : [], notes: d ? d.notes || [] : [], log: d ? d.log || [] : [], updated: d ? d.updated || '' : '' };
+  return { sha: r.sha, rows: d ? d.rows || [] : [], notes: d ? d.notes || [] : [], log: d ? d.log || [] : [], checks: d ? d.checks || {} : {}, updated: d ? d.updated || '' : '' };
 }
 const LOG_MAX = 80, NOTE_MAX = 200;
 function clean(src, prev) {
@@ -54,7 +55,7 @@ async function mutate(doc, fn, msg) {
     if (out.log) cur.log = [{ at: updated, ...out.log }, ...cur.log].slice(0, LOG_MAX);
     cur.notes = cur.notes.slice(0, NOTE_MAX);
     try {
-      await L.writeJson(F.pathOf(fid(doc)), F.seal({ rows: cur.rows, notes: cur.notes, log: cur.log, updated }, { updated: updated.slice(0, 10), count: cur.rows.length }), cur.sha, msg(out));
+      await L.writeJson(F.pathOf(fid(doc)), F.seal({ rows: cur.rows, notes: cur.notes, log: cur.log, checks: cur.checks, updated }, { updated: updated.slice(0, 10), count: cur.rows.length }), cur.sha, msg(out));
       const { log, ...rest } = out;
       return { ...rest, updated };
     } catch (e) { if (a === 2 || (e.status !== 409 && e.status !== 422)) throw e; }
@@ -72,7 +73,7 @@ module.exports = async (req, res) => {
   const pw = String(b.password ?? '');
   if (!L.siteOk(req) && !same(pw, process.env.STATS_PASSWORD) && !L.teamOk(pw)) { await wait(800); return res.status(401).json({ error: '비밀번호가 맞지 않습니다.' }); }
   try {
-    if (b.action === 'get') { const cur = await readRows(doc); return res.status(200).json({ rows: cur.rows, notes: cur.notes, log: cur.log.slice(0, 40), updated: cur.updated }); }
+    if (b.action === 'get') { const cur = await readRows(doc); return res.status(200).json({ rows: cur.rows, notes: cur.notes, log: cur.log.slice(0, 40), checks: cur.checks, updated: cur.updated }); }
     const by = s(b.by, 20);
     if (b.action === 'delete') {
       const id = s(b.id, 20);
@@ -94,6 +95,13 @@ module.exports = async (req, res) => {
         return { ok: true, row: x, log: { act: what, team: x.team, task: x.task, by } };
       }, o => `계획안 일정 ${src.id ? '수정' : '추가'}: ${o.row.team} ${o.row.task.slice(0, 40)}`);
       return res.status(out.error ? out.status : 200).json(out);
+    }
+    if (b.action === 'check') {
+      const key = s(b.key, 20); if (!/^[a-z0-9-]+$/i.test(key)) return res.status(400).json({ error: '항목이 올바르지 않습니다.' });
+      const done = !!b.done, label = s(b.label, 80);
+      const out = await mutate(doc, cur => { if (done) cur.checks[key] = { done: true, by, at: nowKst() }; else delete cur.checks[key]; return { ok: true, key, done, check: cur.checks[key] || null, log: label ? { act: done ? '완료 체크' : '체크 해제', team: '변경 목록', task: label, by } : null }; },
+        o => `계획안 변경 목록 ${o.done ? '완료' : '해제'}: ${o.key}`);
+      return res.status(200).json(out);
     }
     if (b.action === 'note') {
       const n = b.note || {};
