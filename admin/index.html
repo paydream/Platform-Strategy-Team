@@ -124,7 +124,7 @@
       <div><label>폴더 이름(영문)</label><input id="vSlug" placeholder="yesform-main"></div>
     </div>
     <label>이번 버전에서 바뀐 점</label><textarea id="vDesc" placeholder="예: 카드 4종 추가, 탭 이름 통일"></textarea>
-    <label>피그마 링크 (선택 · 피그마에서 만든 시안이면 넣어 주세요. 시안 화면에 "피그마로 가기" 버튼이 생깁니다)</label><input id="vFigma" placeholder="https://www.figma.com/design/…">
+    <label>피그마 링크 (선택 · 피그마에서 만든 시안이면 넣어 주세요. 시안 화면에 "피그마로 가기" 버튼이 생깁니다)</label>placeholder="https://www.figma.com/design/…"><p class="note" id="figSrc" style="margin-top:4px"></p>
     <label>시안 버튼 (이름 · 경로)</label>
     <div class="vlist" id="nVers"><p class="note">zip을 고르면 여기에 나옵니다.</p></div>
     <div class="bar"><button class="primary" id="upload" disabled>올리기</button><span class="status" id="upStatus"></span></div>
@@ -374,7 +374,26 @@ addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.retur
 document.querySelectorAll('input[name="dest"]').forEach(r => r.addEventListener('change', () => {
   const add = document.querySelector('input[name="dest"]:checked').value === 'add';
   $('newBox').style.display = add ? 'none' : ''; $('addBox').style.display = add ? '' : 'none';
+  autoFigma();
 }));
+// 피그마 링크 자동 입력: (1) zip 안 HTML에 적힌 피그마 주소·파일키 (2) 기존 프로젝트의 새 버전이면 그 프로젝트의 마지막 피그마 링크. 직접 고치면 그 값을 씀
+let figAuto = true;
+$('vFigma').addEventListener('input', () => { figAuto = !$('vFigma').value.trim(); $('figSrc').textContent = ''; });
+$('pPick').addEventListener('change', () => autoFigma());
+function figmaFromText(t) {
+  const m = t.match(/https:\/\/(?:www\.)?figma\.com\/(?:design|file|proto)\/[A-Za-z0-9]{15,}[^\s"'<>)\]]*/);
+  if (m) return m[0].replace(/&amp;/g, '&');
+  const k = t.match(/Figma[^\n]{0,80}?\b([A-Za-z0-9]{22})\b\)?\s*(?:\/\s*)?(\d+:\d+)?/);
+  return k ? `https://www.figma.com/design/${k[1]}/${k[2] ? '?node-id=' + k[2].replace(':', '-') : ''}` : '';
+}
+function projFigma(p) { if (!p) return ''; return (p.versions || []).slice().reverse().map(v => v.figma).find(Boolean) || p.figma || ''; }
+function autoFigma() {
+  if (!figAuto) return;
+  const add = document.querySelector('input[name="dest"]:checked').value === 'add';
+  const fromZip = pending && pending.figma, fromProj = add ? projFigma(P().find(p => p.id === $('pPick').value)) : '';
+  $('vFigma').value = fromZip || fromProj || '';
+  $('figSrc').textContent = fromZip ? '자동 입력: zip 안 시안 파일에 적힌 피그마 정보' : fromProj ? '자동 입력: 이 프로젝트의 이전 버전 피그마 링크' : '';
+}
 const decodeName = bytes => { try { return new TextDecoder('utf-8', { fatal: true }).decode(bytes); } catch { return new TextDecoder('euc-kr').decode(bytes); } };
 function renderPending() {
   $('nVers').innerHTML = pending.items.map((v, j) => `<div class="vrow"><input data-nv="${j}" value="${esc(v.label)}"><input value="${esc(v.href)}" disabled><button data-del="${j}">빼기</button></div>`).join('') || '<p class="note">zip 안에서 .html 파일을 찾지 못했습니다. 시안 HTML 파일이 들어 있는지 확인해 주세요.</p>';
@@ -402,6 +421,11 @@ $('zip').onchange = async () => {
       items = pages.map(p => ({ label: p.split('/').pop().replace(/\.html?$/i, ''), href: p }));
     }
     pending = { files, items, preview: htmls.includes('index.html') ? 'index.html' : items[0] && items[0].href };
+    // 시안 HTML에서 피그마 원본 정보 찾기 (미리보기 파일 먼저)
+    const td = new TextDecoder();
+    const hfiles = files.filter(f => /\.html?$/i.test(f.path) && f.bytes.length < 3e6).sort((a, b) => (b.path === pending.preview) - (a.path === pending.preview));
+    for (const f of hfiles) { const u = figmaFromText(td.decode(f.bytes)); if (u) { pending.figma = u; break; } }
+    autoFigma();
     renderPending();
     if (!$('vSlug').value) $('vSlug').value = file.name.replace(/\.zip$/i, '').normalize('NFC').replace(/[^a-z0-9-]+/gi, '-').replace(/^-+|-+$/g, '').toLowerCase().slice(0, 60) || 'design';
     s.textContent = `파일 ${files.length}개 · 시안 ${items.length}개를 찾았습니다.`;
@@ -474,7 +498,7 @@ $('upload').onclick = async () => {
     }
     say('완료. 1~2분 뒤 사이트에 반영됩니다.');
     s.className = 'status ok'; s.textContent = '올렸습니다.';
-    pending = null; ['zip', 'pTitle', 'pDesc', 'vLabel', 'vDesc', 'vSlug', 'vFigma'].forEach(id => $(id).value = ''); $('nVers').innerHTML = '';
+    pending = null; ['zip', 'pTitle', 'pDesc', 'vLabel', 'vDesc', 'vSlug', 'vFigma'].forEach(id => $(id).value = ''); figAuto = true; $('figSrc').textContent = ''; $('nVers').innerHTML = '';
     await loadData();
   } catch (e) { fail(e.message); say('실패: ' + e.message); }
   $('upload').disabled = !pending;
