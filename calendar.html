@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="gnb.css">
 <style>
   :root{--bg:#f6f7f9;--card:#fff;--line:#e5e8ec;--line2:#eef0f3;--text:#191f28;--sub:#6b7684;--faint:#98a1ad;--accent:#2f6bff;
-    --up:#0284c7;--up-bg:#e0f2fe;--la:#db2777;--la-bg:#fce7f3;--re:#7c3aed;--re-bg:#f0eaff;
+    --yu:#2f6bff;--yu-bg:#e6eeff;--sim:#7c3aed;--sim-bg:#f0eaff;--park:#0b8a7a;--park-bg:#e1f5f2;
     --done:#12a150;--done-bg:#e8f7ee;--now:#2f6bff;--now-bg:#eaf0ff;--wait:#6b7684;--wait-bg:#f0f2f5}
   *{box-sizing:border-box;margin:0;padding:0}
   [hidden]{display:none!important}
@@ -32,7 +32,8 @@
   .ibtn:hover{border-color:#c9d3e6;color:var(--text)}
   .tbtn{height:34px;padding:0 12px;border-radius:9px;border:1px solid var(--line);background:#fff;font-size:13px;color:var(--text)}
   .tbtn:hover{border-color:#c9d3e6}
-  .filters{display:flex;gap:6px;flex-wrap:wrap}
+  .filters{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  .filters .sep{width:1px;height:18px;background:var(--line);margin:0 4px}
   .chip{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:99px;border:1px solid var(--line);background:#fff;font-size:13px;color:var(--sub)}
   .chip i{width:8px;height:8px;border-radius:50%;background:var(--c)}
   .chip b{font-weight:600;color:var(--text)}
@@ -59,6 +60,7 @@
   .ev.cl{border-top-left-radius:0;border-bottom-left-radius:0}
   .ev.cr{border-top-right-radius:0;border-bottom-right-radius:0}
   .ev.st-done{opacity:.62}
+  .ev.nodate{background:repeating-linear-gradient(135deg,var(--bg2) 0 6px,#fff 6px 9px)}
   .more{position:absolute;font-size:11px;color:var(--sub);pointer-events:auto;background:none;border:0;padding:0 4px;height:18px}
   .more:hover{color:var(--accent)}
   .side{position:sticky;top:16px;display:flex;flex-direction:column;gap:12px}
@@ -77,6 +79,11 @@
   .empty{font-size:13px;color:var(--sub);padding:14px 4px}
   .det .cat{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--fg)}
   .det .cat i{width:8px;height:8px;border-radius:50%;background:var(--fg)}
+  .det .who{display:flex;gap:4px;flex-wrap:wrap;margin-top:10px}
+  .det .who span{font-size:12px;padding:1px 8px;border-radius:99px;background:#f2f4f6;color:var(--sub)}
+  .det .who span.t{background:#eef3ff;color:var(--text);font-weight:600}
+  .det .kv{margin-top:10px;font-size:13px;display:grid;grid-template-columns:64px 1fr;gap:4px 8px}
+  .det .kv dt{color:var(--sub)}
   .det h4{font-size:16px;line-height:1.4;margin-top:4px}
   .det .pd{font-size:13px;color:var(--sub);margin-top:4px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
   .ch{list-style:none;margin-top:12px;border-top:1px solid var(--line2)}
@@ -127,15 +134,20 @@
 <script>
 (function () {
   const API = 'https://yesform-bs-dashboard.vercel.app/api/master?tab=';
-  const SHEET = 'https://docs.google.com/spreadsheets/d/1p6fzdYoFfsqjVuM7-R2nO7Nq2lGlXSX9aKMZWVXPJ3Q/edit#gid=434634521';
+  const STORE = '/api/calendar';   // 플로우 게시판 업무 저장본(작업자 = 유영경·심현지·박채은)
   const BOARD = 'https://yesform-schedule-board.vercel.app/';
-  // 카테고리: 월별 마케팅 계획표(콘텐츠·서비스 업데이트) · 주요 콘텐츠 런칭일 · 제품 배포/오픈
-  const CATS = {
-    update: { label: '업데이트', fg: 'var(--up)', bg: 'var(--up-bg)' },
-    launch: { label: '런칭', fg: 'var(--la)', bg: 'var(--la-bg)' },
-    release: { label: '제품 배포', fg: 'var(--re)', bg: 'var(--re-bg)' }
-  };
-  const PRODUCTS = ['예스폼 에디터', '예스폼싸인', '에디터·싸인 통합', '웹 업무자동화'];
+  // 우리 팀 3명만 추적한다
+  const PEOPLE = [
+    { id: 'yu', name: '유영경', fg: 'var(--yu)', bg: 'var(--yu-bg)', re: /유영경|ykwillow/i },
+    { id: 'sim', name: '심현지', fg: 'var(--sim)', bg: 'var(--sim-bg)', re: /심현지|hyunji\s*sim/i,
+      byName: s => /디자인/.test(s) && !/디자인\s*(시스템|토큰|가이드)/.test(s) },
+    { id: 'park', name: '박채은', fg: 'var(--park)', bg: 'var(--park-bg)', re: /박채은|park\s*chae\s*eun/i,
+      byName: s => /기획/.test(s) }
+  ];
+  const PBY = Object.fromEntries(PEOPLE.map(p => [p.name, p]));
+  // 현황판 WBS에서 빼는 프로젝트(팀 WBS 화면과 같은 기준)
+  const SKIP = new Set(['웹 업무자동화', '에디터·싸인 통합', '예스폼', '마케팅', '주요 콘텐츠']);
+  const SRC = { flow: '플로우', wbs: '현황판 WBS' };
   const $ = s => document.querySelector(s);
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const pad = n => String(n).padStart(2, '0');
@@ -143,6 +155,7 @@
   const parseD = s => { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s || ''); return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null; };
   const DOW = ['일', '월', '화', '수', '목', '금', '토'];
   const fmt = d => (d.getMonth() + 1) + '.' + pad(d.getDate()) + '(' + DOW[d.getDay()] + ')';
+  const period = x => x.noDate ? '기간 미정 · 등록 ' + fmt(x.start) : fmt(x.start) + (+x.end !== +x.start ? ' ~ ' + fmt(x.end) : '');
   const today = new Date(); today.setHours(0, 0, 0, 0);
 
   function parseCSV(t) { const rows = []; let row = [], f = '', q = false;
@@ -154,61 +167,61 @@
     if (f || row.length) { row.push(f); rows.push(row); } return rows; }
   function records(csv) { const r = parseCSV(csv); const h = r[0] || []; return r.slice(1).filter(x => x.length > 1).map(x => Object.fromEntries(h.map((k, i) => [k.trim(), (x[i] || '').trim()]))); }
 
-  function statusOf(s, start, end) {
-    if (/완료/.test(s)) return 'done';
-    if (/진행/.test(s)) return 'now';
-    if (/대기|예정|미정/.test(s)) return 'wait';
-    if (end && end < today) return 'done';
-    if (start && start <= today) return 'now';
-    return 'wait';
-  }
-  const ST_LABEL = { done: '완료', now: '진행', wait: '예정' };
-  function channels(note) {
-    const out = [], links = [];
-    String(note || '').split(/\s·\s/).forEach(p => {
-      p = p.trim(); if (!p) return;
-      if (/^LINK:/.test(p)) { links.push(p.slice(5).trim()); return; }
-      const m = /^(.*?)(?:\s+(\d{4}-\d{2}-\d{2}))?(✓)?(?:\s+@(\S+))?$/.exec(p);
-      if (!m) return;
-      out.push({ name: m[1].replace(/✓$/, '').trim(), date: m[2] || '', done: !!m[3] || /✓/.test(m[1]), url: m[4] && /^https?:/.test(m[4]) ? m[4] : '' });
-    });
-    return { ch: out, links };
+  function stClass(s) { if (/완료/.test(s)) return 'done'; if (/진행|피드백/.test(s)) return 'now'; return 'wait'; }
+
+  // 플로우 업무: 기간(시작·마감일)이 있으면 그 기간, 없으면 등록일에 '기간 미정'으로 둔다
+  function fromFlow(items) {
+    return (items || []).map(x => {
+      const s = parseD(x.start), e = parseD(x.end), r = parseD(x.reg);
+      const start = s || e || r, end = e && s ? (e < s ? s : e) : (s || e || r);
+      if (!start) return null;
+      const team = (x.team || []).filter(n => PBY[n]);
+      if (!team.length) return null;
+      return { src: 'flow', title: x.title, proj: x.proj, parent: x.parent, st: x.st || '요청', team, workers: x.workers || [], by: x.by, reg: r, start, end, noDate: !s && !e };
+    }).filter(Boolean);
   }
 
-  function build(rows) {
-    const ev = [], seen = new Set();
+  // 현황판 WBS: 담당자 이름 → 업무명(디자인=심현지, 기획=박채은) → 상위 업무 순서로 사람을 정한다
+  function fromWbs(rows) {
+    const out = [], ctx = {};
     rows.forEach(r => {
-      const p = r['프로젝트'], name = r['업무명'], s = parseD(r['시작일']), e = parseD(r['종료일']) || s;
-      if (!s) return;
-      if (p === '마케팅') {
-        const c = channels(r['비고']);
-        ev.push({ cat: 'update', title: name, start: s, end: e < s ? s : e, st: statusOf(r['상태'], s, e), month: r['그룹'], week: r['구분'], ch: c.ch, links: c.links, src: r['원본링크'] });
-      } else if (p === '주요 콘텐츠' && (r['구분'] === '런칭' || name === '런칭')) {
-        const k = 'l|' + r['그룹'] + '|' + ymd(s); if (seen.has(k)) return; seen.add(k);
-        ev.push({ cat: 'launch', title: r['그룹'] + ' 런칭', start: s, end: s, st: statusOf(r['상태'], s, s), who: r['담당자'], src: r['원본링크'] });
-      } else if (PRODUCTS.includes(p) && /배포|오픈|런칭|출시/.test(name) && !/모니터링/.test(name) && !/^·/.test(name)) {
-        const clean = name.replace(/^[\d.]+\s*/, '');
-        const t = p + (r['그룹'] && r['그룹'] !== p && !/^[\d.]/.test(r['그룹']) ? ' ' + r['그룹'] : '') + ' ' + clean;
-        const k = 'r|' + t + '|' + ymd(s); if (seen.has(k)) return; seen.add(k);
-        ev.push({ cat: 'release', title: t, start: s, end: e < s ? s : e, st: statusOf(r['상태'], s, e), who: r['담당자'], src: r['원본링크'] });
-      }
+      const proj = r['프로젝트'], grp = r['그룹'];
+      if (SKIP.has(proj)) return;
+      const raw = (r['업무명'] || '').trim(); if (!raw) return;
+      const m = raw.match(/^(\d+(?:\.\d+)*)\.?\s+(.*)$/);
+      const no = m ? m[1] : null, name = m ? m[2] : raw;
+      const map = ctx[proj + '|' + grp] || (ctx[proj + '|' + grp] = {});
+      const parent = no && no.includes('.') ? (map[no.split('.').slice(0, -1).join('.')] || null) : null;
+      const owner = (r['담당자'] || '').trim();
+      let who = null;
+      const direct = PEOPLE.find(p => p.re.test(owner));
+      if (direct) who = direct;
+      else if (!owner) { const bn = PEOPLE.find(p => p.byName && p.byName(name)); if (bn) who = bn; else if (parent && parent.who) who = parent.who; }
+      const s = parseD(r['시작일']), e = parseD(r['종료일']) || s;
+      const t = { no, who, s, e, kids: [] };
+      if (no) map[no] = t;
+      if (parent) parent.kids.push(t);
+      if (!who || !s) return;
+      t.item = { src: 'wbs', title: '[' + (proj.replace(/^예스폼\s*/, '') || proj) + '] ' + name, proj: proj + (grp && grp !== proj ? ' · ' + grp : ''), st: r['상태'] || '', team: [who.name], workers: owner ? owner.split(/,\s*/) : [], start: s, end: e < s ? s : e, link: r['원본링크'] };
+      out.push(t);
     });
-    ev.sort((a, b) => a.start - b.start || b.end - a.end);
-    ev.forEach((x, i) => x.id = i);
-    return ev;
+    // 하위 일정이 있는 상위 업무는 하위 일정으로 대신 보여준다
+    return out.filter(t => !t.kids.some(k => k.who && k.s)).map(t => t.item);
   }
 
   let EV = [], cur = new Date(today.getFullYear(), today.getMonth(), 1), sel = null;
-  const on = { update: true, launch: true, release: true };
-  const visible = () => EV.filter(x => on[x.cat]);
+  const onP = { yu: true, sim: true, park: true }, onS = { flow: true, wbs: true };
+  const visible = () => EV.filter(x => onS[x.src] && x.team.some(n => onP[PBY[n].id]));
+  const colorOf = x => { const p = PEOPLE.find(p => onP[p.id] && x.team.includes(p.name)) || PBY[x.team[0]]; return p; };
 
+  function inMonth(x) { const a = cur, b = new Date(cur.getFullYear(), cur.getMonth() + 1, 0); return x.start <= b && x.end >= a; }
   function renderFilters() {
-    const mStart = cur, mEnd = new Date(cur.getFullYear(), cur.getMonth() + 1, 0);
-    $('#filters').innerHTML = Object.entries(CATS).map(([k, c]) => {
-      const n = EV.filter(x => x.cat === k && x.start <= mEnd && x.end >= mStart).length;
-      return `<button class="chip" data-k="${k}" aria-pressed="${on[k]}" style="--c:${c.fg}"><i></i>${c.label} <b>${n}</b></button>`;
-    }).join('');
-    document.querySelectorAll('#filters .chip').forEach(b => b.onclick = () => { on[b.dataset.k] = !on[b.dataset.k]; render(); });
+    const mon = EV.filter(x => onS[x.src] && inMonth(x));
+    const pc = PEOPLE.map(p => `<button class="chip" data-p="${p.id}" aria-pressed="${onP[p.id]}" style="--c:${p.fg}"><i></i>${p.name} <b>${mon.filter(x => x.team.includes(p.name)).length}</b></button>`).join('');
+    const sc = Object.entries(SRC).map(([k, l]) => `<button class="chip" data-s="${k}" aria-pressed="${onS[k]}" style="--c:#98a1ad">${l}</button>`).join('');
+    $('#filters').innerHTML = pc + '<span class="sep"></span>' + sc;
+    document.querySelectorAll('#filters [data-p]').forEach(b => b.onclick = () => { onP[b.dataset.p] = !onP[b.dataset.p]; render(); });
+    document.querySelectorAll('#filters [data-s]').forEach(b => b.onclick = () => { onS[b.dataset.s] = !onS[b.dataset.s]; render(); });
   }
 
   function renderGrid() {
@@ -229,7 +242,6 @@
         const cls = ['day', d.getMonth() !== m ? 'out' : '', i === 5 ? 'sat' : '', i === 6 ? 'sun' : '', +d === +today ? 'today' : ''].join(' ');
         days += `<div class="${cls}"><span class="n">${d.getDate()}</span></div>`;
       }
-      // 주 안에서 겹치는 일정을 줄(lane)에 배치
       const segs = evs.filter(x => x.start <= we && x.end >= ws).map(x => {
         const a = Math.max(0, Math.round((Math.max(+x.start, +ws) - ws) / 864e5));
         const b = Math.min(6, Math.round((Math.min(+x.end, +we) - ws) / 864e5));
@@ -241,8 +253,8 @@
         let l = laneEnd.findIndex(e => e < s.a); if (l < 0) { l = laneEnd.length; laneEnd.push(-1); }
         laneEnd[l] = s.b;
         if (l >= LANES) { for (let i = s.a; i <= s.b; i++) hidden[i]++; return; }
-        const c = CATS[s.x.cat];
-        bars += `<button class="ev st-${s.x.st}${s.cl ? ' cl' : ''}${s.cr ? ' cr' : ''}${sel === s.x.id ? ' sel' : ''}" data-id="${s.x.id}" title="${esc(s.x.title)} · ${fmt(s.x.start)}${+s.x.end !== +s.x.start ? ' ~ ' + fmt(s.x.end) : ''}" style="--fg:${c.fg};--bg2:${c.bg};left:calc(${s.a} * 100% / 7 + 4px);width:calc(${s.b - s.a + 1} * 100% / 7 - 8px);top:${l * LH}px">${s.x.cat === 'launch' ? '★ ' : ''}${esc(s.x.title)}</button>`;
+        const c = colorOf(s.x);
+        bars += `<button class="ev st-${stClass(s.x.st)}${s.x.noDate ? ' nodate' : ''}${s.cl ? ' cl' : ''}${s.cr ? ' cr' : ''}${sel === s.x.id ? ' sel' : ''}" data-id="${s.x.id}" title="${esc(s.x.title)} · ${esc(s.x.team.join('·'))} · ${period(s.x)}" style="--fg:${c.fg};--bg2:${c.bg};left:calc(${s.a} * 100% / 7 + 4px);width:calc(${s.b - s.a + 1} * 100% / 7 - 8px);top:${l * LH}px">${esc(s.x.title)}</button>`;
       });
       hidden.forEach((n, i) => { if (n) bars += `<button class="more" data-day="${ymd(new Date(ws.getFullYear(), ws.getMonth(), ws.getDate() + i))}" style="left:calc(${i} * 100% / 7 + 4px);top:${LANES * LH}px">+${n}개</button>`; });
       html += `<div class="week">${days}<div class="lanes">${bars}</div></div>`;
@@ -256,28 +268,29 @@
   }
 
   function renderList() {
-    const mStart = cur, mEnd = new Date(cur.getFullYear(), cur.getMonth() + 1, 0);
-    const items = visible().filter(x => x.start <= mEnd && x.end >= mStart);
-    $('#ltitle').textContent = (cur.getMonth() + 1) + '월 업데이트';
+    const items = visible().filter(inMonth);
+    $('#ltitle').textContent = (cur.getMonth() + 1) + '월 일정';
     $('#lcount').textContent = items.length + '건';
     $('#list').innerHTML = items.length ? items.map(x => {
-      const c = CATS[x.cat];
+      const c = colorOf(x);
       return `<li><button class="li${sel === x.id ? ' sel' : ''}" data-id="${x.id}" style="--fg:${c.fg}"><span class="bd"></span><span class="tx"><strong>${esc(x.title)}</strong>
-        <span class="mt"><span>${c.label}</span><span>${fmt(x.start)}${+x.end !== +x.start ? ' ~ ' + fmt(x.end) : ''}</span><span class="st ${x.st}">${ST_LABEL[x.st]}</span></span></span></button></li>`;
-    }).join('') : '<li class="empty">이 달에 잡힌 업데이트가 없어요.</li>';
+        <span class="mt"><span>${esc(x.team.join('·'))}</span><span>${period(x)}</span><span class="st ${stClass(x.st)}">${esc(x.st || '-')}</span></span></span></button></li>`;
+    }).join('') : '<li class="empty">이 달에 잡힌 일정이 없어요.</li>';
     document.querySelectorAll('#list .li').forEach(b => b.onclick = () => select(+b.dataset.id));
   }
 
   function renderDetail() {
     const x = EV.find(e => e.id === sel), box = $('#det');
     if (!x) { box.hidden = true; return; }
-    const c = CATS[x.cat];
-    const chs = (x.ch || []).map(h => `<li class="${h.done ? 'done' : ''}"><span class="ok"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg></span><span class="nm">${esc(h.name)}</span><span class="dt">${h.date ? fmt(parseD(h.date)) : '-'}</span>${h.url ? `<a href="${esc(h.url)}" target="_blank" rel="noopener">보기</a>` : ''}</li>`).join('');
-    const links = (x.links || []).map(u => `<a href="${esc(u)}" target="_blank" rel="noopener">페이지 열기</a>`).join('') + (x.src ? `<a href="${esc(x.src)}" target="_blank" rel="noopener">원본 시트</a>` : '');
+    const c = colorOf(x);
+    const who = (x.workers.length ? x.workers : x.team).map(n => `<span class="${PBY[n] || x.team.includes(n) ? 't' : ''}">${esc(n)}</span>`).join('');
+    const kv = [['출처', SRC[x.src]], ['프로젝트', x.proj], x.parent ? ['상위 업무', x.parent] : null, ['기간', period(x)], x.src === 'flow' && x.reg ? ['등록', fmt(x.reg) + (x.by ? ' · ' + x.by : '')] : null].filter(Boolean)
+      .map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('');
     box.style.setProperty('--fg', c.fg);
-    box.innerHTML = `<span class="cat"><i></i>${c.label}</span><h4>${esc(x.title)}</h4>
-      <div class="pd"><span>${fmt(x.start)}${+x.end !== +x.start ? ' ~ ' + fmt(x.end) : ''}</span>${x.week ? `<span>· ${esc(x.month)} ${esc(x.week)}</span>` : ''}${x.who ? `<span>· ${esc(x.who)}</span>` : ''}<span class="st ${x.st}">${ST_LABEL[x.st]}</span></div>
-      ${chs ? `<ul class="ch">${chs}</ul>` : ''}${links ? `<div class="links">${links}</div>` : ''}`;
+    box.innerHTML = `<span class="cat"><i></i>${esc(x.team.join(' · '))}</span><h4>${esc(x.title)}</h4>
+      <div class="pd"><span class="st ${stClass(x.st)}">${esc(x.st || '-')}</span></div>
+      <dl class="kv">${kv}</dl><div class="who">${who}</div>
+      ${x.link ? `<div class="links"><a href="${esc(x.link)}" target="_blank" rel="noopener">원본 시트</a></div>` : ''}`;
     box.hidden = false;
   }
 
@@ -289,18 +302,21 @@
   $('#today').onclick = () => { cur = new Date(today.getFullYear(), today.getMonth(), 1); sel = null; render(); };
 
   render();
-  fetch(API + encodeURIComponent('통합일정'), { cache: 'no-store' })
-    .then(r => { if (!r.ok) throw new Error(r.status); return r.text(); })
-    .then(t => {
-      EV = build(records(t));
-      const n = new Date();
-      $('#src').innerHTML = `<span><span class="dot"></span>${n.getMonth() + 1}/${n.getDate()} ${pad(n.getHours())}:${pad(n.getMinutes())} 불러옴</span><a href="${SHEET}" target="_blank" rel="noopener">월별 마케팅 계획표</a><a href="${BOARD}" target="_blank" rel="noopener">사업일정 현황판</a>`;
-      render();
-    })
-    .catch(() => {
-      $('#src').innerHTML = `<span><span class="dot warn"></span>불러오기 실패</span><a href="${SHEET}" target="_blank" rel="noopener">월별 마케팅 계획표</a>`;
-      $('#err').textContent = '사업일정 현황판 데이터를 불러오지 못했어요. 잠시 뒤 새로고침해 주세요.'; $('#err').hidden = false;
-    });
+  const pFlow = fetch(STORE, { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null);
+  const pWbs = fetch(API + encodeURIComponent('통합일정'), { cache: 'no-store' }).then(r => r.ok ? r.text() : null).catch(() => null);
+  Promise.all([pFlow, pWbs]).then(([f, w]) => {
+    const a = f ? fromFlow(f.flow && f.flow.items) : [], b = w ? fromWbs(records(w)) : [];
+    EV = a.concat(b).sort((p, q) => p.start - q.start || q.end - p.end);
+    EV.forEach((x, i) => x.id = i);
+    const fAt = f && f.flow && f.flow.fetchedAt ? new Date(f.flow.fetchedAt) : null;
+    const parts = [];
+    parts.push(f ? `<span><span class="dot"></span>플로우 ${fAt ? (fAt.getMonth() + 1) + '/' + fAt.getDate() + ' ' + pad(fAt.getHours()) + ':' + pad(fAt.getMinutes()) : ''} 수집</span>` : '<span><span class="dot warn"></span>플로우 저장본 없음</span>');
+    parts.push(w ? '<span><span class="dot"></span>현황판 WBS 불러옴</span>' : '<span><span class="dot warn"></span>현황판 불러오기 실패</span>');
+    parts.push(`<a href="${BOARD}" target="_blank" rel="noopener">사업일정 현황판</a>`);
+    $('#src').innerHTML = parts.join('');
+    if (!f && !w) { $('#err').textContent = '일정을 불러오지 못했어요. 잠시 뒤 새로고침해 주세요.'; $('#err').hidden = false; }
+    render();
+  });
 })();
 </script>
 </body>
