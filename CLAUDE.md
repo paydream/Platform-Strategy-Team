@@ -8,7 +8,7 @@
 - 새 파일은 `archive/YYYYMMDD-HHMMSS-영문이름/` 새 폴더에 넣는다. 폴더가 이미 있으면 멈춘다.
 - 목록에서 빼려면 숨기기(`hidden: true`)나 휴지통(`trash`)을 쓴다. 시안 파일은 그대로 둔다.
 - 버전의 `folder`·`preview`·시안 `href`는 한 번 정해지면 바뀌지 않는다(`admin/model.js`의 `checkSave`가 막음).
-- 바꿔도 되는 파일은 관리용뿐이다: `projects.json`, `data/comments.json`, 루트 `index.html`, `project.html`, `tracking.html`, `wbs.html`, `stats*.html`(통계 화면), `vercel.json`, `admin/`, `api/`, `data/`, `README.md`, `CLAUDE.md`, `.github/`.
+- 바꿔도 되는 파일은 관리용뿐이다: `projects.json`, `data/comments.json`, 루트 `index.html`, `project.html`, `tracking.html`, `wbs.html`, `stats*.html`(통계 화면), `gnb.css`·`gnb.js`(공통 GNB), `vercel.json`, `admin/`, `api/`, `data/`, `README.md`, `CLAUDE.md`, `.github/`.
 - `.github/workflows/no-overwrite.yml`이 push마다 이 규칙을 검사한다.
 
 ## 데이터 (`projects.json`, version 2)
@@ -51,3 +51,9 @@
 - 갱신: 매일 17시 Aside 루틴이 (1) 현황판 `https://yesform-bs-dashboard.vercel.app/api/master?tab=통합일정` WBS와 (2) 예스폼 관리자 연차/휴가 달력(`formadmin.yesform.com/admin/admin/newVacation/huga_calendar.php?Year=&Month=`, 이번 달~+2달, 심현지·박채은만)을 모아 `POST /api/wbs` `{ key, data }`(키 = `STATS_UPDATE_KEY`). 데이터: `{ updated, updatedAt, wbs{fetchedAt, sheetCollected, rows[]}, leaves{ok, fetchedAt, months[], items[{date,team,name,type}]} }`.
 - 휴가 계산: 반반차 0.25일, 반차 0.5일, 그 외는 하루. 하루 휴가는 빈 날에서 뺀다.
 - 분류: 담당자 `hyunji sim`/`PARK CHAEEUN` → 해당 사람. 담당자 칸이 비면 업무명 ‘디자인’(시스템·토큰·가이드 제외) → 심현지, ‘기획’ → 박채은, 그 하위 업무도 같은 사람. 제외 프로젝트: 웹 업무자동화(박지훈), 에디터·싸인 통합(상세 시트와 중복), 예스폼(주간 회의), 마케팅, 주요 콘텐츠. 규칙은 `wbs.html`의 `PEOPLE`/`SKIP`.
+
+## 공통 GNB (`gnb.css` · `gnb.js`)
+- 업무 아카이브(`/`) · 에디터/싸인 지표 · 팀 WBS · 측정 관리 · 통계 · 관리자를 아이콘+메뉴명으로 보여주는 상단 메뉴. 왼쪽 "플랫폼전략팀" 로고를 누르면 메인 홈(`./`)으로 간다.
+- 메뉴 추가·순서·아이콘·배지 변경은 `gnb.js`의 `MENU`만 고치면 모든 화면에 반영된다. 스타일은 `gnb.css`.
+- 화면 마크업: `<header class="gnb"><div class="wrap gnb-top">로고 <div class="gnb-util">화면별 버튼(잠그기 등)</div></div><nav class="wrap gnb-nav" data-current="메뉴id"></nav><script src="gnb.js"></script></header>`, `<head>`에 `<link rel="stylesheet" href="gnb.css">`.
+- 메뉴 id: `archive`, `metrics`(stats.html), `wbs`, `tracking`, `stats`(stats-age*.html·홈 사이드바 `#stats`), `admin`. 새 화면을 만들면 같은 마크업을 쓴다.
