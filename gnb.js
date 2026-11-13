@@ -1,4 +1,4 @@
-/* 플랫폼전략팀 공통 GNB 메뉴. 메뉴 추가·순서 변경은 이 파일의 MENU만 고치면 모든 화면에 반영된다.
+/* 플랫폼전략팀 공통 GNB 메뉴. 메뉴 추가·순서 변경은 이 파일의 MENU만 고치면 모든 화면에 반영된다. side: true인 메뉴(관리자)는 맨 오른쪽에 따로 붙는다.
    각 화면 마크업은 그대로 두고, 스크립트가 nav를 로고와 .gnb-util 사이로 옮겨 한 줄(60px)로 만든다.
    각 화면: <nav class="wrap gnb-nav" data-current="메뉴id"></nav><script src="gnb.js"></script> */
 (function () {
@@ -13,11 +13,13 @@
       svg: '<rect x="4" y="12" width="3.6" height="8" rx="1"' + F + '/><rect x="10.2" y="8" width="3.6" height="12" rx="1"' + F + '/><rect x="16.4" y="4" width="3.6" height="16" rx="1" fill="currentColor"/>' },
     { id: 'wbs', href: 'wbs.html', label: '팀 WBS', fg: '#7c4dff', bg: '#f0eaff',
       svg: '<rect x="3" y="4.5" width="18" height="16" rx="2.5"' + F + '/><path d="M3 9.5h18M8 3v3M16 3v3"/><path d="M7 13.2h6M10 16.8h7" stroke-width="2.6"/>' },
+    { id: 'calendar', href: 'calendar.html', label: '업데이트 캘린더', fg: '#0284c7', bg: '#e0f2fe', title: '예스폼 주요 업데이트 캘린더',
+      svg: '<rect x="3" y="4.5" width="18" height="16" rx="2.5"' + F + '/><path d="M3 9.5h18M8 3v3M16 3v3"/><path d="m12 11.4 1.2 2.4 2.6.4-1.9 1.8.45 2.6L12 17.4l-2.35 1.2.45-2.6-1.9-1.8 2.6-.4z" fill="currentColor" stroke-width="1.2"/>' },
     { id: 'tracking', href: 'tracking.html', label: '측정 관리', fg: '#f07800', bg: '#fff1e0',
       svg: '<circle cx="12" cy="12" r="9"' + F + '/><circle cx="12" cy="12" r="5.2"/><circle cx="12" cy="12" r="1.8" fill="currentColor"/>' },
-    { id: 'stats', href: 'stats-age.html', label: '데이터', fg: '#e5457a', bg: '#fdeaf1', lock: true, title: '비밀번호로 열람',
+    { id: 'stats', href: 'stats-age.html', label: '데이터', fg: '#e5457a', bg: '#fdeaf1',
       svg: '<path d="M11 4.5a8.5 8.5 0 1 0 8.5 8.5H11z"' + F + '/><path d="M14 2.5a7.5 7.5 0 0 1 7.5 7.5H14z" fill="currentColor"/>' },
-    { id: 'admin', href: 'admin/', label: '관리자', fg: '#4e5968', bg: '#eef0f3',
+    { id: 'admin', href: 'admin/', label: '관리자', fg: '#4e5968', bg: '#eef0f3', side: true,
       svg: '<path d="M4 7h9M18 7h2M4 17h3M12 17h8"/><circle cx="15.5" cy="7" r="2.4"' + F + '/><circle cx="9.5" cy="17" r="2.4"' + F + '/>' }
   ];
   var LOCK = '<svg viewBox="0 0 24 24"' + S.replace('1.8', '2.6') + '><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
@@ -26,7 +28,7 @@
     var nav = navs[n], cur = nav.getAttribute('data-current') || '';
     if (nav.getAttribute('data-done')) continue;
     if (!nav.getAttribute('aria-label')) nav.setAttribute('aria-label', '주요 메뉴');
-    nav.innerHTML = MENU.map(function (m) {
+    var item = function (m) {
       var on = m.id === cur;
       var href = m.href;
       return '<a class="gnb-item' + (on ? ' on' : '') + '" href="' + href + '"' + (on ? ' aria-current="page"' : '') +
@@ -34,9 +36,16 @@
         '<span class="gnb-ic" aria-hidden="true">' +
         '<svg viewBox="0 0 24 24"' + S + '>' + m.svg + '</svg>' + (m.lock ? '<span class="gnb-lock">' + LOCK + '</span>' : '') + '</span>' +
         '<span class="gnb-label">' + m.label + '</span>' + (m.badge ? '<span class="gnb-badge">' + m.badge + '</span>' : '') + '</a>';
-    }).join('');
+    };
+    nav.innerHTML = MENU.filter(function (m) { return !m.side; }).map(item).join('');
     var top = nav.parentNode && nav.parentNode.querySelector('.gnb-top');
-    if (top) { nav.classList.remove('wrap'); top.insertBefore(nav, top.querySelector('.gnb-util')); }
+    if (top) {
+      nav.classList.remove('wrap'); top.insertBefore(nav, top.querySelector('.gnb-util'));
+      // 관리자는 다른 메뉴와 헷갈리지 않게 맨 오른쪽에 따로 둔다
+      var side = document.createElement('div'); side.className = 'gnb-side';
+      side.innerHTML = MENU.filter(function (m) { return m.side; }).map(item).join('');
+      top.appendChild(side);
+    }
     nav.setAttribute('data-done', '1');
   }
 })();

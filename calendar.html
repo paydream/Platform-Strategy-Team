@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>예스폼 주요 업데이트 캘린더 | 플랫폼전략팀 업무 아카이브</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="gnb.css">
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--line:#e5e8ec;--line2:#eef0f3;--text:#191f28;--sub:#6b7684;--faint:#98a1ad;--accent:#2f6bff;
+    --up:#0284c7;--up-bg:#e0f2fe;--la:#db2777;--la-bg:#fce7f3;--re:#7c3aed;--re-bg:#f0eaff;
+    --done:#12a150;--done-bg:#e8f7ee;--now:#2f6bff;--now-bg:#eaf0ff;--wait:#6b7684;--wait-bg:#f0f2f5}
+  *{box-sizing:border-box;margin:0;padding:0}
+  [hidden]{display:none!important}
+  body{font-family:"Pretendard Variable",Pretendard,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  button{font-family:inherit;cursor:pointer}
+  header{background:var(--card);border-bottom:1px solid var(--line)}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+  main{padding-bottom:60px}
+  .hero{padding:30px 0 18px;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+  .hero h1{font-size:26px;letter-spacing:-.01em}
+  .src{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--sub)}
+  .src .dot{width:7px;height:7px;border-radius:50%;background:var(--done);display:inline-block;margin-right:5px}
+  .src .dot.warn{background:#f59e0b}
+  .src a{color:var(--accent);text-decoration:none;font-weight:600}
+  .bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+  .mnav{display:flex;align-items:center;gap:6px}
+  .mnav h2{font-size:20px;min-width:118px;text-align:center;letter-spacing:-.01em}
+  .ibtn{width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:#fff;display:grid;place-items:center;color:var(--sub)}
+  .ibtn:hover{border-color:#c9d3e6;color:var(--text)}
+  .tbtn{height:34px;padding:0 12px;border-radius:9px;border:1px solid var(--line);background:#fff;font-size:13px;color:var(--text)}
+  .tbtn:hover{border-color:#c9d3e6}
+  .filters{display:flex;gap:6px;flex-wrap:wrap}
+  .chip{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:99px;border:1px solid var(--line);background:#fff;font-size:13px;color:var(--sub)}
+  .chip i{width:8px;height:8px;border-radius:50%;background:var(--c)}
+  .chip b{font-weight:600;color:var(--text)}
+  .chip[aria-pressed="false"]{opacity:.45}
+  .layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .dow{display:grid;grid-template-columns:repeat(7,1fr);border-bottom:1px solid var(--line);background:#fafbfc}
+  .dow div{font-size:12px;color:var(--sub);text-align:center;padding:8px 0;font-weight:600}
+  .dow div:nth-child(6){color:#3b82f6}.dow div:nth-child(7){color:#ef4444}
+  .week{position:relative;display:grid;grid-template-columns:repeat(7,1fr);border-bottom:1px solid var(--line2)}
+  .week:last-child{border-bottom:0}
+  .day{min-height:118px;border-right:1px solid var(--line2);padding:6px 8px}
+  .day:nth-child(7){border-right:0}
+  .day .n{font-size:12px;font-weight:600;color:var(--text);display:inline-grid;place-items:center;min-width:22px;height:22px;border-radius:11px}
+  .day.out .n{color:#c4cad2}
+  .day.sat .n{color:#3b82f6}.day.sun .n{color:#ef4444}
+  .day.out.sat .n,.day.out.sun .n{color:#c4cad2}
+  .day.today .n{background:var(--accent);color:#fff;padding:0 6px}
+  .day.out{background:#fcfcfd}
+  .lanes{position:absolute;left:0;right:0;top:32px;pointer-events:none}
+  .ev{position:absolute;height:22px;border-radius:6px;font-size:12px;line-height:22px;padding:0 7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:auto;border:0;text-align:left;background:var(--bg2);color:var(--fg);font-weight:600}
+  .ev:hover{filter:brightness(.96)}
+  .ev.sel{box-shadow:inset 0 0 0 1.5px var(--fg)}
+  .ev.cl{border-top-left-radius:0;border-bottom-left-radius:0}
+  .ev.cr{border-top-right-radius:0;border-bottom-right-radius:0}
+  .ev.st-done{opacity:.62}
+  .more{position:absolute;font-size:11px;color:var(--sub);pointer-events:auto;background:none;border:0;padding:0 4px;height:18px}
+  .more:hover{color:var(--accent)}
+  .side{position:sticky;top:16px;display:flex;flex-direction:column;gap:12px}
+  .panel{padding:16px}
+  .panel h3{font-size:15px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .panel h3 small{font-size:12px;color:var(--sub);font-weight:500}
+  .list{list-style:none;margin-top:10px;display:flex;flex-direction:column;gap:2px;max-height:calc(100vh - 260px);overflow:auto}
+  .li{width:100%;text-align:left;background:none;border:0;border-radius:10px;padding:10px;display:flex;gap:10px;align-items:flex-start;color:inherit}
+  .li:hover,.li.sel{background:#f2f5fb}
+  .li .bd{flex:none;width:4px;align-self:stretch;border-radius:2px;background:var(--fg)}
+  .li .tx{min-width:0;flex:1}
+  .li strong{display:block;font-size:13px;line-height:1.4}
+  .li .mt{font-size:12px;color:var(--sub);margin-top:2px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  .st{font-size:11px;font-weight:700;padding:0 6px;border-radius:99px;line-height:18px}
+  .st.done{background:var(--done-bg);color:var(--done)}.st.now{background:var(--now-bg);color:var(--now)}.st.wait{background:var(--wait-bg);color:var(--wait)}
+  .empty{font-size:13px;color:var(--sub);padding:14px 4px}
+  .det .cat{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--fg)}
+  .det .cat i{width:8px;height:8px;border-radius:50%;background:var(--fg)}
+  .det h4{font-size:16px;line-height:1.4;margin-top:4px}
+  .det .pd{font-size:13px;color:var(--sub);margin-top:4px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .ch{list-style:none;margin-top:12px;border-top:1px solid var(--line2)}
+  .ch li{display:flex;align-items:center;gap:8px;font-size:13px;padding:8px 0;border-bottom:1px solid var(--line2)}
+  .ch li .ok{flex:none;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;background:var(--wait-bg);color:var(--faint)}
+  .ch li.done .ok{background:var(--done-bg);color:var(--done)}
+  .ch li .nm{flex:1;min-width:0}
+  .ch li .dt{color:var(--sub);font-size:12px;white-space:nowrap}
+  .ch li a{color:var(--accent);text-decoration:none;font-size:12px;font-weight:600;white-space:nowrap}
+  .links{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .links a{font-size:12px;color:var(--accent);text-decoration:none;font-weight:600;border:1px solid #c9d8ff;border-radius:8px;padding:4px 10px;background:#f5f8ff}
+  .err{background:#fff4e5;color:#b45309;border:1px solid #fcd9a8;border-radius:12px;padding:14px 16px;font-size:13px;margin-bottom:12px}
+  @media (max-width:1000px){.layout{grid-template-columns:1fr}.side{position:static}.list{max-height:none}}
+  @media (max-width:720px){.calcard{display:none}.mnav h2{font-size:18px;min-width:100px}}
+</style>
+</head>
+<body>
+<header class="gnb"><div class="wrap gnb-top"><a class="gnb-logo" href="./" title="메인 홈으로"><strong>플랫폼전략팀</strong></a><div class="gnb-util"></div></div><nav class="wrap gnb-nav" data-current="calendar" aria-label="주요 메뉴"></nav><script src="gnb.js"></script></header>
+<main class="wrap">
+  <div class="hero">
+    <h1>예스폼 주요 업데이트 캘린더</h1>
+    <div class="src" id="src"><span><span class="dot warn"></span>불러오는 중…</span></div>
+  </div>
+  <div class="err" id="err" hidden></div>
+  <div class="bar">
+    <div class="mnav">
+      <button class="ibtn" id="prev" aria-label="이전 달"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+      <h2 id="mlabel"></h2>
+      <button class="ibtn" id="next" aria-label="다음 달"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+      <button class="tbtn" id="today">오늘</button>
+    </div>
+    <div class="filters" id="filters"></div>
+  </div>
+  <div class="layout">
+    <div class="card calcard">
+      <div class="dow"><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div><div>일</div></div>
+      <div id="grid"></div>
+    </div>
+    <aside class="side">
+      <div class="card panel det" id="det" hidden></div>
+      <div class="card panel">
+        <h3><span id="ltitle">이번 달 업데이트</span><small id="lcount"></small></h3>
+        <ul class="list" id="list"></ul>
+      </div>
+    </aside>
+  </div>
+</main>
+<script>
+(function () {
+  const API = 'https://yesform-bs-dashboard.vercel.app/api/master?tab=';
+  const SHEET = 'https://docs.google.com/spreadsheets/d/1p6fzdYoFfsqjVuM7-R2nO7Nq2lGlXSX9aKMZWVXPJ3Q/edit#gid=434634521';
+  const BOARD = 'https://yesform-schedule-board.vercel.app/';
+  // 카테고리: 월별 마케팅 계획표(콘텐츠·서비스 업데이트) · 주요 콘텐츠 런칭일 · 제품 배포/오픈
+  const CATS = {
+    update: { label: '업데이트', fg: 'var(--up)', bg: 'var(--up-bg)' },
+    launch: { label: '런칭', fg: 'var(--la)', bg: 'var(--la-bg)' },
+    release: { label: '제품 배포', fg: 'var(--re)', bg: 'var(--re-bg)' }
+  };
+  const PRODUCTS = ['예스폼 에디터', '예스폼싸인', '에디터·싸인 통합', '웹 업무자동화'];
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const pad = n => String(n).padStart(2, '0');
+  const ymd = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+  const parseD = s => { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s || ''); return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null; };
+  const DOW = ['일', '월', '화', '수', '목', '금', '토'];
+  const fmt = d => (d.getMonth() + 1) + '.' + pad(d.getDate()) + '(' + DOW[d.getDay()] + ')';
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+
+  function parseCSV(t) { const rows = []; let row = [], f = '', q = false;
+    for (let i = 0; i < t.length; i++) { const c = t[i];
+      if (q) { if (c === '"') { if (t[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += c; }
+      else if (c === '"') q = true; else if (c === ',') { row.push(f); f = ''; }
+      else if (c === '\n' || c === '\r') { if (c === '\r' && t[i + 1] === '\n') i++; row.push(f); rows.push(row); row = []; f = ''; }
+      else f += c; }
+    if (f || row.length) { row.push(f); rows.push(row); } return rows; }
+  function records(csv) { const r = parseCSV(csv); const h = r[0] || []; return r.slice(1).filter(x => x.length > 1).map(x => Object.fromEntries(h.map((k, i) => [k.trim(), (x[i] || '').trim()]))); }
+
+  function statusOf(s, start, end) {
+    if (/완료/.test(s)) return 'done';
+    if (/진행/.test(s)) return 'now';
+    if (/대기|예정|미정/.test(s)) return 'wait';
+    if (end && end < today) return 'done';
+    if (start && start <= today) return 'now';
+    return 'wait';
+  }
+  const ST_LABEL = { done: '완료', now: '진행', wait: '예정' };
+  function channels(note) {
+    const out = [], links = [];
+    String(note || '').split(/\s·\s/).forEach(p => {
+      p = p.trim(); if (!p) return;
+      if (/^LINK:/.test(p)) { links.push(p.slice(5).trim()); return; }
+      const m = /^(.*?)(?:\s+(\d{4}-\d{2}-\d{2}))?(✓)?(?:\s+@(\S+))?$/.exec(p);
+      if (!m) return;
+      out.push({ name: m[1].replace(/✓$/, '').trim(), date: m[2] || '', done: !!m[3] || /✓/.test(m[1]), url: m[4] && /^https?:/.test(m[4]) ? m[4] : '' });
+    });
+    return { ch: out, links };
+  }
+
+  function build(rows) {
+    const ev = [], seen = new Set();
+    rows.forEach(r => {
+      const p = r['프로젝트'], name = r['업무명'], s = parseD(r['시작일']), e = parseD(r['종료일']) || s;
+      if (!s) return;
+      if (p === '마케팅') {
+        const c = channels(r['비고']);
+        ev.push({ cat: 'update', title: name, start: s, end: e < s ? s : e, st: statusOf(r['상태'], s, e), month: r['그룹'], week: r['구분'], ch: c.ch, links: c.links, src: r['원본링크'] });
+      } else if (p === '주요 콘텐츠' && (r['구분'] === '런칭' || name === '런칭')) {
+        const k = 'l|' + r['그룹'] + '|' + ymd(s); if (seen.has(k)) return; seen.add(k);
+        ev.push({ cat: 'launch', title: r['그룹'] + ' 런칭', start: s, end: s, st: statusOf(r['상태'], s, s), who: r['담당자'], src: r['원본링크'] });
+      } else if (PRODUCTS.includes(p) && /배포|오픈|런칭|출시/.test(name) && !/모니터링/.test(name) && !/^·/.test(name)) {
+        const clean = name.replace(/^[\d.]+\s*/, '');
+        const t = p + (r['그룹'] && r['그룹'] !== p && !/^[\d.]/.test(r['그룹']) ? ' ' + r['그룹'] : '') + ' ' + clean;
+        const k = 'r|' + t + '|' + ymd(s); if (seen.has(k)) return; seen.add(k);
+        ev.push({ cat: 'release', title: t, start: s, end: e < s ? s : e, st: statusOf(r['상태'], s, e), who: r['담당자'], src: r['원본링크'] });
+      }
+    });
+    ev.sort((a, b) => a.start - b.start || b.end - a.end);
+    ev.forEach((x, i) => x.id = i);
+    return ev;
+  }
+
+  let EV = [], cur = new Date(today.getFullYear(), today.getMonth(), 1), sel = null;
+  const on = { update: true, launch: true, release: true };
+  const visible = () => EV.filter(x => on[x.cat]);
+
+  function renderFilters() {
+    const mStart = cur, mEnd = new Date(cur.getFullYear(), cur.getMonth() + 1, 0);
+    $('#filters').innerHTML = Object.entries(CATS).map(([k, c]) => {
+      const n = EV.filter(x => x.cat === k && x.start <= mEnd && x.end >= mStart).length;
+      return `<button class="chip" data-k="${k}" aria-pressed="${on[k]}" style="--c:${c.fg}"><i></i>${c.label} <b>${n}</b></button>`;
+    }).join('');
+    document.querySelectorAll('#filters .chip').forEach(b => b.onclick = () => { on[b.dataset.k] = !on[b.dataset.k]; render(); });
+  }
+
+  function renderGrid() {
+    const y = cur.getFullYear(), m = cur.getMonth();
+    $('#mlabel').textContent = y + '년 ' + (m + 1) + '월';
+    const first = new Date(y, m, 1), off = (first.getDay() + 6) % 7;
+    const gStart = new Date(y, m, 1 - off);
+    const last = new Date(y, m + 1, 0), weeks = Math.ceil((off + last.getDate()) / 7);
+    const LANES = 3, LH = 25;
+    let html = '';
+    const evs = visible();
+    for (let w = 0; w < weeks; w++) {
+      const ws = new Date(gStart.getFullYear(), gStart.getMonth(), gStart.getDate() + w * 7);
+      const we = new Date(ws.getFullYear(), ws.getMonth(), ws.getDate() + 6);
+      let days = '';
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(ws.getFullYear(), ws.getMonth(), ws.getDate() + i);
+        const cls = ['day', d.getMonth() !== m ? 'out' : '', i === 5 ? 'sat' : '', i === 6 ? 'sun' : '', +d === +today ? 'today' : ''].join(' ');
+        days += `<div class="${cls}"><span class="n">${d.getDate()}</span></div>`;
+      }
+      // 주 안에서 겹치는 일정을 줄(lane)에 배치
+      const segs = evs.filter(x => x.start <= we && x.end >= ws).map(x => {
+        const a = Math.max(0, Math.round((Math.max(+x.start, +ws) - ws) / 864e5));
+        const b = Math.min(6, Math.round((Math.min(+x.end, +we) - ws) / 864e5));
+        return { x, a, b, cl: x.start < ws, cr: x.end > we };
+      }).sort((p, q) => p.a - q.a || (q.b - q.a) - (p.b - p.a));
+      const laneEnd = [], hidden = Array(7).fill(0);
+      let bars = '';
+      segs.forEach(s => {
+        let l = laneEnd.findIndex(e => e < s.a); if (l < 0) { l = laneEnd.length; laneEnd.push(-1); }
+        laneEnd[l] = s.b;
+        if (l >= LANES) { for (let i = s.a; i <= s.b; i++) hidden[i]++; return; }
+        const c = CATS[s.x.cat];
+        bars += `<button class="ev st-${s.x.st}${s.cl ? ' cl' : ''}${s.cr ? ' cr' : ''}${sel === s.x.id ? ' sel' : ''}" data-id="${s.x.id}" title="${esc(s.x.title)} · ${fmt(s.x.start)}${+s.x.end !== +s.x.start ? ' ~ ' + fmt(s.x.end) : ''}" style="--fg:${c.fg};--bg2:${c.bg};left:calc(${s.a} * 100% / 7 + 4px);width:calc(${s.b - s.a + 1} * 100% / 7 - 8px);top:${l * LH}px">${s.x.cat === 'launch' ? '★ ' : ''}${esc(s.x.title)}</button>`;
+      });
+      hidden.forEach((n, i) => { if (n) bars += `<button class="more" data-day="${ymd(new Date(ws.getFullYear(), ws.getMonth(), ws.getDate() + i))}" style="left:calc(${i} * 100% / 7 + 4px);top:${LANES * LH}px">+${n}개</button>`; });
+      html += `<div class="week">${days}<div class="lanes">${bars}</div></div>`;
+    }
+    $('#grid').innerHTML = html;
+    document.querySelectorAll('#grid .ev').forEach(b => b.onclick = () => select(+b.dataset.id));
+    document.querySelectorAll('#grid .more').forEach(b => b.onclick = () => {
+      const d = parseD(b.dataset.day); const f = visible().find(x => x.start <= d && x.end >= d && !document.querySelector(`#grid .ev[data-id="${x.id}"]`));
+      if (f) select(f.id);
+    });
+  }
+
+  function renderList() {
+    const mStart = cur, mEnd = new Date(cur.getFullYear(), cur.getMonth() + 1, 0);
+    const items = visible().filter(x => x.start <= mEnd && x.end >= mStart);
+    $('#ltitle').textContent = (cur.getMonth() + 1) + '월 업데이트';
+    $('#lcount').textContent = items.length + '건';
+    $('#list').innerHTML = items.length ? items.map(x => {
+      const c = CATS[x.cat];
+      return `<li><button class="li${sel === x.id ? ' sel' : ''}" data-id="${x.id}" style="--fg:${c.fg}"><span class="bd"></span><span class="tx"><strong>${esc(x.title)}</strong>
+        <span class="mt"><span>${c.label}</span><span>${fmt(x.start)}${+x.end !== +x.start ? ' ~ ' + fmt(x.end) : ''}</span><span class="st ${x.st}">${ST_LABEL[x.st]}</span></span></span></button></li>`;
+    }).join('') : '<li class="empty">이 달에 잡힌 업데이트가 없어요.</li>';
+    document.querySelectorAll('#list .li').forEach(b => b.onclick = () => select(+b.dataset.id));
+  }
+
+  function renderDetail() {
+    const x = EV.find(e => e.id === sel), box = $('#det');
+    if (!x) { box.hidden = true; return; }
+    const c = CATS[x.cat];
+    const chs = (x.ch || []).map(h => `<li class="${h.done ? 'done' : ''}"><span class="ok"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg></span><span class="nm">${esc(h.name)}</span><span class="dt">${h.date ? fmt(parseD(h.date)) : '-'}</span>${h.url ? `<a href="${esc(h.url)}" target="_blank" rel="noopener">보기</a>` : ''}</li>`).join('');
+    const links = (x.links || []).map(u => `<a href="${esc(u)}" target="_blank" rel="noopener">페이지 열기</a>`).join('') + (x.src ? `<a href="${esc(x.src)}" target="_blank" rel="noopener">원본 시트</a>` : '');
+    box.style.setProperty('--fg', c.fg);
+    box.innerHTML = `<span class="cat"><i></i>${c.label}</span><h4>${esc(x.title)}</h4>
+      <div class="pd"><span>${fmt(x.start)}${+x.end !== +x.start ? ' ~ ' + fmt(x.end) : ''}</span>${x.week ? `<span>· ${esc(x.month)} ${esc(x.week)}</span>` : ''}${x.who ? `<span>· ${esc(x.who)}</span>` : ''}<span class="st ${x.st}">${ST_LABEL[x.st]}</span></div>
+      ${chs ? `<ul class="ch">${chs}</ul>` : ''}${links ? `<div class="links">${links}</div>` : ''}`;
+    box.hidden = false;
+  }
+
+  function select(id) { sel = sel === id ? null : id; render(); }
+  function render() { renderFilters(); renderGrid(); renderList(); renderDetail(); }
+
+  $('#prev').onclick = () => { cur = new Date(cur.getFullYear(), cur.getMonth() - 1, 1); sel = null; render(); };
+  $('#next').onclick = () => { cur = new Date(cur.getFullYear(), cur.getMonth() + 1, 1); sel = null; render(); };
+  $('#today').onclick = () => { cur = new Date(today.getFullYear(), today.getMonth(), 1); sel = null; render(); };
+
+  render();
+  fetch(API + encodeURIComponent('통합일정'), { cache: 'no-store' })
+    .then(r => { if (!r.ok) throw new Error(r.status); return r.text(); })
+    .then(t => {
+      EV = build(records(t));
+      const n = new Date();
+      $('#src').innerHTML = `<span><span class="dot"></span>${n.getMonth() + 1}/${n.getDate()} ${pad(n.getHours())}:${pad(n.getMinutes())} 불러옴</span><a href="${SHEET}" target="_blank" rel="noopener">월별 마케팅 계획표</a><a href="${BOARD}" target="_blank" rel="noopener">사업일정 현황판</a>`;
+      render();
+    })
+    .catch(() => {
+      $('#src').innerHTML = `<span><span class="dot warn"></span>불러오기 실패</span><a href="${SHEET}" target="_blank" rel="noopener">월별 마케팅 계획표</a>`;
+      $('#err').textContent = '사업일정 현황판 데이터를 불러오지 못했어요. 잠시 뒤 새로고침해 주세요.'; $('#err').hidden = false;
+    });
+})();
+</script>
+</body>
+</html>
