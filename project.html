@@ -161,10 +161,10 @@ function shell() {
   $('clist').addEventListener('click', e => { const b = e.target.closest('[data-del]'); if (b) delComment(b.dataset.del); });
   $('finalBtnBox').addEventListener('click', e => { if (e.target.closest('#fpick')) toggleFinal(); });
 }
-// 왼쪽 버전 목록: 숨기지 않은 버전이 2개 이상이면 최근 3개(최신이 위). 보고 있는 버전이 그 밖이면 아래에 따로 붙임
+// 왼쪽 버전 목록(디자인 프로젝트만): 숨기지 않은 버전이 2개 이상이면 최근 3개(최신이 위). 보고 있는 버전이 그 밖이면 아래에 따로 붙임
 function renderVersions() {
   const vs = P.versions.filter(v => !v.hidden), box = $('vside');
-  if (vs.length < 2) { box.hidden = true; return; }
+  if (vs.length < 2 || P.team === 'planning') { box.hidden = true; return; } // 기획은 버전 목록 없음
   const recent = vs.slice(-3).reverse(), extra = recent.includes(V) ? null : V;
   const row = v => `<a class="vlink${v === V ? ' on' : ''}" href="project.html?id=${encodeURIComponent(P.id)}&v=${encodeURIComponent(v.id)}"${v === V ? ' aria-current="page"' : ''}>
       <span class="vl">${esc(v.label)}</span><span class="vm"><time>${esc(v.created || '')}</time>${P.final && P.final.version === v.id ? '<span class="chip final">확정안</span>' : ''}</span>
@@ -314,7 +314,9 @@ async function toggleFinal() {
   // 버전은 고르지 않음: 확정안 버전 → 없으면 최신 버전 하나만 보여 줌 (주소에 v가 있으면 그 버전)
   const fv = P.final && vs.find(v => v.id === P.final.version);
   defV = fv || vs[vs.length - 1];
-  V = vs.find(v => v.id === params.get('v')) || (params.get('h') && vs.find(v => v.items.some(i => i.href === params.get('h')))) || defV;
+  // 기획 프로젝트는 버전 관리 없이 최종본(확정안 → 없으면 최신) 하나만 보여 줌
+  V = P.team === 'planning' ? defV
+    : vs.find(v => v.id === params.get('v')) || (params.get('h') && vs.find(v => v.items.some(i => i.href === params.get('h')))) || defV;
   shell(); trackFrame();
   try {
     const r = await fetch(`api/comments?project=${encodeURIComponent(P.id)}`, { cache: 'no-store' });
