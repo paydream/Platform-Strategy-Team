@@ -126,7 +126,6 @@
   <section class="hero">
     <div>
       <h1>GA4·GTM 측정 관리</h1>
-      <p>GA4에 무엇을 언제 넣었는지, 누가 요청하고 누가 작업했는지 기록합니다.</p>
       <p class="src" id="srcLine"></p>
     </div>
     <div style="display:flex;gap:8px"><button class="btn" id="unlockBtn" type="button">편집 잠금 해제</button><button class="btn primary" id="addBtn" type="button">+ 기록 추가</button></div>
@@ -159,7 +158,6 @@
 <div class="mback" id="eBack" hidden>
   <form class="modal" id="eForm" autocomplete="off">
     <h3 id="eTitle">기록 추가</h3>
-    <p class="desc">GA4에 이벤트·태그·코드·맞춤 정의를 넣거나 바꿨을 때 남겨 주세요.</p>
     <div class="fgrid">
       <label>날짜<input name="date" type="date" required></label>
       <label>제품<select name="product"><option value="yesform">예스폼</option><option value="sign">예스폼싸인</option><option value="editor">에디터</option></select></label>
@@ -181,7 +179,6 @@
 <div class="mback" id="vBack" hidden>
   <form class="modal" id="vForm" autocomplete="off" style="max-width:460px">
     <h3 id="vTitle">GTM 버전 메모</h3>
-    <p class="desc">GTM 게시 계정은 공용이라 실제 요청자·작업자를 여기에 남깁니다.</p>
     <div class="fgrid">
       <label>요청자<input name="requester" maxlength="40" list="people"></label>
       <label>작업자<input name="worker" maxlength="40" list="people"></label>
@@ -272,8 +269,8 @@ function renderGtm() {
           ${rel.length ? `<div class="rel">${rel.map(r => `<a href="#${esc(r.id)}" data-open="${esc(r.id)}" class="tag blue">측정 기록: ${esc(r.title.slice(0, 30))}</a>`).join(' ')}</div>` : ''}</div>
         <div class="who"><div><span>요청</span> ${n.requester ? `<b>${esc(n.requester)}</b>` : '<span class="none">미기록</span>'}</div><div><span>작업</span> ${n.worker ? `<b>${esc(n.worker)}</b>` : '<span class="none">미기록</span>'}</div>
           ${n.note ? `<div style="color:var(--sub)">${esc(n.note)}</div>` : ''}<button data-v="${key}">요청자·작업자 ${n.requester || n.worker ? '수정' : '남기기'}</button></div></li>`; }).join('')}</ul></div>`;
-  }).join('') + `<p style="font-size:12px;color:var(--mute);margin:-4px 0 60px">시간은 한국 시간. 게시 계정(wwwchamjal 등)은 여럿이 같이 쓰는 계정이라 실제 요청자·작업자는 오른쪽에 따로 남깁니다. 「추가·변경·삭제」는 바로 앞 버전과 비교한 결과입니다.</p>`
-  : '<div class="ccard"><div class="empty">에디터는 GTM이 없습니다. 사이트 코드(gtag)로 GA4에 바로 보내서, 「측정 추가 기록」 탭에만 남깁니다.</div></div>';
+  }).join('') + `<div style="height:56px"></div>`
+  : '<div class="ccard"><div class="empty">에디터는 GTM이 없습니다.</div></div>';
 }
 function openDrawer(id) {
   const r = D.records.find(x => x.id === id); if (!r) return;
@@ -289,8 +286,7 @@ function openDrawer(id) {
       ${r.gtm ? `<dt>GTM</dt><dd><code>${esc(r.gtm.container)}</code> v${r.gtm.version}${v ? ` · ${esc(v.date)} 게시 · ${esc(v.name || '')}` : ''}</dd>` : ''}</dl>
     ${r.note ? `<div class="sec"><h3>메모</h3><div class="note">${esc(r.note)}</div></div>` : ''}
     ${(r.events || []).length ? `<div class="sec"><h3>이벤트 · GA4 수집 확인 (${esc(S.ga.end)}까지)</h3><table class="evt"><thead><tr><th>이벤트</th><th>GA4 첫 수집</th><th style="text-align:right">최근 7일</th><th style="text-align:right">28일</th></tr></thead><tbody>
-      ${r.events.map(e => { const x = ev[e]; return `<tr><td><code>${esc(e)}</code></td><td>${x ? esc(x.first) + (x.first === '2026-08-01' ? ' 이전' : '') : '<span class="tag red">수집 없음</span>'}</td><td style="text-align:right">${x ? fmt(x.d7) : '-'}</td><td style="text-align:right">${x ? fmt(x.d28) : '-'}</td></tr>`; }).join('')}</tbody></table>
-      <p style="font-size:11.5px;color:var(--mute);margin-top:6px">같은 이벤트명을 다른 측정도 쓰면 숫자는 합계입니다. GA4 조회 범위가 8/1부터라 그 전부터 있던 이벤트는 「이전」으로 표시.</p></div>` : ''}
+      ${r.events.map(e => { const x = ev[e]; return `<tr><td><code>${esc(e)}</code></td><td>${x ? esc(x.first) + (x.first === '2026-08-01' ? ' 이전' : '') : '<span class="tag red">수집 없음</span>'}</td><td style="text-align:right">${x ? fmt(x.d7) : '-'}</td><td style="text-align:right">${x ? fmt(x.d28) : '-'}</td></tr>`; }).join('')}</tbody></table></div>` : ''}
     ${r.params?.length ? `<div class="sec"><h3>등록한 맞춤 정의 매개변수</h3><div>${r.params.map(p => `<span class="ev">${esc(p)}</span>`).join('')}</div></div>` : ''}
     ${v ? `<div class="sec"><h3>GTM v${v.id}에서 바뀐 것</h3>${chgHtml(v)}${v.notes ? `<details class="desc" open><summary>버전 설명</summary><pre>${esc(v.notes)}</pre></details>` : ''}</div>` : ''}
     <div class="sec"><h3>수정 이력</h3><ul class="log">${(r.log || []).slice().reverse().map(l => `<li>${esc(l.date)} · ${esc(l.by)} · ${esc(l.text)}</li>`).join('')}</ul></div>

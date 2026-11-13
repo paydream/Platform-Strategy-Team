@@ -327,7 +327,7 @@ function render() {
   </div>
   <div class="subsel">${view === 'week' ? wPicker() : ''}<div class="seg sub ${view}" role="tablist" aria-label="기간">${sub}</div></div>
   ${prod === 'editor' ? editorView(ctx) : signView(ctx)}
-  ${notes()}`;
+  <div style="height:60px"></div>`;
   document.querySelectorAll('.ptab').forEach(b => b.onclick = () => { prod = b.dataset.p; render(); });
   document.querySelectorAll('.seg button[data-m]').forEach(b => b.onclick = () => { month = b.dataset.m; render(); });
   document.querySelectorAll('.seg button[data-k]').forEach(b => b.onclick = () => { pkey[view] = b.dataset.k; render(); });
@@ -375,18 +375,17 @@ function editorView({ m, pm, cd, pd, mk, pmk, label }) {
       ${kpi('싸인 연결 사용자', sgn, '명', diff(sgn, ev(P, 'sign_entry'), cd, pd), `문서 생성자의 ${pctTxt(pct(sgn, crt))}`)}
     </div></section>
 
-  <section class="blk"><h2>전환 흐름 <small>에디터에 들어온 사용자가 어디까지 갔는지</small></h2>
+  <section class="blk"><h2>전환 흐름</h2>
     ${funnel([['활성 사용자', act, 'GA4 전체'], ['에디터 진입', ent], ['문서 생성', crt], ['문서 내보내기', exp], ['싸인 연결', sgn]])}</section>
 
-  <section class="blk"><h2>채널별 성과 <small>어느 채널이 사용자와 문서 생성을 만들었나</small></h2>
+  <section class="blk"><h2>채널별 성과</h2>
     <div class="card"><div class="scroll"><table class="tbl">
       <thead><tr><th>유입 채널</th><th>사용자</th><th>비중</th><th>${CMP.col}</th><th>문서 생성</th><th>생성률</th><th>내보내기</th><th>싸인 연결</th></tr></thead>
       <tbody>${ch.map(r => { const p = prevCh[r[0]]; const rate = r[1] ? r[4] / r[1] : 0;
         return `<tr><td class="name">${esc(r[0])}</td><td>${fmt(r[1])}</td><td>${shareCell(r[1], chTot, chMax)}</td><td>${pm ? dtxt(diff(r[1], p && p[1], cd, pd)) : '-'}</td>
           <td>${fmt(r[4])}</td><td class="${r[1] >= 50 && rate === bestRate ? 'best' : ''}">${pctTxt(pct(r[4], r[1]))}</td><td>${fmt(r[5])}</td><td>${fmt(r[6])}</td></tr>`; }).join('')}</tbody>
       <tfoot><tr><td>합계</td><td>${fmt(chTot)}</td><td></td><td></td><td>${fmt(ch.reduce((a, r) => a + r[4], 0))}</td><td>${pctTxt(pct(ch.reduce((a, r) => a + r[4], 0), chTot))}</td><td>${fmt(ch.reduce((a, r) => a + r[5], 0))}</td><td>${fmt(ch.reduce((a, r) => a + r[6], 0))}</td></tr></tfoot>
-    </table></div></div>
-    <p style="font-size:12px;color:var(--sub);margin-top:6px">사용자 50명 이상 채널 중 생성률이 가장 높은 곳을 색으로 표시했어요. 한 사람이 여러 채널로 들어오면 채널마다 세므로 합계가 활성 사용자보다 클 수 있어요.</p></section>
+    </table></div></div></section>
 
   <section class="blk"><h2>일별 추이 ${view === 'day' ? '<small>최근 7일</small>' : view === 'week' ? '<small>최근 5주</small>' : ''}</h2><div class="chartbox"><div class="legend" id="legend"></div><svg class="chart" id="chart" role="img" aria-label="일별 추이"></svg></div></section>
 
@@ -403,9 +402,9 @@ const paySrcCell = (n, s, e) => { const l = D.payments ? paysIn(s, e) : []; retu
 function paySection(pay) {
   if (!D.payments) return '';
   const list = paysIn(SEL.s, SEL.e), g = srcGroup(list), tot = list.length, max = Math.max(...g.map(x => x[1][0]), 1);
-  const note = tot !== pay[0] ? `<p class="pnote">관리자 결제 통계는 ${fmt(pay[0])}건, 결제 목록은 ${fmt(tot)}건이에요 (관리자 수동 등록·취소 처리 차이).</p>` : '';
-  if (!tot) return `<section class="blk"><h2>결제 출처 <small>결제 1건마다 들어온 경로</small></h2><div class="card"><p class="pempty">이 기간에는 결제가 없어요.</p></div></section>`;
-  return `<section class="blk"><h2>결제 출처 <small>결제 1건마다 들어온 경로 · 관리자 유입 기록 우선, 없으면 GA4 결제 세션</small></h2>
+  const note = tot !== pay[0] ? `<p class="pnote">관리자 결제 통계는 ${fmt(pay[0])}건, 결제 목록은 ${fmt(tot)}건이에요.</p>` : '';
+  if (!tot) return `<section class="blk"><h2>결제 출처</h2><div class="card"><p class="pempty">이 기간에는 결제가 없어요.</p></div></section>`;
+  return `<section class="blk"><h2>결제 출처</h2>
     <div class="two">
       <div class="card"><div class="hd"><b>출처별</b><span>${fmt(tot)}건 · ${won(list.reduce((a, p) => a + p[2], 0))}</span></div><div class="scroll"><table class="tbl">
         <thead><tr><th>출처</th><th>결제</th><th>비중</th><th>결제 금액</th></tr></thead>
@@ -437,18 +436,18 @@ function signView({ m, pm, cd, pd, mk, pmk, label }) {
   <section class="blk"><h2>핵심 지표 <small>${CMP.note}</small></h2>
     <div class="kpis${S.contrib ? ' k5' : ''}">
       ${kpi('결제 건수', pay[0], '건', dPay, `결제 금액 ${won(pay[1])}${pList.length ? `<span class="ksrc">${srcGroup(pList).slice(0, 5).map(([k, [n]]) => `<i>${esc(k)} ${n}건</i>`).join('')}${srcGroup(pList).length > 5 ? `<i>외 ${srcGroup(pList).length - 5}곳</i>` : ''}</span>` : ''}`, true)}
-      ${S.contrib ? kpi('예스폼 기여 결제', S.contrib[1], '원', diff(S.contrib[1], P && P.contrib && P.contrib[1], cd, pd), `${fmt(S.contrib[0])}건 · 싸인 이용자의 예스폼 플랜 결제 (기여통계)`) : ''}
+      ${S.contrib ? kpi('예스폼 기여 결제', S.contrib[1], '원', diff(S.contrib[1], P && P.contrib && P.contrib[1], cd, pd), `${fmt(S.contrib[0])}건`) : ''}
       ${kpi('신규 가입', S.signup, '명', dSign, `방문자의 ${pctTxt(pct(S.signup, S.visit))}`)}
       ${kpi('방문자', S.visit, '명', dVisit, (cd > 1 ? `일평균 ${fmt(S.visit / cd)}명 · 일별 합계` : view === 'week' ? `하루 평균 ${fmt(S.visit / 7)}명 · 일별 합계` : `${CMP.short} ${fmt(P && P.visit)}명`))}
       ${kpi('전자계약 실사용자', S.users, '명', diff(S.users, P && P.users, cd, pd), `에디터 경유 ${fmt(S.editorUsers)}명${view === 'week' ? ' · 일별 합계' : ''}`)}
     </div></section>
 
-  <section class="blk"><h2>전환 흐름 <small>방문에서 결제까지</small></h2>
+  <section class="blk"><h2>전환 흐름</h2>
     ${funnel([['방문자', S.visit, '관리자 방문 통계'], ['신규 가입', S.signup], ['전자계약 실사용자', S.users], ['결제', pay[0], won(pay[1])]])}</section>
 
   ${paySection(pay)}
 
-  <section class="blk"><h2>지면·캠페인별 성과 <small>관리자 유입 결제 통계 (등록된 유입 경로만)</small></h2>
+  <section class="blk"><h2>지면·캠페인별 성과 <small>관리자 유입 결제 통계</small></h2>
     <div class="two">
       <div class="card"><div class="hd"><b>그룹별 방문 · 결제</b><span>등록 경로 방문 ${fmt(plTot[0])} · 결제 ${fmt(plTot[1])}건</span></div><div class="scroll"><table class="tbl">
         <thead><tr><th>지면 그룹</th><th>방문</th><th>비중</th><th>${CMP.col}</th><th>결제</th><th>결제 금액</th><th>전환율</th></tr></thead>
@@ -459,7 +458,7 @@ function signView({ m, pm, cd, pd, mk, pmk, label }) {
           <div class="nv"><span class="${r[3] ? 'best' : 'muted'}">결제 ${fmt(r[3])}건</span><small>${r[4] ? won(r[4]) + ' · ' : ''}방문 ${fmt(r[2])}</small></div></li>`).join('')}</ol></div>
     </div></section>
 
-  <section class="blk"><h2>유입 채널별 사용자 <small>GA4 · 광고·검색·블로그 등 전체 채널</small></h2>
+  <section class="blk"><h2>유입 채널별 사용자 <small>GA4</small></h2>
     <div class="card"><div class="scroll"><table class="tbl">
       <thead><tr><th>유입 채널</th><th>사용자</th><th>비중</th><th>${CMP.col}</th><th>신규 사용자</th></tr></thead>
       <tbody>${ch.map(r => { const p = prevCh[r[0]]; return `<tr><td class="name">${esc(r[0])}</td><td>${fmt(r[1])}</td><td>${shareCell(r[1], chTot, chMax)}</td><td>${pm ? dtxt(diff(r[1], p && p[1], cd, pd)) : '-'}</td><td>${fmt(r[2])}</td></tr>`; }).join('')}</tbody>
@@ -485,15 +484,14 @@ function goalPanel() {
   if (g.editor && g.editor.active) items.push(['editor', '에디터', '활성 사용자', m.editor.active, g.editor.active, '명']);
   if (g.sign && g.sign.active) items.push(['sign', '싸인', '활성 사용자', m.sign.active, g.sign.active, '명']);
   if (g.sign && g.sign.pay) items.push(['sign', '싸인', '결제 건수', ((D.mkt.sign[m.m] || {}).pay || [0])[0], g.sign.pay, '건']);
-  return `<section class="goals" aria-label="월간 목표 달성 현황"><div class="gh"><b>${+m.m.slice(5)}월 목표 달성 현황</b><span>${MD(m.end)}까지 · ${total}일 중 ${done}일 지남 (${tp.toFixed(0)}%) · 막대의 세로선이 오늘까지 기준선</span></div>
+  return `<section class="goals" aria-label="월간 목표 달성 현황"><div class="gh"><b>${+m.m.slice(5)}월 목표 달성 현황</b><span>${MD(m.end)}까지 · ${total}일 중 ${done}일 지남 (${tp.toFixed(0)}%)</span></div>
     <div class="gl">${items.map(([p, pn, label, cur, goal, unit]) => {
       const r = cur / goal * 100, proj = cur / done * total, need = left > 0 ? Math.max(0, goal - cur) / left : 0;
       const st = r >= 100 ? ['done', '달성'] : r >= tp ? ['ahead', '순항'] : r >= tp * 0.8 ? ['near', '조금 부족'] : ['behind', '부족'];
       return `<div class="gc ${p}"><div class="gt"><span class="gp">${pn}</span>${label}<em class="gs ${st[0]}">${st[1]}</em></div>
         <div class="gv"><b>${fmt(cur)}</b><small>/ ${fmt(goal)}${unit}</small><strong>${r.toFixed(0)}%</strong></div>
         <div class="gb"><span style="width:${Math.min(100, r)}%"></span><i style="left:${Math.min(100, tp)}%"></i></div>
-        <div class="gn">${r >= 100 ? `목표보다 ${fmt(cur - goal)}${unit} 더 했어요` : `남은 ${fmt(goal - cur)}${unit} · 남은 ${left}일 동안 하루 ${fmt(Math.ceil(need))}${unit}씩`}<br>지금 속도면 월말 약 ${fmt(proj)}${unit} (단순 환산)</div></div>`; }).join('')}</div>
-    <p class="gf">활성 사용자는 GA4 월 순 사용자예요. 같은 사람이 다시 와도 한 번만 세서 날짜에 비례해 늘지 않으니, 단순 환산은 실제보다 높게 나올 수 있어요. 결제 건수는 싸인 관리자 기준이에요.</p></section>`;
+        <div class="gn">${r >= 100 ? `목표보다 ${fmt(cur - goal)}${unit} 더 했어요` : `남은 ${fmt(goal - cur)}${unit} · 남은 ${left}일 동안 하루 ${fmt(Math.ceil(need))}${unit}씩`}<br>지금 속도면 월말 약 ${fmt(proj)}${unit} (단순 환산)</div></div>`; }).join('')}</div></section>`;
 }
 function trendTables(p) { return view === 'month' ? weekTable(p) + monthTable(p) : periodTable(p); }
 // 데일리: 최근 14일 / 주간: 직전 7일 블록. 선택한 기간 행을 강조
@@ -505,7 +503,7 @@ function periodTable(p) {
   const row = x => p === 'editor' ? [x.editor.active, x.editor.new, ev(x, 'document_create'), ev(x, 'export_document'), ev(x, 'sign_entry')].map(fmt)
     : [fmt(x.sign.visit), fmt(x.sign.signup), paySrcCell(x.mkt.sign.pay[0], x.s, x.e), won(x.mkt.sign.pay[1]), x.sign.contrib ? `${won(x.sign.contrib[1])}<span class="psm">${fmt(x.sign.contrib[0])}건</span>` : '-', fmt(x.sign.users), fmt(x.sign.active)];
   const lbl = x => view === 'day' ? `${MD(x.k)} (${wday(x.k)})` : dRange(x.s, x.e);
-  return `<section class="blk"><h2>${view === 'day' ? '일별 추이 표 <small>최근 7일 · 사용자는 하루 순 사용자</small>' : '7일 단위 추이 <small>어제부터 7일씩 끊어서 · 사용자는 7일 순 사용자, 방문자·실사용자는 일별 합계</small>'}</h2>
+  return `<section class="blk"><h2>${view === 'day' ? '일별 추이 표 <small>최근 7일</small>' : '7일 단위 추이'}</h2>
     <div class="card"><div class="scroll"><table class="tbl"><thead><tr><th>${view === 'day' ? '날짜' : '기간'}</th>${head.map(h => `<th>${h}</th>`).join('')}</tr></thead>
     <tbody>${L.map(x => `<tr class="${x.k === pkey[view] ? 'sel' : ''}${view === 'day' && /[일토]/.test(wday(x.k)) ? ' we' : ''}"><td>${lbl(x)}</td>${row(x).map(v => `<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div></section>`;
 }
@@ -515,7 +513,7 @@ function weekTable(p) {
   const row = w => { const u = k => (w.editor.ev[k] || [0, 0])[1];
     return p === 'editor' ? [w.editor.active, w.editor.new, u('document_create'), u('export_document'), u('sign_entry')].map(fmt)
       : [fmt(w.sign.visit), fmt(w.sign.signup), paySrcCell(w.sign.pay[0], w.s, w.e), won(w.sign.pay[1]), w.sign.contrib ? `${won(w.sign.contrib[1])}<span class="psm">${fmt(w.sign.contrib[0])}건</span>` : '-', fmt(w.sign.active)]; };
-  return `<section class="blk"><h2>주간 추이 <small>월~일 기준 · 사용자는 주간 순 사용자, 방문자는 일별 합계</small></h2>
+  return `<section class="blk"><h2>주간 추이 <small>월~일</small></h2>
     <div class="card"><div class="scroll"><table class="tbl"><thead><tr><th>주</th>${head.map(h => `<th>${h}</th>`).join('')}</tr></thead>
     <tbody>${W.map(w => { const part = (new Date(w.e) - new Date(w.s)) / 864e5 < 6; return `<tr><td>${dRange(w.s, w.e)}${part ? ' <span class="muted">(진행 중)</span>' : ''}</td>${row(w).map(v => `<td>${v}</td>`).join('')}</tr>`; }).join('')}</tbody></table></div></div></section>`;
 }
@@ -529,21 +527,6 @@ function monthTable(p) {
   return `<section class="blk"><h2>월별 비교</h2><div class="card"><div class="scroll"><table class="tbl">
     <thead><tr><th>지표</th>${D.months.map(x => `<th>${mLabel(x)}</th>`).join('')}</tr></thead>
     <tbody>${rows.map(([l, f]) => `<tr><td class="name">${l}</td>${D.months.map(x => `<td>${f(x)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div></section>`;
-}
-function notes() {
-  const last = mLabel(D.months[D.months.length - 1]);
-  return `<div class="notes"><b>데이터 기준</b><ul>${prod === 'editor' ? `
-    <li>GA4 예스폼 에디터 속성, 전체 국가 기준이에요. 기능별 수치는 그 행동을 1번 이상 한 사용자 수예요.</li>
-    <li>채널은 GA4 세션 소스/매체를 묶은 거예요. 예스폼 서식 페이지(yesform/referral), 메인 프롬프트(www_prompt), 사이드바(sidebar), 메타 광고(meta/cpc), 네이버 브랜드검색(naverbs)으로 나눴어요.</li>
-    <li>10/19 에디터 정식 런칭 전 수치(8~10월 초)는 런칭 전 운영 기간 데이터예요.</li>` : `
-    <li>결제·가입·방문·전자계약 실사용자는 예스폼싸인 관리자 통계예요. 관리자 통계에는 내부 테스트 계정이 섞여 있어요.</li>
-    <li>지면·캠페인별 성과는 관리자 유입 결제 통계로, 유입 URL로 등록된 경로만 잡혀요. 직접 방문이나 검색 유입은 이 표에 없어요.</li>
-    <li>예스폼 기여 결제는 관리자 「예스폼 기여통계」의 기여 결제(건수·금액)예요. 싸인 이용자가 예스폼 플랜(1WB~1ME)을 결제한 것으로, 싸인 결제 건수·금액과는 따로 세요.</li>
-    <li>결제 출처는 ① 관리자 유입 결제 통계(등록된 유입 링크)에 잡힌 결제면 그 지면 이름(같은 날짜·금액으로 맞춤), ② 아니면 관리자 결제 목록의 주문번호와 GA4 결제(purchase) 이벤트를 맞춰 그 결제가 일어난 방문의 유입 경로(소스/매체·캠페인·첫 페이지)로 정했어요. 결제 건별 목록의 회색 글씨에 근거가 같이 나와요. 10/6 이전 일부 결제는 GA4 기록이 없어 '출처 기록 없음'이에요. 네이버 광고 태그(NaPm)가 붙은 방문은 GA4에 naver / organic으로 잡혀도 네이버 검색광고로 분류했어요.</li>
-    <li>유입 채널별 사용자는 GA4 예스폼싸인 속성(전체 국가)의 세션 소스/매체를 묶은 거예요. 매출은 GA4를 쓰지 않아요.</li>
-    <li>${last} 전자계약 실사용자는 관리자 월간 값이라 업데이트 당일이 일부 들어 있을 수 있어요.</li>`}
-    <li>매일 오전 9시와 오후 5시, 하루 두 번 전날 데이터까지 자동으로 갱신돼요. 나머지 수치는 ${D0(D.range.end)}까지예요. 월간의 전월 비교는 기간 길이가 달라도 비교할 수 있게 일평균으로 계산했어요.</li>
-    <li>데일리는 지난주 같은 요일과, 주간은 7일 구간을 그 바로 앞 7일과 비교해요(기본은 어제까지 직전 7일, 시작일을 바꾸면 최근 12주 안에서 아무 7일이나 볼 수 있어요). 사용자 수는 그 기간의 순 사용자이고, 싸인 방문자·전자계약 실사용자는 관리자 일별 값의 합계예요.</li></ul></div>`;
 }
 
 /* ---------- 일별 차트 (SVG) ---------- */
