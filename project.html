@@ -98,6 +98,7 @@
 <script>
 const TEAMS = { design: '디자인', planning: '기획' };
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+try { if (!sessionStorage.getItem('pst_stats_pw')) sessionStorage.setItem('pst_stats_pw', 'site'); } catch {} // 비밀번호 문서 시안(iframe)이 바로 열리게
 const store = { get(k){ try { return localStorage.getItem(k) || ''; } catch { return ''; } }, set(k,v){ try { localStorage.setItem(k,v); } catch {} }, del(k){ try { localStorage.removeItem(k); } catch {} } };
 const $ = id => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -200,8 +201,7 @@ $('cform').addEventListener('submit', async e => {
   if (!author) { msg.textContent = '작성자 이름을 넣어 주세요.'; return $('author').focus(); }
   if (!text) { msg.textContent = '코멘트 내용을 넣어 주세요.'; return $('text').focus(); }
   if ([...text].length > 500) { msg.textContent = '코멘트는 500자까지 쓸 수 있습니다.'; return; }
-  let password = store.get('team_pw');
-  if (!password) { password = prompt('팀 비밀번호를 넣어 주세요. (한 번 넣으면 이 브라우저가 기억합니다)') || ''; if (!password) return; }
+  let password = store.get('team_pw') || 'site'; // 사이트 비밀번호로 로그인한 상태면 서버가 통과시킨다
   $('save').disabled = true; $('save').textContent = '저장 중…';
   try {
     const r = await fetch('api/comments', { method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -209,7 +209,7 @@ $('cform').addEventListener('submit', async e => {
     const j = await r.json().catch(() => ({}));
     if (r.status === 401) store.del('team_pw');
     if (!r.ok) throw new Error(j.error || `저장하지 못했습니다 (${r.status})`);
-    store.set('team_pw', password); store.set('comment_author', author);
+    if (password !== 'site') store.set('team_pw', password); store.set('comment_author', author);
     comments.push(j.comment);
     closeModal();
     $('side').classList.add('open'); renderComments(j.comment.id); renderHeader(); // 저장하면 오른쪽에 코멘트 사이드바가 열림
