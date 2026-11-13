@@ -8,8 +8,15 @@
 - 새 파일은 `archive/YYYYMMDD-HHMMSS-영문이름/` 새 폴더에 넣는다. 폴더가 이미 있으면 멈춘다.
 - 목록에서 빼려면 숨기기(`hidden: true`)나 휴지통(`trash`)을 쓴다. 시안 파일은 그대로 둔다.
 - 버전의 `folder`·`preview`·시안 `href`는 한 번 정해지면 바뀌지 않는다(`admin/model.js`의 `checkSave`가 막음).
-- 바꿔도 되는 파일은 관리용뿐이다: `projects.json`, `data/comments.json`, 루트 `index.html`, `project.html`, `tracking.html`, `wbs.html`, `work.html`, `calendar.html`, `stats*.html`(통계 화면), `gnb.css`·`gnb.js`(공통 GNB), `vercel.json`, `admin/`, `api/`, `data/`, `README.md`, `CLAUDE.md`, `.github/`.
+- 바꿔도 되는 파일은 관리용뿐이다: `projects.json`, `data/comments.json`, 루트 `index.html`, `project.html`, `tracking.html`, `wbs.html`, `work.html`, `calendar.html`, `stats*.html`(통계 화면), `gnb.css`·`gnb.js`(공통 GNB), `vercel.json`, `middleware.js`(사이트 비밀번호), `admin/`, `api/`, `data/`, `README.md`, `CLAUDE.md`, `.github/`.
 - `.github/workflows/no-overwrite.yml`이 push마다 이 규칙을 검사한다.
+
+## 사이트 전체 비밀번호 (`middleware.js`, 2026-11-13~)
+- 사이트에 처음 들어오면 비밀번호 화면이 뜨고, 맞히면 30일짜리 쿠키(`pst_site`, HttpOnly)를 받아 모든 화면·데이터를 비밀번호 없이 본다. 시안 파일(`archive/`)·`projects.json`·API도 전부 이 뒤에 있다.
+- 비밀번호 = Vercel env `SITE_PASSWORD`(없으면 `STATS_PASSWORD`). 값을 바꾸면 기존 쿠키는 모두 무효 → 다시 로그인. 잠그기(로그아웃) = `/__logout`.
+- 쿠키 값 = HMAC-SHA256(비밀번호, 'pst-site-v1') hex. 서버 API는 `api/_lib.js`의 `siteOk(req)`로 같은 쿠키를 확인해 통계 비밀번호(`api/stats`)·팀 비밀번호(코멘트, 측정 관리 편집)를 대신한다. 관리자 비밀번호(관리자 화면·업로드·확정안·삭제)는 그대로.
+- 예외(쿠키 없이 통과): `/robots.txt`, Aside 루틴 업로드 `POST /api/stats-update`·`POST /api/wbs`(자체 키 검사), 헤더 `x-pst-key` = `STATS_UPDATE_KEY`인 요청(루틴의 GET 확인용).
+- 통계 화면(stats*.html)·비밀번호 문서 셸은 들어오면 바로 열리고, 쿠키가 없을 때만 예전 비밀번호 화면을 보여준다. 새 화면을 만들 때 따로 비밀번호를 넣지 않는다.
 
 ## 데이터 (`projects.json`, version 2)
 - `projects[]`: `{ id, title, team('design'|'planning'), category, desc, created, updated, hidden, final, versions[] }`. 배열 순서 = 화면 순서.
@@ -40,7 +47,7 @@
 - 원본 설계는 Google 시트 「GA4개선(WBS포함)」(01 예스폼 신규 · 02 제거·수정 · 03 싸인 신규 · 04 개발 필수 · WBS). 2026-11-12에 시트 내용으로 처음 채움.
 
 ## 통계 · 에디터/싸인 지표 (`/stats.html`, 매일 자동 갱신)
-- 헤더 GNB의 "에디터/싸인 지표" 버튼(매일 보는 메뉴라 고정). 에디터·예스폼싸인 탭 × 월 탭. 통계 비밀번호(`STATS_PASSWORD`)로 열람.
+- 헤더 GNB의 "에디터/싸인 지표" 버튼(매일 보는 메뉴라 고정). 에디터·예스폼싸인 탭 × 월 탭. 사이트 비밀번호로 로그인하면 바로 열림.
 - 데이터: `data/stats/marketing.enc.json` — 저장소가 공개라 AES-256-GCM으로 암호화(`api/_statsfile.js`, 키는 `STATS_UPDATE_KEY`에서 파생). `meta`(업데이트 날짜·기간)만 평문. 파일이 없으면 env `STATS_DATA`(예전 스냅샷)를 쓴다.
 - 갱신: 매일 아침 Aside 루틴이 GA4(에디터·싸인 속성)와 싸인 관리자 통계에서 전날까지 다시 뽑아 `POST /api/stats-update` `{ key, id:'marketing', data }`로 보낸다(키 = `STATS_UPDATE_KEY`). API가 암호화해 GitHub에 커밋. 이 파일만 바뀐 커밋은 재배포 안 함(ignoreCommand), `/api/stats`가 GitHub에서 바로 읽는다(60초 캐시).
 - 목록(사이드바)의 기간·업데이트 날짜는 `auto: true` 항목이면 파일 meta로 자동 표시된다.
