@@ -82,3 +82,5 @@
 - `api/stats.js` LIST에 `{ id, file: true, sidebar: false }`로 등록 → 통계 비밀번호(`STATS_PASSWORD`)를 맞히면 `POST /api/stats {password, id}`가 본문을 준다. 사이드바 목록에는 안 나온다.
 - 지금 항목: `membership-plan` 예스폼 멤버십 요금제 변경 계획안 (2027) → `archive/20261113-112032-yesform-membership-plan/` (2026-11-13).
 - 본문을 고치려면 새 본문을 같은 방식으로 암호화해 `data/stats/<id>.enc.json`을 덮어쓴다(이 파일만 바뀐 커밋은 재배포 없음).
+- `membership-plan` v2(`archive/20261113-141552-yesform-membership-plan-v2/`)는 셸이 화면을 직접 그린다: 본문 데이터의 `plan`(요금제·오픈안·결정 필요 등 JSON)을 쓰고, `html`은 v1 셸 호환용이다.
+- 팀별 일정은 화면에서 직접 추가·수정·삭제한다: `POST /api/plan-schedule { doc, password, action:'get'|'save'|'delete' }` → `data/stats/<doc>-schedule.enc.json`(`{ rows:[{id,team,kind(task|milestone),task,start,end,st,note}], updated }`). 권한은 사이트 로그인 쿠키·통계 비밀번호·팀 비밀번호. 허용 문서는 `api/plan-schedule.js`의 `DOCS`.
