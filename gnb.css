@@ -6,11 +6,11 @@
 .gnb-logo::after{content:"";width:1px;height:18px;background:#e5e8ec;margin-left:12px}
 .gnb-logo:hover strong{color:#2f6bff}
 .gnb-logo:focus-visible{outline:2px solid #2f6bff;outline-offset:4px}
-.gnb-nav{display:flex;align-items:stretch;gap:2px;flex:1 1 auto;min-width:0;height:59px;margin:0!important;padding:0!important;max-width:none!important;overflow-x:auto;scrollbar-width:none}
+.gnb-nav{display:flex;align-items:stretch;gap:0;flex:1 1 auto;min-width:0;height:59px;margin:0!important;padding:0!important;max-width:none!important;overflow-x:auto;scrollbar-width:none}
 .gnb-nav::-webkit-scrollbar{display:none}
 .gnb-util{display:flex;align-items:center;gap:8px;flex:none;margin-left:auto}
 .gnb-util:empty{display:none}
-.gnb-item{position:relative;flex:none;display:flex;align-items:center;gap:6px;padding:0 7px;text-decoration:none;color:#4e5968;font-size:13.5px;font-weight:500;letter-spacing:-.01em;white-space:nowrap;transition:color .15s}
+.gnb-item{position:relative;flex:none;display:flex;align-items:center;gap:6px;padding:0 6px;text-decoration:none;color:#4e5968;font-size:13.5px;font-weight:500;letter-spacing:-.01em;white-space:nowrap;transition:color .15s}
 .gnb-ic{position:relative;flex:none;width:27px;height:27px;border-radius:8px;display:grid;place-items:center;background:var(--gbg);color:var(--gfg);transition:transform .15s,box-shadow .15s}
 .gnb-ic svg{width:16px;height:16px}
 .gnb-item:hover{color:#191f28}
@@ -19,7 +19,7 @@
 .gnb-item:focus-visible .gnb-ic{box-shadow:0 0 0 2px #fff,0 0 0 4px var(--gfg)}
 .gnb-item.on{color:#191f28;font-weight:700}
 .gnb-item.on .gnb-ic{box-shadow:inset 0 0 0 1.5px var(--gfg)}
-.gnb-item.on::after{content:"";position:absolute;left:7px;right:7px;bottom:0;height:2px;border-radius:2px 2px 0 0;background:#191f28}
+.gnb-item.on::after{content:"";position:absolute;left:6px;right:6px;bottom:0;height:2px;border-radius:2px 2px 0 0;background:#191f28}
 .gnb-badge{flex:none;font-size:10px;font-weight:700;line-height:16px;padding:0 5px;margin-left:-2px;border-radius:99px;background:#fff;color:var(--gfg);border:1px solid var(--gfg)}
 .gnb-lock{position:absolute;right:-4px;bottom:-4px;width:15px;height:15px;border-radius:50%;background:#fff;border:1px solid #e5e8ec;display:grid;place-items:center;color:#6b7684}
 .gnb-lock svg{width:9px;height:9px}
@@ -30,7 +30,9 @@
 .gnb-side .gnb-ic svg{width:15px;height:15px}
 .gnb-util:empty + .gnb-side{margin-left:auto}
 /* GNB 검색 */
-.gnb-search{position:relative;flex:0 1 210px;min-width:120px;margin-left:8px}
+@media (min-width:1200px){.gnb-nav{flex-shrink:0}}
+/* 공간이 모자라면 메뉴보다 검색창이 먼저 줄어든다 */
+.gnb-search{position:relative;flex:0 60 210px;min-width:130px;margin-left:8px}
 .gnb-search input{width:100%;height:36px;border:1px solid #e5e8ec;border-radius:10px;background:#f6f7f9;padding:0 10px 0 32px;font:inherit;font-size:13.5px;color:#191f28;transition:border-color .15s,background .15s,box-shadow .15s}
 .gnb-search input::placeholder{color:#98a1ad}
 .gnb-search input:hover{border-color:#d5dae1}
@@ -50,7 +52,6 @@
 .gnb-sempty{font-size:13px;color:#8b95a1;padding:12px 10px}
 .gnb-sall{display:block;margin-top:4px;padding:9px 10px;border-top:1px solid #eef0f3;font-size:12.5px;color:#2f6bff;text-decoration:none;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .gnb-sall:hover{background:#f5f8ff;border-radius:0 0 8px 8px}
-@media (max-width:1100px){.gnb-search{flex-basis:150px}}
 @media (max-width:640px){
   .gnb-search{display:none}
   .gnb-side{margin-left:2px}
