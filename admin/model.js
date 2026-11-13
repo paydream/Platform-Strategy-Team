@@ -1,7 +1,8 @@
 /* 아카이브 데이터 규칙 — 관리자 페이지(브라우저)와 서버 API가 같이 씀
    구조: projects[] > versions[] > items[]
-   - project: { id, title, team('design'|'planning'), category, desc, created, updated, hidden, final, versions }
-   - version: { id, label, title, desc, created, folder, preview, hidden, items:[{label, href}] }
+   - project: { id, title, team('design'|'planning'), category, desc, created, updated, hidden, final, figma?, versions }
+   - version: { id, label, title, desc, created, folder, preview, hidden, figma?, items:[{label, href}] }
+   - figma  : 피그마 원본 링크(https://www.figma.com/…). 시안 화면에 "피그마로 가기" 버튼으로 나옴. 버전 것이 우선, 없으면 프로젝트 것
    - final  : null 또는 { version: 버전id, href: 시안경로 또는 null }   ← 최종안 표시
    - trash  : [{ type:'version', projectId, deleted, version } | { type:'project', deleted, project }]
    덮어쓰기 금지: 한 번 만든 버전의 folder·preview·시안 경로는 절대 못 바꿈. 지우는 건 trash로 옮기기만 */
@@ -26,6 +27,8 @@
     }
     return map;
   }
+  const FIGMA_RE = /^https:\/\/(www\.)?figma\.com\/\S+$/;
+  const badFigma = u => u != null && u !== '' && (typeof u !== 'string' || u.length > 600 || !FIGMA_RE.test(u));
   const pathKey = v => [v.folder, v.preview, ...(v.items || []).map(i => i.href)].join('\n');
 
   // 저장 전 검사: 문제 있으면 한국어 문장, 없으면 null
@@ -47,6 +50,8 @@
       if (p.team && !TEAMS[p.team]) return '팀은 디자인 또는 기획만 고를 수 있습니다.';
       for (const k of ['title', 'desc', 'category', 'created', 'updated'])
         if (p[k] != null && (typeof p[k] !== 'string' || p[k].length > 2000)) return '글자 항목 형식이 올바르지 않습니다.';
+      if (badFigma(p.figma)) return `"${p.title}" 피그마 링크는 https://www.figma.com/ 으로 시작해야 합니다.`;
+      for (const v of p.versions || []) if (badFigma(v.figma)) return `"${p.title} ${v.label}" 피그마 링크는 https://www.figma.com/ 으로 시작해야 합니다.`;
       for (const v of p.versions || [])
         for (const k of ['label', 'title', 'desc'])
           if (v[k] != null && (typeof v[k] !== 'string' || v[k].length > 2000)) return '글자 항목 형식이 올바르지 않습니다.';
@@ -82,11 +87,13 @@
       created: s(up.version.created, 20) || today, folder: up.folder, preview: inFolder(up.version.preview) ? up.version.preview : items[0].href,
       hidden: false, items,
     });
+    const fg = s(up.version.figma, 600);
+    if (fg) { if (!FIGMA_RE.test(fg)) throw new Error('피그마 링크는 https://www.figma.com/ 으로 시작해야 합니다.'); p.versions[p.versions.length - 1].figma = fg; }
     p.updated = today;
     // 새 버전이 올라온 프로젝트는 맨 위로
     data.projects = [p, ...data.projects.filter(x => x !== p)];
     return data;
   }
 
-  return { TEAMS, FOLDER_RE, todayKST, allVersions, checkSave, addUpload };
+  return { TEAMS, FOLDER_RE, FIGMA_RE, todayKST, allVersions, checkSave, addUpload };
 });

@@ -124,6 +124,7 @@
       <div><label>폴더 이름(영문)</label><input id="vSlug" placeholder="yesform-main"></div>
     </div>
     <label>이번 버전에서 바뀐 점</label><textarea id="vDesc" placeholder="예: 카드 4종 추가, 탭 이름 통일"></textarea>
+    <label>피그마 링크 (선택 · 피그마에서 만든 시안이면 넣어 주세요. 시안 화면에 "피그마로 가기" 버튼이 생깁니다)</label><input id="vFigma" placeholder="https://www.figma.com/design/…">
     <label>시안 버튼 (이름 · 경로)</label>
     <div class="vlist" id="nVers"><p class="note">zip을 고르면 여기에 나옵니다.</p></div>
     <div class="bar"><button class="primary" id="upload" disabled>올리기</button><span class="status" id="upStatus"></span></div>
@@ -254,6 +255,7 @@ function renderList() {
           <div><label>카테고리</label><input data-f="category" value="${esc(p.category)}" list="cats"></div>
         </div>
         <label>프로젝트 설명</label><textarea data-f="desc">${esc(p.desc)}</textarea>
+        <label>피그마 링크 (프로젝트 기본 · 버전에 따로 넣으면 그 버전은 버전 링크가 우선)</label><input data-f="figma" value="${esc(p.figma || '')}" placeholder="https://www.figma.com/design/…">
         <label>버전 (최신이 아래) — ★를 누르면 확정안으로 표시, 다시 누르면 해제</label>
         ${p.versions.map((v, j) => `
           <div class="ver ${v.hidden ? 'hidden' : ''}" data-v="${j}">
@@ -267,6 +269,7 @@ function renderList() {
                 <button class="icon-btn del" data-act="delv" title="버전을 휴지통으로" aria-label="버전 삭제">${TRASH_SVG}</button>
               </div>
             </div>
+            <input data-vf="figma" value="${esc(v.figma || '')}" placeholder="이 버전 피그마 링크 (선택)" style="margin-top:6px">
             <div class="items">${v.items.map((it, k) => `
               <div class="irow" data-i="${k}"><input data-if="label" value="${esc(it.label)}" title="${esc(it.href)}">
                 <button class="fbtn ${p.final && p.final.version === v.id && p.final.href === it.href ? 'on' : ''}" data-act="finali">★ 확정안</button></div>`).join('')}</div>
@@ -422,7 +425,7 @@ $('upload').onclick = async () => {
     folder, projectId: add ? $('pPick').value : null,
     project: add ? null : { title: $('pTitle').value.trim(), team: $('pTeam').value, category: $('pCat').value.trim(), desc: $('pDesc').value.trim() },
     version: { label: $('vLabel').value.trim(), title: add ? (P().find(p => p.id === $('pPick').value) || {}).title : $('pTitle').value.trim(),
-      desc: $('vDesc').value.trim(), created: $('vCreated').value.trim() || today(),
+      desc: $('vDesc').value.trim(), created: $('vCreated').value.trim() || today(), figma: $('vFigma').value.trim(),
       preview: `${folder}/${pending.preview}`, items: pending.items.map(v => ({ label: v.label, href: `${folder}/${v.href}` })) },
   };
   $('upload').disabled = true; log.style.display = 'block'; log.textContent = '';
@@ -471,7 +474,7 @@ $('upload').onclick = async () => {
     }
     say('완료. 1~2분 뒤 사이트에 반영됩니다.');
     s.className = 'status ok'; s.textContent = '올렸습니다.';
-    pending = null; ['zip', 'pTitle', 'pDesc', 'vLabel', 'vDesc', 'vSlug'].forEach(id => $(id).value = ''); $('nVers').innerHTML = '';
+    pending = null; ['zip', 'pTitle', 'pDesc', 'vLabel', 'vDesc', 'vSlug', 'vFigma'].forEach(id => $(id).value = ''); $('nVers').innerHTML = '';
     await loadData();
   } catch (e) { fail(e.message); say('실패: ' + e.message); }
   $('upload').disabled = !pending;
