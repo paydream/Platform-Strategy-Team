@@ -3,11 +3,24 @@
 // 저장소가 공개라 비밀번호·수치는 코드에 두지 않는다. 목록(제목·기간·출처)만 여기 둔다.
 // auto: true 인 통계는 매일 자동 갱신된다 — 데이터는 data/stats/<id>.enc.json(암호화, api/_statsfile.js)에서 먼저 읽고,
 // 없으면 env 값을 쓴다. 목록의 기간·업데이트 날짜도 그 파일의 meta로 바뀐다.
+// file: true 인 항목(비밀번호 걸린 문서 등)은 data/stats/<id>.enc.json 에서만 읽는다. sidebar: false 면 사이드바 목록에 안 나온다.
 const crypto = require('crypto');
 const F = require('./_statsfile');
 
 // 메인 오른쪽 사이드바 "통계 데이터" 목록. 새 통계를 올리면 맨 앞에 추가하고, 데이터는 env에 넣는다.
 const LIST = [
+  {
+    id: 'membership-plan',
+    title: '예스폼 멤버십 요금제 변경 계획안 (2027)',
+    desc: '요금제 시안 기반 변경 내용 · 고객별 가격 영향 · 일정 · 역할 · 결정 안건',
+    product: '예스폼',
+    period: '2027 개편',
+    source: '요금제 시안 · 개편안 문서',
+    updated: '2026-11-13',
+    href: null, // 업무 아카이브 기획 프로젝트 화면에서 연다
+    file: true,
+    sidebar: false,
+  },
   {
     id: 'yesform-age',
     title: '예스폼 한국 사용자 연령·해상도',
@@ -55,7 +68,7 @@ async function withMeta(item) {
 
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
-  if (req.method === 'GET') return res.status(200).json({ list: await Promise.all(LIST.map(withMeta)) });
+  if (req.method === 'GET') return res.status(200).json({ list: await Promise.all(LIST.filter(x => x.sidebar !== false).map(withMeta)) });
   if (req.method !== 'POST') return res.status(405).json({ error: '허용되지 않는 요청입니다.' });
   if (!process.env.STATS_PASSWORD) return res.status(503).json({ error: '통계 비밀번호가 아직 설정되지 않았습니다.' });
   let b;
@@ -68,8 +81,8 @@ module.exports = async (req, res) => {
   const item = LIST.find(x => x.id === (b.id || 'marketing'));
   if (!item) return res.status(404).json({ error: '없는 통계입니다.' });
   let data = null;
-  if (item.auto) { try { data = await F.readData(item.id); } catch { data = null; } }
-  if (!data) { try { data = JSON.parse(process.env[item.env] || 'null'); } catch { data = null; } }
+  if (item.auto || item.file) { try { data = await F.readData(item.id); } catch { data = null; } }
+  if (!data && item.env) { try { data = JSON.parse(process.env[item.env] || 'null'); } catch { data = null; } }
   if (!data) return res.status(503).json({ error: '통계 데이터가 아직 없습니다.' });
   return res.status(200).json(data);
 };
