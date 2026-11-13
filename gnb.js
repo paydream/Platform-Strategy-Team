@@ -13,7 +13,7 @@
       svg: '<rect x="4" y="12" width="3.6" height="8" rx="1"' + F + '/><rect x="10.2" y="8" width="3.6" height="12" rx="1"' + F + '/><rect x="16.4" y="4" width="3.6" height="16" rx="1" fill="currentColor"/>' },
     { id: 'wbs', href: 'wbs.html', label: '팀 WBS', fg: '#7c4dff', bg: '#f0eaff',
       svg: '<rect x="3" y="4.5" width="18" height="16" rx="2.5"' + F + '/><path d="M3 9.5h18M8 3v3M16 3v3"/><path d="M7 13.2h6M10 16.8h7" stroke-width="2.6"/>' },
-    { id: 'calendar', href: 'calendar.html', label: '업데이트 캘린더', fg: '#0284c7', bg: '#e0f2fe', title: '예스폼 주요 업데이트 캘린더',
+    { id: 'calendar', href: 'calendar.html', label: '캘린더', fg: '#0284c7', bg: '#e0f2fe', title: '캘린더',
       svg: '<rect x="3" y="4.5" width="18" height="16" rx="2.5"' + F + '/><path d="M3 9.5h18M8 3v3M16 3v3"/><path d="m12 11.4 1.2 2.4 2.6.4-1.9 1.8.45 2.6L12 17.4l-2.35 1.2.45-2.6-1.9-1.8 2.6-.4z" fill="currentColor" stroke-width="1.2"/>' },
     { id: 'tracking', href: 'tracking.html', label: '측정 관리', fg: '#f07800', bg: '#fff1e0',
       svg: '<circle cx="12" cy="12" r="9"' + F + '/><circle cx="12" cy="12" r="5.2"/><circle cx="12" cy="12" r="1.8" fill="currentColor"/>' },
