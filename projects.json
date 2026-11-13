@@ -59,6 +59,22 @@
               "href": "archive/20261113-143712-yesform-membership-plan-v3/index.html"
             }
           ]
+        },
+        {
+          "id": "20261113-145943-yesform-membership-dashboard",
+          "label": "최종본",
+          "title": "예스폼 멤버십 요금제 변경 계획안 (2027)",
+          "desc": "팀 공유 대시보드로 재구성: 진행 현황·이번 주/다음 주·팀별 업무·전체 일정·업무 공유·요금제 탭",
+          "created": "2026.11.13",
+          "folder": "archive/20261113-145943-yesform-membership-dashboard",
+          "preview": "archive/20261113-145943-yesform-membership-dashboard/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "대시보드",
+              "href": "archive/20261113-145943-yesform-membership-dashboard/index.html"
+            }
+          ]
         }
       ]
     },
