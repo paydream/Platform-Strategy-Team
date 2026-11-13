@@ -20,7 +20,7 @@
           "created": "2026.11.13",
           "folder": "archive/20261113-112032-yesform-membership-plan",
           "preview": "archive/20261113-112032-yesform-membership-plan/index.html",
-          "hidden": false,
+          "hidden": true,
           "items": [
             {
               "label": "계획안",
@@ -30,7 +30,7 @@
         },
         {
           "id": "20261113-141552-yesform-membership-plan-v2",
-          "label": "v2",
+          "label": "최종본",
           "title": "예스폼 멤버십 요금제 변경 계획안 (2027)",
           "desc": "보고용 대시보드로 재구성 (현황·전체 일정 간트·오픈안 비교·결정 필요), 팀별 일정 화면에서 직접 수정",
           "created": "2026.11.13",
