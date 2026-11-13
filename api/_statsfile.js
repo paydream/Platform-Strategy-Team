@@ -44,4 +44,4 @@ async function writeData(id, data, meta) {
     } catch (e) { if (a === 2 || (e.status !== 409 && e.status !== 422)) throw e; }
   }
 }
-module.exports = { readMeta, readData, writeData, pathOf };
+module.exports = { readMeta, readData, writeData, pathOf, seal, open };
