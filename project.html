@@ -32,6 +32,20 @@
   .hbtn .n{font-size:11px;background:rgba(255,255,255,.25);border-radius:99px;padding:0 6px}
   .hbtn.list .n{background:#eef0f3;color:var(--sub)}
 
+  /* 왼쪽 버전 사이드바: 버전이 2개 이상일 때, 최근 3개까지 */
+  .vside{width:220px;flex:none;background:var(--card);border-right:1px solid var(--line);overflow:auto;padding:14px 10px}
+  .vside h3{font-size:12px;font-weight:600;color:var(--sub);padding:0 8px 8px;display:flex;justify-content:space-between}
+  .vlink{display:block;text-decoration:none;color:var(--text);border-radius:8px;padding:9px 10px;margin-bottom:2px}
+  .vlink:hover{background:#f2f5fb}
+  .vlink.on{background:var(--chip)}
+  .vlink.on .vl{color:var(--accent)}
+  .vl{display:block;font-size:13px;font-weight:600;line-height:1.4;word-break:keep-all}
+  .vm{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--sub);margin-top:3px}
+  .vlink .chip{font-size:10px;padding:1px 6px}
+  .vd{font-size:12px;color:var(--sub);margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:keep-all}
+  .vgap{font-size:11px;color:var(--sub);padding:6px 10px 2px}
+  @media (max-width:900px){.vside{display:none}}
+
   /* 본문: 시안 화면 + (코멘트가 열리면) 오른쪽 사이드바 */
   .main{flex:1;display:flex;min-height:0}
   .frame{flex:1;min-width:0;background:#e9ecf0}
@@ -102,7 +116,7 @@ try { if (!sessionStorage.getItem('pst_stats_pw')) sessionStorage.setItem('pst_s
 const store = { get(k){ try { return localStorage.getItem(k) || ''; } catch { return ''; } }, set(k,v){ try { localStorage.setItem(k,v); } catch {} }, del(k){ try { localStorage.removeItem(k); } catch {} } };
 const $ = id => document.getElementById(id);
 const params = new URLSearchParams(location.search);
-let P = null, V = null, href = null, comments = [], commentsOn = true;
+let P = null, V = null, defV = null, href = null, comments = [], commentsOn = true;
 
 const fmt = iso => { const d = new Date(iso); const z = n => String(n).padStart(2, '0'); return `${d.getFullYear()}.${z(d.getMonth()+1)}.${z(d.getDate())} ${z(d.getHours())}:${z(d.getMinutes())}`; };
 const here = () => comments.filter(c => c.version === V.id && c.href === href);
@@ -125,6 +139,7 @@ function shell() {
       </div>
     </header>
     <div class="main">
+      <nav class="vside" id="vside" aria-label="버전" hidden></nav>
       <div class="frame"><iframe id="frame" title="시안 화면"></iframe></div>
       <aside class="side" id="side" aria-label="코멘트">
         <div class="side-head"><b id="sideTitle">코멘트</b><small id="sideWhere"></small><button id="closeSide" aria-label="닫기">×</button></div>
@@ -134,11 +149,23 @@ function shell() {
   // 피그마 원본 링크: 보고 있는 버전의 figma → 없으면 프로젝트의 figma
   const fu = [V.figma, P.figma].find(u => typeof u === 'string' && /^https:\/\/(www\.)?figma\.com\//.test(u));
   if (fu) { $('figmaLink').href = fu; $('figmaLink').style.display = ''; }
+  renderVersions();
   $('openModal').onclick = openModal;
   $('openSide').onclick = () => openSide(true);
   $('closeSide').onclick = () => openSide(false);
   $('clist').addEventListener('click', e => { const b = e.target.closest('[data-del]'); if (b) delComment(b.dataset.del); });
   $('finalBtnBox').addEventListener('click', e => { if (e.target.closest('#fpick')) toggleFinal(); });
+}
+// 왼쪽 버전 목록: 숨기지 않은 버전이 2개 이상이면 최근 3개(최신이 위). 보고 있는 버전이 그 밖이면 아래에 따로 붙임
+function renderVersions() {
+  const vs = P.versions.filter(v => !v.hidden), box = $('vside');
+  if (vs.length < 2) { box.hidden = true; return; }
+  const recent = vs.slice(-3).reverse(), extra = recent.includes(V) ? null : V;
+  const row = v => `<a class="vlink${v === V ? ' on' : ''}" href="project.html?id=${encodeURIComponent(P.id)}&v=${encodeURIComponent(v.id)}"${v === V ? ' aria-current="page"' : ''}>
+      <span class="vl">${esc(v.label)}</span><span class="vm"><time>${esc(v.created || '')}</time>${P.final && P.final.version === v.id ? '<span class="chip final">확정안</span>' : ''}</span>
+      ${(v.desc || v.title) ? `<span class="vd">${esc(v.desc || v.title)}</span>` : ''}</a>`;
+  box.innerHTML = `<h3><span>버전</span><span>${vs.length > 3 ? `최근 3개 · 전체 ${vs.length}개` : `${vs.length}개`}</span></h3>${recent.map(row).join('')}${extra ? '<div class="vgap">보고 있는 버전</div>' + row(extra) : ''}`;
+  box.hidden = false;
 }
 function renderHeader() {
   const label = (V.items.find(i => i.href === href) || {}).label || decodeURI(href.split('/').slice(-2).join('/'));
@@ -179,7 +206,7 @@ function trackFrame() {
 function select(h) {
   href = h;
   $('frame').src = encodeURI(h);
-  const u = new URL(location); u.searchParams.set('h', h); u.searchParams.delete('v'); history.replaceState(null, '', u);
+  const u = new URL(location); u.searchParams.set('h', h); if (V !== defV) u.searchParams.set('v', V.id); else u.searchParams.delete('v'); history.replaceState(null, '', u);
   renderHeader();
   // 다른 화면으로 바꾸면: 그 화면에 코멘트가 있을 때만 열린 사이드바 유지
   if ($('side').classList.contains('open')) { if (here().length) renderComments(); else openSide(false); }
@@ -259,7 +286,8 @@ async function toggleFinal() {
   if (!P || !vs.length) { $('app').innerHTML = '<p class="notfound">프로젝트를 찾지 못했습니다. <a href="./">목록으로</a></p>'; return; }
   // 버전은 고르지 않음: 확정안 버전 → 없으면 최신 버전 하나만 보여 줌 (주소에 v가 있으면 그 버전)
   const fv = P.final && vs.find(v => v.id === P.final.version);
-  V = vs.find(v => v.id === params.get('v')) || fv || vs[vs.length - 1];
+  defV = fv || vs[vs.length - 1];
+  V = vs.find(v => v.id === params.get('v')) || (params.get('h') && vs.find(v => v.items.some(i => i.href === params.get('h')))) || defV;
   shell(); trackFrame();
   try {
     const r = await fetch(`api/comments?project=${encodeURIComponent(P.id)}`, { cache: 'no-store' });

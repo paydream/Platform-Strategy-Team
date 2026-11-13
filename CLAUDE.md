@@ -19,8 +19,9 @@
 - 통계 화면(stats*.html)·비밀번호 문서 셸은 들어오면 바로 열리고, 쿠키가 없을 때만 예전 비밀번호 화면을 보여준다. 새 화면을 만들 때 따로 비밀번호를 넣지 않는다.
 
 ## 데이터 (`projects.json`, version 2)
-- `projects[]`: `{ id, title, team('design'|'planning'), category, desc, created, updated, hidden, final, versions[] }`. 배열 순서 = 화면 순서.
-- `versions[]`: `{ id, label('v1'…), title, desc(바뀐 점), created, folder, preview, hidden, items[{label, href}] }`. 오래된 것이 앞.
+- `projects[]`: `{ id, title, team('design'|'planning'), category, desc, created, updated, hidden, final, figma?, versions[] }`. 배열 순서 = 화면 순서.
+- `versions[]`: `{ id, label('v1'…), title, desc(바뀐 점), created, folder, preview, hidden, figma?, items[{label, href}] }`. 오래된 것이 앞.
+- `figma`: 피그마 원본 링크(https://www.figma.com/…만 허용). 시안 화면 헤더에 「피그마로 가기 ↗」 버튼으로 나옴(버전 것 → 없으면 프로젝트 것). **시안을 올릴 때 피그마에서 만든 것이면 반드시 링크를 넣는다.** 관리자 「새 시안 올리기」의 피그마 링크 칸은 자동으로 채워짐: zip 안 HTML에 적힌 피그마 주소나 `Figma … <22자 파일키> / 노드` 표기 → 없으면 기존 프로젝트의 마지막 피그마 링크. 서버(`admin/model.js` addUpload)도 링크 없이 올라온 새 버전에 이전 버전·프로젝트 링크를 이어 붙인다.
 - `final`(확정안, 디자인 프로젝트는 관리자 3번의 "확정안" 칸이나 프로젝트 화면의 "이 시안을 확정안으로" 버튼으로 지정): `null` 또는 `{ version: 버전id, href: 시안경로|null }` (href가 null이면 버전 전체가 최종안).
 - `trash[]`: `{type:'version', projectId, deleted, version}` 또는 `{type:'project', deleted, project}`.
 - 규칙 코드는 `admin/model.js` 한 곳(관리자 페이지와 서버 API가 같이 씀).
@@ -31,7 +32,7 @@
 - 이 파일만 바뀐 커밋은 재배포하지 않는다(`vercel.json` ignoreCommand). 코멘트는 `/api/comments`가 GitHub에서 바로 읽는다.
 
 ## 화면·API
-- `/` 프로젝트 목록(전체/디자인/기획), `/project.html?id=…` 시안 보기(버전 선택 없음: 확정안 버전 → 없으면 최신 버전, 시안 전환은 시안 화면 안의 자체 전환 바를 쓰고 페이지가 iframe 경로를 따라감), 헤더 "코멘트" 버튼 → 작성 모달 → 저장 시 오른쪽 사이드바에 코멘트 표시, `/admin/` 관리자.
+- `/` 프로젝트 목록(전체/디자인/기획), `/project.html?id=…` 시안 보기(기본 = 확정안 버전 → 없으면 최신 버전. 버전이 2개 이상이면 왼쪽 사이드바에 최근 3개 버전 링크(`&v=버전id`), 보고 있는 버전이 그 밖이면 아래에 따로 표시, 시안 전환은 시안 화면 안의 자체 전환 바를 쓰고 페이지가 iframe 경로를 따라감), 헤더 "코멘트" 버튼 → 작성 모달 → 저장 시 오른쪽 사이드바에 코멘트 표시, `/admin/` 관리자.
 - `/api/projects`(목록 저장), `/api/upload`(올리기), `/api/comments`(코멘트). Vercel 환경변수: `GITHUB_TOKEN`, `ADMIN_PASSWORD`, `TEAM_PASSWORD`(선택).
 
 ## 예전 위치(2026.10.07~08에 올린 것, 그대로 유지)
