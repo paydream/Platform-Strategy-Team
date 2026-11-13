@@ -254,7 +254,7 @@ const TIP = {
   '목표 활성 사용자': "GA4 월 순 사용자예요. 같은 사람이 다시 와도 한 번만 세서 날짜에 비례해 늘지 않아, '지금 속도면 월말' 환산은 실제보다 높게 나올 수 있어요.",
   '목표 결제 건수': '예스폼싸인 관리자 결제 통계 기준이에요.'
 };
-const ti = (k, t) => { const s = t || TIP[k]; return s ? `<span class="ti" tabindex="0" role="button" aria-label="${esc(k)} 설명" data-tip="${esc(s)}">i</span>` : ''; };
+const ti = () => ''; // 인포(i) 아이콘 툴팁은 사용자 요청으로 끔 (2026-11-13). TIP 설명은 남겨 둠
 const TL = k => `${k}${ti(k)}`; // 지표명 + i 툴팁 (지역 변수 L과 겹치지 않게 TL)
 (function () {
   const box = document.createElement('div'); box.className = 'tipbox'; box.setAttribute('role', 'tooltip'); box.hidden = true; document.body.appendChild(box);
