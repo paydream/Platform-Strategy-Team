@@ -105,6 +105,10 @@
   .blk > h2{font-size:18px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
   .blk > h2 small{font-size:13px;font-weight:400;color:var(--sub)}
   .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}
+  .kpis.k5{grid-template-columns:repeat(5,1fr)}
+  @media (max-width:1240px){.kpis.k5{grid-template-columns:repeat(3,1fr)}}
+  @media (max-width:960px){.kpis.k5{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:520px){.kpis.k5{grid-template-columns:1fr}}
   .kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
   .kpi.main{border-color:var(--c-soft);background:linear-gradient(180deg,var(--c-bg),#fff 70%)}
   .kpi .l{font-size:14px;color:var(--sub);font-weight:500}
@@ -433,8 +437,9 @@ function signView({ m, pm, cd, pd, mk, pmk, label }) {
     <ul>${bullets.map(b => `<li>${b}</li>`).join('')}</ul></div>
 
   <section class="blk"><h2>핵심 지표 <small>${CMP.note}</small></h2>
-    <div class="kpis">
+    <div class="kpis${S.contrib ? ' k5' : ''}">
       ${kpi('결제 건수', pay[0], '건', dPay, `결제 금액 ${won(pay[1])}${pList.length ? `<span class="ksrc">${srcGroup(pList).slice(0, 5).map(([k, [n]]) => `<i>${esc(k)} ${n}건</i>`).join('')}${srcGroup(pList).length > 5 ? `<i>외 ${srcGroup(pList).length - 5}곳</i>` : ''}</span>` : ''}`, true)}
+      ${S.contrib ? kpi('예스폼 기여 결제', S.contrib[1], '원', diff(S.contrib[1], P && P.contrib && P.contrib[1], cd, pd), `${fmt(S.contrib[0])}건 · 싸인 이용자의 예스폼 플랜 결제 (기여통계)`) : ''}
       ${kpi('신규 가입', S.signup, '명', dSign, `방문자의 ${pctTxt(pct(S.signup, S.visit))}`)}
       ${kpi('방문자', S.visit, '명', dVisit, (cd > 1 ? `일평균 ${fmt(S.visit / cd)}명 · 일별 합계` : view === 'week' ? `하루 평균 ${fmt(S.visit / 7)}명 · 일별 합계` : `${CMP.short} ${fmt(P && P.visit)}명`))}
       ${kpi('전자계약 실사용자', S.users, '명', diff(S.users, P && P.users, cd, pd), `에디터 경유 ${fmt(S.editorUsers)}명${view === 'week' ? ' · 일별 합계' : ''}`)}
@@ -498,9 +503,9 @@ function periodTable(p) {
   let L = view === 'day' ? D.periods.day.slice(-7).reverse() : wAligned(12);
   if (view === 'week' && !L.some(x => x.k === pkey.week)) L = [wFind(pkey.week), ...L];
   const ev = (x, k) => (x.editor.ev[k] || [0, 0])[1];
-  const head = p === 'editor' ? ['활성 사용자', '신규 사용자', '문서 생성', '내보내기', '싸인 연결'] : ['방문자', '신규 가입', '결제', '결제 금액', '전자계약 실사용자', 'GA4 사용자'];
+  const head = p === 'editor' ? ['활성 사용자', '신규 사용자', '문서 생성', '내보내기', '싸인 연결'] : ['방문자', '신규 가입', '결제', '결제 금액', '예스폼 기여 결제', '전자계약 실사용자', 'GA4 사용자'];
   const row = x => p === 'editor' ? [x.editor.active, x.editor.new, ev(x, 'document_create'), ev(x, 'export_document'), ev(x, 'sign_entry')].map(fmt)
-    : [fmt(x.sign.visit), fmt(x.sign.signup), paySrcCell(x.mkt.sign.pay[0], x.s, x.e), won(x.mkt.sign.pay[1]), fmt(x.sign.users), fmt(x.sign.active)];
+    : [fmt(x.sign.visit), fmt(x.sign.signup), paySrcCell(x.mkt.sign.pay[0], x.s, x.e), won(x.mkt.sign.pay[1]), x.sign.contrib ? `${won(x.sign.contrib[1])}<span class="psm">${fmt(x.sign.contrib[0])}건</span>` : '-', fmt(x.sign.users), fmt(x.sign.active)];
   const lbl = x => view === 'day' ? `${MD(x.k)} (${wday(x.k)})` : dRange(x.s, x.e);
   return `<section class="blk"><h2>${view === 'day' ? '일별 추이 표 <small>최근 7일 · 사용자는 하루 순 사용자</small>' : '7일 단위 추이 <small>어제부터 7일씩 끊어서 · 사용자는 7일 순 사용자, 방문자·실사용자는 일별 합계</small>'}</h2>
     <div class="card"><div class="scroll"><table class="tbl"><thead><tr><th>${view === 'day' ? '날짜' : '기간'}</th>${head.map(h => `<th>${h}</th>`).join('')}</tr></thead>
@@ -508,10 +513,10 @@ function periodTable(p) {
 }
 function weekTable(p) {
   const W = D.weeks.slice().reverse();
-  const head = p === 'editor' ? ['활성 사용자', '신규 사용자', '문서 생성', '내보내기', '싸인 연결'] : ['방문자', '신규 가입', '결제', '결제 금액', 'GA4 사용자'];
+  const head = p === 'editor' ? ['활성 사용자', '신규 사용자', '문서 생성', '내보내기', '싸인 연결'] : ['방문자', '신규 가입', '결제', '결제 금액', '예스폼 기여 결제', 'GA4 사용자'];
   const row = w => { const u = k => (w.editor.ev[k] || [0, 0])[1];
     return p === 'editor' ? [w.editor.active, w.editor.new, u('document_create'), u('export_document'), u('sign_entry')].map(fmt)
-      : [fmt(w.sign.visit), fmt(w.sign.signup), paySrcCell(w.sign.pay[0], w.s, w.e), won(w.sign.pay[1]), fmt(w.sign.active)]; };
+      : [fmt(w.sign.visit), fmt(w.sign.signup), paySrcCell(w.sign.pay[0], w.s, w.e), won(w.sign.pay[1]), w.sign.contrib ? `${won(w.sign.contrib[1])}<span class="psm">${fmt(w.sign.contrib[0])}건</span>` : '-', fmt(w.sign.active)]; };
   return `<section class="blk"><h2>주간 추이 <small>월~일 기준 · 사용자는 주간 순 사용자, 방문자는 일별 합계</small></h2>
     <div class="card"><div class="scroll"><table class="tbl"><thead><tr><th>주</th>${head.map(h => `<th>${h}</th>`).join('')}</tr></thead>
     <tbody>${W.map(w => { const part = (new Date(w.e) - new Date(w.s)) / 864e5 < 6; return `<tr><td>${dRange(w.s, w.e)}${part ? ' <span class="muted">(진행 중)</span>' : ''}</td>${row(w).map(v => `<td>${v}</td>`).join('')}</tr>`; }).join('')}</tbody></table></div></div></section>`;
@@ -521,7 +526,7 @@ function monthTable(p) {
   const rows = p === 'editor'
     ? [['활성 사용자', x => fmt(x.editor.active)], ['신규 사용자', x => fmt(x.editor.new)], ['에디터 진입', x => fmt(ev(x, 'editor_entry'))], ['문서 생성', x => fmt(ev(x, 'document_create'))],
        ['문서 생성률', x => pctTxt(pct(ev(x, 'document_create'), x.editor.active))], ['문서 내보내기', x => fmt(ev(x, 'export_document'))], ['싸인 연결', x => fmt(ev(x, 'sign_entry'))], ['로그인 성공', x => fmt(ev(x, 'login_success'))]]
-    : [['결제 건수', x => fmt((D.mkt.sign[x.m].pay || [])[0])], ['결제 금액', x => won((D.mkt.sign[x.m].pay || [])[1])], ['신규 가입', x => fmt(x.sign.signup)], ['방문자', x => fmt(x.sign.visit)],
+    : [['예스폼 기여 결제', x => x.sign.contrib ? `${won(x.sign.contrib[1])} (${fmt(x.sign.contrib[0])}건)` : '-'], ['결제 건수', x => fmt((D.mkt.sign[x.m].pay || [])[0])], ['결제 금액', x => won((D.mkt.sign[x.m].pay || [])[1])], ['신규 가입', x => fmt(x.sign.signup)], ['방문자', x => fmt(x.sign.visit)],
        ['가입률 (방문 대비)', x => pctTxt(pct(x.sign.signup, x.sign.visit))], ['전자계약 실사용자', x => fmt(x.sign.users)], ['에디터 경유 실사용자', x => fmt(x.sign.editorUsers)], ['GA4 활성 사용자', x => fmt(x.sign.active)]];
   return `<section class="blk"><h2>월별 비교</h2><div class="card"><div class="scroll"><table class="tbl">
     <thead><tr><th>지표</th>${D.months.map(x => `<th>${mLabel(x)}</th>`).join('')}</tr></thead>
@@ -535,6 +540,7 @@ function notes() {
     <li>10/19 에디터 정식 런칭 전 수치(8~10월 초)는 런칭 전 운영 기간 데이터예요.</li>` : `
     <li>결제·가입·방문·전자계약 실사용자는 예스폼싸인 관리자 통계예요. 관리자 통계에는 내부 테스트 계정이 섞여 있어요.</li>
     <li>지면·캠페인별 성과는 관리자 유입 결제 통계로, 유입 URL로 등록된 경로만 잡혀요. 직접 방문이나 검색 유입은 이 표에 없어요.</li>
+    <li>예스폼 기여 결제는 관리자 「예스폼 기여통계」의 기여 결제(건수·금액)예요. 싸인 이용자가 예스폼 플랜(1WB~1ME)을 결제한 것으로, 싸인 결제 건수·금액과는 따로 세요.</li>
     <li>결제 출처는 ① 관리자 유입 결제 통계(등록된 유입 링크)에 잡힌 결제면 그 지면 이름(같은 날짜·금액으로 맞춤), ② 아니면 관리자 결제 목록의 주문번호와 GA4 결제(purchase) 이벤트를 맞춰 그 결제가 일어난 방문의 유입 경로(소스/매체·캠페인·첫 페이지)로 정했어요. 결제 건별 목록의 회색 글씨에 근거가 같이 나와요. 10/6 이전 일부 결제는 GA4 기록이 없어 '출처 기록 없음'이에요. 네이버 광고 태그(NaPm)가 붙은 방문은 GA4에 naver / organic으로 잡혀도 네이버 검색광고로 분류했어요.</li>
     <li>유입 채널별 사용자는 GA4 예스폼싸인 속성(전체 국가)의 세션 소스/매체를 묶은 거예요. 매출은 GA4를 쓰지 않아요.</li>
     <li>${last} 전자계약 실사용자는 관리자 월간 값이라 업데이트 당일이 일부 들어 있을 수 있어요.</li>`}
