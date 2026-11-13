@@ -2,6 +2,35 @@
   "version": 2,
   "projects": [
     {
+      "id": "20261113-112032-yesform-membership-plan",
+      "title": "예스폼 멤버십 요금제 변경 계획안 (2027)",
+      "team": "planning",
+      "category": "요금제",
+      "desc": "요금제 시안(yesform-custom.vercel.app/pricing) 기반 2027 멤버십 개편 실행 계획. 비밀번호 필요.",
+      "created": "2026.11.13",
+      "updated": "2026.11.13",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261113-112032-yesform-membership-plan",
+          "label": "팀장 협의용 초안",
+          "title": "예스폼 멤버십 요금제 변경 계획안 (2027)",
+          "desc": "최초 작성: 변경 내용, 혜택 변화 점검, 고객별 가격 영향, 매출 영향, 기존 회원 전환, 일정, 역할, 작업 범위, 성과 지표, 결정 안건",
+          "created": "2026.11.13",
+          "folder": "archive/20261113-112032-yesform-membership-plan",
+          "preview": "archive/20261113-112032-yesform-membership-plan/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "계획안",
+              "href": "archive/20261113-112032-yesform-membership-plan/index.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "20261106-180001-yesform-login-modal",
       "title": "예스폼 메인 로그인 모달 (업무 브리핑)",
       "team": "design",
