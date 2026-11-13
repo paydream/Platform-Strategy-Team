@@ -148,7 +148,7 @@
           "created": "2026.11.13",
           "folder": "archive/20261113-161738-yesform-membership-dashboard-todo",
           "preview": "archive/20261113-161738-yesform-membership-dashboard-todo/index.html",
-          "hidden": false,
+          "hidden": true,
           "items": [
             {
               "label": "대시보드",
