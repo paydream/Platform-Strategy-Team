@@ -62,8 +62,9 @@
 
 ## 공통 GNB (`gnb.css` · `gnb.js`)
 - 한 줄(높이 60px, 아래 테두리 포함): 왼쪽 "플랫폼전략팀" 텍스트 로고(이미지 마크 없음, 누르면 메인 홈 `./`) · 메뉴(아이콘+메뉴명) · 화면별 버튼(`.gnb-util`) · 맨 오른쪽 구분선 뒤 「관리자」(`.gnb-side`).
-- 메뉴 순서: 업무 아카이브 · 주요 업무 · 에디터/싸인 지표 · 팀 WBS · 캘린더 · 측정 관리 · 데이터 | 관리자. 메뉴 추가·순서·아이콘 변경은 `gnb.js`의 `MENU`만 고치면 모든 화면에 반영된다(`side: true`면 맨 오른쪽 따로). 스타일은 `gnb.css`.
+- 메뉴 순서: 업무 아카이브 · 주요 업무 · 에디터/싸인 지표 · 팀 WBS · 캘린더 · GA(측정 관리, tracking.html) · 데이터 · [검색창] | 관리자. 메뉴 추가·순서·아이콘 변경은 `gnb.js`의 `MENU`만 고치면 모든 화면에 반영된다(`side: true`면 맨 오른쪽 따로). 스타일은 `gnb.css`.
 - 화면 마크업: `<header class="gnb"><div class="wrap gnb-top"><a class="gnb-logo" href="./"><strong>플랫폼전략팀</strong></a><div class="gnb-util">화면별 버튼(잠그기 등)</div></div><nav class="wrap gnb-nav" data-current="메뉴id"></nav><script src="gnb.js"></script></header>`, `<head>`에 `<link rel="stylesheet" href="gnb.css">`. `gnb.js`가 nav를 로고와 `.gnb-util` 사이로 옮기고 관리자를 끝에 붙인다.
+- 검색: `gnb.js`의 `initSearch`가 메뉴 오른쪽에 검색창을 붙인다. 메뉴(label + `kw` 추가 검색어)와 업무 아카이브 프로젝트(`projects.json`의 제목·설명·카테고리·버전명)를 띄어쓰기 단어 모두 포함으로 찾는다. 결과를 누르면 그 화면/`project.html?id=`로, 선택 없이 Enter면 `./?q=검색어`(메인 목록 검색창에 채워짐)로 간다. 단축키 `/`. 640px 이하에서는 숨긴다.
 - 메뉴 id: `archive`, `work`(work.html), `metrics`(stats.html), `wbs`, `calendar`(calendar.html), `tracking`, `stats`(데이터 = stats-age*.html), `admin`. 새 화면을 만들면 같은 마크업을 쓴다.
 
 ## 캘린더 (`/calendar.html`)

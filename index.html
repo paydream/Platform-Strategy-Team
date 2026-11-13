@@ -123,6 +123,9 @@ document.querySelector('.tabs').addEventListener('click', e => {
   document.querySelectorAll('.tabs button').forEach(x => x.setAttribute('aria-selected', x === b));
   render();
 });
+// GNB 검색에서 넘어온 검색어(?q=)
+const q0 = new URLSearchParams(location.search).get('q');
+if (q0) { q = q0.trim(); document.getElementById('q').value = q; }
 document.getElementById('q').addEventListener('input', e => { q = e.target.value.trim(); render(); });
 fetch('projects.json', { cache: 'no-store' }).then(r => r.json()).then(d => { projects = d.projects || []; render(); });
 fetch('api/comments?summary=1', { cache: 'no-store' }).then(r => r.ok ? r.json() : {}).then(d => { counts = d.counts || {}; if (projects.length) render(); }).catch(() => {});
