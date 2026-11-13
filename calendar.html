@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>예스폼 주요 업데이트 캘린더 | 플랫폼전략팀 업무 아카이브</title>
+<title>캘린더 | 플랫폼전략팀 업무 아카이브</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="gnb.css">
 <style>
@@ -96,6 +96,32 @@
   .links{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
   .links a{font-size:12px;color:var(--accent);text-decoration:none;font-weight:600;border:1px solid #c9d8ff;border-radius:8px;padding:4px 10px;background:#f5f8ff}
   .err{background:#fff4e5;color:#b45309;border:1px solid #fcd9a8;border-radius:12px;padding:14px 16px;font-size:13px;margin-bottom:12px}
+  .btn{height:38px;padding:0 16px;border-radius:10px;border:1px solid var(--line);background:#fff;font-size:14px;font-weight:600;color:var(--text)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.primary:hover{filter:brightness(.95)}
+  .btn:disabled{opacity:.6;cursor:default}
+  .tbtn.danger{color:#e5484d}
+  .tbtn.danger:hover{border-color:#f5b5b7}
+  .dact{display:flex;gap:6px;margin-top:14px}
+  .day{cursor:default}
+  .mback{position:fixed;inset:0;background:rgba(15,23,42,.36);display:grid;place-items:center;z-index:50;padding:20px}
+  .modal{background:#fff;border-radius:16px;width:100%;max-width:440px;padding:22px;box-shadow:0 20px 50px rgba(0,0,0,.18)}
+  .modal h3{font-size:17px;margin-bottom:14px}
+  .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .fgrid label{display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--sub);font-weight:600}
+  .fgrid .full{grid-column:1/-1}
+  .fgrid input,.fgrid select,.fgrid textarea{font:inherit;font-size:14px;color:var(--text);border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:#fff;font-weight:400}
+  .fgrid input,.fgrid select{height:38px}
+  .fgrid textarea{min-height:72px;resize:vertical}
+  .fgrid input:focus,.fgrid select:focus,.fgrid textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(47,107,255,.12)}
+  .picks{display:flex;gap:6px;flex-wrap:wrap}
+  .pick{cursor:pointer}
+  .pick input{position:absolute;opacity:0;pointer-events:none}
+  .pick span{display:inline-flex;align-items:center;height:32px;padding:0 12px;border-radius:99px;border:1px solid var(--line);font-size:13px;color:var(--sub);font-weight:500}
+  .pick input:checked+span{background:var(--cb);border-color:var(--c);color:var(--c);font-weight:700}
+  .pick input:focus-visible+span{box-shadow:0 0 0 3px rgba(47,107,255,.2)}
+  .mfoot{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-top:18px}
+  .mfoot .ferr{flex:1;font-size:12px;color:#e5484d}
   @media (max-width:1000px){.layout{grid-template-columns:1fr}.side{position:static}.list{max-height:none}}
   @media (max-width:720px){.calcard{display:none}.mnav h2{font-size:18px;min-width:100px}}
 </style>
@@ -104,8 +130,8 @@
 <header class="gnb"><div class="wrap gnb-top"><a class="gnb-logo" href="./" title="메인 홈으로"><strong>플랫폼전략팀</strong></a><div class="gnb-util"></div></div><nav class="wrap gnb-nav" data-current="calendar" aria-label="주요 메뉴"></nav><script src="gnb.js"></script></header>
 <main class="wrap">
   <div class="hero">
-    <h1>예스폼 주요 업데이트 캘린더</h1>
-    <div class="src" id="src"><span><span class="dot warn"></span>불러오는 중…</span></div>
+    <h1>캘린더</h1>
+    <button class="btn primary" id="addBtn" type="button">+ 일정 추가</button>
   </div>
   <div class="err" id="err" hidden></div>
   <div class="bar">
@@ -131,23 +157,32 @@
     </aside>
   </div>
 </main>
+<div class="mback" id="fBack" hidden>
+  <form class="modal" id="fForm" autocomplete="off">
+    <h3 id="fTitle">일정 추가</h3>
+    <div class="fgrid">
+      <label class="full">일정<input name="title" maxlength="100" required></label>
+      <label>시작일<input name="start" type="date" required></label>
+      <label>종료일<input name="end" type="date"></label>
+      <div class="full fgrid" style="grid-template-columns:1fr"><label>담당자</label><div class="picks" id="fTeam"></div></div>
+      <label>상태<select name="st" id="fSt"></select></label>
+      <label>링크<input name="link" type="url" maxlength="500" placeholder="https://"></label>
+      <label class="full">메모<textarea name="memo" maxlength="1000"></textarea></label>
+    </div>
+    <div class="mfoot"><span class="ferr" id="fErr" role="alert"></span><button type="button" class="tbtn" id="fCancel">취소</button><button type="submit" class="btn primary" id="fSave">저장</button></div>
+  </form>
+</div>
 <script>
 (function () {
-  const API = 'https://yesform-bs-dashboard.vercel.app/api/master?tab=';
-  const STORE = '/api/calendar';   // 플로우 게시판 업무 저장본(작업자 = 유영경·심현지·박채은)
-  const BOARD = 'https://yesform-schedule-board.vercel.app/';
+  const STORE = '/api/calendar';
   // 우리 팀 3명만 추적한다
   const PEOPLE = [
-    { id: 'yu', name: '유영경', fg: 'var(--yu)', bg: 'var(--yu-bg)', re: /유영경|ykwillow/i },
-    { id: 'sim', name: '심현지', fg: 'var(--sim)', bg: 'var(--sim-bg)', re: /심현지|hyunji\s*sim/i,
-      byName: s => /디자인/.test(s) && !/디자인\s*(시스템|토큰|가이드)/.test(s) },
-    { id: 'park', name: '박채은', fg: 'var(--park)', bg: 'var(--park-bg)', re: /박채은|park\s*chae\s*eun/i,
-      byName: s => /기획/.test(s) }
+    { id: 'yu', name: '유영경', fg: 'var(--yu)', bg: 'var(--yu-bg)' },
+    { id: 'sim', name: '심현지', fg: 'var(--sim)', bg: 'var(--sim-bg)' },
+    { id: 'park', name: '박채은', fg: 'var(--park)', bg: 'var(--park-bg)' }
   ];
   const PBY = Object.fromEntries(PEOPLE.map(p => [p.name, p]));
-  // 현황판 WBS에서 빼는 프로젝트(팀 WBS 화면과 같은 기준)
-  const SKIP = new Set(['웹 업무자동화', '에디터·싸인 통합', '예스폼', '마케팅', '주요 콘텐츠']);
-  const SRC = { flow: '플로우', wbs: '현황판 WBS' };
+  const STATES = ['예정', '진행 중', '완료'];
   const $ = s => document.querySelector(s);
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const pad = n => String(n).padStart(2, '0');
@@ -158,70 +193,39 @@
   const period = x => x.noDate ? '기간 미정 · 등록 ' + fmt(x.start) : fmt(x.start) + (+x.end !== +x.start ? ' ~ ' + fmt(x.end) : '');
   const today = new Date(); today.setHours(0, 0, 0, 0);
 
-  function parseCSV(t) { const rows = []; let row = [], f = '', q = false;
-    for (let i = 0; i < t.length; i++) { const c = t[i];
-      if (q) { if (c === '"') { if (t[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += c; }
-      else if (c === '"') q = true; else if (c === ',') { row.push(f); f = ''; }
-      else if (c === '\n' || c === '\r') { if (c === '\r' && t[i + 1] === '\n') i++; row.push(f); rows.push(row); row = []; f = ''; }
-      else f += c; }
-    if (f || row.length) { row.push(f); rows.push(row); } return rows; }
-  function records(csv) { const r = parseCSV(csv); const h = r[0] || []; return r.slice(1).filter(x => x.length > 1).map(x => Object.fromEntries(h.map((k, i) => [k.trim(), (x[i] || '').trim()]))); }
-
   function stClass(s) { if (/완료/.test(s)) return 'done'; if (/진행|피드백/.test(s)) return 'now'; return 'wait'; }
 
-  // 플로우 업무: 기간(시작·마감일)이 있으면 그 기간, 없으면 등록일에 '기간 미정'으로 둔다
-  function fromFlow(items) {
+  // 저장된 업무: 기간(시작·마감일)이 있으면 그 기간, 없으면 등록일에 '기간 미정'으로 둔다
+  function fromStore(items) {
     return (items || []).map(x => {
       const s = parseD(x.start), e = parseD(x.end), r = parseD(x.reg);
       const start = s || e || r, end = e && s ? (e < s ? s : e) : (s || e || r);
       if (!start) return null;
       const team = (x.team || []).filter(n => PBY[n]);
       if (!team.length) return null;
-      return { src: 'flow', title: x.title, proj: x.proj, parent: x.parent, st: x.st || '요청', team, workers: x.workers || [], by: x.by, reg: r, start, end, noDate: !s && !e };
+      return { src: 'store', title: x.title, proj: x.proj, parent: x.parent, st: x.st || '요청', team, workers: x.workers || [], by: x.by, reg: r, start, end, noDate: !s && !e };
+    }).filter(Boolean);
+  }
+  // 직접 추가한 일정
+  function fromManual(items) {
+    return (items || []).map(x => {
+      const start = parseD(x.start); if (!start) return null;
+      const e = parseD(x.end), team = (x.team || []).filter(n => PBY[n]);
+      if (!team.length) return null;
+      return { src: 'manual', mid: x.id, raw: x, title: x.title, st: x.st || '예정', team, workers: [], start, end: e && e >= start ? e : start, memo: x.memo, link: x.link };
     }).filter(Boolean);
   }
 
-  // 현황판 WBS: 담당자 이름 → 업무명(디자인=심현지, 기획=박채은) → 상위 업무 순서로 사람을 정한다
-  function fromWbs(rows) {
-    const out = [], ctx = {};
-    rows.forEach(r => {
-      const proj = r['프로젝트'], grp = r['그룹'];
-      if (SKIP.has(proj)) return;
-      const raw = (r['업무명'] || '').trim(); if (!raw) return;
-      const m = raw.match(/^(\d+(?:\.\d+)*)\.?\s+(.*)$/);
-      const no = m ? m[1] : null, name = m ? m[2] : raw;
-      const map = ctx[proj + '|' + grp] || (ctx[proj + '|' + grp] = {});
-      const parent = no && no.includes('.') ? (map[no.split('.').slice(0, -1).join('.')] || null) : null;
-      const owner = (r['담당자'] || '').trim();
-      let who = null;
-      const direct = PEOPLE.find(p => p.re.test(owner));
-      if (direct) who = direct;
-      else if (!owner) { const bn = PEOPLE.find(p => p.byName && p.byName(name)); if (bn) who = bn; else if (parent && parent.who) who = parent.who; }
-      const s = parseD(r['시작일']), e = parseD(r['종료일']) || s;
-      const t = { no, who, s, e, kids: [] };
-      if (no) map[no] = t;
-      if (parent) parent.kids.push(t);
-      if (!who || !s) return;
-      t.item = { src: 'wbs', title: '[' + (proj.replace(/^예스폼\s*/, '') || proj) + '] ' + name, proj: proj + (grp && grp !== proj ? ' · ' + grp : ''), st: r['상태'] || '', team: [who.name], workers: owner ? owner.split(/,\s*/) : [], start: s, end: e < s ? s : e, link: r['원본링크'] };
-      out.push(t);
-    });
-    // 하위 일정이 있는 상위 업무는 하위 일정으로 대신 보여준다
-    return out.filter(t => !t.kids.some(k => k.who && k.s)).map(t => t.item);
-  }
-
   let EV = [], cur = new Date(today.getFullYear(), today.getMonth(), 1), sel = null;
-  const onP = { yu: true, sim: true, park: true }, onS = { flow: true, wbs: true };
-  const visible = () => EV.filter(x => onS[x.src] && x.team.some(n => onP[PBY[n].id]));
-  const colorOf = x => { const p = PEOPLE.find(p => onP[p.id] && x.team.includes(p.name)) || PBY[x.team[0]]; return p; };
+  const onP = { yu: true, sim: true, park: true };
+  const visible = () => EV.filter(x => x.team.some(n => onP[PBY[n].id]));
+  const colorOf = x => PEOPLE.find(p => onP[p.id] && x.team.includes(p.name)) || PBY[x.team[0]];
 
   function inMonth(x) { const a = cur, b = new Date(cur.getFullYear(), cur.getMonth() + 1, 0); return x.start <= b && x.end >= a; }
   function renderFilters() {
-    const mon = EV.filter(x => onS[x.src] && inMonth(x));
-    const pc = PEOPLE.map(p => `<button class="chip" data-p="${p.id}" aria-pressed="${onP[p.id]}" style="--c:${p.fg}"><i></i>${p.name} <b>${mon.filter(x => x.team.includes(p.name)).length}</b></button>`).join('');
-    const sc = Object.entries(SRC).map(([k, l]) => `<button class="chip" data-s="${k}" aria-pressed="${onS[k]}" style="--c:#98a1ad">${l}</button>`).join('');
-    $('#filters').innerHTML = pc + '<span class="sep"></span>' + sc;
+    const mon = EV.filter(inMonth);
+    $('#filters').innerHTML = PEOPLE.map(p => `<button class="chip" data-p="${p.id}" aria-pressed="${onP[p.id]}" style="--c:${p.fg}"><i></i>${p.name} <b>${mon.filter(x => x.team.includes(p.name)).length}</b></button>`).join('');
     document.querySelectorAll('#filters [data-p]').forEach(b => b.onclick = () => { onP[b.dataset.p] = !onP[b.dataset.p]; render(); });
-    document.querySelectorAll('#filters [data-s]').forEach(b => b.onclick = () => { onS[b.dataset.s] = !onS[b.dataset.s]; render(); });
   }
 
   function renderGrid() {
@@ -240,7 +244,7 @@
       for (let i = 0; i < 7; i++) {
         const d = new Date(ws.getFullYear(), ws.getMonth(), ws.getDate() + i);
         const cls = ['day', d.getMonth() !== m ? 'out' : '', i === 5 ? 'sat' : '', i === 6 ? 'sun' : '', +d === +today ? 'today' : ''].join(' ');
-        days += `<div class="${cls}"><span class="n">${d.getDate()}</span></div>`;
+        days += `<div class="${cls}" data-date="${ymd(d)}"><span class="n">${d.getDate()}</span></div>`;
       }
       const segs = evs.filter(x => x.start <= we && x.end >= ws).map(x => {
         const a = Math.max(0, Math.round((Math.max(+x.start, +ws) - ws) / 864e5));
@@ -260,11 +264,14 @@
       html += `<div class="week">${days}<div class="lanes">${bars}</div></div>`;
     }
     $('#grid').innerHTML = html;
-    document.querySelectorAll('#grid .ev').forEach(b => b.onclick = () => select(+b.dataset.id));
-    document.querySelectorAll('#grid .more').forEach(b => b.onclick = () => {
+    document.querySelectorAll('#grid .ev').forEach(b => b.onclick = e => { e.stopPropagation(); select(+b.dataset.id); });
+    document.querySelectorAll('#grid .more').forEach(b => b.onclick = e => {
+      e.stopPropagation();
       const d = parseD(b.dataset.day); const f = visible().find(x => x.start <= d && x.end >= d && !document.querySelector(`#grid .ev[data-id="${x.id}"]`));
       if (f) select(f.id);
     });
+    // 빈 날짜 칸을 두 번 누르면 그 날짜로 일정 추가
+    document.querySelectorAll('#grid .day').forEach(c => c.ondblclick = () => openForm(null, c.dataset.date));
   }
 
   function renderList() {
@@ -284,39 +291,93 @@
     if (!x) { box.hidden = true; return; }
     const c = colorOf(x);
     const who = (x.workers.length ? x.workers : x.team).map(n => `<span class="${PBY[n] || x.team.includes(n) ? 't' : ''}">${esc(n)}</span>`).join('');
-    const kv = [['출처', SRC[x.src]], ['프로젝트', x.proj], x.parent ? ['상위 업무', x.parent] : null, ['기간', period(x)], x.src === 'flow' && x.reg ? ['등록', fmt(x.reg) + (x.by ? ' · ' + x.by : '')] : null].filter(Boolean)
+    const kv = [x.proj ? ['프로젝트', x.proj] : null, x.parent ? ['상위 업무', x.parent] : null, ['기간', period(x)], x.reg ? ['등록', fmt(x.reg) + (x.by ? ' · ' + x.by : '')] : null, x.memo ? ['메모', x.memo] : null].filter(Boolean)
       .map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('');
     box.style.setProperty('--fg', c.fg);
     box.innerHTML = `<span class="cat"><i></i>${esc(x.team.join(' · '))}</span><h4>${esc(x.title)}</h4>
       <div class="pd"><span class="st ${stClass(x.st)}">${esc(x.st || '-')}</span></div>
-      <dl class="kv">${kv}</dl><div class="who">${who}</div>
-      ${x.link ? `<div class="links"><a href="${esc(x.link)}" target="_blank" rel="noopener">원본 시트</a></div>` : ''}`;
+      <dl class="kv">${kv}</dl>${x.src === 'manual' ? '' : `<div class="who">${who}</div>`}
+      ${x.link ? `<div class="links"><a href="${esc(x.link)}" target="_blank" rel="noopener">링크 열기</a></div>` : ''}
+      ${x.src === 'manual' ? '<div class="dact"><button class="tbtn" id="dEdit">수정</button><button class="tbtn danger" id="dDel">삭제</button></div>' : ''}`;
     box.hidden = false;
+    if (x.src === 'manual') {
+      $('#dEdit').onclick = () => openForm(x.raw);
+      $('#dDel').onclick = () => remove(x);
+    }
   }
 
   function select(id) { sel = sel === id ? null : id; render(); }
   function render() { renderFilters(); renderGrid(); renderList(); renderDetail(); }
 
+  /* ---------- 일정 추가·수정 ---------- */
+  const form = $('#fForm'), back = $('#fBack'), fe = n => form.elements.namedItem(n);
+  $('#fTeam').innerHTML = PEOPLE.map(p => `<label class="pick" style="--c:${p.fg};--cb:${p.bg}"><input type="checkbox" name="team" value="${p.name}"><span>${p.name}</span></label>`).join('');
+  $('#fSt').innerHTML = STATES.map(s => `<option>${s}</option>`).join('');
+  function openForm(item, date) {
+    form.reset(); $('#fErr').textContent = '';
+    form.dataset.id = item ? item.id : '';
+    $('#fTitle').textContent = item ? '일정 수정' : '일정 추가';
+    const d = date || (cur.getFullYear() === today.getFullYear() && cur.getMonth() === today.getMonth() ? ymd(today) : ymd(cur));
+    fe("title").value = item ? item.title : '';
+    fe("start").value = item ? item.start : d;
+    fe("end").value = item ? (item.end || item.start) : d;
+    fe("st").value = item ? item.st : '예정';
+    fe("memo").value = item ? item.memo || '' : '';
+    fe("link").value = item ? item.link || '' : '';
+    form.querySelectorAll('[name=team]').forEach(c => c.checked = item ? item.team.includes(c.value) : false);
+    back.hidden = false; fe("title").focus();
+  }
+  const closeForm = () => { back.hidden = true; };
+  $('#addBtn').onclick = () => openForm(null);
+  $('#fCancel').onclick = closeForm;
+  back.onclick = e => { if (e.target === back) closeForm(); };
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !back.hidden) closeForm(); });
+  fe("start").onchange = () => { if (!fe("end").value || fe("end").value < fe("start").value) fe("end").value = fe("start").value; };
+
+  async function post(body) {
+    const r = await fetch(STORE, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).catch(() => null);
+    const j = r ? await r.json().catch(() => ({})) : {};
+    if (!r || !r.ok) throw new Error(j.error || '서버에 연결하지 못했어요.');
+    return j;
+  }
+  form.onsubmit = async e => {
+    e.preventDefault();
+    const team = [...form.querySelectorAll('[name=team]:checked')].map(c => c.value);
+    const item = { id: form.dataset.id || undefined, title: fe("title").value.trim(), start: fe("start").value, end: fe("end").value || fe("start").value, team, st: fe("st").value, memo: fe("memo").value.trim(), link: fe("link").value.trim() };
+    if (!item.title) return void ($('#fErr').textContent = '일정 이름을 넣어 주세요.');
+    if (!item.start) return void ($('#fErr').textContent = '시작일을 넣어 주세요.');
+    if (!team.length) return void ($('#fErr').textContent = '담당자를 골라 주세요.');
+    if (item.link && !/^https?:\/\//i.test(item.link)) return void ($('#fErr').textContent = '링크는 http로 시작하는 주소로 넣어 주세요.');
+    const btn = $('#fSave'); btn.disabled = true; btn.textContent = '저장 중…';
+    try {
+      const j = await post({ action: 'save', item });
+      closeForm();
+      await load(j.item && j.item.id);
+    } catch (err) { $('#fErr').textContent = err.message; }
+    finally { btn.disabled = false; btn.textContent = '저장'; }
+  };
+  async function remove(x) {
+    if (!confirm(`「${x.title}」 일정을 지울까요?`)) return;
+    try { await post({ action: 'delete', id: x.mid }); sel = null; await load(); }
+    catch (err) { alert(err.message); }
+  }
+
   $('#prev').onclick = () => { cur = new Date(cur.getFullYear(), cur.getMonth() - 1, 1); sel = null; render(); };
   $('#next').onclick = () => { cur = new Date(cur.getFullYear(), cur.getMonth() + 1, 1); sel = null; render(); };
   $('#today').onclick = () => { cur = new Date(today.getFullYear(), today.getMonth(), 1); sel = null; render(); };
 
-  render();
-  const pFlow = fetch(STORE, { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null);
-  const pWbs = fetch(API + encodeURIComponent('통합일정'), { cache: 'no-store' }).then(r => r.ok ? r.text() : null).catch(() => null);
-  Promise.all([pFlow, pWbs]).then(([f, w]) => {
-    const a = f ? fromFlow(f.flow && f.flow.items) : [], b = w ? fromWbs(records(w)) : [];
+  async function load(focusMid) {
+    const f = await fetch(STORE, { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null);
+    if (!f) { $('#err').textContent = '일정을 불러오지 못했어요. 잠시 뒤 새로고침해 주세요.'; $('#err').hidden = false; }
+    else $('#err').hidden = true;
+    const a = f ? fromStore(f.flow && f.flow.items) : [], b = f ? fromManual(f.manual) : [];
     EV = a.concat(b).sort((p, q) => p.start - q.start || q.end - p.end);
     EV.forEach((x, i) => x.id = i);
-    const fAt = f && f.flow && f.flow.fetchedAt ? new Date(f.flow.fetchedAt) : null;
-    const parts = [];
-    parts.push(f ? `<span><span class="dot"></span>플로우 ${fAt ? (fAt.getMonth() + 1) + '/' + fAt.getDate() + ' ' + pad(fAt.getHours()) + ':' + pad(fAt.getMinutes()) : ''} 수집</span>` : '<span><span class="dot warn"></span>플로우 저장본 없음</span>');
-    parts.push(w ? '<span><span class="dot"></span>현황판 WBS 불러옴</span>' : '<span><span class="dot warn"></span>현황판 불러오기 실패</span>');
-    parts.push(`<a href="${BOARD}" target="_blank" rel="noopener">사업일정 현황판</a>`);
-    $('#src').innerHTML = parts.join('');
-    if (!f && !w) { $('#err').textContent = '일정을 불러오지 못했어요. 잠시 뒤 새로고침해 주세요.'; $('#err').hidden = false; }
+    if (focusMid) { const x = EV.find(e => e.mid === focusMid); if (x) { sel = x.id; cur = new Date(x.start.getFullYear(), x.start.getMonth(), 1); } }
     render();
-  });
+  }
+  render();
+  load();
 })();
 </script>
 </body>

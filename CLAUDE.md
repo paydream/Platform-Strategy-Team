@@ -61,14 +61,14 @@
 
 ## 공통 GNB (`gnb.css` · `gnb.js`)
 - 한 줄(높이 60px, 아래 테두리 포함): 왼쪽 "플랫폼전략팀" 텍스트 로고(이미지 마크 없음, 누르면 메인 홈 `./`) · 메뉴(아이콘+메뉴명) · 화면별 버튼(`.gnb-util`) · 맨 오른쪽 구분선 뒤 「관리자」(`.gnb-side`).
-- 메뉴 순서: 업무 아카이브 · 주요 업무 · 에디터/싸인 지표 · 팀 WBS · 업데이트 캘린더 · 측정 관리 · 데이터 | 관리자. 메뉴 추가·순서·아이콘 변경은 `gnb.js`의 `MENU`만 고치면 모든 화면에 반영된다(`side: true`면 맨 오른쪽 따로). 스타일은 `gnb.css`.
+- 메뉴 순서: 업무 아카이브 · 주요 업무 · 에디터/싸인 지표 · 팀 WBS · 캘린더 · 측정 관리 · 데이터 | 관리자. 메뉴 추가·순서·아이콘 변경은 `gnb.js`의 `MENU`만 고치면 모든 화면에 반영된다(`side: true`면 맨 오른쪽 따로). 스타일은 `gnb.css`.
 - 화면 마크업: `<header class="gnb"><div class="wrap gnb-top"><a class="gnb-logo" href="./"><strong>플랫폼전략팀</strong></a><div class="gnb-util">화면별 버튼(잠그기 등)</div></div><nav class="wrap gnb-nav" data-current="메뉴id"></nav><script src="gnb.js"></script></header>`, `<head>`에 `<link rel="stylesheet" href="gnb.css">`. `gnb.js`가 nav를 로고와 `.gnb-util` 사이로 옮기고 관리자를 끝에 붙인다.
 - 메뉴 id: `archive`, `work`(work.html), `metrics`(stats.html), `wbs`, `calendar`(calendar.html), `tracking`, `stats`(데이터 = stats-age*.html), `admin`. 새 화면을 만들면 같은 마크업을 쓴다.
 
-## 예스폼 주요 업데이트 캘린더 (`/calendar.html`)
-- GNB "업데이트 캘린더". 우리 팀 3명(유영경·심현지·박채은) 업무만 보여준다. 월 달력(월~일) + 그 달 목록 + 항목 상세. 사람 칩(유영경/심현지/박채은)과 출처 칩(플로우/현황판 WBS)으로 거른다.
+## 캘린더 (`/calendar.html`)
+- GNB "캘린더". 우리 팀 3명(유영경·심현지·박채은) 일정만 보여준다. 월 달력(월~일) + 그 달 목록 + 항목 상세. 사람 칩으로 거른다. 화면에 데이터 출처(플로우 등)는 표시하지 않는다. 현황판 WBS는 쓰지 않는다(2026-11-13 사용자 요청).
 - 플로우: `GET /api/calendar` → `data/stats/calendar.enc.json`(암호화, `api/_statsfile.js` 재사용, 재배포 없음). 플로우 「전체 업무」(게시판 업무, DM 제외)에서 작업자(담당자)에 ykwillow@·sim2@·cheun611@yesform.com이 있는 업무 중 등록일 또는 시작·마감일이 기준일 3개월 전 이후인 것. 기간이 없으면 등록일에 「기간 미정」 빗금 막대로 둔다. 갱신: `POST /api/calendar` `{ key, data:{ updated, updatedAt, flow:{ fetchedAt, range, rule, items[{id,title,proj,st,team[],workers[],start,end,reg,edit,by,parent,prog}] } } }`, 키 = `STATS_UPDATE_KEY`(미들웨어 통과는 헤더 `x-pst-key`). 수집은 플로우 로그인 탭에서 `/ACT_GRID_TASK_LIST_R001.jct`(본문 `_JSON_=` + encodeURIComponent 2번, FILTER_REC에 담당자 USER 필터, GROUP_REC [], TREE_MODE_YN N, PG_NO 페이지)로 한다. 2026-11-13 첫 수집 50건(8/13~11/13).
-- 현황판 WBS: 화면에서 `https://yesform-bs-dashboard.vercel.app/api/master?tab=통합일정`을 바로 읽고 팀 WBS와 같은 규칙(담당자 `hyunji sim`/`PARK CHAEEUN` → 업무명 디자인/기획 → 상위 업무, 같은 제외 프로젝트)으로 심현지·박채은 업무만 고른다. 하위 일정이 있는 상위 업무는 빼고 하위만 보여준다. 마케팅 계획표·주요 콘텐츠·제품 배포는 더 이상 넣지 않는다(2026-11-13 사용자 요청).
+- 직접 추가 일정: 화면의 「+ 일정 추가」(또는 날짜 칸 더블클릭)로 추가하고, 상세에서 수정·삭제한다. 필드 { id, title, start, end, team[유영경|심현지|박채은], st(예정|진행 중|완료), memo, link, created, updated }. 저장 `data/stats/calendar-manual.enc.json`(암호화 { items }, 재배포 없음). `POST /api/calendar` `{ action:'save', item }`(item.id 없으면 추가) / `{ action:'delete', id }` — 사이트 로그인 쿠키(siteOk) 또는 팀 비밀번호. `GET /api/calendar`가 업무 저장본과 함께 `manual` 배열로 준다. 업무 저장본 갱신(`{ key, data }`)은 이 파일을 건드리지 않는다.
 
 ## 비밀번호 문서 (기획 계획안 등)
 - 업무 아카이브 프로젝트로 올리되, 시안 폴더의 index.html은 비밀번호 화면(셸)만 두고 본문은 넣지 않는다(저장소·시안 폴더는 공개로 서빙됨).
