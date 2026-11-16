@@ -46,6 +46,22 @@
               "href": "archive/20261116-141301-yesform-brief-timeline-v2/index.html"
             }
           ]
+        },
+        {
+          "id": "20261116-153014-yesform-brief-timeline-v3",
+          "label": "v3 · 원래 디자인 유지 + 타임라인 내용",
+          "title": "예스폼 메인 로그인 모달 (연말연초 타임라인)",
+          "desc": "피그마 최종안(모달 디자인 36:5834) 레이아웃 그대로: 블루 헤더·밑줄 탭·왼쪽 월별 일정·월별 카드·서식 행. 내용만 교체: 탭 = 전체·회사 업무·국세·지방세·노무·인사·개인, 월별 카드 = 법정 기한·법령 시행·권장 시기를 날짜순 49건(행 둘째 줄: 분야 배지 + 날짜/시기 · 대상). 지난 일정은 회색. 헤더 타일 = 다음 마감 D-day · 이번 달 일정.",
+          "created": "2026.11.16",
+          "folder": "archive/20261116-153014-yesform-brief-timeline-v3",
+          "preview": "archive/20261116-153014-yesform-brief-timeline-v3/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "타임라인 시안",
+              "href": "archive/20261116-153014-yesform-brief-timeline-v3/index.html"
+            }
+          ]
         }
       ]
     },
