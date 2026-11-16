@@ -10,12 +10,13 @@
 // POST { doc, password, action:'link', key, url, label, by } → 변경 화면 링크 수정 (url 비우면 기본 링크로)
 // POST { doc, password, action:'todo-save', row, seed?, by } → 해야 할 일 추가·수정 (처음 저장 때 seed=문서 기본 목록을 저장본으로 옮김)
 // POST { doc, password, action:'todo-delete', id, seed?, by }  → 해야 할 일 삭제
+// POST { doc, password, action:'todo-need', id, need, seed?, by } → 해야 할 일 필요 여부 (true 해야 함 · false 안 해도 됨 · null 미정)
 const crypto = require('crypto');
 const L = require('./_lib');
 const F = require('./_statsfile');
 
 const DOCS = ['membership-plan']; // 일정 편집을 허용하는 문서
-const TEAMS = ['플랫폼전략팀', '콘텐츠팀', '개발팀', '관리팀', '공통'];
+const TEAMS = ['플랫폼전략팀', '콘텐츠사업팀', '개발팀', '관리팀', '공통'];
 const STATES = ['예정', '진행 중', '완료', '지연'];
 const KINDS = ['task', 'milestone'];
 
@@ -40,7 +41,8 @@ const LOG_MAX = 80, NOTE_MAX = 200, TODO_MAX = 300;
 const okUrl = u => !u || /^https?:\/\//i.test(u);
 function cleanTodo(src, prev) {
   const x = { ...(prev || {}) };
-  x.team = TEAMS.includes(src.team) ? src.team : '';
+  const tm = src.team === '콘텐츠팀' ? '콘텐츠사업팀' : src.team;
+  x.team = TEAMS.includes(tm) ? tm : '';
   if (!x.team) throw bad('담당 팀을 골라 주세요.');
   x.item = s(src.item, 80); if (!x.item) throw bad('변경 항목을 넣어 주세요.');
   x.order = s(src.order, 10) || '1';
@@ -52,6 +54,7 @@ function cleanTodo(src, prev) {
   const more = Array.isArray(src.more) ? src.more : (prev && prev.more) || [];
   x.more = more.slice(0, 5).map(m => ({ label: s(m && m.label, 30), url: s(m && m.url, 500) })).filter(m => m.label && /^https?:\/\//i.test(m.url));
   if (!x.more.length) delete x.more;
+  if ('need' in src) { if (src.need === true || src.need === false) x.need = src.need; else delete x.need; }
   return x;
 }
 function seedTodos(cur, seed) {
@@ -61,7 +64,8 @@ function seedTodos(cur, seed) {
 }
 function clean(src, prev) {
   const x = { ...(prev || {}) };
-  x.team = TEAMS.includes(src.team) ? src.team : '';
+  const tm = src.team === '콘텐츠팀' ? '콘텐츠사업팀' : src.team;
+  x.team = TEAMS.includes(tm) ? tm : '';
   if (!x.team) throw bad('팀을 골라 주세요.');
   x.task = s(src.task, 80); if (!x.task) throw bad('업무 이름을 넣어 주세요.');
   x.kind = KINDS.includes(src.kind) ? src.kind : 'task';
@@ -149,6 +153,12 @@ module.exports = async (req, res) => {
         else list[i] = x;
         return { ok: true, todo: x, todos: list, log: { act: prev ? '수정' : '추가', team: '해야 할 일', task: `${x.team} ${x.item}`, by } };
       }, o => `계획안 해야 할 일 ${src.id ? '수정' : '추가'}: ${o.todo.team} ${o.todo.item.slice(0, 40)}`);
+      return res.status(out.error ? out.status : 200).json(out);
+    }
+    if (b.action === 'todo-need') {
+      const id = s(b.id, 20), need = b.need === true ? true : b.need === false ? false : null;
+      const out = await mutate(doc, cur => { seedTodos(cur, b.seed); const x = cur.todos.find(t => t.id === id); if (!x) return { error: '그 사이 지워진 항목입니다. 새로고침해 주세요.', status: 404 }; if (need === null) { delete x.need; delete x.needBy; delete x.needAt; } else { x.need = need; x.needBy = by; x.needAt = nowKst(); } return { ok: true, todo: x, todos: cur.todos, log: { act: need === null ? '필요 여부 미정' : need ? '해야 함' : '안 해도 됨', team: '해야 할 일', task: `${x.team} ${x.item}`, by } }; },
+        o => `계획안 해야 할 일 필요 여부: ${o.todo.team} ${o.todo.item.slice(0, 40)}`);
       return res.status(out.error ? out.status : 200).json(out);
     }
     if (b.action === 'todo-delete') {
