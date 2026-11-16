@@ -292,7 +292,7 @@
           "created": "2026.11.16",
           "folder": "archive/20261116-162406-yesform-membership-dashboard-review",
           "preview": "archive/20261116-162406-yesform-membership-dashboard-review/index.html",
-          "hidden": false,
+          "hidden": true,
           "items": [
             {
               "label": "대시보드",
@@ -308,7 +308,7 @@
           "created": "2026.11.16",
           "folder": "archive/20261116-163750-yesform-membership-dashboard-due",
           "preview": "archive/20261116-163750-yesform-membership-dashboard-due/index.html",
-          "hidden": false,
+          "hidden": true,
           "items": [
             {
               "label": "대시보드",
