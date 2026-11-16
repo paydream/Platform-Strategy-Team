@@ -219,6 +219,22 @@
               "href": "archive/20261116-111324-yesform-membership-dashboard-edit/index.html"
             }
           ]
+        },
+        {
+          "id": "20261116-112904-yesform-membership-dashboard-need",
+          "label": "최종본",
+          "title": "예스폼 멤버십 요금제 변경 계획안 (2027)",
+          "desc": "해야 할 일 필요 여부 토글, 12/31 오픈 목표 일정, 콘텐츠사업팀",
+          "created": "2026.11.16",
+          "folder": "archive/20261116-112904-yesform-membership-dashboard-need",
+          "preview": "archive/20261116-112904-yesform-membership-dashboard-need/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "대시보드",
+              "href": "archive/20261116-112904-yesform-membership-dashboard-need/index.html"
+            }
+          ]
         }
       ]
     },
