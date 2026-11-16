@@ -260,7 +260,7 @@
           "created": "2026.11.16",
           "folder": "archive/20261116-155824-yesform-membership-dashboard-renew",
           "preview": "archive/20261116-155824-yesform-membership-dashboard-renew/index.html",
-          "hidden": false,
+          "hidden": true,
           "items": [
             {
               "label": "대시보드",
