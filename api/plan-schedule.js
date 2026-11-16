@@ -8,7 +8,7 @@
 // POST { doc, password, action:'note-delete', id }      → 업무 공유 글 지우기
 // POST { doc, password, action:'check', key, done, by }  → 변경 화면·항목 체크 (key: 목록 항목 id)
 // POST { doc, password, action:'link', key, url, label, by } → 변경 화면 링크 수정 (url 비우면 기본 링크로)
-// POST { doc, password, action:'todo-save', row, seed?, by } → 해야 할 일 추가·수정 (처음 저장 때 seed=문서 기본 목록을 저장본으로 옮김)
+// POST { doc, password, action:'todo-save', row, seed?, by } → 해야 할 일 추가·수정 (처음 저장 때 seed=문서 기본 목록을 저장본으로 옮김). row.due = 기한 YYYY-MM-DD (빈 값이면 지움)
 // POST { doc, password, action:'todo-delete', id, seed?, by }  → 해야 할 일 삭제
 // POST { doc, password, action:'todo-need', id, need, seed?, by } → 해야 할 일 필요 여부 (true 해야 함 · false 안 해도 됨 · null 미정)
 const crypto = require('crypto');
@@ -55,6 +55,7 @@ function cleanTodo(src, prev) {
   x.more = more.slice(0, 5).map(m => ({ label: s(m && m.label, 30), url: s(m && m.url, 500) })).filter(m => m.label && /^https?:\/\//i.test(m.url));
   if (!x.more.length) delete x.more;
   if ('need' in src) { if (src.need === true || src.need === false) x.need = src.need; else delete x.need; }
+  if ('due' in src) { const d = s(src.due, 10); if (/^\d{4}-\d{2}-\d{2}$/.test(d)) x.due = d; else delete x.due; }
   return x;
 }
 function seedTodos(cur, seed) {
