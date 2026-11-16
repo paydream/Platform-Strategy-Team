@@ -299,6 +299,22 @@
               "href": "archive/20261116-162406-yesform-membership-dashboard-review/index.html"
             }
           ]
+        },
+        {
+          "id": "20261116-163750-yesform-membership-dashboard-due",
+          "label": "최종본",
+          "title": "예스폼 멤버십 요금제 변경 계획안 (2027)",
+          "desc": "해야 할 일에 기한(12/31 10시 적용 역산) 추가: 표 · 팀별 업무에 기한 + D-day, 수정창 기한 입력",
+          "created": "2026.11.16",
+          "folder": "archive/20261116-163750-yesform-membership-dashboard-due",
+          "preview": "archive/20261116-163750-yesform-membership-dashboard-due/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "대시보드",
+              "href": "archive/20261116-163750-yesform-membership-dashboard-due/index.html"
+            }
+          ]
         }
       ]
     },
