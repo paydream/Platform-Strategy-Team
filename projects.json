@@ -2,70 +2,6 @@
   "version": 2,
   "projects": [
     {
-      "id": "20261116-125722-yesform-brief-timeline-v1",
-      "title": "예스폼 메인 로그인 모달 (연말연초 타임라인)",
-      "team": "design",
-      "category": "웹 메인",
-      "desc": "기존 「업무 브리핑」 모달(필수 업무/27년 법령 탭)을 하나의 시기별 타임라인으로 재구성. 신고·납부 기한, 법령 개정 일정, 연말연초 주요 업무를 날짜순으로 배치.",
-      "created": "2026.11.16",
-      "updated": "2026.11.16",
-      "hidden": false,
-      "final": {
-        "version": "20261116-153014-yesform-brief-timeline-v3",
-        "href": "archive/20261116-153014-yesform-brief-timeline-v3/index.html"
-      },
-      "versions": [
-        {
-          "id": "20261116-125722-yesform-brief-timeline-v1",
-          "label": "v1 · 시기별 타임라인",
-          "title": "예스폼 메인 로그인 모달 (연말연초 타임라인)",
-          "desc": "탭 2개 → 왼쪽 타임라인 1개로 통합. 신고·납부 20건(국세청 표준 기한, 주말·공휴일 순연 표시) · 법령 시행 13건 · 연말연초 업무 28건을 11월~2월 시기별 배치. 오늘 표시선, D-day, 유형 필터, 헤더에 다음 마감·이번 달 일정. 기존 추적번호(data-sclick) 41개 유지.",
-          "created": "2026.11.16",
-          "folder": "archive/20261116-125722-yesform-brief-timeline-v1",
-          "preview": "archive/20261116-125722-yesform-brief-timeline-v1/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "타임라인 시안",
-              "href": "archive/20261116-125722-yesform-brief-timeline-v1/index.html"
-            }
-          ]
-        },
-        {
-          "id": "20261116-141301-yesform-brief-timeline-v2",
-          "label": "v2 · 월별 타임라인 (법정 기한/권장 시기)",
-          "title": "예스폼 메인 로그인 모달 (연말연초 타임라인)",
-          "desc": "참고 화면 기준으로 재구성: 「연말연초 타임라인 11월→2월」 제목, 범례(● 법정 기한 / ◌ 회사 업무 권장 시기), 분야 탭(전체·회사 업무·국세·지방세·노무·인사·개인), 월 구분선 + 이번 달 표시. 항목마다 날짜(또는 넷째 주 ~12월 초 같은 권장 시기) · 제목 · 분야 · 권장 시기/D-day/법령 시행 표시 · 대상 · 설명 · 자세히 보기 · 관련 서식 링크 · 캘린더에 추가(.ics). 49건, 기존 추적번호 41개 유지.",
-          "created": "2026.11.16",
-          "folder": "archive/20261116-141301-yesform-brief-timeline-v2",
-          "preview": "archive/20261116-141301-yesform-brief-timeline-v2/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "타임라인 시안",
-              "href": "archive/20261116-141301-yesform-brief-timeline-v2/index.html"
-            }
-          ]
-        },
-        {
-          "id": "20261116-153014-yesform-brief-timeline-v3",
-          "label": "v3 · 원래 디자인 유지 + 타임라인 내용",
-          "title": "예스폼 메인 로그인 모달 (연말연초 타임라인)",
-          "desc": "피그마 최종안(모달 디자인 36:5834) 레이아웃 그대로: 블루 헤더·밑줄 탭·왼쪽 월별 일정·월별 카드·서식 행. 내용만 교체: 탭 = 전체·회사 업무·국세·지방세·노무·인사·개인, 월별 카드 = 법정 기한·법령 시행·권장 시기를 날짜순 49건(행 둘째 줄: 분야 배지 + 날짜/시기 · 대상). 지난 일정은 회색. 헤더 타일 = 다음 마감 D-day · 이번 달 일정.",
-          "created": "2026.11.16",
-          "folder": "archive/20261116-153014-yesform-brief-timeline-v3",
-          "preview": "archive/20261116-153014-yesform-brief-timeline-v3/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "타임라인 시안",
-              "href": "archive/20261116-153014-yesform-brief-timeline-v3/index.html"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "id": "20261113-112032-yesform-membership-plan",
       "title": "예스폼 멤버십 요금제 변경 계획안 (2027)",
       "team": "planning",
@@ -313,6 +249,86 @@
             {
               "label": "대시보드",
               "href": "archive/20261116-120745-yesform-membership-dashboard-design/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261116-155824-yesform-membership-dashboard-renew",
+          "label": "최종본",
+          "title": "예스폼 멤버십 요금제 변경 계획안 (2027)",
+          "desc": "연 결제를 12개월 단위 자동갱신 구독으로 정정: 변경 요금제 카드 문구, 디자인(결제·결제 완료·마이페이지·메일) 요건, 해야 할 일 #5·9·12·26·30 상세",
+          "created": "2026.11.16",
+          "folder": "archive/20261116-155824-yesform-membership-dashboard-renew",
+          "preview": "archive/20261116-155824-yesform-membership-dashboard-renew/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "대시보드",
+              "href": "archive/20261116-155824-yesform-membership-dashboard-renew/index.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "20261116-125722-yesform-brief-timeline-v1",
+      "title": "예스폼 메인 로그인 모달 (연말연초 타임라인)",
+      "team": "design",
+      "category": "웹 메인",
+      "desc": "기존 「업무 브리핑」 모달(필수 업무/27년 법령 탭)을 하나의 시기별 타임라인으로 재구성. 신고·납부 기한, 법령 개정 일정, 연말연초 주요 업무를 날짜순으로 배치.",
+      "created": "2026.11.16",
+      "updated": "2026.11.16",
+      "hidden": false,
+      "final": {
+        "version": "20261116-153014-yesform-brief-timeline-v3",
+        "href": "archive/20261116-153014-yesform-brief-timeline-v3/index.html"
+      },
+      "versions": [
+        {
+          "id": "20261116-125722-yesform-brief-timeline-v1",
+          "label": "v1 · 시기별 타임라인",
+          "title": "예스폼 메인 로그인 모달 (연말연초 타임라인)",
+          "desc": "탭 2개 → 왼쪽 타임라인 1개로 통합. 신고·납부 20건(국세청 표준 기한, 주말·공휴일 순연 표시) · 법령 시행 13건 · 연말연초 업무 28건을 11월~2월 시기별 배치. 오늘 표시선, D-day, 유형 필터, 헤더에 다음 마감·이번 달 일정. 기존 추적번호(data-sclick) 41개 유지.",
+          "created": "2026.11.16",
+          "folder": "archive/20261116-125722-yesform-brief-timeline-v1",
+          "preview": "archive/20261116-125722-yesform-brief-timeline-v1/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "타임라인 시안",
+              "href": "archive/20261116-125722-yesform-brief-timeline-v1/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261116-141301-yesform-brief-timeline-v2",
+          "label": "v2 · 월별 타임라인 (법정 기한/권장 시기)",
+          "title": "예스폼 메인 로그인 모달 (연말연초 타임라인)",
+          "desc": "참고 화면 기준으로 재구성: 「연말연초 타임라인 11월→2월」 제목, 범례(● 법정 기한 / ◌ 회사 업무 권장 시기), 분야 탭(전체·회사 업무·국세·지방세·노무·인사·개인), 월 구분선 + 이번 달 표시. 항목마다 날짜(또는 넷째 주 ~12월 초 같은 권장 시기) · 제목 · 분야 · 권장 시기/D-day/법령 시행 표시 · 대상 · 설명 · 자세히 보기 · 관련 서식 링크 · 캘린더에 추가(.ics). 49건, 기존 추적번호 41개 유지.",
+          "created": "2026.11.16",
+          "folder": "archive/20261116-141301-yesform-brief-timeline-v2",
+          "preview": "archive/20261116-141301-yesform-brief-timeline-v2/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "타임라인 시안",
+              "href": "archive/20261116-141301-yesform-brief-timeline-v2/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261116-153014-yesform-brief-timeline-v3",
+          "label": "v3 · 원래 디자인 유지 + 타임라인 내용",
+          "title": "예스폼 메인 로그인 모달 (연말연초 타임라인)",
+          "desc": "피그마 최종안(모달 디자인 36:5834) 레이아웃 그대로: 블루 헤더·밑줄 탭·왼쪽 월별 일정·월별 카드·서식 행. 내용만 교체: 탭 = 전체·회사 업무·국세·지방세·노무·인사·개인, 월별 카드 = 법정 기한·법령 시행·권장 시기를 날짜순 49건(행 둘째 줄: 분야 배지 + 날짜/시기 · 대상). 지난 일정은 회색. 헤더 타일 = 다음 마감 D-day · 이번 달 일정.",
+          "created": "2026.11.16",
+          "folder": "archive/20261116-153014-yesform-brief-timeline-v3",
+          "preview": "archive/20261116-153014-yesform-brief-timeline-v3/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "타임라인 시안",
+              "href": "archive/20261116-153014-yesform-brief-timeline-v3/index.html"
             }
           ]
         }
