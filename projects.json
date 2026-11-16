@@ -228,7 +228,7 @@
           "created": "2026.11.16",
           "folder": "archive/20261116-112904-yesform-membership-dashboard-need",
           "preview": "archive/20261116-112904-yesform-membership-dashboard-need/index.html",
-          "hidden": false,
+          "hidden": true,
           "items": [
             {
               "label": "대시보드",
