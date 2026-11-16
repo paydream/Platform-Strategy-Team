@@ -94,6 +94,22 @@
               "href": "archive/20261116-161156-yesform-brief-timeline-v5/index.html"
             }
           ]
+        },
+        {
+          "id": "20261116-161844-yesform-brief-timeline-v6",
+          "label": "v6 · 유형 필터 제거, 탭 1줄",
+          "title": "예스폼 메인 로그인 모달 (연말연초 타임라인)",
+          "desc": "상단의 유형 필터 알약(납부·신고 기한/법령 개정/연말연초 업무) 제거해 탭을 분야 탭 1줄로 단순화. 유형은 리스트 각 항목의 배지(납부·신고 기한 / 법령 개정 + 시행일 / 연말연초 업무 + 권장 시기)로만 표시. 나머지는 v5와 동일.",
+          "created": "2026.11.16",
+          "folder": "archive/20261116-161844-yesform-brief-timeline-v6",
+          "preview": "archive/20261116-161844-yesform-brief-timeline-v6/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "타임라인 시안",
+              "href": "archive/20261116-161844-yesform-brief-timeline-v6/index.html"
+            }
+          ]
         }
       ]
     },
