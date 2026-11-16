@@ -27,6 +27,22 @@
               "href": "archive/20261116-125722-yesform-brief-timeline-v1/index.html"
             }
           ]
+        },
+        {
+          "id": "20261116-141301-yesform-brief-timeline-v2",
+          "label": "v2 · 월별 타임라인 (법정 기한/권장 시기)",
+          "title": "예스폼 메인 로그인 모달 (연말연초 타임라인)",
+          "desc": "참고 화면 기준으로 재구성: 「연말연초 타임라인 11월→2월」 제목, 범례(● 법정 기한 / ◌ 회사 업무 권장 시기), 분야 탭(전체·회사 업무·국세·지방세·노무·인사·개인), 월 구분선 + 이번 달 표시. 항목마다 날짜(또는 넷째 주 ~12월 초 같은 권장 시기) · 제목 · 분야 · 권장 시기/D-day/법령 시행 표시 · 대상 · 설명 · 자세히 보기 · 관련 서식 링크 · 캘린더에 추가(.ics). 49건, 기존 추적번호 41개 유지.",
+          "created": "2026.11.16",
+          "folder": "archive/20261116-141301-yesform-brief-timeline-v2",
+          "preview": "archive/20261116-141301-yesform-brief-timeline-v2/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "타임라인 시안",
+              "href": "archive/20261116-141301-yesform-brief-timeline-v2/index.html"
+            }
+          ]
         }
       ]
     },
