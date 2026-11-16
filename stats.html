@@ -74,6 +74,15 @@
   .paylist .pa{flex:none;text-align:right;font-weight:600;font-size:14px}.paylist .pa small{display:block;font-weight:400;font-size:11px;color:var(--sub)}
   .pnote{font-size:12px;color:var(--sub);margin-top:6px}
   .pempty{padding:18px;color:var(--sub);font-size:14px}
+  .psum{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--sub);margin:4px 0 10px}
+  .psum b{color:var(--text)}.psum .late,.ptbl .late{color:#e5484d}
+  .pcard{margin-bottom:12px}
+  .tbl.ptbl td,.tbl.ptbl th{vertical-align:top;text-align:left}
+  .ptbl td.pdesc{white-space:pre-line;min-width:320px;max-width:560px;line-height:1.55;font-size:13px}
+  .ptbl td small{display:block;font-size:11px;color:var(--sub);font-weight:400;margin-top:2px}
+  .ptbl tr.plate td:first-child{box-shadow:inset 3px 0 0 #e5484d}
+  .pst{font-style:normal;font-size:12px;font-weight:700;padding:2px 9px;border-radius:99px;white-space:nowrap}
+  .pst.done{background:#e8f7ee;color:#12a150}.pst.doing{background:#eef3ff;color:#2f6bff}.pst.todo{background:#f2f4f6;color:#6b7684}
   .subsel{margin-top:2px;display:flex;justify-content:flex-end;align-items:center;gap:10px;flex-wrap:wrap}
   .wpick{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--sub);background:#fff;border:1px solid var(--line);border-radius:10px;padding:6px 10px}
   .wpick input{font:inherit;font-size:14px;color:var(--text);border:1px solid var(--line);border-radius:7px;padding:4px 8px;background:#fff}
@@ -252,7 +261,8 @@ const TIP = {
   '월별 비교': '월별 값이에요. 마지막 달은 데이터 마지막 날까지예요.',
   '목표': '오늘까지 지난 날짜 비율(막대의 세로선) 대비 달성률이에요. 달성: 100% 이상, 순항: 기준선 이상, 조금 부족: 기준선의 80% 이상, 부족: 그 아래.',
   '목표 활성 사용자': "GA4 월 순 사용자예요. 같은 사람이 다시 와도 한 번만 세서 날짜에 비례해 늘지 않아, '지금 속도면 월말' 환산은 실제보다 높게 나올 수 있어요.",
-  '목표 결제 건수': '예스폼싸인 관리자 결제 통계 기준이에요.'
+  '목표 결제 건수': '예스폼싸인 관리자 결제 통계 기준이에요.',
+  '목표 방문자': '예스폼싸인 관리자 방문 통계(일별 합계) 기준이에요.'
 };
 const ti = () => ''; // 인포(i) 아이콘 툴팁은 사용자 요청으로 끔 (2026-11-13). TIP 설명은 남겨 둠
 const TL = k => `${k}${ti(k)}`; // 지표명 + i 툴팁 (지역 변수 L과 겹치지 않게 TL)
@@ -515,6 +525,8 @@ function signView({ m, pm, cd, pd, mk, pmk, label }) {
   <section class="blk"><h2>전환 흐름</h2>
     ${funnel([['방문자', S.visit, '관리자 방문 통계'], ['신규 가입', S.signup], ['전자계약 실사용자', S.users], ['결제', pay[0], won(pay[1])]])}</section>
 
+  ${planSection()}
+
   ${paySection(pay)}
 
   <section class="blk"><h2>지면·캠페인별 성과${ti('지면·캠페인별 성과')} <small>관리자 유입 결제 통계</small></h2>
@@ -546,12 +558,35 @@ function wPicker() {
   return `<label class="wpick">기간 직접 선택 <input type="date" id="wStart" value="${cur.s}" min="${P[0].s}" max="${P[P.length - 1].s}" aria-label="주간 시작일"><span>~ ${MD(cur.e)} (${wday(cur.e)})</span></label>`;
 }
 // 월간 목표 달성 현황 — 데이터 마지막 달 기준, 에디터·싸인을 한 번에 (목표값은 암호화 데이터의 goals)
+/* ---------- 마케팅 계획표 (구글 시트 「예스폼싸인 진행상황」을 갱신 때마다 읽어 옴) ---------- */
+function planDate(t) { // '26. 11. 11 (수)', '2026. 11. 9(월)', '11/6' → YYYY-MM-DD
+  const y0 = D.range.end.slice(0, 4); let m;
+  if ((m = String(t).match(/(\d{2,4})\.\s*(\d{1,2})\.\s*(\d{1,2})/))) return `${m[1].length === 2 ? '20' + m[1] : m[1]}-${m[2].padStart(2, '0')}-${m[3].padStart(2, '0')}`;
+  if ((m = String(t).match(/^(\d{1,2})\/(\d{1,2})$/))) return `${y0}-${m[1].padStart(2, '0')}-${m[2].padStart(2, '0')}`;
+  return null;
+}
+function planSection() {
+  const P = D.plan; if (!P || !P.ok) return '';
+  const today = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
+  const all = P.sections.flatMap(x => x.rows), cnt = st => all.filter(r => r[5] === st).length;
+  const late = r => { const d = planDate(r[3]); return d && d < today && r[5] !== '완료'; };
+  const chip = st => `<em class="pst ${st === '완료' ? 'done' : st === '진행' ? 'doing' : 'todo'}">${esc(st || '-')}</em>`;
+  const rd = new Date(P.readAt), rk = new Date(rd.getTime() + 9 * 3600e3);
+  const kpiTxt = P.kpi.map(k => `${esc(k[0])} <b>${esc(k[1])}</b>`).join(' · ');
+  return `<section class="blk"><h2>마케팅 실행 계획 <small>마케팅 계획표 시트 「${esc(P.title)}」 · ${rk.getUTCMonth() + 1}.${rk.getUTCDate()} ${String(rk.getUTCHours()).padStart(2, '0')}:${String(rk.getUTCMinutes()).padStart(2, '0')} 기준${P.url ? ` · <a href="${esc(P.url)}" target="_blank" rel="noopener">시트에서 수정</a>` : ''}</small></h2>
+    <div class="psum">${P.month ? `<span>${+P.month.slice(5)}월 KPI: ${kpiTxt}</span>` : ''}<span class="pcnt">완료 <b>${cnt('완료')}</b> · 진행 <b>${cnt('진행')}</b> · 예정 <b>${cnt('예정')}</b>${all.filter(late).length ? ` · <b class="late">예정일 지남 ${all.filter(late).length}</b>` : ''}</span></div>
+    ${P.sections.map(sec => `<div class="card pcard"><div class="hd"><b>${esc(sec.title)}</b><span>${sec.rows.length}건</span></div><div class="scroll"><table class="tbl ptbl">
+      <thead><tr><th>구분 · 채널</th><th>담당</th><th>예정일</th><th>실행 내용</th><th>상태</th><th>완료일</th></tr></thead>
+      <tbody>${sec.rows.map(r => `<tr class="${late(r) ? 'plate' : ''}"><td class="name">${esc(r[1])}<small>${esc(r[0])}</small></td><td>${esc(r[2])}</td><td>${esc(r[3])}${late(r) ? '<small class="late">지남</small>' : ''}</td><td class="pdesc">${esc(r[4])}${r[7] ? `<small>${esc(r[7])}</small>` : ''}</td><td>${chip(r[5])}</td><td>${esc(r[6]) || '-'}</td></tr>`).join('')}</tbody></table></div></div>`).join('')}
+  </section>`;
+}
 function goalPanel() {
   const m = D.months[D.months.length - 1], g = (D.goals || {})[m.m];
   if (!g) return '';
   const total = lastDay(m), done = days(m), tp = done / total * 100, left = total - done;
   const items = [];
   if (g.editor && g.editor.active) items.push(['editor', '에디터', '활성 사용자', m.editor.active, g.editor.active, '명']);
+  if (g.sign && g.sign.visit) items.push(['sign', '싸인', '방문자', m.sign.visit, g.sign.visit, '명']);
   if (g.sign && g.sign.active) items.push(['sign', '싸인', '활성 사용자', m.sign.active, g.sign.active, '명']);
   if (g.sign && g.sign.pay) items.push(['sign', '싸인', '결제 건수', ((D.mkt.sign[m.m] || {}).pay || [0])[0], g.sign.pay, '건']);
   return `<section class="goals" aria-label="월간 목표 달성 현황"><div class="gh"><b>${+m.m.slice(5)}월 목표 달성 현황${ti('목표')}</b><span>${MD(m.end)}까지 · ${total}일 중 ${done}일 지남 (${tp.toFixed(0)}%)</span></div>
