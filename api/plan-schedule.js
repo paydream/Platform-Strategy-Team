@@ -8,6 +8,8 @@
 // POST { doc, password, action:'note-delete', id }      → 업무 공유 글 지우기
 // POST { doc, password, action:'check', key, done, by }  → 변경 화면·항목 체크 (key: 목록 항목 id)
 // POST { doc, password, action:'link', key, url, label, by } → 변경 화면 링크 수정 (url 비우면 기본 링크로)
+// POST { doc, password, action:'todo-save', row, seed?, by } → 해야 할 일 추가·수정 (처음 저장 때 seed=문서 기본 목록을 저장본으로 옮김)
+// POST { doc, password, action:'todo-delete', id, seed?, by }  → 해야 할 일 삭제
 const crypto = require('crypto');
 const L = require('./_lib');
 const F = require('./_statsfile');
@@ -32,9 +34,31 @@ const fid = doc => `${doc}-schedule`;
 async function readRows(doc) {
   const r = await L.readJson(F.pathOf(fid(doc)), null);
   const d = r.data ? F.open(r.data) : null;
-  return { sha: r.sha, rows: d ? d.rows || [] : [], notes: d ? d.notes || [] : [], log: d ? d.log || [] : [], checks: d ? d.checks || {} : {}, links: d ? d.links || {} : {}, updated: d ? d.updated || '' : '' };
+  return { sha: r.sha, rows: d ? d.rows || [] : [], notes: d ? d.notes || [] : [], log: d ? d.log || [] : [], checks: d ? d.checks || {} : {}, links: d ? d.links || {} : {}, todos: d && Array.isArray(d.todos) ? d.todos : null, updated: d ? d.updated || '' : '' };
 }
-const LOG_MAX = 80, NOTE_MAX = 200;
+const LOG_MAX = 80, NOTE_MAX = 200, TODO_MAX = 300;
+const okUrl = u => !u || /^https?:\/\//i.test(u);
+function cleanTodo(src, prev) {
+  const x = { ...(prev || {}) };
+  x.team = TEAMS.includes(src.team) ? src.team : '';
+  if (!x.team) throw bad('담당 팀을 골라 주세요.');
+  x.item = s(src.item, 80); if (!x.item) throw bad('변경 항목을 넣어 주세요.');
+  x.order = s(src.order, 10) || '1';
+  x.group = s(src.group, 40) || '기타';
+  x.detail = s(src.detail, 500);
+  const no = parseInt(src.no, 10); x.no = Number.isFinite(no) && no > 0 && no < 10000 ? no : 0;
+  x.url = s(src.url, 500); if (!okUrl(x.url)) throw bad('링크는 http:// 또는 https:// 로 시작해야 해요.');
+  if (!x.url) delete x.url;
+  const more = Array.isArray(src.more) ? src.more : (prev && prev.more) || [];
+  x.more = more.slice(0, 5).map(m => ({ label: s(m && m.label, 30), url: s(m && m.url, 500) })).filter(m => m.label && /^https?:\/\//i.test(m.url));
+  if (!x.more.length) delete x.more;
+  return x;
+}
+function seedTodos(cur, seed) {
+  if (cur.todos) return;
+  if (!Array.isArray(seed) || !seed.length) throw bad('목록을 불러오지 못했어요. 새로고침해 주세요.');
+  cur.todos = seed.slice(0, TODO_MAX).map(t => { const x = cleanTodo(t); x.id = s(t.id, 20) || 't' + crypto.randomBytes(4).toString('hex'); const lk = cur.links[x.id]; if (lk && lk.url) { x.url = lk.url; delete cur.links[x.id]; } return x; });
+}
 function clean(src, prev) {
   const x = { ...(prev || {}) };
   x.team = TEAMS.includes(src.team) ? src.team : '';
@@ -56,7 +80,7 @@ async function mutate(doc, fn, msg) {
     if (out.log) cur.log = [{ at: updated, ...out.log }, ...cur.log].slice(0, LOG_MAX);
     cur.notes = cur.notes.slice(0, NOTE_MAX);
     try {
-      await L.writeJson(F.pathOf(fid(doc)), F.seal({ rows: cur.rows, notes: cur.notes, log: cur.log, checks: cur.checks, links: cur.links, updated }, { updated: updated.slice(0, 10), count: cur.rows.length }), cur.sha, msg(out));
+      await L.writeJson(F.pathOf(fid(doc)), F.seal({ rows: cur.rows, notes: cur.notes, log: cur.log, checks: cur.checks, links: cur.links, ...(cur.todos ? { todos: cur.todos } : {}), updated }, { updated: updated.slice(0, 10), count: cur.rows.length }), cur.sha, msg(out));
       const { log, ...rest } = out;
       return { ...rest, updated };
     } catch (e) { if (a === 2 || (e.status !== 409 && e.status !== 422)) throw e; }
@@ -74,7 +98,7 @@ module.exports = async (req, res) => {
   const pw = String(b.password ?? '');
   if (!L.siteOk(req) && !same(pw, process.env.STATS_PASSWORD) && !L.teamOk(pw)) { await wait(800); return res.status(401).json({ error: '비밀번호가 맞지 않습니다.' }); }
   try {
-    if (b.action === 'get') { const cur = await readRows(doc); return res.status(200).json({ rows: cur.rows, notes: cur.notes, log: cur.log.slice(0, 40), checks: cur.checks, links: cur.links, updated: cur.updated }); }
+    if (b.action === 'get') { const cur = await readRows(doc); return res.status(200).json({ rows: cur.rows, notes: cur.notes, log: cur.log.slice(0, 40), checks: cur.checks, links: cur.links, todos: cur.todos, updated: cur.updated }); }
     const by = s(b.by, 20);
     if (b.action === 'delete') {
       const id = s(b.id, 20);
@@ -111,6 +135,27 @@ module.exports = async (req, res) => {
       const out = await mutate(doc, cur => { if (url) cur.links[key] = { url, by, at: nowKst() }; else delete cur.links[key]; return { ok: true, key, link: cur.links[key] || null, log: { act: url ? '링크 수정' : '링크 기본값으로', team: '변경 화면', task: label || key, by } }; },
         o => `계획안 화면 링크 수정: ${o.key}`);
       return res.status(200).json(out);
+    }
+    if (b.action === 'todo-save') {
+      const src = b.row || {};
+      const out = await mutate(doc, cur => {
+        seedTodos(cur, b.seed);
+        const list = cur.todos;
+        const i = src.id ? list.findIndex(x => x.id === src.id) : -1;
+        if (src.id && i < 0) return { error: '그 사이 지워진 항목입니다. 새로고침해 주세요.', status: 404 };
+        const prev = i >= 0 ? { ...list[i] } : null;
+        const x = cleanTodo(src, prev);
+        if (i < 0) { if (list.length >= TODO_MAX) return { error: '항목이 너무 많아요.', status: 400 }; x.id = 't' + crypto.randomBytes(4).toString('hex'); if (!x.no) x.no = list.reduce((m, t) => Math.max(m, t.no || 0), 0) + 1; list.push(x); }
+        else list[i] = x;
+        return { ok: true, todo: x, todos: list, log: { act: prev ? '수정' : '추가', team: '해야 할 일', task: `${x.team} ${x.item}`, by } };
+      }, o => `계획안 해야 할 일 ${src.id ? '수정' : '추가'}: ${o.todo.team} ${o.todo.item.slice(0, 40)}`);
+      return res.status(out.error ? out.status : 200).json(out);
+    }
+    if (b.action === 'todo-delete') {
+      const id = s(b.id, 20);
+      const out = await mutate(doc, cur => { seedTodos(cur, b.seed); const i = cur.todos.findIndex(x => x.id === id); if (i < 0) return { error: '이미 지워진 항목입니다.', status: 404 }; const [x] = cur.todos.splice(i, 1); return { ok: true, todo: x, todos: cur.todos, log: { act: '삭제', team: '해야 할 일', task: `${x.team} ${x.item}`, by } }; },
+        o => `계획안 해야 할 일 삭제: ${o.todo.team} ${o.todo.item.slice(0, 40)}`);
+      return res.status(out.error ? out.status : 200).json(out);
     }
     if (b.action === 'note') {
       const n = b.note || {};
