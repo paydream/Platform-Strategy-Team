@@ -244,7 +244,7 @@
           "created": "2026.11.16",
           "folder": "archive/20261116-120745-yesform-membership-dashboard-design",
           "preview": "archive/20261116-120745-yesform-membership-dashboard-design/index.html",
-          "hidden": false,
+          "hidden": true,
           "items": [
             {
               "label": "대시보드",
