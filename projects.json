@@ -2,6 +2,35 @@
   "version": 2,
   "projects": [
     {
+      "id": "20261116-125722-yesform-brief-timeline-v1",
+      "title": "예스폼 메인 로그인 모달 (연말연초 타임라인)",
+      "team": "design",
+      "category": "웹 메인",
+      "desc": "기존 「업무 브리핑」 모달(필수 업무/27년 법령 탭)을 하나의 시기별 타임라인으로 재구성. 신고·납부 기한, 법령 개정 일정, 연말연초 주요 업무를 날짜순으로 배치.",
+      "created": "2026.11.16",
+      "updated": "2026.11.16",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261116-125722-yesform-brief-timeline-v1",
+          "label": "v1 · 시기별 타임라인",
+          "title": "예스폼 메인 로그인 모달 (연말연초 타임라인)",
+          "desc": "탭 2개 → 왼쪽 타임라인 1개로 통합. 신고·납부 20건(국세청 표준 기한, 주말·공휴일 순연 표시) · 법령 시행 13건 · 연말연초 업무 28건을 11월~2월 시기별 배치. 오늘 표시선, D-day, 유형 필터, 헤더에 다음 마감·이번 달 일정. 기존 추적번호(data-sclick) 41개 유지.",
+          "created": "2026.11.16",
+          "folder": "archive/20261116-125722-yesform-brief-timeline-v1",
+          "preview": "archive/20261116-125722-yesform-brief-timeline-v1/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "타임라인 시안",
+              "href": "archive/20261116-125722-yesform-brief-timeline-v1/index.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "20261113-112032-yesform-membership-plan",
       "title": "예스폼 멤버십 요금제 변경 계획안 (2027)",
       "team": "planning",
