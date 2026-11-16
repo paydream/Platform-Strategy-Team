@@ -8,7 +8,7 @@
       "category": "요금제",
       "desc": "요금제 시안(yesform-custom.vercel.app/pricing) 기반 2027 멤버십 개편 실행 계획. 비밀번호 필요.",
       "created": "2026.11.13",
-      "updated": "2026.11.13",
+      "updated": "2026.11.16",
       "hidden": false,
       "final": null,
       "versions": [
@@ -192,7 +192,7 @@
           "id": "20261113-163216-yesform-membership-dashboard-center",
           "label": "최종본",
           "title": "예스폼 멤버십 요금제 변경 계획안 (2027)",
-          "desc": "가운데 정렬·오른쪽 메뉴, 변경 요금제(가격만), 일정표 날짜 겹침·잘림 수정",
+          "desc": "가운데 정렬·오른쪽 메뉴, 변경 요금제(가격만), 일정표 날짜 겹침·잘림 수정 (11/16 배포)",
           "created": "2026.11.13",
           "folder": "archive/20261113-163216-yesform-membership-dashboard-center",
           "preview": "archive/20261113-163216-yesform-membership-dashboard-center/index.html",
