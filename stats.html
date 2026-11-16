@@ -44,6 +44,12 @@
   .hero{padding:30px 0 0}
   .hero h1{font-size:26px;letter-spacing:-.01em}
   .hero p{color:var(--sub);margin-top:4px;font-size:14px}
+  .qlinks{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+  .qlink{display:inline-flex;align-items:center;gap:10px;padding:10px 14px 10px 12px;background:#fff;border:1px solid #bfe6cd;border-radius:12px;text-decoration:none;color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.04);transition:border-color .15s,box-shadow .15s}
+  .qlink:hover{border-color:#12a150;box-shadow:0 4px 14px rgba(18,161,80,.12)}
+  .qlink .qi{width:32px;height:32px;border-radius:8px;background:#e8f7ee;display:grid;place-items:center;font-size:16px}
+  .qlink .qt b{display:block;font-size:14px}.qlink .qt small{display:block;font-size:12px;color:var(--sub);margin-top:1px}
+  .qlink .qa{color:#12a150;font-weight:700;margin-left:4px}
   .stale{margin-top:10px;padding:10px 14px;border-radius:10px;background:#fff4e5;color:#b45309;font-size:13px;border:1px solid #fcd9a8}
   .ctrl{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:20px;position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0}
   .ptabs{display:flex;gap:8px}
@@ -331,6 +337,11 @@ function dtxt(d) {
 const updown = d => { if (d == null) return ''; const a = CMP.avg ? '일평균 ' : ''; return d >= 0 ? `늘었어요 (${a}${Math.abs(d).toFixed(0)}%↑)` : `줄었어요 (${a}${Math.abs(d).toFixed(0)}%↓)`; };
 
 // 매일 오전 9시·오후 5시 자동 갱신(전날까지). 갱신 시각과, 이틀 넘게 멈췄을 때 안내
+// 상단 바로가기 (링크 주소는 공개 저장소에 두지 않고 암호화 데이터 D.links에서 받음)
+function quickLinks() {
+  const L = (D.links || []).filter(x => x && x.url);
+  return L.length ? `<div class="qlinks">${L.map(x => `<a class="qlink" href="${esc(x.url)}" target="_blank" rel="noopener"><span class="qi">${x.icon || '📊'}</span><span class="qt"><b>${esc(x.title)}</b>${x.desc ? `<small>${esc(x.desc)}</small>` : ''}</span><span class="qa" aria-hidden="true">↗</span></a>`).join('')}</div>` : '';
+}
 function upd() {
   if (!D.updatedAt) return `업데이트 ${D0(D.updated)}`;
   const t = new Date(D.updatedAt), k = new Date(t.getTime() + 9 * 3600e3);
@@ -386,6 +397,7 @@ function render() {
     <h1>에디터/싸인 지표</h1>
     <p>예스폼 에디터 · 예스폼싸인 | 데이터 ${D0(D.range.start)} ~ ${D0(D.range.end)} · ${upd()}</p>
     ${stale()}
+    ${quickLinks()}
   </section>
   ${goalPanel()}
   <div class="ctrl">
