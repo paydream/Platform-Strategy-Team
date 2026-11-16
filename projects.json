@@ -276,7 +276,7 @@
           "created": "2026.11.16",
           "folder": "archive/20261116-160621-yesform-membership-dashboard-price",
           "preview": "archive/20261116-160621-yesform-membership-dashboard-price/index.html",
-          "hidden": false,
+          "hidden": true,
           "items": [
             {
               "label": "대시보드",
