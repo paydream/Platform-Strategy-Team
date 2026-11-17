@@ -14,7 +14,7 @@
 ## 배포 (2026-11-17~ 자동 배포 끔)
 - Vercel Hobby는 하루 배포 생성 100회 한도이고, ignoreCommand로 빌드를 취소해도 배포 생성 수에는 들어간다. 2026-11-16에 데이터 저장 커밋 122건으로 한도를 넘겨 막혔다.
 - 그래서 `vercel.json`의 `git.deploymentEnabled.main=false`로 **커밋이 배포를 만들지 않게** 했고, 같은 이유로 ignoreCommand는 뺐다(훅 배포가 데이터 커밋 직후에 취소되지 않도록). 데이터 저장(해야 할 일·일정·통계·코멘트·핀 등)은 아무리 많이 해도 배포와 무관하고, 화면은 API가 GitHub에서 바로 읽으므로 저장 즉시 반영된다.
-- **디자인·기획 아카이브 업로드와 관리자 목록 저장은 배포를 막지 않고 바로 진행한다(2026-11-17 사용자 결정).** `/api/upload`·`/api/projects`가 저장 성공 직후 훅을 부르고(실패하면 3번까지 재시도), 그래도 실패하면 관리자 화면이 `/api/deploy`(관리자 비밀번호)로 한 번 더 요청한다. 결과는 관리자 화면에 「바로 배포를 시작했습니다」 또는 「지금 배포」 버튼으로 보인다. 2026-11-17 훅 직접 호출로 배포 READY 확인.
+- **디자인·기획 아카이브 업로드와 관리자 목록 저장은 배포를 막지 않고 바로 진행한다(2026-11-17 사용자 결정).** `/api/upload`·`/api/projects`가 저장 성공 직후 훅을 부르고(실패하면 3번까지 재시도), 그래도 실패하면 관리자 화면이 `/api/upload` `{action:'deploy'}`(관리자 비밀번호)로 한 번 더 요청한다. Hobby는 서버 함수(api/*.js) 12개 한도라 API 파일을 새로 늘리지 말 것(2026-11-17 13개로 배포 ERROR). 결과는 관리자 화면에 「바로 배포를 시작했습니다」 또는 「지금 배포」 버튼으로 보인다. 2026-11-17 훅 직접 호출로 배포 READY 확인.
 - 화면·목록이 바뀌는 저장만 Deploy Hook(Vercel env `DEPLOY_HOOK_URL`, Settings > Git > Deploy Hooks `archive-deploy`)을 부른다: `/api/upload`(아카이브 올리기)와 `/api/projects`(관리자 목록 저장)가 성공 뒤 `L.deploy()`를 한 번 호출. 데이터 저장 API에는 넣지 않는다.
 - 배포 전에도 보이게: 목록 화면(`index.html`·`project.html`·`work.html`·`gnb.js` 검색)은 `GET /api/projects`(GitHub 최신)를 먼저 읽고 안 되면 배포된 `projects.json`을 쓴다. 시안 파일은 배포된 정적 파일이 없으면 `vercel.json` rewrite로 `/api/raw`가 GitHub에서 바로 내준다. 그래서 올리기 직후 훅 배포가 실패·지연돼도 새 시안이 열린다.
 - `index.html`, `stats*.html`, `api/` 같은 코드 파일을 GitHub에 직접 커밋한 경우는 **자동 배포되지 않는다.** 관리자 페이지에서 목록 저장을 한 번 하거나(훅 호출), Vercel 대시보드 Deployments에서 Redeploy를 눌러 배포한다. 여러 파일을 고칠 때는 모아서 커밋하고 배포는 마지막에 한 번만.
