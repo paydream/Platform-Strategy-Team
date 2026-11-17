@@ -2,35 +2,6 @@
   "version": 2,
   "projects": [
     {
-      "id": "20261117-114846-index",
-      "title": "[예스폼싸인] 로고 수정",
-      "team": "design",
-      "category": "웹 메인",
-      "desc": "",
-      "created": "2026.11.17",
-      "updated": "2026.11.17",
-      "hidden": false,
-      "final": null,
-      "versions": [
-        {
-          "id": "20261117-114846-index",
-          "label": "v1",
-          "title": "[예스폼싸인] 로고 수정",
-          "desc": "",
-          "created": "2026.11.17",
-          "folder": "archive/20261117-114846-index",
-          "preview": "archive/20261117-114846-index/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261117-114846-index/index.html"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "id": "20261020-163515-icons",
       "title": "예스폼싸인 로고 개선 작업",
       "team": "design",
@@ -124,9 +95,55 @@
             }
           ],
           "figma": "https://www.figma.com/design/Tu14pavg2z84R2MVQXpMe0/?node-id=1-1190"
+        },
+        {
+          "id": "20261117-130910-64",
+          "label": "v6",
+          "title": "예스폼싸인 로고 개선 작업",
+          "desc": "",
+          "created": "2026.11.17",
+          "folder": "archive/20261117-130910-64",
+          "preview": "archive/20261117-130910-64/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261117-130910-64/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/Tu14pavg2z84R2MVQXpMe0/?node-id=1-1190"
         }
       ],
       "figma": "https://www.figma.com/design/Tu14pavg2z84R2MVQXpMe0/?node-id=1-1190"
+    },
+    {
+      "id": "20261117-114846-index",
+      "title": "[예스폼싸인] 로고 수정",
+      "team": "design",
+      "category": "웹 메인",
+      "desc": "",
+      "created": "2026.11.17",
+      "updated": "2026.11.17",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261117-114846-index",
+          "label": "v1",
+          "title": "[예스폼싸인] 로고 수정",
+          "desc": "",
+          "created": "2026.11.17",
+          "folder": "archive/20261117-114846-index",
+          "preview": "archive/20261117-114846-index/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261117-114846-index/index.html"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "20261113-112032-yesform-membership-plan",
