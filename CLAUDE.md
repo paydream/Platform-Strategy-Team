@@ -17,6 +17,7 @@
 - 화면·목록이 바뀌는 저장만 Deploy Hook(Vercel env `DEPLOY_HOOK_URL`, Settings > Git > Deploy Hooks `archive-deploy`)을 부른다: `/api/upload`(아카이브 올리기)와 `/api/projects`(관리자 목록 저장)가 성공 뒤 `L.deploy()`를 한 번 호출. 데이터 저장 API에는 넣지 않는다.
 - 배포 전에도 보이게: 목록 화면(`index.html`·`project.html`·`work.html`·`gnb.js` 검색)은 `GET /api/projects`(GitHub 최신)를 먼저 읽고 안 되면 배포된 `projects.json`을 쓴다. 시안 파일은 배포된 정적 파일이 없으면 `vercel.json` rewrite로 `/api/raw`가 GitHub에서 바로 내준다. 그래서 올리기 직후 훅 배포가 실패·지연돼도 새 시안이 열린다.
 - `index.html`, `stats*.html`, `api/` 같은 코드 파일을 GitHub에 직접 커밋한 경우는 **자동 배포되지 않는다.** 관리자 페이지에서 목록 저장을 한 번 하거나(훅 호출), Vercel 대시보드 Deployments에서 Redeploy를 눌러 배포한다. 여러 파일을 고칠 때는 모아서 커밋하고 배포는 마지막에 한 번만.
+- 대시보드·훅 없이 배포가 필요하면: `vercel.json`의 `git.deploymentEnabled.main`을 true로 바꾼 커밋을 push(그 커밋이 배포됨) → 바로 다음 커밋에서 false로 되돌린다(배포 안 됨). 2026-11-17에 이 방법으로 배포.
 
 ## 사이트 전체 비밀번호 (`middleware.js`, 2026-11-13~)
 - 사이트에 처음 들어오면 비밀번호 화면이 뜨고, 맞히면 30일짜리 쿠키(`pst_site`, HttpOnly)를 받아 모든 화면·데이터를 비밀번호 없이 본다. 시안 파일(`archive/`)·`projects.json`·API도 전부 이 뒤에 있다.
