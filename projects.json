@@ -2,70 +2,6 @@
   "version": 2,
   "projects": [
     {
-      "id": "20261110-164447-css",
-      "title": "[예스폼싸인] 2차 고도화 템플릿",
-      "team": "design",
-      "category": "웹 메인",
-      "desc": "",
-      "created": "2026.11.10",
-      "updated": "2026.11.17",
-      "hidden": false,
-      "final": null,
-      "versions": [
-        {
-          "id": "20261110-164447-css",
-          "label": "v1",
-          "title": "[예스폼싸인] 2차 고도화 템플릿",
-          "desc": "",
-          "created": "2026.11.10",
-          "folder": "archive/20261110-164447-css",
-          "preview": "archive/20261110-164447-css/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261110-164447-css/index.html"
-            }
-          ]
-        },
-        {
-          "id": "20261112-164035-images",
-          "label": "v2",
-          "title": "[예스폼싸인] 2차 고도화 템플릿",
-          "desc": "",
-          "created": "2026.11.12",
-          "folder": "archive/20261112-164035-images",
-          "preview": "archive/20261112-164035-images/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261112-164035-images/index.html"
-            }
-          ],
-          "figma": "https://www.figma.com/design/EXUWdUfToeHuFf1sblHGNd/?node-id=54169-29120"
-        },
-        {
-          "id": "20261117-161319-2",
-          "label": "v3",
-          "title": "[예스폼싸인] 2차 고도화 템플릿",
-          "desc": "",
-          "created": "2026.11.17",
-          "folder": "archive/20261117-161319-2",
-          "preview": "archive/20261117-161319-2/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261117-161319-2/index.html"
-            }
-          ],
-          "figma": "https://www.figma.com/design/EXUWdUfToeHuFf1sblHGNd/?node-id=54169-29120"
-        }
-      ],
-      "figma": "https://www.figma.com/design/EXUWdUfToeHuFf1sblHGNd/"
-    },
-    {
       "id": "20261116-125722-yesform-brief-timeline-v1",
       "title": "예스폼 메인 로그인 모달 (연말연초 타임라인)",
       "team": "design",
@@ -242,8 +178,89 @@
             }
           ],
           "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX?node-id=147-1385"
+        },
+        {
+          "id": "20261117-162223-yesform-brief-timeline-v11",
+          "label": "v11 · 주요 내용 문체 통일 (명사형 종결)",
+          "title": "예스폼 메인 로그인 모달 (연말연초 타임라인)",
+          "desc": "주요 내용·설명에서 「~해요」 문체를 없애고 명사형 종결로 통일(42건 점검), 지급명세서 문구에 「제출」 추가, 국민연금·산업안전보건법 대상과 난임휴가·산업안전보건법 설명을 룰북 시트 값과 일치",
+          "created": "2026.11.17",
+          "folder": "archive/20261117-162223-yesform-brief-timeline-v11",
+          "preview": "archive/20261117-162223-yesform-brief-timeline-v11/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "연말연초 모달 시안 5종",
+              "href": "archive/20261117-162223-yesform-brief-timeline-v11/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX?node-id=147-1385"
         }
       ]
+    },
+    {
+      "id": "20261110-164447-css",
+      "title": "[예스폼싸인] 2차 고도화 템플릿",
+      "team": "design",
+      "category": "웹 메인",
+      "desc": "",
+      "created": "2026.11.10",
+      "updated": "2026.11.17",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261110-164447-css",
+          "label": "v1",
+          "title": "[예스폼싸인] 2차 고도화 템플릿",
+          "desc": "",
+          "created": "2026.11.10",
+          "folder": "archive/20261110-164447-css",
+          "preview": "archive/20261110-164447-css/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261110-164447-css/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261112-164035-images",
+          "label": "v2",
+          "title": "[예스폼싸인] 2차 고도화 템플릿",
+          "desc": "",
+          "created": "2026.11.12",
+          "folder": "archive/20261112-164035-images",
+          "preview": "archive/20261112-164035-images/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261112-164035-images/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/EXUWdUfToeHuFf1sblHGNd/?node-id=54169-29120"
+        },
+        {
+          "id": "20261117-161319-2",
+          "label": "v3",
+          "title": "[예스폼싸인] 2차 고도화 템플릿",
+          "desc": "",
+          "created": "2026.11.17",
+          "folder": "archive/20261117-161319-2",
+          "preview": "archive/20261117-161319-2/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261117-161319-2/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/EXUWdUfToeHuFf1sblHGNd/?node-id=54169-29120"
+        }
+      ],
+      "figma": "https://www.figma.com/design/EXUWdUfToeHuFf1sblHGNd/"
     },
     {
       "id": "20261020-163515-icons",
