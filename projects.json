@@ -161,6 +161,23 @@
             }
           ],
           "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX?node-id=147-1385"
+        },
+        {
+          "id": "20261117-160052-yesform-brief-timeline-v10",
+          "label": "v10 · 법령 문구 추가 보완 (대상·과징금 요건·고시 대기)",
+          "title": "예스폼 메인 로그인 모달 (연말연초 타임라인)",
+          "desc": "휴게시간 예외 대상을 「근로시간이 4시간인 근로자가 있는 사업장」으로 수정, 산업안전보건법 과징금에 안전·보건조치 위반 요건 반영, 산재보험료율은 「고시 대기」 배지와 「고시 후」 날짜 표기로 변경",
+          "created": "2026.11.17",
+          "folder": "archive/20261117-160052-yesform-brief-timeline-v10",
+          "preview": "archive/20261117-160052-yesform-brief-timeline-v10/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "연말연초 모달 시안 5종",
+              "href": "archive/20261117-160052-yesform-brief-timeline-v10/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX?node-id=147-1385"
         }
       ]
     },
