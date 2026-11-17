@@ -13,6 +13,8 @@ module.exports = async (req, res) => {
     const folderFree = async f => !(await L.gh(`/repos/${L.REPO}/contents/${L.enc(f)}?ref=${encodeURIComponent(L.BRANCH)}`, { allow404: true }));
 
     if (b.action === 'check') return res.status(200).json({ ok: true });
+    // 사이트 배포 바로 시작 (관리자 화면 「지금 배포」, 저장 뒤 훅 실패 시). Hobby는 함수 12개 한도라 별도 API 파일을 만들지 않고 여기서 처리
+    if (b.action === 'deploy') { const deployed = await L.deploy('admin deploy'); return deployed ? res.status(200).json({ ok: true, deployed }) : res.status(502).json({ error: '배포 요청이 실패했습니다. 잠시 뒤 다시 눌러 주세요.' }); }
     if (b.action === 'start') {
       if (!M.FOLDER_RE.test(b.folder || '')) return res.status(400).json({ error: '폴더 이름 형식이 올바르지 않습니다.' });
       if (!(await folderFree(b.folder))) return res.status(409).json({ error: `${b.folder} 폴더가 이미 있습니다. 덮어쓰지 않고 멈췄습니다.` });
