@@ -53,6 +53,15 @@ function siteOk(req) {
 }
 const configured = () => Boolean(TOKEN && process.env.ADMIN_PASSWORD);
 
+// 배포 트리거: 커밋은 자동 배포되지 않음(vercel.json git.deploymentEnabled=false). 화면·목록이 바뀌는 저장(아카이브 업로드, projects.json)만 Deploy Hook을 한 번 부른다.
+// 데이터 파일 저장(plan-schedule, stats-update, work, comments, tracking 등)에서는 부르지 않는다.
+async function deploy(reason) {
+  const url = process.env.DEPLOY_HOOK_URL;
+  if (!url) return false;
+  try { const r = await fetch(url, { method: 'POST' }); if (!r.ok) console.error('deploy hook', r.status, reason); return r.ok; }
+  catch (e) { console.error('deploy hook failed', reason, e && e.message); return false; }
+}
+
 function body(req) { return typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {}); }
 function ghError(e) {
   return e.status === 401 ? '서버의 GitHub 토큰이 맞지 않거나 만료됐습니다.'
@@ -61,4 +70,4 @@ function ghError(e) {
     : e.message && !e.status ? e.message : '처리 중 오류가 났습니다.';
 }
 
-module.exports = { REPO, BRANCH, gh, enc, readJson, writeJson, adminOk, teamOk, siteOk, configured, body, ghError };
+module.exports = { REPO, BRANCH, gh, enc, readJson, writeJson, adminOk, teamOk, siteOk, configured, body, ghError, deploy };

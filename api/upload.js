@@ -46,7 +46,8 @@ module.exports = async (req, res) => {
         const commit = await L.gh(`/repos/${L.REPO}/git/commits`, { method: 'POST', body: JSON.stringify({ message: `아카이브 추가: ${String(title).slice(0, 100)} (관리자 페이지)`, tree: newTree.sha, parents: [ref.object.sha] }) });
         try {
           await L.gh(`/repos/${L.REPO}/git/refs/heads/${encodeURIComponent(L.BRANCH)}`, { method: 'PATCH', body: JSON.stringify({ sha: commit.sha }) });
-          return res.status(200).json({ ok: true, commit: commit.sha });
+          const deployed = await L.deploy('upload ' + upload.folder);
+          return res.status(200).json({ ok: true, commit: commit.sha, deployed });
         } catch (e) { if (e.status !== 422) throw e; }
       }
       return res.status(409).json({ error: '다른 저장과 겹쳤습니다. 잠시 뒤 다시 올려 주세요.' });

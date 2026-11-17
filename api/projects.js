@@ -22,6 +22,7 @@ module.exports = async (req, res) => {
     const problem = M.checkSave(cur.data, b.data);
     if (problem) return res.status(400).json({ error: problem });
     const sha = await L.writeJson('projects.json', b.data, cur.sha, '아카이브 목록 수정 (관리자 페이지)');
-    return res.status(200).json({ ok: true, sha });
+    const deployed = await L.deploy('projects.json');
+    return res.status(200).json({ ok: true, sha, deployed });
   } catch (e) { return res.status(500).json({ error: L.ghError(e) }); }
 };
