@@ -34,7 +34,7 @@
     var TEAM = { design: '디자인', planning: '기획' };
     function load() {
       if (P || loading) return loading;
-      loading = fetch('projects.json', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (d) {
+      loading = fetch('api/projects', { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }).then(function (j) { return (j && j.enabled && j.data) ? j.data : fetch('projects.json', { cache: 'no-store' }).then(function (r) { return r.json(); }); }).then(function (d) {
         P = (d.projects || []).filter(function (p) { return !p.hidden && (p.versions || []).some(function (v) { return !v.hidden; }); });
       }).catch(function () { P = []; }).then(function () { loading = null; if (input.value.trim()) run(); });
       return loading;

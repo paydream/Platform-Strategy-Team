@@ -128,7 +128,7 @@ document.getElementById('undo').onclick = async () => {
   try { pins = await setPin(id, true); render(); } catch (err) { toast(err.message, false); }
 };
 
-fetch('projects.json', { cache: 'no-store' }).then(r => r.json()).then(d => { projects = d.projects || []; loaded++; render(); });
+fetch('api/projects', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null).then(j => (j && j.enabled && j.data) ? j.data : fetch('projects.json', { cache: 'no-store' }).then(r => r.json())).then(d => { projects = d.projects || []; loaded++; render(); });
 fetch('api/work', { cache: 'no-store' }).then(r => r.ok ? r.json() : { pins: [] }).then(d => { pins = d.pins || []; loaded++; render(); }).catch(() => { loaded++; render(); });
 fetch('api/comments?summary=1', { cache: 'no-store' }).then(r => r.ok ? r.json() : {}).then(d => { counts = d.counts || {}; render(); }).catch(() => {});
 </script>

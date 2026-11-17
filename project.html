@@ -307,7 +307,8 @@ async function toggleFinal() {
 
 /* ---------- 시작 ---------- */
 (async () => {
-  const d = await fetch('projects.json', { cache: 'no-store' }).then(r => r.json());
+  // 올린 직후(배포 전)에도 열리도록 GitHub의 최신 목록을 먼저 읽음
+  const d = await fetch('api/projects', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null).then(j => (j && j.enabled && j.data) ? j.data : fetch('projects.json', { cache: 'no-store' }).then(r => r.json()));
   P = (d.projects || []).find(p => p.id === params.get('id'));
   const vs = P ? P.versions.filter(v => !v.hidden) : [];
   if (!P || !vs.length) { $('app').innerHTML = '<p class="notfound">프로젝트를 찾지 못했습니다. <a href="./">목록으로</a></p>'; return; }

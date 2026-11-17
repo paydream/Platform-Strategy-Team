@@ -14,5 +14,11 @@
     "deploymentEnabled": {
       "main": false
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/archive/:path*",
+      "destination": "/api/raw?p=archive/:path*"
+    }
+  ]
 }
