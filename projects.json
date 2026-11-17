@@ -144,6 +144,23 @@
             }
           ],
           "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX?node-id=147-1385"
+        },
+        {
+          "id": "20261117-155158-yesform-brief-timeline-v9",
+          "label": "v9 · 법령 문구 검증 반영 (법령정보센터 대조)",
+          "title": "예스폼 메인 로그인 모달 (연말연초 타임라인)",
+          "desc": "법령 6건을 국가법령정보센터 원문과 대조. 휴게시간 예외 문구 보완(4시간·명시적 요청), 산재보험료율 「12월 말 고시 예정(고시 전)」 표기, 산업안전보건법 대상·시행 단계(1.28 / 4.28) 구분",
+          "created": "2026.11.17",
+          "folder": "archive/20261117-155158-yesform-brief-timeline-v9",
+          "preview": "archive/20261117-155158-yesform-brief-timeline-v9/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "연말연초 모달 시안 5종",
+              "href": "archive/20261117-155158-yesform-brief-timeline-v9/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX?node-id=147-1385"
         }
       ]
     },
