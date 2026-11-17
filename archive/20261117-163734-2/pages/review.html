@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>예스폼싸인 · 검토</title>
+<!--
+  예스폼싸인 2차 고도화 — 템플릿 만들기 4단계 검토 (2026-11-10 · 2026-11-17 새 시안으로 바꿈)
+  Figma: 싸인_디자인시스템 › 템플릿 생성_검토 1 (54522:37956 · 1280 × 798) — 예전 시안 54320:48060
+  · 템플릿 만들기 흐름: 문서 업로드 → 역할 설정 → 서명 조건 설정 [다음] → 이 화면 (주소 ?flow=tpl&d=…)
+    시안 바로가기 [템플릿 만들기] › "4단계 검토"로 바로 열 수도 있음
+  · 앞 단계에서 넘어온 문서 이름 · 서명 순서 · 역할 · 추가 인증 · 템플릿 유형이 채워짐 (js/review.js)
+    이 화면을 바로 열면 Figma 예시(2차적저작물 이용허락 계약서.pdf · 역할 3개)로 보임
+  · 템플릿명 — 처음 값은 문서 이름 · [수정하기]를 누르면 입력 칸으로 가서 글자를 모두 고름 · 비우면 [저장하기]가 흐림
+  · "자주 사용하는 템플릿" — 누르면 켜고 끔 (켜짐 = 파란 핀 · Figma 처음 모습)
+  · 역할 카드 — 색은 역할 순서대로 빨강 · 노랑 · 주황 … · 순서대로 서명하기일 때만 카드 사이에 › 표시
+  · 고정 첨부 문서 — X 로 빼기 · [파일 추가 (n/5)]로 파일 고르기 (최대 5개 · 다 차면 흐림)
+  · [저장하기] → 템플릿 관리(index.html)로 돌아감
+  · 스타일 ../css/style.css ("검토" 부분)
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="page-step">
+
+<header class="hd hd--step">
+  <div class="hd__logo hd__logo--step"><img src="../images/로고_스_64.png" width="104" height="32" alt="예스폼싸인"></div>
+  <ol class="steps" aria-label="계약 단계">
+    <li class="steps__item"><span class="steps__num">1</span>문서 업로드</li>
+    <li class="steps__item"><span class="steps__num">2</span>역할 설정</li>
+    <li class="steps__item"><span class="steps__num">3</span>서명 조건 설정</li>
+    <li class="steps__item is-on" aria-current="step"><span class="steps__num">4</span>검토</li>
+  </ol>
+  <span class="hd__empty" aria-hidden="true"></span>
+</header>
+
+<main class="pt">
+  <h1 class="pt__title">템플릿 정보를 입력하고 저장해 주세요</h1>
+
+  <!-- 검토 카드 (Figma 템플릿 생성_검토 1 · 54522:37963) -->
+  <section class="rv-card" aria-label="템플릿 정보">
+    <!-- 템플릿명 -->
+    <div class="rv-name">
+      <label class="rv-name__label" for="rv-name">템플릿명<span class="field__req" aria-hidden="true">*</span></label>
+      <div class="rv-name__body">
+        <div class="rv-name__row">
+          <input class="field__input rv-name__input" id="rv-name" type="text" maxlength="50" placeholder="템플릿명을 입력해 주세요." required data-name>
+          <button class="btn btn--line-blue rv-name__edit" type="button" data-edit>수정하기</button>
+        </div>
+        <button class="rv-fav" type="button" aria-pressed="true" data-fav>
+          <img class="rv-fav__off" src="../images/ic-pin-16.svg" width="16" height="16" alt="">
+          <img class="rv-fav__on" src="../images/ic-pin-16-on.svg" width="16" height="16" alt="">
+          자주 사용하는 템플릿
+        </button>
+      </div>
+    </div>
+
+    <hr class="rv-line">
+
+    <!-- 템플릿 정보 -->
+    <div class="rv-info">
+      <h2 class="rv-info__title">템플릿 정보</h2>
+      <dl class="rv-list">
+        <div>
+          <dt>문서</dt>
+          <dd class="rv-doc"><span data-doc>2차적저작물 이용허락 계약서.pdf</span><button class="btn-xs" type="button">미리 보기</button></dd>
+        </div>
+        <div>
+          <dt>서명 순서</dt>
+          <dd data-order>순서대로 서명하기</dd>
+        </div>
+        <div class="rv-list__roles">
+          <dt>역할 <span data-role-count>(3)</span></dt>
+          <dd><ul class="rv-roles" data-roles></ul></dd>
+        </div>
+        <div>
+          <dt>템플릿 유형</dt>
+          <dd><span class="type type--normal" data-type>일반 계약</span></dd>
+        </div>
+        <div>
+          <dt>고정 첨부 문서</dt>
+          <dd class="rv-files" data-attach>
+            <span class="rv-file"><span class="rv-file__name">파일명칭.pdf</span><button class="rv-file__del" type="button" aria-label="파일명칭.pdf 빼기" data-attach-del><img src="../images/ic-close-14.svg" width="14" height="14" alt=""></button></span>
+            <label class="rv-add" data-attach-add><img src="../images/ic-plus-blue-14.svg" width="14" height="14" alt="">파일 추가 (<span data-attach-count>1</span>/5)<input type="file" data-attach-input></label>
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+</main>
+
+<footer class="wfooter">
+  <button class="btn btn--out" type="button" data-exit>나가기</button>
+  <button class="btn btn--primary btn--next" type="button" data-done>저장하기</button>
+</footer>
+
+<!-- 나가기 확인 모달 (Figma 54347:35246) -->
+<div class="dim" id="exit-modal" hidden>
+  <div class="modal modal--sm" role="alertdialog" aria-modal="true" aria-labelledby="exit-title" aria-describedby="exit-desc">
+    <div class="modal__top">
+      <h2 class="modal__title" id="exit-title">나가기</h2>
+      <p class="modal__desc" id="exit-desc">현재 작성하신 계약이 저장되지 않습니다.<br>정말 나가시겠습니까?</p>
+    </div>
+    <div class="modal__btns">
+      <button class="modal__btn" type="button" data-exit-cancel>취소</button>
+      <a class="modal__btn modal__btn--primary" href="../index.html">나가기</a>
+    </div>
+  </div>
+</div>
+
+<script src="../js/step.js"></script>
+<script src="../js/review.js"></script>
+<script src="../js/proto-bar.js"></script>
+</body>
+</html>
