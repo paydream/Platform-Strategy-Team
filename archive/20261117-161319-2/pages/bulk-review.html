@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>예스폼싸인 · 대량 전송 검토</title>
+<!--
+  예스폼싸인 2차 고도화 — 대량 전송 4단계 검토 (2026-11-17)
+  Figma: 검토 54522:37263 · 전송 요약 54522:38295 · 전송 전 확인 사항 54522:37659
+         받는 사람 목록 모달 54554:51659 (모달 54554:52028)
+  · 전송 설정 [다음]에서 오는 화면 · 위쪽 단계는 4단계 "검토"
+  · 전송 요약 — 대량 전송 계약명(위 문서 줄 값) · 계약명 규칙 · 서명 유효기간(days) · 라벨(label) 등
+    서명 참여자 · 예상 차감 건수 = 참여자 설정에서 입력한 받는 사람 수 · 잔여 건수 96건(시안 값)
+  · [받는 사람 목록 보기] → 받는 사람 목록 모달 (이름 또는 연락처로 검색 · 추가 인증 칩: 접근 암호 · 휴대폰 인증 O 이면 휴대폰 번호)
+    닫기 · 확인 · 바깥 · Esc 로 닫힘 · 주소에 modal=1 이면 열자마자 모달
+  · "본인은 상기 사항을 … 동의합니다."를 체크해야 [대량 전송하기]가 진해짐
+  · [대량 전송하기] → 발송 진행 화면(bulk-progress.html)
+  · 동작 js/bulk-review.js · 스타일 css/style.css (아래쪽 "대량 전송 3 · 4단계 · 발송 진행" 부분)
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="page-step page-step--doc">
+
+<header class="hd hd--step">
+  <div class="hd__logo hd__logo--step"><img src="../images/로고_스_64.png" width="104" height="32" alt="예스폼싸인"></div>
+  <ol class="steps" aria-label="대량 전송 단계" data-steps></ol>
+  <span class="hd__empty" aria-hidden="true"></span>
+</header>
+
+<!-- 문서 줄 (Figma upload 54522:39090) -->
+<div class="docbar">
+  <div class="docbar__inner">
+    <div class="docbar__doc">
+      <p class="docbar__name" data-tpl-name>아르바이트 근로계약서</p>
+      <button class="btn-xs" type="button">미리보기</button>
+    </div>
+    <div class="docbar__title">
+      <label class="docbar__label" for="bulk-title">대량 전송 계약명<span class="field__req" aria-hidden="true">*</span></label>
+      <input class="docbar__input" id="bulk-title" type="text" data-bulk-title required>
+    </div>
+  </div>
+</div>
+
+<main class="bk">
+  <h1 class="bk__title">검토 후 대량 전송</h1>
+
+  <!-- 전송 요약 (Figma 54522:38295) -->
+  <section class="br-card br-sum" aria-labelledby="br-sum-title">
+    <h2 class="br-card__title" id="br-sum-title">전송 요약</h2>
+    <dl class="br-sum__list">
+      <div><dt>대량 전송 계약명</dt><dd data-sum="title">아르바이트 근로계약서</dd></div>
+      <div><dt>계약명</dt><dd data-sum="rule">받는 사람별(기본 아르바이트 근로계약서_{이름})</dd></div>
+      <div><dt>계약 문서</dt><dd>알바계약서.hwp (1개)</dd></div>
+      <div><dt>서명 유효기간</dt><dd data-sum="days">14일</dd></div>
+      <div><dt>추가 인증</dt><dd>서명 참여자별 설정</dd></div>
+      <div><dt>라벨</dt><dd><span class="chip chip--auto" data-sum="label">표준 근로계약서_2026년 05월 외 1개</span></dd></div>
+      <div><dt>발송 방식</dt><dd>순서대로 발송</dd></div>
+    </dl>
+    <hr class="br-sum__line">
+    <div class="br-sum__bar">
+      <p class="br-sum__counts">
+        <span>서명 참여자<b><span data-sum="count">0</span>명</b></span><i aria-hidden="true"></i>
+        <span>예상 차감 건수<b class="br-sum__blue"><span data-sum="charge">0</span>건</b></span><i aria-hidden="true"></i>
+        <span>잔여 건수<b><span data-sum="left">96</span>건</b></span>
+      </p>
+      <button class="btn-xs" type="button" aria-haspopup="dialog" aria-controls="rl-modal" data-open-list>받는 사람 목록 보기</button>
+    </div>
+  </section>
+
+  <!-- 전송 전 확인 사항 (Figma 54522:37659) -->
+  <section class="br-card br-check" aria-labelledby="br-check-title">
+    <h2 class="br-card__title br-check__title" id="br-check-title">전송 전 확인 사항</h2>
+    <ul class="br-check__list">
+      <li>받는 사람마다 계약을 1건씩 순서대로 발송하며, 발송에 성공한 건만 차감됩니다. 표시된 차감 건수는 예상 건수입니다.</li>
+      <li>입력한 연락처로 계약서 링크가 전송됩니다. 연락처를 다시 확인해 주세요.</li>
+      <li>전송 후에는 계약 내용을 바꿀 수 없으며, 계약별로 취소할 수 있습니다.</li>
+      <li>전자서명법에 따라 서명 계약과 동일한 법적 효력이 있음에 동의합니다.</li>
+    </ul>
+    <label class="br-agree">
+      <input type="checkbox" data-agree>
+      <span class="br-agree__ic" aria-hidden="true"></span>
+      본인은 상기 사항을 확인했으며, 모두 동의합니다.
+    </label>
+  </section>
+</main>
+
+<footer class="wfooter">
+  <button class="btn btn--out" type="button" data-exit>나가기</button>
+  <button class="btn btn--primary btn--next" type="button" data-next disabled>대량 전송하기</button>
+</footer>
+
+<!-- 받는 사람 목록 모달 (Figma 54554:52028) -->
+<div class="dim" id="rl-modal" hidden>
+  <div class="modal modal--list" role="dialog" aria-modal="true" aria-labelledby="rl-title" tabindex="-1">
+    <div class="modal__top">
+      <h2 class="modal__title" id="rl-title">받는 사람 목록 <span data-list-count>0</span>명</h2>
+    </div>
+    <div class="rl">
+      <label class="search search--full">
+        <input type="search" placeholder="이름 또는 연락처로 검색" aria-label="이름 또는 연락처로 검색" data-list-search>
+        <img src="../images/ic-search-24.svg" width="24" height="24" alt="">
+      </label>
+      <div class="rl-table">
+        <div class="rl-row rl-row--head" role="presentation">
+          <span class="rl-no">NO</span>
+          <span class="rl-name">이름</span>
+          <span class="rl-contact">연락처</span>
+          <span class="rl-title">계약명</span>
+          <span class="rl-auth">추가 인증</span>
+        </div>
+        <ul class="rl-rows" data-list-rows></ul>
+        <p class="table__empty" data-list-empty hidden>검색 결과가 없습니다.</p>
+      </div>
+    </div>
+    <div class="modal__btns">
+      <button class="modal__btn" type="button" data-list-close>닫기</button>
+      <button class="modal__btn modal__btn--primary" type="button" data-list-close>확인</button>
+    </div>
+  </div>
+</div>
+
+<!-- 나가기 확인 모달 (Figma 54347:35246) -->
+<div class="dim" id="exit-modal" hidden>
+  <div class="modal modal--sm" role="alertdialog" aria-modal="true" aria-labelledby="exit-title" aria-describedby="exit-desc">
+    <div class="modal__top">
+      <h2 class="modal__title" id="exit-title">나가기</h2>
+      <p class="modal__desc" id="exit-desc">현재 작성하신 계약이 저장되지 않습니다.<br>정말 나가시겠습니까?</p>
+    </div>
+    <div class="modal__btns">
+      <button class="modal__btn" type="button" data-exit-cancel>취소</button>
+      <a class="modal__btn modal__btn--primary" href="../index.html">나가기</a>
+    </div>
+  </div>
+</div>
+
+<script src="../js/step.js"></script>
+<script src="../js/bulk-common.js"></script>
+<script src="../js/bulk-review.js"></script>
+<script src="../js/proto-bar.js"></script>
+</body>
+</html>
