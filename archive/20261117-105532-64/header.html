@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>예스폼싸인 · 헤더 로고 비교</title>
+<!--
+  예스폼싸인 헤더 로고 비교 (2026-11-17)
+  Figma: 싸인_디자인시스템 › Header_home · Type=logout, device=PC(web), Role=Default (53149:15065)
+  · 헤더는 컴포넌트 그대로 — 로고(h1) · 메뉴 4개 · [1개월 무료 체험] · [로그인] · 높이 60 · 아래 줄 #EBEDEF
+  · 로고 이미지만 다름 — Figma 로고 칸 104 × 32 에 넣음
+    이전 로고: old/8차.png (208 × 64, 2배 · 2차고도화 화면에 쓰던 로고와 같은 파일)
+    수정 로고: 로고_스_64.png (195 × 64, 2배 · '스'만 변경) — 잘리지 않게 왼쪽 맞춤
+  · 스타일 header.css · 이미지는 이 파일 기준 상대 경로
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="header.css">
+</head>
+<body>
+
+<main class="cmp">
+
+  <!-- 이전 로고 -->
+  <section class="cmp__sec" aria-labelledby="cmp-before">
+    <div class="cmp__head">
+      <h2 class="cmp__title" id="cmp-before">이전 로고</h2>
+      <span class="cmp__file">old/8차.png</span>
+    </div>
+    <header class="hd">
+      <div class="hd__inner">
+        <h1 class="hd__logo"><a href="#"><img src="old/8차.png" width="104" height="32" alt="예스폼싸인"></a></h1>
+        <nav class="hd__lnb" aria-label="주 메뉴">
+          <a href="#">서비스가이드</a>
+          <a href="#">전자서명 만들기</a>
+          <a href="#">이용요금</a>
+          <a href="#">고객센터</a>
+        </nav>
+        <div class="hd__info">
+          <a class="hd__btn hd__btn--blue" href="#">1개월 무료 체험</a>
+          <a class="hd__btn" href="#">로그인</a>
+        </div>
+      </div>
+    </header>
+  </section>
+
+  <!-- 수정 로고 ('스'만 변경) -->
+  <section class="cmp__sec" aria-labelledby="cmp-after">
+    <div class="cmp__head">
+      <h2 class="cmp__title" id="cmp-after">수정 로고 <span class="cmp__note">('스'만 변경)</span></h2>
+      <span class="cmp__file">로고_스_64.png</span>
+    </div>
+    <header class="hd">
+      <div class="hd__inner">
+        <h1 class="hd__logo"><a href="#"><img src="로고_스_64.png" width="104" height="32" alt="예스폼싸인"></a></h1>
+        <nav class="hd__lnb" aria-label="주 메뉴">
+          <a href="#">서비스가이드</a>
+          <a href="#">전자서명 만들기</a>
+          <a href="#">이용요금</a>
+          <a href="#">고객센터</a>
+        </nav>
+        <div class="hd__info">
+          <a class="hd__btn hd__btn--blue" href="#">1개월 무료 체험</a>
+          <a class="hd__btn" href="#">로그인</a>
+        </div>
+      </div>
+    </header>
+  </section>
+
+</main>
+
+</body>
+</html>

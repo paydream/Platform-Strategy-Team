@@ -1,0 +1,44 @@
+/* 예스폼싸인 헤더 — Figma Header_home · Type=logout (53149:15065)
+   높이 60 · 좌우 24 · 안쪽 최대 1600 · 아래 줄 1 (#EBEDEF, 안쪽 선이라 높이에 포함) · 밝은 화면 고정 */
+:root{
+  color-scheme:light;
+  --blue:#1B52ED;
+  --blue-line:#2D62FA;
+  --text:#1D1F20;
+  --line:#E3E5E8;
+  --line-mid:#EBEDEF;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:#F6F8FA}
+body{min-width:1280px;font-family:Pretendard,'Pretendard Variable','Noto Sans KR',-apple-system,sans-serif;color:var(--text);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid #7DA2FF;outline-offset:2px}
+
+/* 비교 화면 — 제목 + 헤더를 위아래로 (회색 바탕 위에 흰 헤더) */
+.cmp{display:flex;flex-direction:column;gap:48px;padding:40px 0 60px}
+.cmp__sec{display:flex;flex-direction:column;gap:12px}
+.cmp__head{display:flex;align-items:baseline;gap:10px;padding:0 24px}
+.cmp__title{margin:0;font-size:20px;line-height:28px;font-weight:700;color:var(--text)}
+.cmp__note{font-weight:500;color:#6D7379}
+.cmp__file{font-size:13px;line-height:18px;color:#888F95}
+
+.hd{padding:0 24px;background:#fff;box-shadow:inset 0 -1px 0 var(--line-mid)}
+.hd__inner{display:flex;align-items:center;max-width:1600px;height:60px;margin:0 auto}
+
+/* 로고 칸 180 (오른쪽 60 여백 포함) · 로고 104 × 32 · 아래 8 띄움 */
+.hd__logo{display:flex;flex-direction:column;justify-content:center;flex:none;width:180px;height:100%;margin:0;padding:0 60px 8px 0}
+.hd__logo a{display:block;width:104px;height:32px}
+.hd__logo img{display:block;width:104px;height:32px;object-fit:contain;object-position:left center}
+
+/* 메뉴 — 16/22 SemiBold · 사이 48 · 위 2 */
+.hd__lnb{display:flex;align-items:center;gap:48px;flex:none;height:100%;padding-top:2px;font-size:16px;line-height:22px;font-weight:600;white-space:nowrap}
+.hd__lnb a{transition:color .15s}
+.hd__lnb a:hover{color:var(--blue)}
+
+/* 오른쪽 버튼 — 높이 36 · 좌우 14 · 둥글기 8 · 14 Medium · 사이 8 */
+.hd__info{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex:1;min-width:0;height:100%}
+.hd__btn{display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 14px;border:1px solid var(--line);border-radius:8px;background:#fff;
+  font-size:14px;line-height:14px;font-weight:500;color:#031228;white-space:nowrap;transition:background-color .15s}
+.hd__btn:hover{background:#F6F7F8}
+.hd__btn--blue{border-color:var(--blue-line);color:var(--blue)}
+.hd__btn--blue:hover{background:#F5F9FF}
