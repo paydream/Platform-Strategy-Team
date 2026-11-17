@@ -981,6 +981,13 @@
       "requester": "",
       "worker": "ADEF (광고대행사)",
       "note": "Google Ads·카카오·네이버 광고 전환 태그 (GA4와 무관)"
+    },
+    "GTM-TKCL5VCQ:11": {
+      "requester": "유영경",
+      "worker": "유영경",
+      "note": "",
+      "by": "유영경",
+      "date": "2026-11-17"
     }
   }
 }
