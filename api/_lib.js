@@ -55,11 +55,16 @@ const configured = () => Boolean(TOKEN && process.env.ADMIN_PASSWORD);
 
 // 배포 트리거: 커밋은 자동 배포되지 않음(vercel.json git.deploymentEnabled=false). 화면·목록이 바뀌는 저장(아카이브 업로드, projects.json)만 Deploy Hook을 한 번 부른다.
 // 데이터 파일 저장(plan-schedule, stats-update, work, comments, tracking 등)에서는 부르지 않는다.
+// 디자인·기획 아카이브 업로드와 목록 저장은 배포를 막지 않고 바로 진행한다(2026-11-17 사용자 요청): 훅 호출이 실패하면 3번까지 다시 시도.
 async function deploy(reason) {
   const url = process.env.DEPLOY_HOOK_URL;
-  if (!url) return false;
-  try { const r = await fetch(url, { method: 'POST' }); if (!r.ok) console.error('deploy hook', r.status, reason); return r.ok; }
-  catch (e) { console.error('deploy hook failed', reason, e && e.message); return false; }
+  if (!url) { console.error('deploy hook: DEPLOY_HOOK_URL 없음', reason); return false; }
+  for (let a = 0; a < 3; a++) {
+    try { const r = await fetch(url, { method: 'POST' }); if (r.ok) return true; console.error('deploy hook', r.status, reason); }
+    catch (e) { console.error('deploy hook failed', reason, e && e.message); }
+    await new Promise(res => setTimeout(res, 800 * (a + 1)));
+  }
+  return false;
 }
 
 function body(req) { return typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {}); }
