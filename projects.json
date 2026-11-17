@@ -127,6 +127,23 @@
             }
           ],
           "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX?node-id=147-1385"
+        },
+        {
+          "id": "20261117-150522-yesform-brief-timeline-v8",
+          "label": "v8 · 서식 카드 정사각 썸네일, D 이전·다음 삭제",
+          "title": "예스폼 메인 로그인 모달 (연말연초 타임라인)",
+          "desc": "피그마 B-1 서식 카드 기준으로 B·D 카드 통일(정사각 썸네일), E·F 목록 썸네일 정사각, 상세 배지 D-day 제거·분야만 표기, 시안 D 이전·다음 이동 줄 삭제",
+          "created": "2026.11.17",
+          "folder": "archive/20261117-150522-yesform-brief-timeline-v8",
+          "preview": "archive/20261117-150522-yesform-brief-timeline-v8/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "연말연초 모달 시안 5종",
+              "href": "archive/20261117-150522-yesform-brief-timeline-v8/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX?node-id=147-1385"
         }
       ]
     },
