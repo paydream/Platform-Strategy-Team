@@ -1,960 +1,986 @@
 {
- "version": 2,
- "updated": "2026-11-12",
- "products": [
-  {
-   "id": "yesform",
-   "name": "예스폼",
-   "ga4": "G-69EG7V0B4J",
-   "gtm": "GTM-5GQJFRS"
-  },
-  {
-   "id": "sign",
-   "name": "예스폼싸인",
-   "ga4": "G-H6S4NQDPKW",
-   "gtm": "GTM-TKCL5VCQ"
-  },
-  {
-   "id": "editor",
-   "name": "에디터",
-   "ga4": "G-C1Y0RLGTB9",
-   "gtm": null
+  "version": 2,
+  "updated": "2026-11-17",
+  "products": [
+    {
+      "id": "yesform",
+      "name": "예스폼",
+      "ga4": "G-69EG7V0B4J",
+      "gtm": "GTM-5GQJFRS"
+    },
+    {
+      "id": "sign",
+      "name": "예스폼싸인",
+      "ga4": "G-H6S4NQDPKW",
+      "gtm": "GTM-TKCL5VCQ"
+    },
+    {
+      "id": "editor",
+      "name": "에디터",
+      "ga4": "G-C1Y0RLGTB9",
+      "gtm": null
+    }
+  ],
+  "records": [
+    {
+      "id": "r021",
+      "change": "추가",
+      "requester": "",
+      "worker": "",
+      "note": "",
+      "events": [
+        "report_submit",
+        "report_modal_open"
+      ],
+      "gtm": null,
+      "basis": "GA4 첫 수집일",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-11-02",
+      "product": "editor",
+      "title": "신고 모달·신고 제출",
+      "method": "사이트 코드"
+    },
+    {
+      "id": "r015",
+      "change": "추가",
+      "requester": "",
+      "worker": "",
+      "note": "GTM 태그 없이 10/30부터 GA4에 들어옴. 누가 넣었는지 확인 필요.",
+      "events": [
+        "login",
+        "signup_agree"
+      ],
+      "gtm": null,
+      "basis": "GA4 첫 수집일",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-10-30",
+      "product": "sign",
+      "title": "로그인·약관 동의",
+      "method": "사이트 코드"
+    },
+    {
+      "id": "r008",
+      "change": "추가",
+      "requester": "유영경",
+      "worker": "유영경",
+      "note": "GA4 맞춤 정의 10개 같은 날 등록. 그중 「가입 진입 위치」 매개변수가 member_typeentry_point로 잘못 들어가 entry_point 값이 안 보임 → 다시 등록 필요. preview_document는 상세에 미리보기가 없어 미설치.",
+      "events": [
+        "view_promotion",
+        "select_promotion",
+        "select_item",
+        "search_no_results",
+        "download_attempt",
+        "download_blocked",
+        "sign_up_start",
+        "view_item_list"
+      ],
+      "gtm": {
+        "container": "GTM-5GQJFRS",
+        "version": 33
+      },
+      "basis": "GTM 게시",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-10-29",
+      "product": "yesform",
+      "title": "GA4 신규 이벤트 9종 (GA4개선 시트 01_예스폼 GTM 단독)",
+      "method": "GTM"
+    },
+    {
+      "id": "r014",
+      "change": "추가",
+      "requester": "유영경",
+      "worker": "유영경",
+      "note": "싸인은 CSP 때문에 맞춤 JS 변수가 안 돼서, 맞춤 HTML 수집기 태그가 sg_* 이벤트를 만들고 GA4 태그가 받는 구조. GA4 맞춤 정의 13개 같은 날 등록.",
+      "events": [
+        "signup_start",
+        "contract_start",
+        "email_verify_view",
+        "view_pricing",
+        "select_plan",
+        "quota_exhausted",
+        "device_block_notice",
+        "cross_site_exit",
+        "cs_contact_click"
+      ],
+      "gtm": {
+        "container": "GTM-TKCL5VCQ",
+        "version": 10
+      },
+      "basis": "GTM 게시",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-10-29",
+      "product": "sign",
+      "title": "GA4 신규 이벤트 9종 (GA4개선 시트 03_싸인 GTM 단독)",
+      "method": "GTM"
+    },
+    {
+      "id": "r020",
+      "change": "추가",
+      "requester": "",
+      "worker": "",
+      "note": "",
+      "events": [
+        "promo_form_cta_click"
+      ],
+      "gtm": null,
+      "basis": "GA4 첫 수집일",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-10-29",
+      "product": "editor",
+      "title": "마케팅 서식 CTA 클릭",
+      "method": "사이트 코드"
+    },
+    {
+      "id": "r026",
+      "change": "추가",
+      "requester": "유영경",
+      "worker": "유영경",
+      "note": "가입 요금제 유형(member_type), 가입 진입 위치(member_typeentry_point), 검색 카테고리(search_category), 다운로드 차단 사유(block_reason), 다운로드 파일 형식(file_type), 로그인 여부(is_logged_in), 서식 ID(item_id), 서식 카테고리(item_category), 서식명(item_name), 회원 등급(user_grade)",
+      "events": [],
+      "gtm": null,
+      "basis": "맞춤 정의 마지막 변경일",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-10-29",
+      "product": "yesform",
+      "title": "GA4 맞춤 정의 10개 등록",
+      "params": [
+        "member_type",
+        "member_typeentry_point",
+        "search_category",
+        "block_reason",
+        "file_type",
+        "is_logged_in",
+        "item_id",
+        "item_category",
+        "item_name",
+        "user_grade"
+      ],
+      "method": "GA4 관리자"
+    },
+    {
+      "id": "r027",
+      "change": "추가",
+      "requester": "유영경",
+      "worker": "유영경",
+      "note": "FAQ 질문 ID(question_id), 디바이스 구분(device_class), 문의 유형(contact_type), 소진 유형(quota_type), 요금제 ID(plan_id), 요금제 건수(quantity), 유입 위치(entry_point), 이동 목적지(destination), 이전 단계(from_step), 인증 노출 계기(trigger_point), 잔여 건수(quota_remaining), 차단 동작(blocked_action), 회원 유형(user_type)",
+      "events": [],
+      "gtm": null,
+      "basis": "맞춤 정의 마지막 변경일",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-10-29",
+      "product": "sign",
+      "title": "GA4 맞춤 정의 13개 등록",
+      "params": [
+        "question_id",
+        "device_class",
+        "contact_type",
+        "quota_type",
+        "plan_id",
+        "quantity",
+        "entry_point",
+        "destination",
+        "from_step",
+        "trigger_point",
+        "quota_remaining",
+        "blocked_action",
+        "user_type"
+      ],
+      "method": "GA4 관리자"
+    },
+    {
+      "id": "r007",
+      "change": "추가",
+      "requester": "유영경",
+      "worker": "유영경",
+      "note": "에디터에서 넘어온 방문에 30일 쿠키(yf_editor_ref), 그 사용자 결제 시 editor_purchase. 사용자 속성 editor_user=Y. 맞춤 정의 8개 같은 날 등록.",
+      "events": [
+        "editor_referral",
+        "editor_purchase"
+      ],
+      "gtm": {
+        "container": "GTM-5GQJFRS",
+        "version": 32
+      },
+      "basis": "GTM 게시",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-10-28",
+      "product": "yesform",
+      "title": "에디터 → 예스폼 유입·결제 추적",
+      "method": "GTM"
+    },
+    {
+      "id": "r025",
+      "change": "추가",
+      "requester": "유영경",
+      "worker": "유영경",
+      "note": "에디터 결제 거래ID(editor_tx_id), 에디터 결제 경로(editor_path), 에디터 결제 금액(editor_tx_value), 에디터 결제 상품명(editor_tx_items), 에디터 마지막 방문일(editor_last_visit), 에디터 유입 도착 페이지(editor_ref_page), 에디터 유입 후 경과일(editor_ref_days), 에디터 이용자(editor_user, 사용자 범위)",
+      "events": [],
+      "gtm": null,
+      "basis": "맞춤 정의 마지막 변경일",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-10-28",
+      "product": "yesform",
+      "title": "GA4 맞춤 정의 8개 등록",
+      "params": [
+        "editor_tx_id",
+        "editor_path",
+        "editor_tx_value",
+        "editor_tx_items",
+        "editor_last_visit",
+        "editor_ref_page",
+        "editor_ref_days",
+        "editor_user"
+      ],
+      "method": "GA4 관리자"
+    },
+    {
+      "id": "r019",
+      "change": "추가",
+      "requester": "",
+      "worker": "",
+      "note": "",
+      "events": [
+        "template_favorite_toggle"
+      ],
+      "gtm": null,
+      "basis": "GA4 첫 수집일",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-10-27",
+      "product": "editor",
+      "title": "서식 찜하기",
+      "method": "사이트 코드"
+    },
+    {
+      "id": "r006",
+      "change": "수정",
+      "requester": "",
+      "worker": "",
+      "note": "이날부터 page_view가 약 절반으로 정상화. 이탈률 등 세션 지표도 이날 기준으로 끊어서 봐야 함.",
+      "events": [
+        "page_view"
+      ],
+      "gtm": {
+        "container": "GTM-5GQJFRS",
+        "version": 30
+      },
+      "basis": "GTM 게시",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-10-22",
+      "product": "yesform",
+      "title": "page_view 중복 제거 — GTM GA4 태그 일시중지",
+      "method": "GTM"
+    },
+    {
+      "id": "r018",
+      "change": "추가",
+      "requester": "",
+      "worker": "",
+      "note": "",
+      "events": [
+        "promo_form_open_result"
+      ],
+      "gtm": null,
+      "basis": "GA4 첫 수집일",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-10-21",
+      "product": "editor",
+      "title": "마케팅 서식 열기 결과",
+      "method": "사이트 코드"
+    },
+    {
+      "id": "r013",
+      "change": "추가",
+      "requester": "",
+      "worker": "kiwon yu",
+      "note": "GTM 태그 없음. 작업자는 GA4개선 WBS 「환불/결제 취소 이벤트 반영」 담당 기준.",
+      "events": [
+        "refund"
+      ],
+      "gtm": null,
+      "basis": "GA4 첫 수집일",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-10-20",
+      "product": "sign",
+      "title": "환불·결제 취소",
+      "method": "사이트 코드"
+    },
+    {
+      "id": "r017",
+      "change": "추가",
+      "requester": "",
+      "worker": "",
+      "note": "",
+      "events": [
+        "sign_promo_click"
+      ],
+      "gtm": null,
+      "basis": "GA4 첫 수집일",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-10-20",
+      "product": "editor",
+      "title": "전자계약 홍보 클릭",
+      "method": "사이트 코드"
+    },
+    {
+      "id": "r032",
+      "change": "추가",
+      "requester": "",
+      "worker": "",
+      "note": "마케팅 서식 로그인(promo_form), 마케팅 서식 종류(form)",
+      "events": [],
+      "gtm": null,
+      "basis": "맞춤 정의 마지막 변경일",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-10-20",
+      "product": "editor",
+      "title": "GA4 맞춤 정의 2개 등록",
+      "params": [
+        "promo_form",
+        "form"
+      ],
+      "method": "GA4 관리자"
+    },
+    {
+      "id": "r016",
+      "change": "추가",
+      "requester": "",
+      "worker": "",
+      "note": "",
+      "events": [
+        "guide_view",
+        "template_open_result",
+        "guide_close",
+        "table_edit",
+        "grade_modal",
+        "template_detail_view",
+        "image_edit",
+        "template_edit_click",
+        "template_search",
+        "sign_entry",
+        "sign_send_result"
+      ],
+      "gtm": null,
+      "basis": "GA4 첫 수집일",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-10-19",
+      "product": "editor",
+      "title": "서식·가이드·등급 모달·전자계약 연계 이벤트",
+      "method": "사이트 코드"
+    },
+    {
+      "id": "r031",
+      "change": "추가",
+      "requester": "",
+      "worker": "",
+      "note": "가이드 끝까지 봄(reached_end), 가이드 닫은 단계(last_step), 가이드 열림 방식(trigger), 검색 결과 유무(has_results), 결과 상태(status), 계약서 서식 여부(is_contract), 로그인 전환 원인(reason), 서식 등급(grade), 서식 편집 진입점(entry), 서식상세 진입경로(via), 액션 종류(action), 전자계약 진입 결과(outcome), 종류(surface), 찜 상태(state), 편집 클릭 결과(result), 프롬프트 출처(source), 필요 멤버십 등급(need), 회원 등급(member_grade)",
+      "events": [],
+      "gtm": null,
+      "basis": "맞춤 정의 마지막 변경일",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-10-19",
+      "product": "editor",
+      "title": "GA4 맞춤 정의 18개 등록",
+      "params": [
+        "reached_end",
+        "last_step",
+        "trigger",
+        "has_results",
+        "status",
+        "is_contract",
+        "reason",
+        "grade",
+        "entry",
+        "via",
+        "action",
+        "outcome",
+        "surface",
+        "state",
+        "result",
+        "source",
+        "need",
+        "member_grade"
+      ],
+      "method": "GA4 관리자"
+    },
+    {
+      "id": "r012",
+      "change": "수정",
+      "requester": "",
+      "worker": "",
+      "note": "같은 버전에서 PostHog 스니펫도 설치.",
+      "events": [
+        "purchase"
+      ],
+      "gtm": {
+        "container": "GTM-TKCL5VCQ",
+        "version": 9
+      },
+      "basis": "GTM 게시",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-10-10",
+      "product": "sign",
+      "title": "GA4 purchase 보완 태그 추가 (일시중지 상태)",
+      "method": "GTM"
+    },
+    {
+      "id": "r005",
+      "change": "추가",
+      "requester": "",
+      "worker": "",
+      "note": "사이트 코드에서 gtag('event','tab_editor_clicked') 직접 전송. 누가 넣었는지 기록 없음.",
+      "events": [
+        "tab_editor_clicked"
+      ],
+      "gtm": null,
+      "basis": "GA4 첫 수집일",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-10-06",
+      "product": "yesform",
+      "title": "예스폼 화면의 에디터 탭 클릭",
+      "method": "사이트 코드"
+    },
+    {
+      "id": "r011",
+      "change": "추가",
+      "requester": "",
+      "worker": "",
+      "note": "",
+      "events": [
+        "purchase"
+      ],
+      "gtm": {
+        "container": "GTM-TKCL5VCQ",
+        "version": 8
+      },
+      "basis": "GTM 게시",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-10-02",
+      "product": "sign",
+      "title": "결제 purchase 누락 보완 (결제정보 쿠키 저장 → 완료페이지에서 보완)",
+      "method": "GTM"
+    },
+    {
+      "id": "r004",
+      "change": "추가",
+      "requester": "유영경",
+      "worker": "유영경",
+      "note": "맞춤 정의 cta_type·cta_position 등록. cta_text는 미등록이라 보고서에서 안 보임.",
+      "events": [
+        "price_cta_click"
+      ],
+      "gtm": {
+        "container": "GTM-5GQJFRS",
+        "version": 28
+      },
+      "basis": "GTM 게시",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-09-23",
+      "product": "yesform",
+      "title": "상세 가격 카드 '단건 구매'·'프리미엄 가입' 버튼 클릭",
+      "method": "GTM"
+    },
+    {
+      "id": "r024",
+      "change": "추가",
+      "requester": "유영경",
+      "worker": "",
+      "note": "CTA 위치(cta_position), CTA 유형(cta_type)",
+      "events": [],
+      "gtm": null,
+      "basis": "맞춤 정의 마지막 변경일",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-09-23",
+      "product": "yesform",
+      "title": "GA4 맞춤 정의 2개 등록",
+      "params": [
+        "cta_position",
+        "cta_type"
+      ],
+      "method": "GA4 관리자"
+    },
+    {
+      "id": "r003",
+      "change": "수정",
+      "requester": "유영경",
+      "worker": "유영경",
+      "note": "서식번호·제목·슬롯·클릭이 문서서식에서 안 잡히던 문제 수정, item_category(excel/doc) 추가.",
+      "events": [
+        "view_item_list",
+        "select_item"
+      ],
+      "gtm": {
+        "container": "GTM-5GQJFRS",
+        "version": 27
+      },
+      "basis": "GTM 게시",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-09-22",
+      "product": "yesform",
+      "title": "추천서식 측정 — 문서서식 주소(/forms/vform_*.php) 대응",
+      "method": "GTM"
+    },
+    {
+      "id": "r002",
+      "change": "추가",
+      "requester": "유영경",
+      "worker": "유영경",
+      "note": "GA4 맞춤 정의 source_form_id 같은 날 등록.",
+      "events": [
+        "view_item_list",
+        "select_item"
+      ],
+      "gtm": {
+        "container": "GTM-5GQJFRS",
+        "version": 26
+      },
+      "basis": "GTM 게시",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-09-21",
+      "product": "yesform",
+      "title": "상세페이지 추천서식(함께 많이 확인한 서식) 노출·클릭",
+      "method": "GTM"
+    },
+    {
+      "id": "r023",
+      "change": "추가",
+      "requester": "유영경",
+      "worker": "",
+      "note": "추천 노출 원본 서식번호(source_form_id)",
+      "events": [],
+      "gtm": null,
+      "basis": "맞춤 정의 마지막 변경일",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-09-21",
+      "product": "yesform",
+      "title": "GA4 맞춤 정의 1개 등록",
+      "params": [
+        "source_form_id"
+      ],
+      "method": "GA4 관리자"
+    },
+    {
+      "id": "r030",
+      "change": "추가",
+      "requester": "",
+      "worker": "",
+      "note": "문서번호(document_id)",
+      "events": [],
+      "gtm": null,
+      "basis": "맞춤 정의 마지막 변경일",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-09-21",
+      "product": "editor",
+      "title": "GA4 맞춤 정의 1개 등록",
+      "params": [
+        "document_id"
+      ],
+      "method": "GA4 관리자"
+    },
+    {
+      "id": "r010",
+      "change": "추가",
+      "requester": "",
+      "worker": "",
+      "note": "11/03 이후 수집 0건. 열기 트리거 조건 점검 필요.",
+      "events": [
+        "reminder_modal"
+      ],
+      "gtm": {
+        "container": "GTM-TKCL5VCQ",
+        "version": 7
+      },
+      "basis": "GTM 게시",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-09-18",
+      "product": "sign",
+      "title": "계약 재발송 모달 열기·발송",
+      "method": "GTM"
+    },
+    {
+      "id": "r022",
+      "change": "추가",
+      "requester": "",
+      "worker": "",
+      "note": "GA4에서 8/1부터 조회해서 실제 추가일은 그 전. 웹 바이탈 6종(TTFB·FCP·LCP·CLS·INP·FID) 포함.",
+      "events": [
+        "ai_bubble_show",
+        "editor_entry",
+        "ai_prompt_submit",
+        "ai_prompt_result",
+        "document_create",
+        "editor_format",
+        "export_document",
+        "login_submit",
+        "login_success",
+        "login_modal_open",
+        "ai_diff_accept",
+        "login_failure",
+        "ai_quick_action",
+        "ai_quick_result",
+        "ai_diff_reject",
+        "title_edit",
+        "signup_click",
+        "table_insert",
+        "ai_retry",
+        "ai_limit_reached",
+        "ai_choice_pick",
+        "ai_hint_pick",
+        "image_insert",
+        "TTFB",
+        "FCP",
+        "LCP",
+        "CLS",
+        "INP",
+        "FID"
+      ],
+      "gtm": null,
+      "basis": "GA4 조회 시작일(8/1) 이전",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-08-01",
+      "product": "editor",
+      "title": "8월 이전부터 쓰던 이벤트 (AI·편집·로그인·내보내기 등)",
+      "method": "사이트 코드"
+    },
+    {
+      "id": "r029",
+      "change": "추가",
+      "requester": "",
+      "worker": "",
+      "note": "로그인여부(auth)",
+      "events": [],
+      "gtm": null,
+      "basis": "맞춤 정의 마지막 변경일",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-06-09",
+      "product": "editor",
+      "title": "GA4 맞춤 정의 1개 등록",
+      "params": [
+        "auth"
+      ],
+      "method": "GA4 관리자"
+    },
+    {
+      "id": "r028",
+      "change": "추가",
+      "requester": "",
+      "worker": "",
+      "note": "AI 옵션(option), AI 적용 범위(scope), DIff 이미지 종류(type), 내보내기 형식(format), 로그인과 문서 생성 방법(method), 진입 경로(entry_source)",
+      "events": [],
+      "gtm": null,
+      "basis": "맞춤 정의 마지막 변경일",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-06-04",
+      "product": "editor",
+      "title": "GA4 맞춤 정의 6개 등록",
+      "params": [
+        "option",
+        "scope",
+        "type",
+        "format",
+        "method",
+        "entry_source"
+      ],
+      "method": "GA4 관리자"
+    },
+    {
+      "id": "r009",
+      "change": "추가",
+      "requester": "",
+      "worker": "",
+      "note": "",
+      "events": [
+        "page_view"
+      ],
+      "gtm": {
+        "container": "GTM-TKCL5VCQ",
+        "version": 3
+      },
+      "basis": "GTM 게시",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2026-04-20",
+      "product": "sign",
+      "title": "GA4 기본 태그 설치",
+      "method": "GTM"
+    },
+    {
+      "id": "r001",
+      "change": "추가",
+      "requester": "",
+      "worker": "",
+      "note": "2026-10-22 v30에서 일시중지. 사이트 공통 코드의 gtag config와 겹쳐 page_view가 2번씩 잡히던 문제 때문.",
+      "events": [
+        "page_view"
+      ],
+      "gtm": {
+        "container": "GTM-5GQJFRS",
+        "version": 3
+      },
+      "basis": "GTM 게시",
+      "log": [
+        {
+          "date": "2026-11-12",
+          "by": "시스템",
+          "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
+        }
+      ],
+      "date": "2024-09-05",
+      "product": "yesform",
+      "title": "GA4 기본 태그 (page_view) 설치",
+      "method": "GTM"
+    },
+    {
+      "date": "2026-11-17",
+      "product": "sign",
+      "title": "메인 서식 카드 클릭 (~로 시작하는 전자계약)",
+      "change": "추가",
+      "method": "GTM",
+      "events": [
+        "template_card_click"
+      ],
+      "requester": "유영경",
+      "worker": "유영경",
+      "note": "메인 「~로 시작하는 전자계약」 서식 카드 클릭. 맞춤 HTML 수집기가 sg_template_card_click을 만들고 GA4 태그가 받는 구조(CSP 대응). 매개변수 template_name·template_category·cate_code·card_position·user_type·device_class. GA4 맞춤 정의 4개(서식명·서식 분류·서식 분류 코드·카드 위치) 같은 날 등록.",
+      "basis": "GTM 게시",
+      "gtm": {
+        "container": "GTM-TKCL5VCQ",
+        "version": 11
+      },
+      "log": [
+        {
+          "date": "2026-11-17",
+          "by": "유영경",
+          "text": "기록 추가"
+        }
+      ],
+      "id": "r3f1af27e"
+    }
+  ],
+  "gtmNotes": {
+    "GTM-5GQJFRS:33": {
+      "requester": "유영경",
+      "worker": "유영경",
+      "note": ""
+    },
+    "GTM-TKCL5VCQ:10": {
+      "requester": "유영경",
+      "worker": "유영경",
+      "note": ""
+    },
+    "GTM-5GQJFRS:32": {
+      "requester": "유영경",
+      "worker": "유영경",
+      "note": ""
+    },
+    "GTM-5GQJFRS:28": {
+      "requester": "유영경",
+      "worker": "유영경",
+      "note": ""
+    },
+    "GTM-5GQJFRS:27": {
+      "requester": "유영경",
+      "worker": "유영경",
+      "note": ""
+    },
+    "GTM-5GQJFRS:26": {
+      "requester": "유영경",
+      "worker": "유영경",
+      "note": ""
+    },
+    "GTM-5GQJFRS:31": {
+      "requester": "유영경",
+      "worker": "유영경",
+      "note": "PostHog 이벤트 절감 — 대상 페이지에서만 로드 (GA4와 무관)"
+    },
+    "GTM-TKCL5VCQ:5": {
+      "requester": "",
+      "worker": "ADEF (광고대행사)",
+      "note": "Google Ads·카카오·네이버 광고 전환 태그 (GA4와 무관)"
+    }
   }
- ],
- "records": [
-  {
-   "id": "r021",
-   "change": "추가",
-   "requester": "",
-   "worker": "",
-   "note": "",
-   "events": [
-    "report_submit",
-    "report_modal_open"
-   ],
-   "gtm": null,
-   "basis": "GA4 첫 수집일",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-11-02",
-   "product": "editor",
-   "title": "신고 모달·신고 제출",
-   "method": "사이트 코드"
-  },
-  {
-   "id": "r015",
-   "change": "추가",
-   "requester": "",
-   "worker": "",
-   "note": "GTM 태그 없이 10/30부터 GA4에 들어옴. 누가 넣었는지 확인 필요.",
-   "events": [
-    "login",
-    "signup_agree"
-   ],
-   "gtm": null,
-   "basis": "GA4 첫 수집일",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-10-30",
-   "product": "sign",
-   "title": "로그인·약관 동의",
-   "method": "사이트 코드"
-  },
-  {
-   "id": "r008",
-   "change": "추가",
-   "requester": "유영경",
-   "worker": "유영경",
-   "note": "GA4 맞춤 정의 10개 같은 날 등록. 그중 「가입 진입 위치」 매개변수가 member_typeentry_point로 잘못 들어가 entry_point 값이 안 보임 → 다시 등록 필요. preview_document는 상세에 미리보기가 없어 미설치.",
-   "events": [
-    "view_promotion",
-    "select_promotion",
-    "select_item",
-    "search_no_results",
-    "download_attempt",
-    "download_blocked",
-    "sign_up_start",
-    "view_item_list"
-   ],
-   "gtm": {
-    "container": "GTM-5GQJFRS",
-    "version": 33
-   },
-   "basis": "GTM 게시",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-10-29",
-   "product": "yesform",
-   "title": "GA4 신규 이벤트 9종 (GA4개선 시트 01_예스폼 GTM 단독)",
-   "method": "GTM"
-  },
-  {
-   "id": "r014",
-   "change": "추가",
-   "requester": "유영경",
-   "worker": "유영경",
-   "note": "싸인은 CSP 때문에 맞춤 JS 변수가 안 돼서, 맞춤 HTML 수집기 태그가 sg_* 이벤트를 만들고 GA4 태그가 받는 구조. GA4 맞춤 정의 13개 같은 날 등록.",
-   "events": [
-    "signup_start",
-    "contract_start",
-    "email_verify_view",
-    "view_pricing",
-    "select_plan",
-    "quota_exhausted",
-    "device_block_notice",
-    "cross_site_exit",
-    "cs_contact_click"
-   ],
-   "gtm": {
-    "container": "GTM-TKCL5VCQ",
-    "version": 10
-   },
-   "basis": "GTM 게시",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-10-29",
-   "product": "sign",
-   "title": "GA4 신규 이벤트 9종 (GA4개선 시트 03_싸인 GTM 단독)",
-   "method": "GTM"
-  },
-  {
-   "id": "r020",
-   "change": "추가",
-   "requester": "",
-   "worker": "",
-   "note": "",
-   "events": [
-    "promo_form_cta_click"
-   ],
-   "gtm": null,
-   "basis": "GA4 첫 수집일",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-10-29",
-   "product": "editor",
-   "title": "마케팅 서식 CTA 클릭",
-   "method": "사이트 코드"
-  },
-  {
-   "id": "r026",
-   "change": "추가",
-   "requester": "유영경",
-   "worker": "유영경",
-   "note": "가입 요금제 유형(member_type), 가입 진입 위치(member_typeentry_point), 검색 카테고리(search_category), 다운로드 차단 사유(block_reason), 다운로드 파일 형식(file_type), 로그인 여부(is_logged_in), 서식 ID(item_id), 서식 카테고리(item_category), 서식명(item_name), 회원 등급(user_grade)",
-   "events": [],
-   "gtm": null,
-   "basis": "맞춤 정의 마지막 변경일",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-10-29",
-   "product": "yesform",
-   "title": "GA4 맞춤 정의 10개 등록",
-   "params": [
-    "member_type",
-    "member_typeentry_point",
-    "search_category",
-    "block_reason",
-    "file_type",
-    "is_logged_in",
-    "item_id",
-    "item_category",
-    "item_name",
-    "user_grade"
-   ],
-   "method": "GA4 관리자"
-  },
-  {
-   "id": "r027",
-   "change": "추가",
-   "requester": "유영경",
-   "worker": "유영경",
-   "note": "FAQ 질문 ID(question_id), 디바이스 구분(device_class), 문의 유형(contact_type), 소진 유형(quota_type), 요금제 ID(plan_id), 요금제 건수(quantity), 유입 위치(entry_point), 이동 목적지(destination), 이전 단계(from_step), 인증 노출 계기(trigger_point), 잔여 건수(quota_remaining), 차단 동작(blocked_action), 회원 유형(user_type)",
-   "events": [],
-   "gtm": null,
-   "basis": "맞춤 정의 마지막 변경일",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-10-29",
-   "product": "sign",
-   "title": "GA4 맞춤 정의 13개 등록",
-   "params": [
-    "question_id",
-    "device_class",
-    "contact_type",
-    "quota_type",
-    "plan_id",
-    "quantity",
-    "entry_point",
-    "destination",
-    "from_step",
-    "trigger_point",
-    "quota_remaining",
-    "blocked_action",
-    "user_type"
-   ],
-   "method": "GA4 관리자"
-  },
-  {
-   "id": "r007",
-   "change": "추가",
-   "requester": "유영경",
-   "worker": "유영경",
-   "note": "에디터에서 넘어온 방문에 30일 쿠키(yf_editor_ref), 그 사용자 결제 시 editor_purchase. 사용자 속성 editor_user=Y. 맞춤 정의 8개 같은 날 등록.",
-   "events": [
-    "editor_referral",
-    "editor_purchase"
-   ],
-   "gtm": {
-    "container": "GTM-5GQJFRS",
-    "version": 32
-   },
-   "basis": "GTM 게시",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-10-28",
-   "product": "yesform",
-   "title": "에디터 → 예스폼 유입·결제 추적",
-   "method": "GTM"
-  },
-  {
-   "id": "r025",
-   "change": "추가",
-   "requester": "유영경",
-   "worker": "유영경",
-   "note": "에디터 결제 거래ID(editor_tx_id), 에디터 결제 경로(editor_path), 에디터 결제 금액(editor_tx_value), 에디터 결제 상품명(editor_tx_items), 에디터 마지막 방문일(editor_last_visit), 에디터 유입 도착 페이지(editor_ref_page), 에디터 유입 후 경과일(editor_ref_days), 에디터 이용자(editor_user, 사용자 범위)",
-   "events": [],
-   "gtm": null,
-   "basis": "맞춤 정의 마지막 변경일",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-10-28",
-   "product": "yesform",
-   "title": "GA4 맞춤 정의 8개 등록",
-   "params": [
-    "editor_tx_id",
-    "editor_path",
-    "editor_tx_value",
-    "editor_tx_items",
-    "editor_last_visit",
-    "editor_ref_page",
-    "editor_ref_days",
-    "editor_user"
-   ],
-   "method": "GA4 관리자"
-  },
-  {
-   "id": "r019",
-   "change": "추가",
-   "requester": "",
-   "worker": "",
-   "note": "",
-   "events": [
-    "template_favorite_toggle"
-   ],
-   "gtm": null,
-   "basis": "GA4 첫 수집일",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-10-27",
-   "product": "editor",
-   "title": "서식 찜하기",
-   "method": "사이트 코드"
-  },
-  {
-   "id": "r006",
-   "change": "수정",
-   "requester": "",
-   "worker": "",
-   "note": "이날부터 page_view가 약 절반으로 정상화. 이탈률 등 세션 지표도 이날 기준으로 끊어서 봐야 함.",
-   "events": [
-    "page_view"
-   ],
-   "gtm": {
-    "container": "GTM-5GQJFRS",
-    "version": 30
-   },
-   "basis": "GTM 게시",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-10-22",
-   "product": "yesform",
-   "title": "page_view 중복 제거 — GTM GA4 태그 일시중지",
-   "method": "GTM"
-  },
-  {
-   "id": "r018",
-   "change": "추가",
-   "requester": "",
-   "worker": "",
-   "note": "",
-   "events": [
-    "promo_form_open_result"
-   ],
-   "gtm": null,
-   "basis": "GA4 첫 수집일",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-10-21",
-   "product": "editor",
-   "title": "마케팅 서식 열기 결과",
-   "method": "사이트 코드"
-  },
-  {
-   "id": "r013",
-   "change": "추가",
-   "requester": "",
-   "worker": "kiwon yu",
-   "note": "GTM 태그 없음. 작업자는 GA4개선 WBS 「환불/결제 취소 이벤트 반영」 담당 기준.",
-   "events": [
-    "refund"
-   ],
-   "gtm": null,
-   "basis": "GA4 첫 수집일",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-10-20",
-   "product": "sign",
-   "title": "환불·결제 취소",
-   "method": "사이트 코드"
-  },
-  {
-   "id": "r017",
-   "change": "추가",
-   "requester": "",
-   "worker": "",
-   "note": "",
-   "events": [
-    "sign_promo_click"
-   ],
-   "gtm": null,
-   "basis": "GA4 첫 수집일",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-10-20",
-   "product": "editor",
-   "title": "전자계약 홍보 클릭",
-   "method": "사이트 코드"
-  },
-  {
-   "id": "r032",
-   "change": "추가",
-   "requester": "",
-   "worker": "",
-   "note": "마케팅 서식 로그인(promo_form), 마케팅 서식 종류(form)",
-   "events": [],
-   "gtm": null,
-   "basis": "맞춤 정의 마지막 변경일",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-10-20",
-   "product": "editor",
-   "title": "GA4 맞춤 정의 2개 등록",
-   "params": [
-    "promo_form",
-    "form"
-   ],
-   "method": "GA4 관리자"
-  },
-  {
-   "id": "r016",
-   "change": "추가",
-   "requester": "",
-   "worker": "",
-   "note": "",
-   "events": [
-    "guide_view",
-    "template_open_result",
-    "guide_close",
-    "table_edit",
-    "grade_modal",
-    "template_detail_view",
-    "image_edit",
-    "template_edit_click",
-    "template_search",
-    "sign_entry",
-    "sign_send_result"
-   ],
-   "gtm": null,
-   "basis": "GA4 첫 수집일",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-10-19",
-   "product": "editor",
-   "title": "서식·가이드·등급 모달·전자계약 연계 이벤트",
-   "method": "사이트 코드"
-  },
-  {
-   "id": "r031",
-   "change": "추가",
-   "requester": "",
-   "worker": "",
-   "note": "가이드 끝까지 봄(reached_end), 가이드 닫은 단계(last_step), 가이드 열림 방식(trigger), 검색 결과 유무(has_results), 결과 상태(status), 계약서 서식 여부(is_contract), 로그인 전환 원인(reason), 서식 등급(grade), 서식 편집 진입점(entry), 서식상세 진입경로(via), 액션 종류(action), 전자계약 진입 결과(outcome), 종류(surface), 찜 상태(state), 편집 클릭 결과(result), 프롬프트 출처(source), 필요 멤버십 등급(need), 회원 등급(member_grade)",
-   "events": [],
-   "gtm": null,
-   "basis": "맞춤 정의 마지막 변경일",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-10-19",
-   "product": "editor",
-   "title": "GA4 맞춤 정의 18개 등록",
-   "params": [
-    "reached_end",
-    "last_step",
-    "trigger",
-    "has_results",
-    "status",
-    "is_contract",
-    "reason",
-    "grade",
-    "entry",
-    "via",
-    "action",
-    "outcome",
-    "surface",
-    "state",
-    "result",
-    "source",
-    "need",
-    "member_grade"
-   ],
-   "method": "GA4 관리자"
-  },
-  {
-   "id": "r012",
-   "change": "수정",
-   "requester": "",
-   "worker": "",
-   "note": "같은 버전에서 PostHog 스니펫도 설치.",
-   "events": [
-    "purchase"
-   ],
-   "gtm": {
-    "container": "GTM-TKCL5VCQ",
-    "version": 9
-   },
-   "basis": "GTM 게시",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-10-10",
-   "product": "sign",
-   "title": "GA4 purchase 보완 태그 추가 (일시중지 상태)",
-   "method": "GTM"
-  },
-  {
-   "id": "r005",
-   "change": "추가",
-   "requester": "",
-   "worker": "",
-   "note": "사이트 코드에서 gtag('event','tab_editor_clicked') 직접 전송. 누가 넣었는지 기록 없음.",
-   "events": [
-    "tab_editor_clicked"
-   ],
-   "gtm": null,
-   "basis": "GA4 첫 수집일",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-10-06",
-   "product": "yesform",
-   "title": "예스폼 화면의 에디터 탭 클릭",
-   "method": "사이트 코드"
-  },
-  {
-   "id": "r011",
-   "change": "추가",
-   "requester": "",
-   "worker": "",
-   "note": "",
-   "events": [
-    "purchase"
-   ],
-   "gtm": {
-    "container": "GTM-TKCL5VCQ",
-    "version": 8
-   },
-   "basis": "GTM 게시",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-10-02",
-   "product": "sign",
-   "title": "결제 purchase 누락 보완 (결제정보 쿠키 저장 → 완료페이지에서 보완)",
-   "method": "GTM"
-  },
-  {
-   "id": "r004",
-   "change": "추가",
-   "requester": "유영경",
-   "worker": "유영경",
-   "note": "맞춤 정의 cta_type·cta_position 등록. cta_text는 미등록이라 보고서에서 안 보임.",
-   "events": [
-    "price_cta_click"
-   ],
-   "gtm": {
-    "container": "GTM-5GQJFRS",
-    "version": 28
-   },
-   "basis": "GTM 게시",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-09-23",
-   "product": "yesform",
-   "title": "상세 가격 카드 '단건 구매'·'프리미엄 가입' 버튼 클릭",
-   "method": "GTM"
-  },
-  {
-   "id": "r024",
-   "change": "추가",
-   "requester": "유영경",
-   "worker": "",
-   "note": "CTA 위치(cta_position), CTA 유형(cta_type)",
-   "events": [],
-   "gtm": null,
-   "basis": "맞춤 정의 마지막 변경일",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-09-23",
-   "product": "yesform",
-   "title": "GA4 맞춤 정의 2개 등록",
-   "params": [
-    "cta_position",
-    "cta_type"
-   ],
-   "method": "GA4 관리자"
-  },
-  {
-   "id": "r003",
-   "change": "수정",
-   "requester": "유영경",
-   "worker": "유영경",
-   "note": "서식번호·제목·슬롯·클릭이 문서서식에서 안 잡히던 문제 수정, item_category(excel/doc) 추가.",
-   "events": [
-    "view_item_list",
-    "select_item"
-   ],
-   "gtm": {
-    "container": "GTM-5GQJFRS",
-    "version": 27
-   },
-   "basis": "GTM 게시",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-09-22",
-   "product": "yesform",
-   "title": "추천서식 측정 — 문서서식 주소(/forms/vform_*.php) 대응",
-   "method": "GTM"
-  },
-  {
-   "id": "r002",
-   "change": "추가",
-   "requester": "유영경",
-   "worker": "유영경",
-   "note": "GA4 맞춤 정의 source_form_id 같은 날 등록.",
-   "events": [
-    "view_item_list",
-    "select_item"
-   ],
-   "gtm": {
-    "container": "GTM-5GQJFRS",
-    "version": 26
-   },
-   "basis": "GTM 게시",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-09-21",
-   "product": "yesform",
-   "title": "상세페이지 추천서식(함께 많이 확인한 서식) 노출·클릭",
-   "method": "GTM"
-  },
-  {
-   "id": "r023",
-   "change": "추가",
-   "requester": "유영경",
-   "worker": "",
-   "note": "추천 노출 원본 서식번호(source_form_id)",
-   "events": [],
-   "gtm": null,
-   "basis": "맞춤 정의 마지막 변경일",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-09-21",
-   "product": "yesform",
-   "title": "GA4 맞춤 정의 1개 등록",
-   "params": [
-    "source_form_id"
-   ],
-   "method": "GA4 관리자"
-  },
-  {
-   "id": "r030",
-   "change": "추가",
-   "requester": "",
-   "worker": "",
-   "note": "문서번호(document_id)",
-   "events": [],
-   "gtm": null,
-   "basis": "맞춤 정의 마지막 변경일",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-09-21",
-   "product": "editor",
-   "title": "GA4 맞춤 정의 1개 등록",
-   "params": [
-    "document_id"
-   ],
-   "method": "GA4 관리자"
-  },
-  {
-   "id": "r010",
-   "change": "추가",
-   "requester": "",
-   "worker": "",
-   "note": "11/03 이후 수집 0건. 열기 트리거 조건 점검 필요.",
-   "events": [
-    "reminder_modal"
-   ],
-   "gtm": {
-    "container": "GTM-TKCL5VCQ",
-    "version": 7
-   },
-   "basis": "GTM 게시",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-09-18",
-   "product": "sign",
-   "title": "계약 재발송 모달 열기·발송",
-   "method": "GTM"
-  },
-  {
-   "id": "r022",
-   "change": "추가",
-   "requester": "",
-   "worker": "",
-   "note": "GA4에서 8/1부터 조회해서 실제 추가일은 그 전. 웹 바이탈 6종(TTFB·FCP·LCP·CLS·INP·FID) 포함.",
-   "events": [
-    "ai_bubble_show",
-    "editor_entry",
-    "ai_prompt_submit",
-    "ai_prompt_result",
-    "document_create",
-    "editor_format",
-    "export_document",
-    "login_submit",
-    "login_success",
-    "login_modal_open",
-    "ai_diff_accept",
-    "login_failure",
-    "ai_quick_action",
-    "ai_quick_result",
-    "ai_diff_reject",
-    "title_edit",
-    "signup_click",
-    "table_insert",
-    "ai_retry",
-    "ai_limit_reached",
-    "ai_choice_pick",
-    "ai_hint_pick",
-    "image_insert",
-    "TTFB",
-    "FCP",
-    "LCP",
-    "CLS",
-    "INP",
-    "FID"
-   ],
-   "gtm": null,
-   "basis": "GA4 조회 시작일(8/1) 이전",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-08-01",
-   "product": "editor",
-   "title": "8월 이전부터 쓰던 이벤트 (AI·편집·로그인·내보내기 등)",
-   "method": "사이트 코드"
-  },
-  {
-   "id": "r029",
-   "change": "추가",
-   "requester": "",
-   "worker": "",
-   "note": "로그인여부(auth)",
-   "events": [],
-   "gtm": null,
-   "basis": "맞춤 정의 마지막 변경일",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-06-09",
-   "product": "editor",
-   "title": "GA4 맞춤 정의 1개 등록",
-   "params": [
-    "auth"
-   ],
-   "method": "GA4 관리자"
-  },
-  {
-   "id": "r028",
-   "change": "추가",
-   "requester": "",
-   "worker": "",
-   "note": "AI 옵션(option), AI 적용 범위(scope), DIff 이미지 종류(type), 내보내기 형식(format), 로그인과 문서 생성 방법(method), 진입 경로(entry_source)",
-   "events": [],
-   "gtm": null,
-   "basis": "맞춤 정의 마지막 변경일",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-06-04",
-   "product": "editor",
-   "title": "GA4 맞춤 정의 6개 등록",
-   "params": [
-    "option",
-    "scope",
-    "type",
-    "format",
-    "method",
-    "entry_source"
-   ],
-   "method": "GA4 관리자"
-  },
-  {
-   "id": "r009",
-   "change": "추가",
-   "requester": "",
-   "worker": "",
-   "note": "",
-   "events": [
-    "page_view"
-   ],
-   "gtm": {
-    "container": "GTM-TKCL5VCQ",
-    "version": 3
-   },
-   "basis": "GTM 게시",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2026-04-20",
-   "product": "sign",
-   "title": "GA4 기본 태그 설치",
-   "method": "GTM"
-  },
-  {
-   "id": "r001",
-   "change": "추가",
-   "requester": "",
-   "worker": "",
-   "note": "2026-10-22 v30에서 일시중지. 사이트 공통 코드의 gtag config와 겹쳐 page_view가 2번씩 잡히던 문제 때문.",
-   "events": [
-    "page_view"
-   ],
-   "gtm": {
-    "container": "GTM-5GQJFRS",
-    "version": 3
-   },
-   "basis": "GTM 게시",
-   "log": [
-    {
-     "date": "2026-11-12",
-     "by": "시스템",
-     "text": "처음 등록 (GTM 게시 이력·GA4 수집 기록으로 채움)"
-    }
-   ],
-   "date": "2024-09-05",
-   "product": "yesform",
-   "title": "GA4 기본 태그 (page_view) 설치",
-   "method": "GTM"
-  }
- ],
- "gtmNotes": {
-  "GTM-5GQJFRS:33": {
-   "requester": "유영경",
-   "worker": "유영경",
-   "note": ""
-  },
-  "GTM-TKCL5VCQ:10": {
-   "requester": "유영경",
-   "worker": "유영경",
-   "note": ""
-  },
-  "GTM-5GQJFRS:32": {
-   "requester": "유영경",
-   "worker": "유영경",
-   "note": ""
-  },
-  "GTM-5GQJFRS:28": {
-   "requester": "유영경",
-   "worker": "유영경",
-   "note": ""
-  },
-  "GTM-5GQJFRS:27": {
-   "requester": "유영경",
-   "worker": "유영경",
-   "note": ""
-  },
-  "GTM-5GQJFRS:26": {
-   "requester": "유영경",
-   "worker": "유영경",
-   "note": ""
-  },
-  "GTM-5GQJFRS:31": {
-   "requester": "유영경",
-   "worker": "유영경",
-   "note": "PostHog 이벤트 절감 — 대상 페이지에서만 로드 (GA4와 무관)"
-  },
-  "GTM-TKCL5VCQ:5": {
-   "requester": "",
-   "worker": "ADEF (광고대행사)",
-   "note": "Google Ads·카카오·네이버 광고 전환 태그 (GA4와 무관)"
-  }
- }
 }
