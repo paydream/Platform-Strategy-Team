@@ -312,10 +312,10 @@ async function toggleFinal() {
   P = (d.projects || []).find(p => p.id === params.get('id'));
   const vs = P ? P.versions.filter(v => !v.hidden) : [];
   if (!P || !vs.length) { $('app').innerHTML = '<p class="notfound">프로젝트를 찾지 못했습니다. <a href="./">목록으로</a></p>'; return; }
-  // 버전은 고르지 않음: 확정안 버전 → 없으면 최신 버전 하나만 보여 줌 (주소에 v가 있으면 그 버전)
+  // 기본은 항상 마지막에 올린 버전 (확정안이어도 최신이 우선, 2026-11-17 사용자 결정). 주소에 v가 있으면 그 버전
   const fv = P.final && vs.find(v => v.id === P.final.version);
-  defV = fv || vs[vs.length - 1];
-  // 기획 프로젝트는 버전 관리 없이 최종본(확정안 → 없으면 최신) 하나만 보여 줌
+  defV = vs[vs.length - 1];
+  // 기획 프로젝트는 버전 관리 없이 최신 버전 하나만 보여 줌
   V = P.team === 'planning' ? defV
     : vs.find(v => v.id === params.get('v')) || (params.get('h') && vs.find(v => v.items.some(i => i.href === params.get('h')))) || defV;
   shell(); trackFrame();
