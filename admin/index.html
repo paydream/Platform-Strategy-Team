@@ -342,11 +342,11 @@ $('trashBox').addEventListener('click', e => {
 });
 
 const clean = d => JSON.parse(JSON.stringify(d, (k, v) => k === '_open' ? undefined : v));
-// 사이트 배포 바로 시작 (/api/deploy). 업로드·저장은 배포를 기다리거나 막지 않는다.
+// 사이트 배포 바로 시작 (/api/upload action:'deploy'). 업로드·저장은 배포를 기다리거나 막지 않는다.
 let savedDeployed = null;
 async function deployNow(password) {
   if (!password) return false;
-  const r = await fetch('/api/deploy', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password }) });
+  const r = await fetch('/api/upload', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password, action: 'deploy' }) });
   return r.ok;
 }
 document.addEventListener('click', async e => {
