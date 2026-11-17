@@ -117,35 +117,6 @@
       "figma": "https://www.figma.com/design/Tu14pavg2z84R2MVQXpMe0/?node-id=1-1190"
     },
     {
-      "id": "20261117-114846-index",
-      "title": "[예스폼싸인] 로고 수정",
-      "team": "design",
-      "category": "웹 메인",
-      "desc": "",
-      "created": "2026.11.17",
-      "updated": "2026.11.17",
-      "hidden": false,
-      "final": null,
-      "versions": [
-        {
-          "id": "20261117-114846-index",
-          "label": "v1",
-          "title": "[예스폼싸인] 로고 수정",
-          "desc": "",
-          "created": "2026.11.17",
-          "folder": "archive/20261117-114846-index",
-          "preview": "archive/20261117-114846-index/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261117-114846-index/index.html"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "id": "20261113-112032-yesform-membership-plan",
       "title": "예스폼 멤버십 요금제 변경 계획안 (2027)",
       "team": "planning",
@@ -2824,6 +2795,39 @@
     }
   ],
   "trash": [
+    {
+      "type": "project",
+      "deleted": "2026.11.17",
+      "project": {
+        "id": "20261117-114846-index",
+        "title": "[예스폼싸인] 로고 수정",
+        "team": "design",
+        "category": "웹 메인",
+        "desc": "",
+        "created": "2026.11.17",
+        "updated": "2026.11.17",
+        "hidden": false,
+        "final": null,
+        "versions": [
+          {
+            "id": "20261117-114846-index",
+            "label": "v1",
+            "title": "[예스폼싸인] 로고 수정",
+            "desc": "",
+            "created": "2026.11.17",
+            "folder": "archive/20261117-114846-index",
+            "preview": "archive/20261117-114846-index/index.html",
+            "hidden": false,
+            "items": [
+              {
+                "label": "시안 01",
+                "href": "archive/20261117-114846-index/index.html"
+              }
+            ]
+          }
+        ]
+      }
+    },
     {
       "type": "version",
       "projectId": "20261106-170954-2026",
