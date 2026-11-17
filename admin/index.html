@@ -342,8 +342,22 @@ $('trashBox').addEventListener('click', e => {
 });
 
 const clean = d => JSON.parse(JSON.stringify(d, (k, v) => k === '_open' ? undefined : v));
+// 사이트 배포 바로 시작 (/api/deploy). 업로드·저장은 배포를 기다리거나 막지 않는다.
+let savedDeployed = null;
+async function deployNow(password) {
+  if (!password) return false;
+  const r = await fetch('/api/deploy', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password }) });
+  return r.ok;
+}
+document.addEventListener('click', async e => {
+  const b = e.target.closest('.deploy-now'); if (!b) return;
+  b.disabled = true; b.textContent = '배포 요청 중…';
+  const ok = await deployNow(adminPassword()).catch(() => false);
+  const st = b.closest('.status'); if (st) { st.className = ok ? 'status ok' : 'status err'; st.innerHTML = ok ? '배포를 시작했습니다(1~2분).' : '배포 요청이 또 실패했습니다. 잠시 뒤 다시 눌러 주세요. <button type="button" class="btn deploy-now">지금 배포</button>'; }
+});
 $('saveList').onclick = async () => {
   const s = $('saveStatus'); s.className = 'status'; s.textContent = '저장 중…';
+  savedDeployed = null;
   const out = clean(data);
   const problem = M.checkSave(JSON.parse(baseText), out);
   if (problem) { s.className = 'status err'; s.textContent = problem; return; }
@@ -354,7 +368,7 @@ $('saveList').onclick = async () => {
       const j = await r.json().catch(() => ({}));
       if (r.status === 401) store.del('admin_pw');
       if (!r.ok) throw new Error(j.error || `저장 실패 (${r.status})`);
-      store.set('admin_pw', password); dataSha = j.sha;
+      store.set('admin_pw', password); dataSha = j.sha; savedDeployed = j.deployed;
     } else {
       if (!cfg().token) throw new Error('관리자 비밀번호 서버 설정이 없어 GitHub 토큰이 필요합니다.');
       const { repo, branch } = cfg();
@@ -365,7 +379,8 @@ $('saveList').onclick = async () => {
       dataSha = r.content.sha;
     }
     baseText = JSON.stringify(out); dirty = false;
-    s.className = 'status ok'; s.textContent = '저장했습니다. 1~2분 뒤 사이트에 반영됩니다.';
+    const dep = serverMode ? (savedDeployed !== false || await deployNow(adminPassword()).catch(() => false)) : await deployNow(adminPassword()).catch(() => false);
+    s.className = dep ? 'status ok' : 'status err'; s.innerHTML = dep ? '저장했고, 바로 배포를 시작했습니다(1~2분).' : '저장했습니다. 배포 요청 실패 → <button type="button" class="btn deploy-now">지금 배포</button>';
   } catch (e) { s.className = 'status err'; s.textContent = e.message; }
 };
 addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
@@ -455,6 +470,7 @@ $('upload').onclick = async () => {
   };
   $('upload').disabled = true; log.style.display = 'block'; log.textContent = '';
   const say = m => { log.textContent += m + '\n'; log.scrollTop = 1e9; };
+  let deployedNow = false;
   try {
     s.className = 'status'; s.textContent = '올리는 중…';
     if (serverMode && !cfg().token) {
@@ -475,7 +491,8 @@ $('upload').onclick = async () => {
         files.push({ path: `${folder}/${f.path}`, sha });
         if (++i % 10 === 0 || i === pending.files.length) say(`파일 올리는 중 ${i}/${pending.files.length}`);
       }
-      await call({ action: 'commit', upload, files });
+      const done = await call({ action: 'commit', upload, files });
+      deployedNow = !!done.deployed;
     } else {
       if (!cfg().token) throw new Error('관리자 비밀번호 서버 설정이 없어 GitHub 토큰이 필요합니다. 1번에서 넣어 주세요.');
       const { repo, branch } = cfg();
@@ -497,8 +514,9 @@ $('upload').onclick = async () => {
       const commit = await gh(`/repos/${repo}/git/commits`, { method: 'POST', body: JSON.stringify({ message: `아카이브 추가: ${upload.version.title} (관리자 페이지)`, tree: newTree.sha, parents: [ref.object.sha] }) });
       await gh(`/repos/${repo}/git/refs/heads/${branch}`, { method: 'PATCH', body: JSON.stringify({ sha: commit.sha }) });
     }
-    say('완료. 1~2분 뒤 사이트에 반영됩니다.');
-    s.className = 'status ok'; s.textContent = '올렸습니다.';
+    if (deployedNow === false && serverMode) deployedNow = await deployNow(adminPassword()).catch(() => false); // 훅이 실패했거나 토큰으로 직접 올린 경우 한 번 더
+    say(deployedNow ? '완료. 사이트 배포를 바로 시작했습니다(1~2분). 시안은 지금도 열립니다.' : '완료. 시안은 지금도 열리지만 사이트 배포 요청이 실패했습니다. 「지금 배포」를 눌러 주세요.');
+    s.className = deployedNow ? 'status ok' : 'status err'; s.innerHTML = deployedNow ? '올렸고, 바로 배포를 시작했습니다.' : '올렸습니다. 배포 요청 실패 → <button type="button" class="btn deploy-now">지금 배포</button>';
     pending = null; ['zip', 'pTitle', 'pDesc', 'vLabel', 'vDesc', 'vSlug', 'vFigma'].forEach(id => $(id).value = ''); figAuto = true; $('figSrc').textContent = ''; $('nVers').innerHTML = '';
     await loadData();
   } catch (e) { fail(e.message); say('실패: ' + e.message); }
