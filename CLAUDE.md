@@ -11,6 +11,12 @@
 - 바꿔도 되는 파일은 관리용뿐이다: `projects.json`, `data/comments.json`, 루트 `index.html`, `project.html`, `tracking.html`, `wbs.html`, `work.html`, `calendar.html`, `stats*.html`(통계 화면), `gnb.css`·`gnb.js`(공통 GNB), `vercel.json`, `middleware.js`(사이트 비밀번호), `admin/`, `api/`, `data/`, `README.md`, `CLAUDE.md`, `.github/`.
 - `.github/workflows/no-overwrite.yml`이 push마다 이 규칙을 검사한다.
 
+## 배포 (2026-11-17~ 자동 배포 끔)
+- Vercel Hobby는 하루 배포 생성 100회 한도이고, ignoreCommand로 빌드를 취소해도 배포 생성 수에는 들어간다. 2026-11-16에 데이터 저장 커밋 122건으로 한도를 넘겨 막혔다.
+- 그래서 `vercel.json`의 `git.deploymentEnabled.main=false`로 **커밋이 배포를 만들지 않게** 했다. 데이터 저장(해야 할 일·일정·통계·코멘트·핀 등)은 아무리 많이 해도 배포와 무관하고, 화면은 API가 GitHub에서 바로 읽으므로 저장 즉시 반영된다.
+- 화면·목록이 바뀌는 저장만 Deploy Hook(Vercel env `DEPLOY_HOOK_URL`, Settings > Git > Deploy Hooks `archive-deploy`)을 부른다: `/api/upload`(아카이브 올리기)와 `/api/projects`(관리자 목록 저장)가 성공 뒤 `L.deploy()`를 한 번 호출. 데이터 저장 API에는 넣지 않는다.
+- `index.html`, `stats*.html`, `api/` 같은 코드 파일을 GitHub에 직접 커밋한 경우는 **자동 배포되지 않는다.** 관리자 페이지에서 목록 저장을 한 번 하거나(훅 호출), Vercel 대시보드 Deployments에서 Redeploy를 눌러 배포한다. 여러 파일을 고칠 때는 모아서 커밋하고 배포는 마지막에 한 번만.
+
 ## 사이트 전체 비밀번호 (`middleware.js`, 2026-11-13~)
 - 사이트에 처음 들어오면 비밀번호 화면이 뜨고, 맞히면 30일짜리 쿠키(`pst_site`, HttpOnly)를 받아 모든 화면·데이터를 비밀번호 없이 본다. 시안 파일(`archive/`)·`projects.json`·API도 전부 이 뒤에 있다.
 - 비밀번호 = Vercel env `SITE_PASSWORD`(없으면 `STATS_PASSWORD`). 값을 바꾸면 기존 쿠키는 모두 무효 → 다시 로그인. 잠그기(로그아웃) = `/__logout`.
