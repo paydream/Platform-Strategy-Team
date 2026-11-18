@@ -561,11 +561,30 @@ function signView({ m, pm, cd, pd, mk, pmk, label }) {
       <tbody>${ch.map(r => { const p = prevCh[r[0]]; return `<tr><td class="name">${esc(r[0])}</td><td>${fmt(r[1])}</td><td>${shareCell(r[1], chTot, chMax)}</td><td>${pm ? dtxt(diff(r[1], p && p[1], cd, pd)) : '-'}</td><td>${fmt(r[2])}</td></tr>`; }).join('')}</tbody>
     </table></div></div></section>
 
+  ${mainMenuSection()}
+
   <section class="blk"><h2>일별 추이 ${view === 'day' ? '<small>최근 3주</small>' : view === 'week' ? '<small>최근 5주</small>' : ''}</h2><div class="chartbox"><div class="legend" id="legend"></div><svg class="chart" id="chart" role="img" aria-label="일별 추이"></svg></div></section>
 
   ${trendTables('sign')}
 
   ${adsSection()}`;
+}
+
+/* ---------- 메인 메뉴별 이동 (싸인 탭) — 2026-11-18 ----------
+   데이터: D.mainMenu = { months[{k,s,e,main,moved,dest{path:users}}], cur, prev } · GA4 page_referrer가 메인(/)인 페이지뷰 사용자 */
+const MM_ROWS = [['전자서명 만들기', '/signature/'], ['회원가입 화면', '/member/registerForm.php'], ['내 계약', '/myContract/'], ['이용요금', '/payment/'], ['서비스가이드', '/serviceGuide/'], ['고객센터', '/support/faqList.php'], ['계약 작성', '/document/contract/index.php']];
+function mainMenuSection() {
+  const M = D.mainMenu; if (!M || !M.months || !M.months.length) return '';
+  const cols = M.months.map(x => ({ h: mLabel({ m: x.k, start: x.s, end: x.e }), x }));
+  if (M.cur) cols.push({ h: `최근 7일 <small>${dRange(M.cur.s, M.cur.e)}</small>`, x: M.cur, p: M.prev });
+  const cell = (n, x, pv) => `${fmt(n)}<span class="psm">${pctTxt(pct(n, x.main))}${pv != null ? ` · 이전 7일 ${pctTxt(pv)}` : ''}</span>`;
+  const rate = (x, path) => x ? pct((path ? (x.dest[path] || 0) : x.moved), x.main) : null;
+  const rows = [['메인 방문자', c => `<b>${fmt(c.x.main)}</b>${c.p ? `<span class="psm">이전 7일 ${fmt(c.p.main)}</span>` : ''}`],
+    ['다른 페이지로 이동', c => cell(c.x.moved, c.x, c.p && rate(c.p))],
+    ...MM_ROWS.map(([l, path]) => [l, c => cell(c.x.dest[path] || 0, c.x, c.p && rate(c.p, path))])];
+  return `<section class="blk"><h2>메인 메뉴별 이동 <small>GA4 · 메인 바로 다음 페이지 사용자 (메인 방문자 대비)</small></h2><div class="card"><div class="scroll"><table class="tbl">
+    <thead><tr><th>메뉴</th>${cols.map(c => `<th>${c.h}</th>`).join('')}</tr></thead>
+    <tbody>${rows.map(([l, f]) => `<tr><td class="name">${l}</td>${cols.map(c => `<td>${f(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div></section>`;
 }
 
 /* ---------- 네이버 광고 (광고센터, 싸인 탭 맨 아래) — 2026-11-18 ----------
