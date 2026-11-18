@@ -117,6 +117,8 @@
   .adwarn{margin-top:12px;background:#fff8ec;border:1px solid #ffd9a3;border-radius:12px;padding:12px 16px;font-size:14px;color:#8a4b00}
   .adwarn b{color:#c26a00}
   .adnote{font-size:12px;color:var(--sub);margin-top:6px}
+  .scroll.vlim{max-height:646px;overflow-y:auto} /* 표 10줄 정도만 보이고 나머지는 스크롤 */
+  .scroll.vlim thead th{position:sticky;top:0;z-index:1}
   .tbl td.adt{text-align:left;white-space:normal;min-width:240px;max-width:420px}
   .tbl td.adt b{display:block;font-size:14px;font-weight:600}
   .tbl td.adt small{display:block;font-size:11px;color:var(--faint);line-height:1.4;margin-top:2px}
@@ -665,7 +667,7 @@ function adsSection({ m, pm, cd, pd, label }) {
       ${idle.length ? `<details class="admore"><summary>노출 없는 소재 ${idle.length}개 보기 (${[...new Set(idle.map(a => a.state))].join('·')})</summary><div class="scroll"><table class="tbl"><tbody>${idle.map(adRow).join('')}</tbody></table></div></details>` : ''}</div>
     ${signKwCard(K.filter(k => k.sign))}
     <div class="two">
-      <div class="card"><div class="hd"><b>파워링크 키워드</b><span>클릭 상위 ${kwTop.length}개 · 등록 ${fmt(A.kwTotal)}개 중 노출 ${fmt(kwImp.filter(k => k.camp === '예스폼싸인').length)}개 · 평균 5위 이내 ${fmt(kwImp.filter(k => k.camp === '예스폼싸인' && k.rnk > 0 && k.rnk <= 5).length)}개</span></div><div class="scroll"><table class="tbl">
+      <div class="card"><div class="hd"><b>파워링크 키워드</b><span>클릭 상위 ${kwTop.length}개 · 등록 ${fmt(A.kwTotal)}개 중 노출 ${fmt(kwImp.filter(k => k.camp === '예스폼싸인').length)}개 · 평균 5위 이내 ${fmt(kwImp.filter(k => k.camp === '예스폼싸인' && k.rnk > 0 && k.rnk <= 5).length)}개</span></div><div class="scroll vlim"><table class="tbl">
         <thead><tr><th>키워드</th><th>평균 순위</th><th>노출</th><th>클릭</th><th>비용</th><th>클릭당</th><th>입찰가</th><th>전환</th></tr></thead>
         <tbody>${kwTop.map(k => `<tr><td class="name">${esc(k.kw)}<small>${esc(k.group)}</small></td><td>${k.rnk ? k.rnk.toFixed(1) + '위' : '-'}</td><td>${fmt(k.cur[0])}</td><td>${fmt(k.cur[1])}</td><td>${won(k.cur[2])}</td><td>${cpc(k.cur) == null ? '-' : won(cpc(k.cur))}</td><td>${won(k.bid)}${k.grpBid ? '<span class="psm">그룹 입찰</span>' : ''}</td><td>${k.cur[3] ? fmt(k.cur[3]) + '건' : '<span class="muted">-</span>'}</td></tr>`).join('')}</tbody></table></div></div>
       <div class="card"><div class="hd"><b>광고그룹</b><span>${label}</span></div><div class="scroll"><table class="tbl">
