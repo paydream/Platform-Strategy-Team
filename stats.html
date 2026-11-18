@@ -137,6 +137,19 @@
   .admore summary::before{content:'▸ ';}
   .admore[open] summary::before{content:'▾ ';}
   .tbl td.adt a{font-size:11px;color:var(--accent);text-decoration:none;word-break:break-all}
+  /* 싸인 마케팅 탭 상단: 이번 기간 할 일 + 핵심 인사이트 — 2026-11-18 */
+  .brief{margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media (max-width:960px){.brief{grid-template-columns:1fr}}
+  .brief .bx{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px}
+  .brief .bx.act{border-left:5px solid #e5484d}
+  .brief .bx.ins{border-left:5px solid var(--c)}
+  .brief .bt{font-size:13px;font-weight:700;margin-bottom:8px}
+  .brief .act .bt{color:#e5484d}.brief .ins .bt{color:var(--c)}
+  .brief ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:7px;font-size:14px;line-height:1.5}
+  .brief ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:7px;font-size:14px;line-height:1.5}
+  .brief ul li::before{content:"·";margin-right:6px;color:var(--faint)}
+  .brief li small{display:block;font-size:12px;color:var(--sub)}
+  .brief .urg{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:#e5484d;border-radius:5px;padding:1px 6px;margin-right:6px;vertical-align:1px}
   section.blk{margin-top:30px}
   .blk > h2{font-size:18px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
   .blk > h2 small{font-size:13px;font-weight:400;color:var(--sub)}
@@ -566,12 +579,67 @@ function signView({ m, pm, cd, pd, mk, pmk, label }) {
 }
 
 /* ---------- 싸인 마케팅 탭 (광고·지면·유입 채널) — 2026-11-18 지표와 분리 ---------- */
+// 싸인 마케팅 탭 맨 위: 이번 기간에 할 일(규칙 기반) + 핵심 인사이트 — 선택한 기간과 비교 기간 기준으로 매번 계산
+function mktBrief({ m, pm, cd, pd, mk, pmk, label }) {
+  const cur = [SEL.s, SEL.e], prev = pm ? (view === 'month' ? [mStart(pm), pm.end] : [pm.s, pm.e]) : null;
+  const chg = (a, b) => (prev ? diff(a, b, cd, pd) : null);
+  const ptxt = d => d == null ? '' : ` (${d >= 0 ? '▲' : '▼'}${Math.abs(d).toFixed(0)}%)`;
+  const acts = [], ins = [];
+  // 결제: 네이버 경유
+  const isNv = p => /네이버|naver/i.test(p[3] || '');
+  const pc0 = D.payments ? paysIn(cur[0], cur[1]) : [], pp0 = D.payments && prev ? paysIn(prev[0], prev[1]) : [];
+  const nv = pc0.filter(isNv), nvp = pp0.filter(isNv), pay = mk.pay || [0, 0];
+  const nvSrc = [...new Set(nv.map(p => String(p[3]).split(' · ')[0]))];
+  if (D.payments) ins.push(`결제 <b>${fmt(pay[0])}건 · ${won(pay[1])}</b> 중 네이버 경유 <b>${fmt(nv.length)}건 · ${won(nv.reduce((a, p) => a + p[2], 0))}</b><small>${nvSrc.length ? '경로: ' + nvSrc.map(esc).join(', ') : ''}${prev ? `${nvSrc.length ? ' · ' : ''}${CMP.short} 네이버 경유 ${fmt(nvp.length)}건` : ''}</small>`);
+  // 광고 (광고센터 일별 데이터)
+  const A = D.ads;
+  if (A && A.v === 2) {
+    const di = d => Math.round((Date.parse(d) - Date.parse(A.start)) / 864e5);
+    const sum = (id, r) => { const t = [0, 0, 0, 0, 0, 0]; if (!r) return t; const a = di(r[0]), b = di(r[1]); for (const x of (A.d[id] || [])) if (x[0] >= a && x[0] <= b) for (let i = 0; i < 6; i++) t[i] += x[i + 1]; return t; };
+    const G = A.meta.g.map(([id, kind, name, on]) => ({ kind, name, on, c: sum(id, cur), p: sum(id, prev) }));
+    const T = k => G.filter(g => g.kind === k).reduce((a, g) => ({ c: a.c.map((v, i) => v + g.c[i]), p: a.p.map((v, i) => v + g.p[i]) }), { c: [0, 0, 0, 0, 0, 0], p: [0, 0, 0, 0, 0, 0] });
+    const pl = T('pl'), pc = T('pc'), cpcC = pl.c[1] ? pl.c[2] / pl.c[1] : 0, cpcP = pl.p[1] ? pl.p[2] / pl.p[1] : 0;
+    ins.push(`파워링크 클릭 <b>${fmt(pl.c[1])}회</b>${ptxt(chg(pl.c[1], pl.p[1]))}, 비용 <b>${won(pl.c[2])}</b>, 클릭당 ${won(Math.round(cpcC))}${prev && cpcP ? ` <small>${CMP.short} 클릭당 ${won(Math.round(cpcP))} · 광고 전환 ${fmt(pl.c[3] + pc.c[3])}건</small>` : ''}`);
+    const lost = G.filter(g => g.kind === 'pc' && g.on && g.p[0] > 0 && g.c[0] === 0);
+    const blocked = A.meta.a.filter(a => a[3] && a[7] !== '노출 가능' && a[7] !== 'OFF');
+    if (lost.length || (pc.c[0] === 0 && (pc.p[0] > 0 || blocked.some(a => a[1] === 'pc')))) acts.push(`<span class="urg">긴급</span><b>파워콘텐츠 재가동</b>: ${lost.length ? lost.map(g => esc(g.name.split('_')[0])).join('·') + ' 그룹 노출 0' : '싸인 파워콘텐츠 전체 노출 0'}${blocked.length ? `, 심사 대기·반려 소재 ${blocked.length}개` : ''}<small>광고센터에서 소재 심사 상태 확인·재검수 요청 (${CMP.short} 노출 ${fmt(pc.p[0])} · 클릭 ${fmt(pc.p[1])})</small>`);
+    else ins.push(`파워콘텐츠 클릭 <b>${fmt(pc.c[1])}회</b>${ptxt(chg(pc.c[1], pc.p[1]))}, 비용 ${won(pc.c[2])}`);
+    // 키워드: 전환 없이 비용 큰 것 / 브랜드 순위
+    const K = A.meta.k.map(([id, kw, group, bid, grpBid, on, paused, camp, brand]) => { const c = sum(id, cur); return { kw, bid, camp, brand, c, rnk: c[0] ? c[5] / c[0] : 0 }; });
+    const costly = K.filter(k => k.c[2] > 0 && !k.c[3]).sort((a, b) => b.c[2] - a.c[2]).slice(0, 3);
+    if (costly.length && costly[0].c[2] >= pl.c[2] * 0.1) acts.push(`<b>전환 없는 고비용 키워드 입찰 점검</b>: ${costly.map(k => `${esc(k.kw)} ${won(k.c[2])}(클릭 ${fmt(k.c[1])})`).join(', ')}<small>파워링크 비용의 ${pctTxt(pct(costly.reduce((a, k) => a + k.c[2], 0), pl.c[2]))} · 전환 0건 → 입찰가 하향 또는 랜딩 점검</small>`);
+    const conv = K.filter(k => k.c[3] > 0).sort((a, b) => b.c[3] - a.c[3]).slice(0, 3);
+    if (conv.length) ins.push(`전환이 나온 키워드: <b>${conv.map(k => `${esc(k.kw)} ${fmt(k.c[3])}건`).join(', ')}</b>`);
+    const br = K.find(k => k.brand && /예스폼싸인$/.test(k.kw));
+    if (br && br.rnk > 2) acts.push(`<b>브랜드 키워드 「예스폼싸인」 순위 보강</b>: 평균 ${br.rnk.toFixed(1)}위<small>입찰가 ${won(br.bid)} · 브랜드 검색은 1위 유지 권장</small>`);
+  }
+  // 유입 채널(GA4): 가장 크게 변한 채널
+  if (pmk && mk.ch && mk.ch.length) {
+    const prevCh = Object.fromEntries(pmk.ch.map(r => [r[0], r]));
+    const mv = mk.ch.map(r => ({ n: r[0], c: r[1], p: prevCh[r[0]] ? prevCh[r[0]][1] : 0, d: prevCh[r[0]] ? diff(r[1], prevCh[r[0]][1], cd, pd) : null })).filter(x => x.d != null && (x.c >= 30 || x.p >= 30));
+    const dn = mv.slice().sort((a, b) => a.d - b.d)[0], up = mv.slice().sort((a, b) => b.d - a.d)[0];
+    const nvCh = mk.ch.filter(r => /네이버/.test(r[0])), nvSum = nvCh.reduce((a, r) => a + r[1], 0), nvPrev = nvCh.reduce((a, r) => a + (prevCh[r[0]] ? prevCh[r[0]][1] : 0), 0);
+    ins.push(`네이버 유입 사용자 <b>${fmt(nvSum)}명</b>${ptxt(chg(nvSum, nvPrev))}${up && up.d > 10 ? ` <small>가장 많이 늘어난 채널: ${esc(up.n)} ${ptxt(up.d).trim()}${dn && dn.d < -10 ? ` · 가장 많이 줄어든 채널: ${esc(dn.n)} ${ptxt(dn.d).trim()}` : ''}</small>` : ''}`);
+    if (dn && dn.d <= -30) acts.push(`<b>${esc(dn.n)} 유입 감소 원인 확인</b>: ${fmt(dn.p)} → ${fmt(dn.c)}명 ${ptxt(dn.d).trim()}<small>광고 중단·글 노출 하락·링크 변경 여부 확인</small>`);
+  }
+  // 지면: 결제 가장 많은 지면
+  const top = (mk.place || []).slice().sort((a, b) => b[2] - a[2] || b[3] - a[3])[0];
+  if (top && top[2] > 0) ins.push(`결제가 가장 많이 나온 등록 지면: <b>${esc(top[0])}</b> ${fmt(top[2])}건 · ${won(top[3])} <small>방문 ${fmt(top[1])} · 전환율 ${pctTxt(pct(top[2], top[1]))}</small>`);
+  if (D.payments && !nv.length) acts.push(`<b>네이버 경유 결제 0건</b>: 블로그·파워콘텐츠 랜딩의 예스폼싸인 링크와 추적 링크(UTM) 점검<small>${label} 기준</small>`);
+  if (!acts.length) acts.push('바로 조치가 필요한 항목은 없어요. 아래 광고·지면 표에서 추이를 확인하세요.');
+  return `<div class="brief">
+    <div class="bx act"><div class="bt">이번에 할 일 · ${label}</div><ol>${acts.slice(0, 4).map(a => `<li>${a}</li>`).join('')}</ol></div>
+    <div class="bx ins"><div class="bt">핵심 인사이트${prev ? ` · ${CMP.label}` : ''}</div><ul>${ins.slice(0, 5).map(a => `<li>${a}</li>`).join('')}</ul></div>
+  </div>`;
+}
 function signMktView({ m, pm, cd, pd, mk, pmk, label }) {
   const pl = mk.place, plTot = mk.placeTot || [0, 0, 0], plMax = Math.max(...pl.map(r => r[1]), 1);
   const prevPl = Object.fromEntries((pmk ? pmk.place : []).map(r => [r[0], r]));
   const ch = mk.ch, chTot = ch.reduce((a, r) => a + r[1], 0), chMax = Math.max(...ch.map(r => r[1]), 1);
   const prevCh = Object.fromEntries((pmk ? pmk.ch : []).map(r => [r[0], r]));
   return `
+  ${mktBrief({ m, pm, cd, pd, mk, pmk, label })}
+
   ${adsSection({ m, pm, cd, pd, label })}
 
   <section class="blk"><h2>지면·캠페인별 성과${ti('지면·캠페인별 성과')} <small>관리자 유입 결제 통계</small></h2>
