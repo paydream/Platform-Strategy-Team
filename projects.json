@@ -212,6 +212,23 @@
             }
           ],
           "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX?node-id=147-1385"
+        },
+        {
+          "id": "20261118-174431-yesform-brief-timeline-v13-final-b",
+          "label": "v13 · 확정안 (B안) · 확정 서식·블로그 글 반영",
+          "title": "예스폼 메인 로그인 모달 (연말연초 타임라인)",
+          "desc": "콘텐츠팀 확정 서식 126개(42건×3)로 교체, 관련 블로그 글 한 줄 추가(7건), 연말정산 간소화·자동차세 연납 일정 표기 수정(시작·신청 기간)",
+          "created": "2026.11.18",
+          "folder": "archive/20261118-174431-yesform-brief-timeline-v13-final-b",
+          "preview": "archive/20261118-174431-yesform-brief-timeline-v13-final-b/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "확정안 · B안",
+              "href": "archive/20261118-174431-yesform-brief-timeline-v13-final-b/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX?node-id=147-1385"
         }
       ]
     },
