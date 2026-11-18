@@ -229,6 +229,23 @@
             }
           ],
           "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX?node-id=147-1385"
+        },
+        {
+          "id": "20261118-202544-yesform-brief-timeline-v14-final-b",
+          "label": "v14 · 확정안 (B안) · 목록 제목 다듬기, 헤더·점·블로그 위치 수정",
+          "title": "예스폼 메인 로그인 모달 (연말연초 타임라인)",
+          "desc": "타임라인 목록 제목 26건을 제목만 읽어도 이해되게 수정, 헤더 「다음 마감 D-14」 삭제, 이번 달 일정만 파란 점(이후 일정 회색), 블로그 줄을 서식 영역 위로 이동",
+          "created": "2026.11.18",
+          "folder": "archive/20261118-202544-yesform-brief-timeline-v14-final-b",
+          "preview": "archive/20261118-202544-yesform-brief-timeline-v14-final-b/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "확정안 · B안",
+              "href": "archive/20261118-202544-yesform-brief-timeline-v14-final-b/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX?node-id=147-1385"
         }
       ]
     },
