@@ -575,6 +575,18 @@ const adCls = st => st === '노출 가능' ? 'ok' : st === '심사 대기' ? 'wa
 const cpc = m => m[1] ? Math.round(m[2] / m[1]) : null;
 const ctr = m => pct(m[1], m[0]);
 const dd = (a, b) => (b ? (a - b) / b * 100 : null);
+// 싸인 관리 키워드: 예스폼싸인 캠페인의 브랜드(예스폼…)·'싸인' 키워드 + 예스폼 계정의 '싸인' 키워드
+function signKwCard(L) {
+  if (!L || !L.length) return '';
+  const st = k => !k.on ? '<span class="adtag off">OFF</span>' : k.paused ? '<span class="adtag wait">중지</span>' : '<span class="adtag ok">ON</span>';
+  const sorted = L.slice().sort((a, b) => (b.brand - a.brand) || (b.cur[1] - a.cur[1]) || (b.cur[0] - a.cur[0]) || (b.prev[0] - a.prev[0]));
+  const act = sorted.filter(k => k.brand || k.cur[0] || k.prev[0]), idle = sorted.filter(k => !k.brand && !k.cur[0] && !k.prev[0]);
+  const tot = L.reduce((a, k) => a.map((v, i) => v + k.cur[i]), [0, 0, 0, 0, 0]);
+  const row = k => `<tr><td class="name">${esc(k.kw)}${k.brand ? ' <span class="adtype">브랜드</span>' : ''}<small>${esc(k.camp)} · ${esc(k.group)}</small></td><td>${st(k)}</td><td>${k.rnk ? k.rnk.toFixed(1) + '위' : '-'}</td><td>${fmt(k.cur[0])}</td><td>${fmt(k.cur[1])}</td><td>${won(k.cur[2])}</td><td>${won(k.bid)}${k.grpBid ? '<span class="psm">그룹 입찰</span>' : ''}</td><td>${k.cur[3] ? fmt(k.cur[3]) + '건' : '<span class="muted">-</span>'}</td><td>${dtxt(dd(k.cur[1], k.prev[1]))}<span class="psm">이전 ${fmt(k.prev[1])}클릭</span></td></tr>`;
+  const head = '<thead><tr><th>키워드</th><th>상태</th><th>평균 순위</th><th>노출</th><th>클릭</th><th>비용</th><th>입찰가</th><th>전환</th><th>클릭 증감</th></tr></thead>';
+  return `<div class="card"><div class="hd"><b>싸인 관리 키워드</b><span>키워드명에 '싸인'·'예스폼'이 들어간 ${L.length}개 · 최근 7일 노출 ${fmt(tot[0])} · 클릭 ${fmt(tot[1])} · 비용 ${won(tot[2])}</span></div><div class="scroll"><table class="tbl">${head}<tbody>${act.map(row).join('')}</tbody></table></div>
+    ${idle.length ? `<details class="admore"><summary>노출 없는 키워드 ${idle.length}개 보기</summary><div class="scroll"><table class="tbl"><tbody>${idle.map(row).join('')}</tbody></table></div></details>` : ''}</div>`;
+}
 function adsSection() {
   const A = D.ads; if (!A || !A.pl) return '';
   const pl = A.pl, pc = A.pc || { ads: [], groups: [], cur: [0,0,0,0,0], prev: [0,0,0,0,0] };
@@ -607,6 +619,7 @@ function adsSection() {
       <thead><tr><th>소재</th><th>상태</th><th>노출</th><th>클릭</th><th>클릭률</th><th>비용</th><th>전환</th><th>클릭 증감</th></tr></thead>
       <tbody>${act.map(adRow).join('')}</tbody></table></div>
       ${idle.length ? `<details class="admore"><summary>노출 없는 소재 ${idle.length}개 보기 (${[...new Set(idle.map(a => a.state))].join('·')})</summary><div class="scroll"><table class="tbl"><tbody>${idle.map(adRow).join('')}</tbody></table></div></details>` : ''}</div>
+    ${signKwCard(pl.signKw)}
     <div class="two">
       <div class="card"><div class="hd"><b>파워링크 키워드</b><span>클릭 상위 ${Math.min(20, kw.top.length)}개 · 등록 ${fmt(kw.total)}개 중 노출 ${fmt(kw.imp)}개 · 평균 5위 이내 ${fmt(kw.top5)}개</span></div><div class="scroll"><table class="tbl">
         <thead><tr><th>키워드</th><th>평균 순위</th><th>노출</th><th>클릭</th><th>비용</th><th>클릭당</th><th>입찰가</th><th>전환</th></tr></thead>
