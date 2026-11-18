@@ -117,6 +117,15 @@
   .adwarn{margin-top:12px;background:#fff8ec;border:1px solid #ffd9a3;border-radius:12px;padding:12px 16px;font-size:14px;color:#8a4b00}
   .adwarn b{color:#c26a00}
   .adnote{font-size:12px;color:var(--sub);margin-top:6px}
+  .adimgs{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;padding:16px 18px}
+  .adimg{border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+  .adimg .ait{display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .adimg > small{font-size:11px;color:var(--faint)}
+  .adimg .ims{display:flex;gap:10px;flex-wrap:wrap}
+  .adimg figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--sub)}
+  .adimg img{width:84px;height:84px;object-fit:cover;border-radius:10px;border:1px solid var(--line);background:#fafbfc}
+  .adimg .mt{display:flex;gap:14px;font-size:13px;color:var(--sub)}
+  .adimg .mt b{color:var(--ink,#111);font-weight:600}
   .scroll.vlim{max-height:646px;overflow-y:auto} /* 표 10줄 정도만 보이고 나머지는 스크롤 */
   .scroll.vlim thead th{position:sticky;top:0;z-index:1}
   .tbl td.adt{text-align:left;white-space:normal;min-width:240px;max-width:420px}
@@ -634,6 +643,12 @@ function adsSection({ m, pm, cd, pd, label }) {
   const tot = kind => { const L = G.filter(g => g.kind === kind); return { cur: L.reduce((a, g) => a.map((v, i) => v + g.cur[i]), [0, 0, 0, 0, 0]), prev: L.reduce((a, g) => a.map((v, i) => v + g.prev[i]), [0, 0, 0, 0, 0]) }; };
   const pl = tot('pl'), pc = tot('pc');
   const all = A.meta.a.map(([id, kind, group, groupOn, title, desc, url, state, edited]) => ({ t: kind === 'pl' ? '파워링크' : '파워콘텐츠', group, groupOn, title, desc, url, state, edited, cur: M5(sum(id, cur)), prev: M5(sum(id, prev)) }));
+  const X = (A.meta.x || []).map(([id, group, type, state, items, edited]) => ({ group, type, state, items, edited, cur: M5(sum(id, cur)), prev: M5(sum(id, prev)) }));
+  const imgCard = x => `<div class="adimg"><div class="ait"><span class="adtype">${x.type}</span><span class="adtag ${adCls(x.state)}">${x.state}</span></div>
+      <div class="ims">${x.items.map(([n, src, u]) => `<figure>${src ? `<img src="${esc(src)}" alt="${esc(n || x.type)}" loading="lazy" referrerpolicy="no-referrer">` : ''}${n ? `<figcaption>${esc(n)}</figcaption>` : ''}</figure>`).join('')}</div>
+      <div class="mt"><span>노출 <b>${fmt(x.cur[0])}</b></span><span>클릭 <b>${fmt(x.cur[1])}</b></span><span>클릭률 <b>${pctTxt(ctr(x.cur))}</b></span><span>${dtxt(adChg(x.cur[0], x.prev[0]))}</span></div>
+      <small>${esc(x.group)}${x.edited ? ` · 수정 ${MD(x.edited)}` : ''}</small></div>`;
+  const xOn = X.filter(x => x.state === '노출 가능'), xOff = X.filter(x => x.state !== '노출 가능');
   const K = A.meta.k.map(([id, kw, group, bid, grpBid, on, paused, camp, brand, sign]) => { const c = sum(id, cur); return { kw, group, bid, grpBid, on, paused, camp, brand, sign, cur: M5(c), prev: M5(sum(id, prev)), rnk: rnk(c) }; });
   const kwImp = K.filter(k => k.cur[0] > 0), kwTop = kwImp.slice().sort((a, b) => b.cur[1] - a.cur[1] || b.cur[0] - a.cur[0]).slice(0, 20);
   const lost = G.filter(g => g.kind === 'pc' && g.on && g.prev[0] > 0 && g.cur[0] === 0);
@@ -664,6 +679,8 @@ function adsSection({ m, pm, cd, pd, label }) {
       <thead><tr><th>소재</th><th>상태</th><th>노출</th><th>클릭</th><th>클릭률</th><th>비용</th><th>전환</th><th>클릭 증감</th></tr></thead>
       <tbody>${act.map(adRow).join('')}</tbody></table></div>
       ${idle.length ? `<details class="admore"><summary>노출 없는 소재 ${idle.length}개 보기 (${[...new Set(idle.map(a => a.state))].join('·')})</summary><div class="scroll"><table class="tbl"><tbody>${idle.map(adRow).join('')}</tbody></table></div></details>` : ''}</div>
+    ${X.length ? `<div class="card"><div class="hd"><b>파워링크 광고 이미지</b><span>노출 중 ${xOn.length}개</span></div><div class="adimgs">${xOn.map(imgCard).join('')}</div>
+      ${xOff.length ? `<details class="admore"><summary>노출 안 되는 이미지 ${xOff.length}개 보기 (${[...new Set(xOff.map(x => x.state))].join('·')})</summary><div class="adimgs">${xOff.map(imgCard).join('')}</div></details>` : ''}</div>` : ''}
     ${signKwCard(K.filter(k => k.sign))}
     <div class="two">
       <div class="card"><div class="hd"><b>파워링크 키워드</b><span>등록 ${fmt(A.kwTotal)}개 중 노출 ${fmt(kwImp.filter(k => k.camp === '예스폼싸인').length)}개 · 평균 5위 이내 ${fmt(kwImp.filter(k => k.camp === '예스폼싸인' && k.rnk > 0 && k.rnk <= 5).length)}개</span></div><div class="scroll vlim"><table class="tbl">
