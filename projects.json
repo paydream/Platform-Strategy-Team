@@ -246,6 +246,23 @@
             }
           ],
           "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX?node-id=147-1385"
+        },
+        {
+          "id": "20261118-205400-yesform-brief-timeline-v15-final-b",
+          "label": "v15 · 확정안 (B안) · 추천 서식 썸네일 3:4",
+          "title": "예스폼 메인 로그인 모달 (연말연초 타임라인)",
+          "desc": "추천 서식 썸네일을 세로형 3:4(134×179)로 변경하고 카드 3개가 영역 폭을 가득 채우도록 조정, 높이를 맞추려고 상세 영역 세로 여백 압축",
+          "created": "2026.11.18",
+          "folder": "archive/20261118-205400-yesform-brief-timeline-v15-final-b",
+          "preview": "archive/20261118-205400-yesform-brief-timeline-v15-final-b/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "확정안 · B안",
+              "href": "archive/20261118-205400-yesform-brief-timeline-v15-final-b/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX?node-id=147-1385"
         }
       ]
     },
