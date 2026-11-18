@@ -226,8 +226,8 @@ const TIP = {
   '생성률': '문서 생성 사용자 ÷ 사용자예요. 사용자 50명 이상 채널 중 가장 높은 곳을 색으로 표시해요.',
   '문서 내보내기': '문서를 내보내기(다운로드)한(export_document) 사용자 수예요.',
   '내보내기': '문서를 내보내기(다운로드)한(export_document) 사용자 수예요.',
-  '싸인 연결': '에디터에서 예스폼싸인으로 넘어간(sign_entry) 사용자 수예요.',
-  '싸인 연결 사용자': '에디터에서 예스폼싸인으로 넘어간(sign_entry) 사용자 수예요.',
+  '싸인 이동': '에디터에서 예스폼싸인으로 넘어간(sign_entry) 사용자 수예요.',
+  '싸인 이동 사용자': '에디터에서 예스폼싸인으로 넘어간(sign_entry) 사용자 수예요.',
   '로그인 성공': '로그인에 성공한(login_success) 사용자 수예요.',
   '채널별 성과': 'GA4 세션 소스/매체를 묶은 채널이에요. 예스폼 서식 페이지(yesform/referral), 메인 프롬프트(www_prompt), 사이드바(sidebar), 메타 광고(meta/cpc), 네이버 브랜드검색(naverbs) 등. 한 사람이 여러 채널로 들어오면 채널마다 세서 합계가 활성 사용자보다 클 수 있어요.',
   '유입 채널': 'GA4 세션 소스/매체를 묶은 채널이에요.',
@@ -453,15 +453,15 @@ function editorView({ m, pm, cd, pd, mk, pmk, label }) {
       ${kpi('활성 사용자', act, '명', dAct, (cd > 1 ? `일평균 ${fmt(act / cd)}명` : view === 'week' ? `하루 평균 ${fmt(dayAvg('editorActive'))}명` : `${CMP.short} ${fmt(P && P.active)}명`), true)}
       ${kpi('신규 사용자', E.new, '명', diff(E.new, P && P.new, cd, pd), `활성 사용자의 ${pctTxt(pct(E.new, act))}`)}
       ${kpi('문서 생성 사용자', crt, '명', dCrt, `생성률 ${pctTxt(pct(crt, act))} (활성 대비)`)}
-      ${kpi('싸인 연결 사용자', sgn, '명', diff(sgn, ev(P, 'sign_entry'), cd, pd), `문서 생성자의 ${pctTxt(pct(sgn, crt))}`)}
+      ${kpi('싸인 이동 사용자', sgn, '명', diff(sgn, ev(P, 'sign_entry'), cd, pd), `문서 생성자의 ${pctTxt(pct(sgn, crt))}`)}
     </div></section>
 
   <section class="blk"><h2>전환 흐름</h2>
-    ${funnel([['활성 사용자', act, 'GA4 전체'], ['에디터 진입', ent], ['문서 생성', crt], ['문서 내보내기', exp], ['싸인 연결', sgn]])}</section>
+    ${funnel([['활성 사용자', act, 'GA4 전체'], ['에디터 진입', ent], ['문서 생성', crt], ['문서 내보내기', exp], ['싸인 이동', sgn]])}</section>
 
   <section class="blk"><h2>채널별 성과${ti('채널별 성과')}</h2>
     <div class="card"><div class="scroll"><table class="tbl">
-      <thead><tr><th>${TL('유입 채널')}</th><th>사용자</th><th>${TL('비중')}</th><th>${TL(CMP.col)}</th><th>${TL('문서 생성')}</th><th>${TL('생성률')}</th><th>${TL('내보내기')}</th><th>${TL('싸인 연결')}</th></tr></thead>
+      <thead><tr><th>${TL('유입 채널')}</th><th>사용자</th><th>${TL('비중')}</th><th>${TL(CMP.col)}</th><th>${TL('문서 생성')}</th><th>${TL('생성률')}</th><th>${TL('내보내기')}</th><th>${TL('싸인 이동')}</th></tr></thead>
       <tbody>${ch.map(r => { const p = prevCh[r[0]]; const rate = r[1] ? r[4] / r[1] : 0;
         return `<tr><td class="name">${esc(r[0])}</td><td>${fmt(r[1])}</td><td>${shareCell(r[1], chTot, chMax)}</td><td>${pm ? dtxt(diff(r[1], p && p[1], cd, pd)) : '-'}</td>
           <td>${fmt(r[4])}</td><td class="${r[1] >= 50 && rate === bestRate ? 'best' : ''}">${pctTxt(pct(r[4], r[1]))}</td><td>${fmt(r[5])}</td><td>${fmt(r[6])}</td></tr>`; }).join('')}</tbody>
@@ -580,7 +580,7 @@ function periodTable(p) {
   let L = view === 'day' ? D.periods.day.slice(-7).reverse() : wAligned(12);
   if (view === 'week' && !L.some(x => x.k === pkey.week)) L = [wFind(pkey.week), ...L];
   const ev = (x, k) => (x.editor.ev[k] || [0, 0])[1];
-  const head = p === 'editor' ? ['활성 사용자', '신규 사용자', '문서 생성', '내보내기', '싸인 연결'] : ['활성 사용자', '신규 가입', '결제', '결제 금액', '예스폼 기여 결제', '전자계약 실사용자', '관리자 방문자'];
+  const head = p === 'editor' ? ['활성 사용자', '신규 사용자', '문서 생성', '내보내기', '싸인 이동'] : ['활성 사용자', '신규 가입', '결제', '결제 금액', '예스폼 기여 결제', '전자계약 실사용자', '관리자 방문자'];
   const row = x => p === 'editor' ? [x.editor.active, x.editor.new, ev(x, 'document_create'), ev(x, 'export_document'), ev(x, 'sign_entry')].map(fmt)
     : [fmt(x.sign.active), fmt(x.sign.signup), paySrcCell(x.mkt.sign.pay[0], x.s, x.e), won(x.mkt.sign.pay[1]), x.sign.contrib ? `${won(x.sign.contrib[1])}<span class="psm">${fmt(x.sign.contrib[0])}건</span>` : '-', fmt(x.sign.users), fmt(x.sign.visit)];
   const lbl = x => view === 'day' ? `${MD(x.k)} (${wday(x.k)})` : dRange(x.s, x.e);
@@ -590,7 +590,7 @@ function periodTable(p) {
 }
 function weekTable(p) {
   const W = D.weeks.slice().reverse();
-  const head = p === 'editor' ? ['활성 사용자', '신규 사용자', '문서 생성', '내보내기', '싸인 연결'] : ['활성 사용자', '신규 가입', '결제', '결제 금액', '예스폼 기여 결제', '관리자 방문자'];
+  const head = p === 'editor' ? ['활성 사용자', '신규 사용자', '문서 생성', '내보내기', '싸인 이동'] : ['활성 사용자', '신규 가입', '결제', '결제 금액', '예스폼 기여 결제', '관리자 방문자'];
   const row = w => { const u = k => (w.editor.ev[k] || [0, 0])[1];
     return p === 'editor' ? [w.editor.active, w.editor.new, u('document_create'), u('export_document'), u('sign_entry')].map(fmt)
       : [fmt(w.sign.active), fmt(w.sign.signup), paySrcCell(w.sign.pay[0], w.s, w.e), won(w.sign.pay[1]), w.sign.contrib ? `${won(w.sign.contrib[1])}<span class="psm">${fmt(w.sign.contrib[0])}건</span>` : '-', fmt(w.sign.visit)]; };
@@ -602,7 +602,7 @@ function monthTable(p) {
   const ev = (x, k) => (x.editor.ev[k] || [0, 0])[1];
   const rows = p === 'editor'
     ? [['활성 사용자', x => fmt(x.editor.active)], ['신규 사용자', x => fmt(x.editor.new)], ['에디터 진입', x => fmt(ev(x, 'editor_entry'))], ['문서 생성', x => fmt(ev(x, 'document_create'))],
-       ['문서 생성률', x => pctTxt(pct(ev(x, 'document_create'), x.editor.active))], ['문서 내보내기', x => fmt(ev(x, 'export_document'))], ['싸인 연결', x => fmt(ev(x, 'sign_entry'))], ['로그인 성공', x => fmt(ev(x, 'login_success'))]]
+       ['문서 생성률', x => pctTxt(pct(ev(x, 'document_create'), x.editor.active))], ['문서 내보내기', x => fmt(ev(x, 'export_document'))], ['싸인 이동', x => fmt(ev(x, 'sign_entry'))], ['로그인 성공', x => fmt(ev(x, 'login_success'))]]
     : [['예스폼 기여 결제', x => x.sign.contrib ? `${won(x.sign.contrib[1])} (${fmt(x.sign.contrib[0])}건)` : '-'], ['결제 건수', x => fmt((D.mkt.sign[x.m].pay || [])[0])], ['결제 금액', x => won((D.mkt.sign[x.m].pay || [])[1])], ['신규 가입', x => fmt(x.sign.signup)], ['활성 사용자', x => fmt(x.sign.active)],
        ['가입률 (활성 사용자 대비)', x => pctTxt(pct(x.sign.signup, x.sign.active))], ['전자계약 실사용자', x => fmt(x.sign.users)], ['에디터 경유 실사용자', x => fmt(x.sign.editorUsers)], ['관리자 방문자', x => fmt(x.sign.visit)]];
   return `<section class="blk"><h2>월별 비교${ti('월별 비교')}</h2><div class="card"><div class="scroll"><table class="tbl">
