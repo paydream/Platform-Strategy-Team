@@ -96,6 +96,7 @@
   .ptab[aria-selected="true"]{color:#fff;border-color:transparent}
   .ptab[data-p="editor"][aria-selected="true"]{background:#2f6bff}
   .ptab[data-p="sign"][aria-selected="true"]{background:#12a150}
+  .ptab[data-p="signmkt"][aria-selected="true"]{background:#0b6b35}
   .ptab[aria-selected="true"] i{background:#fff}
   .seg{display:flex;gap:4px;background:#eceef1;border-radius:10px;padding:4px}
   .seg button{font:inherit;font-size:14px;border:0;background:none;padding:6px 14px;border-radius:7px;cursor:pointer;color:var(--sub);white-space:nowrap}
@@ -296,7 +297,7 @@ const TL = k => `${k}${ti(k)}`; // 지표명 + i 툴팁 (지역 변수 L과 겹�
   addEventListener('scroll', hide, true); addEventListener('resize', hide);
 })();
 const KEY = 'pst_stats_pw';
-let D = null, month = null, prod = 'sign', view = 'day', pkey = { day: null, week: null };
+let D = null, month = null, prod = 'sign', ptab = 'sign', view = 'day', pkey = { day: null, week: null };
 // 보기별 비교 기준 (render에서 설정)
 let CMP = { short: '전월', label: '전월 대비', avg: true, note: '전월 비교는 일평균 기준' }, SEL = { s: '', e: '' };
 const dayAvg = col => { const i = D.dailyCols.indexOf(col), r = D.daily.filter(x => x[0] >= SEL.s && x[0] <= SEL.e); return r.length ? r.reduce((a, x) => a + (x[i] || 0), 0) / r.length : null; };
@@ -371,7 +372,8 @@ function stale() {
 function start() {
   $('#gate').hidden = true; $('#app').hidden = false; $('#logout').hidden = false;
   const h = new URLSearchParams(location.hash.slice(1));
-  prod = h.get('p') === 'editor' ? 'editor' : 'sign'; // 첫 화면: 싸인
+  ptab = ['editor', 'signmkt'].includes(h.get('p')) ? h.get('p') : 'sign'; // 첫 화면: 싸인
+  prod = ptab === 'editor' ? 'editor' : 'sign';
   month = D.months.some(x => x.m === h.get('m')) ? h.get('m') : D.months[D.months.length - 1].m;
   const v = h.get('v');
   view = hasP() ? (v === 'day' || v === 'week' || v === 'month' ? v : h.get('m') ? 'month' : 'day') : 'month'; // 첫 화면: 데일리
@@ -387,7 +389,7 @@ function render() {
   document.body.className = prod;
   let ctx, sub;
   if (view === 'month') {
-    history.replaceState(null, '', `#p=${prod}&v=month&m=${month}`);
+    history.replaceState(null, '', `#p=${ptab}&v=month&m=${month}`);
     const i = D.months.findIndex(x => x.m === month), m = D.months[i], pm = D.months[i - 1] || null;
     CMP = { short: '전월', label: '전월 대비', avg: true, note: pm ? '전월 비교는 일평균 기준' : '', col: '전월 대비' };
     ctx = { m, pm, cd: days(m), pd: pm ? days(pm) : 0, mk: D.mkt[prod][m.m], pmk: pm ? D.mkt[prod][pm.m] : null, label: mLabel(m) };
@@ -396,7 +398,7 @@ function render() {
   } else {
     const L = D.periods[view], k = pkey[view], i = L.findIndex(x => x.k === k), m = L[i];
     const pm = view === 'day' ? L[i - 7] || null : wFind(addDay(m.e, -7));
-    history.replaceState(null, '', `#p=${prod}&v=${view}&k=${k}`);
+    history.replaceState(null, '', `#p=${ptab}&v=${view}&k=${k}`);
     CMP = view === 'day'
       ? { short: '지난주 같은 요일', label: `지난주 ${wday(m.s)}요일 대비`, avg: false, note: pm ? `지난주 같은 요일(${MD(pm.s)})과 비교` : '', col: '지난주 대비' }
       : { short: '이전 7일', label: '이전 7일 대비', avg: false, note: pm ? `이전 7일(${dRange(pm.s, pm.e)})과 비교` : '', col: '이전 7일 대비' };
@@ -417,15 +419,16 @@ function render() {
   ${goalPanel()}
   <div class="ctrl">
     <div class="ptabs" role="tablist">
-      <button class="ptab" role="tab" data-p="editor" aria-selected="${prod === 'editor'}"><i></i>예스폼 에디터</button>
-      <button class="ptab" role="tab" data-p="sign" aria-selected="${prod === 'sign'}"><i></i>예스폼싸인</button>
+      <button class="ptab" role="tab" data-p="editor" aria-selected="${ptab === 'editor'}"><i></i>예스폼 에디터</button>
+      <button class="ptab" role="tab" data-p="sign" aria-selected="${ptab === 'sign'}"><i></i>예스폼싸인</button>
+      <button class="ptab" role="tab" data-p="signmkt" aria-selected="${ptab === 'signmkt'}"><i></i>싸인 마케팅</button>
     </div>
     ${hasP() ? `<div class="seg vseg" role="tablist" aria-label="보기">${VIEWS.map(([v, l]) => `<button role="tab" data-v="${v}" aria-selected="${v === view}">${l}</button>`).join('')}</div>` : ''}
   </div>
   <div class="subsel">${view === 'week' ? wPicker() : ''}<div class="seg sub ${view}" role="tablist" aria-label="기간">${sub}</div></div>
-  ${prod === 'editor' ? editorView(ctx) : signView(ctx)}
+  ${prod === 'editor' ? editorView(ctx) : ptab === 'signmkt' ? signMktView(ctx) : signView(ctx)}
   <div style="height:60px"></div>`;
-  document.querySelectorAll('.ptab').forEach(b => b.onclick = () => { prod = b.dataset.p; render(); });
+  document.querySelectorAll('.ptab').forEach(b => b.onclick = () => { ptab = b.dataset.p; prod = ptab === 'editor' ? 'editor' : 'sign'; render(); });
   document.querySelectorAll('.seg button[data-m]').forEach(b => b.onclick = () => { month = b.dataset.m; render(); });
   document.querySelectorAll('.seg button[data-k]').forEach(b => b.onclick = () => { pkey[view] = b.dataset.k; render(); });
   const ws = $('#wStart'); if (ws) ws.onchange = () => { const w = ws.value && wFind(addDay(ws.value, 6)); if (w && wFind(addDay(w.e, -7))) { pkey.week = w.k; render(); } else { ws.value = wFind(pkey.week).s; } };
@@ -544,6 +547,22 @@ function signView({ m, pm, cd, pd, mk, pmk, label }) {
 
   ${paySection(pay)}
 
+  ${mainMenuSection()}
+
+  <section class="blk"><h2>일별 추이 ${view === 'day' ? '<small>최근 3주</small>' : view === 'week' ? '<small>최근 5주</small>' : ''}</h2><div class="chartbox"><div class="legend" id="legend"></div><svg class="chart" id="chart" role="img" aria-label="일별 추이"></svg></div></section>
+
+  ${trendTables('sign')}`;
+}
+
+/* ---------- 싸인 마케팅 탭 (광고·지면·유입 채널) — 2026-11-18 지표와 분리 ---------- */
+function signMktView({ m, pm, cd, pd, mk, pmk, label }) {
+  const pl = mk.place, plTot = mk.placeTot || [0, 0, 0], plMax = Math.max(...pl.map(r => r[1]), 1);
+  const prevPl = Object.fromEntries((pmk ? pmk.place : []).map(r => [r[0], r]));
+  const ch = mk.ch, chTot = ch.reduce((a, r) => a + r[1], 0), chMax = Math.max(...ch.map(r => r[1]), 1);
+  const prevCh = Object.fromEntries((pmk ? pmk.ch : []).map(r => [r[0], r]));
+  return `
+  ${adsSection()}
+
   <section class="blk"><h2>지면·캠페인별 성과${ti('지면·캠페인별 성과')} <small>관리자 유입 결제 통계</small></h2>
     <div class="two">
       <div class="card"><div class="hd"><b>그룹별 방문 · 결제</b><span>등록 경로 방문 ${fmt(plTot[0])} · 결제 ${fmt(plTot[1])}건</span></div><div class="scroll"><table class="tbl">
@@ -559,15 +578,7 @@ function signView({ m, pm, cd, pd, mk, pmk, label }) {
     <div class="card"><div class="scroll"><table class="tbl">
       <thead><tr><th>${TL('유입 채널')}</th><th>사용자</th><th>${TL('비중')}</th><th>${TL(CMP.col)}</th><th>${TL('신규 사용자')}</th></tr></thead>
       <tbody>${ch.map(r => { const p = prevCh[r[0]]; return `<tr><td class="name">${esc(r[0])}</td><td>${fmt(r[1])}</td><td>${shareCell(r[1], chTot, chMax)}</td><td>${pm ? dtxt(diff(r[1], p && p[1], cd, pd)) : '-'}</td><td>${fmt(r[2])}</td></tr>`; }).join('')}</tbody>
-    </table></div></div></section>
-
-  ${mainMenuSection()}
-
-  <section class="blk"><h2>일별 추이 ${view === 'day' ? '<small>최근 3주</small>' : view === 'week' ? '<small>최근 5주</small>' : ''}</h2><div class="chartbox"><div class="legend" id="legend"></div><svg class="chart" id="chart" role="img" aria-label="일별 추이"></svg></div></section>
-
-  ${trendTables('sign')}
-
-  ${adsSection()}`;
+    </table></div></div></section>`;
 }
 
 /* ---------- 메인 메뉴별 이동 (싸인 탭) — 2026-11-18 ----------
