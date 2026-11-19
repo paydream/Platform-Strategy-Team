@@ -280,6 +280,27 @@
             }
           ],
           "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX/?node-id=200-591"
+        },
+        {
+          "id": "20261119-115610-yesform-brief-timeline-v17-final-b",
+          "label": "v17 · 확정안 (B안) · 블로그 표시 2종 (포스팅 글 줄 / 정보 칸 안)",
+          "title": "예스폼 메인 로그인 모달 (연말연초 타임라인)",
+          "desc": "피그마 섹션 200:590 최종 반영. 시안 1: 블로그 줄 라벨 「포스팅 글」, 상세 제목 줄 세로 중앙 정렬. 시안 2: 블로그를 정보 칸 안 구분선 아래 한 줄로(블로그 배지 + 밑줄 제목 + ›), 블로그 있는 일정만 정보 칸 여백 16.",
+          "created": "2026.11.19",
+          "folder": "archive/20261119-115610-yesform-brief-timeline-v17-final-b",
+          "preview": "archive/20261119-115610-yesform-brief-timeline-v17-final-b/a-blog-row/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 1 · 포스팅 글 줄 (확정안)",
+              "href": "archive/20261119-115610-yesform-brief-timeline-v17-final-b/a-blog-row/index.html"
+            },
+            {
+              "label": "시안 2 · 정보 칸 안 블로그",
+              "href": "archive/20261119-115610-yesform-brief-timeline-v17-final-b/b-blog-in-info/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX/?node-id=200-590"
         }
       ]
     },
