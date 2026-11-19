@@ -8,7 +8,7 @@
       "category": "웹 메인",
       "desc": "기존 「업무 브리핑」 모달(필수 업무/27년 법령 탭)을 하나의 시기별 타임라인으로 재구성. 신고·납부 기한, 법령 개정 일정, 연말연초 주요 업무를 날짜순으로 배치.",
       "created": "2026.11.16",
-      "updated": "2026.11.18",
+      "updated": "2026.11.19",
       "hidden": false,
       "final": {
         "version": "20261118-205400-yesform-brief-timeline-v15-final-b",
@@ -263,6 +263,23 @@
             }
           ],
           "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX?node-id=147-1385"
+        },
+        {
+          "id": "20261119-111105-yesform-brief-timeline-v16-final-b",
+          "label": "v16 · 확정안 (B안) · 피그마 최종 디자인 반영",
+          "title": "예스폼 메인 로그인 모달 (연말연초 타임라인)",
+          "desc": "피그마 수정본(200:591) 반영: 헤더 높이 92·글자 크기, 상세 제목 옆에 분야·기한 배지, 정보 칸 여백, 블로그 줄 썸네일 제거·높이 42, 영역 간격 16, 배지 DS 크기(12px·높이 16), 왼쪽 여백 조정",
+          "created": "2026.11.19",
+          "folder": "archive/20261119-111105-yesform-brief-timeline-v16-final-b",
+          "preview": "archive/20261119-111105-yesform-brief-timeline-v16-final-b/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "확정안 · B안",
+              "href": "archive/20261119-111105-yesform-brief-timeline-v16-final-b/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX/?node-id=200-591"
         }
       ]
     },
