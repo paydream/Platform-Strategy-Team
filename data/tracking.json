@@ -1022,7 +1022,7 @@
         "webformat_select",
         "webformat_download"
       ],
-      "requester": "유영경",
+      "requester": "오동성",
       "worker": "유영경",
       "note": "대상 20건 상세의 웹서식 버튼 클릭 시 webformat_select(webformat_result: download/login_required/limit), 내려받기 링크(dw_form.php)로 연결되면 webformat_download + 사용자 속성 webformat_downloader=Y + 30일 쿠키 yf_webformat_dl. webformat_purchase에 webformat_downloaded(Y/N) 추가. GA4 맞춤 정의 3개 같은 날 등록.",
       "basis": "GTM 게시",
@@ -1035,6 +1035,11 @@
           "date": "2026-11-19",
           "by": "유영경",
           "text": "기록 추가"
+        },
+        {
+          "date": "2026-11-19",
+          "by": "유영경",
+          "text": "기록 수정"
         }
       ],
       "id": "r23e81c16"
