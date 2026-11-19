@@ -149,6 +149,12 @@
   .brief ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:7px;font-size:14px;line-height:1.5}
   .brief ul li::before{content:"·";margin-right:6px;color:var(--faint)}
   .brief li small{display:block;font-size:12px;color:var(--sub)}
+  .vtbl td.adt{min-width:200px;max-width:520px}
+  .vtbl td.adt a{font-size:14px;color:var(--text,inherit);text-decoration:none}
+  .vtbl td.adt a:hover{text-decoration:underline}
+  .vlist{padding:12px 18px;display:flex;flex-direction:column;gap:8px;border-bottom:1px solid var(--line);font-size:14px}
+  .vlist small{display:block;font-size:12px;color:var(--sub)}
+  .card .hd span a{color:var(--accent);text-decoration:none}
   .brief .urg{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:#e5484d;border-radius:5px;padding:1px 6px;margin-right:6px;vertical-align:1px}
   section.blk{margin-top:30px}
   .blk > h2{font-size:18px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
@@ -627,6 +633,7 @@ function mktBrief({ m, pm, cd, pd, mk, pmk, label }) {
   const top = (mk.place || []).slice().sort((a, b) => b[2] - a[2] || b[3] - a[3])[0];
   if (top && top[2] > 0) ins.push(`결제가 가장 많이 나온 등록 지면: <b>${esc(top[0])}</b> ${fmt(top[2])}건 · ${won(top[3])} <small>방문 ${fmt(top[1])} · 전환율 ${pctTxt(pct(top[2], top[1]))}</small>`);
   if (D.payments && !nv.length) acts.push(`<b>네이버 경유 결제 0건</b>: 블로그·파워콘텐츠 랜딩의 예스폼싸인 링크와 추적 링크(UTM) 점검<small>${label} 기준</small>`);
+  try { viralBrief(acts, ins); } catch (e) { console.error(e); }
   if (!acts.length) acts.push('바로 조치가 필요한 항목은 없어요. 아래 광고·지면 표에서 추이를 확인하세요.');
   return `<div class="brief">
     <div class="bx act"><div class="bt">이번에 할 일 · ${label}</div><ol>${acts.slice(0, 4).map(a => `<li>${a}</li>`).join('')}</ol></div>
@@ -642,6 +649,8 @@ function signMktView({ m, pm, cd, pd, mk, pmk, label }) {
   ${mktBrief({ m, pm, cd, pd, mk, pmk, label })}
 
   ${adsSection({ m, pm, cd, pd, label })}
+
+  ${(() => { try { return viralSection(); } catch (e) { console.error(e); return ''; } })()}
 
   <section class="blk"><h2>지면·캠페인별 성과${ti('지면·캠페인별 성과')} <small>관리자 유입 결제 통계</small></h2>
     <div class="two">
@@ -676,6 +685,90 @@ function mainMenuSection() {
   return `<section class="blk"><h2>메인 메뉴별 이동 <small>GA4 · 메인 바로 다음 페이지 사용자 (메인 방문자 대비)</small></h2><div class="card"><div class="scroll"><table class="tbl">
     <thead><tr><th>메뉴</th>${cols.map(c => `<th>${c.h}</th>`).join('')}</tr></thead>
     <tbody>${rows.map(([l, f]) => `<tr><td class="name">${l}</td>${cols.map(c => `<td>${f(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div></section>`;
+}
+
+/* ---------- 네이버 바이럴 (구글 시트 「예스폼싸인_네이버 마케팅 사이클」) — 2026-11-19 ----------
+   주간·월간 보기에서만 표시 (데일리 없음). 데이터: D.viral = { url, plans[{name,link,s,e,actions,execs[{no,name,owner,result}],resultHead}], perf[{s,e,review[{no,verdict}]}],
+   posts[{cafe,kw,title,url,date}], comments[{pri,kw,cafe,title,url,status,author,date}], share[{at,s,e,kw,areas{영역:[자사,전체,점유율,노출키워드]}}] } */
+const VR_AREAS = ['7개영역합산', '블로그', '카페', '지식iN', 'AI브리핑', '웹사이트', '파워링크'];
+function viralCtx() {
+  const V = D.viral; if (!V || view === 'day') return null;
+  const i = view === 'month' ? D.months.findIndex(x => x.m === month) : -1;
+  const pmM = i > 0 ? D.months[i - 1] : null, pmW = view === 'week' ? wFind(addDay(SEL.s, -1)) : null;
+  const prev = view === 'month' ? (pmM ? [mStart(pmM), pmM.end] : null) : (pmW ? [pmW.s, pmW.e] : [addDay(SEL.s, -7), addDay(SEL.s, -1)]);
+  const inR = (d, r) => d && r && d >= r[0] && d <= r[1];
+  const cur = [SEL.s, SEL.e], weeks = view === 'month' ? Math.max(1, Math.round(((Date.parse(SEL.e) - Date.parse(SEL.s)) / 864e5 + 1) / 7)) : 1;
+  const posts = V.posts.filter(p => inR(p.date, cur)), postsP = V.posts.filter(p => inR(p.date, prev));
+  const done = V.comments.filter(c => c.status === '완료'), cm = done.filter(c => inR(c.date, cur)), cmP = done.filter(c => inR(c.date, prev));
+  const wait = V.comments.filter(c => c.status === '대기'), hold = V.comments.filter(c => c.status === '보류');
+  const ov = p => p.s && p.e && p.s <= SEL.e && p.e >= SEL.s;
+  // 주간: 선택 기간 마지막 날이 들어 있는 계획 주 (없으면 겹치는 마지막 주) / 월간: 겹치는 모든 계획 주
+  let plans = view === 'month' ? V.plans.filter(ov) : [V.plans.find(p => p.s <= SEL.e && SEL.e <= p.e) || V.plans.filter(ov).pop()].filter(Boolean);
+  const before = plans.length ? V.plans.filter(p => p.e < plans[0].s).pop() : null;
+  const verdict = p => { const f = (V.perf || []).find(x => x.s && p.s && x.s <= p.e && x.e >= p.s); return no => { const r = f && f.review.find(r => r.no === no); return r ? r.verdict : ''; }; };
+  const sh = (V.share || []).filter(x => x.at <= addDay(SEL.e, 1)), shCur = sh[sh.length - 1] || null, shPrev = sh[sh.length - 2] || null;
+  return { V, cur, prev, weeks, posts, postsP, cm, cmP, wait, hold, plans, before, verdict, shCur, shPrev };
+}
+function viralSection() {
+  if (!D.viral) return '';
+  if (view === 'day') return `<section class="blk"><h2>네이버 바이럴 <small>카페 글 · 댓글 · 블로그 · 검색 점유율</small></h2><div class="card"><p class="pempty">네이버 바이럴은 주간 단위로 관리해요. 위에서 <b>주간</b> 또는 <b>월간</b>을 골라 주세요.</p></div></section>`;
+  const X = viralCtx(), V = X.V;
+  const vs = (c, p) => X.prev ? `<div class="sub">${view === 'month' ? '전월' : '이전 7일'} ${fmt(p)}건</div>` : '';
+  const goalPost = 10 * X.weeks;
+  const s = X.shCur, sp = X.shPrev, A = s ? s.areas : {}, AP = sp ? sp.areas : {};
+  const pp = (a, b) => b == null ? '' : `<span class="pill ${a - b > 0.05 ? 'up' : a - b < -0.05 ? 'down' : 'flat'}">${a - b > 0.05 ? '▲' : a - b < -0.05 ? '▼' : ''}${Math.abs(a - b).toFixed(2)}%p<span>${MD(sp.at)} 측정 대비</span></span>`;
+  const tot = A['7개영역합산'], totP = AP['7개영역합산'];
+  const kpis = `<div class="kpis">
+    <div class="kpi"><div class="l">카페 글 게시</div><div class="v">${fmt(X.posts.length)}<small>건</small></div><div class="sub">목표 ${view === 'month' ? `주 10건 × ${X.weeks}주` : '주 10건'} 중 ${pctTxt(X.posts.length / goalPost * 100)}</div>${vs(X.posts.length, X.postsP.length)}</div>
+    <div class="kpi"><div class="l">타카페 댓글 완료</div><div class="v">${fmt(X.cm.length)}<small>건</small></div><div class="sub">지금 대기 ${fmt(X.wait.length)}건 · 보류 ${fmt(X.hold.length)}건</div>${vs(X.cm.length, X.cmP.length)}</div>
+    <div class="kpi"><div class="l">검색결과 카드 점유율</div><div class="v">${tot ? tot[2].toFixed(2) : '-'}<small>%</small></div>${tot ? pp(tot[2], totP && totP[2]) : ''}<div class="sub">${s ? `${MD(s.at)} 측정 · PC 50개 키워드 · 7개 영역` : '측정 없음'}</div></div>
+    <div class="kpi"><div class="l">카페 · 지식iN 자사 자리</div><div class="v">${A['카페'] ? fmt(A['카페'][0]) : '-'}<small>/ ${A['지식iN'] ? fmt(A['지식iN'][0]) : '-'}</small></div><div class="sub">${s ? `카페 ${fmt(A['카페'] && A['카페'][1])}자리 · 지식iN ${fmt(A['지식iN'] && A['지식iN'][1])}자리 중 · 목표 1개 이상` : ''}</div></div>
+  </div>`;
+  // 실행 표
+  const res = (p, e) => e.result ? esc(e.result) : `<span class="muted">${esc((p.resultHead || '결과').replace(/^결과\s*/, '').replace(/[()]/g, '')) || '측정 전'} 예정</span>`;
+  const vtag = v => !v ? '' : `<span class="adtag ${/효과 있음/.test(v) ? 'ok' : /수정|중단/.test(v) ? 'bad' : 'wait'}">${esc(v)}</span> `;
+  const planRows = (p, showWeek) => { const vf = X.verdict(p); return p.execs.map(e => `<tr>${showWeek ? `<td class="name">${dRange(p.s, p.e)}</td>` : ''}<td>${e.no}</td><td class="adt"><b>${esc(e.name)}</b><small class="ds">${esc(e.kw)}</small></td><td>${esc(e.owner) || '-'}</td><td class="adt">${vtag(vf(e.no))}${res(p, e)}</td></tr>`).join(''); };
+  const head = showWeek => `<thead><tr>${showWeek ? '<th>주차</th>' : ''}<th>순서</th><th>실행</th><th>담당</th><th>결과</th></tr></thead>`;
+  const P = X.plans, cur = P[P.length - 1];
+  let planCard = '';
+  if (view === 'week' && cur) {
+    const act = (cur.actions || []).length ? `<div class="vlist">${cur.actions.map(a => `<div><b>${a.no}. ${esc(a.action)}</b><small>${esc(a.owner)}${a.check ? ' · 확인 기준: ' + esc(a.check) : ''}</small></div>`).join('')}</div>` : '';
+    planCard = `<div class="card"><div class="hd"><b>이번 주 실행 · ${dRange(cur.s, cur.e)}</b><span><a href="${esc(cur.link)}" target="_blank" rel="noopener">시트 「${esc(cur.name)}」 열기</a></span></div>${act}<div class="scroll"><table class="tbl vtbl">${head(false)}<tbody>${planRows(cur, false)}</tbody></table></div></div>`;
+    if (X.before && X.before.execs.length) planCard += `<div class="card"><div class="hd"><b>지난 실행 결과 · ${dRange(X.before.s, X.before.e)}</b><span><a href="${esc(X.before.link)}" target="_blank" rel="noopener">시트 「${esc(X.before.name)}」 열기</a></span></div><div class="scroll"><table class="tbl vtbl">${head(false)}<tbody>${planRows(X.before, false)}</tbody></table></div></div>`;
+  } else if (P.length) planCard = `<div class="card"><div class="hd"><b>주차별 실행 · 결과</b><span>${P.length}주</span></div><div class="scroll"><table class="tbl vtbl">${head(true)}<tbody>${P.map(p => planRows(p, true)).join('')}</tbody></table></div></div>`;
+  else planCard = `<div class="card"><p class="pempty">이 기간에 해당하는 주간 계획 탭이 시트에 없어요.</p></div>`;
+  // 점유율 추이
+  const SH = (V.share || []).slice(-6);
+  const shCard = SH.length ? `<div class="card"><div class="hd"><b>네이버 통합검색 자사 점유율</b><span>월요일 측정 · PC · 50개 키워드 · 자사 자리 / 전체 자리</span></div><div class="scroll"><table class="tbl">
+    <thead><tr><th>영역</th>${SH.map(x => `<th>${MD(x.at)} 측정<small class="psm">${x.s ? dRange(x.s, x.e) : ''}</small></th>`).join('')}</tr></thead>
+    <tbody>${VR_AREAS.map(k => `<tr><td class="name">${k === '7개영역합산' ? '<b>7개 영역 합계</b>' : k}${k === '파워링크' ? ' <span class="adtype">광고</span>' : ''}</td>${SH.map(x => { const a = x.areas[k]; return `<td>${a ? `<b>${a[2].toFixed(2)}%</b><span class="psm">${fmt(a[0])} / ${fmt(a[1])}${a[3] != null ? ` · 키워드 ${fmt(a[3])}` : ''}</span>` : '-'}</td>`; }).join('')}</tr>`).join('')}
+      <tr><td class="name">검색 노출 키워드</td>${SH.map(x => `<td>${x.kw ? `${fmt(x.kw[0])} / ${fmt(x.kw[1])}` : '-'}</td>`).join('')}</tr></tbody></table></div></div>` : '';
+  // 게시 목록
+  const lnk = (u, t) => u ? `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)}</a>` : esc(t);
+  const postRows = X.posts.slice().sort((a, b) => b.date.localeCompare(a.date)).map(p => `<tr><td>${MD(p.date)}</td><td class="adt">${lnk(p.url, p.title)}<small>${esc(p.cafe)} · ${esc(p.kw)}</small></td></tr>`).join('');
+  const cmRows = L => L.map(c => `<tr><td>${c.date ? MD(c.date) : '-'}</td><td class="adt">${lnk(c.url, c.title)}<small>${esc(c.cafe)}${c.kw ? ' · ' + esc(c.kw) : ''}</small></td><td>${c.status === '완료' ? '<span class="adtag ok">완료</span>' : c.status === '보류' ? '<span class="adtag off">보류</span>' : '<span class="adtag wait">대기</span>'}</td><td class="adt"><small>${esc(c.author)}</small></td></tr>`).join('');
+  const lists = `<div class="card"><div class="hd"><b>이 기간 게시 기록</b><span>${V.postsLink ? `<a href="${esc(V.postsLink)}" target="_blank" rel="noopener">카페 글 탭</a> · ` : ''}${V.commentsLink ? `<a href="${esc(V.commentsLink)}" target="_blank" rel="noopener">카페덧글 탭</a>` : ''}</span></div>
+    <details class="admore"><summary>카페 글 ${fmt(X.posts.length)}건 보기</summary>${postRows ? `<div class="scroll"><table class="tbl vtbl"><tbody>${postRows}</tbody></table></div>` : '<p class="pempty">이 기간 게시 기록이 없어요.</p>'}</details>
+    <details class="admore"><summary>타카페 댓글 완료 ${fmt(X.cm.length)}건 보기</summary>${X.cm.length ? `<div class="scroll"><table class="tbl vtbl"><tbody>${cmRows(X.cm)}</tbody></table></div>` : '<p class="pempty">이 기간 완료된 댓글이 없어요.</p>'}</details>
+    <details class="admore"><summary>대기 ${fmt(X.wait.length)}건 · 보류 ${fmt(X.hold.length)}건 보기 (기간 무관, 지금 상태)</summary><div class="scroll"><table class="tbl vtbl"><tbody>${cmRows([...X.wait, ...X.hold])}</tbody></table></div></details></div>`;
+  const tU = new Date(new Date(V.updatedAt).getTime() + 9 * 3600e3);
+  return `<section class="blk"><h2>네이버 바이럴 <small>마케팅 사이클 시트 · ${view === 'month' ? mLabel(D.months.find(x => x.m === month)) : dRange(SEL.s, SEL.e)} · 시트 반영 ${tU.getUTCMonth() + 1}.${tU.getUTCDate()} ${String(tU.getUTCHours()).padStart(2, '0')}:${String(tU.getUTCMinutes()).padStart(2, '0')}</small></h2>
+    ${V.stale ? `<div class="stale" role="status">시트를 읽지 못해 마지막으로 받은 값을 보여 줘요.</div>` : ''}
+    ${kpis}${planCard}${shCard}${lists}</section>`;
+}
+// 상단 「이번에 할 일」·「핵심 인사이트」에 넣을 바이럴 항목 (주간·월간만)
+function viralBrief(acts, ins) {
+  const X = viralCtx(); if (!X) return;
+  const goal = 10 * X.weeks, todo = [];
+  if (X.posts.length < goal) todo.push(`카페 글 ${fmt(X.posts.length)}/${fmt(goal)}건`);
+  if (X.wait.length) todo.push(`대기 댓글 ${fmt(X.wait.length)}건`);
+  const ended = X.plans.filter(p => p.e < D.range.end && p.execs.some(e => !e.result));
+  if (ended.length) todo.push(`결과 미기록 ${ended.map(p => dRange(p.s, p.e)).join(', ')}`);
+  const A = X.shCur && X.shCur.areas;
+  if (A && A['카페'] && !A['카페'][0]) todo.push('카페 검색 자리 0');
+  if (todo.length) acts.push(`<b>네이버 바이럴</b>: ${todo.join(' · ')}<small>카페 글은 주 10건 목표 · 대기 댓글은 등업·승인 조건 확인 후 처리</small>`);
+  const t = A && A['7개영역합산'], tp = X.shPrev && X.shPrev.areas['7개영역합산'], b = A && A['블로그'];
+  ins.push(`바이럴: 카페 글 <b>${fmt(X.posts.length)}건</b> · 댓글 <b>${fmt(X.cm.length)}건</b>${t ? ` · 검색결과 카드 점유율 <b>${t[2].toFixed(2)}%</b>${tp ? ` (${t[2] - tp[2] >= 0 ? '▲' : '▼'}${Math.abs(t[2] - tp[2]).toFixed(2)}%p)` : ''}` : ''}${b ? `<small>${MD(X.shCur.at)} 측정 · 블로그 ${b[2].toFixed(2)}% · 카페 ${A['카페'][0]}자리 · 지식iN ${A['지식iN'][0]}자리</small>` : ''}`);
 }
 
 /* ---------- 네이버 광고 (광고센터, 싸인 탭 맨 아래) — 2026-11-18 ----------
