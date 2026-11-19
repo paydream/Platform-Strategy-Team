@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>예스폼싸인 · 대량 전송 받는 사람 입력</title>
+<!--
+  예스폼싸인 2차 고도화 — 대량 전송 받는 사람 입력 표 (2026-11-17)
+  Figma: 참여자 설정 54501:40591 · 데이터 오류 항목을 눌렀을 때 54548:41966
+  · 위쪽 단계는 화면 01 · 02 모두 2단계 "참여자 설정"
+  · 주소 src=excel → 엑셀에서 불러온 예시 12명 (오류 5건 포함) · 없으면 직접 입력 — 빈 줄 1개
+    errors=1 → 열자마자 "데이터 오류 항목" 목록을 띄움
+  · 표 한 줄 = 받는 사람 한 명 — 계약명 · 이름 · 연락처 · 전달 메시지 · 접근 암호 · 휴대폰 인증
+    - 계약명은 비워 두면 "템플릿 이름_이름"으로 자동으로 채워짐
+    - 엑셀에서 여러 칸을 복사해 아무 칸에나 붙여 넣으면 그 칸부터 오른쪽 · 아래로 채움 (줄이 모자라면 늘어남 · 최대 100줄)
+    - 모두 빈 줄은 오류로 보지 않음 · 입력한 줄만 바로 확인해 틀린 칸은 빨간 테두리
+  · [데이터 오류 항목] → 오류 목록 (항목을 누르면 그 칸으로 이동) · 닫기 · 바깥 · Esc 로 닫힘
+  · [입력 방식 변경] → 입력 방식 설정 · [엑셀 다시 올리기] → 엑셀 업로드 화면
+  · 받는 사람이 1명 이상이고 오류가 없으면 [다음]이 진해짐 → 입력한 줄을 담아 두고 3단계 전송 설정(bulk-settings.html)으로
+  · 동작은 js/bulk-recipients.js · 스타일 css/style.css (아래쪽 "대량 전송" 부분)
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="page-step page-step--doc">
+
+<header class="hd hd--step">
+  <div class="hd__logo hd__logo--step"><img src="../images/로고_스_64.png" width="104" height="32" alt="예스폼싸인"></div>
+  <ol class="steps" aria-label="대량 전송 단계" data-steps></ol>
+  <span class="hd__empty" aria-hidden="true"></span>
+</header>
+
+<!-- 문서 줄 (Figma upload 54522:39090) -->
+<div class="docbar">
+  <div class="docbar__inner">
+    <div class="docbar__doc">
+      <p class="docbar__name" data-tpl-name>아르바이트 근로계약서</p>
+      <button class="btn-xs" type="button">미리보기</button>
+    </div>
+    <div class="docbar__title">
+      <label class="docbar__label" for="bulk-title">대량 전송 계약명<span class="field__req" aria-hidden="true">*</span></label>
+      <input class="docbar__input" id="bulk-title" type="text" data-bulk-title required>
+    </div>
+  </div>
+</div>
+
+<main class="bk bk--wide">
+  <h1 class="bk__title">계약을 받을 사람을 입력해 주세요</h1>
+
+  <section class="rcp" aria-label="받는 사람 목록">
+    <div class="rcp__bar">
+      <div class="rcp__tabs">
+        <button class="rcp__tab is-on" type="button" data-tab="all" aria-pressed="true">전체<span class="badge" data-count-all>0</span></button>
+        <i aria-hidden="true"></i>
+        <button class="rcp__tab" type="button" data-tab="error" aria-pressed="false" aria-haspopup="dialog" aria-controls="rcp-errors">데이터 오류 항목<span class="badge" data-count-error>0</span></button>
+      </div>
+      <div class="rcp__btns">
+        <a class="btn btn--line" href="#" data-go-method>입력 방식 변경</a>
+        <a class="btn btn--line" href="#" data-go-excel>엑셀 다시 올리기</a>
+        <button class="btn btn--line" type="button" data-del-checked disabled>선택 삭제</button>
+        <button class="btn btn--line-blue" type="button" data-add-row><img src="../images/ic-plus-blue-16.svg" width="16" height="16" alt="">행 추가</button>
+      </div>
+    </div>
+
+    <div class="rcp__info">
+      <p class="rcp__hint"><img src="../images/ic-info-dark-14.svg" width="14" height="14" alt="">엑셀 시트에서 여러 칸을 복사해 표에 붙여넣을 수 있습니다.</p>
+      <p class="rcp__sum">받는 사람<span><b data-count-ok>0</b><em>/</em><em>100명</em></span></p>
+    </div>
+
+    <div class="rcp__table" role="table" aria-label="받는 사람">
+      <div class="rcp__row rcp__row--head" role="row">
+        <span role="columnheader"><label class="cbox"><input type="checkbox" data-check-all aria-label="모두 선택"><span aria-hidden="true"></span></label></span>
+        <span class="rcp__no" role="columnheader">NO.</span>
+        <span role="columnheader" class="rcp__th">계약명<span class="field__req" aria-hidden="true">*</span>
+          <span class="tip"><button class="tip__btn" type="button" aria-label="계약명 안내" aria-describedby="tip-title"><img src="../images/ic-info-14.svg" width="14" height="14" alt=""></button>
+            <span class="tip__box tip__box--sm" role="tooltip" id="tip-title"><span class="tip__inner"><span class="tip__desc">비워 두면 "템플릿 이름_이름"으로 자동 입력됩니다.</span></span></span></span></span>
+        <span role="columnheader" class="rcp__th">이름<span class="field__req" aria-hidden="true">*</span>
+          <span class="tip"><button class="tip__btn" type="button" aria-label="이름 안내" aria-describedby="tip-name"><img src="../images/ic-info-14.svg" width="14" height="14" alt=""></button>
+            <span class="tip__box tip__box--sm" role="tooltip" id="tip-name"><span class="tip__inner"><span class="tip__desc">계약을 받을 사람의 이름입니다.</span></span></span></span></span>
+        <span role="columnheader" class="rcp__th">연락처<span class="field__req" aria-hidden="true">*</span>
+          <span class="tip"><button class="tip__btn" type="button" aria-label="연락처 안내" aria-describedby="tip-phone"><img src="../images/ic-info-14.svg" width="14" height="14" alt=""></button>
+            <span class="tip__box tip__box--sm" role="tooltip" id="tip-phone"><span class="tip__inner"><span class="tip__desc">서명 요청을 받을 휴대폰 번호 11자리입니다.</span></span></span></span></span>
+        <span role="columnheader" class="rcp__th">전달 메시지
+          <span class="tip"><button class="tip__btn" type="button" aria-label="전달 메시지 안내" aria-describedby="tip-msg"><img src="../images/ic-info-14.svg" width="14" height="14" alt=""></button>
+            <span class="tip__box tip__box--sm" role="tooltip" id="tip-msg"><span class="tip__inner"><span class="tip__desc">서명 요청과 함께 받는 사람에게 보내는 메시지입니다.</span></span></span></span></span>
+        <span role="columnheader" class="rcp__th">접근 암호<span class="field__req" aria-hidden="true">*</span>
+          <span class="tip tip--end"><button class="tip__btn" type="button" aria-label="접근 암호 안내" aria-describedby="tip-pw"><img src="../images/ic-info-14.svg" width="14" height="14" alt=""></button>
+            <span class="tip__box tip__box--sm" role="tooltip" id="tip-pw"><span class="tip__inner"><span class="tip__desc">계약서를 열 때 입력하는 암호입니다. 4자 이상 20자 미만으로 입력하세요.</span></span></span></span></span>
+        <span role="columnheader" class="rcp__th">휴대폰 인증
+          <span class="tip tip--end"><button class="tip__btn" type="button" aria-label="휴대폰 인증 안내" aria-describedby="tip-auth"><img src="../images/ic-info-14.svg" width="14" height="14" alt=""></button>
+            <span class="tip__box tip__box--sm" role="tooltip" id="tip-auth"><span class="tip__inner"><span class="tip__desc">O로 입력하면 서명 전에 휴대폰 본인 인증을 합니다.</span></span></span></span></span>
+        <span role="columnheader"><span class="sr-only">삭제</span></span>
+      </div>
+      <div class="rcp__body" role="rowgroup" data-rows></div>
+    </div>
+
+    <!-- 데이터 오류 항목 (Figma 팝업 54548:42086) -->
+    <div class="errpop" id="rcp-errors" role="dialog" aria-labelledby="errpop-title" hidden>
+      <div class="errpop__top">
+        <h2 class="errpop__title" id="errpop-title">오류 항목을 확인해 주세요</h2>
+        <button class="errpop__close" type="button" aria-label="닫기" data-err-close><img src="../images/ic-close-20.svg" width="20" height="20" alt=""></button>
+      </div>
+      <ul class="errpop__list" data-err-list></ul>
+      <p class="errpop__help">항목을 누르면 해당 칸으로 이동합니다.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="wfooter">
+  <button class="btn btn--out" type="button" data-exit>나가기</button>
+  <button class="btn btn--primary btn--next" type="button" data-next disabled>다음</button>
+</footer>
+
+<!-- 나가기 확인 모달 (Figma 54347:35246) -->
+<div class="dim" id="exit-modal" hidden>
+  <div class="modal modal--sm" role="alertdialog" aria-modal="true" aria-labelledby="exit-title" aria-describedby="exit-desc">
+    <div class="modal__top">
+      <h2 class="modal__title" id="exit-title">나가기</h2>
+      <p class="modal__desc" id="exit-desc">현재 작성하신 계약이 저장되지 않습니다.<br>정말 나가시겠습니까?</p>
+    </div>
+    <div class="modal__btns">
+      <button class="modal__btn" type="button" data-exit-cancel>취소</button>
+      <a class="modal__btn modal__btn--primary" href="../index.html">나가기</a>
+    </div>
+  </div>
+</div>
+
+<script src="../js/step.js"></script>
+<script src="../js/bulk-common.js"></script>
+<script src="../js/bulk-recipients.js"></script>
+<script src="../js/proto-bar.js"></script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>예스폼싸인 · 검토</title>
+<!--
+  예스폼싸인 2차 고도화 — 템플릿 만들기 4단계 검토 (2026-11-10 · 2026-11-17 새 시안으로 바꿈)
+  Figma: 싸인_디자인시스템 › 템플릿 생성_검토 1 (54522:37956 · 1280 × 798) — 예전 시안 54320:48060
+  · 템플릿 만들기 흐름: 문서 업로드 → 역할 설정 → 서명 조건 설정 [다음] → 이 화면 (주소 ?flow=tpl&d=…)
+    시안 바로가기 [템플릿 만들기] › "4단계 검토"로 바로 열 수도 있음
+  · 앞 단계에서 넘어온 문서 이름 · 서명 순서 · 역할 · 추가 인증 · 템플릿 유형이 채워짐 (js/review.js)
+    템플릿 관리 [수정하기]로 온 수정 모드(edit=1)면 템플릿명은 원래 이름 · "자주 사용하는 템플릿"은 목록 핀 상태 그대로
+    이 화면을 바로 열면 Figma 예시(2차적저작물 이용허락 계약서.pdf · 역할 3개)로 보임
+  · 템플릿명 — 처음 값은 문서 이름 · [수정하기]를 누르면 입력 칸으로 가서 글자를 모두 고름 · 비우면 [저장하기]가 흐림
+    평소엔 입력 칸 · [수정하기] 모두 회색 테두리(54522:37956) · 고치는 중(입력 칸에 커서)에는 둘 다 파란 테두리(54634:41735)
+  · "자주 사용하는 템플릿" — 처음엔 꺼짐(회색 핀 · 54522:37956) · 누르면 켜짐(파란 핀 · "자주 사용하는 템플릿에 추가되었습니다." · 54634:41735) · 다시 누르면 꺼짐
+  · 문서 [미리 보기] → 계약 화면 미리보기 모달 (54492:36403) — 역할 고르기 · 문서 확대/축소(50~200%) · 예시 값 입력
+    공통 항목(회사명 · 계약 시작일)은 비어 있으면 빨간 테두리 + "필수 입력 항목입니다." · [확인] · 바깥 · Esc 로 닫힘
+  · 역할 카드 — 색은 역할 순서대로 빨강 · 노랑 · 주황 … · 순서대로 서명하기일 때만 카드 사이에 › 표시
+  · 고정 첨부 문서 — X 로 빼기 · [파일 추가 (n/5)]로 파일 고르기 (최대 5개 · 다 차면 흐림)
+  · [저장하기] → 템플릿 관리(index.html)로 돌아감
+  · 스타일 ../css/style.css ("검토" 부분)
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="page-step">
+
+<header class="hd hd--step">
+  <div class="hd__logo hd__logo--step"><img src="../images/로고_스_64.png" width="104" height="32" alt="예스폼싸인"></div>
+  <ol class="steps" aria-label="계약 단계">
+    <li class="steps__item"><span class="steps__num">1</span>문서 업로드</li>
+    <li class="steps__item"><span class="steps__num">2</span>역할 설정</li>
+    <li class="steps__item"><span class="steps__num">3</span>서명 조건 설정</li>
+    <li class="steps__item is-on" aria-current="step"><span class="steps__num">4</span>검토</li>
+  </ol>
+  <span class="hd__empty" aria-hidden="true"></span>
+</header>
+
+<main class="pt">
+  <h1 class="pt__title">템플릿 정보를 입력하고 저장해 주세요</h1>
+
+  <!-- 검토 카드 (Figma 템플릿 생성_검토 1 · 54522:37963) -->
+  <section class="rv-card" aria-label="템플릿 정보">
+    <!-- 템플릿명 -->
+    <div class="rv-name">
+      <label class="rv-name__label" for="rv-name">템플릿명<span class="field__req" aria-hidden="true">*</span></label>
+      <div class="rv-name__body">
+        <div class="rv-name__row">
+          <input class="field__input rv-name__input" id="rv-name" type="text" maxlength="50" placeholder="템플릿명을 입력해 주세요." required data-name>
+          <button class="btn btn--line rv-name__edit" type="button" data-edit>수정하기</button>
+        </div>
+        <!-- 자주 사용하는 템플릿 — 꺼짐 54522:37956 · 켜짐 54634:41735 -->
+        <button class="rv-fav" type="button" aria-pressed="false" data-fav>
+          <img class="rv-fav__off" src="../images/ic-pin-16.svg" width="16" height="16" alt="">
+          <img class="rv-fav__on" src="../images/ic-pin-16-on.svg" width="16" height="16" alt="">
+          <span class="rv-fav__off">자주 사용하는 템플릿</span>
+          <span class="rv-fav__on">자주 사용하는 템플릿에 추가되었습니다.</span>
+        </button>
+      </div>
+    </div>
+
+    <hr class="rv-line">
+
+    <!-- 템플릿 정보 -->
+    <div class="rv-info">
+      <h2 class="rv-info__title">템플릿 정보</h2>
+      <dl class="rv-list">
+        <div>
+          <dt>문서</dt>
+          <dd class="rv-doc"><span data-doc>2차적저작물 이용허락 계약서.pdf</span><button class="btn-xs" type="button" aria-haspopup="dialog" aria-controls="pv-modal" data-pv-open>미리 보기</button></dd>
+        </div>
+        <div>
+          <dt>서명 순서</dt>
+          <dd data-order>순서대로 서명하기</dd>
+        </div>
+        <div class="rv-list__roles">
+          <dt>역할 <span data-role-count>(3)</span></dt>
+          <dd><ul class="rv-roles" data-roles></ul></dd>
+        </div>
+        <div>
+          <dt>템플릿 유형</dt>
+          <dd><span class="type type--normal" data-type>일반 계약</span></dd>
+        </div>
+        <div>
+          <dt>고정 첨부 문서</dt>
+          <dd class="rv-files" data-attach>
+            <span class="rv-file"><span class="rv-file__name">파일명칭.pdf</span><button class="rv-file__del" type="button" aria-label="파일명칭.pdf 빼기" data-attach-del><img src="../images/ic-close-14.svg" width="14" height="14" alt=""></button></span>
+            <label class="rv-add" data-attach-add><img src="../images/ic-plus-blue-14.svg" width="14" height="14" alt="">파일 추가 (<span data-attach-count>1</span>/5)<input type="file" data-attach-input></label>
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+</main>
+
+<footer class="wfooter">
+  <button class="btn btn--out" type="button" data-exit>나가기</button>
+  <button class="btn btn--primary btn--next" type="button" data-done>저장하기</button>
+</footer>
+
+<!-- 계약 화면 미리보기 모달 (Figma 54492:36403) — 문서 [미리 보기]를 누르면 뜸 -->
+<div class="dim" id="pv-modal" hidden>
+  <div class="modal pv" role="dialog" aria-modal="true" aria-labelledby="pv-title" tabindex="-1">
+    <div class="modal__top modal__top--pick">
+      <h2 class="modal__title" id="pv-title">계약 화면 미리보기</h2>
+    </div>
+    <div class="pv-bar">
+      <div class="pv-role">
+        <span class="pv-role__label" id="pv-role-label">역할</span>
+        <label class="pv-select">
+          <i class="pv-select__dot" aria-hidden="true" data-pv-dot></i>
+          <span class="pv-select__text" aria-hidden="true"><span class="pv-select__name" data-pv-name>근로자</span><span class="pv-select__sub" data-pv-sub>보낼 때 입력</span></span>
+          <select aria-labelledby="pv-role-label" data-pv-role></select>
+        </label>
+      </div>
+      <div class="pv-zoom">
+        <button class="pv-zoom__btn" type="button" aria-label="작게 보기" data-pv-zoom="-1"><img src="../images/ic-zoom-out-20.svg" width="20" height="20" alt=""></button>
+        <span class="pv-zoom__val" aria-live="polite" data-pv-zoom-val>100%</span>
+        <button class="pv-zoom__btn" type="button" aria-label="크게 보기" data-pv-zoom="1"><img src="../images/ic-zoom-in-20.svg" width="20" height="20" alt=""></button>
+      </div>
+    </div>
+    <div class="pv-body">
+      <div class="pv-doc" data-pv-doc>
+        <img class="pv-doc__page" src="../images/doc-preview.png" width="480" height="682" alt="계약 문서 미리보기" data-pv-page>
+      </div>
+      <section class="pv-side" aria-labelledby="pv-side-title">
+        <h3 class="pv-side__title" id="pv-side-title">예시 값 입력</h3>
+        <div class="pv-side__body">
+          <div class="pv-group">
+            <p class="pv-group__label">공통 항목</p>
+            <div class="pv-group__fields">
+              <div class="pv-field">
+                <label class="pv-field__label" for="pv-company">회사명</label>
+                <input class="pv-field__input" id="pv-company" type="text" placeholder="항목명을 입력해 주세요." required data-pv-req>
+                <p class="pv-field__help">필수 입력 항목입니다.</p>
+              </div>
+              <div class="pv-field">
+                <label class="pv-field__label" for="pv-start">계약 시작일</label>
+                <input class="pv-field__input" id="pv-start" type="text" placeholder="항목명을 입력해 주세요." required data-pv-req>
+                <p class="pv-field__help">필수 입력 항목입니다.</p>
+              </div>
+            </div>
+          </div>
+          <div class="pv-group pv-group--role">
+            <p class="pv-group__label">현재 선택한 역할</p>
+            <div class="pv-field">
+              <label class="pv-field__label" for="pv-rname">이름</label>
+              <input class="pv-field__input" id="pv-rname" type="text" placeholder="이름을 입력해 주세요." data-pv-rname>
+            </div>
+            <div class="pv-field">
+              <label class="pv-field__label" for="pv-raddr">주소</label>
+              <input class="pv-field__input" id="pv-raddr" type="text" placeholder="주소를 입력해 주세요." data-pv-raddr>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div class="modal__btns">
+      <button class="modal__btn modal__btn--primary" type="button" data-pv-close>확인</button>
+    </div>
+  </div>
+</div>
+
+<!-- 나가기 확인 모달 (Figma 54347:35246) -->
+<div class="dim" id="exit-modal" hidden>
+  <div class="modal modal--sm" role="alertdialog" aria-modal="true" aria-labelledby="exit-title" aria-describedby="exit-desc">
+    <div class="modal__top">
+      <h2 class="modal__title" id="exit-title">나가기</h2>
+      <p class="modal__desc" id="exit-desc">현재 작성하신 계약이 저장되지 않습니다.<br>정말 나가시겠습니까?</p>
+    </div>
+    <div class="modal__btns">
+      <button class="modal__btn" type="button" data-exit-cancel>취소</button>
+      <a class="modal__btn modal__btn--primary" href="../index.html">나가기</a>
+    </div>
+  </div>
+</div>
+
+<script src="../js/step.js"></script>
+<script src="../js/review.js"></script>
+<script src="../js/proto-bar.js"></script>
+</body>
+</html>

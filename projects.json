@@ -95,6 +95,23 @@
             }
           ],
           "figma": "https://www.figma.com/design/EXUWdUfToeHuFf1sblHGNd/?node-id=54169-29120"
+        },
+        {
+          "id": "20261119-163335-2",
+          "label": "v6",
+          "title": "[예스폼싸인] 2차 고도화 템플릿",
+          "desc": "",
+          "created": "2026.11.19",
+          "folder": "archive/20261119-163335-2",
+          "preview": "archive/20261119-163335-2/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261119-163335-2/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/EXUWdUfToeHuFf1sblHGNd/?node-id=54169-29120"
         }
       ],
       "figma": "https://www.figma.com/design/EXUWdUfToeHuFf1sblHGNd/"
