@@ -318,6 +318,23 @@
             }
           ],
           "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX/?node-id=200-590"
+        },
+        {
+          "id": "20261119-133008-yesform-brief-timeline-v19-final-b",
+          "label": "v19 · 확정안 (B안) · 피그마 카드 최종 (블로그 시안 2종)",
+          "title": "예스폼 메인 로그인 모달 (연말연초 타임라인)",
+          "desc": "피그마 섹션 200:590 재반영: 추천 서식 카드 컴포넌트 변경(썸네일 칸 여백 8·아래 구분선, 이미지 134×174 모서리 8, 이름 여백 6/12, 카드 높이 243). 위쪽 버튼으로 시안 1(포스팅 글 줄) / 시안 2(정보 칸 안 블로그) 전환.",
+          "created": "2026.11.19",
+          "folder": "archive/20261119-133008-yesform-brief-timeline-v19-final-b",
+          "preview": "archive/20261119-133008-yesform-brief-timeline-v19-final-b/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "확정안 · B안 (블로그 시안 2종)",
+              "href": "archive/20261119-133008-yesform-brief-timeline-v19-final-b/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX/?node-id=200-590"
         }
       ]
     },
