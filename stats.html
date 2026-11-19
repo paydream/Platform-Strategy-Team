@@ -579,6 +579,8 @@ function signView({ m, pm, cd, pd, mk, pmk, label }) {
 
   ${paySection(pay)}
 
+  ${srcSections({ m, pm, cd, pd, mk, pmk, label })}
+
   ${mainMenuSection()}
 
   <section class="blk"><h2>일별 추이 ${view === 'day' ? '<small>최근 3주</small>' : view === 'week' ? '<small>최근 5주</small>' : ''}</h2><div class="chartbox"><div class="legend" id="legend"></div><svg class="chart" id="chart" role="img" aria-label="일별 추이"></svg></div></section>
@@ -642,18 +644,13 @@ function mktBrief({ m, pm, cd, pd, mk, pmk, label }) {
     <div class="bx ins"><div class="bt">핵심 인사이트${prev ? ` · ${CMP.label}` : ''}</div><ul>${ins.slice(0, view === 'day' ? 5 : 6).map(a => `<li>${a}</li>`).join('')}</ul></div>
   </div>`;
 }
-function signMktView({ m, pm, cd, pd, mk, pmk, label }) {
+// 유입 출처 (지면·캠페인별 성과 + 유입 채널별 사용자): 예스폼싸인 탭과 싸인 마케팅 탭 모두에서 사용 (2026-11-19)
+function srcSections({ m, pm, cd, pd, mk, pmk, label }) {
   const pl = mk.place, plTot = mk.placeTot || [0, 0, 0], plMax = Math.max(...pl.map(r => r[1]), 1);
   const prevPl = Object.fromEntries((pmk ? pmk.place : []).map(r => [r[0], r]));
   const ch = mk.ch, chTot = ch.reduce((a, r) => a + r[1], 0), chMax = Math.max(...ch.map(r => r[1]), 1);
   const prevCh = Object.fromEntries((pmk ? pmk.ch : []).map(r => [r[0], r]));
   return `
-  ${mktBrief({ m, pm, cd, pd, mk, pmk, label })}
-
-  ${adsSection({ m, pm, cd, pd, label })}
-
-  ${(() => { try { return viralSection(); } catch (e) { console.error(e); return ''; } })()}
-
   <section class="blk"><h2>지면·캠페인별 성과${ti('지면·캠페인별 성과')} <small>관리자 유입 결제 통계</small></h2>
     <div class="two">
       <div class="card"><div class="hd"><b>그룹별 방문 · 결제</b><span>등록 경로 방문 ${fmt(plTot[0])} · 결제 ${fmt(plTot[1])}건</span></div><div class="scroll"><table class="tbl">
@@ -670,6 +667,20 @@ function signMktView({ m, pm, cd, pd, mk, pmk, label }) {
       <thead><tr><th>${TL('유입 채널')}</th><th>사용자</th><th>${TL('비중')}</th><th>${TL(CMP.col)}</th><th>${TL('신규 사용자')}</th></tr></thead>
       <tbody>${ch.map(r => { const p = prevCh[r[0]]; return `<tr><td class="name">${esc(r[0])}</td><td>${fmt(r[1])}</td><td>${shareCell(r[1], chTot, chMax)}</td><td>${pm ? dtxt(diff(r[1], p && p[1], cd, pd)) : '-'}</td><td>${fmt(r[2])}</td></tr>`; }).join('')}</tbody>
     </table></div></div></section>`;
+}
+function signMktView({ m, pm, cd, pd, mk, pmk, label }) {
+  const pl = mk.place, plTot = mk.placeTot || [0, 0, 0], plMax = Math.max(...pl.map(r => r[1]), 1);
+  const prevPl = Object.fromEntries((pmk ? pmk.place : []).map(r => [r[0], r]));
+  const ch = mk.ch, chTot = ch.reduce((a, r) => a + r[1], 0), chMax = Math.max(...ch.map(r => r[1]), 1);
+  const prevCh = Object.fromEntries((pmk ? pmk.ch : []).map(r => [r[0], r]));
+  return `
+  ${mktBrief({ m, pm, cd, pd, mk, pmk, label })}
+
+  ${adsSection({ m, pm, cd, pd, label })}
+
+  ${(() => { try { return viralSection(); } catch (e) { console.error(e); return ''; } })()}
+
+  ${srcSections({ m, pm, cd, pd, mk, pmk, label })}`;
 }
 
 /* ---------- 메인 메뉴별 이동 (싸인 탭) — 2026-11-18 ----------
