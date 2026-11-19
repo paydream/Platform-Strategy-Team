@@ -1,4 +1,4 @@
-/* 플랫폼전략팀 공통 GNB 메뉴. 메뉴 추가·순서 변경은 이 파일의 MENU만 고치면 모든 화면에 반영된다. kw는 GNB 검색용 추가 검색어. side: true인 메뉴(관리자)는 맨 오른쪽에 따로 붙는다.
+/* 플랫폼전략팀 공통 GNB 메뉴. 메뉴 추가·순서 변경은 이 파일의 MENU만 고치면 모든 화면에 반영된다. kw는 GNB 검색용 추가 검색어. side: true인 메뉴(관리자)는 맨 오른쪽에 따로 붙는다. hidden: true인 메뉴는 GNB·검색에 노출하지 않는다(페이지 주소로는 열림).
    각 화면 마크업은 그대로 두고, 스크립트가 nav를 로고와 .gnb-util 사이로 옮겨 한 줄(60px)로 만든다.
    각 화면: <nav class="wrap gnb-nav" data-current="메뉴id"></nav><script src="gnb.js"></script> */
 (function () {
@@ -17,7 +17,7 @@
       svg: '<rect x="3" y="4.5" width="18" height="16" rx="2.5"' + F + '/><path d="M3 9.5h18M8 3v3M16 3v3"/><path d="m12 11.4 1.2 2.4 2.6.4-1.9 1.8.45 2.6L12 17.4l-2.35 1.2.45-2.6-1.9-1.8 2.6-.4z" fill="currentColor" stroke-width="1.2"/>' },
     { id: 'tracking', href: 'tracking.html', label: 'GA', title: 'GA4·GTM 측정 관리', kw: '측정 관리 GA4 GTM 이벤트', fg: '#f07800', bg: '#fff1e0',
       svg: '<circle cx="12" cy="12" r="9"' + F + '/><circle cx="12" cy="12" r="5.2"/><circle cx="12" cy="12" r="1.8" fill="currentColor"/>' },
-    { id: 'stats', href: 'stats-age.html', label: '데이터', kw: '연령 해상도 통계', fg: '#e5457a', bg: '#fdeaf1',
+    { id: 'stats', href: 'stats-age.html', label: '데이터', hidden: true, kw: '연령 해상도 통계', fg: '#e5457a', bg: '#fdeaf1',
       svg: '<path d="M11 4.5a8.5 8.5 0 1 0 8.5 8.5H11z"' + F + '/><path d="M14 2.5a7.5 7.5 0 0 1 7.5 7.5H14z" fill="currentColor"/>' },
     { id: 'admin', href: 'admin/', label: '관리자', fg: '#4e5968', bg: '#eef0f3', side: true,
       svg: '<path d="M4 7h9M18 7h2M4 17h3M12 17h8"/><circle cx="15.5" cy="7" r="2.4"' + F + '/><circle cx="9.5" cy="17" r="2.4"' + F + '/>' }
@@ -43,7 +43,7 @@
     function run() {
       var q = input.value.trim(), words = q.toLowerCase().split(/\s+/).filter(Boolean);
       if (!words.length) { close(); return; }
-      var menus = MENU.filter(function (m) { return hit(m.label + ' ' + (m.kw || ''), words); }).map(function (m) {
+      var menus = MENU.filter(function (m) { return !m.hidden && hit(m.label + ' ' + (m.kw || ''), words); }).map(function (m) {
         return { href: m.href, title: m.label, sub: m.title && m.title !== m.label ? m.title : '', fg: m.fg, bg: m.bg, svg: m.svg };
       });
       var projs = (P || []).filter(function (p) {
@@ -106,13 +106,13 @@
         '<svg viewBox="0 0 24 24"' + S + '>' + m.svg + '</svg>' + (m.lock ? '<span class="gnb-lock">' + LOCK + '</span>' : '') + '</span>' +
         '<span class="gnb-label">' + m.label + '</span>' + (m.badge ? '<span class="gnb-badge">' + m.badge + '</span>' : '') + '</a>';
     };
-    nav.innerHTML = MENU.filter(function (m) { return !m.side; }).map(item).join('');
+    nav.innerHTML = MENU.filter(function (m) { return !m.side && !m.hidden; }).map(item).join('');
     var top = nav.parentNode && nav.parentNode.querySelector('.gnb-top');
     if (top) {
       nav.classList.remove('wrap'); top.insertBefore(nav, top.querySelector('.gnb-util'));
       // 관리자는 다른 메뉴와 헷갈리지 않게 맨 오른쪽에 따로 둔다
       var side = document.createElement('div'); side.className = 'gnb-side';
-      side.innerHTML = MENU.filter(function (m) { return m.side; }).map(item).join('');
+      side.innerHTML = MENU.filter(function (m) { return m.side && !m.hidden; }).map(item).join('');
       top.appendChild(side);
       initSearch(top);
     }
