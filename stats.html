@@ -724,7 +724,7 @@ function viralSection() {
     <div class="kpi"><div class="l">카페 글 게시</div><div class="v">${fmt(X.posts.length)}<small>건</small></div><div class="sub">목표 ${view === 'month' ? `주 10건 × ${X.weeks}주` : '주 10건'} 중 ${pctTxt(X.posts.length / goalPost * 100)}</div>${vs(X.posts.length, X.postsP.length)}</div>
     <div class="kpi"><div class="l">타카페 댓글 완료</div><div class="v">${fmt(X.cm.length)}<small>건</small></div><div class="sub">지금 대기 ${fmt(X.wait.length)}건 · 보류 ${fmt(X.hold.length)}건</div>${vs(X.cm.length, X.cmP.length)}</div>
     <div class="kpi"><div class="l">검색결과 카드 점유율</div><div class="v">${tot ? tot[2].toFixed(2) : '-'}<small>%</small></div>${tot ? pp(tot[2], totP && totP[2]) : ''}<div class="sub">${s ? `${MD(s.at)} 측정 · PC 50개 키워드 · 7개 영역` : '측정 없음'}</div></div>
-    <div class="kpi"><div class="l">카페 · 지식iN 자사 자리</div><div class="v">${A['카페'] ? fmt(A['카페'][0]) : '-'}<small>/ ${A['지식iN'] ? fmt(A['지식iN'][0]) : '-'}</small></div><div class="sub">${s ? `카페 ${fmt(A['카페'] && A['카페'][1])}자리 · 지식iN ${fmt(A['지식iN'] && A['지식iN'][1])}자리 중 · 목표 1개 이상` : ''}</div></div>
+    <div class="kpi"><div class="l">검색 결과에 뜬 우리 카페·지식iN 글</div><div class="v">${A['카페'] && A['지식iN'] ? fmt(A['카페'][0] + A['지식iN'][0]) : '-'}<small>건</small></div><div class="sub">${s ? `카페 칸 ${fmt(A['카페'] && A['카페'][1])}개 중 ${fmt(A['카페'] && A['카페'][0])}개 · 지식iN 칸 ${fmt(A['지식iN'] && A['지식iN'][1])}개 중 ${fmt(A['지식iN'] && A['지식iN'][0])}개` : ''}</div><div class="sub">${s ? `${MD(s.at)} 측정 · 50개 키워드 검색 · 목표 1건 이상` : ''}</div></div>
   </div>`;
   // 실행 표
   const res = (p, e) => e.result ? esc(e.result) : `<span class="muted">${esc((p.resultHead || '결과').replace(/^결과\s*/, '').replace(/[()]/g, '')) || '측정 전'} 예정</span>`;
@@ -741,7 +741,7 @@ function viralSection() {
   else planCard = `<div class="card"><p class="pempty">이 기간에 해당하는 주간 계획 탭이 시트에 없어요.</p></div>`;
   // 점유율 추이
   const SH = (V.share || []).slice(-6);
-  const shCard = SH.length ? `<div class="card"><div class="hd"><b>네이버 통합검색 자사 점유율</b><span>월요일 측정 · PC · 50개 키워드 · 자사 자리 / 전체 자리</span></div><div class="scroll"><table class="tbl">
+  const shCard = SH.length ? `<div class="card"><div class="hd"><b>네이버 검색 결과 중 우리 비중</b><span>월요일 측정 · PC · 50개 키워드 · 아래 작은 숫자 = 우리 결과 수 / 전체 결과 수</span></div><div class="scroll"><table class="tbl">
     <thead><tr><th>영역</th>${SH.map(x => `<th>${MD(x.at)} 측정<small class="psm">${x.s ? dRange(x.s, x.e) : ''}</small></th>`).join('')}</tr></thead>
     <tbody>${VR_AREAS.map(k => `<tr><td class="name">${k === '7개영역합산' ? '<b>7개 영역 합계</b>' : k}${k === '파워링크' ? ' <span class="adtype">광고</span>' : ''}</td>${SH.map(x => { const a = x.areas[k]; return `<td>${a ? `<b>${a[2].toFixed(2)}%</b><span class="psm">${fmt(a[0])} / ${fmt(a[1])}${a[3] != null ? ` · 키워드 ${fmt(a[3])}` : ''}</span>` : '-'}</td>`; }).join('')}</tr>`).join('')}
       <tr><td class="name">검색 노출 키워드</td>${SH.map(x => `<td>${x.kw ? `${fmt(x.kw[0])} / ${fmt(x.kw[1])}` : '-'}</td>`).join('')}</tr></tbody></table></div></div>` : '';
@@ -767,10 +767,10 @@ function viralBrief(acts, ins) {
   const ended = X.plans.filter(p => p.e < D.range.end && p.execs.some(e => !e.result));
   if (ended.length) todo.push(`결과 미기록 ${ended.map(p => dRange(p.s, p.e)).join(', ')}`);
   const A = X.shCur && X.shCur.areas;
-  if (A && A['카페'] && !A['카페'][0]) todo.push('카페 검색 자리 0');
+  if (A && A['카페'] && !A['카페'][0]) todo.push('검색 결과에 뜬 우리 카페 글 0건');
   if (todo.length) acts.push(`<b>네이버 바이럴</b>: ${todo.join(' · ')}<small>카페 글은 주 10건 목표 · 대기 댓글은 등업·승인 조건 확인 후 처리</small>`);
   const t = A && A['7개영역합산'], tp = X.shPrev && X.shPrev.areas['7개영역합산'], b = A && A['블로그'];
-  ins.push(`바이럴: 카페 글 <b>${fmt(X.posts.length)}건</b> · 댓글 <b>${fmt(X.cm.length)}건</b>${t ? ` · 검색결과 카드 점유율 <b>${t[2].toFixed(2)}%</b>${tp ? ` (${t[2] - tp[2] >= 0 ? '▲' : '▼'}${Math.abs(t[2] - tp[2]).toFixed(2)}%p)` : ''}` : ''}${b ? `<small>${MD(X.shCur.at)} 측정 · 블로그 ${b[2].toFixed(2)}% · 카페 ${A['카페'][0]}자리 · 지식iN ${A['지식iN'][0]}자리</small>` : ''}`);
+  ins.push(`바이럴: 카페 글 <b>${fmt(X.posts.length)}건</b> · 댓글 <b>${fmt(X.cm.length)}건</b>${t ? ` · 검색결과 카드 점유율 <b>${t[2].toFixed(2)}%</b>${tp ? ` (${t[2] - tp[2] >= 0 ? '▲' : '▼'}${Math.abs(t[2] - tp[2]).toFixed(2)}%p)` : ''}` : ''}${b ? `<small>${MD(X.shCur.at)} 측정 · 블로그 ${b[2].toFixed(2)}% · 검색 결과에 뜬 우리 카페 글 ${A['카페'][0]}건 · 지식iN ${A['지식iN'][0]}건</small>` : ''}`);
 }
 
 /* ---------- 네이버 광고 (광고센터, 싸인 탭 맨 아래) — 2026-11-18 ----------
