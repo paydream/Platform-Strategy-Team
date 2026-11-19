@@ -1,0 +1,14 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>연말연초 업무 브리핑 모달 · 확정안 (B안) · 블로그 시안 2종</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>*{box-sizing:border-box;margin:0;padding:0}html,body{height:100%;overflow:hidden;font-family:Pretendard,-apple-system,sans-serif}
+iframe{position:fixed;inset:0;width:100%;height:100%;border:0;display:none}iframe.on{display:block}
+.sw{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:10;display:flex;gap:4px;padding:4px;background:rgba(29,31,32,.88);border-radius:100px;box-shadow:0 4px 16px rgba(0,0,0,.18)}
+.sw button{border:0;background:transparent;color:#C9CED3;font:600 13px/18px Pretendard,sans-serif;padding:7px 14px;border-radius:100px;cursor:pointer;white-space:nowrap}
+.sw button:hover{color:#fff}.sw button.on{background:#fff;color:#1D1F20}</style></head><body>
+<div class="sw" role="tablist"><button data-k="1" role="tab">시안 1 · 포스팅 글 줄</button><button data-k="2" role="tab">시안 2 · 정보 칸 안 블로그</button></div>
+<iframe id="f1" title="시안 1 · 포스팅 글 줄" src="_s1/index.html"></iframe><iframe id="f2" title="시안 2 · 정보 칸 안 블로그" data-src="_s2/index.html"></iframe>
+<script>
+function show(k){k=k==='2'?'2':'1';document.querySelectorAll('.sw button').forEach(b=>{const on=b.dataset.k===k;b.classList.toggle('on',on);b.setAttribute('aria-selected',on);});document.querySelectorAll('iframe').forEach(f=>{const on=f.id==='f'+k;if(on&&!f.src&&f.dataset.src)f.src=f.dataset.src;f.classList.toggle('on',on);});if(location.hash!=='#'+k)history.replaceState(null,'','#'+k);}
+document.querySelectorAll('.sw button').forEach(b=>b.onclick=()=>show(b.dataset.k));
+show((location.hash||'#1').slice(1));
+</script></body></html>
