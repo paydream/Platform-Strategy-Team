@@ -201,7 +201,10 @@
   .more{display:inline-block;margin-top:14px;font-size:13px;color:var(--accent);text-decoration:none}
   .more:hover{text-decoration:underline}
   .tbl td small{color:var(--faint);font-size:11px;margin-left:4px}
+  /* 업무 아카이브 시안 보기(iframe) 안에서는 GNB를 숨긴다 */
+  .embed header.gnb{display:none}
 </style>
+<script>if (window.top !== window.self) document.documentElement.classList.add('embed');</script>
 </head>
 <body>
 <header class="gnb"><div class="wrap gnb-top"><a class="gnb-logo" href="./" title="메인 홈으로"><strong>플랫폼전략팀</strong></a><div class="gnb-util"><button class="hbtn" id="logout" hidden>잠그기</button></div></div><nav class="wrap gnb-nav" data-current="stats" aria-label="주요 메뉴"></nav><script src="gnb.js"></script></header>

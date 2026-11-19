@@ -181,7 +181,10 @@
   .alg{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--sub);padding:12px 18px 0}
   .alg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
   @media (max-width:640px){.dev li,.dev.wide li{grid-template-columns:100px 1fr;}.dev .nv{grid-column:1/-1;text-align:left}}
+  /* 업무 아카이브 시안 보기(iframe) 안에서는 GNB를 숨긴다 */
+  .embed header.gnb{display:none}
 </style>
+<script>if (window.top !== window.self) document.documentElement.classList.add('embed');</script>
 </head>
 <body>
 <header class="gnb"><div class="wrap gnb-top"><a class="gnb-logo" href="./" title="메인 홈으로"><strong>플랫폼전략팀</strong></a><div class="gnb-util"><a class="hbtn" href="stats-age.html">요약으로</a><button class="hbtn" id="logout" hidden>잠그기</button></div></div><nav class="wrap gnb-nav" data-current="stats" aria-label="주요 메뉴"></nav><script src="gnb.js"></script></header>

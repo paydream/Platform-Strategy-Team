@@ -1757,6 +1757,39 @@
       ]
     },
     {
+      "id": "20261112-yesform-age-resolution",
+      "title": "예스폼 한국 사용자 연령·해상도",
+      "team": "planning",
+      "category": "데이터",
+      "desc": "예스폼 GA4 한국 사용자 연령·해상도 분석 (2022.09~2026.10)",
+      "created": "2026.11.12",
+      "updated": "2026.11.12",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261112-yesform-age-resolution",
+          "label": "최종본",
+          "title": "예스폼 한국 사용자 연령·해상도",
+          "desc": "",
+          "created": "2026.11.12",
+          "folder": "",
+          "preview": "stats-age.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "요약",
+              "href": "stats-age.html"
+            },
+            {
+              "label": "월별·기간별 상세",
+              "href": "stats-age-detail.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "20261109-170909-downloads",
       "title": "서식뱅크 종료",
       "team": "planning",
