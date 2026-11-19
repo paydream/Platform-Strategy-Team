@@ -593,7 +593,8 @@ function mktBrief({ m, pm, cd, pd, mk, pmk, label }) {
   if (D.payments) ins.push(`결제 <b>${fmt(pay[0])}건 · ${won(pay[1])}</b> 중 네이버 경유 <b>${fmt(nv.length)}건 · ${won(nv.reduce((a, p) => a + p[2], 0))}</b><small>${nvSrc.length ? '경로: ' + nvSrc.map(esc).join(', ') : ''}${prev ? `${nvSrc.length ? ' · ' : ''}${CMP.short} 네이버 경유 ${fmt(nvp.length)}건` : ''}</small>`);
   // 광고 (광고센터 일별 데이터)
   const A = D.ads;
-  if (A && A.v === 2) {
+  if (A && A.v === 2 && SEL.s > A.end) acts.push(`<b>광고센터 데이터 없음</b>: ${MD(A.end)}까지만 수집됐어요${A.stale ? ' · 광고센터 로그인 후 다시 갱신 필요' : ''}<small>광고 관련 할 일·인사이트는 이 날짜에 계산하지 않았어요</small>`);
+  if (A && A.v === 2 && SEL.s <= A.end) {
     const di = d => Math.round((Date.parse(d) - Date.parse(A.start)) / 864e5);
     const sum = (id, r) => { const t = [0, 0, 0, 0, 0, 0]; if (!r) return t; const a = di(r[0]), b = di(r[1]); for (const x of (A.d[id] || [])) if (x[0] >= a && x[0] <= b) for (let i = 0; i < 6; i++) t[i] += x[i + 1]; return t; };
     const G = A.meta.g.map(([id, kind, name, on]) => ({ kind, name, on, c: sum(id, cur), p: sum(id, prev) }));
@@ -705,7 +706,10 @@ function adsSection({ m, pm, cd, pd, label }) {
   adChg = (a, b) => prev ? diff(a, b, cd, pd) : null;
   const sum = (id, r) => { const t = [0, 0, 0, 0, 0, 0]; if (!r) return t; const a = di(r[0]), b = di(r[1]); for (const x of (A.d[id] || [])) if (x[0] >= a && x[0] <= b) for (let i = 0; i < 6; i++) t[i] += x[i + 1]; return t; };
   const M5 = t => t.slice(0, 5), rnk = t => t[0] ? t[5] / t[0] : 0;
-  const staleTxt = '';
+  const tU = new Date(new Date(A.updatedAt).getTime() + 9 * 3600e3), upd = `${tU.getUTCMonth() + 1}.${tU.getUTCDate()} ${String(tU.getUTCHours()).padStart(2, '0')}:${String(tU.getUTCMinutes()).padStart(2, '0')}`;
+  // 광고센터 데이터가 선택 기간을 덮지 못하면 0으로 보이지 않게 안내 (로그인 만료로 갱신이 멈춘 경우 등)
+  if (SEL.s > A.end) return `<section class="blk"><h2>네이버 광고 <small>광고센터 · ${label}</small></h2><div class="stale" role="status">광고센터 데이터는 ${MD(A.end)}까지만 있어요${A.stale ? ` (광고센터 로그인이 필요해 ${upd} 수집값에서 멈춤)` : ' (오늘 갱신 전)'}. ${MD(A.end)} 이전 날짜나 주간·월간 보기를 골라 주세요.</div></section>`;
+  const staleTxt = SEL.e > A.end ? `<div class="stale" role="status">광고센터 데이터는 ${MD(A.end)}까지라 ${MD(addDay(A.end, 1))}~${MD(SEL.e)}는 빠져 있어요${A.stale ? ' (광고센터 로그인 필요)' : ''}.</div>` : '';
   const kp = (l, v, unit, d, sub) => `<div class="kpi"><div class="l">${l}</div><div class="v">${fmt(v)}<small>${unit}</small></div>${d == null ? `<div class="pill flat">${CMP.short} 비교 없음</div>` : `<div class="pill ${d > 0.5 ? 'up' : d < -0.5 ? 'down' : 'flat'}">${d > 0.5 ? '▲' : d < -0.5 ? '▼' : ''} ${Math.abs(d).toFixed(0)}%<span>${CMP.label}${CMP.avg ? ' (일평균)' : ''}</span></div>`}${sub ? `<div class="sub">${sub}</div>` : ''}</div>`;
   const G = A.meta.g.map(([id, kind, name, on, bid]) => { const c = sum(id, cur), p = sum(id, prev); return { kind, t: kind === 'pl' ? '파워링크' : '파워콘텐츠', name, on, bid, cur: M5(c), prev: M5(p) }; });
   const tot = kind => { const L = G.filter(g => g.kind === kind); return { cur: L.reduce((a, g) => a.map((v, i) => v + g.cur[i]), [0, 0, 0, 0, 0]), prev: L.reduce((a, g) => a.map((v, i) => v + g.prev[i]), [0, 0, 0, 0, 0]) }; };
