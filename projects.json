@@ -335,6 +335,23 @@
             }
           ],
           "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX/?node-id=200-590"
+        },
+        {
+          "id": "20261119-134339-yesform-brief-timeline-v20-final-b",
+          "label": "v20 · 확정안 (B안) · 블로그 줄 피그마 재반영 (시안 2종)",
+          "title": "예스폼 메인 로그인 모달 (연말연초 타임라인)",
+          "desc": "피그마 섹션 200:590 재반영. 공통: 상세 위 여백 22. 시안 1: 블로그 줄 = 글 제목 + 오른쪽 「보기」 배지(「포스팅 글」 라벨·› 삭제). 시안 2: 정보 칸 안 블로그 줄 밑줄·› 삭제, 「블로그」 배지 높이 20, 구분선 아래 여백 14. 위쪽 버튼으로 시안 1/2 전환.",
+          "created": "2026.11.19",
+          "folder": "archive/20261119-134339-yesform-brief-timeline-v20-final-b",
+          "preview": "archive/20261119-134339-yesform-brief-timeline-v20-final-b/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "확정안 · B안 (블로그 시안 2종)",
+              "href": "archive/20261119-134339-yesform-brief-timeline-v20-final-b/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX/?node-id=200-590"
         }
       ]
     },
