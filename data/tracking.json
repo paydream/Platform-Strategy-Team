@@ -979,6 +979,87 @@
         }
       ],
       "id": "r3f1af27e"
+    },
+    {
+      "date": "2026-11-19",
+      "product": "yesform",
+      "title": "HTML서비스 웹서식 상세 조회 → 결제 연결 (등록링크 20건)",
+      "change": "추가",
+      "method": "GTM",
+      "events": [
+        "webformat_view",
+        "webformat_purchase"
+      ],
+      "requester": "유영경",
+      "worker": "유영경",
+      "note": "콘텐츠 사업팀 트래커 「HTML서비스 제작리스트」 등록링크 20건(excel.yesform.com/xls/100421323~100421347) 상세 조회 시 webformat_view(webformat_id·webformat_name) + 30일 쿠키 yf_webformat_ref, 사용자 속성 webformat_viewer=Y. 쿠키 보유자 결제 시 webformat_purchase(거래ID·금액·상품·조회 후 경과일). 대상 목록은 GTM 변수 「CJS - webformat 대상 서식 목록」. GA4 맞춤 정의 8개 같은 날 등록, 탐색 분석 「웹서식(HTML서비스) 조회 → 결제」 생성.",
+      "basis": "GTM 게시",
+      "gtm": {
+        "container": "GTM-5GQJFRS",
+        "version": 34
+      },
+      "log": [
+        {
+          "date": "2026-11-19",
+          "by": "유영경",
+          "text": "기록 추가"
+        }
+      ],
+      "id": "r0ea6e2ad"
+    },
+    {
+      "date": "2026-11-19",
+      "product": "yesform",
+      "title": "웹서식 선택·내려받기 (상세 「바로 사용 > 웹서식」)",
+      "change": "추가",
+      "method": "GTM",
+      "events": [
+        "webformat_select",
+        "webformat_download"
+      ],
+      "requester": "유영경",
+      "worker": "유영경",
+      "note": "대상 20건 상세의 웹서식 버튼 클릭 시 webformat_select(webformat_result: download/login_required/limit), 내려받기 링크(dw_form.php)로 연결되면 webformat_download + 사용자 속성 webformat_downloader=Y + 30일 쿠키 yf_webformat_dl. webformat_purchase에 webformat_downloaded(Y/N) 추가. GA4 맞춤 정의 3개 같은 날 등록.",
+      "basis": "GTM 게시",
+      "gtm": {
+        "container": "GTM-5GQJFRS",
+        "version": 35
+      },
+      "log": [
+        {
+          "date": "2026-11-19",
+          "by": "유영경",
+          "text": "기록 추가"
+        }
+      ],
+      "id": "r23e81c16"
+    },
+    {
+      "date": "2026-11-19",
+      "product": "yesform",
+      "title": "웹서식 경유 결제 기준 정교화 (막힘 → 결제 → 내려받기)",
+      "change": "수정",
+      "method": "GTM",
+      "events": [
+        "webformat_purchase",
+        "webformat_download"
+      ],
+      "requester": "유영경",
+      "worker": "유영경",
+      "note": "v36·v37. 웹서식 경유 결제 = 웹서식 클릭이 막힌(비로그인/권한 부족) 뒤 결제(webformat_path=blocked_then_paid). 조회만 하고 결제는 viewed_only. webformat_block_result·webformat_block_days 추가. 내려받기는 webformat_download_type(direct 기존 권한 / after_payment 막힘→결제 후 / after_login / after_block) + webformat_paid_tx_id. 첫 결제 여부는 거래ID로 관리자 결제내역 대조 필요. v37은 login_required 판정 수정. GA4 맞춤 정의 5개 같은 날 등록.",
+      "basis": "GTM 게시",
+      "gtm": {
+        "container": "GTM-5GQJFRS",
+        "version": 37
+      },
+      "log": [
+        {
+          "date": "2026-11-19",
+          "by": "유영경",
+          "text": "기록 추가"
+        }
+      ],
+      "id": "r0f0a91e7"
     }
   ],
   "gtmNotes": {
@@ -1028,6 +1109,34 @@
       "note": "",
       "by": "유영경",
       "date": "2026-11-17"
+    },
+    "GTM-5GQJFRS:34": {
+      "requester": "유영경",
+      "worker": "유영경",
+      "note": "",
+      "by": "유영경",
+      "date": "2026-11-19"
+    },
+    "GTM-5GQJFRS:35": {
+      "requester": "유영경",
+      "worker": "유영경",
+      "note": "",
+      "by": "유영경",
+      "date": "2026-11-19"
+    },
+    "GTM-5GQJFRS:36": {
+      "requester": "유영경",
+      "worker": "유영경",
+      "note": "",
+      "by": "유영경",
+      "date": "2026-11-19"
+    },
+    "GTM-5GQJFRS:37": {
+      "requester": "유영경",
+      "worker": "유영경",
+      "note": "v36 보완 (login_required 판정 수정)",
+      "by": "유영경",
+      "date": "2026-11-19"
     }
   }
 }
