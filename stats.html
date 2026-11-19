@@ -157,6 +157,7 @@
   .vlist{padding:12px 18px;display:flex;flex-direction:column;gap:8px;border-bottom:1px solid var(--line);font-size:14px}
   .vlist small{display:block;font-size:12px;color:var(--sub)}
   .card .hd span a{color:var(--accent);text-decoration:none}
+  .tbl tr.grp td{text-align:left;font-size:12px;font-weight:700;color:var(--sub);background:#fafbfc;padding:8px 14px}
   .brief .urg{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:#e5484d;border-radius:5px;padding:1px 6px;margin-right:6px;vertical-align:1px}
   section.blk{margin-top:30px}
   .blk > h2{font-size:18px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
@@ -804,6 +805,18 @@ const cpc = m => m[1] ? Math.round(m[2] / m[1]) : null;
 const ctr = m => pct(m[1], m[0]);
 const dd = (a, b) => (b ? (a - b) / b * 100 : null);
 // 싸인 관리 키워드: 예스폼싸인 캠페인의 브랜드(예스폼…)·'싸인' 키워드 + 예스폼 계정의 '싸인' 키워드
+// 추가 추천 키워드 (주간 보기 전용, 2026-11-19): 광고센터 연관 키워드 중 예스폼싸인 캠페인에 아직 없는 것. 주 1회 갱신
+// D.ads.recs = { at, list: [[키워드, PC 월검색, 모바일 월검색, PC 월평균 클릭, 경쟁, 평균 노출 광고 수, 씨앗, 주제, 예스폼 계정 광고 중(1/0)]] }
+function recKwCard(R) {
+  if (!R || !R.list || !R.list.length) return '';
+  const tU = new Date(new Date(R.at).getTime() + 9 * 3600e3);
+  const cls = c => c === '높음' ? 'bad' : c === '중간' ? 'wait' : 'ok';
+  const cats = [...new Set(R.list.map(r => r[7]))];
+  const row = r => `<tr><td class="name">${esc(r[0])}<small>「${esc(r[6])}」 연관 검색어</small></td><td><b>${fmt(r[1])}</b></td><td>${fmt(r[2])}</td><td><span class="adtag ${cls(r[4])}">${esc(r[4] || '-')}</span></td><td>${r[8] ? '<span class="adtag wait">예스폼 계정 광고 중</span>' : '<span class="adtag ok">신규</span>'}</td></tr>`;
+  return `<div class="card"><div class="hd"><b>추가 추천 키워드</b><span>예스폼싸인 캠페인에 없는 연관 검색어 · PC 월 검색량 순 · ${tU.getUTCMonth() + 1}.${tU.getUTCDate()} 기준 (매주 갱신)</span></div><div class="scroll"><table class="tbl">
+    <thead><tr><th>키워드</th><th>PC 월 검색</th><th>모바일 월 검색</th><th>경쟁</th><th>등록 상태</th></tr></thead>
+    <tbody>${cats.map(c => `<tr class="grp"><td colspan="5">${esc(c)}</td></tr>${R.list.filter(r => r[7] === c).map(row).join('')}`).join('')}</tbody></table></div></div>`;
+}
 function signKwCard(L) {
   if (!L || !L.length) return '';
   const st = k => !k.on ? '<span class="adtag off">OFF</span>' : k.paused ? '<span class="adtag wait">중지</span>' : '<span class="adtag ok">ON</span>';
@@ -880,6 +893,7 @@ function adsSection({ m, pm, cd, pd, label }) {
         <thead><tr><th>광고그룹</th><th>노출</th><th>클릭</th><th>비용</th><th>클릭 증감</th></tr></thead>
         <tbody>${G.filter(g => g.cur[0] || g.prev[0]).sort((a, b) => b.cur[1] - a.cur[1] || b.prev[1] - a.prev[1]).map(g => `<tr><td class="name">${esc(g.name)}<small>${g.t}${g.on ? '' : ' · OFF'}</small></td><td>${fmt(g.cur[0])}</td><td>${fmt(g.cur[1])}</td><td>${won(g.cur[2])}</td><td>${dtxt(adChg(g.cur[1], g.prev[1]))}</td></tr>`).join('')}</tbody></table></div></div>
     </div>
+    ${view === 'week' ? recKwCard(A.recs) : ''}
     ${TR.length ? `<div class="card"><div class="hd"><b>${view === 'month' ? '월별 광고 추이' : '주간 광고 추이'}</b></div><div class="scroll"><table class="tbl">
       <thead><tr><th>${view === 'month' ? '월' : '주'}</th><th>파워링크 노출</th><th>클릭</th><th>비용</th><th>클릭당</th><th>파워콘텐츠 노출</th><th>클릭</th><th>비용</th><th>광고 전환</th></tr></thead>
       <tbody>${TR.map(w => `<tr><td>${w.l}</td><td>${fmt(w.pl[0])}</td><td>${fmt(w.pl[1])}</td><td>${won(w.pl[2])}</td><td>${cpc(w.pl) == null ? '-' : won(cpc(w.pl))}</td><td>${fmt(w.pc[0])}</td><td>${fmt(w.pc[1])}</td><td>${won(w.pc[2])}</td><td>${fmt(w.pl[3] + w.pc[3])}</td></tr>`).join('')}</tbody></table></div></div>` : ''}
