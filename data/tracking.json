@@ -1054,7 +1054,7 @@
         "webformat_purchase",
         "webformat_download"
       ],
-      "requester": "유영경",
+      "requester": "오동성",
       "worker": "유영경",
       "note": "v36·v37. 웹서식 경유 결제 = 웹서식 클릭이 막힌(비로그인/권한 부족) 뒤 결제(webformat_path=blocked_then_paid). 조회만 하고 결제는 viewed_only. webformat_block_result·webformat_block_days 추가. 내려받기는 webformat_download_type(direct 기존 권한 / after_payment 막힘→결제 후 / after_login / after_block) + webformat_paid_tx_id. 첫 결제 여부는 거래ID로 관리자 결제내역 대조 필요. v37은 login_required 판정 수정. GA4 맞춤 정의 5개 같은 날 등록.",
       "basis": "GTM 게시",
@@ -1067,6 +1067,11 @@
           "date": "2026-11-19",
           "by": "유영경",
           "text": "기록 추가"
+        },
+        {
+          "date": "2026-11-19",
+          "by": "유영경",
+          "text": "기록 수정"
         }
       ],
       "id": "r0f0a91e7"
