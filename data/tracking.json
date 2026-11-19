@@ -990,7 +990,7 @@
         "webformat_view",
         "webformat_purchase"
       ],
-      "requester": "유영경",
+      "requester": "오동성",
       "worker": "유영경",
       "note": "콘텐츠 사업팀 트래커 「HTML서비스 제작리스트」 등록링크 20건(excel.yesform.com/xls/100421323~100421347) 상세 조회 시 webformat_view(webformat_id·webformat_name) + 30일 쿠키 yf_webformat_ref, 사용자 속성 webformat_viewer=Y. 쿠키 보유자 결제 시 webformat_purchase(거래ID·금액·상품·조회 후 경과일). 대상 목록은 GTM 변수 「CJS - webformat 대상 서식 목록」. GA4 맞춤 정의 8개 같은 날 등록, 탐색 분석 「웹서식(HTML서비스) 조회 → 결제」 생성.",
       "basis": "GTM 게시",
@@ -1003,6 +1003,11 @@
           "date": "2026-11-19",
           "by": "유영경",
           "text": "기록 추가"
+        },
+        {
+          "date": "2026-11-19",
+          "by": "유영경",
+          "text": "기록 수정"
         }
       ],
       "id": "r0ea6e2ad"
