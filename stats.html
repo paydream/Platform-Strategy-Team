@@ -548,7 +548,7 @@ const paySrcCell = (n, s, e) => { const l = D.payments ? paysIn(s, e) : []; retu
 function paySection(pay) {
   if (!D.payments) return '';
   const list = paysIn(SEL.s, SEL.e), g = srcGroup(list), tot = list.length, max = Math.max(...g.map(x => x[1][0]), 1);
-  const note = tot !== pay[0] ? `<p class="pnote">관리자 결제 통계는 ${fmt(pay[0])}건, 결제 목록은 ${fmt(tot)}건이에요.</p>` : '';
+  const note = '';
   if (!tot) return `<section class="blk"><h2>결제 출처${ti('결제 출처')}</h2><div class="card"><p class="pempty">이 기간에는 결제가 없어요.</p></div></section>`;
   return `<section class="blk"><h2>결제 출처${ti('결제 출처')}</h2>
     <div class="two">
@@ -673,11 +673,11 @@ function srcSections({ m, pm, cd, pd, mk, pmk, label }) {
   const ch = mk.ch, chTot = ch.reduce((a, r) => a + r[1], 0), chMax = Math.max(...ch.map(r => r[1]), 1);
   const prevCh = Object.fromEntries((pmk ? pmk.ch : []).map(r => [r[0], r]));
   return `
-  <section class="blk"><h2>지면·캠페인별 성과${ti('지면·캠페인별 성과')} <small>관리자 유입 결제 통계${gxN ? ' · 결제는 GA4로 지면이 확인된 건 포함' : ''}</small></h2>
+  <section class="blk"><h2>지면·캠페인별 성과${ti('지면·캠페인별 성과')} <small>관리자 유입 결제 통계</small></h2>
     <div class="two">
-      <div class="card"><div class="hd"><b>그룹별 방문 · 결제</b><span>등록 경로 방문 ${fmt(plTot[0])} · 결제 ${fmt(plTot[1] + gxN)}건${gxN ? ` (GA4 확인 ${fmt(gxN)}건 포함)` : ''}</span></div><div class="scroll"><table class="tbl">
+      <div class="card"><div class="hd"><b>그룹별 방문 · 결제</b><span>등록 경로 방문 ${fmt(plTot[0])} · 결제 ${fmt(plTot[1] + gxN)}건</span></div><div class="scroll"><table class="tbl">
         <thead><tr><th>${TL('지면 그룹')}</th><th>방문</th><th>${TL('비중')}</th><th>${TL(CMP.col)}</th><th>${TL('결제')}</th><th>${TL('결제 금액')}</th><th>${TL('전환율')}</th></tr></thead>
-        <tbody>${pl.map(r => { const p = prevPl[r[0]]; return `<tr><td class="name">${esc(r[0])}</td><td>${fmt(r[1])}</td><td>${shareCell(r[1], plTot[0], plMax)}</td><td>${pm ? dtxt(diff(r[1], p && p[1], cd, pd)) : '-'}</td><td class="${r[2] ? 'best' : 'muted'}">${fmt(r[2])}${r[4] ? `<span class="psm">GA4 확인 +${fmt(r[4])}</span>` : ''}</td><td>${r[3] ? won(r[3]) : '<span class="muted">-</span>'}</td><td>${pctTxt(pct(r[2], r[1]))}</td></tr>`; }).join('')}</tbody>
+        <tbody>${pl.map(r => { const p = prevPl[r[0]]; return `<tr><td class="name">${esc(r[0])}</td><td>${fmt(r[1])}</td><td>${shareCell(r[1], plTot[0], plMax)}</td><td>${pm ? dtxt(diff(r[1], p && p[1], cd, pd)) : '-'}</td><td class="${r[2] ? 'best' : 'muted'}">${fmt(r[2])}</td><td>${r[3] ? won(r[3]) : '<span class="muted">-</span>'}</td><td>${pctTxt(pct(r[2], r[1]))}</td></tr>`; }).join('')}</tbody>
       </table></div></div>
       <div class="card"><div class="hd"><b>상위 지면</b></div>
         <ol class="toplist">${mk.top.slice(0, 8).map((r, k) => `<li><em>${k + 1}</em><div class="nm"><b>${esc(r[0])}</b><small>${esc(r[1])}</small></div>
@@ -756,8 +756,8 @@ function viralSection() {
   const kpis = `<div class="kpis">
     <div class="kpi"><div class="l">카페 글 게시</div><div class="v">${fmt(X.posts.length)}<small>건</small></div><div class="sub">목표 ${view === 'month' ? `주 10건 × ${X.weeks}주` : '주 10건'} 중 ${pctTxt(X.posts.length / goalPost * 100)}</div>${vs(X.posts.length, X.postsP.length)}</div>
     <div class="kpi"><div class="l">타카페 댓글 완료</div><div class="v">${fmt(X.cm.length)}<small>건</small></div><div class="sub">지금 대기 ${fmt(X.wait.length)}건 · 보류 ${fmt(X.hold.length)}건</div>${vs(X.cm.length, X.cmP.length)}</div>
-    <div class="kpi"><div class="l">검색결과 카드 점유율</div><div class="v">${tot ? tot[2].toFixed(2) : '-'}<small>%</small></div>${tot ? pp(tot[2], totP && totP[2]) : ''}<div class="sub">${s ? `${MD(s.at)} 측정 · PC 50개 키워드 · 7개 영역` : '측정 없음'}</div></div>
-    <div class="kpi"><div class="l">검색 결과에 뜬 우리 카페·지식iN 글</div><div class="v">${A['카페'] && A['지식iN'] ? fmt(A['카페'][0] + A['지식iN'][0]) : '-'}<small>건</small></div><div class="sub">${s ? `카페 칸 ${fmt(A['카페'] && A['카페'][1])}개 중 ${fmt(A['카페'] && A['카페'][0])}개 · 지식iN 칸 ${fmt(A['지식iN'] && A['지식iN'][1])}개 중 ${fmt(A['지식iN'] && A['지식iN'][0])}개` : ''}</div><div class="sub">${s ? `${MD(s.at)} 측정 · 50개 키워드 검색 · 목표 1건 이상` : ''}</div></div>
+    <div class="kpi"><div class="l">검색결과 카드 점유율</div><div class="v">${tot ? tot[2].toFixed(2) : '-'}<small>%</small></div>${tot ? pp(tot[2], totP && totP[2]) : ''}<div class="sub">${s ? `${MD(s.at)} 측정` : '측정 없음'}</div></div>
+    <div class="kpi"><div class="l">검색 결과에 뜬 우리 카페·지식iN 글</div><div class="v">${A['카페'] && A['지식iN'] ? fmt(A['카페'][0] + A['지식iN'][0]) : '-'}<small>건</small></div><div class="sub">${s ? `카페 칸 ${fmt(A['카페'] && A['카페'][1])}개 중 ${fmt(A['카페'] && A['카페'][0])}개 · 지식iN 칸 ${fmt(A['지식iN'] && A['지식iN'][1])}개 중 ${fmt(A['지식iN'] && A['지식iN'][0])}개` : ''}</div><div class="sub">${s ? `${MD(s.at)} 측정` : ''}</div></div>
   </div>`;
   // 실행 표
   const res = (p, e) => e.result ? esc(e.result) : `<span class="muted">${esc((p.resultHead || '결과').replace(/^결과\s*/, '').replace(/[()]/g, '')) || '측정 전'} 예정</span>`;
@@ -774,7 +774,7 @@ function viralSection() {
   else planCard = `<div class="card"><p class="pempty">이 기간에 해당하는 주간 계획 탭이 시트에 없어요.</p></div>`;
   // 점유율 추이
   const SH = (V.share || []).slice(-6);
-  const shCard = SH.length ? `<div class="card"><div class="hd"><b>네이버 검색 결과 중 우리 비중</b><span>월요일 측정 · PC · 50개 키워드 · 아래 작은 숫자 = 우리 결과 수 / 전체 결과 수</span></div><div class="scroll"><table class="tbl">
+  const shCard = SH.length ? `<div class="card"><div class="hd"><b>네이버 검색 결과 중 우리 비중</b><span>PC · 50개 키워드</span></div><div class="scroll"><table class="tbl">
     <thead><tr><th>영역</th>${SH.map(x => `<th>${MD(x.at)} 측정<small class="psm">${x.s ? dRange(x.s, x.e) : ''}</small></th>`).join('')}</tr></thead>
     <tbody>${VR_AREAS.map(k => `<tr><td class="name">${k === '7개영역합산' ? '<b>7개 영역 합계</b>' : k}${k === '파워링크' ? ' <span class="adtype">광고</span>' : ''}</td>${SH.map(x => { const a = x.areas[k]; return `<td>${a ? `<b>${a[2].toFixed(2)}%</b><span class="psm">${fmt(a[0])} / ${fmt(a[1])}${a[3] != null ? ` · 키워드 ${fmt(a[3])}` : ''}</span>` : '-'}</td>`; }).join('')}</tr>`).join('')}
       <tr><td class="name">검색 노출 키워드</td>${SH.map(x => `<td>${x.kw ? `${fmt(x.kw[0])} / ${fmt(x.kw[1])}` : '-'}</td>`).join('')}</tr></tbody></table></div></div>` : '';
@@ -821,8 +821,8 @@ function recKwCard(R) {
   const tU = new Date(new Date(R.at).getTime() + 9 * 3600e3);
   const cls = c => c === '높음' ? 'bad' : c === '중간' ? 'wait' : 'ok';
   const cats = [...new Set(R.list.map(r => r[7]))];
-  const row = r => `<tr><td class="name">${esc(r[0])}<small>「${esc(r[6])}」 연관 검색어</small></td><td><b>${fmt(r[1])}</b></td><td>${fmt(r[2])}</td><td><span class="adtag ${cls(r[4])}">${esc(r[4] || '-')}</span></td><td>${r[8] ? '<span class="adtag wait">예스폼 계정 광고 중</span>' : '<span class="adtag ok">신규</span>'}</td></tr>`;
-  return `<div class="card"><div class="hd"><b>추가 추천 키워드</b><span>예스폼싸인 캠페인에 없는 연관 검색어 · PC 월 검색량 순 · ${tU.getUTCMonth() + 1}.${tU.getUTCDate()} 기준 (매주 갱신)</span></div><div class="scroll"><table class="tbl">
+  const row = r => `<tr><td class="name">${esc(r[0])}</td><td><b>${fmt(r[1])}</b></td><td>${fmt(r[2])}</td><td><span class="adtag ${cls(r[4])}">${esc(r[4] || '-')}</span></td><td>${r[8] ? '<span class="adtag wait">예스폼 계정 광고 중</span>' : '<span class="adtag ok">신규</span>'}</td></tr>`;
+  return `<div class="card"><div class="hd"><b>추가 추천 키워드</b><span>${tU.getUTCMonth() + 1}.${tU.getUTCDate()} 기준</span></div><div class="scroll"><table class="tbl">
     <thead><tr><th>키워드</th><th>PC 월 검색</th><th>모바일 월 검색</th><th>경쟁</th><th>등록 상태</th></tr></thead>
     <tbody>${cats.map(c => `<tr class="grp"><td colspan="5">${esc(c)}</td></tr>${R.list.filter(r => r[7] === c).map(row).join('')}`).join('')}</tbody></table></div></div>`;
 }
