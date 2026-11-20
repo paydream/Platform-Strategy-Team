@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>예스폼싸인 · 대량 전송 입력 방식 설정</title>
+<!--
+  예스폼싸인 2차 고도화 — 대량 전송 1단계 입력 방식 설정 (2026-11-17 · 2026-11-19 화면 02(간편) 삭제)
+  · 화면 01 — 4단계 · 입력 방식 설정 / 참여자 설정 / 전송 설정 / 검토
+    Figma 54414:43700(직접 입력 고름) · 54496:39187(엑셀 업로드 고름) · 54554:52139(엑셀 업로드 화면)
+    - 입력 방식 카드는 고르기만 함 (radio) → [다음]
+    - 직접 입력 → bulk-recipients.html (빈 표)
+    - 엑셀 업로드 → 이 화면 안에서 "엑셀 파일을 업로드 해주세요" 화면으로 바뀜 (?view=excel)
+      파일을 끌어 놓거나 [내 PC 업로드]로 고르면 바로 bulk-recipients.html?src=excel (불러온 표)
+      이 화면 아래 버튼은 [나가기] + 흐린 [다음]
+  · 위 문서 줄 — 템플릿 이름 · [미리보기] · 대량 전송 계약명 (주소 ?tpl= · 없으면 아르바이트 근로계약서)
+  · 동작은 js/bulk-send.js · 스타일 css/style.css (아래쪽 "대량 전송" 부분)
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="page-step page-step--doc">
+
+<header class="hd hd--step">
+  <div class="hd__logo hd__logo--step"><img src="../images/logo-sign.png" width="91" height="30" alt="예스폼싸인"></div>
+  <ol class="steps" aria-label="대량 전송 단계" data-steps></ol>
+  <span class="hd__empty" aria-hidden="true"></span>
+</header>
+
+<!-- 문서 줄 (Figma upload 54522:39090) -->
+<div class="docbar">
+  <div class="docbar__inner">
+    <div class="docbar__doc">
+      <p class="docbar__name" data-tpl-name>아르바이트 근로계약서</p>
+      <button class="btn-xs" type="button">미리보기</button>
+    </div>
+    <div class="docbar__title">
+      <label class="docbar__label" for="bulk-title">대량 전송 계약명<span class="field__req" aria-hidden="true">*</span></label>
+      <input class="docbar__input" id="bulk-title" type="text" data-bulk-title required>
+    </div>
+  </div>
+</div>
+
+<main class="bk">
+  <!-- 입력 방식 고르기 -->
+  <section class="bk__view" data-view="pick" aria-labelledby="bk-pick-title">
+    <h1 class="bk__title" id="bk-pick-title">입력 방식을 선택해 주세요</h1>
+    <div class="bk-opts" role="radiogroup" aria-labelledby="bk-pick-title">
+      <div class="bk-opt" data-opt="direct">
+        <label class="bk-opt__hit">
+          <input class="bk-opt__radio" type="radio" name="bulk-method" value="direct" checked>
+          <span class="bk-opt__top">
+            <img src="../images/ic-format-list-24.svg" width="24" height="24" alt="">
+            <span class="bk-opt__check" aria-hidden="true"></span>
+          </span>
+          <span class="bk-opt__body">
+            <span class="bk-opt__name">직접 입력</span>
+            <span class="bk-opt__list">
+              <span><b>2~30명</b> 인원에게 전송 권장</span>
+              <span>엑셀에서 여러 칸을 복사해 붙여넣기 가능</span>
+              <span>데이터 입력 시 바로 오류 확인 가능</span>
+            </span>
+          </span>
+        </label>
+      </div>
+      <div class="bk-opt" data-opt="excel">
+        <label class="bk-opt__hit">
+          <input class="bk-opt__radio" type="radio" name="bulk-method" value="excel">
+          <span class="bk-opt__top">
+            <img src="../images/ic-format-excel-24.svg" width="24" height="24" alt="">
+            <span class="bk-opt__check" aria-hidden="true"></span>
+          </span>
+          <span class="bk-opt__body">
+            <span class="bk-opt__name">엑셀 업로드</span>
+            <span class="bk-opt__list">
+              <span><b>최대 100명</b> 인원에게 전송<span class="badge badge--blue">추천</span></span>
+              <span>대량 전송 템플릿 전용 엑셀 양식 제공</span>
+              <span>불러온 뒤 화면에서 바로 수정 가능</span>
+            </span>
+          </span>
+        </label>
+      </div>
+    </div>
+  </section>
+
+  <!-- 화면 01 · 엑셀 업로드를 고르고 [다음] (Figma 54554:52139) -->
+  <section class="bk__view" data-view="excel" aria-labelledby="bk-excel-title" hidden>
+    <h1 class="bk__title" id="bk-excel-title">엑셀 파일을 업로드 해주세요</h1>
+    <div class="bk-up" data-drop>
+      <div class="bk-up__hd">
+        <h2 class="bk-up__title">엑셀 업로드</h2>
+        <button class="btn-xs" type="button" data-change-method>입력 방식 변경</button>
+      </div>
+      <div class="bk-up__body">
+        <div class="bk-up__form">
+          <div class="bk-up__text">
+            <p class="bk-up__sub">양식을 다운로드 해 작성해 주세요</p>
+            <p class="bk-up__desc">전자계약을 대량으로 전송할 수 있는 표준화된 엑셀 양식을 제공합니다.</p>
+          </div>
+          <button class="btn btn--line-blue" type="button" data-form-down><img src="../images/ic-download-blue-16.svg" width="16" height="16" alt="">엑셀 양식 다운로드</button>
+        </div>
+        <hr class="bk-up__line">
+        <div class="bk-up__file">
+          <div class="bk-up__text">
+            <p class="bk-up__sub">작성한 파일을 올려 주세요</p>
+            <ul class="bk-up__dots">
+              <li>이 템플릿 전용 엑셀 양식으로 작성한 파일만 올릴 수 있습니다.</li>
+              <li>파일을 올리면 바로 불러와 참여자 설정 화면으로 이동합니다.</li>
+            </ul>
+          </div>
+          <div class="bk-up__drop">
+            <div class="bk-up__box">
+              <img src="../images/ic-upload-24.svg" width="24" height="24" alt="">
+              <p>엑셀 양식을 여기로 끌어 놓거나<br>PC 업로드를 클릭하여 선택해 주세요.</p>
+            </div>
+            <p class="bk-up__err" data-drop-err hidden>엑셀 파일(.xlsx, .xls)만 올릴 수 있습니다.</p>
+            <label class="btn btn--primary btn--upload bk-up__btn">내 PC 업로드<input type="file" accept=".xlsx,.xls,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" data-pc-input></label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wfooter">
+  <button class="btn btn--out" type="button" data-exit>나가기</button>
+  <button class="btn btn--primary btn--next" type="button" data-next>다음</button>
+</footer>
+
+<!-- 나가기 확인 모달 (Figma 54347:35246) -->
+<div class="dim" id="exit-modal" hidden>
+  <div class="modal modal--sm" role="alertdialog" aria-modal="true" aria-labelledby="exit-title" aria-describedby="exit-desc">
+    <div class="modal__top">
+      <h2 class="modal__title" id="exit-title">나가기</h2>
+      <p class="modal__desc" id="exit-desc">현재 작성하신 계약이 저장되지 않습니다.<br>정말 나가시겠습니까?</p>
+    </div>
+    <div class="modal__btns">
+      <button class="modal__btn" type="button" data-exit-cancel>취소</button>
+      <a class="modal__btn modal__btn--primary" href="../index.html">나가기</a>
+    </div>
+  </div>
+</div>
+
+<script src="../js/step.js"></script>
+<script src="../js/bulk-common.js"></script>
+<script src="../js/bulk-send.js"></script>
+<script src="../js/proto-bar.js"></script>
+</body>
+</html>

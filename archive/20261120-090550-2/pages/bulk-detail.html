@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>예스폼싸인 · 대량 전송 상세</title>
+<!--
+  예스폼싸인 2차 고도화 — 내 계약 현황 › 대량 전송 › 상세 (2026-11-17)
+  Figma: 마이페이지 > 계약 상세 정보 > 진행중 (54606:48998 · 2026-11-18 갱신 · 예전 54552:48674)
+  · 대량 전송 목록(bulk-list.html)에서 행을 누르면 오는 화면
+  · 대량 전송 정보(제목 줄 오른쪽 [템플릿 보기] · [결과 다운로드]) · 숫자 칸 5개(카드 하나 · 세로선으로 나눔) · 받는 사람 표
+  · 숫자 칸과 거르기 칩 숫자는 표의 받는 사람(js/bulk-detail.js 의 PEOPLE)으로 셈
+    발송 실패 칸 [재발송]은 발송 실패가 0건이면 숨김 (주소 ?fail=0 → 실패 없는 예시)
+    차감 건수 = 발송 성공 건수 · 아래 "실패 N건 제외"는 발송 실패 수
+  · [전체] · [발송 실패] · [서명 대기중] · [서명 완료] · [서명 취소]로 표를 거르고, 문서 또는 참여자 검색으로 이름 · 연락처 · 계약명을 찾음
+  · 표 줄 색: 발송 실패 = 빨간 바탕 · 발송중 = 파란 바탕 · 발송 대기 = 흐린 글자 (Figma 그대로)
+  · 화면에 들어오면 발송중인 사람부터 4명만 차례로 결과가 나옴 (1.2초 간격 · 성공 · 실패 · 성공 · 성공) — 숫자 칸 · 칩 숫자도 같이 바뀜
+    발송 전 54579:43788 · 발송중(도는 아이콘) 54579:46930 · 발송 성공 54579:43782 · 발송 실패 54579:43785
+  · [템플릿 보기] · [결과 다운로드] · 새로고침(↻) · 발송 실패 칸의 [재발송] · [라벨 설정]은 디자인이 없어 눌러도 그대로
+  · 동작 js/bulk-detail.js · 스타일 css/style.css (아래쪽 "대량 전송 목록 · 상세" 부분)
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<!-- 상단 헤더 (Header_home · 로그인) -->
+<header class="hd">
+  <div class="hd__logo"><a href="../index.html"><img src="../images/logo-sign.png" width="91" height="30" alt="예스폼싸인"></a></div>
+  <button class="btn btn--line-blue" type="button">요금제 구매하기</button>
+</header>
+
+<div class="body">
+
+  <!-- 왼쪽 메뉴 (side_navigation 54169:29123) — 대량 전송 켜짐 -->
+  <nav class="snb" aria-label="계약 메뉴">
+    <div class="snb__user">
+      <div class="snb__profile">
+        <p class="snb__name"><b>예스폼</b>님<span class="tag tag--blue">무료회원</span></p>
+        <p class="snb__meta"><span data-quota>잔여 건수 29건</span><i></i><span>D-484</span></p>
+      </div>
+      <button class="btn btn--primary btn--block" type="button" data-start>계약 시작하기</button>
+    </div>
+    <div class="snb__menu">
+      <div class="snb__group">
+        <p class="snb__label">내 계약 현황</p>
+        <a class="snb__item" href="#">모든 계약</a>
+        <a class="snb__item" href="#">내 서명 필요</a>
+        <a class="snb__item" href="#">진행 중인 계약</a>
+        <a class="snb__item" href="#">작성 중인 계약</a>
+        <a class="snb__item" href="#">완료된 계약</a>
+        <a class="snb__item" href="#">취소된 계약</a>
+        <a class="snb__item is-on" href="bulk-list.html">대량 전송<span class="snb__new">NEW</span></a>
+      </div>
+      <div class="snb__group">
+        <p class="snb__label">계약 준비</p>
+        <a class="snb__item" href="../index.html">템플릿 관리</a>
+        <a class="snb__item" href="#">서명 관리</a>
+        <a class="snb__item" href="#">문서/계약 자료실</a>
+        <a class="snb__item" href="#">주소록 관리</a>
+      </div>
+      <div class="snb__group">
+        <p class="snb__label">회원정보 관리</p>
+        <a class="snb__item" href="#">계정 관리</a>
+        <a class="snb__item" href="#">결제 관리</a>
+      </div>
+    </div>
+    <p class="snb__foot"><a href="#">고객센터</a><i></i><a href="#">로그아웃</a></p>
+  </nav>
+
+  <!-- 본문 (Content-Area) -->
+  <main class="content">
+    <div class="content__inner content__inner--g24">
+      <div class="page-hd">
+        <ol class="crumb" aria-label="현재 위치">
+          <li><a href="#">내 계약 현황</a></li>
+          <li><a href="bulk-list.html">대량 전송</a></li>
+          <li aria-current="page">11월 입사자 비밀 유지 서약</li>
+        </ol>
+        <h1 class="page-hd__title">11월 입사자 비밀 유지 서약</h1>
+      </div>
+
+      <!-- 대량 전송 정보 (54614:41102) — 제목 줄 오른쪽에 [템플릿 보기] · [결과 다운로드] -->
+      <section class="bd-sec" aria-labelledby="bd-info-title">
+        <div class="bd-sec__hd">
+          <h2 class="bd-sec__title" id="bd-info-title">대량 전송 정보</h2>
+          <div class="bd-hd__btns">
+            <button class="btn-sm" type="button">템플릿 보기</button>
+            <button class="btn-sm btn-sm--icon" type="button"><img src="../images/ic-download-16.svg" width="16" height="16" alt="">결과 다운로드</button>
+          </div>
+        </div>
+        <div class="bd-info">
+          <dl class="bd-info__grid">
+            <div><dt>템플릿명</dt><dd class="bd-info__strong">비밀유지 서약서</dd></div>
+            <div class="bd-info__status"><dt>발송 상태</dt><dd><span class="bdg bdg--solid">진행중</span></dd></div>
+            <div><dt>기준 시간</dt><dd>(UTC+09:00) 한국 표준시</dd></div>
+            <div><dt>전송 시간</dt><dd>2026.09.03 10:15</dd></div>
+            <div><dt>서명 요청자</dt><dd title="예스폼(123456789@yesform.com)">예스폼(123456789@yesform.com)</dd></div>
+            <div><dt>서명 유효기간</dt><dd>14일 (2026.11.15까지)</dd></div>
+            <div><dt>라벨</dt><dd class="bd-info__label"><span class="chip chip--auto" title="신규 입사자_11월">신규 입사자_11월</span><button class="btn-xs" type="button">라벨 설정</button></dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <!-- 숫자 (54606:49043) — 카드 하나에 5칸 · 칸 사이 세로선 · 숫자만(단위 없음) -->
+      <ul class="bd-stats bd-stats--panel" aria-label="대량 전송 결과">
+        <li class="bd-stat"><p class="bd-stat__name">받는 사람</p><p class="bd-stat__num"><b data-stat="all">0</b></p></li>
+        <li class="bd-stat"><p class="bd-stat__name">발송 성공</p><p class="bd-stat__num bd-stat__num--blue"><b data-stat="ok">0</b></p></li>
+        <li class="bd-stat">
+          <div class="bd-stat__top"><p class="bd-stat__name">발송 실패</p><button class="bd-retry" type="button" data-retry><img src="../images/ic-retry-12.svg" width="12" height="12" alt="">재발송</button></div>
+          <p class="bd-stat__num bd-stat__num--red"><b data-stat="fail">0</b></p>
+          <p class="bd-stat__note">차감되지 않음</p>
+        </li>
+        <li class="bd-stat"><p class="bd-stat__name">서명 완료</p><p class="bd-stat__num"><b data-stat="done">0</b><small>/<span data-stat="all">0</span>명</small></p></li>
+        <li class="bd-stat"><p class="bd-stat__name">차감 건수</p><p class="bd-stat__num bd-stat__num--gray"><b data-stat="charged">0</b></p><p class="bd-stat__note">실패 <span data-stat="fail">0</span>건 제외</p></li>
+      </ul>
+
+      <div class="list">
+        <div class="bl-tools bl-tools--center">
+          <div class="bd-filters">
+            <div class="chips" role="group" aria-label="받는 사람 거르기">
+              <button class="chipbtn is-on" type="button" data-tab="all" aria-pressed="true">전체 <span data-count="all">0</span></button>
+              <button class="chipbtn" type="button" data-tab="fail" aria-pressed="false">발송 실패 <span data-count="fail">0</span></button>
+              <button class="chipbtn" type="button" data-tab="wait" aria-pressed="false">서명 대기중 <span data-count="wait">0</span></button>
+              <button class="chipbtn" type="button" data-tab="done" aria-pressed="false">서명 완료 <span data-count="done">0</span></button>
+              <button class="chipbtn" type="button" data-tab="cancel" aria-pressed="false">서명 취소 <span data-count="cancel">0</span></button>
+            </div>
+            <i class="bd-filters__line" aria-hidden="true"></i>
+            <button class="bd-refresh" type="button" aria-label="새로고침"><img src="../images/ic-retry-16.svg" width="16" height="16" alt=""></button>
+          </div>
+          <label class="search search--230">
+            <input type="search" placeholder="문서 또는 참여자 검색" aria-label="문서 또는 참여자 검색" data-search>
+            <img src="../images/ic-search-24.svg" width="24" height="24" alt="">
+          </label>
+        </div>
+
+        <!-- 받는 사람 표 (Table-Card 54552:49829) -->
+        <div class="bd-table">
+          <div class="bd-row bd-row--head" role="presentation">
+            <span class="bd-no">NO</span>
+            <span class="bd-name">이름</span>
+            <span class="bd-contact">연락처</span>
+            <span class="bd-title">계약명</span>
+            <span class="bd-result">발송 결과</span>
+            <span class="bd-status">계약 상태</span>
+            <span class="bd-date">서명 완료일</span>
+          </div>
+          <ul class="bd-rows" data-rows></ul>
+          <p class="table__empty" data-empty hidden>조건에 맞는 받는 사람이 없습니다.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- 서비스 개선 제안하기 (의견보내기) -->
+<button class="feedback" type="button"><img src="../images/ic-feedback-24.svg" width="24" height="24" alt="">서비스 개선 제안하기</button>
+
+<script src="../js/bulk-detail.js"></script>
+<script src="../js/start-modal.js"></script>
+<script src="../js/proto-bar.js"></script>
+</body>
+</html>

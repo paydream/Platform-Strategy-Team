@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>예스폼싸인 · 대량 전송</title>
+<!--
+  예스폼싸인 2차 고도화 — 내 계약 현황 › 대량 전송 목록 (2026-11-17)
+  Figma: 마이페이지 > 내 계약 현황 (54552:47470)
+  · 왼쪽 메뉴 [대량 전송]을 누르면 오는 화면 — 대량 전송한 계약을 묶음 단위로 모아 봄
+  · 발송 상태 · 라벨 고르기 · 문서 또는 참여자 검색으로 목록을 거름
+  · 행을 누르면 대량 전송 상세(bulk-detail.html) · 체크박스 · [⋯] 추가 메뉴(계약 재발송 · 라벨 설정 · 계약 삭제)는 행 이동 없이 동작
+  · 행에 마우스를 올리면 옅은 회색 바탕 (표 둥근 모서리 안으로 잘림 · 계약명 밑줄 없음)
+  · [라벨 설정] · [삭제] · 추가 메뉴 항목은 디자인이 없어 눌러도 그대로
+  · 왼쪽 메뉴 [계약 시작하기] → 모달 없이 바로 1단계 문서 업로드 (upload.html?…&tab=sample · js/start-modal.js)
+  · 동작 js/bulk-list.js · 스타일 css/style.css (아래쪽 "대량 전송 목록 · 상세" 부분)
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<!-- 상단 헤더 (Header_home · 로그인) -->
+<header class="hd">
+  <div class="hd__logo"><a href="../index.html"><img src="../images/logo-sign.png" width="91" height="30" alt="예스폼싸인"></a></div>
+  <button class="btn btn--line-blue" type="button">요금제 구매하기</button>
+</header>
+
+<div class="body">
+
+  <!-- 왼쪽 메뉴 (side_navigation 54169:29123) — 대량 전송 켜짐 -->
+  <nav class="snb" aria-label="계약 메뉴">
+    <div class="snb__user">
+      <div class="snb__profile">
+        <p class="snb__name"><b>예스폼</b>님<span class="tag tag--blue">무료회원</span></p>
+        <p class="snb__meta"><span data-quota>잔여 건수 29건</span><i></i><span>D-484</span></p>
+      </div>
+      <button class="btn btn--primary btn--block" type="button" data-start>계약 시작하기</button>
+    </div>
+    <div class="snb__menu">
+      <div class="snb__group">
+        <p class="snb__label">내 계약 현황</p>
+        <a class="snb__item" href="#">모든 계약</a>
+        <a class="snb__item" href="#">내 서명 필요</a>
+        <a class="snb__item" href="#">진행 중인 계약</a>
+        <a class="snb__item" href="#">작성 중인 계약</a>
+        <a class="snb__item" href="#">완료된 계약</a>
+        <a class="snb__item" href="#">취소된 계약</a>
+        <a class="snb__item is-on" href="bulk-list.html" aria-current="page">대량 전송<span class="snb__new">NEW</span></a>
+      </div>
+      <div class="snb__group">
+        <p class="snb__label">계약 준비</p>
+        <a class="snb__item" href="../index.html">템플릿 관리</a>
+        <a class="snb__item" href="#">서명 관리</a>
+        <a class="snb__item" href="#">문서/계약 자료실</a>
+        <a class="snb__item" href="#">주소록 관리</a>
+      </div>
+      <div class="snb__group">
+        <p class="snb__label">회원정보 관리</p>
+        <a class="snb__item" href="#">계정 관리</a>
+        <a class="snb__item" href="#">결제 관리</a>
+      </div>
+    </div>
+    <p class="snb__foot"><a href="#">고객센터</a><i></i><a href="#">로그아웃</a></p>
+  </nav>
+
+  <!-- 본문 (Content-Area) -->
+  <main class="content">
+    <div class="content__inner content__inner--g24">
+      <div class="page-hd">
+        <ol class="crumb" aria-label="현재 위치">
+          <li><a href="#">내 계약 현황</a></li>
+          <li aria-current="page" data-crumb-count>대량 전송(6건)</li>
+        </ol>
+        <h1 class="page-hd__title">대량 전송</h1>
+        <p class="page-hd__desc">대량 전송한 계약을 묶음 단위로 모아 봅니다.</p>
+      </div>
+
+      <div class="list">
+        <div class="bl-tools">
+          <div class="bl-tools__btns">
+            <button class="btn-md" type="button">라벨 설정</button>
+            <button class="btn-md" type="button">삭제</button>
+          </div>
+          <div class="bl-tools__filter">
+            <select class="sel" aria-label="발송 상태" data-filter-status>
+              <option value="">발송 상태 전체</option>
+              <option value="진행중">진행중</option>
+              <option value="작성중">작성중</option>
+              <option value="완료됨">완료됨</option>
+            </select>
+            <select class="sel" aria-label="라벨" data-filter-label>
+              <option value="">라벨 미선택</option>
+              <option value="근로계약서_2026년 05월 외 1개">근로계약서_2026년 05월 외 1개</option>
+            </select>
+            <label class="search search--230">
+              <input type="search" placeholder="문서 또는 참여자 검색" aria-label="문서 또는 참여자 검색" data-search>
+              <img src="../images/ic-search-24.svg" width="24" height="24" alt="">
+            </label>
+          </div>
+        </div>
+
+        <!-- 대량 전송 표 (Table-Card) -->
+        <div class="bl-table" data-table>
+          <div class="bl-row bl-row--head" role="presentation">
+            <label class="cbox"><input type="checkbox" data-check-all aria-label="모두 선택"><span aria-hidden="true"></span></label>
+            <span class="bl-col-name">계약명</span>
+            <span class="bl-col-status">상태</span>
+            <span class="bl-col-label">라벨</span>
+            <span class="bl-col-date">마지막 활동시간</span>
+            <span class="bl-col-more">추가 메뉴</span>
+          </div>
+          <ul class="bl-rows" data-rows>
+            <li class="bl-row" data-people="김민수 이서연 박지훈">
+              <label class="cbox"><input type="checkbox" data-check aria-label="근로계약서_김민수.pdf 선택"><span aria-hidden="true"></span></label>
+              <a class="bl-col-name bl-title" href="bulk-detail.html">근로계약서_김민수.pdf</a>
+              <span class="bl-col-status"><span class="bdg bdg--blue">진행중</span></span>
+              <span class="bl-col-label bl-none">-</span>
+              <span class="bl-col-date">2025-11-26 11:27:34</span>
+              <span class="bl-col-more"><button class="bl-more" type="button" aria-label="추가 메뉴" aria-haspopup="menu" aria-expanded="false"></button></span>
+            </li>
+            <li class="bl-row" data-people="최수아 정도윤">
+              <label class="cbox"><input type="checkbox" data-check aria-label="매니지먼트 전속계약서(연예 스포츠).pdf 선택"><span aria-hidden="true"></span></label>
+              <a class="bl-col-name bl-title" href="bulk-detail.html">매니지먼트 전속계약서(연예 스포츠).pdf</a>
+              <span class="bl-col-status"><span class="bdg bdg--orange">작성중</span></span>
+              <span class="bl-col-label"><span class="chip" title="근로계약서_2026년 05월 외 1개">근로계약서_2026년 05월 외 1개</span></span>
+              <span class="bl-col-date">2025-11-26 11:27:34</span>
+              <span class="bl-col-more"><button class="bl-more" type="button" aria-label="추가 메뉴" aria-haspopup="menu" aria-expanded="false"></button></span>
+            </li>
+            <li class="bl-row" data-people="강하은 조은우">
+              <label class="cbox"><input type="checkbox" data-check aria-label="근로계약서_김민수.pdf 선택"><span aria-hidden="true"></span></label>
+              <a class="bl-col-name bl-title" href="bulk-detail.html">근로계약서_김민수.pdf</a>
+              <span class="bl-col-status"><span class="bdg bdg--green">완료됨</span></span>
+              <span class="bl-col-label bl-none">-</span>
+              <span class="bl-col-date">2025-11-26 11:27:34</span>
+              <span class="bl-col-more"><button class="bl-more" type="button" aria-label="추가 메뉴" aria-haspopup="menu" aria-expanded="false"></button></span>
+            </li>
+            <li class="bl-row" data-people="윤지아 장시우">
+              <label class="cbox"><input type="checkbox" data-check aria-label="근로계약서_김민수.pdf 선택"><span aria-hidden="true"></span></label>
+              <a class="bl-col-name bl-title" href="bulk-detail.html">근로계약서_김민수.pdf</a>
+              <span class="bl-col-status"><span class="bdg bdg--green">완료됨</span></span>
+              <span class="bl-col-label bl-none">-</span>
+              <span class="bl-col-date">2025-11-26 11:27:34</span>
+              <span class="bl-col-more"><button class="bl-more" type="button" aria-label="추가 메뉴" aria-haspopup="menu" aria-expanded="false"></button></span>
+            </li>
+            <li class="bl-row" data-people="한예린 오지호">
+              <label class="cbox"><input type="checkbox" data-check aria-label="근로계약서_김민수.pdf 선택"><span aria-hidden="true"></span></label>
+              <a class="bl-col-name bl-title" href="bulk-detail.html">근로계약서_김민수.pdf</a>
+              <span class="bl-col-status"><span class="bdg bdg--green">완료됨</span></span>
+              <span class="bl-col-label bl-none">-</span>
+              <span class="bl-col-date">2025-11-26 11:27:34</span>
+              <span class="bl-col-more"><button class="bl-more" type="button" aria-label="추가 메뉴" aria-haspopup="menu" aria-expanded="false"></button></span>
+            </li>
+            <li class="bl-row" data-people="정다은 서하준">
+              <label class="cbox"><input type="checkbox" data-check aria-label="근로계약서_김민수.pdf 선택"><span aria-hidden="true"></span></label>
+              <a class="bl-col-name bl-title" href="bulk-detail.html">근로계약서_김민수.pdf</a>
+              <span class="bl-col-status"><span class="bdg bdg--green">완료됨</span></span>
+              <span class="bl-col-label bl-none">-</span>
+              <span class="bl-col-date">2025-11-26 11:27:34</span>
+              <span class="bl-col-more"><button class="bl-more" type="button" aria-label="추가 메뉴" aria-haspopup="menu" aria-expanded="false"></button></span>
+            </li>
+          </ul>
+          <p class="table__empty" data-empty hidden>조건에 맞는 대량 전송이 없습니다.</p>
+
+          <!-- 추가 메뉴 (Figma mini-popup 54552:47573) — [⋯]를 누른 행 옆에 뜸 -->
+          <ul class="mini" role="menu" aria-label="추가 메뉴" data-mini hidden>
+            <li role="none"><button class="mini__item" type="button" role="menuitem"><img src="../images/ic-mail-send-20.svg" width="20" height="20" alt="">계약 재발송</button></li>
+            <li role="none"><button class="mini__item" type="button" role="menuitem"><img src="../images/ic-tag-20.svg" width="20" height="20" alt="">라벨 설정</button></li>
+            <li class="mini__line" role="separator"></li>
+            <li role="none"><button class="mini__item" type="button" role="menuitem"><img src="../images/ic-trash-dark-20.svg" width="20" height="20" alt="">계약 삭제</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- 서비스 개선 제안하기 (의견보내기) -->
+<button class="feedback" type="button"><img src="../images/ic-feedback-24.svg" width="24" height="24" alt="">서비스 개선 제안하기</button>
+
+<script src="../js/bulk-list.js"></script>
+<script src="../js/start-modal.js"></script>
+<script src="../js/proto-bar.js"></script>
+</body>
+</html>
