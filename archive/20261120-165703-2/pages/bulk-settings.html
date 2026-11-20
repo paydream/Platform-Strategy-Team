@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>예스폼싸인 · 대량 전송 전송 설정</title>
+<!--
+  예스폼싸인 2차 고도화 — 대량 전송 3단계 전송 설정 (2026-11-17)
+  Figma: 전송 설정 54548:42675 · 전송 정보 카드 54548:43225
+  · 참여자 설정 [다음]에서 오는 화면 · 위쪽 단계는 3단계 "전송 설정"
+  · 서명 유효기간 — 숫자만 (1~365일) · 비우거나 0 이면 [다음]이 흐림
+  · 라벨 — 라벨 칩 + [라벨 설정] → 라벨 설정 모달 (js/label-modal.js · Figma 53702:42429)
+    고른 라벨은 [다음]에서 주소 label=라벨1|라벨2 로 검토 화면에 넘김 (여럿이면 "라벨1 외 N개" · 없으면 "-")
+  · [다음] → 4단계 검토(bulk-review.html) · 서명 유효기간 · 라벨은 주소(days · label)로 넘김
+  · 동작 js/bulk-settings.js · 스타일 css/style.css (아래쪽 "대량 전송 3 · 4단계 · 발송 진행" 부분)
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="page-step page-step--doc">
+
+<header class="hd hd--step">
+  <div class="hd__logo hd__logo--step"><img src="../images/logo-sign.png" width="91" height="30" alt="예스폼싸인"></div>
+  <ol class="steps" aria-label="대량 전송 단계" data-steps></ol>
+  <span class="hd__empty" aria-hidden="true"></span>
+</header>
+
+<!-- 문서 줄 (Figma upload 54522:39090) -->
+<div class="docbar">
+  <div class="docbar__inner">
+    <div class="docbar__doc">
+      <p class="docbar__name" data-tpl-name>아르바이트 근로계약서</p>
+      <button class="btn-xs" type="button">미리보기</button>
+    </div>
+    <div class="docbar__title">
+      <label class="docbar__label" for="bulk-title">대량 전송 계약명<span class="field__req" aria-hidden="true">*</span></label>
+      <input class="docbar__input" id="bulk-title" type="text" data-bulk-title required>
+    </div>
+  </div>
+</div>
+
+<main class="bk">
+  <h1 class="bk__title">전송 설정</h1>
+
+  <!-- 전송 정보 (Figma 54548:43225) -->
+  <section class="bs-card" aria-labelledby="bs-title">
+    <h2 class="bs-card__title" id="bs-title">전송 정보</h2>
+    <div class="bs-row bs-row--days">
+      <label class="bs-row__label" for="bs-days">서명 유효기간<span class="field__req" aria-hidden="true">*</span></label>
+      <div class="bs-row__value">
+        <label class="bs-days">
+          <input id="bs-days" type="text" inputmode="numeric" maxlength="3" value="14" autocomplete="off" aria-describedby="bs-days-unit" required data-days>
+          <span id="bs-days-unit">일</span>
+        </label>
+      </div>
+    </div>
+    <div class="bs-row">
+      <p class="bs-row__label">라벨</p>
+      <div class="bs-row__value bs-row__value--label">
+        <span class="lbl" data-labels="표준 근로계약서_2026년 05월|신규 입사자_11월" data-label><span class="chip chip--112" title="표준 근로계약서_2026년 05월, 신규 입사자_11월">표준 근로계약서_2026년 05월 외 1개</span></span>
+        <button class="btn-xs" type="button" aria-haspopup="dialog" aria-controls="label-modal" data-label-open="[data-label]">라벨 설정</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wfooter">
+  <button class="btn btn--out" type="button" data-exit>나가기</button>
+  <button class="btn btn--primary btn--next" type="button" data-next>다음</button>
+</footer>
+
+<!-- 나가기 확인 모달 (Figma 54347:35246) -->
+<div class="dim" id="exit-modal" hidden>
+  <div class="modal modal--sm" role="alertdialog" aria-modal="true" aria-labelledby="exit-title" aria-describedby="exit-desc">
+    <div class="modal__top">
+      <h2 class="modal__title" id="exit-title">나가기</h2>
+      <p class="modal__desc" id="exit-desc">현재 작성하신 계약이 저장되지 않습니다.<br>정말 나가시겠습니까?</p>
+    </div>
+    <div class="modal__btns">
+      <button class="modal__btn" type="button" data-exit-cancel>취소</button>
+      <a class="modal__btn modal__btn--primary" href="../index.html">나가기</a>
+    </div>
+  </div>
+</div>
+
+<script src="../js/step.js"></script>
+<script src="../js/bulk-common.js"></script>
+<script src="../js/label-modal.js"></script>
+<script src="../js/bulk-settings.js"></script>
+<script src="../js/proto-bar.js"></script>
+</body>
+</html>
