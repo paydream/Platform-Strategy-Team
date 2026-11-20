@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>멤버십 요금제 시뮬레이션 · 2027년 1분기</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{--bg:#f4f6f8;--card:#fff;--text:#191f28;--sub:#6b7684;--mute:#8b95a1;--line:#e5e8eb;--soft:#f2f4f6;--blue:#2f5bea;--blue-bg:#eef2ff;--red:#d93f3f;--red-bg:#fdeeee;--green:#168a5a;--green-bg:#e9f7f0;--amber:#b76e00;--amber-bg:#fff4dd}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--text);font:14px/1.5 "Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+.wrap{max-width:1440px;margin:0 auto;padding:28px 28px 60px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:18px;flex-wrap:wrap}
+h1{font-size:24px;margin:0;letter-spacing:-.02em}
+.hsub{color:var(--sub);font-size:13.5px;margin-top:4px}
+.hmeta{color:var(--mute);font-size:12.5px;text-align:right}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px}
+.card h2{font-size:16px;margin:0 0 14px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.card h2 small{font-weight:500;color:var(--mute);font-size:12.5px}
+.kpis{display:grid;grid-template-columns:1.25fr 1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+.kpi .lab{color:var(--sub);font-size:13px}
+.kpi .val{font-size:28px;font-weight:700;letter-spacing:-.02em;margin-top:2px;line-height:1.25}
+.kpi .val small{font-size:14px;font-weight:600;color:var(--sub);margin-left:6px}
+.kpi .sub{color:var(--sub);font-size:12.5px;margin-top:6px}
+.kpi .sub b{color:var(--text);font-weight:600}.kpi .sub b.pos{color:var(--green)}.kpi .sub b.neg{color:var(--red)}
+.bar{height:8px;background:var(--soft);border-radius:99px;margin-top:10px;position:relative;overflow:visible}
+.bar i{display:block;height:100%;border-radius:99px;background:var(--blue)}
+.bar em{position:absolute;top:-4px;width:2px;height:16px;background:var(--mute);border-radius:2px}
+.pos{color:var(--green)}.neg{color:var(--red)}
+.chip{display:inline-block;font-style:normal;font-size:11px;font-weight:600;border-radius:6px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+.c-sheet{background:var(--blue-bg);color:var(--blue)}.c-assume{background:var(--amber-bg);color:var(--amber)}.c-input{background:var(--green-bg);color:var(--green)}
+.grid{display:grid;grid-template-columns:372px minmax(0,1fr);gap:14px;align-items:start}
+.side{display:flex;flex-direction:column;gap:14px;position:sticky;top:14px;max-height:calc(100vh - 28px);overflow:auto;padding-right:2px}
+.main{display:flex;flex-direction:column;gap:14px;min-width:0}
+.seg{display:flex;background:#fff;border:1px solid var(--line);border-radius:10px;padding:3px;gap:3px}
+.seg button{flex:1;border:0;background:transparent;border-radius:7px;padding:7px 4px;font:inherit;font-size:13px;font-weight:600;color:var(--sub);cursor:pointer;white-space:nowrap}
+.seg button.on{background:var(--text);color:#fff}
+.seg button:focus-visible,.row input:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+.field{margin-top:14px}
+.field>label{display:block;font-size:12.5px;color:var(--sub);font-weight:600;margin-bottom:6px}
+.tog{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid var(--soft)}
+.tog:first-of-type{border-top:0}
+.tog span{font-size:13.5px;font-weight:600}
+.tog small{display:block;color:var(--mute);font-weight:500;font-size:12px}
+.sw{appearance:none;width:38px;height:22px;border-radius:99px;background:#d1d6db;position:relative;cursor:pointer;flex:none;transition:.15s}
+.sw:after{content:"";position:absolute;left:2px;top:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.15s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.sw:checked{background:var(--blue)}.sw:checked:after{left:18px}
+details{border-top:1px solid var(--soft);padding:10px 0 2px}
+details:first-of-type{border-top:0}
+summary{cursor:pointer;font-weight:700;font-size:13.5px;list-style:none;display:flex;justify-content:space-between;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary:after{content:"＋";color:var(--mute);font-weight:400}
+details[open] summary:after{content:"－"}
+.row{margin:10px 0 12px}
+.row .top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:13px}
+.row .top b{font-weight:700;white-space:nowrap}
+.row .top span{color:var(--text)}
+.row input[type=range]{width:100%;margin:6px 0 0;accent-color:var(--blue)}
+.row .hint{font-size:11.5px;color:var(--mute);margin-top:1px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--soft);white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+thead th{font-size:12.5px;color:var(--sub);font-weight:600;background:#f7f8fa;border-bottom:1px solid var(--line)}
+tbody tr:last-child td{border-bottom:0}
+tfoot td{font-weight:700;border-top:1px solid var(--line);border-bottom:0}
+.scroll{overflow-x:auto}
+#cmp th.sel,#cmp td.sel{background:var(--blue-bg)}
+#cmp thead th{cursor:pointer;vertical-align:bottom;white-space:normal;min-width:118px}
+#cmp thead th b{display:block;color:var(--text);font-size:13.5px}
+#cmp thead th:first-child{cursor:default;min-width:150px}
+#cmp td.rowlab{color:var(--sub);font-weight:600;font-size:13px}
+#cmp tr.big td{font-size:16px;font-weight:700}
+#cmp tr.big td.rowlab{font-size:13px}
+.two{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:14px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--sub);margin-top:10px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+svg text{font-family:inherit}
+.flow{display:grid;grid-template-columns:auto 1fr auto;gap:8px 10px;align-items:center;font-size:13px}
+.flow .fb{height:22px;border-radius:6px;display:flex;overflow:hidden;background:var(--soft)}
+.flow .fb i{display:block;height:100%}
+.flow .fn{color:var(--sub);font-size:12.5px;text-align:right;white-space:nowrap}
+.need{margin-top:12px;padding:11px 14px;border-radius:10px;background:var(--soft);font-size:13.5px;font-weight:600}
+.need.ok{background:var(--green-bg);color:var(--green)}
+.pol td{white-space:normal;text-align:left;vertical-align:top}
+.pol td:first-child{width:128px;color:var(--sub);font-weight:600;white-space:nowrap}
+.src td{white-space:normal;text-align:left;vertical-align:top;font-size:13px}
+.src td:nth-child(2){text-align:right;font-weight:600}
+.src td:last-child{color:var(--sub);width:1%;white-space:nowrap}
+.note{font-size:12.5px;color:var(--mute);margin-top:10px}
+@media (max-width:1100px){.grid{grid-template-columns:1fr}.side{position:static;max-height:none}.kpis{grid-template-columns:1fr 1fr}.two{grid-template-columns:1fr}}
+@media (max-width:640px){.wrap{padding:18px 14px 40px}.kpis{grid-template-columns:1fr}.kpi .val{font-size:24px}.card{padding:16px 14px}.seg button{white-space:normal;font-size:12.5px}.hmeta{text-align:left}.pol td:first-child{width:84px;white-space:normal}h1{font-size:21px}}
+@media print{.side{position:static;max-height:none}body{background:#fff}}
+</style>
+</head>
+<body>
+<div class="wrap"><noscript><div style="background:#fff4dd;color:#b76e00;padding:10px 16px;border-radius:10px;margin-bottom:14px;font-weight:600">기준 가정 · C안 값이 표시돼 있어요. 정책 · 가정을 바꾸려면 파일을 내려받아 크롬에서 열어 주세요.</div></noscript>
+<header>
+  <div>
+    <h1>멤버십 요금제 시뮬레이션 · 2027년 1분기</h1>
+    <div class="hsub">목표 실수입 <b id="h-target">9.35억</b> (부가세·수수료 제외, 25년 분기 평균) · 새 요금제 12/31 시행</div>
+  </div>
+  <div class="hmeta">기준 데이터: 25년 / 26년 매출금액 정리 시트<br>작성 2026-11-20</div>
+</header>
+
+<section class="kpis">
+  <div class="card kpi"><div class="lab">1분기 예상 실수입</div><div class="val" id="k-net">7.87억<small>84.2%</small></div><div class="bar"><i id="k-bar" style="width: 84.1775%;"></i><em id="k-mark" title="현행 유지 시" style="left: 84.9602%;"></em></div><div class="sub" id="k-net-sub">현행 유지 시 <b>7.94억</b> (85.0%) · 선택안 <b class="neg">-732만</b></div></div>
+  <div class="card kpi"><div class="lab">목표 대비</div><div class="val" id="k-gap"><span class="neg">-1.48억</span></div><div class="sub" id="k-gap-sub">월 평균 <b>2.62억</b> / 목표 3.12억</div></div>
+  <div class="card kpi"><div class="lab">1분기 만료 연결제 회원 갱신</div><div class="val" id="k-ren">1,073명<small>36.6%</small></div><div class="sub" id="k-ren-sub">만료 2,931명 · 현행 1,026명 대비 <b class="pos">+47명</b></div></div>
+  <div class="card kpi"><div class="lab">2027년 연결제 회원 유지</div><div class="val" id="k-year">2,928명<small>36.6%</small></div><div class="sub" id="k-year-sub">8,000명 중 · 현행 2,800명 대비 <b class="pos">+128명</b></div></div>
+</section>
+
+<div class="grid">
+<aside class="side">
+  <div class="card">
+    <h2>정책 <small>기존 연결제 회원</small></h2>
+    <div class="seg" id="preset"><button data-v="A" class="" title="새 요금 전면 적용">A안</button><button data-v="B" class="" title="기존가 유지 · 자동갱신 필수">B안</button><button data-v="C" class="on" title="기존가 유지 · 1회 결제 선택">C안</button><button data-v="D" class="" title="C + 조기 갱신">D안</button><button data-v="E" class="" title="D + 월정액 → 연 전환">E안</button></div>
+    <div class="field"><label>갱신 가격 (부가세 포함)</label><div class="seg" id="price"><button data-v="110000" class="on">110,000 기존가</button><button data-v="121000">121,000</button><button data-v="132000">132,000 새 요금</button></div></div>
+    <div class="field"><label>자동갱신</label><div class="seg" id="auto"><button data-v="must">필수</button><button data-v="optional" class="on">선택 (1회 결제 132,000 허용)</button></div></div>
+    <div class="field" style="margin-top:10px">
+      <div class="tog"><span>만료 안내 · 복귀 안내<small>D-30 · D-7 · 당일 · D+7 · D+30</small></span><input type="checkbox" class="sw" id="notify" checked=""></div>
+      <div class="tog"><span>조기 갱신<small>2~4분기 만료자, 1분기 중 110,000 + 1개월</small></span><input type="checkbox" class="sw" id="early"></div>
+      <div class="tog"><span>월정액 → 연 전환 제안<small>기존 월정액 회원, 연 110,000</small></span><input type="checkbox" class="sw" id="convert"></div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>가정</h2>
+    <div class="seg" id="level"><button data-v="low">보수</button><button data-v="mid" class="on">기준</button><button data-v="high">낙관</button></div>
+    <div id="sliders" style="margin-top:8px"><details open=""><summary>연결제 회원</summary><div class="row"><div class="top"><span>현재 연결제 회원 수 <i class="chip c-input">입력</i></span><b id="v-base">8,000명</b></div><input type="range" id="s-base" min="5000" max="12000" step="100" aria-label="현재 연결제 회원 수" value="8000"><div class="hint">1분기 만료 = 25년 월별 1년권 결제 비중 적용</div></div><div class="row"><div class="top"><span>현재 재결제율 (만료 분기 내) <i class="chip c-assume">가정</i></span><b id="v-r0">35%</b></div><input type="range" id="s-r0" min="10" max="70" step="1" aria-label="현재 재결제율 (만료 분기 내)" value="35"><div class="hint">자동갱신이 없어 만료 후 직접 다시 결제하는 비율</div></div><div class="row"><div class="top"><span>가격 10% 인상 시 갱신 감소 <i class="chip c-assume">가정</i></span><b id="v-eOld">8%</b></div><input type="range" id="s-eOld" min="0" max="20" step="1" aria-label="가격 10% 인상 시 갱신 감소" value="8"></div><div class="row"><div class="top"><span>자동갱신 필수로 빠지는 비율 <i class="chip c-assume">가정</i></span><b id="v-fAuto">15%</b></div><input type="range" id="s-fAuto" min="0" max="40" step="1" aria-label="자동갱신 필수로 빠지는 비율" value="15"><div class="hint">카드 등록 · 결재 부담, 정기결제 불가 수단</div></div><div class="row"><div class="top"><span>안내로 늘어나는 갱신 <i class="chip c-assume">가정</i></span><b id="v-uNotify">10%</b></div><input type="range" id="s-uNotify" min="0" max="30" step="1" aria-label="안내로 늘어나는 갱신" value="10"></div><div class="row"><div class="top"><span>조기 갱신 참여율 <i class="chip c-assume">가정</i></span><b id="v-pEarly">10%</b></div><input type="range" id="s-pEarly" min="0" max="40" step="1" aria-label="조기 갱신 참여율" value="10"></div><div class="row"><div class="top"><span>월정액 → 연 전환율 <i class="chip c-assume">가정</i></span><b id="v-cRate">3%</b></div><input type="range" id="s-cRate" min="0" max="15" step="0.5" aria-label="월정액 → 연 전환율" value="3"></div><div class="row"><div class="top"><span>12월 선결제로 빠지는 1분기 갱신 <i class="chip c-assume">가정</i></span><b id="v-dec">0%</b></div><input type="range" id="s-dec" min="0" max="40" step="1" aria-label="12월 선결제로 빠지는 1분기 갱신" value="0"><div class="hint">12월 안내 때 미리 결제하면 4분기 매출로 이동</div></div></details><details><summary>시장 · 신규 가입</summary><div class="row"><div class="top"><span>27년 1분기 자연 추세 (전년비) <i class="chip c-assume">가정</i></span><b id="v-g">-15%</b></div><input type="range" id="s-g" min="-30" max="5" step="1" aria-label="27년 1분기 자연 추세 (전년비)" value="-15"><div class="hint">26년 3분기 -15.5%, 10월 -18.0%</div></div><div class="row"><div class="top"><span>가격 10% 인상 시 신규 감소 <i class="chip c-assume">가정</i></span><b id="v-eNew">5%</b></div><input type="range" id="s-eNew" min="0" max="15" step="1" aria-label="가격 10% 인상 시 신규 감소" value="5"></div><div class="row"><div class="top"><span>12개월 약정으로 줄어드는 신규 월 결제 <i class="chip c-assume">가정</i></span><b id="v-fCommit">10%</b></div><input type="range" id="s-fCommit" min="0" max="30" step="1" aria-label="12개월 약정으로 줄어드는 신규 월 결제" value="10"></div><div class="row"><div class="top"><span>새 월 결제 회원 월 유지율 <i class="chip c-assume">가정</i></span><b id="v-rhoNew">95%</b></div><input type="range" id="s-rhoNew" min="88" max="99" step="0.5" aria-label="새 월 결제 회원 월 유지율" value="95"><div class="hint">25년 프리미엄 월정액 실적 93.1%</div></div><div class="row"><div class="top"><span>신규 월 결제 → 연 결제 이동 <i class="chip c-assume">가정</i></span><b id="v-shift">5%</b></div><input type="range" id="s-shift" min="0" max="20" step="1" aria-label="신규 월 결제 → 연 결제 이동" value="5"><div class="hint">연 결제 할인폭 7% → 17%</div></div><div class="row"><div class="top"><span>신규 · 복귀 연 결제 자동갱신 이탈 <i class="chip c-assume">가정</i></span><b id="v-fAutoNew">10%</b></div><input type="range" id="s-fAutoNew" min="0" max="30" step="1" aria-label="신규 · 복귀 연 결제 자동갱신 이탈" value="10"></div></details><details><summary>폐지 · 변경 상품</summary><div class="row"><div class="top"><span>유료 1개월 → 베이직 7일 <i class="chip c-assume">가정</i></span><b id="v-mbBasic">65%</b></div><input type="range" id="s-mbBasic" min="0" max="100" step="5" aria-label="유료 1개월 → 베이직 7일" value="65"></div><div class="row"><div class="top"><span>유료 1개월 → 프리미엄 월 <i class="chip c-assume">가정</i></span><b id="v-mbPrem">15%</b></div><input type="range" id="s-mbPrem" min="0" max="50" step="5" aria-label="유료 1개월 → 프리미엄 월" value="15"></div><div class="row"><div class="top"><span>유료 1년 → 프리미엄 연 <i class="chip c-assume">가정</i></span><b id="v-ybAnn">20%</b></div><input type="range" id="s-ybAnn" min="0" max="60" step="5" aria-label="유료 1년 → 프리미엄 연" value="20"></div><div class="row"><div class="top"><span>유료 1년 → 베이직 7일 <i class="chip c-assume">가정</i></span><b id="v-ybBasic">30%</b></div><input type="range" id="s-ybBasic" min="0" max="60" step="5" aria-label="유료 1년 → 베이직 7일" value="30"></div><div class="row"><div class="top"><span>기업 신규 → 비즈니스 (2인 19,800) <i class="chip c-assume">가정</i></span><b id="v-bizConv">70%</b></div><input type="range" id="s-bizConv" min="30" max="100" step="5" aria-label="기업 신규 → 비즈니스 (2인 19,800)" value="70"></div></details></div>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="card">
+    <h2>정책안 비교 <small>같은 가정 · 열을 누르면 선택</small></h2>
+    <div class="scroll"><table id="cmp"><thead><tr><th></th><th data-k="A" class=""><b>A안</b>새 요금 전면 적용</th><th data-k="B" class=""><b>B안</b>기존가 유지 · 자동갱신 필수</th><th data-k="C" class="sel"><b>C안</b>기존가 유지 · 1회 결제 선택</th><th data-k="D" class=""><b>D안</b>C + 조기 갱신</th><th data-k="E" class=""><b>E안</b>D + 월정액 → 연 전환</th></tr></thead><tbody><tr class="big"><td class="rowlab">1분기 실수입</td><td class="">7.62억</td><td class="">7.71억</td><td class="sel">7.87억</td><td class="">8.34억</td><td class="">8.69억</td></tr><tr class=""><td class="rowlab">목표 달성률</td><td class=""><span class="neg">81.5%</span></td><td class=""><span class="neg">82.5%</span></td><td class="sel"><span class="neg">84.2%</span></td><td class=""><span class="neg">89.2%</span></td><td class=""><span class="neg">93.0%</span></td></tr><tr class=""><td class="rowlab">목표 대비</td><td class=""><span class="neg">-1.73억</span></td><td class=""><span class="neg">-1.64억</span></td><td class="sel"><span class="neg">-1.48억</span></td><td class=""><span class="neg">-1.01억</span></td><td class=""><span class="neg">-6,565만</span></td></tr><tr class=""><td class="rowlab">현행 유지 대비</td><td class=""><span class="neg">-3,251만</span></td><td class=""><span class="neg">-2,318만</span></td><td class="sel"><span class="neg">-732만</span></td><td class=""><span class="pos">+3,997만</span></td><td class=""><span class="pos">+7,495만</span></td></tr><tr class=""><td class="rowlab">1분기 만료자 갱신</td><td class="">733명 <span class="neg">(-293)</span></td><td class="">959명 <span class="neg">(-67)</span></td><td class="sel">1,073명 <span class="pos">(+47)</span></td><td class="">1,073명 <span class="pos">(+47)</span></td><td class="">1,073명 <span class="pos">(+47)</span></td></tr><tr class=""><td class="rowlab">27년 연결제 유지</td><td class="">1,999명 <span class="neg">(-801)</span></td><td class="">2,618명 <span class="neg">(-182)</span></td><td class="sel">2,928명 <span class="pos">(+128)</span></td><td class="">3,250명 <span class="pos">(+450)</span></td><td class="">3,250명 <span class="pos">(+450)</span></td></tr><tr class=""><td class="rowlab">연 자동갱신 회원 (1분기 말)</td><td class="">2,457명</td><td class="">2,684명</td><td class="sel">2,684명</td><td class="">3,191명</td><td class="">3,647명</td></tr><tr class=""><td class="rowlab">당겨온 결제</td><td class="">-</td><td class="">-</td><td class="sel">-</td><td class="">1,731만</td><td class="">5,230만</td></tr></tbody></table></div>
+    <div class="need" id="need">목표까지 1.48억 · 조기 갱신 참여율 31% (1,586명)이면 달성</div>
+  </div>
+
+  <div class="two">
+    <div class="card">
+      <h2>월별 실수입 <small>억 원</small></h2>
+      <div id="chart"><svg viewBox="0 0 560 290" width="100%" role="img" aria-label="월별 실수입: 현행 유지와 선택안"><line x1="38" x2="560" y1="260" y2="260" stroke="#eef0f2"></line><text x="32" y="264" text-anchor="end" font-size="11" fill="#8b95a1">0</text><line x1="38" x2="560" y1="189.5187169565781" y2="189.5187169565781" stroke="#eef0f2"></line><text x="32" y="193.5187169565781" text-anchor="end" font-size="11" fill="#8b95a1">1</text><line x1="38" x2="560" y1="119.0374339131562" y2="119.0374339131562" stroke="#eef0f2"></line><text x="32" y="123.0374339131562" text-anchor="end" font-size="11" fill="#8b95a1">2</text><line x1="38" x2="560" y1="48.556150869734324" y2="48.556150869734324" stroke="#eef0f2"></line><text x="32" y="52.556150869734324" text-anchor="end" font-size="11" fill="#8b95a1">3</text><rect x="58" y="171.4011036529838" width="62" height="88.5988963470162" fill="#9db4ff" opacity="0.55"><title>현행 · 프리미엄 월정액 · 기존 회원 1.26억</title></rect><rect x="58" y="164.1829368646524" width="62" height="7.218166788331416" fill="#2f5bea" opacity="0.55"><title>현행 · 프리미엄 월 결제 · 신규 1,024만</title></rect><rect x="58" y="140.83320249395115" width="62" height="23.349734370701242" fill="#168a5a" opacity="0.55"><title>현행 · 프리미엄 연 · 기존 연결제 회원 갱신 3,313만</title></rect><rect x="58" y="92.15455925059436" width="62" height="48.67864324335679" fill="#7fcfa9" opacity="0.55"><title>현행 · 프리미엄 연 · 신규 · 복귀 6,907만</title></rect><rect x="58" y="81.13485411542032" width="62" height="11.019705135174036" fill="#b9a3e8" opacity="0.55"><title>현행 · 프리미엄 2년 → 연 결제 1,563만</title></rect><rect x="58" y="71.0838117599024" width="62" height="10.051042355517922" fill="#8b95a1" opacity="0.55"><title>현행 · 기업회원 · 비즈니스 1,426만</title></rect><rect x="58" y="56.21560434242491" width="62" height="14.868207417477493" fill="#c9cfd6" opacity="0.55"><title>현행 · 유료 → 베이직 7일 2,110만</title></rect><text x="89" y="51.21560434242491" text-anchor="middle" font-size="11.5" font-weight="700" fill="#191f28">2.89</text><text x="89" y="274" text-anchor="middle" font-size="11" fill="#8b95a1">현행</text><rect x="130" y="171.4011036529838" width="62" height="88.5988963470162" fill="#9db4ff" opacity="1"><title>선택안 · 프리미엄 월정액 · 기존 회원 1.26억</title></rect><rect x="130" y="163.70497941393103" width="62" height="7.696124239052779" fill="#2f5bea" opacity="1"><title>선택안 · 프리미엄 월 결제 · 신규 1,092만</title></rect><rect x="130" y="138.785135935943" width="62" height="24.919843477988024" fill="#168a5a" opacity="1"><title>선택안 · 프리미엄 연 · 기존 연결제 회원 갱신 3,536만</title></rect><rect x="130" y="86.88035919446688" width="62" height="51.90477674147613" fill="#7fcfa9" opacity="1"><title>선택안 · 프리미엄 연 · 신규 · 복귀 7,364만</title></rect><rect x="130" y="79.82947905265632" width="62" height="7.050880141810552" fill="#b9a3e8" opacity="1"><title>선택안 · 프리미엄 2년 → 연 결제 1,000만</title></rect><rect x="130" y="69.66882585914823" width="62" height="10.160653193508097" fill="#8b95a1" opacity="1"><title>선택안 · 기업회원 · 비즈니스 1,442만</title></rect><rect x="130" y="59.42278410342075" width="62" height="10.246041755727475" fill="#c9cfd6" opacity="1"><title>선택안 · 유료 → 베이직 7일 1,454만</title></rect><text x="161" y="54.42278410342075" text-anchor="middle" font-size="11.5" font-weight="700" fill="#191f28">2.85</text><text x="161" y="274" text-anchor="middle" font-size="11" fill="#8b95a1">선택안</text><text x="125" y="288" text-anchor="middle" font-size="12.5" font-weight="700" fill="#191f28">1월</text><rect x="232" y="192.44824930997407" width="62" height="67.55175069002593" fill="#9db4ff" opacity="0.55"><title>현행 · 프리미엄 월정액 · 기존 회원 9,584만</title></rect><rect x="232" y="180.07322304965615" width="62" height="12.375026260317924" fill="#2f5bea" opacity="0.55"><title>현행 · 프리미엄 월 결제 · 신규 1,756만</title></rect><rect x="232" y="156.95415488951443" width="62" height="23.119068160141723" fill="#168a5a" opacity="0.55"><title>현행 · 프리미엄 연 · 기존 연결제 회원 갱신 3,280만</title></rect><rect x="232" y="119.3736061753153" width="62" height="37.580548714199125" fill="#7fcfa9" opacity="0.55"><title>현행 · 프리미엄 연 · 신규 · 복귀 5,332만</title></rect><rect x="232" y="110.68072686832829" width="62" height="8.69287930698701" fill="#b9a3e8" opacity="0.55"><title>현행 · 프리미엄 2년 → 연 결제 1,233만</title></rect><rect x="232" y="102.30157180741176" width="62" height="8.379155060916531" fill="#8b95a1" opacity="0.55"><title>현행 · 기업회원 · 비즈니스 1,189만</title></rect><rect x="232" y="89.28346941523608" width="62" height="13.018102392175678" fill="#c9cfd6" opacity="0.55"><title>현행 · 유료 → 베이직 7일 1,847만</title></rect><text x="263" y="84.28346941523608" text-anchor="middle" font-size="11.5" font-weight="700" fill="#191f28">2.42</text><text x="263" y="274" text-anchor="middle" font-size="11" fill="#8b95a1">현행</text><rect x="304" y="192.44824930997407" width="62" height="67.55175069002593" fill="#9db4ff" opacity="1"><title>선택안 · 프리미엄 월정액 · 기존 회원 9,584만</title></rect><rect x="304" y="178.82485030460361" width="62" height="13.623399005370459" fill="#2f5bea" opacity="1"><title>선택안 · 프리미엄 월 결제 · 신규 1,933만</title></rect><rect x="304" y="154.16516924920464" width="62" height="24.659681055398977" fill="#168a5a" opacity="1"><title>선택안 · 프리미엄 연 · 기존 연결제 회원 갱신 3,499만</title></rect><rect x="304" y="113.73850458165026" width="62" height="40.42666466755438" fill="#7fcfa9" opacity="1"><title>선택안 · 프리미엄 연 · 신규 · 복귀 5,736만</title></rect><rect x="304" y="108.1764274363054" width="62" height="5.562077145344858" fill="#b9a3e8" opacity="1"><title>선택안 · 프리미엄 2년 → 연 결제 789만</title></rect><rect x="304" y="99.67611431097373" width="62" height="8.500313125331672" fill="#8b95a1" opacity="1"><title>선택안 · 기업회원 · 비즈니스 1,206만</title></rect><rect x="304" y="90.91752534667381" width="62" height="8.758588964299918" fill="#c9cfd6" opacity="1"><title>선택안 · 유료 → 베이직 7일 1,243만</title></rect><text x="335" y="85.91752534667381" text-anchor="middle" font-size="11.5" font-weight="700" fill="#191f28">2.40</text><text x="335" y="274" text-anchor="middle" font-size="11" fill="#8b95a1">선택안</text><text x="299" y="288" text-anchor="middle" font-size="12.5" font-weight="700" fill="#191f28">2월</text><rect x="406" y="186.1617169643579" width="62" height="73.83828303564209" fill="#9db4ff" opacity="0.55"><title>현행 · 프리미엄 월정액 · 기존 회원 1.05억</title></rect><rect x="406" y="167.9245546875606" width="62" height="18.237162276797307" fill="#2f5bea" opacity="0.55"><title>현행 · 프리미엄 월 결제 · 신규 2,588만</title></rect><rect x="406" y="146.93771067275003" width="62" height="20.986844014810572" fill="#168a5a" opacity="0.55"><title>현행 · 프리미엄 연 · 기존 연결제 회원 갱신 2,978만</title></rect><rect x="406" y="106.64683474307196" width="62" height="40.290875929678066" fill="#7fcfa9" opacity="0.55"><title>현행 · 프리미엄 연 · 신규 · 복귀 5,717만</title></rect><rect x="406" y="98.6755836335578" width="62" height="7.9712511095141565" fill="#b9a3e8" opacity="0.55"><title>현행 · 프리미엄 2년 → 연 결제 1,131만</title></rect><rect x="406" y="89.26927985710384" width="62" height="9.406303776453967" fill="#8b95a1" opacity="0.55"><title>현행 · 기업회원 · 비즈니스 1,335만</title></rect><rect x="406" y="74.6736467811327" width="62" height="14.595633075971136" fill="#c9cfd6" opacity="0.55"><title>현행 · 유료 → 베이직 7일 2,071만</title></rect><text x="437" y="69.6736467811327" text-anchor="middle" font-size="11.5" font-weight="700" fill="#191f28">2.63</text><text x="437" y="274" text-anchor="middle" font-size="11" fill="#8b95a1">현행</text><rect x="478" y="186.1617169643579" width="62" height="73.83828303564209" fill="#9db4ff" opacity="1"><title>선택안 · 프리미엄 월정액 · 기존 회원 1.05억</title></rect><rect x="478" y="165.74738222235" width="62" height="20.414334742007895" fill="#2f5bea" opacity="1"><title>선택안 · 프리미엄 월 결제 · 신규 2,896만</title></rect><rect x="478" y="143.28049872877247" width="62" height="22.46688349357754" fill="#168a5a" opacity="1"><title>선택안 · 프리미엄 연 · 기존 연결제 회원 갱신 3,188만</title></rect><rect x="478" y="99.54586742703947" width="62" height="43.734631301733" fill="#7fcfa9" opacity="1"><title>선택안 · 프리미엄 연 · 신규 · 복귀 6,205만</title></rect><rect x="478" y="94.44551896362563" width="62" height="5.100348463413837" fill="#b9a3e8" opacity="1"><title>선택안 · 프리미엄 2년 → 연 결제 724만</title></rect><rect x="478" y="84.92572902743021" width="62" height="9.519789936195423" fill="#8b95a1" opacity="1"><title>선택안 · 기업회원 · 비즈니스 1,351만</title></rect><rect x="478" y="74.99040310257533" width="62" height="9.93532592485488" fill="#c9cfd6" opacity="1"><title>선택안 · 유료 → 베이직 7일 1,410만</title></rect><text x="509" y="69.99040310257533" text-anchor="middle" font-size="11.5" font-weight="700" fill="#191f28">2.62</text><text x="509" y="274" text-anchor="middle" font-size="11" fill="#8b95a1">선택안</text><text x="473" y="288" text-anchor="middle" font-size="12.5" font-weight="700" fill="#191f28">3월</text><line x1="38" x2="560" y1="40.35714285714289" y2="40.35714285714289" stroke="#d93f3f" stroke-dasharray="5 4" stroke-width="1.5"></line><text x="558" y="35.35714285714289" text-anchor="end" font-size="11.5" font-weight="700" fill="#d93f3f">월 목표 3.12</text></svg></div>
+      <div class="legend" id="legend"><span><i style="background:#9db4ff"></i>프리미엄 월정액 · 기존 회원</span><span><i style="background:#2f5bea"></i>프리미엄 월 결제 · 신규</span><span><i style="background:#168a5a"></i>프리미엄 연 · 기존 연결제 회원 갱신</span><span><i style="background:#7fcfa9"></i>프리미엄 연 · 신규 · 복귀</span><span><i style="background:#e0a100"></i>조기 갱신 · 월정액 → 연 전환</span><span><i style="background:#b9a3e8"></i>프리미엄 2년 → 연 결제</span><span><i style="background:#8b95a1"></i>기업회원 · 비즈니스</span><span><i style="background:#c9cfd6"></i>유료 → 베이직 7일</span></div>
+    </div>
+    <div class="card">
+      <h2>연결제 회원 흐름 <small id="flow-sub">1분기 만료 2,931명</small></h2>
+      <div class="flow" id="flow"><b>1월</b><div class="fb" title="만료 1,014명"><i style="width:32.725%;background:#168a5a"></i><i style="width:3.8808000000000002%;background:#7fcfa9"></i><i style="width:0%;background:#d93f3f"></i></div><span class="fn">371 / 1,014명</span><b>2월</b><div class="fb" title="만료 1,003명"><i style="width:32.725%;background:#168a5a"></i><i style="width:3.8808000000000002%;background:#7fcfa9"></i><i style="width:0%;background:#d93f3f"></i></div><span class="fn">367 / 1,003명</span><b>3월</b><div class="fb" title="만료 914명"><i style="width:32.725%;background:#168a5a"></i><i style="width:3.8808000000000002%;background:#7fcfa9"></i><i style="width:0%;background:#d93f3f"></i></div><span class="fn">335 / 914명</span></div>
+      <div class="legend" id="flow-legend"><span><i style="background:#168a5a"></i>자동갱신 등록</span><span><i style="background:#7fcfa9"></i>1회 결제</span><span><i style="background:#d93f3f"></i>변경으로 이탈</span><span><i style="background:#f2f4f6;border:1px solid #e5e8eb"></i>원래 미갱신</span></div>
+      <table style="margin-top:14px" id="flow-tbl"><tbody>
+    <tr><td>자동갱신 등록</td><td>959명</td></tr>
+    <tr><td>1회 결제 (132,000)</td><td>114명</td></tr>
+    <tr><td>정책으로 추가 갱신</td><td class="pos">47명</td></tr>
+    <tr><td>원래 미갱신 (재결제율 35%)</td><td>1,905명</td></tr>
+    <tr><td>조기 갱신 (2~4분기 만료자)</td><td>-</td></tr>
+    <tr><td>월정액 → 연 전환</td><td>-</td></tr></tbody></table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>요금제별 1분기 실수입 <small>현행 유지 시 vs 선택안</small></h2>
+    <div class="scroll"><table id="mix"><thead><tr><th>요금제</th><th>현행 유지 시</th><th>선택안</th><th>차이</th><th>1월</th><th>2월</th><th>3월</th></tr></thead><tbody><tr><td><i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#9db4ff;margin-right:7px"></i>프리미엄 월정액 · 기존 회원</td><td>3.26억</td><td>3.26억</td><td class="pos">-</td><td>1.26억</td><td>9,584만</td><td>1.05억</td></tr><tr><td><i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#2f5bea;margin-right:7px"></i>프리미엄 월 결제 · 신규</td><td>5,367만</td><td>5,921만</td><td class="pos">+554만</td><td>1,092만</td><td>1,933만</td><td>2,896만</td></tr><tr><td><i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#168a5a;margin-right:7px"></i>프리미엄 연 · 기존 연결제 회원 갱신</td><td>9,571만</td><td>1.02억</td><td class="pos">+651만</td><td>3,536만</td><td>3,499만</td><td>3,188만</td></tr><tr><td><i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#7fcfa9;margin-right:7px"></i>프리미엄 연 · 신규 · 복귀</td><td>1.80억</td><td>1.93억</td><td class="pos">+1,350만</td><td>7,364만</td><td>5,736만</td><td>6,205만</td></tr><tr><td><i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#e0a100;margin-right:7px"></i>조기 갱신 · 월정액 → 연 전환</td><td>-</td><td>-</td><td class="pos">-</td><td>-</td><td>-</td><td>-</td></tr><tr><td><i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#b9a3e8;margin-right:7px"></i>프리미엄 2년 → 연 결제</td><td>3,928만</td><td>2,513만</td><td class="neg">-1,415만</td><td>1,000만</td><td>789만</td><td>724만</td></tr><tr><td><i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#8b95a1;margin-right:7px"></i>기업회원 · 비즈니스</td><td>3,949만</td><td>3,998만</td><td class="pos">+49만</td><td>1,442만</td><td>1,206만</td><td>1,351만</td></tr><tr><td><i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#c9cfd6;margin-right:7px"></i>유료 → 베이직 7일</td><td>6,027만</td><td>4,106만</td><td class="neg">-1,921만</td><td>1,454만</td><td>1,243만</td><td>1,410만</td></tr></tbody><tfoot><tr><td>합계</td><td>7.94억</td><td>7.87억</td><td class="neg">-732만</td><td>2.85억</td><td>2.40억</td><td>2.62억</td></tr></tfoot></table></div>
+  </div>
+
+  <div class="card">
+    <h2>정책 상세 <small id="pol-name">C안 · 기존가 유지 · 1회 결제 선택</small></h2>
+    <table class="pol" id="pol"><tbody><tr><td>대상</td><td>12/31 이전에 프리미엄 1년 · 2년권을 결제한 회원 (현재 8,000명)</td></tr><tr><td>갱신 가격</td><td>만료 30일 전 ~ 만료 후 30일 안에 갱신하면 110,000원 유지. 자동갱신을 유지하는 동안 매년 같은 가격. 기간을 넘기면 새 요금 132,000원</td></tr><tr><td>자동갱신</td><td>자동갱신 등록 시 110,000원, 등록 없이 1년 이용권 1회 결제는 132,000원. 결제 화면에서 선택</td></tr><tr><td>안내</td><td>만료 D-30 · D-7 · 당일 메일과 로그인 배너, 만료 후 D+7 · D+30 복귀 안내. 메일 첫 줄에 갱신 가격과 기한</td></tr><tr><td>조기 갱신</td><td>없음</td></tr><tr><td>월정액 → 연 전환</td><td>없음</td></tr><tr><td>2년권 · 유료 1년</td><td>2년권 만료자는 같은 갱신 가격 적용. 유료 1년 만료자는 프리미엄 연 132,000원 또는 베이직 7일</td></tr><tr><td>자동갱신 고지</td><td>갱신 결제 30일 전에 금액 · 결제일 · 해지 방법 메일 고지. 연 결제 첫 갱신은 27년 12월 31일분</td></tr><tr><td>필요 작업</td><td>기존 회원 판별 (1년 · 2년권 결제 이력) · 갱신 가격 적용 결제 화면 · 기존 1년 이용권 1회 결제 상품 유지 (132,000원) · 만료 · 복귀 안내 메일과 배너 · 갱신 사전 고지 메일</td></tr></tbody></table>
+  </div>
+
+  <div class="card">
+    <h2>기준 데이터 · 가정</h2>
+    <div class="scroll"><table class="src" id="src"><tbody><tr><td>27년 1분기 목표 실수입 (25년 분기 평균)</td><td>9.35억</td><td><i class="chip c-sheet">시트</i></td></tr><tr><td>26년 1분기 · 3분기 실수입</td><td>9.35억 · 7.57억</td><td><i class="chip c-sheet">시트</i></td></tr><tr><td>26년 월별 전년비 (1 · 2 · 3월)</td><td>-4.0% · -18.3% · -9.1%</td><td><i class="chip c-sheet">시트</i></td></tr><tr><td>실수입 환산 (결제액 ÷ 1.1 − 수수료 3.53%)</td><td>결제액 × 0.874</td><td><i class="chip c-sheet">시트</i></td></tr><tr><td>25년 1분기 프리미엄 1년 결제</td><td>3,877건 · 4.14억</td><td><i class="chip c-sheet">시트</i></td></tr><tr><td>25년 1분기 프리미엄 2년 결제</td><td>331건 · 5,898만</td><td><i class="chip c-sheet">시트</i></td></tr><tr><td>25년 1년권 결제의 1분기 비중</td><td>36.6%</td><td><i class="chip c-sheet">시트</i></td></tr><tr><td>1년권 실결제 단가 / 정가 110,000</td><td>97.0%</td><td><i class="chip c-sheet">시트</i></td></tr><tr><td>25년 프리미엄 월정액 월 유지율</td><td>93.1%</td><td><i class="chip c-sheet">시트</i></td></tr><tr><td>1월 기존 프리미엄 월정액 결제 회원 (추정)</td><td>15,205명</td><td><i class="chip c-assume">가정</i></td></tr><tr><td>새 요금 (부가세 포함)</td><td>월 13,200 · 연 132,000 · 베이직 7일 9,900 · 비즈니스 1인 9,900</td><td><i class="chip c-input">입력</i></td></tr><tr><td>현재 연결제 회원 수</td><td>8,000명</td><td><i class="chip c-input">입력</i></td></tr><tr><td>재결제율 · 가격 반응 · 자동갱신 이탈 · 참여율</td><td>왼쪽 가정 값</td><td><i class="chip c-assume">가정</i></td></tr></tbody></table></div>
+    <div class="note">26년 요금제별 건수는 시트에 없어 25년 1분기 구성비에 26년 월별 전년비를 곱해 썼어요. 관리자 26년 요금제별 실적이 들어오면 연결제 회원 수 · 재결제율을 실제 값으로 바꿔야 해요.</div>
+  </div>
+</div>
+</div>
+</div>
+
+<script>
+const D = {"n":{"1MP_N":[1451,1392,1475,1885,1741,1714,1758,1564,1854,1630,1907,2079],"1MP_R":[18627,18242,18810,18909,19515,19514,20021,20105,20167,20585,20598,20890],"1YP":[1341,1327,1209,859,679,708,797,741,685,614,711,910],"2YP":[123,114,94,93,86,82,104,72,85,65,83,102],"1ME_N":[82,99,93,72,61,54,76,55,67,48,74,103],"1ME_R":[1706,1657,1678,1645,1647,1604,1580,1562,1529,1517,1483,1472],"1WB":[1487,1483,1481,1024,919,947,972,890,919,943,1023,1092],"1MB":[839,838,924,713,668,598,616,559,714,666,821,891],"1YB":[87,99,91,57,44,53,57,50,58,43,42,49]},"amt":{"1MP_N":[14357200,13873200,14599200,18858400,17330500,16962000,17400900,15476300,18353500,16131500,18876000,20576600],"1MP_R":[176226473,172911458,178888290,180240091,186557885,186928586,192132179,193335095,194245833,198638815,199032602,202167310],"1YP":[143267100,141851800,128769100,91943300,71593900,74989400,84534000,78636200,71462900,64415000,74644800,95322900],"2YP":[21918600,20314800,16750800,16572600,15325200,14612400,18532800,12830400,15147000,11583000,14790600,18176400],"1ME_N":[918500,1089000,1050500,792000,671000,599500,841500,605000,737000,533500,814000,1138500],"1ME_R":[19073394,18492643,18715922,18380455,18382653,17909696,17639120,17430138,17050671,16885683,16445717,16324728],"1WB":[14722400,14781800,14661900,10137600,9100300,9375300,9622800,8811000,9098100,9335700,10127700,10810800],"1MB":[9109013,9106818,10015387,7698810,7187293,6447020,6645418,6026812,7712015,7208228,8869214,9675526],"1YB":[5742000,6534000,5994000,3762000,2904000,3498000,3762000,3278000,3828000,2838000,2772000,3234000]},"net25":[354373362,348714626,340465502,304395070,287489874,289438404,306794435,293961204,295010896,286246196,302749184,329955890],"net26":[340326015,285034992,309485971,294548230,275879587,273663621,265192782,252721694,239117656,234592353],"gross26":[389134060,326232040,354013903,337060477,315760734,313227214,303518890,289290098,273794493,268540372],"fee26":[13432221,11539590,12344850,11870386,11175626,11088392,10733482,10269304,9786428,9535258],"feeRate":0.0352540573415806,"k26":[0.9603600368811017,0.8173875448516461,0.9090083112150376],"target":934898661,"q26_1":934846978,"q26_3":757032132,"q25_1":1043553490,"rho25":0.9311359366328507,"ypShare":[0.1267366033456195,0.12541347698705227,0.11426141196484264,0.08118325300066156,0.0641716283905113,0.06691239013325773,0.07532369341272091,0.07003118797845194,0.06473868254418297,0.05802854172573481,0.06719591721009356,0.0860032133068708],"annDisc":0.9704973386170188};
+const NET = 1/1.1 - D.feeRate, OLD = 110000, NEW = 132000, MNEW = 13200, MOLD = 9900;
+const PRESETS = {
+  A:{name:'A안',desc:'새 요금 전면 적용',price:132000,auto:'must',notify:false,early:false,convert:false},
+  B:{name:'B안',desc:'기존가 유지 · 자동갱신 필수',price:110000,auto:'must',notify:true,early:false,convert:false},
+  C:{name:'C안',desc:'기존가 유지 · 1회 결제 선택',price:110000,auto:'optional',notify:true,early:false,convert:false},
+  D:{name:'D안',desc:'C + 조기 갱신',price:110000,auto:'optional',notify:true,early:true,convert:false},
+  E:{name:'E안',desc:'D + 월정액 → 연 전환',price:110000,auto:'optional',notify:true,early:true,convert:true}
+};
+const SL = [
+  {g:'연결제 회원',open:true,items:[
+    {k:'base',lab:'현재 연결제 회원 수',unit:'명',min:5000,max:12000,step:100,src:'input',hint:'1분기 만료 = 25년 월별 1년권 결제 비중 적용'},
+    {k:'r0',lab:'현재 재결제율 (만료 분기 내)',unit:'%',min:10,max:70,step:1,src:'assume',hint:'자동갱신이 없어 만료 후 직접 다시 결제하는 비율'},
+    {k:'eOld',lab:'가격 10% 인상 시 갱신 감소',unit:'%',min:0,max:20,step:1,src:'assume',scale:10},
+    {k:'fAuto',lab:'자동갱신 필수로 빠지는 비율',unit:'%',min:0,max:40,step:1,src:'assume',hint:'카드 등록 · 결재 부담, 정기결제 불가 수단'},
+    {k:'uNotify',lab:'안내로 늘어나는 갱신',unit:'%',min:0,max:30,step:1,src:'assume'},
+    {k:'pEarly',lab:'조기 갱신 참여율',unit:'%',min:0,max:40,step:1,src:'assume'},
+    {k:'cRate',lab:'월정액 → 연 전환율',unit:'%',min:0,max:15,step:0.5,src:'assume'},
+    {k:'dec',lab:'12월 선결제로 빠지는 1분기 갱신',unit:'%',min:0,max:40,step:1,src:'assume',hint:'12월 안내 때 미리 결제하면 4분기 매출로 이동'}
+  ]},
+  {g:'시장 · 신규 가입',items:[
+    {k:'g',lab:'27년 1분기 자연 추세 (전년비)',unit:'%',min:-30,max:5,step:1,src:'assume',hint:'26년 3분기 -15.5%, 10월 -18.0%'},
+    {k:'eNew',lab:'가격 10% 인상 시 신규 감소',unit:'%',min:0,max:15,step:1,src:'assume',scale:10},
+    {k:'fCommit',lab:'12개월 약정으로 줄어드는 신규 월 결제',unit:'%',min:0,max:30,step:1,src:'assume'},
+    {k:'rhoNew',lab:'새 월 결제 회원 월 유지율',unit:'%',min:88,max:99,step:0.5,src:'assume',hint:'25년 프리미엄 월정액 실적 93.1%'},
+    {k:'shift',lab:'신규 월 결제 → 연 결제 이동',unit:'%',min:0,max:20,step:1,src:'assume',hint:'연 결제 할인폭 7% → 17%'},
+    {k:'fAutoNew',lab:'신규 · 복귀 연 결제 자동갱신 이탈',unit:'%',min:0,max:30,step:1,src:'assume'}
+  ]},
+  {g:'폐지 · 변경 상품',items:[
+    {k:'mbBasic',lab:'유료 1개월 → 베이직 7일',unit:'%',min:0,max:100,step:5,src:'assume'},
+    {k:'mbPrem',lab:'유료 1개월 → 프리미엄 월',unit:'%',min:0,max:50,step:5,src:'assume'},
+    {k:'ybAnn',lab:'유료 1년 → 프리미엄 연',unit:'%',min:0,max:60,step:5,src:'assume'},
+    {k:'ybBasic',lab:'유료 1년 → 베이직 7일',unit:'%',min:0,max:60,step:5,src:'assume'},
+    {k:'bizConv',lab:'기업 신규 → 비즈니스 (2인 19,800)',unit:'%',min:30,max:100,step:5,src:'assume'}
+  ]}
+];
+const LEVELS = {
+  low:{base:8000,r0:25,eOld:12,fAuto:25,uNotify:5,pEarly:5,cRate:1.5,dec:0,g:-18,eNew:8,fCommit:15,rhoNew:93,shift:2,fAutoNew:15,mbBasic:55,mbPrem:10,ybAnn:10,ybBasic:30,bizConv:60},
+  mid:{base:8000,r0:35,eOld:8,fAuto:15,uNotify:10,pEarly:10,cRate:3,dec:0,g:-15,eNew:5,fCommit:10,rhoNew:95,shift:5,fAutoNew:10,mbBasic:65,mbPrem:15,ybAnn:20,ybBasic:30,bizConv:70},
+  high:{base:8000,r0:45,eOld:4,fAuto:8,uNotify:15,pEarly:18,cRate:5,dec:0,g:-10,eNew:3,fCommit:5,rhoNew:97,shift:8,fAutoNew:5,mbBasic:75,mbPrem:20,ybAnn:30,ybBasic:30,bizConv:80}
+};
+const STREAMS = [
+  ['mpOld','프리미엄 월정액 · 기존 회원','#9db4ff'],
+  ['mpNew','프리미엄 월 결제 · 신규','#2f5bea'],
+  ['annOld','프리미엄 연 · 기존 연결제 회원 갱신','#168a5a'],
+  ['annNew','프리미엄 연 · 신규 · 복귀','#7fcfa9'],
+  ['pull','조기 갱신 · 월정액 → 연 전환','#e0a100'],
+  ['y2','프리미엄 2년 → 연 결제','#b9a3e8'],
+  ['biz','기업회원 · 비즈니스','#8b95a1'],
+  ['basic','유료 → 베이직 7일','#c9cfd6']
+];
+let A = {...LEVELS.mid}, P = {...PRESETS.C}, presetKey = 'C', levelKey = 'mid';
+
+function model(P, A){
+  const g = 1 + A.g/100, M = [0,1,2], f = M.map(m => D.k26[m]*g);
+  const n = (k,m) => D.n[k][m]*f[m], amt = (k,m) => D.amt[k][m]*f[m];
+  const disc = D.annDisc, rho = D.rho25, rhoN = A.rhoNew/100, r0 = A.r0/100;
+  const eOld = A.eOld/10, eNew = A.eNew/10;
+  const E = D.ypShare.map(s => A.base*s);
+  const pm = p => Math.max(0, 1 - eOld*(p/OLD - 1));
+  const nm = P.notify ? 1 + A.uNotify/100 : 1;
+  const pol = b => { let auto = b*pm(P.price)*(1 - A.fAuto/100)*nm, once = P.auto === 'optional' ? b*pm(NEW)*(A.fAuto/100)*0.8*nm : 0; return {auto, once}; };
+  const unit = pol(1), polMult = unit.auto + unit.once;
+  const rate = Math.min(0.98, r0*polMult);
+  const base = {}, sc = {}; STREAMS.forEach(([k]) => { base[k] = [0,0,0]; sc[k] = [0,0,0]; });
+  const mem = {exp:[],baseRen:[],auto:[],once:[]};
+  // 프리미엄 월정액
+  const cRen = M.map(m => n('1MP_R',m)), cNew = M.map(m => n('1MP_N',m)), pRen = M.map(m => D.amt['1MP_R'][m]/D.n['1MP_R'][m]);
+  const leg = [cRen[0], cRen[1] - cNew[0]*rho, cRen[2] - cNew[0]*rho*rho - cNew[1]*rho];
+  const conv = P.convert ? leg[0]*A.cRate/100 : 0;
+  const volNew = Math.max(0, 1 - eNew*(MNEW/MOLD - 1))*(1 - A.fCommit/100);
+  const mb = M.map(m => n('1MB',m)), yb = M.map(m => n('1YB',m));
+  const nNew = M.map(m => cNew[m]*volNew*(1 - A.shift/100) + mb[m]*A.mbPrem/100);
+  const shiftN = M.map(m => cNew[m]*volNew*A.shift/100);
+  const newPay = [nNew[0], nNew[1] + nNew[0]*rhoN, nNew[2] + nNew[1]*rhoN + nNew[0]*rhoN*rhoN];
+  let annNewCount = 0, convLost = 0;
+  M.forEach(m => {
+    base.mpOld[m] = leg[m]*pRen[m];
+    base.mpNew[m] = amt('1MP_N',m) + (cRen[m] - leg[m])*pRen[m];
+    sc.mpOld[m] = Math.max(0, leg[m] - conv*(m+1)/3)*pRen[m];
+    convLost += conv*(m+1)/3*pRen[m];
+    sc.mpNew[m] = newPay[m]*MNEW;
+    // 연 결제
+    const Am = n('1YP',m), avgP = D.amt['1YP'][m]/D.n['1YP'][m];
+    const exB = Math.min(E[m]*r0, Am), other = Am - exB;
+    const exS = exB*(1 - A.dec/100), r = pol(exS);
+    mem.exp.push(E[m]); mem.baseRen.push(exB); mem.auto.push(r.auto); mem.once.push(r.once);
+    base.annOld[m] = exB*avgP; base.annNew[m] = other*avgP;
+    sc.annOld[m] = (r.auto*P.price + r.once*NEW)*disc;
+    const an = other*Math.max(0, 1 - eNew*(NEW/OLD - 1))*(1 - A.fAutoNew/100) + shiftN[m] + yb[m]*A.ybAnn/100;
+    annNewCount += an; sc.annNew[m] = an*NEW*disc;
+    // 2년권
+    const c2 = n('2YP',m), r2 = pol(c2);
+    base.y2[m] = amt('2YP',m); sc.y2[m] = (r2.auto*P.price + r2.once*NEW)*disc;
+    // 기업
+    base.biz[m] = amt('1ME_R',m) + amt('1ME_N',m);
+    sc.biz[m] = amt('1ME_R',m) + n('1ME_N',m)*A.bizConv/100*19800;
+    // 유료 → 베이직
+    base.basic[m] = amt('1WB',m) + amt('1MB',m) + amt('1YB',m);
+    sc.basic[m] = amt('1WB',m) + (mb[m]*A.mbBasic/100 + yb[m]*A.ybBasic/100)*9900;
+  });
+  // 조기 갱신 · 전환
+  const poolEarly = E.slice(3).reduce((a,b) => a+b, 0), nEarly = P.early ? poolEarly*A.pEarly/100 : 0;
+  const earlyGross = nEarly*OLD*disc, convGross = conv*OLD*disc;
+  M.forEach(m => { sc.pull[m] = (earlyGross + convGross)/3; });
+  const sum = o => STREAMS.reduce((a,[k]) => a + o[k].reduce((x,y) => x+y, 0), 0);
+  const monthNet = o => M.map(m => STREAMS.reduce((a,[k]) => a + o[k][m], 0)*NET);
+  const baseNet = sum(base)*NET, net = sum(sc)*NET;
+  const expQ1 = mem.exp.reduce((a,b) => a+b, 0), baseRenQ1 = mem.baseRen.reduce((a,b) => a+b, 0);
+  const autoQ1 = mem.auto.reduce((a,b) => a+b, 0), onceQ1 = mem.once.reduce((a,b) => a+b, 0);
+  const pe = P.early ? A.pEarly/100 : 0;
+  const yearKeep = autoQ1 + onceQ1 + poolEarly*(pe + (1 - pe)*rate), yearBase = baseRenQ1 + poolEarly*r0;
+  const pulled = (nEarly*rate*OLD*disc + Math.max(0, convGross - convLost))*NET;
+  const perPoint = poolEarly/100*OLD*disc*NET;
+  const needEarly = (D.target - (net - earlyGross*NET))/perPoint;
+  return {base, sc, baseNet, net, monthBase:monthNet(base), monthSc:monthNet(sc), mem, expQ1, baseRenQ1, autoQ1, onceQ1, renQ1:autoQ1+onceQ1,
+    yearKeep, yearBase, rate, pulled, nEarly, conv, poolEarly, needEarly, autoMembers:autoQ1 + nEarly + conv + annNewCount, legacy:leg[0]};
+}
+
+const won = v => { const a = Math.abs(v); return (v < 0 ? '-' : '') + (a >= 1e8 ? (a/1e8).toFixed(2) + '억' : Math.round(a/1e4).toLocaleString() + '만'); };
+const sgn = v => (v > 0 ? '+' : '') + won(v);
+const num = v => Math.round(v).toLocaleString();
+const sgnN = v => (v > 0 ? '+' : '') + num(v);
+const pct = v => (v*100).toFixed(1) + '%';
+const cls = v => v >= 0 ? 'pos' : 'neg';
+const $ = id => document.getElementById(id);
+
+function buildSliders(){
+  $('sliders').innerHTML = SL.map(grp => `<details ${grp.open ? 'open' : ''}><summary>${grp.g}</summary>` + grp.items.map(s =>
+    `<div class="row"><div class="top"><span>${s.lab} <i class="chip ${s.src === 'input' ? 'c-input' : 'c-assume'}">${s.src === 'input' ? '입력' : '가정'}</i></span><b id="v-${s.k}"></b></div><input type="range" id="s-${s.k}" min="${s.min}" max="${s.max}" step="${s.step}" aria-label="${s.lab}">${s.hint ? `<div class="hint">${s.hint}</div>` : ''}</div>`).join('') + '</details>').join('');
+  SL.forEach(grp => grp.items.forEach(s => { $('s-' + s.k).addEventListener('input', e => { A[s.k] = Number(e.target.value); levelKey = ''; render(); }); }));
+}
+function syncControls(){
+  SL.forEach(grp => grp.items.forEach(s => { $('s-' + s.k).value = A[s.k]; $('v-' + s.k).textContent = (s.unit === '명' ? num(A[s.k]) : A[s.k]) + s.unit; }));
+  $('preset').innerHTML = Object.entries(PRESETS).map(([k,p]) => `<button data-v="${k}" class="${k === presetKey ? 'on' : ''}" title="${p.desc}">${p.name}</button>`).join('');
+  document.querySelectorAll('#price button').forEach(b => b.classList.toggle('on', Number(b.dataset.v) === P.price));
+  document.querySelectorAll('#auto button').forEach(b => b.classList.toggle('on', b.dataset.v === P.auto));
+  document.querySelectorAll('#level button').forEach(b => b.classList.toggle('on', b.dataset.v === levelKey));
+  $('notify').checked = P.notify; $('early').checked = P.early; $('convert').checked = P.convert;
+}
+function matchPreset(){ presetKey = Object.keys(PRESETS).find(k => ['price','auto','notify','early','convert'].every(f => PRESETS[k][f] === P[f])) || ''; }
+
+function render(){
+  syncControls();
+  const R = model(P, A), T = D.target;
+  $('h-target').textContent = won(T);
+  $('k-net').innerHTML = won(R.net) + `<small>${pct(R.net/T)}</small>`;
+  $('k-bar').style.width = Math.min(100, R.net/T*100) + '%';
+  $('k-mark').style.left = Math.min(100, R.baseNet/T*100) + '%';
+  $('k-net-sub').innerHTML = `현행 유지 시 <b>${won(R.baseNet)}</b> (${pct(R.baseNet/T)}) · 선택안 <b class="${cls(R.net - R.baseNet)}">${sgn(R.net - R.baseNet)}</b>`;
+  $('k-gap').innerHTML = `<span class="${cls(R.net - T)}">${sgn(R.net - T)}</span>`;
+  $('k-gap-sub').innerHTML = `월 평균 <b>${won(R.net/3)}</b> / 목표 ${won(T/3)}` + (R.pulled > 0 ? `<br>당겨온 결제 <b>${won(R.pulled)}</b> (2~4분기에서 이동)` : '');
+  $('k-ren').innerHTML = num(R.renQ1) + `명<small>${pct(R.renQ1/R.expQ1)}</small>`;
+  $('k-ren-sub').innerHTML = `만료 ${num(R.expQ1)}명 · 현행 ${num(R.baseRenQ1)}명 대비 <b class="${cls(R.renQ1 - R.baseRenQ1)}">${sgnN(R.renQ1 - R.baseRenQ1)}명</b>`;
+  $('k-year').innerHTML = num(R.yearKeep) + `명<small>${pct(R.yearKeep/A.base)}</small>`;
+  $('k-year-sub').innerHTML = `${num(A.base)}명 중 · 현행 ${num(R.yearBase)}명 대비 <b class="${cls(R.yearKeep - R.yearBase)}">${sgnN(R.yearKeep - R.yearBase)}명</b>`;
+
+  // 정책안 비교
+  const keys = Object.keys(PRESETS), RS = keys.map(k => model(PRESETS[k], A));
+  const cur = presetKey ? null : R;
+  const cols = keys.map((k,i) => ({k, name:PRESETS[k].name, desc:PRESETS[k].desc, r:RS[i], sel:k === presetKey}));
+  if (cur) cols.push({k:'', name:'직접 설정', desc:'왼쪽 선택값', r:cur, sel:true});
+  const rowsC = [
+    ['1분기 실수입', c => won(c.r.net), 'big'],
+    ['목표 달성률', c => `<span class="${cls(c.r.net - T)}">${pct(c.r.net/T)}</span>`],
+    ['목표 대비', c => `<span class="${cls(c.r.net - T)}">${sgn(c.r.net - T)}</span>`],
+    ['현행 유지 대비', c => `<span class="${cls(c.r.net - c.r.baseNet)}">${sgn(c.r.net - c.r.baseNet)}</span>`],
+    ['1분기 만료자 갱신', c => `${num(c.r.renQ1)}명 <span class="${cls(c.r.renQ1 - c.r.baseRenQ1)}">(${sgnN(c.r.renQ1 - c.r.baseRenQ1)})</span>`],
+    ['27년 연결제 유지', c => `${num(c.r.yearKeep)}명 <span class="${cls(c.r.yearKeep - c.r.yearBase)}">(${sgnN(c.r.yearKeep - c.r.yearBase)})</span>`],
+    ['연 자동갱신 회원 (1분기 말)', c => num(c.r.autoMembers) + '명'],
+    ['당겨온 결제', c => c.r.pulled > 0 ? won(c.r.pulled) : '-']
+  ];
+  $('cmp').innerHTML = '<thead><tr><th></th>' + cols.map(c => `<th data-k="${c.k}" class="${c.sel ? 'sel' : ''}"><b>${c.name}</b>${c.desc}</th>`).join('') + '</tr></thead><tbody>' +
+    rowsC.map(([lab, fn, cl]) => `<tr class="${cl || ''}"><td class="rowlab">${lab}</td>` + cols.map(c => `<td class="${c.sel ? 'sel' : ''}">${fn(c)}</td>`).join('') + '</tr>').join('') + '</tbody>';
+  document.querySelectorAll('#cmp thead th[data-k]').forEach(th => th.addEventListener('click', () => { const k = th.dataset.k; if (!k) return; P = {...PRESETS[k]}; presetKey = k; render(); }));
+  const gap = T - R.net, need = $('need');
+  if (gap <= 0) { need.className = 'need ok'; need.textContent = `목표 달성 (${sgn(-gap)})`; }
+  else { need.className = 'need'; need.innerHTML = `목표까지 ${won(gap)} · ` + (R.needEarly <= 100 ? `조기 갱신 참여율 ${R.needEarly.toFixed(0)}% (${num(R.poolEarly*R.needEarly/100)}명)이면 달성` : `조기 갱신 참여율 100%로도 부족 (${won(R.poolEarly*OLD*D.annDisc*NET)} 한도)`); }
+
+  // 월별 차트
+  const W = 560, H = 290, L = 38, B = 30, Tp = 14, ch = H - B - Tp, tm = T/3;
+  const groups = [['1월',0],['2월',1],['3월',2]];
+  const maxV = Math.max(tm, ...R.monthBase, ...R.monthSc)*1.12, y = v => Tp + ch - v/maxV*ch;
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="월별 실수입: 현행 유지와 선택안">`;
+  for (let v = 0; v <= maxV; v += 1e8) svg += `<line x1="${L}" x2="${W}" y1="${y(v)}" y2="${y(v)}" stroke="#eef0f2"/><text x="${L-6}" y="${y(v)+4}" text-anchor="end" font-size="11" fill="#8b95a1">${(v/1e8).toFixed(0)}</text>`;
+  const gw = (W - L)/3, bw = 62;
+  groups.forEach(([lab, m], i) => {
+    const cx = L + gw*i + gw/2, pairs = [[R.base, cx - bw - 5, .55, '현행'], [R.sc, cx + 5, 1, '선택안']];
+    pairs.forEach(([o, x, op, t]) => { let acc = 0; STREAMS.forEach(([k,,c]) => { const v = o[k][m]*NET; if (v <= 0) return; const y1 = y(acc + v); svg += `<rect x="${x}" y="${y1}" width="${bw}" height="${Math.max(0, y(acc) - y1)}" fill="${c}" opacity="${op}"><title>${t} · ${STREAMS.find(s => s[0] === k)[1]} ${won(v)}</title></rect>`; acc += v; });
+      svg += `<text x="${x + bw/2}" y="${y(acc) - 5}" text-anchor="middle" font-size="11.5" font-weight="700" fill="#191f28">${(acc/1e8).toFixed(2)}</text><text x="${x + bw/2}" y="${H - B + 14}" text-anchor="middle" font-size="11" fill="#8b95a1">${t}</text>`; });
+    svg += `<text x="${cx}" y="${H - 2}" text-anchor="middle" font-size="12.5" font-weight="700" fill="#191f28">${lab}</text>`;
+  });
+  svg += `<line x1="${L}" x2="${W}" y1="${y(tm)}" y2="${y(tm)}" stroke="#d93f3f" stroke-dasharray="5 4" stroke-width="1.5"/><text x="${W-2}" y="${y(tm)-5}" text-anchor="end" font-size="11.5" font-weight="700" fill="#d93f3f">월 목표 ${(tm/1e8).toFixed(2)}</text></svg>`;
+  $('chart').innerHTML = svg;
+  $('legend').innerHTML = STREAMS.map(([,l,c]) => `<span><i style="background:${c}"></i>${l}</span>`).join('');
+
+  // 연결제 회원 흐름
+  $('flow-sub').textContent = `1분기 만료 ${num(R.expQ1)}명`;
+  const fl = ['1월','2월','3월'].map((lab, m) => { const e = R.mem.exp[m], a = R.mem.auto[m], o = R.mem.once[m], b = R.mem.baseRen[m], lostPol = Math.max(0, b - a - o);
+    return `<b>${lab}</b><div class="fb" title="만료 ${num(e)}명"><i style="width:${a/e*100}%;background:#168a5a"></i><i style="width:${o/e*100}%;background:#7fcfa9"></i><i style="width:${lostPol/e*100}%;background:#d93f3f"></i></div><span class="fn">${num(a+o)} / ${num(e)}명</span>`; }).join('');
+  $('flow').innerHTML = fl;
+  $('flow-legend').innerHTML = '<span><i style="background:#168a5a"></i>자동갱신 등록</span><span><i style="background:#7fcfa9"></i>1회 결제</span><span><i style="background:#d93f3f"></i>변경으로 이탈</span><span><i style="background:#f2f4f6;border:1px solid #e5e8eb"></i>원래 미갱신</span>';
+  const lostQ1 = R.baseRenQ1 - R.renQ1;
+  $('flow-tbl').innerHTML = `<tbody>
+    <tr><td>자동갱신 등록</td><td>${num(R.autoQ1)}명</td></tr>
+    <tr><td>1회 결제 (132,000)</td><td>${num(R.onceQ1)}명</td></tr>
+    <tr><td>${lostQ1 >= 0 ? '변경으로 이탈' : '정책으로 추가 갱신'}</td><td class="${lostQ1 > 0 ? 'neg' : 'pos'}">${num(Math.abs(lostQ1))}명</td></tr>
+    <tr><td>원래 미갱신 (재결제율 ${A.r0}%)</td><td>${num(R.expQ1 - R.baseRenQ1)}명</td></tr>
+    <tr><td>조기 갱신 (2~4분기 만료자)</td><td>${R.nEarly ? num(R.nEarly) + '명' : '-'}</td></tr>
+    <tr><td>월정액 → 연 전환</td><td>${R.conv ? num(R.conv) + '명' : '-'}</td></tr></tbody>`;
+
+  // 요금제별
+  const q = (o,k) => o[k].reduce((a,b) => a+b, 0)*NET;
+  let tb = 0, ts = 0;
+  $('mix').innerHTML = '<thead><tr><th>요금제</th><th>현행 유지 시</th><th>선택안</th><th>차이</th><th>1월</th><th>2월</th><th>3월</th></tr></thead><tbody>' + STREAMS.map(([k,l,c]) => { const b = q(R.base,k), s = q(R.sc,k); tb += b; ts += s;
+    return `<tr><td><i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:${c};margin-right:7px"></i>${l}</td><td>${b ? won(b) : '-'}</td><td>${s ? won(s) : '-'}</td><td class="${cls(s-b)}">${Math.abs(s-b) < 5e3 ? '-' : sgn(s-b)}</td>${[0,1,2].map(m => `<td>${R.sc[k][m] ? won(R.sc[k][m]*NET) : '-'}</td>`).join('')}</tr>`; }).join('') +
+    `</tbody><tfoot><tr><td>합계</td><td>${won(tb)}</td><td>${won(ts)}</td><td class="${cls(ts-tb)}">${sgn(ts-tb)}</td>${R.monthSc.map(v => `<td>${won(v)}</td>`).join('')}</tr></tfoot>`;
+
+  // 정책 상세
+  $('pol-name').textContent = presetKey ? PRESETS[presetKey].name + ' · ' + PRESETS[presetKey].desc : '직접 설정';
+  const pr = P.price.toLocaleString() + '원', rowsP = [
+    ['대상', `12/31 이전에 프리미엄 1년 · 2년권을 결제한 회원 (현재 ${num(A.base)}명)`],
+    ['갱신 가격', P.price === OLD ? `만료 30일 전 ~ 만료 후 30일 안에 갱신하면 ${pr} 유지. 자동갱신을 유지하는 동안 매년 같은 가격. 기간을 넘기면 새 요금 132,000원` : P.price === NEW ? `새 요금 ${pr} 적용 (기존 110,000원 대비 +20%)` : `만료 30일 전 ~ 만료 후 30일 안에 갱신하면 ${pr} (새 요금 132,000원 대비 11,000원 할인)`],
+    ['자동갱신', P.auto === 'must' ? '연 자동갱신 등록 필수. 결제 화면에서 갱신 주기 · 금액 · 해지 방법 별도 동의' : `자동갱신 등록 시 ${pr}, 등록 없이 1년 이용권 1회 결제는 132,000원. 결제 화면에서 선택`],
+    ['안내', P.notify ? '만료 D-30 · D-7 · 당일 메일과 로그인 배너, 만료 후 D+7 · D+30 복귀 안내. 메일 첫 줄에 갱신 가격과 기한' : '별도 안내 없음 (만료 후 재결제 시 새 요금 화면)'],
+    ['조기 갱신', P.early ? '2~4분기 만료 예정자가 1~3월에 미리 연장하면 110,000원 + 1개월 추가, 남은 기간 뒤에 12개월 이어 붙임. 자동갱신 등록 조건' : '없음'],
+    ['월정액 → 연 전환', P.convert ? '기존 프리미엄 월정액 회원에게 연 110,000원 제안 (월 9,900원 × 12 = 118,800원 대비 7% 할인). 전환 달부터 월 결제 중단' : '없음'],
+    ['2년권 · 유료 1년', '2년권 만료자는 같은 갱신 가격 적용. 유료 1년 만료자는 프리미엄 연 132,000원 또는 베이직 7일'],
+    ['자동갱신 고지', '갱신 결제 30일 전에 금액 · 결제일 · 해지 방법 메일 고지. 연 결제 첫 갱신은 27년 12월 31일분'],
+    ['필요 작업', ['기존 회원 판별 (1년 · 2년권 결제 이력)', P.price !== NEW ? '갱신 가격 적용 결제 화면' : '', P.auto === 'optional' ? '기존 1년 이용권 1회 결제 상품 유지 (132,000원)' : '', P.notify ? '만료 · 복귀 안내 메일과 배너' : '', P.early ? '조기 갱신 결제 (남은 기간 뒤 12개월 연장)' : '', P.convert ? '월정액 → 연 전환 결제 (전환 달 월 결제 중단)' : '', '갱신 사전 고지 메일'].filter(Boolean).join(' · ')]
+  ];
+  $('pol').innerHTML = '<tbody>' + rowsP.map(([a,b]) => `<tr><td>${a}</td><td>${b}</td></tr>`).join('') + '</tbody>';
+
+  // 기준 데이터 · 가정
+  const q1 = k => D.amt[k].slice(0,3).reduce((a,b) => a+b, 0), q1n = k => D.n[k].slice(0,3).reduce((a,b) => a+b, 0);
+  const rowsS = [
+    ['27년 1분기 목표 실수입 (25년 분기 평균)', won(T), 'sheet'],
+    ['26년 1분기 · 3분기 실수입', won(D.q26_1) + ' · ' + won(D.q26_3), 'sheet'],
+    ['26년 월별 전년비 (1 · 2 · 3월)', D.k26.map(v => ((v-1)*100).toFixed(1) + '%').join(' · '), 'sheet'],
+    ['실수입 환산 (결제액 ÷ 1.1 − 수수료 ' + (D.feeRate*100).toFixed(2) + '%)', '결제액 × ' + NET.toFixed(3), 'sheet'],
+    ['25년 1분기 프리미엄 1년 결제', num(q1n('1YP')) + '건 · ' + won(q1('1YP')), 'sheet'],
+    ['25년 1분기 프리미엄 2년 결제', num(q1n('2YP')) + '건 · ' + won(q1('2YP')), 'sheet'],
+    ['25년 1년권 결제의 1분기 비중', pct(D.ypShare.slice(0,3).reduce((a,b) => a+b, 0)), 'sheet'],
+    ['1년권 실결제 단가 / 정가 110,000', pct(D.annDisc), 'sheet'],
+    ['25년 프리미엄 월정액 월 유지율', pct(D.rho25), 'sheet'],
+    ['1월 기존 프리미엄 월정액 결제 회원 (추정)', num(R.legacy) + '명', 'assume'],
+    ['새 요금 (부가세 포함)', '월 13,200 · 연 132,000 · 베이직 7일 9,900 · 비즈니스 1인 9,900', 'input'],
+    ['현재 연결제 회원 수', num(A.base) + '명', 'input'],
+    ['재결제율 · 가격 반응 · 자동갱신 이탈 · 참여율', '왼쪽 가정 값', 'assume']
+  ];
+  const chip = {sheet:'<i class="chip c-sheet">시트</i>', assume:'<i class="chip c-assume">가정</i>', input:'<i class="chip c-input">입력</i>'};
+  $('src').innerHTML = '<tbody>' + rowsS.map(([a,b,c]) => `<tr><td>${a}</td><td>${b}</td><td>${chip[c]}</td></tr>`).join('') + '</tbody>';
+}
+
+buildSliders();
+$('preset').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; presetKey = b.dataset.v; P = {...PRESETS[presetKey]}; render(); });
+$('price').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; P.price = Number(b.dataset.v); matchPreset(); render(); });
+$('auto').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; P.auto = b.dataset.v; matchPreset(); render(); });
+$('level').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; levelKey = b.dataset.v; const keep = A.base; A = {...LEVELS[levelKey], base:keep}; render(); });
+['notify','early','convert'].forEach(id => $(id).addEventListener('change', e => { P[id] = e.target.checked; matchPreset(); render(); }));
+render();
+</script>
+
+
+</body></html>
