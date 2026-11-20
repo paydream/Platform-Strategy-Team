@@ -659,17 +659,25 @@ function mktBrief({ m, pm, cd, pd, mk, pmk, label }) {
   </div>`;
 }
 // 유입 출처 (지면·캠페인별 성과 + 유입 채널별 사용자): 예스폼싸인 탭과 싸인 마케팅 탭 모두에서 사용 (2026-11-19)
+// 결제 출처 이름 → 지면 그룹 (관리자 plGroup과 같은 규칙). 지면이 아닌 출처(검색·직접 유입 등)는 null
+const payPlace = n => /씽크존|^thinkzon/i.test(n) ? '씽크존' : /서식사전/.test(n) ? '서식사전' : /^메일링/.test(n) ? '메일링' : /네이버 카페/.test(n) ? '네이버 카페'
+  : /블로그/.test(n) && /^네이버 (공식 )?블로그|블로그 광고|파워콘텐츠/.test(n) ? (/광고|대행사|파워콘텐츠/.test(n) ? '블로그 광고' : '블로그 운영') : /온라인도장/.test(n) ? '온라인도장' : /^예스폼/.test(n) ? '예스폼 사이트 지면' : null;
 function srcSections({ m, pm, cd, pd, mk, pmk, label }) {
-  const pl = mk.place, plTot = mk.placeTot || [0, 0, 0], plMax = Math.max(...pl.map(r => r[1]), 1);
+  // 관리자 유입 결제 통계가 놓친 결제 중 GA4로 지면이 확인된 건을 더한다 (2026-11-20: 씽크존 thinkzon / banner 결제가 관리자 통계엔 0으로 나옴)
+  const gx = {}; let gxN = 0;
+  if (D.payments) for (const p of paysIn(SEL.s, SEL.e)) { if (!/^GA4:/.test(p[4] || '')) continue; const g = payPlace(p[3]); if (!g) continue; (gx[g] = gx[g] || [0, 0])[0]++; gx[g][1] += p[2]; gxN++; }
+  const pl = mk.place.map(r => { const x = gx[r[0]]; return x ? [r[0], r[1], r[2] + x[0], r[3] + x[1], x[0]] : [...r.slice(0, 4), 0]; });
+  for (const [g, x] of Object.entries(gx)) if (!pl.some(r => r[0] === g)) pl.push([g, 0, x[0], x[1], x[0]]);
+  const plTot = mk.placeTot || [0, 0, 0], plMax = Math.max(...pl.map(r => r[1]), 1);
   const prevPl = Object.fromEntries((pmk ? pmk.place : []).map(r => [r[0], r]));
   const ch = mk.ch, chTot = ch.reduce((a, r) => a + r[1], 0), chMax = Math.max(...ch.map(r => r[1]), 1);
   const prevCh = Object.fromEntries((pmk ? pmk.ch : []).map(r => [r[0], r]));
   return `
-  <section class="blk"><h2>지면·캠페인별 성과${ti('지면·캠페인별 성과')} <small>관리자 유입 결제 통계</small></h2>
+  <section class="blk"><h2>지면·캠페인별 성과${ti('지면·캠페인별 성과')} <small>관리자 유입 결제 통계${gxN ? ' · 결제는 GA4로 지면이 확인된 건 포함' : ''}</small></h2>
     <div class="two">
-      <div class="card"><div class="hd"><b>그룹별 방문 · 결제</b><span>등록 경로 방문 ${fmt(plTot[0])} · 결제 ${fmt(plTot[1])}건</span></div><div class="scroll"><table class="tbl">
+      <div class="card"><div class="hd"><b>그룹별 방문 · 결제</b><span>등록 경로 방문 ${fmt(plTot[0])} · 결제 ${fmt(plTot[1] + gxN)}건${gxN ? ` (GA4 확인 ${fmt(gxN)}건 포함)` : ''}</span></div><div class="scroll"><table class="tbl">
         <thead><tr><th>${TL('지면 그룹')}</th><th>방문</th><th>${TL('비중')}</th><th>${TL(CMP.col)}</th><th>${TL('결제')}</th><th>${TL('결제 금액')}</th><th>${TL('전환율')}</th></tr></thead>
-        <tbody>${pl.map(r => { const p = prevPl[r[0]]; return `<tr><td class="name">${esc(r[0])}</td><td>${fmt(r[1])}</td><td>${shareCell(r[1], plTot[0], plMax)}</td><td>${pm ? dtxt(diff(r[1], p && p[1], cd, pd)) : '-'}</td><td class="${r[2] ? 'best' : 'muted'}">${fmt(r[2])}</td><td>${r[3] ? won(r[3]) : '<span class="muted">-</span>'}</td><td>${pctTxt(pct(r[2], r[1]))}</td></tr>`; }).join('')}</tbody>
+        <tbody>${pl.map(r => { const p = prevPl[r[0]]; return `<tr><td class="name">${esc(r[0])}</td><td>${fmt(r[1])}</td><td>${shareCell(r[1], plTot[0], plMax)}</td><td>${pm ? dtxt(diff(r[1], p && p[1], cd, pd)) : '-'}</td><td class="${r[2] ? 'best' : 'muted'}">${fmt(r[2])}${r[4] ? `<span class="psm">GA4 확인 +${fmt(r[4])}</span>` : ''}</td><td>${r[3] ? won(r[3]) : '<span class="muted">-</span>'}</td><td>${pctTxt(pct(r[2], r[1]))}</td></tr>`; }).join('')}</tbody>
       </table></div></div>
       <div class="card"><div class="hd"><b>상위 지면</b></div>
         <ol class="toplist">${mk.top.slice(0, 8).map((r, k) => `<li><em>${k + 1}</em><div class="nm"><b>${esc(r[0])}</b><small>${esc(r[1])}</small></div>
