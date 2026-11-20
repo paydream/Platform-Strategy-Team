@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>예스폼싸인 · 문서/계약 자료실</title>
+<!--
+  예스폼싸인 문서/계약 자료실 — 검색 결과 없음 (2026-11-20)
+  Figma: 예스폼싸인_2025 › 13394:3827 (프레임 "20260125" · 1920 × 1466)
+  · 인기 서식은 Figma 와 같이 화면 캡처 이미지(images/popular-forms.png · 제목 · 카드 · 좌우 버튼 포함)
+  · 계약서 검색 → 검색어를 넣고 Enter → "○○(으)로 검색된 항목이 없습니다." 문구와 아래 파란 버튼 글자가 바뀜
+    (주소 뒤 ?q=검색어 로 열어도 같음 · 처음 값은 시안대로 "내용증명서")
+  · 많이 찾는 서식 칩 → 그 이름으로 검색 · 파란 버튼 → 예스폼을 새 창으로 엶
+  · 보기 방식(그리드 · 리스트) · 분류 고르기는 모양만 바뀜 (결과 목록 디자인이 없음)
+  · 스타일 css/style.css · 스크립트 js/main.js · 그림 images/
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="frame" id="frame">
+
+  <!-- 왼쪽 메뉴 (300 · #F6F8FC) -->
+  <aside class="nav">
+    <a class="nav__logo"><img src="images/logo-yesformsign.png" width="104" height="32" alt="예스폼싸인"></a>
+    <div class="nav__user">
+      <p class="nav__name">예스폼 <span class="nav__sir">님</span> <span class="nav__grade"><b>무료</b>회원</span></p>
+      <div class="nav__btns">
+        <a class="nav__btn nav__btn--start">계약 시작하기</a>
+        <a class="nav__btn nav__btn--plan">요금제 구매</a>
+      </div>
+    </div>
+    <ul class="nav__menu">
+      <li><a>내 계약 현황</a></li>
+      <li><a>서명 관리</a></li>
+      <li><a class="is-on" aria-current="page">문서/계약 자료실</a></li>
+      <li><a>주소록 관리</a></li>
+      <li><a>회원정보 관리</a></li>
+    </ul>
+    <div class="nav__foot"><a>고객센터</a><i aria-hidden="true"></i><a>로그아웃</a></div>
+  </aside>
+
+  <main class="main">
+    <!-- 머리말 -->
+    <header class="head">
+      <h1 class="head__title">문서/계약 자료실</h1>
+      <p class="head__desc">다양한 인기 계약서를 예스폼싸인에서 무료로 다운받으실 수 있습니다.</p>
+      <p class="head__path">문서/계약 자료실</p>
+    </header>
+
+    <!-- 인기 서식 — Figma 화면 캡처 이미지 (1376 × 529) -->
+    <section class="popular" aria-labelledby="popular-title">
+      <h2 class="sr-only" id="popular-title">인기 서식</h2>
+      <img class="popular__shot" src="images/popular-forms.png" width="1376" height="529" alt="인기 서식 — 개인정보활용동의서 · 건물 임대차계약서 · 부동산 월세 계약서 · 부동산임대계약서 양식 · 사직서">
+    </section>
+
+    <!-- 멤버십 배너 (1280 × 90) -->
+    <a class="banner">
+      <span class="banner__body">
+        <img class="banner__icon" src="images/banner-membership-icon.png" width="60" height="45" alt="">
+        <span class="banner__text">예스폼 프리미엄 회원 결제 시 예스폼싸인 계약 건수 증정 혜택까지!<br>패밀리사이트 멤버십 혜택을 한 눈에 확인하세요.</span>
+      </span>
+      <span class="banner__btn">예스폼 멤버십 구경하기</span>
+    </a>
+
+    <!-- 서식 목록 -->
+    <section class="forms" aria-label="서식 목록">
+      <div class="tools">
+        <div class="view" role="group" aria-label="보기 방식">
+          <button class="view__btn is-on" type="button" aria-pressed="true" aria-label="그리드로 보기" data-view="grid"><img src="images/ic-view-grid-on.png" width="16" height="16" alt=""></button>
+          <button class="view__btn" type="button" aria-pressed="false" aria-label="리스트로 보기" data-view="list"><img src="images/ic-view-list.png" width="20" height="14" alt=""></button>
+        </div>
+        <form class="tools__form" role="search" data-search-form>
+          <select class="select" aria-label="분류" data-category>
+            <option value="">전체</option>
+            <option>취업/고용</option>
+            <option>건설/공사</option>
+            <option>부동산</option>
+            <option>금전거래</option>
+            <option>물건거래</option>
+            <option>하청/용역</option>
+            <option>회사운영</option>
+            <option>기타문서</option>
+          </select>
+          <input class="search" type="search" placeholder="계약서 검색" aria-label="계약서 검색" autocomplete="off" data-search>
+        </form>
+      </div>
+
+      <!-- 검색 결과 없음 (1280 · 테두리 #E3E5E8 · 안쪽 40) -->
+      <div class="empty" aria-live="polite">
+        <div class="empty__top">
+          <span class="empty__icon"><img src="images/ic-empty-alert.svg" alt=""></span>
+          <div class="empty__text">
+            <p class="empty__title"><span class="empty__key" data-keyword>내용증명서</span><span>(으)로 검색된 항목이 없습니다.</span></p>
+            <p class="empty__desc">예스폼에서 더 다양한 서식과 계약서 양식을 만나보세요.</p>
+          </div>
+          <a class="btn-primary" href="https://www.yesform.com/" target="_blank" rel="noopener" data-yesform>
+            <span data-yesform-label>예스폼에서 내용증명서 검색하기</span>
+            <span class="btn-primary__icon"><img src="images/ic-alink-14.svg" alt=""></span>
+            <span class="sr-only">(새 창)</span>
+          </a>
+        </div>
+        <img class="empty__line" src="images/line-divider.svg" alt="">
+        <div class="hot">
+          <p class="hot__label">많이 찾는 서식</p>
+          <div class="hot__chips">
+            <button class="chip" type="button" data-chip>근로계약서</button>
+            <button class="chip" type="button" data-chip>차용증</button>
+            <button class="chip" type="button" data-chip>임대차계약서</button>
+            <button class="chip" type="button" data-chip>사직서</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>
