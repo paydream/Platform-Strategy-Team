@@ -2,184 +2,6 @@
   "version": 2,
   "projects": [
     {
-      "id": "20261110-164447-css",
-      "title": "[예스폼싸인] 2차 고도화 템플릿",
-      "team": "design",
-      "category": "웹 메인",
-      "desc": "",
-      "created": "2026.11.10",
-      "updated": "2026.11.20",
-      "hidden": false,
-      "final": null,
-      "versions": [
-        {
-          "id": "20261110-164447-css",
-          "label": "v1",
-          "title": "[예스폼싸인] 2차 고도화 템플릿",
-          "desc": "",
-          "created": "2026.11.10",
-          "folder": "archive/20261110-164447-css",
-          "preview": "archive/20261110-164447-css/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261110-164447-css/index.html"
-            }
-          ]
-        },
-        {
-          "id": "20261112-164035-images",
-          "label": "v2",
-          "title": "[예스폼싸인] 2차 고도화 템플릿",
-          "desc": "",
-          "created": "2026.11.12",
-          "folder": "archive/20261112-164035-images",
-          "preview": "archive/20261112-164035-images/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261112-164035-images/index.html"
-            }
-          ],
-          "figma": "https://www.figma.com/design/EXUWdUfToeHuFf1sblHGNd/?node-id=54169-29120"
-        },
-        {
-          "id": "20261117-161319-2",
-          "label": "v3",
-          "title": "[예스폼싸인] 2차 고도화 템플릿",
-          "desc": "",
-          "created": "2026.11.17",
-          "folder": "archive/20261117-161319-2",
-          "preview": "archive/20261117-161319-2/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261117-161319-2/index.html"
-            }
-          ],
-          "figma": "https://www.figma.com/design/EXUWdUfToeHuFf1sblHGNd/?node-id=54169-29120"
-        },
-        {
-          "id": "20261117-163734-2",
-          "label": "v4",
-          "title": "[예스폼싸인] 2차 고도화 템플릿",
-          "desc": "",
-          "created": "2026.11.17",
-          "folder": "archive/20261117-163734-2",
-          "preview": "archive/20261117-163734-2/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261117-163734-2/index.html"
-            }
-          ],
-          "figma": "https://www.figma.com/design/EXUWdUfToeHuFf1sblHGNd/?node-id=54169-29120"
-        },
-        {
-          "id": "20261119-141452-2",
-          "label": "v5",
-          "title": "[예스폼싸인] 2차 고도화 템플릿",
-          "desc": "",
-          "created": "2026.11.19",
-          "folder": "archive/20261119-141452-2",
-          "preview": "archive/20261119-141452-2/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261119-141452-2/index.html"
-            }
-          ],
-          "figma": "https://www.figma.com/design/EXUWdUfToeHuFf1sblHGNd/?node-id=54169-29120"
-        },
-        {
-          "id": "20261119-163335-2",
-          "label": "v6",
-          "title": "[예스폼싸인] 2차 고도화 템플릿",
-          "desc": "",
-          "created": "2026.11.19",
-          "folder": "archive/20261119-163335-2",
-          "preview": "archive/20261119-163335-2/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261119-163335-2/index.html"
-            }
-          ],
-          "figma": "https://www.figma.com/design/EXUWdUfToeHuFf1sblHGNd/?node-id=54169-29120"
-        },
-        {
-          "id": "20261120-090550-2",
-          "label": "v7",
-          "title": "[예스폼싸인] 2차 고도화 템플릿",
-          "desc": "",
-          "created": "2026.11.20",
-          "folder": "archive/20261120-090550-2",
-          "preview": "archive/20261120-090550-2/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261120-090550-2/index.html"
-            }
-          ],
-          "figma": "https://www.figma.com/design/EXUWdUfToeHuFf1sblHGNd/?node-id=54169-29120"
-        },
-        {
-          "id": "20261120-165703-2",
-          "label": "v8",
-          "title": "[예스폼싸인] 2차 고도화 템플릿",
-          "desc": "",
-          "created": "2026.11.20",
-          "folder": "archive/20261120-165703-2",
-          "preview": "archive/20261120-165703-2/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261120-165703-2/index.html"
-            }
-          ],
-          "figma": "https://www.figma.com/design/EXUWdUfToeHuFf1sblHGNd/?node-id=54169-29120"
-        }
-      ],
-      "figma": "https://www.figma.com/design/EXUWdUfToeHuFf1sblHGNd/"
-    },
-    {
-      "id": "20261120-160136-yesform-membership-simulation",
-      "title": "멤버십 요금제 시뮬레이션 (2027년 1분기)",
-      "team": "planning",
-      "category": "요금제",
-      "desc": "27년 1분기 목표 실수입 대비 새 요금제·기존 연결제 회원 갱신 정책안 시뮬레이션",
-      "created": "2026.11.20",
-      "updated": "2026.11.20",
-      "hidden": false,
-      "final": null,
-      "versions": [
-        {
-          "id": "20261120-160136-yesform-membership-simulation",
-          "label": "v1",
-          "title": "멤버십 요금제 시뮬레이션 (2027년 1분기)",
-          "desc": "정책안 A~E 비교, 월별 실수입, 연결제 회원 흐름, 가정 조절",
-          "created": "2026.11.20",
-          "folder": "archive/20261120-160136-yesform-membership-simulation",
-          "preview": "archive/20261120-160136-yesform-membership-simulation/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시뮬레이션",
-              "href": "archive/20261120-160136-yesform-membership-simulation/index.html"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "id": "20261116-125722-yesform-brief-timeline-v1",
       "title": "예스폼 메인 로그인 모달 (연말연초 타임라인)",
       "team": "design",
@@ -547,6 +369,201 @@
             }
           ],
           "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX/?node-id=200-591"
+        },
+        {
+          "id": "20261120-165901-yesform-brief-timeline-v22-admin",
+          "label": "v22 · 콘텐츠 관리 (시트 표 + 모달 미리보기)",
+          "title": "예스폼 메인 로그인 모달 (연말연초 타임라인)",
+          "desc": "관리자 형태: 시트 「모달_확정안_서식」 21열을 표로 보여 주고, 칸을 고치면 위 모달 미리보기(확정안 v21)가 바로 바뀜. 시트 실시간 비교(다른 칸 빨간 줄), 시트 값으로 바꾸기, 되돌리기, 시트용 복사·CSV, 행 추가·삭제, 화면 크기 전환, 전체 넘침 점검.",
+          "created": "2026.11.20",
+          "folder": "archive/20261120-165901-yesform-brief-timeline-v22-admin",
+          "preview": "archive/20261120-165901-yesform-brief-timeline-v22-admin/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "콘텐츠 관리 · 모달 미리보기",
+              "href": "archive/20261120-165901-yesform-brief-timeline-v22-admin/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX/?node-id=200-591"
+        }
+      ]
+    },
+    {
+      "id": "20261110-164447-css",
+      "title": "[예스폼싸인] 2차 고도화 템플릿",
+      "team": "design",
+      "category": "웹 메인",
+      "desc": "",
+      "created": "2026.11.10",
+      "updated": "2026.11.20",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261110-164447-css",
+          "label": "v1",
+          "title": "[예스폼싸인] 2차 고도화 템플릿",
+          "desc": "",
+          "created": "2026.11.10",
+          "folder": "archive/20261110-164447-css",
+          "preview": "archive/20261110-164447-css/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261110-164447-css/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261112-164035-images",
+          "label": "v2",
+          "title": "[예스폼싸인] 2차 고도화 템플릿",
+          "desc": "",
+          "created": "2026.11.12",
+          "folder": "archive/20261112-164035-images",
+          "preview": "archive/20261112-164035-images/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261112-164035-images/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/EXUWdUfToeHuFf1sblHGNd/?node-id=54169-29120"
+        },
+        {
+          "id": "20261117-161319-2",
+          "label": "v3",
+          "title": "[예스폼싸인] 2차 고도화 템플릿",
+          "desc": "",
+          "created": "2026.11.17",
+          "folder": "archive/20261117-161319-2",
+          "preview": "archive/20261117-161319-2/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261117-161319-2/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/EXUWdUfToeHuFf1sblHGNd/?node-id=54169-29120"
+        },
+        {
+          "id": "20261117-163734-2",
+          "label": "v4",
+          "title": "[예스폼싸인] 2차 고도화 템플릿",
+          "desc": "",
+          "created": "2026.11.17",
+          "folder": "archive/20261117-163734-2",
+          "preview": "archive/20261117-163734-2/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261117-163734-2/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/EXUWdUfToeHuFf1sblHGNd/?node-id=54169-29120"
+        },
+        {
+          "id": "20261119-141452-2",
+          "label": "v5",
+          "title": "[예스폼싸인] 2차 고도화 템플릿",
+          "desc": "",
+          "created": "2026.11.19",
+          "folder": "archive/20261119-141452-2",
+          "preview": "archive/20261119-141452-2/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261119-141452-2/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/EXUWdUfToeHuFf1sblHGNd/?node-id=54169-29120"
+        },
+        {
+          "id": "20261119-163335-2",
+          "label": "v6",
+          "title": "[예스폼싸인] 2차 고도화 템플릿",
+          "desc": "",
+          "created": "2026.11.19",
+          "folder": "archive/20261119-163335-2",
+          "preview": "archive/20261119-163335-2/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261119-163335-2/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/EXUWdUfToeHuFf1sblHGNd/?node-id=54169-29120"
+        },
+        {
+          "id": "20261120-090550-2",
+          "label": "v7",
+          "title": "[예스폼싸인] 2차 고도화 템플릿",
+          "desc": "",
+          "created": "2026.11.20",
+          "folder": "archive/20261120-090550-2",
+          "preview": "archive/20261120-090550-2/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261120-090550-2/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/EXUWdUfToeHuFf1sblHGNd/?node-id=54169-29120"
+        },
+        {
+          "id": "20261120-165703-2",
+          "label": "v8",
+          "title": "[예스폼싸인] 2차 고도화 템플릿",
+          "desc": "",
+          "created": "2026.11.20",
+          "folder": "archive/20261120-165703-2",
+          "preview": "archive/20261120-165703-2/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261120-165703-2/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/EXUWdUfToeHuFf1sblHGNd/?node-id=54169-29120"
+        }
+      ],
+      "figma": "https://www.figma.com/design/EXUWdUfToeHuFf1sblHGNd/"
+    },
+    {
+      "id": "20261120-160136-yesform-membership-simulation",
+      "title": "멤버십 요금제 시뮬레이션 (2027년 1분기)",
+      "team": "planning",
+      "category": "요금제",
+      "desc": "27년 1분기 목표 실수입 대비 새 요금제·기존 연결제 회원 갱신 정책안 시뮬레이션",
+      "created": "2026.11.20",
+      "updated": "2026.11.20",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261120-160136-yesform-membership-simulation",
+          "label": "v1",
+          "title": "멤버십 요금제 시뮬레이션 (2027년 1분기)",
+          "desc": "정책안 A~E 비교, 월별 실수입, 연결제 회원 흐름, 가정 조절",
+          "created": "2026.11.20",
+          "folder": "archive/20261120-160136-yesform-membership-simulation",
+          "preview": "archive/20261120-160136-yesform-membership-simulation/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시뮬레이션",
+              "href": "archive/20261120-160136-yesform-membership-simulation/index.html"
+            }
+          ]
         }
       ]
     },
