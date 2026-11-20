@@ -85,8 +85,8 @@
       "updated": "2026.11.20",
       "hidden": false,
       "final": {
-        "version": "20261120-165901-yesform-brief-timeline-v22-admin",
-        "href": "archive/20261120-165901-yesform-brief-timeline-v22-admin/index.html"
+        "version": "20261120-141045-yesform-brief-timeline-v21-final",
+        "href": "archive/20261120-141045-yesform-brief-timeline-v21-final/index.html"
       },
       "versions": [
         {
@@ -440,23 +440,6 @@
             {
               "label": "최종 확정안 · B안",
               "href": "archive/20261120-141045-yesform-brief-timeline-v21-final/index.html"
-            }
-          ],
-          "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX/?node-id=200-591"
-        },
-        {
-          "id": "20261120-165901-yesform-brief-timeline-v22-admin",
-          "label": "v22 · 콘텐츠 관리 (시트 표 + 모달 미리보기)",
-          "title": "예스폼 메인 로그인 모달 (연말연초 타임라인)",
-          "desc": "관리자 형태: 시트 「모달_확정안_서식」 21열을 표로 보여 주고, 칸을 고치면 위 모달 미리보기(확정안 v21)가 바로 바뀜. 시트 실시간 비교(다른 칸 빨간 줄), 시트 값으로 바꾸기, 되돌리기, 시트용 복사·CSV, 행 추가·삭제, 화면 크기 전환, 전체 넘침 점검.",
-          "created": "2026.11.20",
-          "folder": "archive/20261120-165901-yesform-brief-timeline-v22-admin",
-          "preview": "archive/20261120-165901-yesform-brief-timeline-v22-admin/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "콘텐츠 관리 · 모달 미리보기",
-              "href": "archive/20261120-165901-yesform-brief-timeline-v22-admin/index.html"
             }
           ],
           "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX/?node-id=200-591"
@@ -3312,6 +3295,28 @@
     }
   ],
   "trash": [
+    {
+      "type": "version",
+      "projectId": "20261116-125722-yesform-brief-timeline-v1",
+      "deleted": "2026.11.20",
+      "version": {
+        "id": "20261120-165901-yesform-brief-timeline-v22-admin",
+        "label": "v22 · 콘텐츠 관리 (시트 표 + 모달 미리보기)",
+        "title": "예스폼 메인 로그인 모달 (연말연초 타임라인)",
+        "desc": "관리자 형태: 시트 「모달_확정안_서식」 21열을 표로 보여 주고, 칸을 고치면 위 모달 미리보기(확정안 v21)가 바로 바뀜. 시트 실시간 비교(다른 칸 빨간 줄), 시트 값으로 바꾸기, 되돌리기, 시트용 복사·CSV, 행 추가·삭제, 화면 크기 전환, 전체 넘침 점검.",
+        "created": "2026.11.20",
+        "folder": "archive/20261120-165901-yesform-brief-timeline-v22-admin",
+        "preview": "archive/20261120-165901-yesform-brief-timeline-v22-admin/index.html",
+        "hidden": false,
+        "items": [
+          {
+            "label": "콘텐츠 관리 · 모달 미리보기",
+            "href": "archive/20261120-165901-yesform-brief-timeline-v22-admin/index.html"
+          }
+        ],
+        "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX/?node-id=200-591"
+      }
+    },
     {
       "type": "project",
       "deleted": "2026.11.17",
