@@ -2,6 +2,51 @@
   "version": 2,
   "projects": [
     {
+      "id": "20261120-160136-yesform-membership-simulation",
+      "title": "멤버십 요금제 시뮬레이션 (2027년 1분기)",
+      "team": "planning",
+      "category": "요금제",
+      "desc": "27년 1분기 목표 실수입 대비 새 요금제·기존 연결제 회원 갱신 정책안 시뮬레이션",
+      "created": "2026.11.20",
+      "updated": "2026.11.20",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261120-160136-yesform-membership-simulation",
+          "label": "v1",
+          "title": "멤버십 요금제 시뮬레이션 (2027년 1분기)",
+          "desc": "정책안 A~E 비교, 월별 실수입, 연결제 회원 흐름, 가정 조절",
+          "created": "2026.11.20",
+          "folder": "archive/20261120-160136-yesform-membership-simulation",
+          "preview": "archive/20261120-160136-yesform-membership-simulation/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시뮬레이션",
+              "href": "archive/20261120-160136-yesform-membership-simulation/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261120-170358-yesform-membership-simulation-v2",
+          "label": "v2",
+          "title": "멤버십 요금제 시뮬레이션 (2027년 1분기)",
+          "desc": "정책 3가지(충성고객 플랜 · 정액제 쿠폰 유지 · 2년 고객 플랜) 비교로 단순화, 관리자 실제 값(회원 수 · 만료 인원 · 재결제율) 반영",
+          "created": "2026.11.20",
+          "folder": "archive/20261120-170358-yesform-membership-simulation-v2",
+          "preview": "archive/20261120-170358-yesform-membership-simulation-v2/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시뮬레이션",
+              "href": "archive/20261120-170358-yesform-membership-simulation-v2/index.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "20261120-170306-yesform-brief-admin",
       "title": "연말연초 업무 브리핑 모달 · 콘텐츠 관리 (관리자)",
       "team": "planning",
@@ -566,35 +611,6 @@
         }
       ],
       "figma": "https://www.figma.com/design/EXUWdUfToeHuFf1sblHGNd/"
-    },
-    {
-      "id": "20261120-160136-yesform-membership-simulation",
-      "title": "멤버십 요금제 시뮬레이션 (2027년 1분기)",
-      "team": "planning",
-      "category": "요금제",
-      "desc": "27년 1분기 목표 실수입 대비 새 요금제·기존 연결제 회원 갱신 정책안 시뮬레이션",
-      "created": "2026.11.20",
-      "updated": "2026.11.20",
-      "hidden": false,
-      "final": null,
-      "versions": [
-        {
-          "id": "20261120-160136-yesform-membership-simulation",
-          "label": "v1",
-          "title": "멤버십 요금제 시뮬레이션 (2027년 1분기)",
-          "desc": "정책안 A~E 비교, 월별 실수입, 연결제 회원 흐름, 가정 조절",
-          "created": "2026.11.20",
-          "folder": "archive/20261120-160136-yesform-membership-simulation",
-          "preview": "archive/20261120-160136-yesform-membership-simulation/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시뮬레이션",
-              "href": "archive/20261120-160136-yesform-membership-simulation/index.html"
-            }
-          ]
-        }
-      ]
     },
     {
       "id": "20261113-112032-yesform-membership-plan",
