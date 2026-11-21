@@ -2,6 +2,83 @@
   "version": 2,
   "projects": [
     {
+      "id": "20261120-170306-yesform-brief-admin",
+      "title": "연말연초 업무 브리핑 모달 · 콘텐츠 관리 (관리자)",
+      "team": "planning",
+      "category": "관리자",
+      "desc": "예스폼 메인 로그인 모달(연말연초 업무 브리핑)의 콘텐츠 관리 화면. 시트 「모달_확정안_서식」 내용을 표로 보여 주고, 표를 고치면 모달 미리보기가 바로 바뀜.",
+      "created": "2026.11.20",
+      "updated": "2026.11.21",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261120-170306-yesform-brief-admin",
+          "label": "v1 · 시트 표 + 모달 미리보기",
+          "title": "연말연초 업무 브리핑 모달 · 콘텐츠 관리 (관리자)",
+          "desc": "시트 「모달_확정안_서식」 21열 표 편집 → 모달 미리보기(확정안 v21) 즉시 반영. 시트 실시간 비교, 시트 값으로 바꾸기, 되돌리기, 시트용 복사·CSV, 행 추가·삭제, 화면 크기 전환, 전체 넘침 점검.",
+          "created": "2026.11.20",
+          "folder": "archive/20261120-170306-yesform-brief-admin",
+          "preview": "archive/20261120-170306-yesform-brief-admin/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "콘텐츠 관리 · 모달 미리보기",
+              "href": "archive/20261120-170306-yesform-brief-admin/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261120-172951-yesform-brief-admin-v2",
+          "label": "v2 · 고유번호 열 추가 (시트 25열)",
+          "title": "연말연초 업무 브리핑 모달 · 콘텐츠 관리 (관리자)",
+          "desc": "시트에 서식1~3·블로그 고유번호 4열이 추가되어 표를 25열로 맞춤(고유번호 열은 모달에 표시되지 않음). 시트의 화면 항목명·비고를 확정안과 맞춰 처음 열 때 「시트와 같음」.",
+          "created": "2026.11.20",
+          "folder": "archive/20261120-172951-yesform-brief-admin-v2",
+          "preview": "archive/20261120-172951-yesform-brief-admin-v2/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "콘텐츠 관리 · 모달 미리보기",
+              "href": "archive/20261120-172951-yesform-brief-admin-v2/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261120-173956-yesform-brief-admin-v3",
+          "label": "v3 · 시트 열 번호 + 번호 안내도",
+          "title": "연말연초 업무 브리핑 모달 · 콘텐츠 관리 (관리자)",
+          "desc": "시트 머리글에 화면 노출 번호(①~⑭)가 붙어 표 머리글에도 같은 번호 표시. 번호 붙은 머리글로 시트 비교·복사. 미리보기 줄에 「번호 안내도」(모달 스크린샷 번호 표기) 링크 추가.",
+          "created": "2026.11.20",
+          "folder": "archive/20261120-173956-yesform-brief-admin-v3",
+          "preview": "archive/20261120-173956-yesform-brief-admin-v3/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "콘텐츠 관리 · 모달 미리보기",
+              "href": "archive/20261120-173956-yesform-brief-admin-v3/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261121-115515-yesform-brief-admin-v4",
+          "label": "v4 · 표시값 열(⑮~⑱) 시트 연동",
+          "title": "연말연초 업무 브리핑 모달 · 콘텐츠 관리 (관리자)",
+          "desc": "시트에 추가된 ⑮ 목록 날짜·요일, ⑯ 목록 배지, ⑰ 상세 배지, ⑱ 시작일·종료일을 표에서 직접 읽고 씀. 경과·D-day는 시트 「개발 참고」 규칙대로 계산(시트만으로 만든 미리보기 = 확정안 v21, 42건 일치). 일정·유형을 고치면 ⑮~⑱ 자동 계산. 번호 안내도 갱신.",
+          "created": "2026.11.21",
+          "folder": "archive/20261121-115515-yesform-brief-admin-v4",
+          "preview": "archive/20261121-115515-yesform-brief-admin-v4/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "콘텐츠 관리 · 모달 미리보기",
+              "href": "archive/20261121-115515-yesform-brief-admin-v4/index.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "20261110-164447-css",
       "title": "[예스폼싸인] 2차 고도화 템플릿",
       "team": "design",
@@ -255,67 +332,6 @@
             {
               "label": "시뮬레이션",
               "href": "archive/20261120-174532-yesform-membership-simulation-v5/index.html"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "20261120-170306-yesform-brief-admin",
-      "title": "연말연초 업무 브리핑 모달 · 콘텐츠 관리 (관리자)",
-      "team": "planning",
-      "category": "관리자",
-      "desc": "예스폼 메인 로그인 모달(연말연초 업무 브리핑)의 콘텐츠 관리 화면. 시트 「모달_확정안_서식」 내용을 표로 보여 주고, 표를 고치면 모달 미리보기가 바로 바뀜.",
-      "created": "2026.11.20",
-      "updated": "2026.11.20",
-      "hidden": false,
-      "final": null,
-      "versions": [
-        {
-          "id": "20261120-170306-yesform-brief-admin",
-          "label": "v1 · 시트 표 + 모달 미리보기",
-          "title": "연말연초 업무 브리핑 모달 · 콘텐츠 관리 (관리자)",
-          "desc": "시트 「모달_확정안_서식」 21열 표 편집 → 모달 미리보기(확정안 v21) 즉시 반영. 시트 실시간 비교, 시트 값으로 바꾸기, 되돌리기, 시트용 복사·CSV, 행 추가·삭제, 화면 크기 전환, 전체 넘침 점검.",
-          "created": "2026.11.20",
-          "folder": "archive/20261120-170306-yesform-brief-admin",
-          "preview": "archive/20261120-170306-yesform-brief-admin/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "콘텐츠 관리 · 모달 미리보기",
-              "href": "archive/20261120-170306-yesform-brief-admin/index.html"
-            }
-          ]
-        },
-        {
-          "id": "20261120-172951-yesform-brief-admin-v2",
-          "label": "v2 · 고유번호 열 추가 (시트 25열)",
-          "title": "연말연초 업무 브리핑 모달 · 콘텐츠 관리 (관리자)",
-          "desc": "시트에 서식1~3·블로그 고유번호 4열이 추가되어 표를 25열로 맞춤(고유번호 열은 모달에 표시되지 않음). 시트의 화면 항목명·비고를 확정안과 맞춰 처음 열 때 「시트와 같음」.",
-          "created": "2026.11.20",
-          "folder": "archive/20261120-172951-yesform-brief-admin-v2",
-          "preview": "archive/20261120-172951-yesform-brief-admin-v2/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "콘텐츠 관리 · 모달 미리보기",
-              "href": "archive/20261120-172951-yesform-brief-admin-v2/index.html"
-            }
-          ]
-        },
-        {
-          "id": "20261120-173956-yesform-brief-admin-v3",
-          "label": "v3 · 시트 열 번호 + 번호 안내도",
-          "title": "연말연초 업무 브리핑 모달 · 콘텐츠 관리 (관리자)",
-          "desc": "시트 머리글에 화면 노출 번호(①~⑭)가 붙어 표 머리글에도 같은 번호 표시. 번호 붙은 머리글로 시트 비교·복사. 미리보기 줄에 「번호 안내도」(모달 스크린샷 번호 표기) 링크 추가.",
-          "created": "2026.11.20",
-          "folder": "archive/20261120-173956-yesform-brief-admin-v3",
-          "preview": "archive/20261120-173956-yesform-brief-admin-v3/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "콘텐츠 관리 · 모달 미리보기",
-              "href": "archive/20261120-173956-yesform-brief-admin-v3/index.html"
             }
           ]
         }
