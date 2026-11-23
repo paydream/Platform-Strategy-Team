@@ -2,6 +2,35 @@
   "version": 2,
   "projects": [
     {
+      "id": "20261123-111007-channel-conversion-2026-10-11",
+      "title": "채널별 전환율 (10월·11월)",
+      "team": "planning",
+      "category": "데이터",
+      "desc": "GA4 싸인·예스폼 채널별 결제 전환율 10월·11월(1~22일) 비교",
+      "created": "2026.11.23",
+      "updated": "2026.11.23",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261123-111007-channel-conversion-2026-10-11",
+          "label": "최종본",
+          "title": "채널별 전환율 (10월·11월)",
+          "desc": "10월·11월 채널별 결제 전환율, 소스/매체 상위",
+          "created": "2026.11.23",
+          "folder": "archive/20261123-111007-channel-conversion-2026-10-11",
+          "preview": "archive/20261123-111007-channel-conversion-2026-10-11/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "채널별 전환율 10월·11월",
+              "href": "archive/20261123-111007-channel-conversion-2026-10-11/index.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "20261113-112032-yesform-membership-plan",
       "title": "예스폼 멤버십 요금제 변경 계획안 (2027)",
       "team": "planning",
