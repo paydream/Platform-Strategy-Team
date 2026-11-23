@@ -2,6 +2,35 @@
   "version": 2,
   "projects": [
     {
+      "id": "20261123-173640-design",
+      "title": "[예스폼] 이용요금 디자인 시안",
+      "team": "design",
+      "category": "웹 메인",
+      "desc": "",
+      "created": "2026.11.23",
+      "updated": "2026.11.23",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261123-173640-design",
+          "label": "v1",
+          "title": "[예스폼] 이용요금 디자인 시안",
+          "desc": "",
+          "created": "2026.11.23",
+          "folder": "archive/20261123-173640-design",
+          "preview": "archive/20261123-173640-design/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261123-173640-design/index.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "20261113-112032-yesform-membership-plan",
       "title": "예스폼 멤버십 요금제 변경 계획안 (2027)",
       "team": "planning",

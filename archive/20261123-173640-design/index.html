@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>예스폼 · 이용요금</title>
+<!--
+  예스폼 멤버십 이용요금 (2026-11-23)
+  Figma: 디자인가이드_2025 › picing 6366:14703 (1280 폭)
+  · 결제 주기(월 결제 · 연 결제) → 프리미엄 · 비즈니스 금액이 바뀜 (처음엔 연 결제)
+  · 비즈니스 인원 −/+ → 합계 금액을 다시 계산 (2명부터)
+  · 자주 묻는 질문 → 누른 질문만 펼침
+  · 스타일 css/style.css · 스크립트 js/main.js · 그림 images/
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- 헤더 (110 · 아래 선 #EAEAEA) -->
+<header class="gnb">
+  <div class="gnb__in">
+    <div class="gnb__left">
+      <a class="gnb__logo" href="#"><img src="images/logo-yesform.svg" width="78" height="34" alt="예스폼"></a>
+      <p class="gnb__cat">이용요금</p>
+      <form class="gnb__search" role="search" onsubmit="return false">
+        <input class="gnb__input" type="search" value="내용증명" aria-label="서식 검색">
+        <button class="gnb__go" type="submit" aria-label="검색"><img src="images/ic-search-30.svg" width="30" height="30" alt=""></button>
+      </form>
+      <label class="gnb__all"><input class="cbox" type="checkbox"><span>전체 검색</span></label>
+    </div>
+    <nav class="gnb__util" aria-label="회원 메뉴">
+      <a class="gnb__item" href="#"><img src="images/ic-join-24.svg" width="24" height="24" alt="">회원가입</a>
+      <a class="gnb__item" href="#" aria-current="page"><img src="images/ic-charge-24.svg" width="24" height="24" alt="">이용요금</a>
+      <a class="gnb__item" href="#"><img src="images/ic-call-24.svg" width="24" height="24" alt="">고객센터</a>
+      <a class="gnb__item" href="#"><img src="images/ic-login-24.svg" width="24" height="24" alt="">로그인</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- 요금 안내 + 요금제 카드 -->
+  <section class="hero">
+    <div class="hero__head">
+      <h1 class="hero__title">예스폼 멤버십 요금 안내</h1>
+      <p class="hero__desc">980만 개인 / 기업이 선택한 국내 1위 서식 플랫폼<br>프리미엄은 물론, 다양한 유료 멤버십으로 약 100만개의 서식을 무제한으로 이용하세요.</p>
+    </div>
+
+    <div class="billing" role="group" aria-label="결제 주기">
+      <button class="billing__btn" type="button" data-billing="month" aria-pressed="false">월 결제</button>
+      <button class="billing__btn is-on" type="button" data-billing="year" aria-pressed="true">연 결제
+        <span class="tip" aria-hidden="true"><span class="tip__box">최대 17% 절약</span><i class="tip__arrow"></i></span>
+      </button>
+    </div>
+
+    <div class="plans">
+      <!-- 무료 -->
+      <article class="plan">
+        <div class="plan__ribbon"></div>
+        <div class="plan__body">
+          <div class="plan__head">
+            <h2 class="plan__name">무료</h2>
+            <p class="plan__desc">서식을 둘러보고 가볍게 써 보세요</p>
+          </div>
+          <div class="plan__price">
+            <p class="plan__row"><strong class="plan__amount">0원</strong></p>
+            <p class="plan__note">언제까지나 무료</p>
+          </div>
+          <a class="btn btn--lg btn--tertiary" href="#">무료로 시작하기</a>
+          <hr class="plan__line">
+          <div class="plan__feats">
+            <p class="plan__inc">기본 혜택</p>
+            <ul class="feats">
+              <li>무료 서식 이용</li>
+              <li>유료 서식 미리보기</li>
+              <li>에디터 AI 체험</li>
+              <li>예스폼싸인 전자계약 체험 (월 1건)</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <!-- 베이직 -->
+      <article class="plan">
+        <div class="plan__ribbon"></div>
+        <div class="plan__body">
+          <div class="plan__head">
+            <h2 class="plan__name">베이직</h2>
+            <p class="plan__desc">필요할 때 7일만 쓰세요</p>
+          </div>
+          <div class="plan__price">
+            <p class="plan__row"><strong class="plan__amount">9,000원</strong><span class="plan__unit">/ 7일</span></p>
+            <p class="plan__note">1회 결제 · 자동결제 없음</p>
+          </div>
+          <a class="btn btn--lg btn--tertiary" href="#">7일 이용권 결제하기</a>
+          <hr class="plan__line">
+          <div class="plan__feats">
+            <p class="plan__inc">무료의 모든 혜택 +</p>
+            <ul class="feats">
+              <li>유료 서식 7일간 무제한 다운로드</li>
+              <li>프리미엄 서식 미리보기</li>
+              <li>한 번만 결제 · 자동결제 없음</li>
+              <li>7일 뒤 자동으로 끝나요</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <!-- 프리미엄 (추천) -->
+      <article class="plan plan--best">
+        <div class="plan__ribbon">가장 많이 선택</div>
+        <div class="plan__body">
+          <div class="plan__head">
+            <h2 class="plan__name">프리미엄</h2>
+            <p class="plan__desc">모든 서식과 전자계약을 한 번에</p>
+          </div>
+          <div class="plan__price">
+            <p class="plan__row"><strong class="plan__amount" data-price="premium">10,000원</strong><span class="plan__unit">/ 월</span></p>
+            <p class="plan__note" data-note="premium">1년 120,000원 한 번에 결제</p>
+            <span class="chip" data-year-only>17% 절약</span>
+          </div>
+          <a class="btn btn--lg btn--yesform" href="#">프리미엄 시작하기</a>
+          <hr class="plan__line">
+          <div class="plan__feats">
+            <p class="plan__inc">베이직의 모든 혜택 +</p>
+            <ul class="feats">
+              <li>전 서식 무제한 다운로드</li>
+              <li>예스폼 에디터로 바로 작성</li>
+              <li class="is-em">예스폼싸인 전자계약 월 10건</li>
+              <li>회사 정보 · 직인 자동 입력</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <!-- 비즈니스 -->
+      <article class="plan">
+        <div class="plan__ribbon"></div>
+        <div class="plan__body">
+          <div class="plan__head">
+            <h2 class="plan__name">비즈니스</h2>
+            <p class="plan__desc">팀이 함께 쓰는 서식과 전자계약</p>
+          </div>
+          <div class="plan__price">
+            <p class="plan__row"><strong class="plan__amount" data-price="business">7,500원</strong><span class="plan__unit">/ 월 · 1인</span></p>
+            <p class="plan__note" data-note="business">1년 90,000원 (1인) 한 번에 결제</p>
+            <div class="seats">
+              <div class="seats__row">
+                <span class="seats__label" id="seats-label">인원</span>
+                <div class="stepper" role="group" aria-labelledby="seats-label">
+                  <button class="stepper__btn" type="button" data-step="-1" aria-label="인원 줄이기">−</button>
+                  <output class="stepper__count" data-seats aria-live="polite">2명</output>
+                  <button class="stepper__btn" type="button" data-step="1" aria-label="인원 늘리기">+</button>
+                </div>
+              </div>
+              <p class="seats__total" data-total>합계 180,000원 / 년</p>
+            </div>
+          </div>
+          <a class="btn btn--lg btn--tertiary" href="#">비즈니스 문의하기</a>
+          <hr class="plan__line">
+          <div class="plan__feats">
+            <p class="plan__inc">프리미엄의 모든 혜택 +</p>
+            <ul class="feats">
+              <li>프리미엄의 모든 기능</li>
+              <li>전자계약 공유 한도 확대</li>
+              <li>여러 명 동시 접속</li>
+              <li>참잘했어요 포함</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <p class="hero__vat">표시 금액은 부가세 별도 금액이에요. 월 결제는 12개월 약정이고, 베이직은 1회 결제예요.</p>
+  </section>
+
+  <!-- 프로모션 (120 · #E2F2FF) -->
+  <section class="nudge" aria-label="프로모션">
+    <div class="nudge__in">
+      <div class="nudge__text">
+        <h2 class="nudge__title">프로모션 내용</h2>
+        <p class="nudge__desc">베이직 두 번이면 18,000원이에요. 프리미엄은 한 달 10,000원으로 모든 서식과 전자계약을 써요.</p>
+      </div>
+      <a class="btn btn--lg btn--yesform nudge__btn" href="#">프리미엄 시작하기</a>
+    </div>
+  </section>
+
+  <!-- 확 달라진 프리미엄 혜택 -->
+  <section class="benefit">
+    <div class="sec-head">
+      <h2 class="sec-head__title">확 달라진 프리미엄 혜택</h2>
+      <p class="sec-head__desc">서식을 찾는 데서 끝나지 않고, 작성하고 계약을 보내는 데까지 한 번에 이어져요.</p>
+    </div>
+    <div class="benefit__body">
+      <div class="pills" role="tablist" aria-label="프리미엄 혜택">
+        <button class="pill is-on" type="button" role="tab" aria-selected="true">무제한 다운로드</button>
+        <button class="pill" type="button" role="tab" aria-selected="false">예스폼싸인 전자계약</button>
+        <button class="pill" type="button" role="tab" aria-selected="false">예스폼 에디터</button>
+      </div>
+      <div class="benefit__cols">
+        <div class="benefit__col">
+          <div class="benefit__head">
+            <h3 class="benefit__title">전 서식 무제한 다운로드</h3>
+            <p class="benefit__desc">유료 · 프리미엄 서식까지 한글 · 워드 · 엑셀 · PDF로 바로 받아요.</p>
+          </div>
+          <div class="benefit__img" role="img" aria-label="이미지 자리"></div>
+        </div>
+        <div class="benefit__col">
+          <div class="benefit__head">
+            <h3 class="benefit__title">웹 서식 지원</h3>
+            <p class="benefit__desc">다운로드 하지 않고 웹에서 바로 편집하고 사용할 수 있는 형식을 지원합니다.</p>
+          </div>
+          <div class="benefit__img" role="img" aria-label="이미지 자리"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 통합 멤버십 (어두운 배경 · 패밀리 서비스 6칸) -->
+  <section class="family">
+    <h2 class="family__title">통합 멤버십으로 실무에 필요한<br>더 많은 혜택을 누려보세요</h2>
+    <ul class="family__list">
+      <li class="glass">예스폼싸인</li>
+      <li class="glass">씽크존</li>
+      <li class="glass">참잘했어요</li>
+      <li class="glass">온라인도장</li>
+      <li class="glass">페이존</li>
+      <li class="glass">에디터</li>
+    </ul>
+  </section>
+
+  <!-- 요금제별 상세 내용 -->
+  <section class="compare">
+    <h2 class="sec-head__title">요금제별 상세 내용</h2>
+    <div class="ctable">
+      <div class="ctable__head">
+        <div class="ctable__label"></div>
+        <div class="ctable__th">
+          <p class="ctable__plan">무료</p>
+          <a class="btn btn--md btn--secondary" href="#">무료 시작하기</a>
+        </div>
+        <div class="ctable__th">
+          <p class="ctable__plan">베이직</p>
+          <a class="btn btn--md btn--secondary" href="#">7일 이용하기</a>
+        </div>
+        <div class="ctable__th">
+          <p class="ctable__plan ctable__plan--best">프리미엄<span class="badge">추천</span></p>
+          <a class="btn btn--md btn--primary" href="#">무제한 시작하기</a>
+        </div>
+        <div class="ctable__th">
+          <p class="ctable__plan">비즈니스</p>
+          <a class="btn btn--md btn--tertiary" href="#">비즈니스 문의</a>
+        </div>
+      </div>
+
+      <div class="ctable__body">
+        <!-- 서식 -->
+        <div class="cgroup cgroup--first">
+          <h3 class="cgroup__title"><img src="images/ic-group-form-24.svg" width="24" height="24" alt="">서식</h3>
+          <div class="crow"><div class="crow__label">무료 서식</div><div class="cell"><i class="ok" aria-label="포함"></i></div><div class="cell"><i class="ok" aria-label="포함"></i></div><div class="cell"><i class="ok" aria-label="포함"></i></div><div class="cell"><i class="ok" aria-label="포함"></i></div></div>
+          <div class="crow"><div class="crow__label">유료 서식</div><div class="cell">미리보기</div><div class="cell">7일간 무제한</div><div class="cell"><i class="ok" aria-label="포함"></i></div><div class="cell"><i class="ok" aria-label="포함"></i></div></div>
+          <div class="crow"><div class="crow__label">프리미엄 서식</div><div class="cell">미리보기</div><div class="cell">미리보기</div><div class="cell"><i class="ok" aria-label="포함"></i></div><div class="cell"><i class="ok" aria-label="포함"></i></div></div>
+          <div class="crow crow--fmt">
+            <div class="crow__label">한글 · 워드 · 엑셀 · PDF 다운로드
+              <span class="fmts"><img src="images/ic-fmt-hwp.svg" width="25" height="25" alt="한글"><img src="images/ic-fmt-word.svg" width="25" height="25" alt="워드"><img src="images/ic-fmt-excel.svg" width="25" height="25" alt="엑셀"><img src="images/ic-fmt-pdf.svg" width="25" height="25" alt="PDF"></span>
+            </div>
+            <div class="cell">무료 서식만</div><div class="cell">무료 · 유료 서식만</div><div class="cell"><i class="ok" aria-label="포함"></i></div><div class="cell"><i class="ok" aria-label="포함"></i></div>
+          </div>
+        </div>
+
+        <!-- 작성 -->
+        <div class="cgroup">
+          <h3 class="cgroup__title"><img src="images/ic-group-write-24.svg" width="24" height="24" alt="">작성</h3>
+          <div class="crow"><div class="crow__label">예스폼 에디터</div><div class="cell"><i class="ok" aria-label="포함"></i></div><div class="cell"><i class="ok" aria-label="포함"></i></div><div class="cell"><i class="ok" aria-label="포함"></i></div><div class="cell"><i class="ok" aria-label="포함"></i></div></div>
+          <div class="crow"><div class="crow__label">예스폼 AI</div><div class="cell">체험</div><div class="cell">체험</div><div class="cell"><i class="ok" aria-label="포함"></i></div><div class="cell"><i class="ok" aria-label="포함"></i></div></div>
+          <div class="crow"><div class="crow__label">회사 정보 · 직인 자동 입력</div><div class="cell"><span class="no" aria-label="없음">-</span></div><div class="cell"><span class="no" aria-label="없음">-</span></div><div class="cell"><i class="ok" aria-label="포함"></i></div><div class="cell"><i class="ok" aria-label="포함"></i></div></div>
+        </div>
+
+        <!-- 예스폼싸인 전자계약 -->
+        <div class="cgroup">
+          <h3 class="cgroup__title"><img src="images/ic-group-sign-24.svg" width="24" height="24" alt="">예스폼싸인 전자계약<img class="cgroup__link" src="images/ic-alink-18.svg" width="18" height="18" alt=""></h3>
+          <div class="crow"><div class="crow__label">전자계약 건수</div><div class="cell">월 1건 체험</div><div class="cell">월 1건 체험</div><div class="cell">월 10건</div><div class="cell">공유 한도 확대</div></div>
+          <div class="crow"><div class="crow__label">예스폼 AI</div><div class="cell">미리보기</div><div class="cell">7일간 무제한</div><div class="cell"><i class="ok" aria-label="포함"></i></div><div class="cell"><i class="ok" aria-label="포함"></i></div></div>
+          <div class="crow"><div class="crow__label">회사 정보 · 직인 자동 입력</div><div class="cell">미리보기</div><div class="cell">미리보기</div><div class="cell"><i class="ok" aria-label="포함"></i></div><div class="cell"><i class="ok" aria-label="포함"></i></div></div>
+        </div>
+
+        <!-- 인원 -->
+        <div class="cgroup">
+          <h3 class="cgroup__title"><img src="images/ic-group-people-24.svg" width="24" height="24" alt="">인원</h3>
+          <div class="crow"><div class="crow__label">여러 명 동시 접속</div><div class="cell"><span class="no" aria-label="없음">-</span></div><div class="cell"><span class="no" aria-label="없음">-</span></div><div class="cell"><span class="no" aria-label="없음">-</span></div><div class="cell"><i class="ok" aria-label="포함"></i></div></div>
+          <div class="crow"><div class="crow__label">참잘했어요</div><div class="cell"><span class="no" aria-label="없음">-</span></div><div class="cell"><span class="no" aria-label="없음">-</span></div><div class="cell"><span class="no" aria-label="없음">-</span></div><div class="cell"><i class="ok" aria-label="포함"></i></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 파트너사 (#FCFCFC) -->
+  <section class="partners">
+    <div class="sec-head">
+      <h2 class="sec-head__title">국내 1위 서식 플랫폼 예스폼 파트너사</h2>
+      <p class="sec-head__desc">대기업 부터 중소기업 · 스타트업까지 예스폼과 함께하고 있습니다.</p>
+    </div>
+    <ul class="logos">
+      <li><img src="images/partners-logo-10.png" width="98" height="16" alt="SAMSUNG"></li>
+      <li><img src="images/partners-logo-11.png" width="79" height="16" alt="NAVER"></li>
+      <li><img src="images/partners-logo-12.png" width="85" height="23" alt="LG전자"></li>
+      <li class="logos__pb2"><img src="images/partners-logo-13.png" width="135" height="28" alt="한국산업단지공단"></li>
+      <li><img src="images/partners-logo-14.png" width="53" height="16" alt="Gabia"></li>
+      <li><img src="images/partners-logo-15.png" width="88" height="30" alt="기업마당"></li>
+      <li><img src="images/partners-logo-16.png" width="122" height="21" alt="kt bizmeka"></li>
+      <li><img src="images/partners-logo-01.png" width="123" height="30" alt="wacampus"></li>
+      <li><img src="images/partners-logo-02.png" width="121" height="18" alt="Hecto Innovation"></li>
+      <li><img src="images/partners-logo-03.png" width="66" height="20" alt="incruit"></li>
+      <li><img src="images/partners-logo-04.png" width="85" height="20" alt="경리나라"></li>
+      <li><img src="images/partners-logo-05.png" width="90" height="29" alt="Fast campus"></li>
+      <li><img src="images/partners-logo-06.png" width="102" height="18" alt="오피스디포"></li>
+      <li><img src="images/partners-logo-07.png" width="102" height="20" alt="wanted"></li>
+      <li><img src="images/partners-logo-08.png" width="108" height="13" alt="SPARKPLUS"></li>
+      <li><img src="images/partners-logo-09.png" width="78" height="13" alt="FASTFIVE"></li>
+    </ul>
+  </section>
+
+  <!-- 자주 묻는 질문 -->
+  <section class="faq">
+    <h2 class="sec-head__title">자주 묻는 질문</h2>
+    <div class="faq__list">
+      <div class="faq__item is-open">
+        <button class="faq__q" type="button" aria-expanded="true">지금 쓰고 있는 월정액 요금도 바로 오르나요?</button>
+        <div class="faq__a"><p>아니요. 지금 약정이 끝날 때까지는 기존 가격 그대로예요. 새 가격은 신규 가입과 갱신 때부터 적용돼요.</p></div>
+      </div>
+      <div class="faq__item">
+        <button class="faq__q" type="button" aria-expanded="false">갱신할 때 연 결제로 바꾸면 혜택이 있나요?</button>
+        <div class="faq__a"><p>갱신하면서 연 결제로 바꾸시면 첫해는 108,000원(지금 가격 × 12개월)에 이용하실 수 있어요.</p></div>
+      </div>
+      <div class="faq__item">
+        <button class="faq__q" type="button" aria-expanded="false">12개월권 · 24개월권 · 유료회원권은 어떻게 되나요?</button>
+        <div class="faq__a"><p>만료일까지 그대로 쓰시고, 만료되면 프리미엄 구독이나 베이직 7일 이용권으로 안내해 드려요.</p></div>
+      </div>
+      <div class="faq__item">
+        <button class="faq__q" type="button" aria-expanded="false">베이직 7일 이용권은 자동으로 결제되나요?</button>
+        <div class="faq__a"><p>아니요. 한 번만 결제되고, 7일이 지나면 자동으로 끝나요. 계속 쓰시려면 프리미엄 구독을 고르시면 돼요.</p></div>
+      </div>
+      <div class="faq__item">
+        <button class="faq__q" type="button" aria-expanded="false">프리미엄을 며칠만 쓸 수는 없나요?</button>
+        <div class="faq__a"><p>프리미엄은 월 결제 또는 연 결제 구독으로만 이용할 수 있어요. 짧게 쓰실 때는 베이직 7일 이용권으로 유료 서식을 받으실 수 있어요.</p></div>
+      </div>
+      <div class="faq__item">
+        <button class="faq__q" type="button" aria-expanded="false">기업회원은 어떻게 바뀌나요?</button>
+        <div class="faq__a"><p>갱신할 때 비즈니스 요금제로 바뀌어요. 첫해 요금 감면은 따로 안내해 드려요.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- 푸터 (138 · 위 선 #EAEAEA) -->
+<footer class="foot">
+  <p class="foot__copy">© yesform All rights reserved.</p>
+  <ul class="foot__links">
+    <li><a href="#">이용약관</a></li>
+    <li><a href="#">개인정보 처리방침</a></li>
+    <li><a href="#">고객센터</a></li>
+  </ul>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

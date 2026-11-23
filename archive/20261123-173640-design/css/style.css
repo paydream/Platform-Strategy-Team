@@ -1,0 +1,201 @@
+/* ==========================================================================
+   예스폼 멤버십 이용요금 (2026-11-23)
+   Figma: 디자인가이드_2025 › picing 6366:14703 · 1280 폭
+   · 색 · 글자는 디자인가이드 변수 그대로 (primary/700 #0472E3, 글자 800 #444 · 700 #666 · 500 #929292 · 450 #B4B4B4,
+     선 300 #EAEAEA · 400 #C2C2C2, 배경 50 #F8F8F8, primary/50 #E2F2FF)
+   · 화면이 1280 보다 좁으면 가로 스크롤 (시안이 PC 1280 기준)
+   ========================================================================== */
+*{box-sizing:border-box}
+html,body{margin:0;background:#fff;color:#000}
+body{min-width:1280px;font-family:Pretendard,'Pretendard Variable','Noto Sans KR',-apple-system,sans-serif;letter-spacing:0;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:none}
+h1,h2,h3,p,ul{margin:0;padding:0}
+ul{list-style:none}
+hr{margin:0;border:0}
+a{color:inherit;text-decoration:none}
+button,input,output{font:inherit;color:inherit;letter-spacing:inherit}
+button{margin:0;padding:0;border:0;background:none;cursor:pointer}
+:focus-visible{outline:2px solid #7DA2FF;outline-offset:2px}
+
+/* ---------- 버튼 (디자인가이드 button · 높이 large 50 / medium 40 · 모서리 5 · 글자 15/22 SemiBold) ---------- */
+.btn{display:flex;align-items:center;justify-content:center;gap:5px;padding:0 20px;border:1px solid transparent;border-radius:5px;
+  font-size:15px;line-height:22px;font-weight:600;white-space:nowrap;cursor:pointer;transition:background-color .15s,filter .15s}
+.btn--lg{height:50px}
+.btn--md{height:40px}
+.btn--tertiary{border-color:#C2C2C2;background:#fff;color:#666}
+.btn--tertiary:hover{background:#EAEAEA}
+.btn--secondary{border-color:#0472E3;background:#fff;color:#0472E3}
+.btn--secondary:hover{background:#F3F3F3}
+.btn--primary{background:#0472E3;color:#fff}
+.btn--primary:hover{background:#005CBF}
+/* yesform 등급 — 오른쪽 #0472E3 → 왼쪽 #3893F1 · 그림자 5 5 10 #0472E3 25% (hover 는 시안에 없어 살짝 어둡게) */
+.btn--yesform{border:0;background:linear-gradient(90deg,#3893F1 0%,#0472E3 100%);box-shadow:5px 5px 10px rgba(4,114,227,.25);color:#fff}
+.btn--yesform:hover{filter:brightness(.94)}
+
+/* ---------- 헤더 (110 · 아래 선 #EAEAEA) ---------- */
+.gnb{height:110px;border-bottom:1px solid #EAEAEA;background:#fff}
+.gnb__in{display:flex;align-items:center;justify-content:space-between;width:1280px;height:100%;margin:0 auto;padding:0 20px}
+.gnb__left{display:flex;align-items:center}
+.gnb__logo{display:block;width:78px;height:34px}
+.gnb__cat{margin-left:15px;font-size:20px;line-height:28px;font-weight:600;white-space:nowrap}
+.gnb__search{display:flex;align-items:center;gap:10px;width:400px;height:46px;margin-left:15px;padding:8px 10px;border-bottom:2px solid #0472E3}
+.gnb__input{flex:1;min-width:0;height:26px;padding:0;border:0;outline:0;background:none;font-size:16px;line-height:26px;font-weight:500}
+.gnb__input::-webkit-search-cancel-button{display:none}
+.gnb__go{width:30px;height:30px}
+.gnb__all{display:flex;align-items:center;gap:5px;margin-left:60px;font-size:15px;line-height:24px;font-weight:500;white-space:nowrap;cursor:pointer}
+/* 체크박스 — 디자인가이드 check box (Default · hovered · selected) */
+.cbox{flex:none;width:24px;height:24px;margin:0;appearance:none;-webkit-appearance:none;background:url(../images/ic-checkbox-24.svg) no-repeat;cursor:pointer}
+.gnb__all:hover .cbox{background-image:url(../images/ic-checkbox-hover-24.svg)}
+.cbox:checked,.gnb__all:hover .cbox:checked{background-image:url(../images/ic-checkbox-on-24.svg)}
+.gnb__util{display:flex;gap:25px}
+.gnb__item{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:45px;font-size:13px;line-height:18px;font-weight:500;white-space:nowrap}
+
+/* ---------- 공통 섹션 머리 (제목 30/42 SemiBold · 설명 16/24 Medium #666 · 사이 8) ---------- */
+.sec-head{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+.sec-head__title{font-size:30px;line-height:42px;font-weight:600;text-align:center;white-space:nowrap}
+.sec-head__desc{font-size:16px;line-height:24px;font-weight:500;color:#666;white-space:nowrap}
+
+/* ---------- 요금 안내 (위아래 60 · 안쪽 1260) ---------- */
+.hero{width:1280px;margin:0 auto;padding:60px 10px}
+.hero__head{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+.hero__title{font-size:36px;line-height:50px;font-weight:600}
+.hero__desc{font-size:16px;line-height:22px;color:#666}
+
+/* 결제 주기 — 220 × 42 · 바탕 #F1F2F4 · 고른 쪽 검정 */
+.billing{display:flex;width:220px;height:42px;margin:40px auto 0;border-radius:26px;background:#F1F2F4}
+.billing__btn{position:relative;display:flex;align-items:center;justify-content:center;width:110px;height:42px;border-radius:21px;
+  font-size:15px;line-height:22px;font-weight:600;color:#666;transition:background-color .15s,color .15s}
+.billing__btn:hover{color:#000}
+.billing__btn.is-on{background:#000;color:#fff}
+/* 말풍선 "최대 17% 절약" — 연 결제 위 · 꼬리 끝이 버튼 위쪽 4px 안 */
+.tip{position:absolute;left:50%;bottom:calc(100% - 4px);display:flex;flex-direction:column;align-items:center;transform:translateX(-50%);pointer-events:none}
+.tip__box{padding:6px 8px;border-radius:8px;background:#0472E3;font-size:14px;line-height:17px;font-weight:600;color:#fff;white-space:nowrap}
+.tip__arrow{display:block;width:12px;height:8px;background:#0472E3;clip-path:polygon(0 0,100% 0,50% 100%)}
+
+/* 요금제 카드 — 4장 · 사이 20 · 모두 같은 높이 */
+.plans{display:flex;gap:20px;margin-top:32px}
+.plan{flex:1 1 0;display:flex;flex-direction:column;min-width:0;border:1px solid #EAEAEA;border-radius:10px;background:#fff;overflow:hidden}
+.plan--best{border:2px solid #0472E3}
+.plan__ribbon{flex:none;display:flex;align-items:center;justify-content:center;height:36px;font-size:14px;line-height:24px;font-weight:600;color:#fff}
+.plan--best .plan__ribbon{background:#0472E3}
+.plan__body{display:flex;flex-direction:column;gap:24px;padding:28px 24px 30px}
+.plan__head{display:flex;flex-direction:column;gap:6px}
+.plan__name{font-size:24px;line-height:34px;font-weight:600}
+.plan--best .plan__name{color:#0472E3}
+.plan__desc{font-size:14px;line-height:24px;font-weight:500;color:#666}
+.plan__price{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.plan__row{display:flex;align-items:baseline;gap:4px;white-space:nowrap}
+.plan__amount{font-size:40px;line-height:56px;font-weight:600}
+.plan__unit{font-size:15px;line-height:24px;font-weight:500;color:#666}
+.plan__note{font-size:13px;line-height:18px;font-weight:500;color:#929292;white-space:nowrap}
+.chip{display:inline-flex;align-items:center;height:26px;padding:5px 10px;border-radius:5px;background:#E2F2FF;font-size:12px;line-height:16px;font-weight:500;color:#0472E3;white-space:nowrap}
+.chip[hidden]{display:none}
+.plan__line{height:1px;background:#EAEAEA}
+.plan__feats{display:flex;flex-direction:column;gap:12px}
+.plan__inc{font-size:13px;line-height:18px;font-weight:500;color:#929292}
+.feats{display:flex;flex-direction:column;gap:12px}
+.feats li{display:flex;align-items:flex-start;gap:10px;height:20px;font-size:15px;line-height:24px;font-weight:500;color:#444;white-space:nowrap}
+.feats li::before{content:"";flex:none;width:20px;height:20px;background:url(../images/ic-check-20.svg) no-repeat}
+.feats li.is-em{font-weight:600;color:#0472E3}
+
+/* 비즈니스 인원 — 114 × 34 · 테두리 #C2C2C2 · −/+ 32 칸 #F8F8F8 */
+.seats{display:flex;flex-direction:column;gap:8px}
+.seats__row{display:flex;align-items:center;gap:12px}
+.seats__label{font-size:14px;line-height:24px;font-weight:500;color:#666}
+.stepper{display:flex;height:34px;border:1px solid #C2C2C2;border-radius:5px;overflow:hidden}
+.stepper__btn{width:32px;height:32px;background:#F8F8F8;font-size:14px;line-height:24px;font-weight:500;color:#666;transition:background-color .15s}
+.stepper__btn:hover:not(:disabled){background:#EAEAEA}
+.stepper__btn:disabled{color:#B4B4B4;cursor:default}
+.stepper__count{display:flex;align-items:center;justify-content:center;width:48px;font-size:14px;line-height:24px;font-weight:600}
+.seats__total{font-size:13px;line-height:18px;font-weight:500;color:#666;white-space:nowrap}
+
+.hero__vat{margin-top:32px;padding-right:10px;font-size:13px;line-height:18px;font-weight:500;color:#929292;text-align:right}
+
+/* ---------- 프로모션 (120 · #E2F2FF · 안쪽 1080) ---------- */
+.nudge{background:#E2F2FF}
+.nudge__in{display:flex;align-items:center;justify-content:space-between;width:1080px;height:120px;margin:0 auto}
+.nudge__text{display:flex;flex-direction:column;gap:6px}
+.nudge__title{font-size:18px;line-height:28px;font-weight:600}
+.nudge__desc{font-size:14px;line-height:24px;font-weight:500;color:#666;white-space:nowrap}
+.nudge__btn{width:240px}
+
+/* ---------- 통합 멤버십 (420 · 어두운 바탕 + 파란 빛 띠 · 유리 카드 6칸) ---------- */
+/* 바탕은 Figma 채우기 3겹 그대로 — #262626 위에 타원 빛 띠(중심 640-16, 0 · 반지름 1522 × 499), 그 위에 가운데 어둡게(60%) */
+.family{display:flex;flex-direction:column;align-items:center;gap:36px;padding:60px 20px;overflow:hidden;
+  background:
+    radial-gradient(ellipse 874px 687px at 50% 210px,rgba(0,0,0,0) 10%,rgba(0,0,0,.6) 66.35%),
+    radial-gradient(ellipse 1522px 499px at calc(50% - 16px) 0,
+      #000 25%,rgba(0,7,14,.969) 27.19%,rgba(1,14,28,.938) 29.38%,rgba(1,29,57,.875) 33.75%,rgba(2,43,85,.813) 38.13%,
+      rgba(2,57,114,.75) 42.5%,rgba(3,86,170,.625) 51.25%,rgba(4,114,227,.5) 60%,rgba(25,127,231,.563) 61.88%,rgba(46,141,234,.625) 63.75%,
+      rgba(88,167,241,.75) 67.5%,rgba(130,194,248,.875) 71.25%,#ACDCFF 75%,#81C8FB 75.6%,#56B4F8 76.2%,#2BA0F4 76.8%,
+      #1596F2 77.1%,#0B91F1 77.25%,#008CF0 77.4%,#0069B4 79.33%,#004678 81.25%,#00355A 82.21%,#00233C 83.17%,#00121E 84.13%,#00090F 84.62%,#000 85.1%),
+    #262626}
+.family__title{font-size:30px;line-height:42px;font-weight:600;color:#fff;text-align:center}
+.family__list{display:flex;gap:40px}
+/* 유리 카드 — 180 × 180 · 모서리 12 · 검정 20% · Figma Glass(흐림 4 · 빛 -45°)를 CSS 로 비슷하게 (굴절은 CSS 로 못 해 빛 테두리로 대신) */
+.glass{display:flex;align-items:center;justify-content:center;width:180px;height:180px;border-radius:12px;background:rgba(0,0,0,.2);
+  -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+  box-shadow:inset 1px 1px 0 rgba(255,255,255,.28),inset -1px -1px 0 rgba(255,255,255,.12),inset 0 0 24px rgba(255,255,255,.05),inset 0 -14px 18px -12px rgba(80,165,245,.35);
+  font-size:18px;line-height:28px;font-weight:600;color:#fff;white-space:nowrap}
+
+/* ---------- 확 달라진 프리미엄 혜택 (안쪽 1080) ---------- */
+.benefit{padding:60px 20px}
+.benefit__body{display:flex;flex-direction:column;align-items:center;gap:36px;width:1080px;margin:36px auto 0}
+/* 탭 — 디자인가이드 Button 40 Round (Fill_color / line_gray) */
+.pills{display:flex;gap:8px}
+.pill{height:40px;padding:0 25px;border-radius:20px;background:#fff;box-shadow:inset 0 0 0 1px #E8E8E8;font-size:15px;line-height:22px;font-weight:600;color:#666;white-space:nowrap;transition:background-color .15s}
+.pill:hover{background:#F3F3F3}
+.pill.is-on{background:#0472E3;box-shadow:none;color:#fff}
+.pill.is-on:hover{background:#035BB6}
+.benefit__cols{display:flex;gap:40px;width:100%}
+.benefit__col{flex:1 1 0;display:flex;flex-direction:column;gap:24px;min-width:0}
+.benefit__head{display:flex;flex-direction:column;gap:6px}
+.benefit__title{font-size:24px;line-height:34px;font-weight:600}
+.benefit__desc{font-size:16px;line-height:26px;font-weight:500;color:#666}
+.benefit__img{height:269px;border-radius:12px;background:#E5E5E5}
+
+/* ---------- 요금제별 상세 내용 (안쪽 1260 · 이름 칸 320 + 요금제 칸 235 × 4) ---------- */
+.compare{width:1280px;margin:0 auto;padding:60px 10px}
+.ctable{margin-top:40px}
+.ctable__head{display:flex;border-bottom:1px solid #EAEAEA}
+.ctable__label{flex:none;width:320px}
+.ctable__th{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;width:235px;height:98px;padding:12px}
+.ctable__th .btn{width:100%}
+.ctable__plan{display:flex;align-items:center;gap:4px;font-size:18px;line-height:28px;font-weight:600;white-space:nowrap}
+.ctable__plan--best{color:#0472E3}
+.badge{display:inline-flex;align-items:center;height:20px;padding:4px 8px;border-radius:99px;background:rgba(4,114,227,.06);font-size:12px;line-height:12px;font-weight:600;color:#0472E3}
+/* 묶음 — 제목 줄 28 · 아래 8 · 줄마다 60 · 묶음 사이 24 + 선 + 24 */
+.cgroup--first{padding-top:20px}
+.cgroup + .cgroup{margin-top:24px;padding-top:24px;border-top:1px solid #EAEAEA}
+.cgroup__title{display:flex;align-items:center;gap:4px;margin-bottom:8px;font-size:20px;line-height:28px;font-weight:600}
+.crow{display:flex;min-height:60px}
+.crow__label{flex:none;display:flex;flex-direction:column;justify-content:center;gap:10px;width:320px;padding:8px 0;font-size:16px;line-height:26px;font-weight:500;color:#666}
+.cell{display:flex;align-items:center;justify-content:center;width:235px;padding:8px 12px;font-size:16px;line-height:26px;font-weight:500;text-align:center}
+.ok{display:block;width:24px;height:24px;background:url(../images/ic-check-24.svg) no-repeat}
+.no{font-weight:600;color:#B4B4B4}
+.fmts{display:flex;gap:12px}
+.fmts img{width:25px;height:25px}
+
+/* ---------- 파트너사 (#FCFCFC · 로고 6칸 × 3줄 · 칸 180 × 60) ---------- */
+.partners{padding:60px 0;background:#FCFCFC}
+.logos{display:grid;grid-template-columns:repeat(6,180px);grid-auto-rows:60px;width:1080px;margin:36px auto 0}
+.logos li{display:flex;align-items:center;justify-content:center}
+.logos .logos__pb2{padding-bottom:2px}
+
+/* ---------- 자주 묻는 질문 (목록 880) ---------- */
+.faq{padding:60px 20px}
+.faq__list{width:880px;margin:36px auto 0}
+.faq__item{padding:24px 0;border-bottom:1px solid #EAEAEA}
+.faq__q{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;font-size:16px;line-height:26px;font-weight:600;text-align:left}
+.faq__q::after{content:"";flex:none;width:24px;height:24px;background:url(../images/ic-arrow-down-24.svg) no-repeat}
+.faq__item.is-open .faq__q::after{background-image:url(../images/ic-arrow-up-24.svg)}
+.faq__a{display:none;margin-top:16px;padding:20px;border-radius:5px;background:#F8F8F8;font-size:15px;line-height:24px;font-weight:500;color:#666}
+.faq__item.is-open .faq__a{display:block}
+
+/* ---------- 푸터 (138 · 위 선 #EAEAEA) ---------- */
+.foot{display:flex;align-items:center;justify-content:center;height:138px;border-top:1px solid #EAEAEA;font-size:15px;line-height:22px;font-weight:500;color:#666;white-space:nowrap}
+/* Figma 문구 앞 공백 두 칸만큼 왼쪽 8 */
+.foot__copy{padding:0 46px 0 8px}
+.foot__links{display:flex}
+.foot__links li + li::before{content:"";display:inline-block;width:1px;height:15px;margin:0 9px;vertical-align:-2px;background:#C2C2C2}
+.foot__links a:hover{color:#000}
