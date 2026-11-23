@@ -443,6 +443,22 @@
               "href": "archive/20261123-121121-yesform-membership-dashboard-bizfix/index.html"
             }
           ]
+        },
+        {
+          "id": "20261123-133659-yesform-membership-dashboard-fix2",
+          "label": "최종본",
+          "title": "예스폼 멤버십 요금제 변경 계획안 (2027)",
+          "desc": "확정 요금 반영: 프리미엄 연 100,000원, 비즈니스 3인 월 12,000원(연 결제 없음), 시뮬 재계산",
+          "created": "2026.11.23",
+          "folder": "archive/20261123-133659-yesform-membership-dashboard-fix2",
+          "preview": "archive/20261123-133659-yesform-membership-dashboard-fix2/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "대시보드",
+              "href": "archive/20261123-133659-yesform-membership-dashboard-fix2/index.html"
+            }
+          ]
         }
       ]
     },
