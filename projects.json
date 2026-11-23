@@ -491,6 +491,22 @@
               "href": "archive/20261123-143645-yesform-membership-dashboard-conclusion/index.html"
             }
           ]
+        },
+        {
+          "id": "20261123-145813-yesform-membership-dashboard-bizconclusion",
+          "label": "최종본",
+          "title": "예스폼 멤버십 요금제 변경 계획안 (2027)",
+          "desc": "비즈니스 요금: 상단 결론 · 해야 할 일 추가 / 월 · 연 결제 비중: 지금 요금 vs 변경 요금 27년 매출 시뮬",
+          "created": "2026.11.23",
+          "folder": "archive/20261123-145813-yesform-membership-dashboard-bizconclusion",
+          "preview": "archive/20261123-145813-yesform-membership-dashboard-bizconclusion/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "대시보드",
+              "href": "archive/20261123-145813-yesform-membership-dashboard-bizconclusion/index.html"
+            }
+          ]
         }
       ]
     },
