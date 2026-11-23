@@ -427,6 +427,22 @@
               "href": "archive/20261123-115942-yesform-membership-dashboard-simannual/index.html"
             }
           ]
+        },
+        {
+          "id": "20261123-121121-yesform-membership-dashboard-bizfix",
+          "label": "최종본",
+          "title": "예스폼 멤버십 요금제 변경 계획안 (2027)",
+          "desc": "변경 요금제: 비즈니스 월 14,000원 / 연 140,000원 (3인, 1인 5,000원)으로 변경",
+          "created": "2026.11.23",
+          "folder": "archive/20261123-121121-yesform-membership-dashboard-bizfix",
+          "preview": "archive/20261123-121121-yesform-membership-dashboard-bizfix/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "대시보드",
+              "href": "archive/20261123-121121-yesform-membership-dashboard-bizfix/index.html"
+            }
+          ]
         }
       ]
     },
