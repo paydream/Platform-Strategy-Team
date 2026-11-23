@@ -484,7 +484,7 @@
           "created": "2026.11.23",
           "folder": "archive/20261123-143645-yesform-membership-dashboard-conclusion",
           "preview": "archive/20261123-143645-yesform-membership-dashboard-conclusion/index.html",
-          "hidden": false,
+          "hidden": true,
           "items": [
             {
               "label": "대시보드",
