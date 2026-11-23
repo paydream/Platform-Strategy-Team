@@ -404,7 +404,7 @@
           "created": "2026.11.23",
           "folder": "archive/20261123-111948-yesform-membership-dashboard-simrec",
           "preview": "archive/20261123-111948-yesform-membership-dashboard-simrec/index.html",
-          "hidden": false,
+          "hidden": true,
           "items": [
             {
               "label": "대시보드",
