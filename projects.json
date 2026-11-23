@@ -500,7 +500,7 @@
           "created": "2026.11.23",
           "folder": "archive/20261123-145813-yesform-membership-dashboard-bizconclusion",
           "preview": "archive/20261123-145813-yesform-membership-dashboard-bizconclusion/index.html",
-          "hidden": false,
+          "hidden": true,
           "items": [
             {
               "label": "대시보드",
