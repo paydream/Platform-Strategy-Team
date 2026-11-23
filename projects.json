@@ -411,6 +411,22 @@
               "href": "archive/20261123-111948-yesform-membership-dashboard-simrec/index.html"
             }
           ]
+        },
+        {
+          "id": "20261123-115942-yesform-membership-dashboard-simannual",
+          "label": "최종본",
+          "title": "예스폼 멤버십 요금제 변경 계획안 (2027)",
+          "desc": "요금제 시뮬 · 비즈니스 요금: 연 결제 금액 케이스 표 추가",
+          "created": "2026.11.23",
+          "folder": "archive/20261123-115942-yesform-membership-dashboard-simannual",
+          "preview": "archive/20261123-115942-yesform-membership-dashboard-simannual/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "대시보드",
+              "href": "archive/20261123-115942-yesform-membership-dashboard-simannual/index.html"
+            }
+          ]
         }
       ]
     },
