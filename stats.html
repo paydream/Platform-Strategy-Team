@@ -551,12 +551,10 @@ function paySection(pay) {
   const note = '';
   if (!tot) return `<section class="blk"><h2>결제 출처${ti('결제 출처')}</h2><div class="card"><p class="pempty">이 기간에는 결제가 없어요.</p></div></section>`;
   return `<section class="blk"><h2>결제 출처${ti('결제 출처')}</h2>
-    <div class="two">
+    <div>
       <div class="card"><div class="hd"><b>출처별</b><span>${fmt(tot)}건 · ${won(list.reduce((a, p) => a + p[2], 0))}</span></div><div class="scroll"><table class="tbl">
         <thead><tr><th>출처</th><th>결제</th><th>${TL('비중')}</th><th>결제 금액</th></tr></thead>
         <tbody>${g.map(([k, [n, a]]) => `<tr><td class="name">${esc(k)}${srcTi('pay', k)}</td><td>${fmt(n)}건</td><td>${shareCell(n, tot, max)}</td><td>${won(a)}</td></tr>`).join('')}</tbody></table></div></div>
-      <div class="card"><div class="hd"><b>결제 건별</b><span>최근 순</span></div>
-        <ol class="paylist">${list.slice().reverse().map(p => `<li><span class="pt">${MD(p[0])} ${p[0].slice(11, 16)}</span><div class="pn"><b>${esc(p[3])}${srcTi('pay', p[3])}</b><small>${esc(p[4])}</small></div><div class="pa">${won(p[2])}<small>${esc(prodName(p[1]))}</small></div></li>`).join('')}</ol></div>
     </div>${note}</section>`;
 }
 function signView({ m, pm, cd, pd, mk, pmk, label }) {
