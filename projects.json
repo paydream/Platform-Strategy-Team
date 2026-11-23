@@ -356,7 +356,7 @@
           "created": "2026.11.20",
           "folder": "archive/20261120-114647-yesform-membership-dashboard-partner2",
           "preview": "archive/20261120-114647-yesform-membership-dashboard-partner2/index.html",
-          "hidden": false,
+          "hidden": true,
           "items": [
             {
               "label": "대시보드",
