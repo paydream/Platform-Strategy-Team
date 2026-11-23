@@ -475,6 +475,22 @@
               "href": "archive/20261123-135721-yesform-membership-dashboard-annualshare/index.html"
             }
           ]
+        },
+        {
+          "id": "20261123-143645-yesform-membership-dashboard-conclusion",
+          "label": "최종본",
+          "title": "예스폼 멤버십 요금제 변경 계획안 (2027)",
+          "desc": "월 · 연 결제 비중: 상단 결론 · 해야 할 일 추가, 표 정리",
+          "created": "2026.11.23",
+          "folder": "archive/20261123-143645-yesform-membership-dashboard-conclusion",
+          "preview": "archive/20261123-143645-yesform-membership-dashboard-conclusion/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "대시보드",
+              "href": "archive/20261123-143645-yesform-membership-dashboard-conclusion/index.html"
+            }
+          ]
         }
       ]
     },
