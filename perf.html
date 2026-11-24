@@ -153,7 +153,8 @@ async function select(id) {
   $('#dash').innerHTML = head + '<div class="db"><p class="nod">불러오는 중…</p></div>';
   if (!it.dash) { $('#dash').innerHTML = head + '<div class="db"><div class="empty">이 항목은 아직 대시보드가 없어요. GA4 탐색 보고서에서 확인해 주세요.</div></div>'; $('#upd').innerHTML = ''; return; }
   const d = await getData(it.dash);
-  $('#dash').innerHTML = head + `<div class="db">${dashBody(d, it)}</div>`;
+  window.__series = null;
+  $('#dash').innerHTML = head + `<div class="db">${it.kind === 'autopay' ? dashAutopay(d && d.autopay, it) : dashBody(d, it)}</div>`;
   const u = d && d.updatedAt ? new Date(new Date(d.updatedAt).getTime() + 9 * 3600e3) : null;
   const stale = d && d.range ? Math.round((Date.parse(new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10)) - Date.parse(d.range.end)) / 864e5) > 2 : true;
   $('#upd').innerHTML = u ? `<i class="${stale ? 'warn' : ''}"></i>매일 오후 5시 자동 갱신 · 마지막 갱신 ${u.getUTCMonth() + 1}.${u.getUTCDate()} ${String(u.getUTCHours()).padStart(2, '0')}:${String(u.getUTCMinutes()).padStart(2, '0')}` : '<i class="warn"></i>매일 오후 5시 자동 갱신 · 아직 갱신 전';
@@ -216,18 +217,48 @@ function dashBody(d, it) {
       <div class="box"><h3>이벤트 요약 <span>사용자 · 횟수</span></h3>${top(evRows, ['이벤트', '사용자', '횟수'], 12)}</div>
     </div>`;
 }
+function dashAutopay(a, it) {
+  const range = a && a.range ? `${D0(a.range.start)} ~ ${D0(a.range.end)}` : '';
+  const ev = Object.fromEntries(((a && a.events) || []).map(r => [r[0], { u: r[1], c: r[2] }]));
+  const g = k => ev[k] || { u: 0, c: 0 };
+  const req = g('autopay_cancel_request'), keep = g('autopay_cancel_keep'), conf = g('autopay_cancel_confirm'), done = g('autopay_cancel_result');
+  const kpis = `<div class="kpis">
+    <div class="kpi"><div class="l">해지요청 클릭</div><div class="v">${fmt(req.u)}<small>명</small></div><div class="s">${fmt(req.c)}회 · 안내 모달 열림</div></div>
+    <div class="kpi hl"><div class="l">안내 보고 유지 (닫기)</div><div class="v">${fmt(keep.u)}<small>명</small></div><div class="s">해지요청 대비 ${pct(keep.u, req.u)}</div></div>
+    <div class="kpi hl"><div class="l">해지하기 클릭</div><div class="v">${fmt(conf.u)}<small>명</small></div><div class="s">해지요청 대비 ${pct(conf.u, req.u)}</div></div>
+    <div class="kpi"><div class="l">해지 처리 응답</div><div class="v">${fmt(done.u)}<small>명</small></div><div class="s">${fmt(done.c)}회 · 서버 응답 기준</div></div>
+    <div class="kpi"><div class="l">해지 방어율</div><div class="v">${req.u ? pct(req.u - conf.u, req.u) : '-'}</div><div class="s">해지요청했지만 해지하기 안 누른 비율</div></div></div>`;
+  if (!a || !(a.events || []).length) return `<p class="upd" style="margin-bottom:10px">기간 ${range || '2026.11.24 ~'}</p>` + kpis + '<div class="empty">아직 수집된 해지 이벤트가 없어요. GTM 버전 45(11/24)부터 측정하고, 매일 오후 5시에 전날까지 들어와요. 11/24에는 측정 확인용 클릭 2건(해지요청·닫기)이 섞여 있어요.</div>';
+  window.__line = a.daily || [];
+  window.__series = [[/^autopay_cancel_request$/, '#e8590c'], [/^autopay_cancel_confirm$/, '#2f6bff']];
+  const top = (rows, cols, n = 10) => rows.length ? `<table><thead><tr>${cols.map(c => `<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.slice(0, n).map(r => `<tr>${r.map(v => `<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table>` : '<p class="nod">아직 데이터 없음</p>';
+  const AEV = { autopay_cancel_request: '해지요청 클릭', autopay_cancel_keep: '안내 보고 유지(닫기)', autopay_cancel_confirm: '해지하기 클릭', autopay_cancel_result: '해지 처리 응답' };
+  const ORDER = ['autopay_cancel_request', 'autopay_cancel_keep', 'autopay_cancel_confirm', 'autopay_cancel_result'];
+  const steps = ORDER.filter(k => ev[k]).map(k => [esc(AEV[k]), fmt(ev[k].u), fmt(ev[k].c), pct(ev[k].u, req.u)]);
+  const GR = { guest: '비회원', free: '무료', paid: '유료', premium: '프리미엄', company: '기업', naver: '네이버' };
+  const gm = {}; (a.grade || []).forEach(r => { const k = GR[r[0]] || unset(r[0]); gm[k] = gm[k] || {}; gm[k][r[1]] = r[2]; });
+  const grows = Object.entries(gm).sort((x, y) => (y[1].autopay_cancel_request || 0) - (x[1].autopay_cancel_request || 0)).map(([k, v]) => [esc(k), fmt(v.autopay_cancel_request || 0), fmt(v.autopay_cancel_keep || 0), fmt(v.autopay_cancel_confirm || 0)]);
+  return `<p class="upd" style="margin-bottom:10px">기간 ${range} · 사용자는 기간 안 순 사용자 · 11/24 측정 확인용 2건 포함</p>` + kpis +
+    `<div class="chart"><h3>일별 추이 <span>사용자</span></h3><div class="lg"><span><i style="background:#e8590c"></i>해지요청 클릭</span><span><i style="background:#2f6bff"></i>해지하기 클릭</span></div><svg class="ln" id="ln"></svg></div>
+    <div class="grid2">
+      <div class="box key"><h3>해지 단계별 <span>해지요청 대비</span></h3>${top(steps, ['단계', '사용자', '횟수', '해지요청 대비'])}</div>
+      <div class="box"><h3>회원 등급별 <span>사용자</span></h3>${top(grows, ['회원 등급', '해지요청', '유지', '해지하기'])}</div>
+    </div>`;
+}
 function drawLine() {
   const svg = $('#ln'); if (!svg) return;
   const rows = window.__line || [];
   const days = [...new Set(rows.map(r => r[0]))].sort();
   const val = (d, re) => rows.filter(r => r[0] === d && re.test(r[1])).reduce((a, r) => a + r[2], 0);
-  const s1 = days.map(d => val(d, /^brief_modal_view$/)), s2 = days.map(d => val(d, /^brief_modal_(item|form|blog)_click$/));
-  const W = svg.clientWidth || 800, H = 180, pl = 40, pr = 10, pt = 10, pb = 22, mx = Math.max(1, ...s1, ...s2);
+  const SR = window.__series || [[/^brief_modal_view$/, '#e8590c'], [/^brief_modal_(item|form|blog)_click$/, '#2f6bff']];
+  const ser = SR.map(([re, c]) => [days.map(d => val(d, re)), c]);
+  const s1 = ser[0][0], s2 = ser[1] ? ser[1][0] : [];
+  const W = svg.clientWidth || 800, H = 180, pl = 40, pr = 10, pt = 10, pb = 22, mx = Math.max(1, ...ser.flatMap(x => x[0]));
   const x = i => pl + (W - pl - pr) * (days.length < 2 ? 0.5 : i / (days.length - 1)), y = v => pt + (H - pt - pb) * (1 - v / mx);
   let g = '';
   for (let k = 0; k <= 3; k++) { const v = mx * k / 3; g += `<line x1="${pl}" x2="${W - pr}" y1="${y(v)}" y2="${y(v)}" stroke="#eef0f3"/><text x="${pl - 6}" y="${y(v) + 4}" font-size="10" fill="#98a1ad" text-anchor="end">${fmt(v)}</text>`; }
   days.forEach((d, i) => { if (days.length <= 14 || i % Math.ceil(days.length / 10) === 0) g += `<text x="${x(i)}" y="${H - 6}" font-size="10" fill="#98a1ad" text-anchor="middle">${+d.slice(5, 7)}.${+d.slice(8)}</text>`; });
-  [[s1, '#e8590c'], [s2, '#2f6bff']].forEach(([s, c]) => { g += `<polyline fill="none" stroke="${c}" stroke-width="2" points="${s.map((v, i) => `${x(i)},${y(v)}`).join(' ')}"/>`; s.forEach((v, i) => { g += `<circle cx="${x(i)}" cy="${y(v)}" r="2.5" fill="${c}"/>`; }); });
+  ser.forEach(([s, c]) => { g += `<polyline fill="none" stroke="${c}" stroke-width="2" points="${s.map((v, i) => `${x(i)},${y(v)}`).join(' ')}"/>`; s.forEach((v, i) => { g += `<circle cx="${x(i)}" cy="${y(v)}" r="2.5" fill="${c}"/>`; }); });
   if (!days.length) g += `<text x="${W / 2}" y="${H / 2}" font-size="12" fill="#98a1ad" text-anchor="middle">아직 일별 데이터 없음</text>`;
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.innerHTML = g;
 }
