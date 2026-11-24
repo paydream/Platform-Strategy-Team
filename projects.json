@@ -2,58 +2,13 @@
   "version": 2,
   "projects": [
     {
-      "id": "20261123-173640-design",
-      "title": "[예스폼] 이용요금 디자인 시안",
-      "team": "design",
-      "category": "웹 메인",
-      "desc": "",
-      "created": "2026.11.23",
-      "updated": "2026.11.23",
-      "hidden": false,
-      "final": null,
-      "versions": [
-        {
-          "id": "20261123-173640-design",
-          "label": "v1",
-          "title": "[예스폼] 이용요금 디자인 시안",
-          "desc": "",
-          "created": "2026.11.23",
-          "folder": "archive/20261123-173640-design",
-          "preview": "archive/20261123-173640-design/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261123-173640-design/index.html"
-            }
-          ]
-        },
-        {
-          "id": "20261123-174316-design",
-          "label": "v2",
-          "title": "[예스폼] 이용요금 디자인 시안",
-          "desc": "",
-          "created": "2026.11.23",
-          "folder": "archive/20261123-174316-design",
-          "preview": "archive/20261123-174316-design/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261123-174316-design/index.html"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "id": "20261113-112032-yesform-membership-plan",
       "title": "예스폼 멤버십 요금제 변경 계획안 (2027)",
       "team": "planning",
       "category": "요금제",
       "desc": "요금제 시안(yesform-custom.vercel.app/pricing) 기반 2027 멤버십 개편 실행 계획. 비밀번호 필요.",
       "created": "2026.11.13",
-      "updated": "2026.11.23",
+      "updated": "2026.11.24",
       "hidden": false,
       "final": null,
       "versions": [
@@ -582,6 +537,67 @@
             {
               "label": "대시보드",
               "href": "archive/20261123-150649-yesform-membership-dashboard-bizfinal/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261124-090143-yesform-membership-dashboard-simhide",
+          "label": "최종본",
+          "title": "예스폼 멤버십 요금제 변경 계획안 (2027)",
+          "desc": "「요금제 시뮬」 메뉴 미노출",
+          "created": "2026.11.24",
+          "folder": "archive/20261124-090143-yesform-membership-dashboard-simhide",
+          "preview": "archive/20261124-090143-yesform-membership-dashboard-simhide/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "대시보드",
+              "href": "archive/20261124-090143-yesform-membership-dashboard-simhide/index.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "20261123-173640-design",
+      "title": "[예스폼] 이용요금 디자인 시안",
+      "team": "design",
+      "category": "웹 메인",
+      "desc": "",
+      "created": "2026.11.23",
+      "updated": "2026.11.23",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261123-173640-design",
+          "label": "v1",
+          "title": "[예스폼] 이용요금 디자인 시안",
+          "desc": "",
+          "created": "2026.11.23",
+          "folder": "archive/20261123-173640-design",
+          "preview": "archive/20261123-173640-design/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261123-173640-design/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261123-174316-design",
+          "label": "v2",
+          "title": "[예스폼] 이용요금 디자인 시안",
+          "desc": "",
+          "created": "2026.11.23",
+          "folder": "archive/20261123-174316-design",
+          "preview": "archive/20261123-174316-design/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261123-174316-design/index.html"
             }
           ]
         }
