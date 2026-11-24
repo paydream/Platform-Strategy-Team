@@ -392,7 +392,7 @@ function diff(cur, prev, cd, pd) {
   return ((cur / cd) - (prev / pd)) / (prev / pd) * 100;
 }
 function pill(d, label = CMP.label) {
-  if (d == null) return `<div class="pill flat">${CMP.short} 비교 없음</div>`;
+  if (d == null) return CMP.none ? '' : `<div class="pill flat">${CMP.short} 비교 없음</div>`;
   const c = d > 0.5 ? 'up' : d < -0.5 ? 'down' : 'flat';
   return `<div class="pill ${c}">${c === 'up' ? '▲' : c === 'down' ? '▼' : ''} ${Math.abs(d).toFixed(0)}%<span>${label}${CMP.avg ? ' (일평균)' : ''}</span></div>`;
 }
@@ -443,7 +443,7 @@ function render() {
     history.replaceState(null, '', `#p=${ptab}&v=month&m=${month}`);
     const q = Q3(); if (month === 'q3' && !q) month = D.months[D.months.length - 1].m;
     const i = D.months.findIndex(x => x.m === month), m = month === 'q3' ? q : D.months[i], pm = month === 'q3' ? null : D.months[i - 1] || null;
-    CMP = month === 'q3' ? { short: '이전 3개월', label: '', avg: false, note: '', col: '이전 3개월 대비' } : { short: '전월', label: '전월 대비', avg: true, note: pm ? '전월 비교는 일평균 기준' : '', col: '전월 대비' };
+    CMP = month === 'q3' ? { short: '이전 3개월', label: '', avg: false, note: '', col: '이전 3개월 대비', none: true } : { short: '전월', label: '전월 대비', avg: true, note: pm ? '전월 비교는 일평균 기준' : '', col: '전월 대비' };
     ctx = { m, pm, cd: days(m), pd: pm ? days(pm) : 0, mk: mkOf(m, prod), pmk: pm ? mkOf(pm, prod) : null, label: month === 'q3' ? q3Label(q) : mLabel(m) };
     SEL = { s: mStart(m), e: m.end };
     sub = D.months.map(x => `<button role="tab" data-m="${x.m}" aria-selected="${x.m === month}">${mLabel(x)}</button>`).join('') + (q ? `<button role="tab" data-m="q3" aria-selected="${month === 'q3'}">${q3Label(q)}</button>` : '');
@@ -574,7 +574,7 @@ function signView({ m, pm, cd, pd, mk, pmk, label }) {
   const payTop = pl.slice().sort((a, b) => b[2] - a[2] || b[3] - a[3])[0];
   const bullets = [];
   const pList = D.payments ? paysIn(SEL.s, SEL.e) : [];
-  if (pList.length) bullets.push(`결제 출처: <b>${srcLine(pList)}</b>`);
+  if (pList.length) { const gg = srcGroup(pList); bullets.push(`결제 출처: <b>${gg.slice(0, 5).map(([k, [n]]) => `${esc(k)} ${n}건`).join(' / ')}${gg.length > 5 ? ` 외 ${gg.length - 5}곳` : ''}</b>`); }
   if (payTop && payTop[2] > 0) bullets.push(`등록된 지면 중 결제가 가장 많이 나온 곳은 <b>${esc(payTop[0])}</b> (${fmt(payTop[2])}건 · ${won(payTop[3])})`);
   bullets.push(`등록된 지면을 통한 결제는 전체 결제 ${fmt(pay[0])}건 중 <b>${fmt(plTot[1])}건</b>이에요`);
   bullets.push(`GA4 기준 가장 많이 들어온 채널은 <b>${esc(ch[0][0])}</b> (${fmt(ch[0][1])}명, ${pctTxt(pct(ch[0][1], chTot))})`);
@@ -854,7 +854,7 @@ function adsSection({ m, pm, cd, pd, label }) {
   // 광고센터 데이터가 선택 기간을 덮지 못하면 0으로 보이지 않게 안내 (로그인 만료로 갱신이 멈춘 경우 등)
   if (SEL.s > A.end) return `<section class="blk"><h2>네이버 광고 <small>광고센터 · ${label}</small></h2><div class="stale" role="status">광고센터 데이터는 ${MD(A.end)}까지만 있어요${A.stale ? ` (광고센터 로그인이 필요해 ${upd} 수집값에서 멈춤)` : ' (오늘 갱신 전)'}. ${MD(A.end)} 이전 날짜나 주간·월간 보기를 골라 주세요.</div></section>`;
   const staleTxt = SEL.e > A.end ? `<div class="stale" role="status">광고센터 데이터는 ${MD(A.end)}까지라 ${MD(addDay(A.end, 1))}~${MD(SEL.e)}는 빠져 있어요${A.stale ? ' (광고센터 로그인 필요)' : ''}.</div>` : '';
-  const kp = (l, v, unit, d, sub) => `<div class="kpi"><div class="l">${l}</div><div class="v">${fmt(v)}<small>${unit}</small></div>${d == null ? `<div class="pill flat">${CMP.short} 비교 없음</div>` : `<div class="pill ${d > 0.5 ? 'up' : d < -0.5 ? 'down' : 'flat'}">${d > 0.5 ? '▲' : d < -0.5 ? '▼' : ''} ${Math.abs(d).toFixed(0)}%<span>${CMP.label}${CMP.avg ? ' (일평균)' : ''}</span></div>`}${sub ? `<div class="sub">${sub}</div>` : ''}</div>`;
+  const kp = (l, v, unit, d, sub) => `<div class="kpi"><div class="l">${l}</div><div class="v">${fmt(v)}<small>${unit}</small></div>${d == null ? (CMP.none ? '' : `<div class="pill flat">${CMP.short} 비교 없음</div>`) : `<div class="pill ${d > 0.5 ? 'up' : d < -0.5 ? 'down' : 'flat'}">${d > 0.5 ? '▲' : d < -0.5 ? '▼' : ''} ${Math.abs(d).toFixed(0)}%<span>${CMP.label}${CMP.avg ? ' (일평균)' : ''}</span></div>`}${sub ? `<div class="sub">${sub}</div>` : ''}</div>`;
   const G = A.meta.g.map(([id, kind, name, on, bid]) => { const c = sum(id, cur), p = sum(id, prev); return { kind, t: kind === 'pl' ? '파워링크' : '파워콘텐츠', name, on, bid, cur: M5(c), prev: M5(p) }; });
   const tot = kind => { const L = G.filter(g => g.kind === kind); return { cur: L.reduce((a, g) => a.map((v, i) => v + g.cur[i]), [0, 0, 0, 0, 0]), prev: L.reduce((a, g) => a.map((v, i) => v + g.prev[i]), [0, 0, 0, 0, 0]) }; };
   const pl = tot('pl'), pc = tot('pc');
