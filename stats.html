@@ -585,7 +585,7 @@ function signView({ m, pm, cd, pd, mk, pmk, label }) {
 
   <section class="blk"><h2>핵심 지표 <small>${CMP.note}</small></h2>
     <div class="kpis${S.contrib ? ' k5' : ''}">
-      ${kpi('결제 건수', pay[0], '건', dPay, `결제 금액 ${won(pay[1])}${pList.length ? `<span class="ksrc">${srcGroup(pList).slice(0, 5).map(([k, [n]]) => `<i>${esc(k)} ${n}건</i>`).join('')}${srcGroup(pList).length > 5 ? `<i>외 ${srcGroup(pList).length - 5}곳</i>` : ''}</span>` : ''}`, true)}
+      ${kpi('결제 건수', pay[0], '건', dPay, `결제 금액 ${won(pay[1])}`, true)}
       ${S.contrib ? kpi('예스폼 기여 결제', S.contrib[1], '원', diff(S.contrib[1], P && P.contrib && P.contrib[1], cd, pd), `${fmt(S.contrib[0])}건`) : ''}
       ${kpi('신규 가입', S.signup, '명', dSign, `활성 사용자의 ${pctTxt(pct(S.signup, S.active))}`)}
       ${kpi('활성 사용자', S.active, '명', dAct, `GA4 순 사용자 · 관리자 방문자 ${fmt(S.visit)}명(일별 합계)`)}
