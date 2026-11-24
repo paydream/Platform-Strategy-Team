@@ -1,0 +1,121 @@
+/* ==========================================================================
+   예스폼싸인 · 전자서명 만들기 · 싸인 그리기 (2026-11-24)
+   Figma: 싸인_디자인시스템 › 261119_이용요금 (54812:47444 · 1400 × 1473)
+   수치는 figma-values.txt 기준 · 흰 바탕(라이트 모드)
+   ========================================================================== */
+*{box-sizing:border-box}
+html,body{margin:0;background:#fff;color:#1D1F20}
+body{min-width:1280px;font-family:Pretendard,'Pretendard Variable','Noto Sans KR',-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3,p,ol,ul,address{margin:0;padding:0;font-style:normal}
+ul{list-style:none}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit}
+img{display:block}
+:focus-visible{outline:2px solid #7DA2FF;outline-offset:2px}
+
+/* 본문 폭 — 1280 · 좌우 10 → 콘텐츠 1260 (Figma 1400 프레임에서 x 70 ~ 1330) */
+.inner{max-width:1280px;margin:0 auto;padding:0 10px}
+
+/* ---------- 헤더 (Header_home) — 높이 60 · 아래 줄 1px #EBEDEF ---------- */
+.hd{height:60px;background:#fff;box-shadow:inset 0 -1px 0 #EBEDEF}
+.hd__inner{display:flex;align-items:center;height:60px}
+/* 로고 칸 180 (오른쪽 60 · 아래 8) · 로고 91 × 30 */
+.hd__logo{flex:0 0 180px;display:flex;flex-direction:column;justify-content:center;height:60px;padding:0 60px 8px 0}
+.hd__logo img{width:91px;height:30px}
+/* 메뉴 — 16 / 22 SemiBold · 간격 48 · 위 2 (마우스 올림 색은 메인 화면 헤더와 같게) */
+.hd__lnb{display:flex;align-items:center;gap:48px;height:60px;padding-top:2px}
+.hd__lnb a{font-size:16px;line-height:22px;font-weight:600;color:#1D1F20;white-space:nowrap;transition:color .15s}
+.hd__lnb a:hover{color:#2D62FA}
+/* 오른쪽 버튼 — 높이 36 · 좌우 14 · 14 / 14 Medium · 간격 8 · 모서리 8 */
+.hd__info{flex:1 0 0;display:flex;align-items:center;justify-content:flex-end;gap:8px}
+.hd__btn{display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 14px;border:1px solid #E3E5E8;border-radius:8px;background:#fff;
+  font-size:14px;line-height:14px;font-weight:500;color:#031228;white-space:nowrap;transition:background-color .15s}
+.hd__btn:hover{background:#F2F2F5}
+.hd__btn:active{background:#EDEDF0}
+.hd__btn--primary{border-color:#2D62FA;color:#1B52ED}
+.hd__btn--primary:hover{background:#F5F9FF}
+.hd__btn--primary:active{background:#EBF4FF}
+
+/* ---------- 히어로 — 위아래 40 · 제목과 본문 사이 40 ---------- */
+.main{padding:40px 0}
+.hero{display:flex;flex-direction:column;align-items:center;gap:40px}
+.hero__head{display:flex;flex-direction:column;gap:8px;width:100%;text-align:center}
+.hero__title{font-size:32px;line-height:42px;font-weight:600;color:#000}
+.hero__desc{font-size:16px;line-height:22px;font-weight:400;letter-spacing:-0.2px;color:#383B3E}
+
+/* 900 칸 — 탭 · 본문 · 버튼 사이 24 · 아래 8 */
+.make{display:flex;flex-direction:column;align-items:center;gap:24px;width:900px;padding-bottom:8px}
+
+/* 탭 (Segmented Control) — 900 × 48 · 안쪽 3 · #F1F2F4 · 모서리 12 */
+.seg{display:flex;align-items:center;width:100%;padding:3px;border-radius:12px;background:#F1F2F4}
+.seg__item{flex:1 1 0;min-width:0;display:flex;align-items:center;justify-content:center;height:42px;padding:8px 12px;margin:0;border:0;border-radius:9px;background:transparent;
+  font-size:15px;line-height:15px;font-weight:600;color:#888F95;white-space:nowrap;cursor:pointer;transition:color .15s}
+.seg__item:not(.is-active):hover{color:#383B3E}   /* 시안에 없어 새로 정함 */
+.seg__item.is-active{background:#fff;color:#1B52ED;box-shadow:.2px .2px 2px rgba(54,59,72,.1);cursor:default}
+/* 칸 사이 줄 1 × 20 #E3E5E8 — 고른 탭 양옆에는 줄이 없음 */
+.seg__div{flex:0 0 1px;height:20px;background:#E3E5E8}
+.seg__item.is-active + .seg__div,
+.seg__div:has(+ .seg__item.is-active){display:none}
+
+.make__body{display:flex;flex-direction:column;gap:20px;width:100%}
+
+/* 만드는 방법 — 제목 20 / 28 SemiBold · 사이 8 · 번호 목록 15 / 21 · 줄 사이 4 */
+.how{display:flex;flex-direction:column;gap:8px}
+.how__title{font-size:20px;line-height:28px;font-weight:600;color:#1D1F20}
+.how__list{padding-left:22px;list-style:decimal;font-size:15px;line-height:21px;color:#383B3E}
+.how__list li + li{margin-top:4px}
+
+/* 그리기 칸 (Input_field) — 900 × 300 · 테두리 1 #E3E5E8 · 모서리 8 */
+.pad{position:relative;height:300px;border:1px solid #E3E5E8;border-radius:8px;background:#fff;overflow:hidden}
+.pad__canvas{position:absolute;inset:0;display:block;width:100%;height:100%;cursor:crosshair;touch-action:none}
+/* 안내 — 펜 28 + 14 / 20 #888F95 · 사이 6 · 칸 가운데 (안쪽 10 · 12) */
+.pad__hint{position:absolute;inset:9px 11px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;pointer-events:none;
+  font-size:14px;line-height:20px;color:#888F95}
+.pad.is-drawn .pad__hint{display:none}
+/* 다시 그리기 — 36 원 · 테두리 1 #EBEDEF · 칸 오른쪽 위 16 (테두리 1 안쪽 기준이라 15) */
+.pad__reset{position:absolute;top:15px;right:15px;z-index:1;display:flex;align-items:center;justify-content:center;width:36px;height:36px;padding:0;
+  border:1px solid #EBEDEF;border-radius:18px;background:#fff;cursor:pointer;transition:background-color .15s}
+.pad__reset:hover{background:#F6F8FA}   /* 시안에 없어 새로 정함 */
+
+/* [만들기] (button_primary · solid · h42) — 180 × 42 · 15 / 15 SemiBold · 모서리 8 */
+.btn{display:inline-flex;align-items:center;justify-content:center;width:180px;height:42px;padding:0 16px;margin:0;border:0;border-radius:8px;background:#1B52ED;
+  font-size:15px;line-height:15px;font-weight:600;color:#fff;cursor:pointer;transition:background-color .15s,opacity .15s}
+.btn:hover{background:#1E4BC9}
+.btn:active{opacity:.9}
+.btn:disabled{background:#1B52ED;opacity:.6;cursor:default}
+
+/* ---------- 배너 — 높이 180 · 배경 그림 1920 × 180 (사진 · 특허증 · 파랑→검정 그러데이션) ---------- */
+.bn{height:180px;overflow:hidden;
+  background:url(../images/banner-bg@2x.jpg) center top/1920px 180px no-repeat,linear-gradient(90deg,#1B52ED 50%,#101010 50%)}
+.bn__inner{display:flex;flex-direction:column;justify-content:center;gap:12px;height:180px;padding-top:10px;padding-bottom:10px}
+.bn__title{font-size:24px;line-height:34px;font-weight:700;color:#fff}
+.bn__desc{font-size:16px;line-height:22px;font-weight:500;color:#fff}
+
+/* ---------- 푸터 (footer · pc) — #333 · 위아래 55 · 폭 1280 ---------- */
+.ft{padding:55px 0;background:#333}
+.ft__inner{display:flex;flex-direction:column;gap:80px;max-width:1280px;margin:0 auto}
+.ft__top{display:flex;align-items:flex-start;justify-content:space-between}
+.ft__div{flex:0 0 1px;height:214px;background:#444}
+.ft__title{padding-bottom:10px;font-size:20px;line-height:28px;font-weight:600;color:#fff}
+.ft__col--left{display:flex;flex-direction:column;gap:20px;width:267px}
+.ft__tel{font-size:40px;line-height:56px;font-weight:600;color:#fff}
+.ft__info{margin-top:5px;font-size:14px;line-height:24px;font-weight:500;color:#B4B4B4}
+.ft__btns{display:flex;gap:20px}
+/* 둥근 버튼 (button_round · tertiary · large) — 높이 40 · 좌우 20 · 테두리 1 흰색 · 15 / 22 SemiBold */
+.ft__round{display:inline-flex;align-items:center;justify-content:center;gap:5px;height:40px;padding:0 20px;margin:0;border:1px solid #fff;border-radius:20px;background:transparent;
+  font-size:15px;line-height:22px;font-weight:600;color:#fff;white-space:nowrap;cursor:pointer}
+.ft__round--map{padding:0 15px 0 20px}
+.ft__col--center{width:426px}
+.ft__news{padding-top:10px}
+.ft__news li{display:flex;align-items:center;justify-content:space-between;gap:23px;height:36px;font-size:14px;line-height:24px;font-weight:500}
+.ft__news a{flex:0 0 275px;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:#B4B4B4}
+.ft__news span{flex:0 0 auto;color:#666}
+.ft__col--right{display:flex;flex-direction:column;align-items:flex-end;gap:20px;width:267px}
+.ft__corp{text-align:right;font-size:14px;line-height:24px;font-weight:500;color:#B4B4B4}
+.ft__corp p{padding:1px 0}
+.ft__corp .ft__addr{padding:2px 0}
+.ft__bottom{display:flex;align-items:center;justify-content:space-between;height:30px}
+.ft__links{display:flex;align-items:center;gap:20px}
+.ft__links a{font-size:14px;line-height:24px;font-weight:600;color:#fff;white-space:nowrap}
+.ft__sns{display:flex;align-items:center;gap:10px}
+.ft__sns a{display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:15px;background:#666}

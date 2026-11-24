@@ -2,6 +2,35 @@
   "version": 2,
   "projects": [
     {
+      "id": "20261124-162015-design",
+      "title": "[예스폼싸인] 전자서명 디자인 시스템 적용",
+      "team": "design",
+      "category": "웹 메인",
+      "desc": "",
+      "created": "2026.11.24",
+      "updated": "2026.11.24",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261124-162015-design",
+          "label": "v1",
+          "title": "[예스폼싸인] 전자서명 디자인 시스템 적용",
+          "desc": "",
+          "created": "2026.11.24",
+          "folder": "archive/20261124-162015-design",
+          "preview": "archive/20261124-162015-design/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261124-162015-design/index.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "20261113-112032-yesform-membership-plan",
       "title": "예스폼 멤버십 요금제 변경 계획안 (2027)",
       "team": "planning",
