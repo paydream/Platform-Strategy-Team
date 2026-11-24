@@ -7,6 +7,15 @@
 const crypto = require('crypto');
 const F = require('./_statsfile');
 const { siteOk } = require('./_lib'); // 사이트 비밀번호로 로그인했으면 통계 비밀번호 없이 통과
+// 성과 측정(perf) 데이터는 성과 측정 비밀번호 쿠키(pst_perf, middleware.js 와 같은 계산)가 있어야 내려준다.
+function perfOk(req) {
+  const pw = process.env.PERF_PASSWORD;
+  if (!pw || !req || !req.headers) return false;
+  const m = String(req.headers.cookie || '').match(/(?:^|;\s*)pst_perf=([0-9a-f]{64})/);
+  if (!m) return false;
+  const tk = crypto.createHmac('sha256', pw).update('pst-perf-v1').digest('hex');
+  return crypto.timingSafeEqual(Buffer.from(m[1]), Buffer.from(tk));
+}
 
 // 메인 오른쪽 사이드바 "통계 데이터" 목록. 새 통계를 올리면 맨 앞에 추가하고, 데이터는 env에 넣는다.
 const LIST = [
@@ -94,6 +103,7 @@ module.exports = async (req, res) => {
   if (b.check) return res.status(200).json({ ok: true }); // 사이드바에서 비밀번호만 확인
   const item = LIST.find(x => x.id === (b.id || 'marketing'));
   if (!item) return res.status(404).json({ error: '없는 통계입니다.' });
+  if (item.id === 'perf' && !perfOk(req)) return res.status(401).json({ error: '성과 측정 비밀번호가 필요합니다. 페이지를 새로고침해 주세요.' });
   let data = null;
   if (item.auto || item.file) { try { data = await F.readData(item.id); } catch { data = null; } }
   if (!data && item.env) { try { data = JSON.parse(process.env[item.env] || 'null'); } catch { data = null; } }
