@@ -187,9 +187,9 @@ async function select(id) {
   cur = id;
   const it = ITEMS.find(x => x.id === id); if (!it) return;
   const head = `<div class="dh big">${it.thumb ? `<a class="shot" href="${esc(it.thumb)}" target="_blank" rel="noopener" title="원본 크기로 보기"><img src="${esc(it.thumb)}" alt="${esc(it.title)} 화면"></a>` : ''}<div class="info"><small>${esc(it.status || '')}</small><p>${it.gtm ? esc(it.gtm) + ' · ' : ''}측정 시작 ${esc(D0(it.start))}${it.events ? ' · 이벤트 ' + esc(it.events) + '종' : ''}</p>
-    <div class="acts">${it.explore ? `<a class="btn pri" href="${esc(it.explore)}" target="_blank" rel="noopener">GA4 탐색 보고서 ↗</a>` : ''}${it.archive ? `<a class="btn" href="${esc(it.archive)}">디자인 시안</a>` : ''}</div>${it.thumb ? '<p class="hint">화면 이미지를 누르면 원본 크기로 열려요</p>' : ''}</div></div>`;
+    <div class="acts">${it.archive ? `<a class="btn" href="${esc(it.archive)}">디자인 시안</a>` : ''}</div>${it.thumb ? '<p class="hint">화면 이미지를 누르면 원본 크기로 열려요</p>' : ''}</div></div>`;
   $('#dash').innerHTML = head + '<div class="db"><p class="nod">불러오는 중…</p></div>';
-  if (!it.dash) { $('#dash').innerHTML = head + '<div class="db"><div class="empty">이 항목은 아직 대시보드가 없어요. GA4 탐색 보고서에서 확인해 주세요.</div></div>'; $('#upd').innerHTML = ''; return; }
+  if (!it.dash) { $('#dash').innerHTML = head + '<div class="db"><div class="empty">이 항목은 아직 대시보드가 없어요.</div></div>'; $('#upd').innerHTML = ''; return; }
   const d = await getData(it.dash);
   window.__series = null;
   $('#dash').innerHTML = head + `<div class="db">${it.kind === 'autopay' ? dashAutopay(d && d.autopay, it) : dashBody(d, it)}</div>`;
