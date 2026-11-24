@@ -60,6 +60,11 @@
   tr:last-child td{border-bottom:0}
   .bar{display:inline-block;height:6px;border-radius:3px;background:var(--c);opacity:.75;vertical-align:middle;margin-right:6px}
   .nod{color:var(--faint);font-size:12px;padding:8px 0}
+  .crumb{display:inline-block;font-size:13px;color:var(--sub);text-decoration:none;margin-bottom:6px}
+  .crumb:hover{color:var(--c)}
+  .cb .hl2{font-size:12.5px;color:var(--text);background:#fff7f1;border-radius:8px;padding:6px 9px;margin-top:4px}
+  .cb .hl2 b{color:var(--c);font-weight:800}
+  #list .lh{margin-top:24px}
   .kpi.hl{border-color:#f3c3a4;background:#fffaf6}
   .box.key{border-color:#f3c3a4}
   .box.key h3{font-size:15px}
@@ -100,12 +105,14 @@
 <header class="gnb"><div class="wrap gnb-top"><a class="gnb-logo" href="./" title="메인 홈으로"><strong>플랫폼전략팀</strong></a><div class="gnb-util"></div></div><nav class="wrap gnb-nav" data-current="perf" aria-label="주요 메뉴"></nav><script src="gnb.js"></script></header>
 <main class="wrap">
   <section class="hero">
-    <div><h1>성과 측정</h1><p>GA4 · GTM으로 측정하는 화면·기능별 성과. 매일 오후 5시에 전날까지 데이터가 자동으로 들어와요.</p></div>
+    <div><a class="crumb" id="crumb" href="perf.html" hidden>← 성과 측정 목록</a><h1 id="ptitle">성과 측정</h1><p id="pdesc">GA4 · GTM으로 측정하는 화면·기능별 성과. 항목을 누르면 데이터가 보여요. 매일 오후 5시에 전날까지 자동으로 들어와요.</p></div>
     <div class="upd" id="upd"></div>
   </section>
-  <section class="dash" id="dash" aria-live="polite"></section>
-  <div class="lh"><h2>측정 목록</h2><span id="cnt"></span></div>
-  <div class="album" id="album"></div>
+  <section class="dash" id="dash" aria-live="polite" hidden></section>
+  <section id="list">
+    <div class="lh"><h2>측정 목록</h2><span id="cnt"></span></div>
+    <div class="album" id="album"></div>
+  </section>
 </main>
 <script>
 const $ = s => document.querySelector(s);
@@ -121,43 +128,63 @@ const EV = { brief_modal_view: '모달 노출', brief_modal_item_click: '일정 
 const evn = e => EV[e] || e;
 const unset = v => !v || v === '(not set)' ? '(미지정)' : v;
 
+const QID = new URLSearchParams(location.search).get('id');
 async function load() {
-  try { const r = await fetch('data/perf.json', { cache: 'no-store' }); ITEMS = (await r.json()).items || []; } catch { ITEMS = []; }
+  try { const r = await fetch('data/perf.json', { cache: 'no-store' }); if (r.status === 401) return location.reload(); ITEMS = (await r.json()).items || []; } catch { ITEMS = []; }
+  if (QID) {
+    const it = ITEMS.find(x => x.id === QID);
+    if (!it) { $('#ptitle').textContent = '성과 측정'; $('#pdesc').textContent = '없는 항목이에요. 목록에서 다시 골라 주세요.'; $('#crumb').hidden = false; $('#list').hidden = true; return; }
+    document.title = `${it.title} | 성과 측정 | 플랫폼전략팀 업무 아카이브`;
+    $('#crumb').hidden = false; $('#ptitle').textContent = it.title; $('#pdesc').textContent = it.desc || '';
+    $('#list').hidden = true; $('#dash').hidden = false;
+    return select(it.id);
+  }
   renderAlbum();
-  const first = ITEMS.find(x => x.dash) || ITEMS[0];
-  if (first) select(first.id);
+  const anyDash = ITEMS.find(x => x.dash);
+  if (anyDash) { const d = await getData(anyDash.dash); renderAlbum(d); setUpd(d); }
 }
 async function getData(id) {
   if (DATA[id] !== undefined) return DATA[id];
   try {
     const r = await fetch('/api/stats', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id }), cache: 'no-store' });
+    if (r.status === 401) { location.reload(); return null; }
     DATA[id] = r.ok ? await r.json() : null;
   } catch { DATA[id] = null; }
   return DATA[id];
 }
-function renderAlbum() {
+// 카드에 보이는 핵심 숫자
+function headline(it, d) {
+  if (!d) return '';
+  const pick = (rows, k) => { const r = (rows || []).find(x => x[0] === k); return r ? r[1] : 0; };
+  if (it.kind === 'autopay') { const a = d.autopay || {}; return `해지요청 <b>${fmt(pick(a.events, 'autopay_cancel_request'))}</b>명 · 해지하기 <b>${fmt(pick(a.events, 'autopay_cancel_confirm'))}</b>명`; }
+  return `노출 <b>${fmt(pick(d.events, 'brief_modal_view'))}</b>명 · 서식 클릭 <b>${fmt(pick(d.events, 'brief_modal_form_click'))}</b>명 · 블로그 <b>${fmt(pick(d.events, 'brief_modal_blog_click'))}</b>명`;
+}
+function renderAlbum(d) {
   $('#cnt').textContent = ITEMS.length ? `${ITEMS.length}건` : '';
-  $('#album').innerHTML = ITEMS.length ? ITEMS.map(it => `<button class="card${cur === it.id ? ' on' : ''}" data-id="${esc(it.id)}" type="button">
+  $('#album').innerHTML = ITEMS.length ? ITEMS.map(it => `<a class="card" href="perf.html?id=${encodeURIComponent(it.id)}">
       <div class="th">${it.thumb ? `<img src="${esc(it.thumb)}" alt="" loading="lazy">` : ''}<em class="${it.status === '측정 중' ? '' : 'ready'}">${esc(it.status || '')}</em></div>
       <div class="cb"><span class="pd">${esc(it.product || '')}</span><b>${esc(it.title)}</b><p>${esc(it.desc || '')}</p>
-        <div class="mt"><span>측정 시작 ${esc(D0(it.start))}</span>${it.events ? `<span>이벤트 ${esc(it.events)}종</span>` : ''}${it.gtm ? `<span>${esc(it.gtm)}</span>` : ''}</div></div></button>`).join('')
+        ${d && it.dash ? `<div class="hl2">${headline(it, d)}</div>` : ''}
+        <div class="mt"><span>측정 시작 ${esc(D0(it.start))}</span>${it.events ? `<span>이벤트 ${esc(it.events)}종</span>` : ''}${it.gtm ? `<span>${esc(it.gtm)}</span>` : ''}</div></div></a>`).join('')
     : '<p class="nod">아직 등록된 측정이 없어요.</p>';
 }
-$('#album').addEventListener('click', e => { const c = e.target.closest('.card'); if (!c) return; select(c.dataset.id); $('#dash').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+function setUpd(d) {
+  const u = d && d.updatedAt ? new Date(new Date(d.updatedAt).getTime() + 9 * 3600e3) : null;
+  const stale = d && d.range ? Math.round((Date.parse(new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10)) - Date.parse(d.range.end)) / 864e5) > 2 : true;
+  $('#upd').innerHTML = u ? `<i class="${stale ? 'warn' : ''}"></i>매일 오후 5시 자동 갱신 · 마지막 갱신 ${u.getUTCMonth() + 1}.${u.getUTCDate()} ${String(u.getUTCHours()).padStart(2, '0')}:${String(u.getUTCMinutes()).padStart(2, '0')}` : '<i class="warn"></i>매일 오후 5시 자동 갱신 · 아직 갱신 전';
+}
 
 async function select(id) {
-  cur = id; renderAlbum();
+  cur = id;
   const it = ITEMS.find(x => x.id === id); if (!it) return;
-  const head = `<div class="dh">${it.thumb ? `<img src="${esc(it.thumb)}" alt="">` : ''}<div class="t"><small>${esc(it.status || '')}</small><h2>${esc(it.title)}</h2><p>${esc(it.desc || '')}</p></div>
+  const head = `<div class="dh">${it.thumb ? `<img src="${esc(it.thumb)}" alt="">` : ''}<div class="t"><small>${esc(it.status || '')}</small><p>${it.gtm ? esc(it.gtm) + ' · ' : ''}측정 시작 ${esc(D0(it.start))}${it.events ? ' · 이벤트 ' + esc(it.events) + '종' : ''}</p></div>
     <div class="acts">${it.explore ? `<a class="btn pri" href="${esc(it.explore)}" target="_blank" rel="noopener">GA4 탐색 보고서 ↗</a>` : ''}${it.archive ? `<a class="btn" href="${esc(it.archive)}">디자인 시안</a>` : ''}</div></div>`;
   $('#dash').innerHTML = head + '<div class="db"><p class="nod">불러오는 중…</p></div>';
   if (!it.dash) { $('#dash').innerHTML = head + '<div class="db"><div class="empty">이 항목은 아직 대시보드가 없어요. GA4 탐색 보고서에서 확인해 주세요.</div></div>'; $('#upd').innerHTML = ''; return; }
   const d = await getData(it.dash);
   window.__series = null;
   $('#dash').innerHTML = head + `<div class="db">${it.kind === 'autopay' ? dashAutopay(d && d.autopay, it) : dashBody(d, it)}</div>`;
-  const u = d && d.updatedAt ? new Date(new Date(d.updatedAt).getTime() + 9 * 3600e3) : null;
-  const stale = d && d.range ? Math.round((Date.parse(new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10)) - Date.parse(d.range.end)) / 864e5) > 2 : true;
-  $('#upd').innerHTML = u ? `<i class="${stale ? 'warn' : ''}"></i>매일 오후 5시 자동 갱신 · 마지막 갱신 ${u.getUTCMonth() + 1}.${u.getUTCDate()} ${String(u.getUTCHours()).padStart(2, '0')}:${String(u.getUTCMinutes()).padStart(2, '0')}` : '<i class="warn"></i>매일 오후 5시 자동 갱신 · 아직 갱신 전';
+  setUpd(d);
   drawLine();
 }
 

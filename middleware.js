@@ -2,15 +2,18 @@
 // 비밀번호 = Vercel 환경변수 SITE_PASSWORD (없으면 STATS_PASSWORD). 비밀번호를 바꾸면 기존 쿠키는 모두 무효가 된다.
 // 예외: Aside 루틴의 데이터 업로드(POST /api/stats-update, /api/wbs — 자체 키로 보호), x-pst-key 헤더(= STATS_UPDATE_KEY)가 맞는 요청, robots.txt.
 // 쿠키 값 계산은 api/_lib.js 의 siteOk 와 같아야 한다.
+// 성과 측정(perf.html, data/perf.json)은 사이트 비밀번호에 더해 성과 측정 비밀번호(Vercel 환경변수 PERF_PASSWORD)를 한 번 더 받는다.
+// 쿠키 pst_perf 계산은 api/_lib.js 의 perfOk 와 같아야 한다.
 export const config = { runtime: 'nodejs' };
 
 const COOKIE = 'pst_site';
+const PCOOKIE = 'pst_perf';
 const MAX_AGE = 60 * 60 * 24 * 30;
 const enc = new TextEncoder();
 
-async function token(pw) {
+async function token(pw, msg = 'pst-site-v1') {
   const key = await crypto.subtle.importKey('raw', enc.encode(pw), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
-  const sig = await crypto.subtle.sign('HMAC', key, enc.encode('pst-site-v1'));
+  const sig = await crypto.subtle.sign('HMAC', key, enc.encode(msg));
   return Array.from(new Uint8Array(sig), b => b.toString(16).padStart(2, '0')).join('');
 }
 function eq(a, b) {
@@ -27,7 +30,7 @@ const next = () => new Response(null, { headers: { 'x-middleware-next': '1' } })
 const safeTo = t => (typeof t === 'string' && t.startsWith('/') && !t.startsWith('//') && !t.startsWith('/__')) ? t : '/';
 const escHtml = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-function page(to, err, status) {
+function page(to, err, status, perf) {
   const html = `<!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow"><title>플랫폼전략팀 업무 아카이브</title>
@@ -44,10 +47,10 @@ input:focus{outline:none;border-color:#2f6bff;box-shadow:0 0 0 3px rgba(47,107,2
 button{margin-top:10px;width:100%;height:46px;border:0;border-radius:10px;background:#2f6bff;color:#fff;font:inherit;font-weight:600;font-size:15px;cursor:pointer}
 .err{color:#e5484d;font-size:13px;margin-top:10px;min-height:20px}
 </style></head><body>
-<form method="post" action="/__login" autocomplete="off" onsubmit="try{sessionStorage.setItem('pst_stats_pw','site')}catch(e){}">
+${perf ? '<form method="post" action="/__perf_login" autocomplete="off">' : `<form method="post" action="/__login" autocomplete="off" onsubmit="try{sessionStorage.setItem('pst_stats_pw','site')}catch(e){}">`}
   <div class="mark" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 7.5l9 4.5 9-4.5z" fill="#fff"/><path d="m3 12 9 4.5 9-4.5"/><path d="m3 16.5 9 4.5 9-4.5"/></svg></div>
-  <h1>플랫폼전략팀 업무 아카이브</h1>
-  <p>비밀번호를 입력해 주세요.</p>
+  <h1>${perf ? '성과 측정' : '플랫폼전략팀 업무 아카이브'}</h1>
+  <p>${perf ? '성과 측정 비밀번호를 입력해 주세요.' : '비밀번호를 입력해 주세요.'}</p>
   <input name="password" type="password" inputmode="numeric" maxlength="40" aria-label="비밀번호" autofocus required>
   <input type="hidden" name="to" value="${escHtml(to)}">
   <button type="submit">확인</button>
@@ -82,7 +85,31 @@ export default async function middleware(req) {
     return page(to, '비밀번호가 맞지 않습니다.', 401);
   }
 
-  if (eq(getCookie(req, COOKIE), tk)) return next();
+  if (p === '/__perf_login') {
+    if (req.method !== 'POST') return Response.redirect(new URL('/perf.html', url), 303);
+    if (!eq(getCookie(req, COOKIE), tk)) return page('/perf.html', '', 401);
+    const ppw = process.env.PERF_PASSWORD;
+    let given = '', to = '/perf.html';
+    try { const f = await req.formData(); given = String(f.get('password') || '').trim(); to = safeTo(String(f.get('to') || '/perf.html')); } catch {}
+    if (ppw && given && eq(await token(given, 'pst-perf-v1'), await token(ppw, 'pst-perf-v1'))) {
+      return new Response(null, { status: 303, headers: { Location: to, 'Set-Cookie': `${PCOOKIE}=${await token(ppw, 'pst-perf-v1')}; Path=/; Max-Age=${MAX_AGE}; HttpOnly; Secure; SameSite=Lax`, 'cache-control': 'no-store' } });
+    }
+    await new Promise(r => setTimeout(r, 800));
+    return page(to, '비밀번호가 맞지 않습니다.', 401, true);
+  }
+
+  if (eq(getCookie(req, COOKIE), tk)) {
+    // 성과 측정 화면·데이터는 성과 측정 비밀번호 쿠키가 있어야 열림
+    if (p === '/perf.html' || p === '/perf' || p.startsWith('/data/perf')) {
+      const ppw = process.env.PERF_PASSWORD;
+      if (!ppw) return new Response('성과 측정 비밀번호가 설정되지 않았습니다.', { status: 503, headers: { 'content-type': 'text/plain; charset=utf-8' } });
+      if (!eq(getCookie(req, PCOOKIE), await token(ppw, 'pst-perf-v1'))) {
+        if (p.startsWith('/data/')) return new Response(JSON.stringify({ error: '성과 측정 비밀번호가 필요합니다.' }), { status: 401, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' } });
+        return page(safeTo(p + url.search), '', 401, true);
+      }
+    }
+    return next();
+  }
 
   if (p.startsWith('/api/')) {
     return new Response(JSON.stringify({ error: '사이트 비밀번호가 필요합니다. 페이지를 새로고침해 주세요.' }), { status: 401, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' } });
