@@ -60,6 +60,20 @@
   tr:last-child td{border-bottom:0}
   .bar{display:inline-block;height:6px;border-radius:3px;background:var(--c);opacity:.75;vertical-align:middle;margin-right:6px}
   .nod{color:var(--faint);font-size:12px;padding:8px 0}
+  .kpi.hl{border-color:#f3c3a4;background:#fffaf6}
+  .box.key{border-color:#f3c3a4}
+  .box.key h3{font-size:15px}
+  .use{margin-top:12px}
+  .ustat{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:4px 0 6px}
+  .ustat div{background:#f8f9fb;border-radius:10px;padding:10px 12px}
+  .ustat span{display:block;font-size:12px;color:var(--sub)}
+  .ustat b{font-size:20px;font-weight:800}
+  .ustat em{display:block;font-style:normal;font-size:11px;color:var(--faint)}
+  .grid2.in{margin-top:6px}
+  .grid2.in h4{font-size:13px;margin:6px 0}
+  table.rk td:first-child{width:22px;color:var(--faint)}
+  table.rk td:nth-child(2){text-align:left;max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  table.rk th:nth-child(2){text-align:left}
 
   /* 앨범형 리스트 */
   .lh{display:flex;justify-content:space-between;align-items:baseline;margin-top:30px}
@@ -78,7 +92,7 @@
   .cb b{font-size:15px;line-height:1.4}
   .cb p{font-size:12.5px;color:var(--sub)}
   .cb .mt{margin-top:auto;padding-top:8px;display:flex;flex-wrap:wrap;gap:4px 10px;font-size:11.5px;color:var(--faint)}
-  @media (max-width:960px){.kpis{grid-template-columns:repeat(3,1fr)}.grid2{grid-template-columns:1fr}}
+  @media (max-width:960px){.kpis{grid-template-columns:repeat(3,1fr)}.grid2{grid-template-columns:1fr}.ustat{grid-template-columns:repeat(2,1fr)}}
   @media (max-width:560px){.kpis{grid-template-columns:repeat(2,1fr)}.dh img{width:100%}}
 </style>
 </head>
@@ -151,37 +165,55 @@ function dashBody(d, it) {
   const ev = Object.fromEntries((d.events || []).map(r => [r[0], { u: r[1], c: r[2], tx: r[3] || 0 }]));
   const g = k => ev[k] || { u: 0, c: 0, tx: 0 };
   const view = g('brief_modal_view'), item = g('brief_modal_item_click'), form = g('brief_modal_form_click'), blog = g('brief_modal_blog_click'), close = g('brief_modal_close'), buy = g('brief_modal_purchase');
-  const clickU = item.u + form.u + blog.u;
+  const U = d.useful || {};
+  const BANDS = ['열람 5초 미만', '열람 5~15초', '열람 15~30초', '열람 30~60초', '열람 1~3분', '열람 3분 이상'];
+  const bandRows = BANDS.map(b => { const r = (U.byBand || []).find(x => x[0] === b); return [b, r ? r[2] : 0, r ? r[3] : 0]; });
+  const bandTot = bandRows.reduce((a, r) => a + r[2], 0);
+  const good = bandRows.slice(2).reduce((a, r) => a + r[2], 0);
   const range = d.range ? `${D0(d.range.start)} ~ ${D0(d.range.end)}` : '';
+  const sec = v => v ? (v >= 60 ? `${Math.floor(v / 60)}분 ${Math.round(v % 60)}초` : `${v.toFixed(1)}초`) : '-';
   const kpis = `<div class="kpis">
     <div class="kpi"><div class="l">모달 노출</div><div class="v">${fmt(view.u)}<small>명</small></div><div class="s">${fmt(view.c)}회</div></div>
-    <div class="kpi"><div class="l">일정 클릭</div><div class="v">${fmt(item.u)}<small>명</small></div><div class="s">노출 대비 ${pct(item.u, view.u)}</div></div>
-    <div class="kpi"><div class="l">서식 · 블로그 클릭</div><div class="v">${fmt(form.u + blog.u)}<small>명</small></div><div class="s">서식 ${fmt(form.u)} · 블로그 ${fmt(blog.u)}</div></div>
-    <div class="kpi"><div class="l">닫기</div><div class="v">${fmt(close.u)}<small>명</small></div><div class="s">노출 대비 ${pct(close.u, view.u)}</div></div>
+    <div class="kpi hl"><div class="l">추천 서식 클릭</div><div class="v">${fmt(form.u)}<small>명</small></div><div class="s">${fmt(form.c)}회 · 노출 대비 ${pct(form.u, view.u)}</div></div>
+    <div class="kpi hl"><div class="l">블로그 글 클릭</div><div class="v">${fmt(blog.u)}<small>명</small></div><div class="s">${fmt(blog.c)}회 · 노출 대비 ${pct(blog.u, view.u)}</div></div>
+    <div class="kpi hl"><div class="l">평균 열람 시간</div><div class="v">${sec(U.avgSec)}</div><div class="s">15초 이상 본 비율 ${pct(good, bandTot)}</div></div>
     <div class="kpi"><div class="l">클릭 후 결제 (30일)</div><div class="v">${fmt(buy.c)}<small>건</small></div><div class="s">${fmt(buy.u)}명</div></div></div>`;
-  if (!(d.events || []).length) return `<p class="upd" style="margin-bottom:10px">기간 ${range}</p>` + kpis + `<div class="empty">아직 수집된 이벤트가 없어요. 모달이 예스폼에 공개되면(GTM 버전 40 게시 완료) 다음 날 오후 5시부터 숫자가 채워져요.</div>`;
+  if (!(d.events || []).length) return `<p class="upd" style="margin-bottom:10px">기간 ${range}</p>` + kpis + `<div class="empty">아직 수집된 이벤트가 없어요. 모달이 예스폼 메인에 공개된 다음 날 오후 5시부터 숫자가 채워져요. 열람 시간 · 본 일정 수 · 행동 수는 GTM 버전 44(11/24) 이후 열람부터 쌓여요.</div>`;
   window.__line = d.daily || [];
   const top = (rows, cols, n = 8) => rows.length ? `<table><thead><tr>${cols.map(c => `<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.slice(0, n).map(r => `<tr>${r.map(v => `<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table>` : '<p class="nod">아직 데이터 없음</p>';
+  const barTd = (v, mx) => `<span class="bar" style="width:${mx ? Math.max(4, Math.round(v / mx * 70)) : 0}px"></span>${fmt(v)}`;
+  const rank = (rows, label) => { const rs = (rows || []).slice().sort((a, b) => b[3] - a[3] || b[4] - a[4]); const mx = rs.length ? rs[0][3] : 0;
+    return rs.length ? `<table class="rk"><thead><tr><th>#</th><th>${label}</th><th>사용자</th><th>클릭</th></tr></thead><tbody>${rs.slice(0, 20).map((r, i) => `<tr><td>${i + 1}</td><td title="${esc(r[0])}">${esc(unset(r[0]))}<small>${esc(String(r[1] || '').replace(/^blog_/, '글 '))}</small></td><td>${barTd(r[3], mx)}</td><td>${fmt(r[4])}</td></tr>`).join('')}</tbody></table>` : '<p class="nod">아직 클릭이 없어요</p>'; };
   const evRows = (d.events || []).slice().sort((a, b) => b[1] - a[1]).map(r => [esc(evn(r[0])), fmt(r[1]), fmt(r[2])]);
-  // 일정별: [일정명, 날짜, 이벤트, 사용자, 횟수] → 일정명 단위로 합침
   const agg = (rows, key, val) => { const o = {}; rows.forEach(r => { const k = key(r); (o[k] = o[k] || [0, 0]); o[k][0] += r[val]; o[k][1] += r[val + 1]; }); return Object.entries(o).sort((a, b) => b[1][0] - a[1][0]); };
   const items = agg(d.items || [], r => `${unset(r[0])}${r[1] && r[1] !== '(not set)' ? ' · ' + r[1] : ''}`, 3).map(([k, v]) => [esc(k), fmt(v[0]), fmt(v[1])]);
-  const forms = agg(d.forms || [], r => `${unset(r[0])}|${evn(r[3])}`, 4).map(([k, v]) => { const [n, e] = k.split('|'); return [`${esc(n)}<small>${esc(e)}</small>`, fmt(v[0]), fmt(v[1])]; });
   const filt = agg(d.filters || [], r => `${evn(r[1])}|${unset(r[0])}`, 2).map(([k, v]) => { const [e, n] = k.split('|'); return [`${esc(n)}<small>${esc(e)}</small>`, fmt(v[0]), fmt(v[1])]; });
-  const cls = (d.close || []).map(r => [esc(unset(r[0])), fmt(r[2]), fmt(r[3])]);
+  const CL = { close_close: '닫기 버튼', close_today_hide: '오늘 다시 보지 않기', close_backdrop: '바깥 클릭', close_esc: 'ESC', close_leave_page: '페이지 이동' };
+  const clsRows = (U.byClose && U.byClose.length ? U.byClose.map(r => [esc(CL[r[0]] || unset(r[0])), fmt(r[2]), fmt(r[3]), sec(r[4]), r[6] ? r[6].toFixed(1) : '-'])
+    : (d.close || []).map(r => [esc(CL[r[0]] || unset(r[0])), fmt(r[2]), fmt(r[3]), '-', '-']));
+  const hide = (U.byClose || []).find(r => r[0] === 'close_today_hide');
+  const bmx = Math.max(0, ...bandRows.map(r => r[2]));
   const DEV = { desktop: 'PC', mobile: '모바일', tablet: '태블릿' };
   const dev = agg(d.device || [], r => DEV[r[1]] || unset(r[1]), 2).map(([k, v]) => [esc(k), fmt(v[0]), fmt(v[1])]);
   const buyRows = (d.purchase || []).map(r => [`${esc(unset(r[1]))}<small>${esc(unset(r[0]))}</small>`, fmt(r[3]), fmt(r[4])]);
   return `<p class="upd" style="margin-bottom:10px">기간 ${range} · 사용자는 기간 안 순 사용자</p>` + kpis +
-    `<div class="chart"><h3>일별 추이 <span>노출 · 클릭 사용자</span></h3><div class="lg"><span><i style="background:#e8590c"></i>모달 노출</span><span><i style="background:#2f6bff"></i>일정 · 서식 · 블로그 클릭</span></div><svg class="ln" id="ln"></svg></div>
+    `<div class="grid2">
+      <div class="box key"><h3>어떤 서식을 클릭했나 <span>추천 서식 클릭 순위</span></h3>${rank(d.formRank, '서식')}</div>
+      <div class="box key"><h3>어떤 블로그 글을 클릭했나 <span>블로그 클릭 순위</span></h3>${rank(d.blogRank, '블로그 글')}</div>
+    </div>
+    <div class="box key use"><h3>얼마나 유용하게 봤나 <span>닫을 때 기준 · GTM v44(11/24)부터</span></h3>
+      <div class="ustat"><div><span>평균 열람 시간</span><b>${sec(U.avgSec)}</b></div><div><span>평균 본 일정 수</span><b>${U.avgItems ? U.avgItems.toFixed(1) + '개' : '-'}</b></div><div><span>평균 행동 수</span><b>${U.avgActions ? U.avgActions.toFixed(1) + '회' : '-'}</b><em>일정·분야·서식·블로그 클릭, 스크롤</em></div><div><span>오늘 다시 보지 않기</span><b>${hide ? pct(hide[3], U.closes) : '-'}</b><em>닫기 중 비율</em></div></div>
+      <div class="grid2 in">
+        <div><h4>열람 시간 분포</h4>${bandTot ? `<table><thead><tr><th>열람 시간</th><th>닫기 횟수</th><th>비율</th></tr></thead><tbody>${bandRows.map(r => `<tr><td>${esc(r[0].replace('열람 ', ''))}</td><td>${barTd(r[2], bmx)}</td><td>${pct(r[2], bandTot)}</td></tr>`).join('')}</tbody></table>` : '<p class="nod">아직 데이터 없음</p>'}</div>
+        <div><h4>닫기 방식</h4>${top(clsRows, ['방식', '사용자', '횟수', '평균 열람', '평균 행동'])}</div>
+      </div></div>
+    <div class="chart"><h3>일별 추이 <span>노출 · 클릭 사용자</span></h3><div class="lg"><span><i style="background:#e8590c"></i>모달 노출</span><span><i style="background:#2f6bff"></i>일정 · 서식 · 블로그 클릭</span></div><svg class="ln" id="ln"></svg></div>
     <div class="grid2">
-      <div class="box"><h3>① 이벤트 요약 <span>사용자 · 횟수</span></h3>${top(evRows, ['이벤트', '사용자', '횟수'], 12)}</div>
-      <div class="box"><h3>② 일정별 관심도 <span>일정 · 서식 · 블로그 클릭</span></h3>${top(items, ['일정', '사용자', '횟수'])}</div>
-      <div class="box"><h3>③ 추천 서식 · 블로그 클릭</h3>${top(forms, ['서식 · 블로그', '사용자', '횟수'])}</div>
-      <div class="box"><h3>④ 분야 필터 · 상단 일정 버튼 · 스크롤</h3>${top(filt, ['구분', '사용자', '횟수'])}</div>
-      <div class="box"><h3>⑤ 닫기 방식</h3>${top(cls, ['방식', '사용자', '횟수'])}</div>
-      <div class="box"><h3>⑥ 서식 · 블로그 클릭 후 결제 <span>30일</span></h3>${top(buyRows, ['서식 번호 · 링크 종류', '사용자', '건수'])}</div>
-      <div class="box"><h3>⑦ 기기별 이용</h3>${top(dev, ['기기', '사용자', '횟수'])}</div>
+      <div class="box"><h3>일정별 관심도 <span>일정 · 서식 · 블로그 클릭</span></h3>${top(items, ['일정', '사용자', '횟수'])}</div>
+      <div class="box"><h3>분야 필터 · 상단 일정 버튼 · 스크롤</h3>${top(filt, ['구분', '사용자', '횟수'])}</div>
+      <div class="box"><h3>서식 · 블로그 클릭 후 결제 <span>30일</span></h3>${top(buyRows, ['서식 번호 · 링크 종류', '사용자', '건수'])}</div>
+      <div class="box"><h3>기기별 이용</h3>${top(dev, ['기기', '사용자', '횟수'])}</div>
+      <div class="box"><h3>이벤트 요약 <span>사용자 · 횟수</span></h3>${top(evRows, ['이벤트', '사용자', '횟수'], 12)}</div>
     </div>`;
 }
 function drawLine() {
