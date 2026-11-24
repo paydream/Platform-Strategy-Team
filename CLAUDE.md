@@ -8,7 +8,7 @@
 - 새 파일은 `archive/YYYYMMDD-HHMMSS-영문이름/` 새 폴더에 넣는다. 폴더가 이미 있으면 멈춘다.
 - 목록에서 빼려면 숨기기(`hidden: true`)나 휴지통(`trash`)을 쓴다. 시안 파일은 그대로 둔다.
 - 버전의 `folder`·`preview`·시안 `href`는 한 번 정해지면 바뀌지 않는다(`admin/model.js`의 `checkSave`가 막음).
-- 바꿔도 되는 파일은 관리용뿐이다: `projects.json`, `data/comments.json`, 루트 `index.html`, `project.html`, `tracking.html`, `wbs.html`, `work.html`, `calendar.html`, `stats*.html`(통계 화면), `gnb.css`·`gnb.js`(공통 GNB), `vercel.json`, `middleware.js`(사이트 비밀번호), `admin/`, `api/`, `data/`, `README.md`, `CLAUDE.md`, `.github/`.
+- 바꿔도 되는 파일은 관리용뿐이다: `projects.json`, `data/comments.json`, 루트 `index.html`, `project.html`, `tracking.html`, `wbs.html`, `perf.html`, `work.html`, `calendar.html`, `stats*.html`(통계 화면), `gnb.css`·`gnb.js`(공통 GNB), `vercel.json`, `middleware.js`(사이트 비밀번호), `admin/`, `api/`, `data/`, `README.md`, `CLAUDE.md`, `.github/`.
 - `.github/workflows/no-overwrite.yml`이 push마다 이 규칙을 검사한다.
 
 ## 배포 (2026-11-17~ 자동 배포 끔)
@@ -94,3 +94,9 @@
 - 본문을 고치려면 새 본문을 같은 방식으로 암호화해 `data/stats/<id>.enc.json`을 덮어쓴다(이 파일만 바뀐 커밋은 재배포 없음).
 - `membership-plan` v2(`archive/20261113-141552-yesform-membership-plan-v2/`)는 셸이 화면을 직접 그린다: 본문 데이터의 `plan`(요금제·오픈안·결정 필요 등 JSON)을 쓰고, `html`은 v1 셸 호환용이다.
 - 팀별 일정은 화면에서 직접 추가·수정·삭제한다: `POST /api/plan-schedule { doc, password, action:'get'|'save'|'delete' }` → `data/stats/<doc>-schedule.enc.json`(`{ rows:[{id,team,kind(task|milestone),task,start,end,st,note}], updated }`). 권한은 사이트 로그인 쿠키·통계 비밀번호·팀 비밀번호. 허용 문서는 `api/plan-schedule.js`의 `DOCS`.
+
+## 성과 측정 (`/perf.html`, 2026-11-24~, 매일 오후 5시 자동)
+- GNB 「성과 측정」. 위: 고른 측정 항목의 대시보드(리스트 헤더), 아래: 앨범형 측정 목록(썸네일 카드).
+- 목록: `data/perf.json` `{ items: [{ id, title, desc, product, status, start, events, gtm, thumb, archive, explore, dash }] }` — 썸네일은 `assets/perf/`. 새 측정을 추가하면 이 파일에 항목을 넣는다(배포 필요). `dash`가 있으면 그 id의 데이터를 `POST /api/stats {id}`로 읽어 대시보드를 그린다.
+- 데이터: `data/stats/perf.enc.json`(암호화). Aside 루틴(매일 17시)이 GA4 예스폼(255821535)에서 brief_modal_* 이벤트를 뽑아 `POST /api/stats-update {key, id:'perf', data}`로 저장(재배포 없음). 원본 탐색 보고서: 「연말연초 업무 브리핑 모달」 kxmY8iGOQea32A2Fx3AS-A (탭 ①~⑦과 같은 조회).
+- 맞춤 측정기준(이벤트 범위) 순서: group2 slot 45 일정명(brief_item) · 46 일정 날짜 · 47 필터 · 48 링크 종류 · 49 서식 고유번호 · 50 서식명.

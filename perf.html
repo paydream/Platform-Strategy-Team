@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>성과 측정 | 플랫폼전략팀 업무 아카이브</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="gnb.css">
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--line:#e5e8ec;--line2:#eef0f3;--text:#191f28;--sub:#6b7684;--faint:#98a1ad;--accent:#2f6bff;--chip:#eef3ff;--c:#e8590c;--c-bg:#fff1e6;--ok:#12a150;--ok-bg:#e8f7ee}
+  *{box-sizing:border-box;margin:0;padding:0}
+  [hidden]{display:none!important}
+  body{font-family:"Pretendard Variable",Pretendard,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+  main{padding-bottom:70px}
+  .hero{padding:30px 0 0;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+  .hero h1{font-size:26px;letter-spacing:-.01em}
+  .hero p{color:var(--sub);margin-top:4px;font-size:14px}
+  .upd{font-size:12px;color:var(--sub);display:flex;align-items:center;gap:6px}
+  .upd i{width:7px;height:7px;border-radius:50%;background:var(--ok);display:inline-block}
+  .upd i.warn{background:#f59e0b}
+
+  /* 대시보드 (리스트 헤더) */
+  .dash{margin-top:20px;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .dh{display:flex;gap:18px;align-items:center;padding:18px 20px;border-bottom:1px solid var(--line2);flex-wrap:wrap}
+  .dh img{width:148px;aspect-ratio:16/10;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
+  .dh .t{flex:1;min-width:220px}
+  .dh .t small{display:inline-block;font-size:12px;font-weight:700;color:var(--c);background:var(--c-bg);border-radius:99px;padding:2px 9px}
+  .dh .t h2{font-size:20px;margin-top:6px;letter-spacing:-.01em}
+  .dh .t p{font-size:13px;color:var(--sub);margin-top:2px}
+  .dh .acts{display:flex;gap:8px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border-radius:9px;border:1px solid var(--line);background:#fff;font:inherit;font-size:13px;font-weight:600;color:var(--text);text-decoration:none;cursor:pointer;white-space:nowrap}
+  .btn:hover{border-color:var(--c);color:var(--c)}
+  .btn.pri{background:var(--c);border-color:var(--c);color:#fff}
+  .btn.pri:hover{filter:brightness(1.05);color:#fff}
+  .db{padding:18px 20px 20px}
+  .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+  .kpi{border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+  .kpi .l{font-size:12px;color:var(--sub)}
+  .kpi .v{font-size:24px;font-weight:800;letter-spacing:-.01em;margin-top:2px}
+  .kpi .v small{font-size:12px;font-weight:600;color:var(--sub);margin-left:3px}
+  .kpi .s{font-size:12px;color:var(--faint);margin-top:2px}
+  .empty{margin-top:12px;padding:14px 16px;border-radius:12px;background:#f8f9fb;border:1px dashed #d6dbe1;color:var(--sub);font-size:13px}
+  .chart{margin-top:14px;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+  .chart h3,.grid2 h3{font-size:14px;margin-bottom:8px;display:flex;justify-content:space-between;gap:8px}
+  .chart h3 span,.grid2 h3 span{font-size:12px;color:var(--faint);font-weight:400}
+  .lg{display:flex;gap:12px;font-size:12px;color:var(--sub);margin-bottom:4px}
+  .lg i{display:inline-block;width:10px;height:3px;border-radius:2px;margin-right:5px;vertical-align:middle}
+  svg.ln{width:100%;height:180px;display:block}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+  .box{border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:0}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{font-size:12px;color:var(--faint);font-weight:500;text-align:right;padding:5px 6px;border-bottom:1px solid var(--line2)}
+  td{text-align:right;padding:6px;border-bottom:1px solid var(--line2);font-variant-numeric:tabular-nums}
+  th:first-child,td:first-child{text-align:left}
+  td:first-child{max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  td small{color:var(--faint);margin-left:4px}
+  tr:last-child td{border-bottom:0}
+  .bar{display:inline-block;height:6px;border-radius:3px;background:var(--c);opacity:.75;vertical-align:middle;margin-right:6px}
+  .nod{color:var(--faint);font-size:12px;padding:8px 0}
+
+  /* 앨범형 리스트 */
+  .lh{display:flex;justify-content:space-between;align-items:baseline;margin-top:30px}
+  .lh h2{font-size:18px}
+  .lh span{font-size:13px;color:var(--sub)}
+  .album{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px;margin-top:12px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;text-decoration:none;display:flex;flex-direction:column;cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s;text-align:left;font:inherit;color:inherit;padding:0}
+  .card:hover{border-color:#f3c3a4;box-shadow:0 6px 18px rgba(0,0,0,.06);transform:translateY(-1px)}
+  .card.on{border-color:var(--c);box-shadow:0 0 0 2px var(--c-bg)}
+  .th{aspect-ratio:16/10;background:#eef0f3;position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+  .th img{width:100%;height:100%;object-fit:cover;display:block}
+  .th em{position:absolute;left:10px;top:10px;font-style:normal;font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px;background:#fff;color:var(--c);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+  .th em.ready{color:var(--sub)}
+  .cb{padding:12px 14px 14px;display:flex;flex-direction:column;gap:4px;flex:1}
+  .cb .pd{font-size:12px;color:var(--c);font-weight:700}
+  .cb b{font-size:15px;line-height:1.4}
+  .cb p{font-size:12.5px;color:var(--sub)}
+  .cb .mt{margin-top:auto;padding-top:8px;display:flex;flex-wrap:wrap;gap:4px 10px;font-size:11.5px;color:var(--faint)}
+  @media (max-width:960px){.kpis{grid-template-columns:repeat(3,1fr)}.grid2{grid-template-columns:1fr}}
+  @media (max-width:560px){.kpis{grid-template-columns:repeat(2,1fr)}.dh img{width:100%}}
+</style>
+</head>
+<body>
+<header class="gnb"><div class="wrap gnb-top"><a class="gnb-logo" href="./" title="메인 홈으로"><strong>플랫폼전략팀</strong></a><div class="gnb-util"></div></div><nav class="wrap gnb-nav" data-current="perf" aria-label="주요 메뉴"></nav><script src="gnb.js"></script></header>
+<main class="wrap">
+  <section class="hero">
+    <div><h1>성과 측정</h1><p>GA4 · GTM으로 측정하는 화면·기능별 성과. 매일 오후 5시에 전날까지 데이터가 자동으로 들어와요.</p></div>
+    <div class="upd" id="upd"></div>
+  </section>
+  <section class="dash" id="dash" aria-live="polite"></section>
+  <div class="lh"><h2>측정 목록</h2><span id="cnt"></span></div>
+  <div class="album" id="album"></div>
+</main>
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = n => (n == null || isNaN(n)) ? '-' : Math.round(n).toLocaleString('ko-KR');
+const pct = (a, b) => b ? (a / b * 100).toFixed(1) + '%' : '-';
+const D0 = s => String(s || '').replace(/-/g, '.');
+let ITEMS = [], DATA = {}, cur = null;
+
+// 이벤트 이름 → 한국어
+const EV = { brief_modal_view: '모달 노출', brief_modal_item_click: '일정 클릭', brief_modal_form_click: '추천 서식 클릭', brief_modal_blog_click: '블로그 클릭',
+  brief_modal_filter_click: '분야 필터', brief_modal_header_click: '상단 일정 버튼', brief_modal_scroll: '스크롤', brief_modal_close: '닫기', brief_modal_purchase: '클릭 후 결제' };
+const evn = e => EV[e] || e;
+const unset = v => !v || v === '(not set)' ? '(미지정)' : v;
+
+async function load() {
+  try { const r = await fetch('data/perf.json', { cache: 'no-store' }); ITEMS = (await r.json()).items || []; } catch { ITEMS = []; }
+  renderAlbum();
+  const first = ITEMS.find(x => x.dash) || ITEMS[0];
+  if (first) select(first.id);
+}
+async function getData(id) {
+  if (DATA[id] !== undefined) return DATA[id];
+  try {
+    const r = await fetch('/api/stats', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id }), cache: 'no-store' });
+    DATA[id] = r.ok ? await r.json() : null;
+  } catch { DATA[id] = null; }
+  return DATA[id];
+}
+function renderAlbum() {
+  $('#cnt').textContent = ITEMS.length ? `${ITEMS.length}건` : '';
+  $('#album').innerHTML = ITEMS.length ? ITEMS.map(it => `<button class="card${cur === it.id ? ' on' : ''}" data-id="${esc(it.id)}" type="button">
+      <div class="th">${it.thumb ? `<img src="${esc(it.thumb)}" alt="" loading="lazy">` : ''}<em class="${it.status === '측정 중' ? '' : 'ready'}">${esc(it.status || '')}</em></div>
+      <div class="cb"><span class="pd">${esc(it.product || '')}</span><b>${esc(it.title)}</b><p>${esc(it.desc || '')}</p>
+        <div class="mt"><span>측정 시작 ${esc(D0(it.start))}</span>${it.events ? `<span>이벤트 ${esc(it.events)}종</span>` : ''}${it.gtm ? `<span>${esc(it.gtm)}</span>` : ''}</div></div></button>`).join('')
+    : '<p class="nod">아직 등록된 측정이 없어요.</p>';
+}
+$('#album').addEventListener('click', e => { const c = e.target.closest('.card'); if (!c) return; select(c.dataset.id); $('#dash').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+
+async function select(id) {
+  cur = id; renderAlbum();
+  const it = ITEMS.find(x => x.id === id); if (!it) return;
+  const head = `<div class="dh">${it.thumb ? `<img src="${esc(it.thumb)}" alt="">` : ''}<div class="t"><small>${esc(it.status || '')}</small><h2>${esc(it.title)}</h2><p>${esc(it.desc || '')}</p></div>
+    <div class="acts">${it.explore ? `<a class="btn pri" href="${esc(it.explore)}" target="_blank" rel="noopener">GA4 탐색 보고서 ↗</a>` : ''}${it.archive ? `<a class="btn" href="${esc(it.archive)}">디자인 시안</a>` : ''}</div></div>`;
+  $('#dash').innerHTML = head + '<div class="db"><p class="nod">불러오는 중…</p></div>';
+  if (!it.dash) { $('#dash').innerHTML = head + '<div class="db"><div class="empty">이 항목은 아직 대시보드가 없어요. GA4 탐색 보고서에서 확인해 주세요.</div></div>'; $('#upd').innerHTML = ''; return; }
+  const d = await getData(it.dash);
+  $('#dash').innerHTML = head + `<div class="db">${dashBody(d, it)}</div>`;
+  const u = d && d.updatedAt ? new Date(new Date(d.updatedAt).getTime() + 9 * 3600e3) : null;
+  const stale = d && d.range ? Math.round((Date.parse(new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10)) - Date.parse(d.range.end)) / 864e5) > 2 : true;
+  $('#upd').innerHTML = u ? `<i class="${stale ? 'warn' : ''}"></i>매일 오후 5시 자동 갱신 · 마지막 갱신 ${u.getUTCMonth() + 1}.${u.getUTCDate()} ${String(u.getUTCHours()).padStart(2, '0')}:${String(u.getUTCMinutes()).padStart(2, '0')}` : '<i class="warn"></i>매일 오후 5시 자동 갱신 · 아직 갱신 전';
+  drawLine();
+}
+
+function dashBody(d, it) {
+  if (!d) return '<div class="empty">데이터를 아직 받지 못했어요. 매일 오후 5시에 GA4에서 자동으로 들어와요.</div>';
+  const ev = Object.fromEntries((d.events || []).map(r => [r[0], { u: r[1], c: r[2], tx: r[3] || 0 }]));
+  const g = k => ev[k] || { u: 0, c: 0, tx: 0 };
+  const view = g('brief_modal_view'), item = g('brief_modal_item_click'), form = g('brief_modal_form_click'), blog = g('brief_modal_blog_click'), close = g('brief_modal_close'), buy = g('brief_modal_purchase');
+  const clickU = item.u + form.u + blog.u;
+  const range = d.range ? `${D0(d.range.start)} ~ ${D0(d.range.end)}` : '';
+  const kpis = `<div class="kpis">
+    <div class="kpi"><div class="l">모달 노출</div><div class="v">${fmt(view.u)}<small>명</small></div><div class="s">${fmt(view.c)}회</div></div>
+    <div class="kpi"><div class="l">일정 클릭</div><div class="v">${fmt(item.u)}<small>명</small></div><div class="s">노출 대비 ${pct(item.u, view.u)}</div></div>
+    <div class="kpi"><div class="l">서식 · 블로그 클릭</div><div class="v">${fmt(form.u + blog.u)}<small>명</small></div><div class="s">서식 ${fmt(form.u)} · 블로그 ${fmt(blog.u)}</div></div>
+    <div class="kpi"><div class="l">닫기</div><div class="v">${fmt(close.u)}<small>명</small></div><div class="s">노출 대비 ${pct(close.u, view.u)}</div></div>
+    <div class="kpi"><div class="l">클릭 후 결제 (30일)</div><div class="v">${fmt(buy.c)}<small>건</small></div><div class="s">${fmt(buy.u)}명</div></div></div>`;
+  if (!(d.events || []).length) return `<p class="upd" style="margin-bottom:10px">기간 ${range}</p>` + kpis + `<div class="empty">아직 수집된 이벤트가 없어요. 모달이 예스폼에 공개되면(GTM 버전 40 게시 완료) 다음 날 오후 5시부터 숫자가 채워져요.</div>`;
+  window.__line = d.daily || [];
+  const top = (rows, cols, n = 8) => rows.length ? `<table><thead><tr>${cols.map(c => `<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.slice(0, n).map(r => `<tr>${r.map(v => `<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table>` : '<p class="nod">아직 데이터 없음</p>';
+  const evRows = (d.events || []).slice().sort((a, b) => b[1] - a[1]).map(r => [esc(evn(r[0])), fmt(r[1]), fmt(r[2])]);
+  // 일정별: [일정명, 날짜, 이벤트, 사용자, 횟수] → 일정명 단위로 합침
+  const agg = (rows, key, val) => { const o = {}; rows.forEach(r => { const k = key(r); (o[k] = o[k] || [0, 0]); o[k][0] += r[val]; o[k][1] += r[val + 1]; }); return Object.entries(o).sort((a, b) => b[1][0] - a[1][0]); };
+  const items = agg(d.items || [], r => `${unset(r[0])}${r[1] && r[1] !== '(not set)' ? ' · ' + r[1] : ''}`, 3).map(([k, v]) => [esc(k), fmt(v[0]), fmt(v[1])]);
+  const forms = agg(d.forms || [], r => `${unset(r[0])}|${evn(r[3])}`, 4).map(([k, v]) => { const [n, e] = k.split('|'); return [`${esc(n)}<small>${esc(e)}</small>`, fmt(v[0]), fmt(v[1])]; });
+  const filt = agg(d.filters || [], r => `${evn(r[1])}|${unset(r[0])}`, 2).map(([k, v]) => { const [e, n] = k.split('|'); return [`${esc(n)}<small>${esc(e)}</small>`, fmt(v[0]), fmt(v[1])]; });
+  const cls = (d.close || []).map(r => [esc(unset(r[0])), fmt(r[2]), fmt(r[3])]);
+  const DEV = { desktop: 'PC', mobile: '모바일', tablet: '태블릿' };
+  const dev = agg(d.device || [], r => DEV[r[1]] || unset(r[1]), 2).map(([k, v]) => [esc(k), fmt(v[0]), fmt(v[1])]);
+  const buyRows = (d.purchase || []).map(r => [`${esc(unset(r[1]))}<small>${esc(unset(r[0]))}</small>`, fmt(r[3]), fmt(r[4])]);
+  return `<p class="upd" style="margin-bottom:10px">기간 ${range} · 사용자는 기간 안 순 사용자</p>` + kpis +
+    `<div class="chart"><h3>일별 추이 <span>노출 · 클릭 사용자</span></h3><div class="lg"><span><i style="background:#e8590c"></i>모달 노출</span><span><i style="background:#2f6bff"></i>일정 · 서식 · 블로그 클릭</span></div><svg class="ln" id="ln"></svg></div>
+    <div class="grid2">
+      <div class="box"><h3>① 이벤트 요약 <span>사용자 · 횟수</span></h3>${top(evRows, ['이벤트', '사용자', '횟수'], 12)}</div>
+      <div class="box"><h3>② 일정별 관심도 <span>일정 · 서식 · 블로그 클릭</span></h3>${top(items, ['일정', '사용자', '횟수'])}</div>
+      <div class="box"><h3>③ 추천 서식 · 블로그 클릭</h3>${top(forms, ['서식 · 블로그', '사용자', '횟수'])}</div>
+      <div class="box"><h3>④ 분야 필터 · 상단 일정 버튼 · 스크롤</h3>${top(filt, ['구분', '사용자', '횟수'])}</div>
+      <div class="box"><h3>⑤ 닫기 방식</h3>${top(cls, ['방식', '사용자', '횟수'])}</div>
+      <div class="box"><h3>⑥ 서식 · 블로그 클릭 후 결제 <span>30일</span></h3>${top(buyRows, ['서식 번호 · 링크 종류', '사용자', '건수'])}</div>
+      <div class="box"><h3>⑦ 기기별 이용</h3>${top(dev, ['기기', '사용자', '횟수'])}</div>
+    </div>`;
+}
+function drawLine() {
+  const svg = $('#ln'); if (!svg) return;
+  const rows = window.__line || [];
+  const days = [...new Set(rows.map(r => r[0]))].sort();
+  const val = (d, re) => rows.filter(r => r[0] === d && re.test(r[1])).reduce((a, r) => a + r[2], 0);
+  const s1 = days.map(d => val(d, /^brief_modal_view$/)), s2 = days.map(d => val(d, /^brief_modal_(item|form|blog)_click$/));
+  const W = svg.clientWidth || 800, H = 180, pl = 40, pr = 10, pt = 10, pb = 22, mx = Math.max(1, ...s1, ...s2);
+  const x = i => pl + (W - pl - pr) * (days.length < 2 ? 0.5 : i / (days.length - 1)), y = v => pt + (H - pt - pb) * (1 - v / mx);
+  let g = '';
+  for (let k = 0; k <= 3; k++) { const v = mx * k / 3; g += `<line x1="${pl}" x2="${W - pr}" y1="${y(v)}" y2="${y(v)}" stroke="#eef0f3"/><text x="${pl - 6}" y="${y(v) + 4}" font-size="10" fill="#98a1ad" text-anchor="end">${fmt(v)}</text>`; }
+  days.forEach((d, i) => { if (days.length <= 14 || i % Math.ceil(days.length / 10) === 0) g += `<text x="${x(i)}" y="${H - 6}" font-size="10" fill="#98a1ad" text-anchor="middle">${+d.slice(5, 7)}.${+d.slice(8)}</text>`; });
+  [[s1, '#e8590c'], [s2, '#2f6bff']].forEach(([s, c]) => { g += `<polyline fill="none" stroke="${c}" stroke-width="2" points="${s.map((v, i) => `${x(i)},${y(v)}`).join(' ')}"/>`; s.forEach((v, i) => { g += `<circle cx="${x(i)}" cy="${y(v)}" r="2.5" fill="${c}"/>`; }); });
+  if (!days.length) g += `<text x="${W / 2}" y="${H / 2}" font-size="12" fill="#98a1ad" text-anchor="middle">아직 일별 데이터 없음</text>`;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.innerHTML = g;
+}
+addEventListener('resize', drawLine);
+load();
+</script>
+</body>
+</html>

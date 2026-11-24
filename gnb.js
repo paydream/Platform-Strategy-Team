@@ -11,6 +11,8 @@
       svg: '<rect x="3" y="7" width="18" height="13" rx="2.5"' + F + '/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7"/><path d="M3 12.5h18"/><path d="M12 11.5v2.5" stroke-width="2.4"/>' },
     { id: 'metrics', href: 'stats.html', label: '에디터/싸인 지표', kw: '통계 지표 매출 결제', fg: '#0f9d58', bg: '#e4f6ec', title: '매일 자동 갱신',
       svg: '<rect x="4" y="12" width="3.6" height="8" rx="1"' + F + '/><rect x="10.2" y="8" width="3.6" height="12" rx="1"' + F + '/><rect x="16.4" y="4" width="3.6" height="16" rx="1" fill="currentColor"/>' },
+    { id: 'perf', href: 'perf.html', label: '성과 측정', title: '성과 측정 · 매일 자동 갱신', kw: '성과 측정 GA4 탐색 대시보드 모달', fg: '#e8590c', bg: '#fff1e6',
+      svg: '<path d="M4 19.5h16"/><path d="M5 15.5l4.2-4.4 3.3 2.8L19 7" stroke-width="2.4"/><path d="M14.8 7H19v4.2" stroke-width="2.4"/>' },
     { id: 'wbs', href: 'wbs.html', label: '팀 WBS', kw: '일정 휴가', fg: '#7c4dff', bg: '#f0eaff',
       svg: '<rect x="3" y="4.5" width="18" height="16" rx="2.5"' + F + '/><path d="M3 9.5h18M8 3v3M16 3v3"/><path d="M7 13.2h6M10 16.8h7" stroke-width="2.6"/>' },
     { id: 'calendar', href: 'calendar.html', label: '캘린더', kw: '일정 업데이트', fg: '#0284c7', bg: '#e0f2fe', title: '캘린더',
