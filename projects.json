@@ -532,7 +532,7 @@
           "created": "2026.11.23",
           "folder": "archive/20261123-150649-yesform-membership-dashboard-bizfinal",
           "preview": "archive/20261123-150649-yesform-membership-dashboard-bizfinal/index.html",
-          "hidden": false,
+          "hidden": true,
           "items": [
             {
               "label": "대시보드",
