@@ -11,6 +11,18 @@ const { siteOk } = require('./_lib'); // 사이트 비밀번호로 로그인했�
 // 메인 오른쪽 사이드바 "통계 데이터" 목록. 새 통계를 올리면 맨 앞에 추가하고, 데이터는 env에 넣는다.
 const LIST = [
   {
+    id: 'perf',
+    title: '성과 측정 · 연말연초 업무 브리핑 모달',
+    desc: 'GA4 brief_modal_* 이벤트 (노출 · 클릭 · 닫기 · 결제)',
+    product: '예스폼',
+    period: '2026.11.23 ~',
+    source: 'GA4',
+    updated: '매일 오후 5시',
+    href: 'perf.html',
+    file: true,
+    sidebar: false,
+  },
+  {
     id: 'membership-plan',
     title: '예스폼 멤버십 요금제 변경 계획안 (2027)',
     desc: '요금제 시안 기반 변경 내용 · 고객별 가격 영향 · 일정 · 역할 · 결정 안건',
