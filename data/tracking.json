@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated": "2026-11-19",
+  "updated": "2026-11-23",
   "products": [
     {
       "id": "yesform",
@@ -1075,6 +1075,119 @@
         }
       ],
       "id": "r0f0a91e7"
+    },
+    {
+      "date": "2026-11-19",
+      "product": "yesform",
+      "title": "웹서식 내려받기 클릭 확인 (페이지 유지·되돌아옴)",
+      "change": "추가",
+      "method": "GTM",
+      "events": [
+        "webformat_download_check"
+      ],
+      "requester": "오동성",
+      "worker": "유영경",
+      "note": "서버 다운로드 완료 신호가 없어 근사치. 내려받기 링크 클릭 후 4초간 상세 유지 = stayed(내려받기로 판단), 서버 안내 후 상세로 되돌아옴 = returned. 정확한 다운로드 수는 관리자 다운로드 통계와 대조. GA4 맞춤 정의 「웹서식 내려받기 확인」 같은 날 등록.",
+      "basis": "GTM 게시",
+      "gtm": {
+        "container": "GTM-5GQJFRS",
+        "version": 38
+      },
+      "log": [
+        {
+          "date": "2026-11-19",
+          "by": "유영경",
+          "text": "기록 추가"
+        }
+      ],
+      "id": "ra8b407ca"
+    },
+    {
+      "date": "2026-11-20",
+      "product": "yesform",
+      "title": "웹서식 경유 결제 확정 (결제 후 웹서식 내려받기)",
+      "change": "추가",
+      "method": "GTM",
+      "events": [
+        "webformat_conversion"
+      ],
+      "requester": "오동성",
+      "worker": "유영경",
+      "note": "웹서식 경유 결제 기준 확장: 대상 서식 상세를 본(또는 웹서식이 막힌) 사용자가 결제 후 돌아와 웹서식을 내려받으면 1건. webformat_conv_path(blocked: 막힘→결제→내려받기 / viewed: 조회→결제→내려받기), webformat_tx_id, webformat_paid_form_id, webformat_pay_to_download_min. 내려받기 유형에 after_view_payment 추가. 첫 결제 여부는 거래ID로 관리자 대조. GA4 맞춤 정의 3개 같은 날 등록.",
+      "basis": "GTM 게시",
+      "gtm": {
+        "container": "GTM-5GQJFRS",
+        "version": 39
+      },
+      "log": [
+        {
+          "date": "2026-11-20",
+          "by": "유영경",
+          "text": "기록 추가"
+        }
+      ],
+      "id": "r9f0e1965"
+    },
+    {
+      "date": "2026-11-23",
+      "product": "yesform",
+      "title": "연말연초 업무 브리핑 모달 측정 (brief_modal_*)",
+      "change": "추가",
+      "method": "GTM",
+      "events": [
+        "brief_modal_view",
+        "brief_modal_item_click",
+        "brief_modal_filter_click",
+        "brief_modal_form_click",
+        "brief_modal_close",
+        "brief_modal_purchase"
+      ],
+      "requester": "유영경",
+      "worker": "유영경",
+      "note": "모달 배포 전 사전 설치(시안 구조 #mB 기준). 모달 노출·일정 클릭·분야 필터·서식/블로그 클릭·닫기 감지, 서식·블로그 클릭 시 쿠키 yf_brief_ref(30일) 후 결제 시 brief_modal_purchase. 모달 배포 전이라 수집 0건이 정상.",
+      "basis": "GTM 게시",
+      "gtm": {
+        "container": "GTM-5GQJFRS",
+        "version": 40
+      },
+      "log": [
+        {
+          "date": "2026-11-23",
+          "by": "유영경",
+          "text": "기록 추가"
+        }
+      ],
+      "id": "r0d1f4143"
+    },
+    {
+      "date": "2026-11-23",
+      "product": "yesform",
+      "title": "웹서식 측정 대상 서식 추가 (No.21~40, 총 40건)",
+      "change": "수정",
+      "method": "GTM",
+      "events": [
+        "webformat_view",
+        "webformat_select",
+        "webformat_download",
+        "webformat_purchase",
+        "webformat_conversion"
+      ],
+      "requester": "오동성",
+      "worker": "유영경",
+      "note": "HTML서비스 제작리스트 신규 등록링크 20건(100421348~100421357, 100421360~100421369)을 변수 「CJS - webformat 대상 서식 목록」에 추가. v41은 변수 저장 누락으로 버전 메모만 반영되어 v42에서 실제 반영. GA4 탐색 분석에 1차(No.1~20)·2차(No.21~40) 비교 탭 추가.",
+      "basis": "GTM 게시",
+      "gtm": {
+        "container": "GTM-5GQJFRS",
+        "version": 42
+      },
+      "log": [
+        {
+          "date": "2026-11-23",
+          "by": "유영경",
+          "text": "기록 추가"
+        }
+      ],
+      "id": "racfe8205"
     }
   ],
   "gtmNotes": {
@@ -1152,6 +1265,41 @@
       "note": "v36 보완 (login_required 판정 수정)",
       "by": "유영경",
       "date": "2026-11-19"
+    },
+    "GTM-5GQJFRS:38": {
+      "requester": "오동성",
+      "worker": "유영경",
+      "note": "",
+      "by": "유영경",
+      "date": "2026-11-19"
+    },
+    "GTM-5GQJFRS:39": {
+      "requester": "오동성",
+      "worker": "유영경",
+      "note": "",
+      "by": "유영경",
+      "date": "2026-11-20"
+    },
+    "GTM-5GQJFRS:40": {
+      "requester": "유영경",
+      "worker": "유영경",
+      "note": "모달 배포 전 사전 설치",
+      "by": "유영경",
+      "date": "2026-11-23"
+    },
+    "GTM-5GQJFRS:41": {
+      "requester": "오동성",
+      "worker": "유영경",
+      "note": "변수 저장 누락 (버전 메모만 반영) → v42에서 실제 반영",
+      "by": "유영경",
+      "date": "2026-11-23"
+    },
+    "GTM-5GQJFRS:42": {
+      "requester": "오동성",
+      "worker": "유영경",
+      "note": "v41 보완: 대상 서식 40건 실제 반영",
+      "by": "유영경",
+      "date": "2026-11-23"
     }
   }
 }
