@@ -356,6 +356,11 @@ const VIEWS = [['day', '데일리'], ['week', '주간 (직전 7일)'], ['month',
 const WD = '일월화수목금토';
 const wday = s => WD[new Date(s + 'T00:00:00').getDay()];
 const hasP = () => !!(D.periods && D.periods.day && D.periods.day.length);
+// 최근 3개월 (2026-11-24): 진행 중인 이번 달을 뺀 직전 3개월. collect.js가 periods.q3에 3개월 전체 순 사용자 등으로 넣는다
+const Q3 = () => { const q = D.periods && D.periods.q3 && D.periods.q3[0]; if (!q) return null;
+  return { m: 'q3', start: q.s, end: q.e, months: q.months, editor: q.editor, sign: q.sign, mkt: q.mkt }; };
+const q3Label = q => `최근 3개월 (${+q.months[0].slice(5)}~${+q.months[2].slice(5)}월)`;
+const mkOf = (x, p) => x.m === 'q3' ? x.mkt[p] : D.mkt[p][x.m];
 
 /* ---------- 비밀번호 ---------- */
 async function unlock(pw, silent) {
@@ -377,7 +382,7 @@ unlock(sessionStorage.getItem(KEY) || 'site', true); // 사이트 비밀번호�
 const mStart = m => m.start || m.m + '-01';
 const lastDay = m => new Date(+m.m.slice(0, 4), +m.m.slice(5, 7), 0).getDate();
 const mLabel = m => { const sd = +mStart(m).slice(8), ed = +m.end.slice(8), full = sd === 1 && ed === lastDay(m); return `${+m.m.slice(5)}월` + (full ? '' : ` (${sd}~${ed}일)`); };
-const days = m => +m.end.slice(8) - +mStart(m).slice(8) + 1;
+const days = m => Math.round((Date.parse(m.end) - Date.parse(mStart(m))) / 864e5) + 1;
 const dRange = (s, e) => `${+s.slice(5, 7)}.${+s.slice(8)} ~ ${+e.slice(5, 7)}.${+e.slice(8)}`;
 const D0 = s => s.replace(/-/g, '.');
 const MD = s => `${+s.slice(5, 7)}.${+s.slice(8, 10)}`;
@@ -420,7 +425,7 @@ function start() {
   const h = new URLSearchParams(location.hash.slice(1));
   ptab = ['editor', 'signmkt'].includes(h.get('p')) ? h.get('p') : 'sign'; // 첫 화면: 싸인
   prod = ptab === 'editor' ? 'editor' : 'sign';
-  month = D.months.some(x => x.m === h.get('m')) ? h.get('m') : D.months[D.months.length - 1].m;
+  month = D.months.some(x => x.m === h.get('m')) || (h.get('m') === 'q3' && Q3()) ? h.get('m') : D.months[D.months.length - 1].m;
   const v = h.get('v');
   view = hasP() ? (v === 'day' || v === 'week' || v === 'month' ? v : h.get('m') ? 'month' : 'day') : 'month'; // 첫 화면: 데일리
   if (hasP()) {
@@ -436,11 +441,12 @@ function render() {
   let ctx, sub;
   if (view === 'month') {
     history.replaceState(null, '', `#p=${ptab}&v=month&m=${month}`);
-    const i = D.months.findIndex(x => x.m === month), m = D.months[i], pm = D.months[i - 1] || null;
-    CMP = { short: '전월', label: '전월 대비', avg: true, note: pm ? '전월 비교는 일평균 기준' : '', col: '전월 대비' };
-    ctx = { m, pm, cd: days(m), pd: pm ? days(pm) : 0, mk: D.mkt[prod][m.m], pmk: pm ? D.mkt[prod][pm.m] : null, label: mLabel(m) };
+    const q = Q3(); if (month === 'q3' && !q) month = D.months[D.months.length - 1].m;
+    const i = D.months.findIndex(x => x.m === month), m = month === 'q3' ? q : D.months[i], pm = month === 'q3' ? null : D.months[i - 1] || null;
+    CMP = month === 'q3' ? { short: '이전 3개월', label: '', avg: false, note: '', col: '이전 3개월 대비' } : { short: '전월', label: '전월 대비', avg: true, note: pm ? '전월 비교는 일평균 기준' : '', col: '전월 대비' };
+    ctx = { m, pm, cd: days(m), pd: pm ? days(pm) : 0, mk: mkOf(m, prod), pmk: pm ? mkOf(pm, prod) : null, label: month === 'q3' ? q3Label(q) : mLabel(m) };
     SEL = { s: mStart(m), e: m.end };
-    sub = D.months.map(x => `<button role="tab" data-m="${x.m}" aria-selected="${x.m === month}">${mLabel(x)}</button>`).join('');
+    sub = D.months.map(x => `<button role="tab" data-m="${x.m}" aria-selected="${x.m === month}">${mLabel(x)}</button>`).join('') + (q ? `<button role="tab" data-m="q3" aria-selected="${month === 'q3'}">${q3Label(q)}</button>` : '');
   } else {
     const L = D.periods[view], k = pkey[view], i = L.findIndex(x => x.k === k), m = L[i];
     const pm = view === 'day' ? L[i - 7] || null : wFind(addDay(m.e, -7));
@@ -583,11 +589,11 @@ function signView({ m, pm, cd, pd, mk, pmk, label }) {
       ${S.contrib ? kpi('예스폼 기여 결제', S.contrib[1], '원', diff(S.contrib[1], P && P.contrib && P.contrib[1], cd, pd), `${fmt(S.contrib[0])}건`) : ''}
       ${kpi('신규 가입', S.signup, '명', dSign, `활성 사용자의 ${pctTxt(pct(S.signup, S.active))}`)}
       ${kpi('활성 사용자', S.active, '명', dAct, `GA4 순 사용자 · 관리자 방문자 ${fmt(S.visit)}명(일별 합계)`)}
-      ${kpi('전자계약 실사용자', S.users, '명', diff(S.users, P && P.users, cd, pd), `에디터 경유 ${fmt(S.editorUsers)}명${view === 'week' ? ' · 일별 합계' : ''}`)}
+      ${kpi(S.usersSum ? '전자계약 실사용자 (월별 합)' : '전자계약 실사용자', S.users, '명', diff(S.users, P && P.users, cd, pd), `에디터 경유 ${fmt(S.editorUsers)}명${view === 'week' ? ' · 일별 합계' : ''}`)}
     </div></section>
 
   <section class="blk"><h2>전환 흐름</h2>
-    ${funnel([['활성 사용자', S.active, 'GA4 순 사용자'], ['신규 가입', S.signup], ['전자계약 실사용자', S.users], ['결제', pay[0], won(pay[1])]])}</section>
+    ${funnel([['활성 사용자', S.active, 'GA4 순 사용자'], ['신규 가입', S.signup], [S.usersSum ? '전자계약 실사용자 (월별 합)' : '전자계약 실사용자', S.users], ['결제', pay[0], won(pay[1])]])}</section>
 
   ${paySection(pay)}
 
@@ -785,7 +791,7 @@ function viralSection() {
     <details class="admore"><summary>타카페 댓글 완료 ${fmt(X.cm.length)}건 보기</summary>${X.cm.length ? `<div class="scroll"><table class="tbl vtbl"><tbody>${cmRows(X.cm)}</tbody></table></div>` : '<p class="pempty">이 기간 완료된 댓글이 없어요.</p>'}</details>
     <details class="admore"><summary>대기 ${fmt(X.wait.length)}건 · 보류 ${fmt(X.hold.length)}건 보기 (기간 무관, 지금 상태)</summary><div class="scroll"><table class="tbl vtbl"><tbody>${cmRows([...X.wait, ...X.hold])}</tbody></table></div></details></div>`;
   const tU = new Date(new Date(V.updatedAt).getTime() + 9 * 3600e3);
-  return `<section class="blk"><h2>네이버 바이럴 <small>마케팅 사이클 시트 · ${view === 'month' ? mLabel(D.months.find(x => x.m === month)) : dRange(SEL.s, SEL.e)} · 시트 반영 ${tU.getUTCMonth() + 1}.${tU.getUTCDate()} ${String(tU.getUTCHours()).padStart(2, '0')}:${String(tU.getUTCMinutes()).padStart(2, '0')}</small></h2>
+  return `<section class="blk"><h2>네이버 바이럴 <small>마케팅 사이클 시트 · ${view === 'month' ? (month === 'q3' ? q3Label(Q3()) : mLabel(D.months.find(x => x.m === month))) : dRange(SEL.s, SEL.e)} · 시트 반영 ${tU.getUTCMonth() + 1}.${tU.getUTCDate()} ${String(tU.getUTCHours()).padStart(2, '0')}:${String(tU.getUTCMinutes()).padStart(2, '0')}</small></h2>
     ${V.stale ? `<div class="stale" role="status">시트를 읽지 못해 마지막으로 받은 값을 보여 줘요.</div>` : ''}
     ${kpis}${planCard}${shCard}${lists}</section>`;
 }
@@ -956,15 +962,16 @@ function weekTable(p) {
     <tbody>${W.map(w => { const part = (new Date(w.e) - new Date(w.s)) / 864e5 < 6; return `<tr><td>${dRange(w.s, w.e)}${part ? ' <span class="muted">(진행 중)</span>' : ''}</td>${row(w).map(v => `<td>${v}</td>`).join('')}</tr>`; }).join('')}</tbody></table></div></div></section>`;
 }
 function monthTable(p) {
+  const q = Q3(), MC = q ? [...D.months, q] : D.months;
   const ev = (x, k) => (x.editor.ev[k] || [0, 0])[1];
   const rows = p === 'editor'
     ? [['활성 사용자', x => fmt(x.editor.active)], ['신규 사용자', x => fmt(x.editor.new)], ['에디터 진입', x => fmt(ev(x, 'editor_entry'))], ['문서 생성', x => fmt(ev(x, 'document_create'))],
        ['문서 생성률', x => pctTxt(pct(ev(x, 'document_create'), x.editor.active))], ['문서 내보내기', x => fmt(ev(x, 'export_document'))], ['싸인 이동', x => fmt(ev(x, 'sign_entry'))], ['로그인 성공', x => fmt(ev(x, 'login_success'))]]
-    : [['예스폼 기여 결제', x => x.sign.contrib ? `${won(x.sign.contrib[1])} (${fmt(x.sign.contrib[0])}건)` : '-'], ['결제 건수', x => fmt((D.mkt.sign[x.m].pay || [])[0])], ['결제 금액', x => won((D.mkt.sign[x.m].pay || [])[1])], ['신규 가입', x => fmt(x.sign.signup)], ['활성 사용자', x => fmt(x.sign.active)],
+    : [['예스폼 기여 결제', x => x.sign.contrib ? `${won(x.sign.contrib[1])} (${fmt(x.sign.contrib[0])}건)` : '-'], ['결제 건수', x => fmt((mkOf(x, 'sign').pay || [])[0])], ['결제 금액', x => won((mkOf(x, 'sign').pay || [])[1])], ['신규 가입', x => fmt(x.sign.signup)], ['활성 사용자', x => fmt(x.sign.active)],
        ['가입률 (활성 사용자 대비)', x => pctTxt(pct(x.sign.signup, x.sign.active))], ['전자계약 실사용자', x => fmt(x.sign.users)], ['에디터 경유 실사용자', x => fmt(x.sign.editorUsers)], ['관리자 방문자', x => fmt(x.sign.visit)]];
   return `<section class="blk"><h2>월별 비교${ti('월별 비교')}</h2><div class="card"><div class="scroll"><table class="tbl">
-    <thead><tr><th>지표</th>${D.months.map(x => `<th>${mLabel(x)}</th>`).join('')}</tr></thead>
-    <tbody>${rows.map(([l, f]) => `<tr><td class="name">${TL(l)}</td>${D.months.map(x => `<td>${f(x)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div></section>`;
+    <thead><tr><th>지표</th>${MC.map(x => `<th>${x.m === 'q3' ? q3Label(x) : mLabel(x)}</th>`).join('')}</tr></thead>
+    <tbody>${rows.map(([l, f]) => `<tr><td class="name">${TL(l)}</td>${MC.map(x => `<td>${f(x)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div></section>`;
 }
 
 /* ---------- 일별 차트 (SVG) ---------- */
