@@ -15,6 +15,20 @@
       "archive": "project.html?id=20261120-141045-yesform-brief-timeline-v21-final",
       "explore": "https://analytics.google.com/analytics/web/?authuser=0#/analysis/a55667387p255821535/edit/kxmY8iGOQea32A2Fx3AS-A",
       "dash": "perf"
+    },
+    {
+      "id": "autopay-cancel",
+      "title": "월 자동정액 해지요청",
+      "desc": "마이페이지 월 자동정액 관리 · 해지요청 클릭 → 안내 보고 유지 / 해지하기 → 해지 처리 응답, 회원 등급별",
+      "product": "예스폼",
+      "status": "측정 중",
+      "start": "2026-11-24",
+      "events": 4,
+      "gtm": "GTM 버전 45",
+      "thumb": "assets/perf/autopay-cancel.jpg",
+      "explore": "https://analytics.google.com/analytics/web/?authuser=0#/analysis/a55667387p255821535/edit/TsHxbghVT1KIyzWSvRStPA",
+      "dash": "perf",
+      "kind": "autopay"
     }
   ]
 }
