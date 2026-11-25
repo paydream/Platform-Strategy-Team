@@ -3,14 +3,14 @@
     {
       "id": "brief-admin",
       "title": "연말연초 업무 브리핑 모달 · 콘텐츠 관리",
-      "desc": "시트 「모달_블로그포함」 내용을 표로 고치면 모달 미리보기가 바로 바뀌는 관리 화면이에요. 다가오는 마감·분야별 현황과 시트 동기화를 한눈에 봐요.",
+      "desc": "시트 「모달_블로그포함」이 콘텐츠 표가 되고, 위 모달 미리보기에 표 열 번호가 표시돼요. 매주 월요일 자동으로 시트를 점검·채우고 바뀐 칸을 초록색으로 보여줘요.",
       "product": "예스폼",
       "kind": "콘텐츠 관리",
       "status": "운영 중",
-      "schedule": "열 때마다 시트 실시간 확인",
+      "schedule": "매주 월요일 자동 갱신",
       "updated": "2026-11-25",
       "thumb": "assets/auto/brief-admin.jpg",
-      "src": "archive/20261125-153034-yesform-brief-admin-v6/index.html",
+      "src": "archive/20261125-155347-yesform-brief-admin-v7/index.html",
       "sheet": "https://docs.google.com/spreadsheets/d/1kyn4zyGjKMDuULLArtsucUnmTOxwhqkj1pRmeGJVsMs/edit?gid=551871236#gid=551871236",
       "meta": [
         "시트 연동",
