@@ -155,6 +155,22 @@
               "href": "archive/20261125-161550-yesform-brief-admin-v9/index.html"
             }
           ]
+        },
+        {
+          "id": "20261125-161853-yesform-brief-admin-v10",
+          "label": "v10 · NEW 표시 위치 정리",
+          "title": "연말연초 업무 브리핑 모달 · 콘텐츠 관리 (관리자)",
+          "desc": "NEW가 있는 행은 표 맨 왼쪽 행 번호 칸에도 NEW 표시(가로 스크롤 없이 확인). 모달 목록의 NEW는 날짜 왼쪽 위로 옮겨 배지와 겹치지 않게.",
+          "created": "2026.11.25",
+          "folder": "archive/20261125-161853-yesform-brief-admin-v10",
+          "preview": "archive/20261125-161853-yesform-brief-admin-v10/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "콘텐츠 관리 대시보드",
+              "href": "archive/20261125-161853-yesform-brief-admin-v10/index.html"
+            }
+          ]
         }
       ]
     },
