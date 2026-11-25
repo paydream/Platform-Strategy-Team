@@ -219,6 +219,22 @@
               "href": "archive/20261125-170824-yesform-brief-admin-v13/index.html"
             }
           ]
+        },
+        {
+          "id": "20261125-172741-yesform-brief-admin-v14",
+          "label": "v14 · 서식명 원래 이름 유지",
+          "title": "연말연초 업무 브리핑 모달 · 콘텐츠 관리 (관리자)",
+          "desc": "서식명 63칸을 예스폼 원래 이름으로 복원. 서식명은 말줄임 점검·자동 줄이기에서 제외. 표시용 줄임은 블로그 제목·상세 문구 8칸만.",
+          "created": "2026.11.25",
+          "folder": "archive/20261125-172741-yesform-brief-admin-v14",
+          "preview": "archive/20261125-172741-yesform-brief-admin-v14/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "콘텐츠 관리 대시보드",
+              "href": "archive/20261125-172741-yesform-brief-admin-v14/index.html"
+            }
+          ]
         }
       ]
     },
