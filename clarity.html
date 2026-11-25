@@ -68,6 +68,12 @@
   td.note div+div{margin-top:2px}
   td .over{color:var(--bad);font-weight:700}
   .tw{overflow-x:auto}
+  .kpi .rec{margin-top:10px;width:100%;justify-content:center;border-color:#f5b3b3;color:var(--bad)}
+  .kpi .rec:hover{background:var(--bad-bg);border-color:var(--bad);color:var(--bad)}
+  a.rl{font-size:11px;color:var(--bad);text-decoration:none;margin-left:4px;white-space:nowrap}
+  a.rl:hover{text-decoration:underline}
+  body.embed .hero h1,body.embed .hero p{display:none}
+  body.embed .hero{justify-content:flex-end}
   .nod{color:var(--faint);font-size:12.5px;padding:6px 0}
   .more{margin-top:8px;text-align:center}
   .rules{font-size:12.5px;color:var(--sub);display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
@@ -125,6 +131,9 @@ function setUpd() {
   const s = new Date(); const m = Date.parse(todayK() + 'T00:00:00+09:00');
   $('#clink').href = `https://clarity.microsoft.com/projects/view/${(D && D.project) || 'xfgy2v09sr'}/dashboard?date=Custom&start=${m}&end=${m + 864e5 - 1}`;
 }
+// Clarity 녹화: 그 날짜에 결제 페이지(settle.php)를 방문하고 자바스크립트 오류가 난 세션
+const recUrl = (date, re) => { const m = Date.parse(date + 'T00:00:00+09:00'); return `https://clarity.microsoft.com/projects/view/${(D && D.project) || 'xfgy2v09sr'}/impressions?URL=${encodeURIComponent('2;6;' + re)}&date=Custom&start=${m}&end=${m + 864e5 - 1}&ScriptErrorText=scriptErrorEventCount`; };
+const REC = { settle: 'settle\\.php' };
 const scopeName = id => ((D.scopes || []).find(x => x.id === id) || {}).name || id;
 const shortName = id => ({ all: '사이트 전체', settle: '결제 페이지', membership: '멤버십 페이지' }[id] || id);
 
@@ -153,7 +162,7 @@ function render() {
         <div class="row"><span>오류 난 세션</span><b class="${rateOver ? 'over' : ''}">${pc(v.r)}</b></div>
         <div class="row"><span>클릭 직후 오류</span><b>${fmt(v.c)}건</b></div>
         <div class="row"><span>세션</span><b>${fmt(v.n)}</b></div>
-        <div class="row"><span>평소 하루 · 비율 기준</span><b>${fmt(b.totalAvg)}건 · ${pc(sc.maxRate)}</b></div></div>`;
+        <div class="row"><span>평소 하루 · 비율 기준</span><b>${fmt(b.totalAvg)}건 · ${pc(sc.maxRate)}</b></div>${REC[sc.id] ? `<a class="btn rec" href="${recUrl(lastOk.date, REC[sc.id])}" target="_blank" rel="noopener">오류 세션 녹화 보기 ↗</a>` : ''}</div>`;
     }).join('') + '</div>';
   }
 
@@ -176,7 +185,8 @@ function render() {
   h += `<div class="card"><h2>점검 이력 <span>최근 14일 · ${fmt(runs.length)}회</span></h2><div class="tw"><table>
     <tr><th class="l">점검 시각</th><th class="l">결과</th>${(D.scopes || []).map(sc => `<th>${esc(shortName(sc.id))}<br>오류 · 세션 비율</th>`).join('')}<th class="l">내용</th></tr>` +
     list.slice(0, SHOW).map(r => `<tr><td class="l" style="white-space:nowrap">${md(r.date)} ${hm(r.at)}</td><td class="l"><span class="badge ${SB[r.status] || 'b-gray'}">${esc(r.status)}</span></td>` +
-      (D.scopes || []).map(sc => { const v = (r.s || {})[sc.id]; if (!v) return '<td>-</td>'; const over = v.n >= sc.minSess && v.r >= sc.maxRate; return `<td>${fmt(v.t)} · <span class="${over ? 'over' : ''}">${pc(v.r)}</span></td>`; }).join('') +
+      (D.scopes || []).map(sc => { const v = (r.s || {})[sc.id]; if (!v) return '<td>-</td>'; const over = v.n >= sc.minSess && v.r >= sc.maxRate; const rl = REC[sc.id] && v.t > 0 ? ` <a class="rl" href="${recUrl(r.date, REC[sc.id])}" target="_blank" rel="noopener" title="이 날짜 결제 페이지 오류 세션 녹화">녹화↗</a>` : '';
+        return `<td>${fmt(v.t)} · <span class="${over ? 'over' : ''}">${pc(v.r)}</span>${rl}</td>`; }).join('') +
       `<td class="note">${r.status === '실패' ? esc(r.note || '') : (r.alerts || []).map(a => `<div>[${esc(a.level)}] ${esc(a.text)}</div>`).join('') || (r.status === '이상 지속' ? '오늘 감지된 이상이 이어지는 중' : '')}</td></tr>`).join('') +
     `</table></div>${list.length > SHOW ? `<div class="more"><button class="btn" id="more">이전 기록 더 보기 (${fmt(list.length - SHOW)}회)</button></div>` : ''}</div>`;
 
