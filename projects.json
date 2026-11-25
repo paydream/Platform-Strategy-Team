@@ -107,6 +107,22 @@
               "href": "archive/20261125-153034-yesform-brief-admin-v6/index.html"
             }
           ]
+        },
+        {
+          "id": "20261125-155347-yesform-brief-admin-v7",
+          "label": "v7 · 시트 기준 · 주간 자동 갱신 · 번호 표시",
+          "title": "연말연초 업무 브리핑 모달 · 콘텐츠 관리 (관리자)",
+          "desc": "열 때 시트 「모달_블로그포함」 값을 그대로 표·미리보기에 씀(기준일 = 이번 주 월요일). 모달 미리보기에 콘텐츠 표 열 번호 표시. 「모달_주간기록」 탭을 읽어 이번 주 바뀐 칸 초록 표시·요약. 말줄임 확인(0건 목표). 매주 월요일 루틴이 시트를 채움.",
+          "created": "2026.11.25",
+          "folder": "archive/20261125-155347-yesform-brief-admin-v7",
+          "preview": "archive/20261125-155347-yesform-brief-admin-v7/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "콘텐츠 관리 대시보드",
+              "href": "archive/20261125-155347-yesform-brief-admin-v7/index.html"
+            }
+          ]
         }
       ]
     },
