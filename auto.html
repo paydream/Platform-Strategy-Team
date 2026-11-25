@@ -79,10 +79,11 @@ function detail(it) {
   $('#crumb').hidden = false; $('#list').hidden = true;
   if (!it) { $('#pdesc').textContent = '없는 항목이에요. 목록에서 다시 골라 주세요.'; return; }
   document.title = `${it.title} | 자동관리 | 플랫폼전략팀 업무 아카이브`;
-  $('#main').classList.add('wide');
+  const fixed = it.width === 'fixed'; // width:'fixed' 항목은 다른 메뉴처럼 본문 폭(1200px) 안에 고정
+  if (!fixed) $('#main').classList.add('wide');
   $('#ptitle').textContent = it.title; $('#pdesc').textContent = it.desc || '';
   $('#acts').innerHTML = `<a class="btn" href="${esc(it.src)}" target="_blank" rel="noopener">새 창 ↗</a>`;
-  $('#frame').hidden = false; document.body.appendChild($('#frame'));
+  $('#frame').hidden = false; if (!fixed) document.body.appendChild($('#frame'));
   $('#frame').innerHTML = `<iframe src="${esc(it.src)}" title="${esc(it.title)}"></iframe>`;
 }
 addEventListener('message', e => { const f = $('#frame iframe'); if (f && e.source === f.contentWindow && e.data && e.data.type === 'auto-h') f.style.height = Math.max(640, e.data.h) + 'px'; });
