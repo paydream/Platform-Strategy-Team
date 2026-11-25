@@ -12,7 +12,27 @@
       "thumb": "assets/auto/brief-admin.jpg",
       "src": "archive/20261125-153034-yesform-brief-admin-v6/index.html",
       "sheet": "https://docs.google.com/spreadsheets/d/1kyn4zyGjKMDuULLArtsucUnmTOxwhqkj1pRmeGJVsMs/edit?gid=551871236#gid=551871236",
-      "meta": ["시트 연동", "일정 42건", "추천 서식 126개"]
+      "meta": [
+        "시트 연동",
+        "일정 42건",
+        "추천 서식 126개"
+      ]
+    },
+    {
+      "id": "clarity",
+      "title": "예스폼 오류 모니터링",
+      "desc": "Clarity 자바스크립트 오류를 1시간마다 점검해 사이트 전체·결제·멤버십 페이지 결과와 점검 이력을 기록",
+      "product": "예스폼",
+      "kind": "오류 모니터링",
+      "status": "운영 중",
+      "schedule": "1시간마다 자동",
+      "updated": "2026-11-25",
+      "thumb": "assets/auto/clarity.jpg",
+      "src": "clarity.html",
+      "meta": [
+        "Microsoft Clarity",
+        "최근 14일 이력"
+      ]
     }
   ]
 }
