@@ -13,10 +13,9 @@
       svg: '<rect x="4" y="12" width="3.6" height="8" rx="1"' + F + '/><rect x="10.2" y="8" width="3.6" height="12" rx="1"' + F + '/><rect x="16.4" y="4" width="3.6" height="16" rx="1" fill="currentColor"/>' },
     { id: 'perf', href: 'perf.html', label: '성과 측정', title: '성과 측정 · 매일 자동 갱신', kw: '성과 측정 GA4 탐색 대시보드 모달', fg: '#e8590c', bg: '#fff1e6',
       svg: '<path d="M4 19.5h16"/><path d="M5 15.5l4.2-4.4 3.3 2.8L19 7" stroke-width="2.4"/><path d="M14.8 7H19v4.2" stroke-width="2.4"/>' },
-    { id: 'wbs', href: 'wbs.html', label: '팀 WBS', kw: '일정 휴가', fg: '#7c4dff', bg: '#f0eaff',
+    { id: 'wbs', href: 'wbs.html', label: '팀 일정', title: '팀 WBS · 캘린더', kw: '팀 WBS 캘린더 일정 휴가 업데이트', group: ['wbs', 'calendar'],
+      sub: [{ id: 'wbs', href: 'wbs.html', label: '팀 WBS' }, { id: 'calendar', href: 'calendar.html', label: '캘린더' }], fg: '#7c4dff', bg: '#f0eaff',
       svg: '<rect x="3" y="4.5" width="18" height="16" rx="2.5"' + F + '/><path d="M3 9.5h18M8 3v3M16 3v3"/><path d="M7 13.2h6M10 16.8h7" stroke-width="2.6"/>' },
-    { id: 'calendar', href: 'calendar.html', label: '캘린더', kw: '일정 업데이트', fg: '#0284c7', bg: '#e0f2fe', title: '캘린더',
-      svg: '<rect x="3" y="4.5" width="18" height="16" rx="2.5"' + F + '/><path d="M3 9.5h18M8 3v3M16 3v3"/><path d="m12 11.4 1.2 2.4 2.6.4-1.9 1.8.45 2.6L12 17.4l-2.35 1.2.45-2.6-1.9-1.8 2.6-.4z" fill="currentColor" stroke-width="1.2"/>' },
     { id: 'tracking', href: 'tracking.html', label: 'GA', title: 'GA4·GTM 측정 관리', kw: '측정 관리 GA4 GTM 이벤트', fg: '#f07800', bg: '#fff1e0',
       svg: '<circle cx="12" cy="12" r="9"' + F + '/><circle cx="12" cy="12" r="5.2"/><circle cx="12" cy="12" r="1.8" fill="currentColor"/>' },
     { id: 'stats', href: 'stats-age.html', label: '데이터', hidden: true, kw: '연령 해상도 통계', fg: '#e5457a', bg: '#fdeaf1',
@@ -100,7 +99,7 @@
     if (nav.getAttribute('data-done')) continue;
     if (!nav.getAttribute('aria-label')) nav.setAttribute('aria-label', '주요 메뉴');
     var item = function (m) {
-      var on = m.id === cur;
+      var on = m.id === cur || (m.group && m.group.indexOf(cur) >= 0);
       var href = m.href;
       return '<a class="gnb-item' + (on ? ' on' : '') + '" href="' + href + '"' + (on ? ' aria-current="page"' : '') +
         (m.title ? ' title="' + m.title + '"' : '') + ' style="--gfg:' + m.fg + ';--gbg:' + m.bg + '">' +
@@ -118,6 +117,14 @@
       top.appendChild(side);
       initSearch(top);
     }
+    // 묶음 메뉴(팀 일정 = 팀 WBS + 캘린더): 본문 맨 위에 하위 탭을 붙인다
+    var grp = MENU.filter(function (m) { return m.sub && m.group && m.group.indexOf(cur) >= 0; })[0];
+    if (grp) (function (grp, cur) { var addSub = function () { var main = document.querySelector('main');
+    if (main && !document.querySelector('.gnb-sub')) {
+      var sub = document.createElement('nav'); sub.className = 'gnb-sub'; sub.setAttribute('aria-label', grp.label);
+      sub.innerHTML = grp.sub.map(function (t) { var o = t.id === cur; return '<a href="' + t.href + '"' + (o ? ' class="on" aria-current="page"' : '') + ' style="--gfg:' + grp.fg + '">' + t.label + '</a>'; }).join('');
+      main.insertBefore(sub, main.firstChild);
+    } }; if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', addSub); else addSub(); })(grp, cur);
     nav.setAttribute('data-done', '1');
   }
 })();

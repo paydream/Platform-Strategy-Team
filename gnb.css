@@ -65,3 +65,9 @@
   .gnb-badge{display:none}
 }
 @media (prefers-reduced-motion:reduce){.gnb-ic,.gnb-item,.gnb-logo strong{transition:none}.gnb-item:hover .gnb-ic{transform:none}}
+
+/* 묶음 메뉴 하위 탭 (팀 일정: 팀 WBS · 캘린더) */
+.gnb-sub{display:flex;gap:4px;margin:22px 0 -6px;padding:4px;background:#eef0f3;border-radius:11px;width:max-content;max-width:100%}
+.gnb-sub a{padding:7px 16px;border-radius:8px;font-size:14px;font-weight:600;color:#6b7684;text-decoration:none;white-space:nowrap}
+.gnb-sub a:hover{color:#191f28}
+.gnb-sub a.on{background:#fff;color:var(--gfg,#191f28);box-shadow:0 1px 3px rgba(0,0,0,.08)}
