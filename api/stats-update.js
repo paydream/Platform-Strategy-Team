@@ -4,7 +4,7 @@ const crypto = require('crypto');
 const L = require('./_lib');
 const F = require('./_statsfile');
 
-const IDS = ['marketing', 'perf']; // 자동 갱신을 받는 통계 (perf = 성과 측정, 매일 17시)
+const IDS = ['marketing', 'perf', 'clarity']; // 자동 갱신을 받는 통계 (perf = 성과 측정, clarity = 예스폼 오류 모니터링 1시간마다)
 function same(given, secret) {
   if (!secret || typeof given !== 'string') return false;
   const a = crypto.createHash('sha256').update(given).digest();
@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
   const id = String(b.id || '');
   if (!IDS.includes(id)) return res.status(404).json({ error: '없는 통계입니다.' });
   const d = b.data;
-  const okShape = id === 'perf' ? d && Array.isArray(d.events) : d && Array.isArray(d.months) && d.months.length;
+  const okShape = id === 'perf' ? d && Array.isArray(d.events) : id === 'clarity' ? d && Array.isArray(d.runs) : d && Array.isArray(d.months) && d.months.length;
   if (!d || typeof d !== 'object' || !okShape || !d.range || !/^\d{4}-\d{2}-\d{2}$/.test(d.range.end || ''))
     return res.status(400).json({ error: '데이터 형식이 올바르지 않습니다.' });
   if (JSON.stringify(d).length > 700000) return res.status(413).json({ error: '데이터가 너무 큽니다.' });

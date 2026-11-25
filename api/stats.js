@@ -20,6 +20,18 @@ function perfOk(req) {
 // 메인 오른쪽 사이드바 "통계 데이터" 목록. 새 통계를 올리면 맨 앞에 추가하고, 데이터는 env에 넣는다.
 const LIST = [
   {
+    id: 'clarity',
+    title: '예스폼 오류 모니터링 (Clarity)',
+    desc: '1시간마다 Clarity 자바스크립트 오류 점검 · 사이트 전체 · 결제 · 멤버십 페이지',
+    product: '예스폼',
+    period: '2026.11.25 ~',
+    source: 'Microsoft Clarity',
+    updated: '1시간마다',
+    href: 'auto.html?id=clarity',
+    file: true,
+    sidebar: false,
+  },
+  {
     id: 'perf',
     title: '성과 측정 · 연말연초 업무 브리핑 모달',
     desc: 'GA4 brief_modal_* 이벤트 (노출 · 클릭 · 닫기 · 결제)',
