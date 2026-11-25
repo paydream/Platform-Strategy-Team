@@ -41,7 +41,7 @@
   .cb .hl2{font-size:12.5px;background:#f4f7ff;border-radius:8px;padding:6px 9px;margin-top:4px}
   .cb .mt{margin-top:auto;padding-top:8px;display:flex;flex-wrap:wrap;gap:4px 10px;font-size:11.5px;color:var(--faint)}
   .nod{color:var(--faint);font-size:13px;padding:8px 0}
-  .frame{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .frame{margin-top:16px;background:var(--bg);overflow:hidden;width:100%}
   .frame iframe{display:block;width:100%;border:0;height:calc(100vh - 190px);min-height:640px;background:var(--bg)}
 </style>
 </head>
@@ -82,7 +82,7 @@ function detail(it) {
   $('#main').classList.add('wide');
   $('#ptitle').textContent = it.title; $('#pdesc').textContent = it.desc || '';
   $('#acts').innerHTML = `<a class="btn" href="${esc(it.src)}" target="_blank" rel="noopener">새 창 ↗</a>`;
-  $('#frame').hidden = false;
+  $('#frame').hidden = false; document.body.appendChild($('#frame'));
   $('#frame').innerHTML = `<iframe src="${esc(it.src)}" title="${esc(it.title)}"></iframe>`;
 }
 addEventListener('message', e => { const f = $('#frame iframe'); if (f && e.source === f.contentWindow && e.data && e.data.type === 'auto-h') f.style.height = Math.max(640, e.data.h) + 'px'; });
