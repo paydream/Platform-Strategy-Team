@@ -165,7 +165,7 @@ async function getData(id) {
 function headline(it, d) {
   if (!d) return '';
   const pick = (rows, k) => { const r = (rows || []).find(x => x[0] === k); return r ? r[1] : 0; };
-  if (it.kind === 'autopay') { const a = d.autopay || {}; return `해지요청 <b>${fmt(pick(a.events, 'autopay_cancel_request'))}</b>명 · 해지하기 <b>${fmt(pick(a.events, 'autopay_cancel_confirm'))}</b>명`; }
+  if (it.kind === 'autopay') { const a = d.autopay || {}; const pc = k => { const r = (a.events || []).find(x => x[0] === k); return r ? r[2] : 0; }; return `해지요청 <b>${fmt(pc('autopay_session_request'))}</b>세션 · 해지하기 <b>${fmt(pc('autopay_session_confirm'))}</b>세션`; }
   return `노출 <b>${fmt(pick(d.events, 'brief_modal_view'))}</b>명 · 서식 클릭 <b>${fmt(pick(d.events, 'brief_modal_form_click'))}</b>명 · 블로그 <b>${fmt(pick(d.events, 'brief_modal_blog_click'))}</b>명`;
 }
 function renderAlbum(d) {
@@ -257,37 +257,40 @@ function dashAutopay(a, it) {
   const range = a && a.range ? `${D0(a.range.start)} ~ ${D0(a.range.end)}` : '';
   const ev = Object.fromEntries(((a && a.events) || []).map(r => [r[0], { u: r[1], c: r[2] }]));
   const g = k => ev[k] || { u: 0, c: 0 };
-  const req = g('autopay_cancel_request'), keep = g('autopay_cancel_keep'), conf = g('autopay_cancel_confirm'), done = g('autopay_cancel_result');
+  const ses = k => g('autopay_session_' + k).c;                       // 세션 수 = 세션당 1회 이벤트 수
+  const req = ses('request'), keep = ses('keep'), conf = ses('confirm'), done = ses('done'), err = ses('error');
+  const clk = g('autopay_cancel_request');
   const kpis = `<div class="kpis">
-    <div class="kpi"><div class="l">해지요청 클릭</div><div class="v">${fmt(req.u)}<small>명</small></div><div class="s">${fmt(req.c)}회 · 안내 모달 열림</div></div>
-    <div class="kpi hl"><div class="l">안내 보고 유지 (닫기)</div><div class="v">${fmt(keep.u)}<small>명</small></div><div class="s">해지요청 대비 ${pct(keep.u, req.u)}</div></div>
-    <div class="kpi hl"><div class="l">해지하기 클릭</div><div class="v">${fmt(conf.u)}<small>명</small></div><div class="s">해지요청 대비 ${pct(conf.u, req.u)}</div></div>
-    <div class="kpi"><div class="l">해지 처리 응답</div><div class="v">${fmt(done.u)}<small>명</small></div><div class="s">${fmt(done.c)}회 · 서버 응답 기준</div></div>
-    <div class="kpi"><div class="l">해지 방어율</div><div class="v">${req.u ? pct(req.u - conf.u, req.u) : '-'}</div><div class="s">해지요청했지만 해지하기 안 누른 비율</div></div></div>`;
-  if (!a || !(a.events || []).length) return `<p class="upd" style="margin-bottom:10px">기간 ${range || '2026.11.24 ~'}</p>` + kpis + '<div class="empty">아직 수집된 해지 이벤트가 없어요. GTM 버전 45(11/24)부터 측정하고, 매일 오후 5시에 전날까지 들어와요. 11/24에는 측정 확인용 클릭 2건(해지요청·닫기)이 섞여 있어요.</div>';
+    <div class="kpi"><div class="l">해지요청 세션</div><div class="v">${fmt(req)}<small>세션</small></div><div class="s">클릭 ${fmt(clk.c)}회 · 사용자 ${fmt(clk.u)}명</div></div>
+    <div class="kpi hl"><div class="l">안내 보고 유지 (닫기)</div><div class="v">${fmt(keep)}<small>세션</small></div><div class="s">해지요청 세션 대비 ${pct(keep, req)}</div></div>
+    <div class="kpi hl"><div class="l">해지하기 클릭</div><div class="v">${fmt(conf)}<small>세션</small></div><div class="s">해지요청 세션 대비 ${pct(conf, req)}</div></div>
+    <div class="kpi"><div class="l">해지 완료</div><div class="v">${fmt(done)}<small>세션</small></div><div class="s">서버 응답 성공 · 오류 ${fmt(err)}세션</div></div>
+    <div class="kpi"><div class="l">해지 방어율</div><div class="v">${req ? pct(req - conf, req) : '-'}</div><div class="s">해지요청 세션 중 해지하기 안 누른 비율</div></div></div>`;
+  const note = '세션 기준: GA4 세션(30분 비활동 시 새 세션)마다 단계별 1번만 셉니다. 같은 세션에서 여러 번 눌러도 1세션이에요. 세션 집계는 GTM 버전 46(11/24 오후)부터예요.';
+  if (!a || !(a.events || []).length) return `<p class="upd" style="margin-bottom:10px">기간 ${range || '2026.11.24 ~'} · 세션 기준</p>` + kpis + `<div class="empty">아직 수집된 해지 이벤트가 없어요. 매일 오후 5시에 전날까지 들어와요. ${note} 11/24에는 측정 확인용 클릭(해지요청·닫기)이 섞여 있어요.</div>`;
   window.__line = a.daily || [];
-  window.__series = [[/^autopay_cancel_request$/, '#e8590c'], [/^autopay_cancel_confirm$/, '#2f6bff']];
+  window.__series = [[/^autopay_session_request$/, '#e8590c', 3], [/^autopay_session_confirm$/, '#2f6bff', 3]];
   const top = (rows, cols, n = 10) => rows.length ? `<table><thead><tr>${cols.map(c => `<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.slice(0, n).map(r => `<tr>${r.map(v => `<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table>` : '<p class="nod">아직 데이터 없음</p>';
-  const AEV = { autopay_cancel_request: '해지요청 클릭', autopay_cancel_keep: '안내 보고 유지(닫기)', autopay_cancel_confirm: '해지하기 클릭', autopay_cancel_result: '해지 처리 응답' };
-  const ORDER = ['autopay_cancel_request', 'autopay_cancel_keep', 'autopay_cancel_confirm', 'autopay_cancel_result'];
-  const steps = ORDER.filter(k => ev[k]).map(k => [esc(AEV[k]), fmt(ev[k].u), fmt(ev[k].c), pct(ev[k].u, req.u)]);
+  const STEPS = [['request', 'autopay_cancel_request', '해지요청 클릭'], ['keep', 'autopay_cancel_keep', '안내 보고 유지(닫기)'], ['confirm', 'autopay_cancel_confirm', '해지하기 클릭'], ['done', null, '해지 완료(성공 응답)'], ['error', null, '해지 처리 오류']];
+  const steps = STEPS.filter(([k, c]) => ses(k) || (c && g(c).c)).map(([k, c, l]) => [esc(l), fmt(ses(k)), c ? fmt(g(c).c) : '-', pct(ses(k), req)]);
   const GR = { guest: '비회원', free: '무료', paid: '유료', premium: '프리미엄', company: '기업', naver: '네이버' };
-  const gm = {}; (a.grade || []).forEach(r => { const k = GR[r[0]] || unset(r[0]); gm[k] = gm[k] || {}; gm[k][r[1]] = r[2]; });
-  const grows = Object.entries(gm).sort((x, y) => (y[1].autopay_cancel_request || 0) - (x[1].autopay_cancel_request || 0)).map(([k, v]) => [esc(k), fmt(v.autopay_cancel_request || 0), fmt(v.autopay_cancel_keep || 0), fmt(v.autopay_cancel_confirm || 0)]);
-  return `<p class="upd" style="margin-bottom:10px">기간 ${range} · 사용자는 기간 안 순 사용자 · 11/24 측정 확인용 2건 포함</p>` + kpis +
-    `<div class="chart"><h3>일별 추이 <span>사용자</span></h3><div class="lg"><span><i style="background:#e8590c"></i>해지요청 클릭</span><span><i style="background:#2f6bff"></i>해지하기 클릭</span></div><svg class="ln" id="ln"></svg></div>
+  const gm = {}; (a.grade || []).forEach(r => { if (!/^autopay_session_/.test(r[1])) return; const k = GR[r[0]] || unset(r[0]); gm[k] = gm[k] || {}; gm[k][r[1].replace('autopay_session_', '')] = r[3]; });
+  const grows = Object.entries(gm).sort((x, y) => (y[1].request || 0) - (x[1].request || 0)).map(([k, v]) => [esc(k), fmt(v.request || 0), fmt(v.keep || 0), fmt(v.confirm || 0), fmt(v.done || 0)]);
+  return `<p class="upd" style="margin-bottom:10px">기간 ${range} · 세션 기준 · 11/24 측정 확인용 클릭 포함</p>` + kpis +
+    `<p class="nod">${note}</p>
+    <div class="chart"><h3>일별 추이 <span>세션</span></h3><div class="lg"><span><i style="background:#e8590c"></i>해지요청 세션</span><span><i style="background:#2f6bff"></i>해지하기 세션</span></div><svg class="ln" id="ln"></svg></div>
     <div class="grid2">
-      <div class="box key"><h3>해지 단계별 <span>해지요청 대비</span></h3>${top(steps, ['단계', '사용자', '횟수', '해지요청 대비'])}</div>
-      <div class="box"><h3>회원 등급별 <span>사용자</span></h3>${top(grows, ['회원 등급', '해지요청', '유지', '해지하기'])}</div>
+      <div class="box key"><h3>해지 단계별 <span>세션 · 클릭 수</span></h3>${top(steps, ['단계', '세션', '클릭 수', '해지요청 세션 대비'])}</div>
+      <div class="box"><h3>회원 등급별 <span>세션</span></h3>${top(grows, ['회원 등급', '해지요청', '유지', '해지하기', '해지 완료'])}</div>
     </div>`;
 }
 function drawLine() {
   const svg = $('#ln'); if (!svg) return;
   const rows = window.__line || [];
   const days = [...new Set(rows.map(r => r[0]))].sort();
-  const val = (d, re) => rows.filter(r => r[0] === d && re.test(r[1])).reduce((a, r) => a + r[2], 0);
+  const val = (d, re, ix = 2) => rows.filter(r => r[0] === d && re.test(r[1])).reduce((a, r) => a + (r[ix] || 0), 0);
   const SR = window.__series || [[/^brief_modal_view$/, '#e8590c'], [/^brief_modal_(item|form|blog)_click$/, '#2f6bff']];
-  const ser = SR.map(([re, c]) => [days.map(d => val(d, re)), c]);
+  const ser = SR.map(([re, c, ix]) => [days.map(d => val(d, re, ix)), c]);
   const s1 = ser[0][0], s2 = ser[1] ? ser[1][0] : [];
   const W = svg.clientWidth || 800, H = 180, pl = 40, pr = 10, pt = 10, pb = 22, mx = Math.max(1, ...ser.flatMap(x => x[0]));
   const x = i => pl + (W - pl - pr) * (days.length < 2 ? 0.5 : i / (days.length - 1)), y = v => pt + (H - pt - pb) * (1 - v / mx);
