@@ -203,6 +203,22 @@
               "href": "archive/20261125-165810-yesform-brief-admin-v12/index.html"
             }
           ]
+        },
+        {
+          "id": "20261125-170824-yesform-brief-admin-v13",
+          "label": "v13 · 내용 변경(N)과 표시용 줄임 구분",
+          "title": "연말연초 업무 브리핑 모달 · 콘텐츠 관리 (관리자)",
+          "desc": "초록 N은 내용이 바뀐 칸(새 서식·링크·블로그·일정·문구)만. 말줄임 방지로 글자만 줄인 칸은 회색 「줄」로 따로 표시. 실제 예스폼 메인 모달과 비교하면 지금은 내용 변경 0칸, 표시용 줄임 71칸.",
+          "created": "2026.11.25",
+          "folder": "archive/20261125-170824-yesform-brief-admin-v13",
+          "preview": "archive/20261125-170824-yesform-brief-admin-v13/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "콘텐츠 관리 대시보드",
+              "href": "archive/20261125-170824-yesform-brief-admin-v13/index.html"
+            }
+          ]
         }
       ]
     },
