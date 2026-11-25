@@ -13,6 +13,8 @@
       svg: '<rect x="4" y="12" width="3.6" height="8" rx="1"' + F + '/><rect x="10.2" y="8" width="3.6" height="12" rx="1"' + F + '/><rect x="16.4" y="4" width="3.6" height="16" rx="1" fill="currentColor"/>' },
     { id: 'perf', href: 'perf.html', label: '성과 측정', title: '성과 측정 · 매일 자동 갱신', kw: '성과 측정 GA4 탐색 대시보드 모달', fg: '#e8590c', bg: '#fff1e6',
       svg: '<path d="M4 19.5h16"/><path d="M5 15.5l4.2-4.4 3.3 2.8L19 7" stroke-width="2.4"/><path d="M14.8 7H19v4.2" stroke-width="2.4"/>' },
+    { id: 'auto', href: 'auto.html', label: '자동관리', title: '자동관리 · 시트·데이터 연동 관리 화면', kw: '자동관리 자동 관리 콘텐츠 관리 대시보드 시트 모달', fg: '#1b52ed', bg: '#ebf1ff',
+      svg: '<rect x="3" y="4" width="18" height="16" rx="2.5"' + F + '/><path d="M3 9h18M8 9v11"/><path d="M12 14.5l2 2 4-4" stroke-width="2.2"/>' },
     { id: 'wbs', href: 'wbs.html', label: '팀 일정', title: '팀 WBS · 캘린더', kw: '팀 WBS 캘린더 일정 휴가 업데이트', group: ['wbs', 'calendar'],
       sub: [{ id: 'wbs', href: 'wbs.html', label: '팀 WBS' }, { id: 'calendar', href: 'calendar.html', label: '캘린더' }], fg: '#7c4dff', bg: '#f0eaff',
       svg: '<rect x="3" y="4.5" width="18" height="16" rx="2.5"' + F + '/><path d="M3 9.5h18M8 3v3M16 3v3"/><path d="M7 13.2h6M10 16.8h7" stroke-width="2.6"/>' },

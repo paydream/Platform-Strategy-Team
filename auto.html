@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>자동관리 | 플랫폼전략팀 업무 아카이브</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="gnb.css">
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--line:#e5e8ec;--line2:#eef0f3;--text:#191f28;--sub:#6b7684;--faint:#98a1ad;--c:#1b52ed;--c-bg:#ebf1ff;--ok:#12a150}
+  *{box-sizing:border-box;margin:0;padding:0}
+  [hidden]{display:none!important}
+  body{font-family:"Pretendard Variable",Pretendard,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+  main{padding-bottom:70px}
+  main.wide{max-width:1488px}
+  .hero{padding:30px 0 0;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+  .hero h1{font-size:26px;letter-spacing:-.01em}
+  .hero p{color:var(--sub);margin-top:4px;font-size:14px}
+  .crumb{display:inline-block;font-size:13px;color:var(--sub);text-decoration:none;margin-bottom:6px}
+  .crumb:hover{color:var(--c)}
+  .acts{display:flex;gap:8px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border-radius:9px;border:1px solid var(--line);background:#fff;font:inherit;font-size:13px;font-weight:600;color:var(--text);text-decoration:none;white-space:nowrap}
+  .btn:hover{border-color:var(--c);color:var(--c)}
+  .lh{display:flex;justify-content:space-between;align-items:baseline;margin-top:30px}
+  .lh h2{font-size:18px}
+  .lh span{font-size:13px;color:var(--sub)}
+  .album{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px;margin-top:12px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;text-decoration:none;display:flex;flex-direction:column;transition:border-color .15s,box-shadow .15s,transform .15s}
+  .card:hover{border-color:#b9c9fb;box-shadow:0 6px 18px rgba(0,0,0,.06);transform:translateY(-1px)}
+  .th{aspect-ratio:16/10;background:#eef0f3;position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+  .th img{width:100%;height:100%;object-fit:cover;object-position:top left;display:block}
+  .th em{position:absolute;left:10px;top:10px;font-style:normal;font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px;background:#fff;color:var(--c);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+  .th em.ready{color:var(--sub)}
+  .cb{padding:12px 14px 14px;display:flex;flex-direction:column;gap:4px;flex:1}
+  .cb .pd{font-size:12px;color:var(--c);font-weight:700}
+  .cb b{font-size:15px;line-height:1.4}
+  .cb p{font-size:12.5px;color:var(--sub)}
+  .cb .hl2{font-size:12.5px;background:#f4f7ff;border-radius:8px;padding:6px 9px;margin-top:4px}
+  .cb .mt{margin-top:auto;padding-top:8px;display:flex;flex-wrap:wrap;gap:4px 10px;font-size:11.5px;color:var(--faint)}
+  .nod{color:var(--faint);font-size:13px;padding:8px 0}
+  .frame{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .frame iframe{display:block;width:100%;border:0;height:calc(100vh - 190px);min-height:640px;background:var(--bg)}
+</style>
+</head>
+<body>
+<header class="gnb"><div class="wrap gnb-top"><a class="gnb-logo" href="./" title="메인 홈으로"><strong>플랫폼전략팀</strong></a><div class="gnb-util"></div></div><nav class="wrap gnb-nav" data-current="auto" aria-label="주요 메뉴"></nav><script src="gnb.js"></script></header>
+<main class="wrap" id="main">
+  <section class="hero">
+    <div><a class="crumb" id="crumb" href="auto.html" hidden>← 자동관리 목록</a><h1 id="ptitle">자동관리</h1><p id="pdesc">시트·데이터와 연결해 자동으로 관리하는 화면 모음. 항목을 누르면 관리 대시보드가 열려요.</p></div>
+    <div class="acts" id="acts"></div>
+  </section>
+  <section class="frame" id="frame" hidden></section>
+  <section id="list">
+    <div class="lh"><h2>관리 목록</h2><span id="cnt"></span></div>
+    <div class="album" id="album"></div>
+  </section>
+</main>
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const D0 = s => String(s || '').replace(/-/g, '.');
+const QID = new URLSearchParams(location.search).get('id');
+let ITEMS = [];
+async function load() {
+  try { const r = await fetch('data/auto.json', { cache: 'no-store' }); ITEMS = (await r.json()).items || []; } catch { ITEMS = []; }
+  if (QID) return detail(ITEMS.find(x => x.id === QID));
+  $('#cnt').textContent = ITEMS.length ? `${ITEMS.length}건` : '';
+  $('#album').innerHTML = ITEMS.length ? ITEMS.map(it => `<a class="card" href="auto.html?id=${encodeURIComponent(it.id)}">
+      <div class="th">${it.thumb ? `<img src="${esc(it.thumb)}" alt="" loading="lazy">` : ''}<em class="${it.status === '운영 중' ? '' : 'ready'}">${esc(it.status || '')}</em></div>
+      <div class="cb"><span class="pd">${esc([it.product, it.kind].filter(Boolean).join(' · '))}</span><b>${esc(it.title)}</b><p>${esc(it.desc || '')}</p>
+        ${it.schedule ? `<div class="hl2">${esc(it.schedule)}</div>` : ''}
+        <div class="mt">${it.updated ? `<span>업데이트 ${esc(D0(it.updated))}</span>` : ''}${(it.meta || []).map(m => `<span>${esc(m)}</span>`).join('')}</div></div></a>`).join('')
+    : '<p class="nod">아직 등록된 항목이 없어요.</p>';
+}
+function detail(it) {
+  $('#crumb').hidden = false; $('#list').hidden = true;
+  if (!it) { $('#pdesc').textContent = '없는 항목이에요. 목록에서 다시 골라 주세요.'; return; }
+  document.title = `${it.title} | 자동관리 | 플랫폼전략팀 업무 아카이브`;
+  $('#main').classList.add('wide');
+  $('#ptitle').textContent = it.title; $('#pdesc').textContent = it.desc || '';
+  $('#acts').innerHTML = `<a class="btn" href="${esc(it.src)}" target="_blank" rel="noopener">새 창 ↗</a>`;
+  $('#frame').hidden = false;
+  $('#frame').innerHTML = `<iframe src="${esc(it.src)}" title="${esc(it.title)}"></iframe>`;
+}
+addEventListener('message', e => { const f = $('#frame iframe'); if (f && e.source === f.contentWindow && e.data && e.data.type === 'auto-h') f.style.height = Math.max(640, e.data.h) + 'px'; });
+load();
+</script>
+</body>
+</html>
