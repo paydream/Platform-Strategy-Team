@@ -91,6 +91,22 @@
               "href": "archive/20261125-152324-yesform-brief-admin-v5/index.html"
             }
           ]
+        },
+        {
+          "id": "20261125-153034-yesform-brief-admin-v6",
+          "label": "v6 · 콘텐츠 관리 대시보드",
+          "title": "연말연초 업무 브리핑 모달 · 콘텐츠 관리 (관리자)",
+          "desc": "디자인 점검 요소(화면 넘침·화면 크기 전환·넘침 열) 제거. 관리 대시보드: 요약 6개(전체 일정·이번 달·2주 안 마감·시행·추천 서식·블로그·시트 동기화), 일정 현황 패널(2주 안 마감·시행, 다가오는 일정, 분야별·월별, 빈 칸), 모달 미리보기, 콘텐츠 표.",
+          "created": "2026.11.25",
+          "folder": "archive/20261125-153034-yesform-brief-admin-v6",
+          "preview": "archive/20261125-153034-yesform-brief-admin-v6/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "콘텐츠 관리 대시보드",
+              "href": "archive/20261125-153034-yesform-brief-admin-v6/index.html"
+            }
+          ]
         }
       ]
     },
