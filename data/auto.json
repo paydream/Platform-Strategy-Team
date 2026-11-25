@@ -29,6 +29,7 @@
       "updated": "2026-11-25",
       "thumb": "assets/auto/clarity.jpg",
       "src": "clarity.html",
+      "width": "fixed",
       "meta": [
         "Microsoft Clarity",
         "위험도 높음만 기록"
