@@ -123,6 +123,22 @@
               "href": "archive/20261125-155347-yesform-brief-admin-v7/index.html"
             }
           ]
+        },
+        {
+          "id": "20261125-160733-yesform-brief-admin-v8",
+          "label": "v8 · 콘텐츠 표 와이드",
+          "title": "연말연초 업무 브리핑 모달 · 콘텐츠 관리 (관리자)",
+          "desc": "콘텐츠 표를 브라우저 창 너비 가득(좌우 여백 없이) 표시, 표 높이 = 화면 높이 - 140.",
+          "created": "2026.11.25",
+          "folder": "archive/20261125-160733-yesform-brief-admin-v8",
+          "preview": "archive/20261125-160733-yesform-brief-admin-v8/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "콘텐츠 관리 대시보드",
+              "href": "archive/20261125-160733-yesform-brief-admin-v8/index.html"
+            }
+          ]
         }
       ]
     },
