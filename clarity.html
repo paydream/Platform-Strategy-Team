@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>예스폼 오류 모니터링 | 플랫폼전략팀 업무 아카이브</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="gnb.css">
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--line:#e5e8ec;--line2:#eef0f3;--text:#191f28;--sub:#6b7684;--faint:#98a1ad;--accent:#2f6bff;--ok:#12a150;--ok-bg:#e8f7ee;--warn:#d97706;--warn-bg:#fff4e0;--bad:#e03131;--bad-bg:#ffecec;--gray-bg:#f1f3f5}
+  *{box-sizing:border-box;margin:0;padding:0}
+  [hidden]{display:none!important}
+  body{font-family:"Pretendard Variable",Pretendard,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased}
+  body.embed{background:transparent}
+  body.embed .gnb{display:none}
+  a{color:inherit}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+  body.embed .wrap{max-width:none;padding:0}
+  main{padding-bottom:60px}
+  body.embed main{padding-bottom:8px}
+  .hero{padding:28px 0 0;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+  body.embed .hero{padding-top:0}
+  .hero h1{font-size:24px;letter-spacing:-.01em}
+  .hero p{color:var(--sub);margin-top:2px;font-size:13px}
+  .upd{font-size:12px;color:var(--sub);display:flex;align-items:center;gap:6px}
+  .upd i{width:7px;height:7px;border-radius:50%;background:var(--ok);display:inline-block}
+  .upd i.warn{background:#f59e0b}
+  .btn{display:inline-flex;align-items:center;height:32px;padding:0 12px;border-radius:8px;border:1px solid var(--line);background:#fff;font:inherit;font-size:12.5px;font-weight:600;text-decoration:none;cursor:pointer;white-space:nowrap}
+  .btn:hover{border-color:var(--accent);color:var(--accent)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-top:14px;min-width:0}
+  .card h2{font-size:15px;display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:10px}
+  .card h2 span{font-size:12px;color:var(--faint);font-weight:400}
+  .status{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;border-radius:99px;padding:3px 10px;white-space:nowrap}
+  .b-ok{background:var(--ok-bg);color:var(--ok)}
+  .b-warn{background:var(--warn-bg);color:var(--warn)}
+  .b-bad{background:var(--bad-bg);color:var(--bad)}
+  .b-gray{background:var(--gray-bg);color:var(--sub)}
+  .status .big{font-size:20px;padding:6px 14px}
+  .status .facts{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--sub)}
+  .status .facts b{color:var(--text);font-size:15px;margin-left:4px}
+  .alerts{margin-top:10px;display:flex;flex-direction:column;gap:6px}
+  .alert{font-size:13px;padding:8px 10px;border-radius:9px;background:#fafbfc;border:1px solid var(--line2);display:flex;gap:8px;align-items:flex-start}
+  .alert .badge{flex:none;margin-top:1px}
+  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+  .kpi.hot{border-color:#f5b3b3;background:#fffafa}
+  .kpi .l{font-size:13px;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+  .kpi .v{font-size:26px;font-weight:800;letter-spacing:-.01em;margin-top:4px}
+  .kpi .v small{font-size:12px;font-weight:600;color:var(--sub);margin-left:3px}
+  .kpi .row{display:flex;justify-content:space-between;font-size:12.5px;color:var(--sub);margin-top:4px}
+  .kpi .row b{color:var(--text);font-weight:700}
+  .kpi .row b.over{color:var(--bad)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .lg{display:flex;gap:12px;font-size:12px;color:var(--sub);margin-bottom:4px;flex-wrap:wrap}
+  .lg i{display:inline-block;width:10px;height:3px;border-radius:2px;margin-right:5px;vertical-align:middle}
+  svg.ch{width:100%;height:190px;display:block}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th{font-size:11.5px;color:var(--faint);font-weight:500;text-align:right;padding:5px 6px;border-bottom:1px solid var(--line2);white-space:nowrap}
+  td{text-align:right;padding:6px;border-bottom:1px solid var(--line2);font-variant-numeric:tabular-nums;vertical-align:top}
+  th.l,td.l{text-align:left}
+  tr:last-child td{border-bottom:0}
+  td.msg{text-align:left;word-break:break-all}
+  td.msg em{font-style:normal;font-size:10.5px;font-weight:700;color:var(--bad);background:var(--bad-bg);border-radius:99px;padding:1px 6px;margin-left:4px}
+  td.note{text-align:left;color:var(--sub);font-size:12px;min-width:220px}
+  td.note div+div{margin-top:2px}
+  td .over{color:var(--bad);font-weight:700}
+  .tw{overflow-x:auto}
+  .nod{color:var(--faint);font-size:12.5px;padding:6px 0}
+  .more{margin-top:8px;text-align:center}
+  .rules{font-size:12.5px;color:var(--sub);display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .rules div{background:#f8f9fb;border-radius:10px;padding:10px 12px}
+  .rules b{display:block;color:var(--text);font-size:13px;margin-bottom:2px}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .seg button{border:0;background:#fff;font:inherit;font-size:12px;padding:4px 10px;cursor:pointer;color:var(--sub)}
+  .seg button.on{background:var(--text);color:#fff}
+  @media (max-width:900px){.kpis,.grid3,.rules{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="gnb"><div class="wrap gnb-top"><a class="gnb-logo" href="./" title="메인 홈으로"><strong>플랫폼전략팀</strong></a><div class="gnb-util"></div></div><nav class="wrap gnb-nav" data-current="auto" aria-label="주요 메뉴"></nav><script src="gnb.js"></script></header>
+<main class="wrap">
+  <section class="hero">
+    <div><h1>예스폼 오류 모니터링</h1><p>Microsoft Clarity · www.yesform.com · 1시간마다 자동 점검 · 오늘 0시부터 누적</p></div>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><div class="upd" id="upd"></div><a class="btn" id="clink" href="#" target="_blank" rel="noopener">Clarity 열기 ↗</a></div>
+  </section>
+  <div id="root"><p class="nod" style="margin-top:16px">불러오는 중…</p></div>
+</main>
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = n => (n == null || isNaN(n)) ? '-' : Math.round(n).toLocaleString('ko-KR');
+const pc = n => (n == null || isNaN(n)) ? '-' : (+n).toFixed(2).replace(/\.?0+$/, '') + '%';
+const kst = iso => new Date(new Date(iso).getTime() + 9 * 3600e3);
+const hm = iso => { const d = kst(iso); return String(d.getUTCHours()).padStart(2, '0') + ':' + String(d.getUTCMinutes()).padStart(2, '0'); };
+const md = s => { const [, m, d] = String(s).split('-'); return `${+m}.${+d}`; };
+const todayK = () => new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
+const EMBED = window.parent !== window;
+if (EMBED) document.body.classList.add('embed');
+const COL = { all: '#2f6bff', settle: '#e03131', membership: '#f08c00' };
+const SB = { '정상': 'b-ok', '이상': 'b-bad', '이상 지속': 'b-warn', '실패': 'b-gray' };
+let D = null, SHOW = 48, DAYSCOPE = 'all';
+
+function postH() { if (EMBED) try { parent.postMessage({ type: 'auto-h', h: document.documentElement.scrollHeight }, '*'); } catch {} }
+new ResizeObserver(postH).observe(document.body);
+
+async function load() {
+  try {
+    if (window.__MOCK) D = window.__MOCK;
+    else {
+      const r = await fetch('/api/stats', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: 'clarity' }), cache: 'no-store' });
+      if (r.status === 401) { location.reload(); return; }
+      D = r.ok ? await r.json() : null;
+    }
+  } catch { D = null; }
+  if (!D || !Array.isArray(D.runs) || !D.runs.length) { $('#root').innerHTML = '<div class="card"><p class="nod">아직 점검 기록이 없어요. 1시간 안에 첫 기록이 들어와요.</p></div>'; setUpd(); return; }
+  render();
+}
+function setUpd() {
+  const last = D && D.runs && D.runs[D.runs.length - 1];
+  const stale = !last || Date.now() - Date.parse(last.at) > 3 * 3600e3;
+  $('#upd').innerHTML = last ? `<i class="${stale ? 'warn' : ''}"></i>마지막 점검 ${md(last.date)} ${hm(last.at)}${stale ? ' · 3시간 넘게 점검이 없어요(맥이 꺼져 있었을 수 있어요)' : ''}` : '<i class="warn"></i>점검 전';
+  const s = new Date(); const m = Date.parse(todayK() + 'T00:00:00+09:00');
+  $('#clink').href = `https://clarity.microsoft.com/projects/view/${(D && D.project) || 'xfgy2v09sr'}/dashboard?date=Custom&start=${m}&end=${m + 864e5 - 1}`;
+}
+const scopeName = id => ((D.scopes || []).find(x => x.id === id) || {}).name || id;
+const shortName = id => ({ all: '사이트 전체', settle: '결제 페이지', membership: '멤버십 페이지' }[id] || id);
+
+function render() {
+  setUpd();
+  const runs = D.runs, last = runs[runs.length - 1];
+  const lastOk = [...runs].reverse().find(r => r.status !== '실패');
+  const today = last.date;
+  const tRuns = runs.filter(r => r.date === today);
+  const tBad = tRuns.filter(r => r.status === '이상').length;
+  const issues = lastOk && lastOk.date === today ? [...(lastOk.alerts || []).map(a => ({ ...a, nw: 1 })), ...(lastOk.ongoing || [])] : [];
+  const st = last.status;
+  const statusTxt = st === '정상' ? '정상' : st === '실패' ? '점검 실패' : st === '이상' ? '이상 감지' : '이상 지속';
+  let h = `<div class="card"><div class="status"><span class="badge ${SB[st] || 'b-gray'} big">${statusTxt}</span>
+    <div class="facts"><span>오늘 점검<b>${tRuns.length}회</b></span><span>새 이상 감지<b>${tBad}회</b></span><span>오늘 이상 항목<b>${issues.length}건</b></span>${st === '실패' ? `<span>${esc(last.note || '')}</span>` : ''}</div></div>`;
+  if (issues.length) h += `<div class="alerts">${issues.map(a => `<div class="alert"><span class="badge ${a.level === '긴급' ? 'b-bad' : 'b-warn'}">${esc(a.level)}</span><span>${esc(a.text)}</span></div>`).join('')}</div>`;
+  h += '</div>';
+
+  // KPI (마지막 정상 점검 기준)
+  if (lastOk) {
+    h += '<div class="kpis">' + (D.scopes || []).map(sc => {
+      const v = (lastOk.s || {})[sc.id] || {}; const b = (D.base || {})[sc.id] || {};
+      const rateOver = v.n >= sc.minSess && v.r >= sc.maxRate, totOver = b.totalAvg && v.t > Math.max(sc.id === 'all' ? 300 : 10, b.totalAvg * 2);
+      return `<div class="kpi ${rateOver || totOver ? 'hot' : ''}"><div class="l">${esc(shortName(sc.id))}<span class="badge ${rateOver || totOver ? 'b-bad' : 'b-ok'}">${rateOver || totOver ? '기준 초과' : '기준 이내'}</span></div>
+        <div class="v">${fmt(v.t)}<small>건</small></div>
+        <div class="row"><span>오류 난 세션</span><b class="${rateOver ? 'over' : ''}">${pc(v.r)}</b></div>
+        <div class="row"><span>클릭 직후 오류</span><b>${fmt(v.c)}건</b></div>
+        <div class="row"><span>세션</span><b>${fmt(v.n)}</b></div>
+        <div class="row"><span>평소 하루 · 비율 기준</span><b>${fmt(b.totalAvg)}건 · ${pc(sc.maxRate)}</b></div></div>`;
+    }).join('') + '</div>';
+  }
+
+  // 차트: 오늘 누적 추이 · 일별 합계
+  h += `<div class="grid2"><div class="card"><h2>오늘 누적 오류 <span>${md(today)} 점검 시각별</span></h2>${lg()}${lineToday(tRuns.filter(r => r.status !== '실패'))}</div>
+    <div class="card"><h2>일별 오류 건수 <span>날짜별 마지막 점검 기준 · 최근 14일</span></h2>${lg()}${barsDaily()}</div></div>`;
+
+  // 상위 오류
+  if (lastOk) {
+    const known = Object.fromEntries((D.known || []).map(k => [k.msg.toLowerCase().replace(/\s+/g, ' '), k]));
+    h += `<div class="card"><h2>지금 상위 오류 <span>${md(lastOk.date)} ${hm(lastOk.at)} 점검 · 오늘 0시부터</span></h2><div class="grid3">` + (D.scopes || []).map(sc => {
+      const v = (lastOk.s || {})[sc.id] || {};
+      const rows = (v.top || []).map(([m, p]) => { const k = known[m.toLowerCase().replace(/\s+/g, ' ')]; const nw = k && !k.baseline && k.first === today; return `<tr><td class="msg">${esc(m)}${nw ? '<em>오늘 처음</em>' : ''}</td><td>${pc(p)}</td></tr>`; }).join('');
+      return `<div><div class="lg" style="font-weight:700;color:var(--text)"><span><i style="background:${COL[sc.id]}"></i>${esc(shortName(sc.id))}</span></div>${rows ? `<table><tr><th class="l">오류 문구</th><th>비중</th></tr>${rows}</table>` : '<p class="nod">오류 없음</p>'}</div>`;
+    }).join('') + '</div></div>';
+  }
+
+  // 점검 이력
+  const list = [...runs].reverse();
+  h += `<div class="card"><h2>점검 이력 <span>최근 14일 · ${fmt(runs.length)}회</span></h2><div class="tw"><table>
+    <tr><th class="l">점검 시각</th><th class="l">결과</th>${(D.scopes || []).map(sc => `<th>${esc(shortName(sc.id))}<br>오류 · 세션 비율</th>`).join('')}<th class="l">내용</th></tr>` +
+    list.slice(0, SHOW).map(r => `<tr><td class="l" style="white-space:nowrap">${md(r.date)} ${hm(r.at)}</td><td class="l"><span class="badge ${SB[r.status] || 'b-gray'}">${esc(r.status)}</span></td>` +
+      (D.scopes || []).map(sc => { const v = (r.s || {})[sc.id]; if (!v) return '<td>-</td>'; const over = v.n >= sc.minSess && v.r >= sc.maxRate; return `<td>${fmt(v.t)} · <span class="${over ? 'over' : ''}">${pc(v.r)}</span></td>`; }).join('') +
+      `<td class="note">${r.status === '실패' ? esc(r.note || '') : (r.alerts || []).map(a => `<div>[${esc(a.level)}] ${esc(a.text)}</div>`).join('') || (r.status === '이상 지속' ? '오늘 감지된 이상이 이어지는 중' : '')}</td></tr>`).join('') +
+    `</table></div>${list.length > SHOW ? `<div class="more"><button class="btn" id="more">이전 기록 더 보기 (${fmt(list.length - SHOW)}회)</button></div>` : ''}</div>`;
+
+  // 판정 기준
+  const sc = id => (D.scopes || []).find(x => x.id === id) || {};
+  h += `<div class="card"><h2>판정 기준 <span>같은 이상은 하루 한 번만 새로 기록</span></h2><div class="rules">
+    <div><b>새 오류</b>범위별 상위 오류(전체 · 클릭 직후)에 기존 기록에 없던 문구가 나타남. 결제·멤버십 페이지면 긴급</div>
+    <div><b>오류 난 세션 비율</b>사이트 전체 ${pc(sc('all').maxRate)}(세션 ${fmt(sc('all').minSess)} 이상) · 결제 ${pc(sc('settle').maxRate)} · 멤버십 ${pc(sc('membership').maxRate)}(세션 ${fmt(sc('settle').minSess)} 이상) 넘으면 이상</div>
+    <div><b>오류 급증</b>오늘 오류 또는 클릭 직후 오류가 평소 하루치의 2배 초과(최소 전체 300건 · 결제/멤버십 10건)</div></div></div>`;
+
+  $('#root').innerHTML = h;
+  const mb = $('#more'); if (mb) mb.onclick = () => { SHOW += 96; render(); };
+  postH();
+}
+function lg() { return `<div class="lg">${(D.scopes || []).map(sc => `<span><i style="background:${COL[sc.id]}"></i>${esc(shortName(sc.id))}${sc.id === 'all' ? ' (왼쪽 축)' : ' (오른쪽 축)'}</span>`).join('')}</div>`; }
+// 두 축 선 그래프: 전체는 왼쪽 축, 결제·멤버십은 오른쪽 축
+function svgLines(xs, series, xlab) {
+  const W = 560, H = 190, L = 40, R = 36, T = 10, B = 24, n = xs.length;
+  if (!n) return '<p class="nod">기록이 없어요.</p>';
+  const mx = k => Math.max(1, ...series.filter(s => s.ax === k).flatMap(s => s.v.filter(v => v != null)));
+  const mL = mx('L'), mR = mx('R');
+  const X = i => n === 1 ? (L + W - R) / 2 : L + i * (W - L - R) / (n - 1);
+  const Y = (v, a) => T + (H - T - B) * (1 - v / (a === 'L' ? mL : mR));
+  let g = '';
+  for (let j = 0; j <= 4; j++) { const y = T + (H - T - B) * j / 4; g += `<line x1="${L}" x2="${W - R}" y1="${y}" y2="${y}" stroke="#eef0f3"/><text x="${L - 6}" y="${y + 4}" font-size="10" fill="#98a1ad" text-anchor="end">${fmt(mL * (1 - j / 4))}</text><text x="${W - R + 6}" y="${y + 4}" font-size="10" fill="#98a1ad">${fmt(mR * (1 - j / 4))}</text>`; }
+  const step = Math.max(1, Math.ceil(n / 8));
+  xs.forEach((x, i) => { if (i % step === 0 || i === n - 1) g += `<text x="${X(i)}" y="${H - 6}" font-size="10" fill="#98a1ad" text-anchor="middle">${esc(xlab(x))}</text>`; });
+  for (const s of series) {
+    const pts = s.v.map((v, i) => v == null ? null : [X(i), Y(v, s.ax)]).filter(Boolean);
+    if (pts.length > 1) g += `<polyline fill="none" stroke="${s.c}" stroke-width="2" points="${pts.map(p => p.join(',')).join(' ')}"/>`;
+    pts.forEach((p, i) => g += `<circle cx="${p[0]}" cy="${p[1]}" r="${n > 30 ? 1.6 : 2.6}" fill="${s.c}"><title>${esc(s.name)} ${fmt(s.v[i])}건</title></circle>`);
+  }
+  return `<svg class="ch" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">${g}</svg>`;
+}
+function lineToday(rs) {
+  return svgLines(rs, (D.scopes || []).map(sc => ({ name: shortName(sc.id), c: COL[sc.id], ax: sc.id === 'all' ? 'L' : 'R', v: rs.map(r => ((r.s || {})[sc.id] || {}).t ?? null) })), r => hm(r.at));
+}
+function barsDaily() {
+  const by = {}; for (const r of D.runs) if (r.status !== '실패') by[r.date] = r;
+  const days = Object.keys(by).sort();
+  return svgLines(days, (D.scopes || []).map(sc => ({ name: shortName(sc.id), c: COL[sc.id], ax: sc.id === 'all' ? 'L' : 'R', v: days.map(d => ((by[d].s || {})[sc.id] || {}).t ?? null) })), d => md(d));
+}
+load();
+</script>
+</body>
+</html>
