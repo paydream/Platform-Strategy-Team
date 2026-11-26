@@ -148,7 +148,7 @@
   };
   window.pstClarityAlert = paintAlert;
   if (window.fetch && navs.length) {
-    fetch('/api/clarity-alert?summary=1', { cache: 'no-store', credentials: 'same-origin' })
+    fetch('/api/stats?alert=clarity&summary=1', { cache: 'no-store', credentials: 'same-origin' })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) { if (j && j.count) paintAlert(j.count); })
       .catch(function () {});

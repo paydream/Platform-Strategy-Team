@@ -152,7 +152,7 @@ let ACK = null;
 async function loadAck() {
   try {
     if (window.__MOCK_ACK) ACK = window.__MOCK_ACK;
-    else { const r = await fetch('/api/clarity-alert', { cache: 'no-store' }); ACK = r.ok ? await r.json() : null; }
+    else { const r = await fetch('/api/stats?alert=clarity', { cache: 'no-store' }); ACK = r.ok ? await r.json() : null; }
   } catch { ACK = null; }
   renderAck();
 }
@@ -185,7 +185,7 @@ function renderAck() {
     if (!cb.checked) return; cb.disabled = true;
     try {
       if (window.__MOCK_ACK) { window.__MOCK_ACK.pending = window.__MOCK_ACK.pending.filter(x => x.id !== cb.dataset.ack); ACK = window.__MOCK_ACK; }
-      else { const r = await fetch('/api/clarity-alert', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids: [cb.dataset.ack] }) }); const j = await r.json(); if (!r.ok) throw new Error(j.error || '저장 실패'); ACK = j; }
+      else { const r = await fetch('/api/stats?alert=clarity', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids: [cb.dataset.ack] }) }); const j = await r.json(); if (!r.ok) throw new Error(j.error || '저장 실패'); ACK = j; }
       const n = (ACK.pending || []).length;
       try { (window.pstClarityAlert || function () {})(n); parent.pstClarityAlert && parent.pstClarityAlert(n); } catch {}
       renderAck();
