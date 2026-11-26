@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>예스폼싸인 · 이용요금</title>
+<!--
+  예스폼싸인 이용요금 (2026-11-26)
+  Figma: 싸인_디자인시스템 › 전체 화면
+    시안01 54644:41577 (1600 × 2955) — 무료 체험 배너 위 · 소량 카드 · 멤버십 카드 3개 · 주요 기능
+    시안02 54851:49194 (1600 × 3358) — 소량 카드 가로형 · 멤버십 한 개 + 펼쳐 보기 · 주요 기능 · 전자 계약 · 인증 및 보안 · 무료 체험 배너 맨 아래
+    (2026-11-26 업데이트 반영)
+  · 맨 위 검정 바는 시안 확인용 (js/sian-bar.js) — 맨 아래 sian-bar.js 한 줄을 지우면 바가 빠지고 시안01 만 보임
+  · 주소 뒤 #1 · #2 로 바로 열기 · 키보드 ←/→
+  · 스타일 css/style.css · 동작 js/main.js · 그림 images/
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- 헤더 (Header_home · Type=logout, PC(web)) — 두 시안 같음 · 높이 72 -->
+<header class="hd">
+  <div class="hd__inner inner">
+    <h1 class="hd__logo"><a href="#"><img src="images/logo-sign@2x.png" width="91" height="30" alt="예스폼싸인"></a></h1>
+    <nav class="hd__lnb" aria-label="주 메뉴">
+      <a href="#">서비스가이드</a>
+      <a href="#">전자서명 만들기</a>
+      <a href="#" aria-current="page">이용요금</a>
+      <a href="#">고객센터</a>
+    </nav>
+    <div class="hd__info">
+      <a class="hd__btn hd__btn--primary" href="#">1개월 무료 체험</a>
+      <a class="hd__btn" href="#">로그인</a>
+    </div>
+  </div>
+</header>
+
+<!-- ======================================================================
+     시안01 (54644:41577)
+     ====================================================================== -->
+<main class="sian sian--1" data-sian="1">
+
+  <!-- 요금 안내 + 무료 체험 배너 + 맞춤형 요금제 (위 #F5F9FF → 흰색) -->
+  <section class="s1-top">
+    <div class="inner">
+      <div class="intro">
+        <img class="intro__hello" src="images/hello@2x.png" width="125" height="47" alt="">
+        <h2 class="intro__title">예스폼싸인 요금 안내</h2>
+        <p class="intro__desc">신규 가입하면 1개월 동안 모든 기능이 무료! 합리적인 가격으로 지금 시작하세요.</p>
+      </div>
+
+      <!-- 무료 체험 배너 (어두운 배경 · 배경 그림 한 장) -->
+      <div class="trial trial--dark">
+        <div class="trial__text">
+          <p class="trial__sub">예스폼싸인이 처음이신가요?</p>
+          <p class="trial__title">자동결제 없는 30일 무료 체험</p>
+        </div>
+        <a class="trial__btn trial__btn--glow" href="#">신규 가입하고 무료 체험하기<img src="images/ic-chevron-right-blue-20.svg" width="20" height="20" alt=""></a>
+      </div>
+
+      <div class="plans">
+        <div class="sec-title">
+          <h3 class="sec-title__h">맞춤형 요금제</h3>
+          <p class="sec-title__p">예스폼싸인의 모든 기능을 요금제 제한 없이 사용할 수 있습니다.</p>
+        </div>
+        <div class="plans__body">
+          <!-- 밑줄 탭 (디자인시스템 tab · tab/resource h46) — 2026-11-26 칩에서 바뀜 -->
+          <div class="utabs" role="tablist" aria-label="요금제 고르기" data-chips>
+            <button class="utab" type="button" role="tab" aria-selected="false">요금제 전체</button>
+            <button class="utab is-on" type="button" role="tab" aria-selected="true">소량 이용</button>
+            <span class="chip-wrap">
+              <button class="utab" type="button" role="tab" aria-selected="false">대량 이용</button>
+              <span class="tip tip--side" aria-hidden="true"><span class="tip__body">신규 기능 업데이트</span></span>
+            </span>
+          </div>
+          <div class="pcards">
+            <div class="pcard">
+              <div class="pcard__top">
+                <div class="pcard__name">
+                  <div class="pcard__row"><p class="pcard__title">전자계약 10건</p></div>
+                  <p class="meta">소상공인<i class="meta__dot"></i>소규모 팀에 추천하는 플랜</p>
+                </div>
+                <div class="pcard__price">
+                  <p class="price"><span class="price__num">12,000</span><span class="price__unit">원</span></p>
+                  <p class="pcard__per">건당 1,200원</p>
+                </div>
+              </div>
+              <div class="pcard__bottom">
+                <a class="btn btn--line btn--46" href="#">10건 구매하기</a>
+                <p class="pcard__note">멤버십 제한 없이 모든 기능 사용</p>
+              </div>
+            </div>
+            <div class="pcard">
+              <div class="pcard__top">
+                <div class="pcard__name">
+                  <div class="pcard__row"><p class="pcard__title">전자계약 20건</p></div>
+                  <p class="meta">소상공인<i class="meta__dot"></i>소규모 팀에 추천하는 플랜</p>
+                </div>
+                <div class="pcard__price">
+                  <p class="price"><span class="price__num">22,000</span><span class="price__unit">원</span><span class="price__sale">12% 할인</span></p>
+                  <p class="pcard__per">건당 1,100원</p>
+                </div>
+              </div>
+              <div class="pcard__bottom">
+                <a class="btn btn--line btn--46" href="#">20건 구매하기</a>
+                <p class="pcard__note">멤버십 제한 없이 모든 기능 사용</p>
+              </div>
+            </div>
+            <div class="pcard">
+              <div class="pcard__top">
+                <div class="pcard__name">
+                  <div class="pcard__row"><p class="pcard__title pcard__title--blue">전자계약 50건</p><span class="label label--blue">가장 많이 선택</span></div>
+                  <p class="meta">소상공인<i class="meta__dot"></i>소규모 팀에 추천하는 플랜</p>
+                </div>
+                <div class="pcard__price">
+                  <p class="price"><span class="price__num">50,000</span><span class="price__unit">원</span><span class="price__sale">12% 할인</span></p>
+                  <p class="pcard__per">건당 1,000원</p>
+                </div>
+              </div>
+              <div class="pcard__bottom">
+                <a class="btn btn--solid btn--46" href="#">50건 구매하기</a>
+                <p class="pcard__note">멤버십 제한 없이 모든 기능 사용</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 통합멤버십 (위 #F5FCFF → 흰색) -->
+  <section class="s1-mem">
+    <div class="inner">
+      <div class="sec-title">
+        <h3 class="sec-title__h">통합멤버십 구독으로 더 큰 혜택</h3>
+        <p class="sec-title__p">예스폼싸인의 모든 기능을 요금제 제한 없이 사용할 수 있습니다.</p>
+      </div>
+      <div class="mcols">
+        <div class="mcol">
+          <div class="mplan">
+            <div class="mplan__info">
+              <div class="mplan__name">
+                <p class="mplan__tag">계약부터 세무·통합 관리가 필요한 분</p>
+                <p class="mplan__title">프리미엄 월정액</p>
+                <p class="meta">매월 10건 자동 지급<i class="meta__dot"></i>유효기간 1년</p>
+              </div>
+              <div class="mplan__price">
+                <p class="mplan__old">12,000원</p>
+                <p class="price price--blue"><span class="price__num">9,000</span><span class="price__unit">원</span><span class="price__per">월 결제</span></p>
+                <p class="mplan__max">최대 혜택 N원</p>
+              </div>
+            </div>
+            <a class="btn btn--solid btn--46" href="#">월 9,000원 구독하기</a>
+          </div>
+          <div class="perk">
+            <p class="perk__title">전자계약 월 10건 + 추가 혜택</p>
+            <div class="perk__group">
+              <p class="perk__head">패밀리사이트 혜택<span class="label label--green">인기</span></p>
+              <ul class="checks">
+                <li>페이존 6개월 이용권</li><li>유아동 학습지 100만종</li><li>프리미엄 온라인 도장</li><li>프리미엄 온라인 도장</li><li>프리미엄 온라인 도장</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="mcol">
+          <div class="mplan">
+            <div class="mplan__info">
+              <div class="mplan__name">
+                <p class="mplan__tag">계약부터 세무·통합 관리가 필요한 분</p>
+                <p class="mplan__title">비즈니스</p>
+                <p class="meta">매월 10건 자동 지급<i class="meta__dot"></i>유효기간 1년</p>
+              </div>
+              <div class="mplan__price">
+                <p class="mplan__old">12,000원</p>
+                <p class="price price--blue"><span class="price__num">9,000</span><span class="price__unit">원</span><span class="price__per">월 결제</span></p>
+                <p class="mplan__max">최대 혜택 N원</p>
+              </div>
+            </div>
+            <a class="btn btn--solid btn--46" href="#">월 9,000원 구독하기</a>
+          </div>
+          <div class="perk">
+            <p class="perk__title">전자계약 월 20건 + 추가 혜택</p>
+            <div class="perk__group">
+              <p class="perk__head">패밀리사이트 혜택<span class="label label--green">인기</span></p>
+              <ul class="checks">
+                <li>페이존 6개월 이용권</li><li>유아동 학습지 100만종</li><li>프리미엄 온라인 도장</li><li>프리미엄 온라인 도장</li><li>프리미엄 온라인 도장</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="mcol">
+          <div class="mplan">
+            <div class="mplan__info">
+              <div class="mplan__name">
+                <p class="mplan__tag">계약부터 세무·통합 관리가 필요한 분</p>
+                <p class="mplan__title">연결제</p>
+                <p class="meta">매월 10건 자동 지급<i class="meta__dot"></i>유효기간 1년</p>
+              </div>
+              <div class="mplan__price">
+                <p class="mplan__old">12,000원</p>
+                <p class="price price--blue"><span class="price__num">9,000</span><span class="price__unit">원</span><span class="price__per">월 결제</span></p>
+                <p class="mplan__max">최대 혜택 N원</p>
+              </div>
+            </div>
+            <a class="btn btn--solid btn--46" href="#">월 9,000원 구독하기</a>
+          </div>
+          <div class="perk">
+            <p class="perk__title">전자계약 월 10건 + 추가 혜택</p>
+            <div class="perk__group">
+              <p class="perk__head">패밀리사이트 혜택<span class="label label--green">인기</span></p>
+              <ul class="checks">
+                <li>페이존 6개월 이용권</li><li>유아동 학습지 100만종</li><li>프리미엄 온라인 도장</li><li>프리미엄 온라인 도장</li><li>프리미엄 온라인 도장</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 주요 기능 -->
+  <section class="s1-feat">
+    <div class="inner">
+      <div class="feat-head">
+        <div class="sec-title">
+          <h3 class="sec-title__h">주요 기능</h3>
+          <p class="sec-title__p">예스폼싸인의 모든 기능을 요금제 제한 없이 사용할 수 있습니다.</p>
+        </div>
+        <nav class="feat-nav" aria-label="주요 기능 바로가기">
+          <a href="#feat-remote"><img src="images/ic-feat-remote-40.svg" width="40" height="40" alt="">비대면 계약</a>
+          <a href="#feat-multi"><img src="images/ic-feat-multi-40.svg" width="40" height="40" alt="">다자간 계약</a>
+          <a href="#feat-bulk"><img src="images/ic-feat-bulk-40.svg" width="40" height="40" alt="">대량 전송</a>
+          <a href="#feat-template"><img src="images/ic-feat-template-40.svg" width="40" height="40" alt="">템플릿</a>
+          <a href="#feat-alarm"><img src="images/ic-feat-alarm-40.svg" width="40" height="40" alt="">알림 지원</a>
+          <a href="#feat-address"><img src="images/ic-feat-address-40.svg" width="40" height="40" alt="">주소록</a>
+        </nav>
+      </div>
+      <!-- 기능 카드 6개 — Figma 시안01 54914:45631 (2026-11-26) · 그림은 카드 전체(412×400)를 글자만 빼고 내보내 배경으로 깔았음 -->
+      <div class="feat-grid">
+        <article class="feat" id="feat-remote">
+          <h4 class="feat__title">비대면 계약</h4>
+          <p class="feat__desc">상대방과 직접 만나지 않아도 언제 어디서나 카카오톡이나 이메일로 계약 상대방과 원격으로 전자계약을 체결합니다.</p>
+          <img class="feat__img" src="images/feat-remote@2x.png" width="412" height="400" alt="">
+        </article>
+        <article class="feat" id="feat-multi">
+          <h4 class="feat__title">다자간 계약</h4>
+          <p class="feat__desc">1:1 계약뿐만 아니라, 여러명의 서명이 필요한 계약까지 최대 10명 동시에 계약을 진행할 수 있습니다.</p>
+          <img class="feat__img" src="images/feat-multi@2x.png" width="412" height="400" alt="">
+        </article>
+        <article class="feat" id="feat-bulk">
+          <h4 class="feat__title">대량 전송</h4>
+          <p class="feat__desc">상대방과 직접 만나지 않아도 언제 어디서나 카카오톡이나 이메일로 계약 상대방과 원격으로 전자계약을 체결합니다.</p>
+          <img class="feat__img" src="images/feat-bulk@2x.png" width="412" height="400" alt="">
+        </article>
+        <article class="feat" id="feat-template">
+          <h4 class="feat__title">템플릿</h4>
+          <p class="feat__desc">서명 요청부터 완료까지, 계약의 모든 진행 상황을 이메일과 카카오 알림톡으로 빠르게 계약 진행이 가능합니다.</p>
+          <img class="feat__img" src="images/feat-template@2x.png" width="412" height="400" alt="">
+        </article>
+        <article class="feat" id="feat-alarm">
+          <h4 class="feat__title">알림 지원</h4>
+          <p class="feat__desc">서명 요청부터 완료까지, 계약의 모든 진행 상황을 이메일과 카카오 알림톡으로 빠르게 계약 진행이 가능합니다.</p>
+          <img class="feat__img" src="images/feat-alarm@2x.png" width="412" height="400" alt="">
+        </article>
+        <article class="feat" id="feat-address">
+          <h4 class="feat__title">주소록</h4>
+          <p class="feat__desc">자주 계약하는 상대방의 정보를 미리 등록해 두어, 계약서를 보낼 때마다 간편하게 정보를 불러와서 계약을 진행할 수 있습니다.</p>
+          <img class="feat__img" src="images/feat-address@2x.png" width="412" height="400" alt="">
+        </article>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ======================================================================
+     시안02 (54851:49194)
+     ====================================================================== -->
+<main class="sian sian--2" data-sian="2" hidden>
+
+  <section class="s2-top">
+    <div class="inner">
+      <div class="intro">
+        <img class="intro__hello" src="images/hello@2x.png" width="125" height="47" alt="">
+        <h2 class="intro__title">예스폼싸인 요금 안내</h2>
+        <p class="intro__desc">신규 가입하면 1개월 동안 모든 기능이 무료! 합리적인 가격으로 지금 시작하세요.</p>
+      </div>
+
+      <div class="s2-plans">
+        <div class="chips chips--center" role="tablist" aria-label="요금제 고르기" data-chips>
+          <button class="chip" type="button" role="tab" aria-selected="false">요금제 전체</button>
+          <button class="chip is-on" type="button" role="tab" aria-selected="true">소량 이용</button>
+          <span class="chip-wrap">
+            <button class="chip" type="button" role="tab" aria-selected="false">대량 이용</button>
+            <!-- 말풍선 숨김 (2026-11-26 요청) — 다시 보이려면 hidden 만 지우면 됨 -->
+            <span class="tip tip--top" aria-hidden="true" hidden><span class="tip__body">신규 기능 업데이트</span></span>
+          </span>
+        </div>
+        <div class="pcards">
+          <div class="hcard">
+            <div class="hcard__body">
+              <div class="hcard__name">
+                <p class="hcard__tag">소상공인에게 추천</p>
+                <p class="hcard__title">전자계약 10건</p>
+                <p class="meta">혜택 키워드<i class="meta__dot"></i>유효기간 1년</p>
+              </div>
+              <i class="hcard__line"></i>
+              <div class="hcard__price">
+                <p class="price price--26"><span class="price__num">12,000</span><span class="price__unit">원</span></p>
+                <p class="hcard__per">건당 1,200원</p>
+              </div>
+            </div>
+            <a class="hcard__btn" href="#">구매하기</a>
+          </div>
+          <div class="hcard">
+            <div class="hcard__body">
+              <div class="hcard__name">
+                <p class="hcard__tag">~이 필요한 팀에 추천</p>
+                <p class="hcard__title">전자계약 20건</p>
+                <p class="meta">키워드<i class="meta__dot"></i>유효기간 1년</p>
+              </div>
+              <i class="hcard__line"></i>
+              <div class="hcard__price">
+                <p class="price price--26"><span class="price__sale">12% 할인</span><span class="price__num">12,000</span><span class="price__unit">원</span></p>
+                <p class="hcard__per">건당 1,200원</p>
+              </div>
+            </div>
+            <a class="hcard__btn" href="#">구매하기</a>
+          </div>
+          <div class="hcard">
+            <div class="hcard__body">
+              <div class="hcard__name">
+                <p class="hcard__tag">~이 필요한 팀에 추천</p>
+                <p class="hcard__title">전자계약 50건</p>
+                <p class="meta">단건 지급<i class="meta__dot"></i>유효기간 1년</p>
+              </div>
+              <i class="hcard__line"></i>
+              <div class="hcard__price">
+                <p class="price price--26 price--blue"><span class="price__sale">12% 할인</span><span class="price__num">50,000</span><span class="price__unit">원</span></p>
+                <p class="hcard__per">건당 1,200원</p>
+              </div>
+            </div>
+            <a class="hcard__btn hcard__btn--solid" href="#">구매하기</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 통합멤버십 (짙은 남색) -->
+  <section class="s2-mem">
+    <div class="inner">
+      <div class="sec-title sec-title--center sec-title--white">
+        <h3 class="sec-title__h">통합멤버십 구독으로 더 큰 혜택</h3>
+        <p class="sec-title__p">예스폼싸인의 모든 기능을 요금제 제한 없이 사용할 수 있습니다.</p>
+      </div>
+
+      <div class="dplans" data-mem-list>
+        <div class="dplan">
+          <div class="dplan__row">
+            <div class="dplan__left">
+              <div class="dplan__name">
+                <p class="dplan__tag">계약부터 세무·통합 관리가 필요한 분</p>
+                <p class="dplan__title">프리미엄 월정액</p>
+                <p class="meta meta--dark">매월 10건 자동 지급<i class="meta__dot"></i>유효기간 1년</p>
+              </div>
+              <i class="dplan__line"></i>
+              <div class="mplan__price">
+                <p class="mplan__old">12,000원</p>
+                <p class="price price--white"><span class="price__num">9,000</span><span class="price__unit">원</span><span class="price__per">월 결제</span></p>
+                <p class="mplan__max mplan__max--mint">최대 혜택 N원</p>
+              </div>
+            </div>
+            <div class="dplan__right">
+              <p class="dplan__perk">전자계약 월 10건 + 추가 혜택</p>
+              <div class="dplan__cols">
+                <div class="perk__group">
+                  <p class="perk__head perk__head--white">예스폼 100만종 서식<span class="label label--green">Best</span></p>
+                  <ul class="checks checks--dark">
+                    <li>엑셀 프로그램</li><li>프리미엄 PPT 템플릿</li><li>웹서식 지원</li><li>전문 서식 상담</li><li>예스폼 에디터</li><li>혜택</li>
+                  </ul>
+                </div>
+                <div class="perk__group">
+                  <p class="perk__head perk__head--white">패밀리사이트 혜택<span class="label label--green">인기</span></p>
+                  <ul class="checks checks--dark">
+                    <li>페이존 6개월 이용권</li><li>유아동 학습지 100만종</li><li>프리미엄 온라인 도장</li><li>프리미엄 온라인 도장</li><li>프리미엄 온라인 도장</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <a class="dplan__btn" href="#">월 9,000원 구독하기</a>
+        </div>
+
+        <!-- 펼치면 보이는 요금제 2개 — 시안에 없어 새로 정함 (이름 · 건수는 시안01 멤버십 카드 그대로) -->
+        <div class="dplan" data-mem-more hidden>
+          <div class="dplan__row">
+            <div class="dplan__left">
+              <div class="dplan__name">
+                <p class="dplan__tag">계약부터 세무·통합 관리가 필요한 분</p>
+                <p class="dplan__title">비즈니스</p>
+                <p class="meta meta--dark">매월 10건 자동 지급<i class="meta__dot"></i>유효기간 1년</p>
+              </div>
+              <i class="dplan__line"></i>
+              <div class="mplan__price">
+                <p class="mplan__old">12,000원</p>
+                <p class="price price--white"><span class="price__num">9,000</span><span class="price__unit">원</span><span class="price__per">월 결제</span></p>
+                <p class="mplan__max mplan__max--mint">최대 혜택 N원</p>
+              </div>
+            </div>
+            <div class="dplan__right">
+              <p class="dplan__perk">전자계약 월 20건 + 추가 혜택</p>
+              <div class="dplan__cols">
+                <div class="perk__group">
+                  <p class="perk__head perk__head--white">예스폼 100만종 서식<span class="label label--green">Best</span></p>
+                  <ul class="checks checks--dark">
+                    <li>엑셀 프로그램</li><li>프리미엄 PPT 템플릿</li><li>웹서식 지원</li><li>전문 서식 상담</li><li>예스폼 에디터</li><li>혜택</li>
+                  </ul>
+                </div>
+                <div class="perk__group">
+                  <p class="perk__head perk__head--white">패밀리사이트 혜택<span class="label label--green">인기</span></p>
+                  <ul class="checks checks--dark">
+                    <li>페이존 6개월 이용권</li><li>유아동 학습지 100만종</li><li>프리미엄 온라인 도장</li><li>프리미엄 온라인 도장</li><li>프리미엄 온라인 도장</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <a class="dplan__btn" href="#">월 9,000원 구독하기</a>
+        </div>
+        <div class="dplan" data-mem-more hidden>
+          <div class="dplan__row">
+            <div class="dplan__left">
+              <div class="dplan__name">
+                <p class="dplan__tag">계약부터 세무·통합 관리가 필요한 분</p>
+                <p class="dplan__title">연결제</p>
+                <p class="meta meta--dark">매월 10건 자동 지급<i class="meta__dot"></i>유효기간 1년</p>
+              </div>
+              <i class="dplan__line"></i>
+              <div class="mplan__price">
+                <p class="mplan__old">12,000원</p>
+                <p class="price price--white"><span class="price__num">9,000</span><span class="price__unit">원</span><span class="price__per">월 결제</span></p>
+                <p class="mplan__max mplan__max--mint">최대 혜택 N원</p>
+              </div>
+            </div>
+            <div class="dplan__right">
+              <p class="dplan__perk">전자계약 월 10건 + 추가 혜택</p>
+              <div class="dplan__cols">
+                <div class="perk__group">
+                  <p class="perk__head perk__head--white">예스폼 100만종 서식<span class="label label--green">Best</span></p>
+                  <ul class="checks checks--dark">
+                    <li>엑셀 프로그램</li><li>프리미엄 PPT 템플릿</li><li>웹서식 지원</li><li>전문 서식 상담</li><li>예스폼 에디터</li><li>혜택</li>
+                  </ul>
+                </div>
+                <div class="perk__group">
+                  <p class="perk__head perk__head--white">패밀리사이트 혜택<span class="label label--green">인기</span></p>
+                  <ul class="checks checks--dark">
+                    <li>페이존 6개월 이용권</li><li>유아동 학습지 100만종</li><li>프리미엄 온라인 도장</li><li>프리미엄 온라인 도장</li><li>프리미엄 온라인 도장</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <a class="dplan__btn" href="#">월 9,000원 구독하기</a>
+        </div>
+      </div>
+
+      <button class="more" type="button" aria-expanded="false" data-mem-toggle><span data-mem-label>다른 통합 멤버십 요금제 보기 (2개)</span><img src="images/ic-down-white-20.svg" width="20" height="20" alt=""></button>
+    </div>
+  </section>
+
+  <!-- 주요 기능 (4칸 · 아이콘 + 글) -->
+  <section class="s2-sec">
+    <div class="inner">
+      <h3 class="s2-sec__title">주요 기능</h3>
+      <div class="s2-grid">
+        <div class="icard"><img src="images/ic-feat-remote-40.svg" width="40" height="40" alt=""><div class="card-txt"><p class="card-txt__title">비대면 계약</p><p class="card-txt__desc">상대방과 직접 만나지 않아도 언제 어디서나 카카오톡이나 이메일로 계약 상대방과 원격으로 전자계약을 체결합니다.</p></div></div>
+        <div class="icard"><img src="images/ic-feat-multi-40.svg" width="40" height="40" alt=""><div class="card-txt"><p class="card-txt__title">다자간 계약</p><p class="card-txt__desc">상대방과 직접 만나지 않아도 언제 어디서나 카카오톡이나 이메일로 계약 상대방과 원격으로 전자계약을 체결합니다.</p></div></div>
+        <div class="icard"><img src="images/ic-feat-bulk-40.svg" width="40" height="40" alt=""><div class="card-txt"><p class="card-txt__title">대량 전송</p><p class="card-txt__desc">상대방과 직접 만나지 않아도 언제 어디서나 카카오톡이나 이메일로 계약 상대방과 원격으로 전자계약을 체결합니다.</p></div></div>
+        <div class="icard"><img src="images/ic-feat-address-40.svg" width="40" height="40" alt=""><div class="card-txt"><p class="card-txt__title">주소록</p><p class="card-txt__desc">상대방과 직접 만나지 않아도 언제 어디서나 카카오톡이나 이메일로 계약 상대방과 원격으로 전자계약을 체결합니다.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 전자 계약 (4칸 · 회색 카드 9개) -->
+  <section class="s2-sec">
+    <div class="inner">
+      <h3 class="s2-sec__title">전자 계약</h3>
+      <div class="s2-grid">
+        <div class="gcard card-txt"><p class="card-txt__title">계약서 샘플 양식 240건</p><p class="card-txt__desc">상대방과 직접 만나지 않아도 언제 어디서나 카카오톡이나 이메일로 계약 상대방과 원격으로 전자계약을 체결합니다.</p></div>
+        <div class="gcard card-txt"><p class="card-txt__title">계약당 첨부파일</p><p class="card-txt__desc">상대방과 직접 만나지 않아도 언제 어디서나 카카오톡이나 이메일로 계약 상대방과 원격으로 전자계약을 체결합니다.</p></div>
+        <div class="gcard card-txt"><p class="card-txt__title">온라인 도장·서명</p><p class="card-txt__desc">상대방과 직접 만나지 않아도 언제 어디서나 카카오톡이나 이메일로 계약 상대방과 원격으로 전자계약을 체결합니다.</p></div>
+        <div class="gcard card-txt"><p class="card-txt__title">다양한 파일 지원</p><p class="card-txt__desc">상대방과 직접 만나지 않아도 언제 어디서나 카카오톡이나 이메일로 계약 상대방과 원격으로 전자계약을 체결합니다.</p></div>
+        <div class="gcard card-txt"><p class="card-txt__title">다양한 작성란</p><p class="card-txt__desc">상대방과 직접 만나지 않아도 언제 어디서나 카카오톡이나 이메일로 계약 상대방과 원격으로 전자계약을 체결합니다.</p></div>
+        <div class="gcard card-txt"><p class="card-txt__title">서명 유효기간 설정</p><p class="card-txt__desc">상대방과 직접 만나지 않아도 언제 어디서나 카카오톡이나 이메일로 계약 상대방과 원격으로 전자계약을 체결합니다.</p></div>
+        <div class="gcard card-txt"><p class="card-txt__title">개별 메시지</p><p class="card-txt__desc">상대방과 직접 만나지 않아도 언제 어디서나 카카오톡이나 이메일로 계약 상대방과 원격으로 전자계약을 체결합니다.</p></div>
+        <div class="gcard card-txt"><p class="card-txt__title">라벨링</p><p class="card-txt__desc">상대방과 직접 만나지 않아도 언제 어디서나 카카오톡이나 이메일로 계약 상대방과 원격으로 전자계약을 체결합니다.</p></div>
+        <div class="gcard card-txt"><p class="card-txt__title">계약 재발송</p><p class="card-txt__desc">상대방과 직접 만나지 않아도 언제 어디서나 카카오톡이나 이메일로 계약 상대방과 원격으로 전자계약을 체결합니다.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 인증 및 보안 (4칸 · 회색 카드 7개) -->
+  <section class="s2-sec">
+    <div class="inner">
+      <h3 class="s2-sec__title">인증 및 보안</h3>
+      <div class="s2-grid">
+        <div class="gcard card-txt"><p class="card-txt__title">감사추적인증서</p><p class="card-txt__desc">상대방과 직접 만나지 않아도 언제 어디서나 카카오톡이나 이메일로 계약 상대방과 원격으로 전자계약을 체결합니다.</p></div>
+        <div class="gcard card-txt"><p class="card-txt__title">휴대폰 인증</p><p class="card-txt__desc">상대방과 직접 만나지 않아도 언제 어디서나 카카오톡이나 이메일로 계약 상대방과 원격으로 전자계약을 체결합니다.</p></div>
+        <div class="gcard card-txt"><p class="card-txt__title">이메일 인증</p><p class="card-txt__desc">상대방과 직접 만나지 않아도 언제 어디서나 카카오톡이나 이메일로 계약 상대방과 원격으로 전자계약을 체결합니다.</p></div>
+        <div class="gcard card-txt"><p class="card-txt__title">비밀번호 인증</p><p class="card-txt__desc">상대방과 직접 만나지 않아도 언제 어디서나 카카오톡이나 이메일로 계약 상대방과 원격으로 전자계약을 체결합니다.</p></div>
+        <div class="gcard card-txt"><p class="card-txt__title">저장 데이터 암호화</p><p class="card-txt__desc">상대방과 직접 만나지 않아도 언제 어디서나 카카오톡이나 이메일로 계약 상대방과 원격으로 전자계약을 체결합니다.</p></div>
+        <div class="gcard card-txt"><p class="card-txt__title">전송구간 TLS/HTTPS 보호</p><p class="card-txt__desc">상대방과 직접 만나지 않아도 언제 어디서나 카카오톡이나 이메일로 계약 상대방과 원격으로 전자계약을 체결합니다.</p></div>
+        <div class="gcard card-txt"><p class="card-txt__title">책임 보험제</p><p class="card-txt__desc">상대방과 직접 만나지 않아도 언제 어디서나 카카오톡이나 이메일로 계약 상대방과 원격으로 전자계약을 체결합니다.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 무료 체험 배너 (밝은 배경 · 배경 그림 한 장) — 2026-11-26 맨 아래로 옮김 -->
+  <div class="inner s2-trial">
+    <div class="trial trial--light">
+      <div class="trial__text">
+        <p class="trial__sub">예스폼싸인이 처음이신가요?</p>
+        <p class="trial__title">신규 가입하고 자동결제 없는 30일 무료 체험</p>
+      </div>
+      <a class="trial__btn trial__btn--solid" href="#">30일 무료 체험하기<img src="images/ic-chevron-right-white-20.svg" width="20" height="20" alt=""></a>
+    </div>
+  </div>
+</main>
+
+<script src="js/main.js"></script>
+<!-- 시안 확인용 바 — 이 한 줄을 지우면 바가 빠지고 시안01 만 보임 -->
+<script src="js/sian-bar.js"></script>
+</body>
+</html>
