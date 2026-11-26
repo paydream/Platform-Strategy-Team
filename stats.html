@@ -549,7 +549,7 @@ function render() {
   drawChart();
   if (window.parent !== window) setTimeout(() => parent.postMessage({ type: 'auto-h', h: document.documentElement.scrollHeight }, '*'), 80);
 }
-const MKT_CONSOLES = [['메타', 'Meta Ads 광고 관리자 · 데이터 연동 전', 'https://adsmanager.facebook.com/'], ['네이버', '파워링크 · 파워콘텐츠', 'https://ads.naver.com/manage/ad-accounts/1912105/sa/campaigns/cmp-a001-01-000000010598857'], ['구글', 'Google Ads · 예스폼싸인_SA', 'https://ads.google.com/aw/campaigns']];
+const MKT_CONSOLES = [['메타', 'Meta Ads 광고 관리자', 'https://adsmanager.facebook.com/'], ['네이버', '파워링크 · 파워콘텐츠', 'https://ads.naver.com/manage/ad-accounts/1912105/sa/campaigns/cmp-a001-01-000000010598857'], ['구글', 'Google Ads · 예스폼싸인_SA', 'https://ads.google.com/aw/campaigns']];
 
 const kpi = (label, v, unit, d, sub, main) => `<div class="kpi${main ? ' main' : ''}"><div class="l">${TL(label)}</div><div class="v">${fmt(v)}<small>${unit}</small></div>${pill(d)}${sub ? `<div class="sub">${sub}</div>` : ''}</div>`;
 function funnel(steps) {
@@ -793,9 +793,9 @@ function mktDash({ pm, cd, pd, label }) {
       ${card('광고 경유 결제', fmt(pays.length), '건', won(rev))}
       ${card('광고비 대비 매출', cost && rev ? pctTxt(rev / cost * 100) : '-', '', pays.length ? `결제당 광고비 ${won(Math.round(cost / pays.length))}` : '')}
     </div>
-    <div class="mch">${R.map(r => `<button class="mc" type="button" data-mt="${r.k}"><div class="t">${MCH[r.k]}<i>${r.on ? (cost ? pctTxt(r.c[2] / cost * 100) : '-') : '연동 전'}</i></div>${r.on ? `<dl>
+    <div class="mch">${R.map(r => `<button class="mc" type="button" data-mt="${r.k}"><div class="t">${MCH[r.k]}<i>${!r.on ? '연동 전' : !r.c[2] ? '집행 없음' : cost ? pctTxt(r.c[2] / cost * 100) : '-'}</i></div>${r.on && r.c[2] ? `<dl>
       <div><dt>광고비</dt><dd>${won(Math.round(r.c[2]))}</dd></div><div><dt>클릭</dt><dd>${fmt(r.c[1])}</dd></div>
-      <div><dt>클릭당</dt><dd>${r.c[1] ? won(Math.round(r.c[2] / r.c[1])) : '-'}</dd></div><div><dt>결제</dt><dd>${fmt(r.pay.length)}건</dd></div></dl>` : '<div class="off">광고 데이터 연동 전</div>'}</button>`).join('')}</div>
+      <div><dt>클릭당</dt><dd>${r.c[1] ? won(Math.round(r.c[2] / r.c[1])) : '-'}</dd></div><div><dt>결제</dt><dd>${fmt(r.pay.length)}건</dd></div></dl>` : `<div class="off">${r.on ? (r.k === 'meta' && (D.metaAds.camps || []).length && D.metaAds.camps.every(c => c[2] !== 'ACTIVE') ? '캠페인 일시중지 · 이 기간 광고비 0원' : '이 기간 광고비 0원') : '광고 데이터 연동 전'}</div>`}</button>`).join('')}</div>
   </section>`;
 }
 function metaSection({ pm, cd, pd, label }) {
@@ -804,6 +804,7 @@ function metaSection({ pm, cd, pd, label }) {
   const days = (M.d || []).filter(r => r[0] >= SEL.s && r[0] <= SEL.e).sort((a, b) => a[0] < b[0] ? 1 : -1);
   const R = mktChannels([SEL.s, SEL.e], pm ? (view === 'month' ? [mStart(pm), pm.end] : [pm.s, pm.e]) : null).find(r => r.k === 'meta');
   const c = R.c, p = R.p;
+  if (!c[2] && !c[0]) return `<div class="mempty">이 기간 메타 광고 집행이 없어요${(M.camps || []).length ? ` · ${M.camps.map(x => `${esc(x[1])} ${x[2] === 'ACTIVE' ? '운영 중' : '일시중지'}`).join(', ')}` : ''}. <a href="https://adsmanager.facebook.com/" target="_blank" rel="noopener">광고 관리자 ↗</a></div>`;
   return `<section class="blk"><h2>메타 광고</h2>
     <div class="kpis">
       ${kpi('광고비', Math.round(c[2]), '원', pm ? diff(c[2], p[2], cd, pd) : null, '')}
