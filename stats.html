@@ -877,8 +877,8 @@ const adPayCh = p => { const s = String(p[3] || ''); if (s === '네이버 검색
 const GCV = [['예스폼싸인_구매', '싸인 결제'], ['예스폼싸인_가입완료', '싸인 가입'], ['가입_일반', '가입'], ['결제시작', '결제 시작']];
 function gadsCv(r) { const G = D.gads; if (!G || !G.cv || !r) return null; const di = d => Math.round((Date.parse(d) - Date.parse(G.start)) / 864e5), a = di(r[0]), b = di(r[1]); const o = {};
   for (const [i, n, c] of G.cv) if (i >= a && i <= b) o[n] = (o[n] || 0) + c; return o; }
-const gcvTxt = o => { if (!o) return ''; const known = GCV.map(([k]) => k), parts = GCV.filter(([k]) => o[k]).map(([k, l]) => `${l} ${fmt(Math.round(o[k] * 100) / 100)}`);
-  const etc = Object.entries(o).filter(([k]) => !known.includes(k)).reduce((a, [, v]) => a + v, 0); if (etc) parts.push(`기타 ${fmt(Math.round(etc * 100) / 100)}`); return parts.join(' · '); };
+const gcvTxt = o => { if (!o) return ''; const known = GCV.map(([k]) => k), parts = GCV.filter(([k]) => o[k]).map(([k, l]) => `${l} ${(Math.round(o[k] * 100) / 100).toLocaleString('ko-KR')}`);
+  const etc = Object.entries(o).filter(([k]) => !known.includes(k)).reduce((a, [, v]) => a + v, 0); if (etc) parts.push(`기타 ${(Math.round(etc * 100) / 100).toLocaleString('ko-KR')}`); return parts.join(' · '); };
 function gadsSection({ m, pm, cd, pd, label }) {
   const G = D.gads; if (!G || G.v !== 1) return '';
   const cur = [SEL.s, SEL.e], prev = pm ? (view === 'month' ? [mStart(pm), pm.end] : [pm.s, pm.e]) : null;
@@ -889,7 +889,7 @@ function gadsSection({ m, pm, cd, pd, label }) {
   const c = gadsSum(cur), p = gadsSum(prev);
   const pays = paysIn(cur[0], cur[1]).filter(x => adPayCh(x) === 'g'), paysP = prev ? paysIn(prev[0], prev[1]).filter(x => adPayCh(x) === 'g') : [];
   const payW = pays.reduce((a, x) => a + x[2], 0);
-  const kp = (l, v, unit, d, sub) => `<div class="kpi"><div class="l">${l}</div><div class="v">${fmt(v)}<small>${unit}</small></div>${d === undefined ? '' : pill(d)}${sub ? `<div class="sub">${sub}</div>` : ''}</div>`;
+  const kp = (l, v, unit, d, sub) => `<div class="kpi"><div class="l">${l}</div><div class="v">${typeof v === 'number' && v % 1 ? v.toLocaleString('ko-KR') : fmt(v)}<small>${unit}</small></div>${d === undefined ? '' : pill(d)}${sub ? `<div class="sub">${sub}</div>` : ''}</div>`;
   const dev = Object.keys(GDEV).map(k => ({ k, n: GDEV[k], c: gadsSum(cur, k), p: gadsSum(prev, k) })).filter(x => x.c[0] || x.p[0]);
   const mo = dev.find(x => x.k === 'mo'), moShare = mo && c[2] ? mo.c[2] / c[2] * 100 : 0;
   const warn = [];
