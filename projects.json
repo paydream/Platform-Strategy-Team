@@ -45,6 +45,23 @@
             }
           ],
           "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX/?node-id=200-591"
+        },
+        {
+          "id": "20261126-174844-yesform-brief-rulebook-v3",
+          "label": "v3 · 상단 정리",
+          "title": "연말연초 업무 브리핑 모달 · 룰북 기준",
+          "desc": "중복 제목·설명 삭제, 상단을 한 줄(기준·버튼)로 정리, 요약 카드 높이 축소.",
+          "created": "2026.11.26",
+          "folder": "archive/20261126-174844-yesform-brief-rulebook-v3",
+          "preview": "archive/20261126-174844-yesform-brief-rulebook-v3/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "룰북 기준 모달",
+              "href": "archive/20261126-174844-yesform-brief-rulebook-v3/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX/?node-id=200-591"
         }
       ]
     },
