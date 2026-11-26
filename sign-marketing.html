@@ -1,39 +1,37 @@
 <!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>예스폼싸인 마케팅 | 자동관리</title><style>
-*{box-sizing:border-box}body{margin:0;padding:clamp(14px,3vw,38px);background:#f6f8fb;color:#18253b;font:15px/1.6 -apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif}main{max-width:1160px;margin:auto}
-.ey{color:#176b60;font-size:12px;font-weight:750;letter-spacing:.06em}h1{margin:2px 0 12px;font-size:clamp(24px,3vw,34px);letter-spacing:-.055em}h2{font-size:18px;margin:26px 0 8px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}h2 small{font-size:12.5px;color:#526478;font-weight:500}
-a{color:#135c8a;text-underline-offset:3px}button,select{font:inherit;color:inherit;background:#fff;border:1px solid #cbd4df;border-radius:8px;padding:6px 10px;cursor:pointer}
-.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.ctl{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.seg{display:inline-flex;border:1px solid #cbd4df;border-radius:9px;overflow:hidden;background:#fff}.seg button{border:0;border-radius:0;padding:7px 14px}.seg button+button{border-left:1px solid #e1e6ec}.seg button[aria-pressed=true]{background:#18253b;color:#fff;font-weight:650}
-.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}.chips button{font-size:13px;padding:4px 10px;border-radius:99px}.chips button[aria-pressed=true]{background:#e5f4ee;border-color:#9fd3bf;color:#17614a;font-weight:650}
-.muted,small,footer{color:#526478;font-size:13px}.date{font-weight:650;margin-top:12px}.cmp{color:#526478;font-weight:500;font-size:13px;margin-left:6px}
-.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}.card,.panel{background:#fff;border:1px solid #dfe5ea;border-radius:14px}.card{padding:16px}.card strong{font-size:19px}
-.tag{display:inline-block;border-radius:6px;background:#e5f4ee;color:#17614a;padding:2px 7px;font-size:12px;font-weight:650}.tag.wait{background:#fff1d8;color:#794700}.card p{margin:6px 0;font-size:14px}.card a{font-size:13px;margin-right:6px}
-.panel{overflow:auto}table{width:100%;border-collapse:collapse;white-space:nowrap;font-variant-numeric:tabular-nums}th,td{padding:11px 13px;text-align:right;border-bottom:1px solid #e9edf1}th{font-size:12px;color:#495d70;background:#f3f6f8}td:first-child,th:first-child{text-align:left}tr.tot td{font-weight:700;background:#fafbfc}
+*{box-sizing:border-box}body{margin:0;padding:clamp(12px,2.4vw,28px);background:#f6f8fb;color:#18253b;font:15px/1.6 -apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif}main{max-width:1160px;margin:auto}
+h2{font-size:17px;margin:24px 0 8px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}h2 small{font-size:12.5px;color:#526478;font-weight:500}
+a{color:#135c8a;text-underline-offset:3px}button{font:inherit;color:inherit;background:#fff;border:1px solid #cbd4df;border-radius:8px;padding:6px 10px;cursor:pointer}
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid #dfe5ea;margin-bottom:14px}
+.tabs{display:flex;gap:2px}.tabs button{border:0;border-bottom:3px solid transparent;border-radius:0;background:none;padding:9px 12px;font-weight:600;color:#526478}.tabs button[aria-selected=true]{color:#18253b;border-bottom-color:#18253b}
+.seg{display:inline-flex;border:1px solid #cbd4df;border-radius:9px;overflow:hidden;background:#fff;margin-bottom:8px}.seg button{border:0;border-radius:0;padding:6px 14px}.seg button+button{border-left:1px solid #e1e6ec}.seg button[aria-pressed=true]{background:#18253b;color:#fff;font-weight:650}
+.chips{display:flex;gap:6px;flex-wrap:wrap}.chips button{font-size:13px;padding:4px 10px;border-radius:99px}.chips button[aria-pressed=true]{background:#e5f4ee;border-color:#9fd3bf;color:#17614a;font-weight:650}
+.meta{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:10px}.date{font-weight:650}.cmp,.upd{color:#526478;font-weight:500;font-size:13px}.cmp{margin-left:6px}
+.reload{display:flex;align-items:center;gap:8px}.reload button{font-size:13px;padding:5px 10px}
+.muted{color:#526478;font-size:13px}
+.panel{background:#fff;border:1px solid #dfe5ea;border-radius:14px;overflow:auto}table{width:100%;border-collapse:collapse;white-space:nowrap;font-variant-numeric:tabular-nums}th,td{padding:10px 13px;text-align:right;border-bottom:1px solid #e9edf1}th{font-size:12px;color:#495d70;background:#f3f6f8}td:first-child,th:first-child{text-align:left}tr.tot td{font-weight:700;background:#fafbfc}tbody tr:last-child td{border-bottom:0}
 .d{font-size:12px;margin-left:4px}.up{color:#c0392b}.down{color:#1f6fb2}.flat{color:#8a97a6}.good.up,.bad.down{color:#17804f}.good.down,.bad.up{color:#c0392b}
-.alert{background:#fff7e9;border-radius:8px;padding:8px 12px;color:#78551e;font-size:13px;margin-top:10px}
-.sug{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.sg{background:#fff;border:1px solid #dfe5ea;border-radius:14px;padding:16px}.sg h3{margin:0 0 4px;font-size:16px}.sg .bs{font-size:12.5px;color:#526478;margin-bottom:8px}.sg ul{margin:0;padding:0;list-style:none;display:grid;gap:9px}.sg li{font-size:14px;line-height:1.5}.sg li b.k{display:inline-block;font-size:11.5px;border-radius:5px;padding:1px 6px;margin-right:6px;vertical-align:1px}
+.alert{background:#fff7e9;border-radius:8px;padding:7px 12px;color:#78551e;font-size:13px;margin-top:10px}
+.sug{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.sg{background:#fff;border:1px solid #dfe5ea;border-radius:14px;padding:14px 16px}.sg h3{margin:0 0 8px;font-size:15px;display:flex;justify-content:space-between;gap:8px}.sg h3 span{font-size:12px;color:#526478;font-weight:500}.sg ul{margin:0;padding:0;list-style:none;display:grid;gap:7px}.sg li{font-size:13.5px;line-height:1.5}.sg li b.k{display:inline-block;font-size:11px;border-radius:5px;padding:0 6px;margin-right:6px;vertical-align:1px}
 .k.cut{background:#fde8e6;color:#a33a2c}.k.up{background:#e3f4ea;color:#17614a}.k.chk{background:#eef1f5;color:#40546b}.k.test{background:#ece8fb;color:#4f3b9a}
-.tabs{display:flex;gap:4px;border-bottom:1px solid #dfe5ea;margin:4px 0 14px}.tabs button{border:0;border-bottom:3px solid transparent;border-radius:0;background:none;padding:9px 12px;font-weight:600;color:#526478}.tabs button[aria-selected=true]{color:#18253b;border-bottom-color:#18253b}
-footer{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px}#fail{color:#873521}
-@media(max-width:820px){.cards,.sug{grid-template-columns:1fr}th,td{padding:9px}}
+footer{display:flex;gap:14px;flex-wrap:wrap;margin-top:16px;font-size:13px;color:#526478}#fail{color:#873521;font-size:13px}
+@media(max-width:820px){.sug{grid-template-columns:1fr}th,td{padding:8px}}
 </style><main>
-<div class="ey">자동관리 / 예스폼싸인</div>
-<div class="bar"><h1>광고 통합 관리</h1><div class="ctl"><div class="seg" role="group" aria-label="보기"><button data-v="day">데일리</button><button data-v="week">주간</button><button data-v="month">월간</button></div><button id="reload">다시 읽기</button></div></div>
-<div class="tabs" role="tablist"><button role="tab" data-t="perf" aria-selected="true">광고 성과 · 진행 제안</button><button role="tab" data-t="ops" aria-selected="false">실무 상세 (키워드 · 바이럴 · 지면)</button></div>
+<div class="top"><div class="tabs" role="tablist"><button role="tab" data-t="perf" aria-selected="true">광고 성과 · 진행 제안</button><button role="tab" data-t="ops" aria-selected="false">실무 상세</button></div><div class="seg" role="group" aria-label="보기"><button data-v="day">데일리</button><button data-v="week">주간</button><button data-v="month">월간</button></div></div>
 <div id="fail" role="status"></div>
 <section id="report" hidden>
 <div class="chips" id="chips" role="group" aria-label="기간 선택"></div>
-<div class="date" id="date"></div>
-<div id="cards" class="cards"></div>
-<section id="sugWrap"><h2>이번 주 진행 제안 <small id="sugBase"></small></h2><div class="sug" id="sug"></div></section>
-<h2>채널별 광고 성과 <small id="perfBase"></small></h2>
-<div class="panel"><table><thead><tr><th>채널</th><th>광고비</th><th>노출</th><th>클릭</th><th>클릭률</th><th>클릭당 비용</th><th>매체 결제 전환</th><th>싸인 결제¹</th><th>결제당 광고비</th><th>광고비 대비 매출</th></tr></thead><tbody id="rows"></tbody></table></div>
+<div class="meta"><div><span class="date" id="date"></span><span class="cmp" id="cmp"></span></div><div class="reload"><span class="upd" id="upd"></span><button id="reload">최신 데이터 불러오기</button></div></div>
 <div id="notice" class="alert" hidden></div>
+<section id="sugWrap"><h2>이번 주 진행 제안 <small id="sugBase"></small></h2><div class="sug" id="sug"></div></section>
+<h2>채널별 성과</h2>
+<div class="panel"><table><thead><tr><th>채널</th><th>광고비</th><th>클릭</th><th>클릭당 비용</th><th>싸인 결제</th><th>결제당 광고비</th></tr></thead><tbody id="rows"></tbody></table></div>
 <h2 id="trendTitle">추이</h2>
 <div class="panel"><table><thead id="trendHead"></thead><tbody id="trend"></tbody></table></div>
-<p class="muted">¹ 싸인 관리자 결제 중 결제 출처가 해당 광고로 확인된 건만 셉니다(메타는 결제 출처 구분 전이라 「미확인」). 매체 결제 전환은 광고센터·구글 애즈가 집계한 결제 전환으로 관리자 결제와 다를 수 있습니다. 비교: 데일리는 지난주 같은 요일, 주간은 이전 7일, 월간은 전월 일평균.</p>
-<footer><a href="https://platform-strategy-team.vercel.app/stats.html#p=signmkt" target="_blank" rel="noopener">상세 지표 · 소재 · 키워드 ↗</a><a href="https://www.facebook.com/ads/library/?active_status=active&ad_type=all&country=KR&search_type=page&view_all_page_id=1629999920585814" target="_blank" rel="noopener">경쟁사 모두싸인 광고 ↗</a></footer>
-</section><section id="ops" hidden><iframe id="opsFrame" title="실무 상세" style="display:block;width:100%;border:0;min-height:900px;background:#f6f8fb"></iframe></section></main>
+<footer><span>결제는 싸인 관리자 결제 출처 기준</span><a href="https://adsmanager.facebook.com/adsmanager/manage/campaigns?act=416026287579366" target="_blank" rel="noopener">메타 ↗</a><a href="https://ads.naver.com/manage/ad-accounts/1912105/sa/campaigns/cmp-a001-01-000000010598857" target="_blank" rel="noopener">네이버 ↗</a><a href="https://ads.google.com/aw/campaigns" target="_blank" rel="noopener">구글 ↗</a><a href="https://www.facebook.com/ads/library/?active_status=active&ad_type=all&country=KR&search_type=page&view_all_page_id=1629999920585814" target="_blank" rel="noopener">모두싸인 광고 ↗</a></footer>
+</section>
+<section id="ops" hidden><iframe id="opsFrame" title="실무 상세" style="display:block;width:100%;border:0;min-height:900px;background:#f6f8fb"></iframe></section>
+</main>
 <script>
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -41,30 +39,26 @@ const day=(s,n)=>new Date(Date.parse(s)+n*864e5).toISOString().slice(0,10);
 const nd=(a,b)=>Math.round((Date.parse(b)-Date.parse(a))/864e5)+1;
 const fmt=n=>n==null||!isFinite(n)?'-':Math.round(n).toLocaleString('ko-KR');
 const won=n=>n==null||!isFinite(n)?'-':fmt(n)+'원';
-const pct=n=>n==null||!isFinite(n)?'-':(Math.round(n*10)/10).toLocaleString('ko-KR')+'%';
+const pct=n=>n==null||!isFinite(n)?'-':Math.round(n)+'%';
 const MD=s=>`${+s.slice(5,7)}.${+s.slice(8,10)}`;
 const WD='일월화수목금토';const wd=s=>WD[new Date(s+'T00:00:00Z').getUTCDay()];
 const CH=[['pl','네이버 파워링크'],['pc','네이버 파워콘텐츠'],['g','구글 검색광고'],['m','메타']];
-let D,M,view='week',key=null;
-
-/* 결제 전환(광고센터): 매출 있는 전환만, 1건 13,200원 기준 상한 */
+let D,M,view='week',key=null,tab='perf';
 const nvPay=(cv,amt)=>amt>0?Math.min(cv,Math.max(1,Math.floor(amt/13200))):0;
 
 function model(D){
   const m={end:D.range.end,ch:{},kw:[],grp:[],ads:[],gDev:{},gCv:{},pay:{}};
-  const mk=(src)=>({start:src?.start,end:src?.end,stale:!!src?.stale,days:{}});
+  const mk=s=>({start:s?.start,end:s?.end,stale:!!s?.stale,days:{}});
   const add=(o,d,v)=>{const r=o.days[d]||(o.days[d]=[0,0,0,0]);v.forEach((x,i)=>r[i]+=x)};
   const N=D.ads,G=D.gads,Me=D.metaAds;
-  const nOk=N&&N.v===2&&N.meta&&N.d, gOk=G&&G.v===1&&Array.isArray(G.d), mOk=Me&&Me.ok&&Array.isArray(Me.d);
-  m.ch.pl=mk(nOk?N:null);m.ch.pc=mk(nOk?N:null);m.ch.g=mk(gOk?G:null);m.ch.m=mk(mOk?Me:null);
-  if(nOk){
-    const conv=rows=>rows.map(([i,imp,clk,cost,cv,amt,rk])=>({d:day(N.start,i),imp,clk,cost,pay:nvPay(cv,amt),rk}));
-    for(const [id,k,name,on] of N.meta.g){const R=conv(N.d[id]||[]);for(const r of R)add(m.ch[k],r.d,[r.imp,r.clk,r.cost,r.pay]);m.grp.push({id,k,name,on,R});}
-    for(const [id,kw,grp,bid,grpBid,on,paused,camp] of N.meta.k){if(!N.d[id])continue;m.kw.push({kw,grp,bid:bid||grpBid,on:on&&!paused,camp,R:conv(N.d[id])});}
-    m.ads=N.meta.a.map(a=>({kind:a[1],group:a[2],groupOn:a[3],title:a[4],state:a[7]}));
-  }
+  const nOk=N&&N.v===2&&N.meta&&N.d,gOk=G&&G.v===1&&Array.isArray(G.d),mOk=Me&&Me.ok&&Array.isArray(Me.d);
+  m.ch.pl=mk(nOk?N:null);m.ch.pc=mk(nOk?N:null);m.ch.g=mk(gOk?G:null);m.ch.m=mk(mOk?Me:null);m.metaCamps=mOk?Me.camps||[]:[];
+  if(nOk){const conv=rows=>rows.map(([i,imp,clk,cost,cv,amt,rk])=>({d:day(N.start,i),imp,clk,cost,pay:nvPay(cv,amt),rk}));
+    for(const [id,k,name,on] of N.meta.g){const R=conv(N.d[id]||[]);for(const r of R)add(m.ch[k],r.d,[r.imp,r.clk,r.cost,r.pay]);m.grp.push({k,name,on,R});}
+    for(const [id,kw,grp,bid,grpBid,on,paused,camp] of N.meta.k){if(N.d[id])m.kw.push({kw,camp,R:conv(N.d[id])});}
+    m.ads=N.meta.a.map(a=>({groupOn:a[3],state:a[7]}));}
   if(gOk){m.budget=G.camp&&G.camp.budget;for(const [i,dev,cost,clk,imp] of G.d){const d=day(G.start,i);add(m.ch.g,d,[imp,clk,cost,0]);const x=m.gDev[d]||(m.gDev[d]={});const r=x[dev]||(x[dev]=[0,0,0]);r[0]+=imp;r[1]+=clk;r[2]+=cost;}
-    for(const [i,name,n] of G.cv||[]){const d=day(G.start,i);const x=m.gCv[d]||(m.gCv[d]={});x[name]=(x[name]||0)+n;if(name==='예스폼싸인_구매'&&m.ch.g.days[d])m.ch.g.days[d][3]+=n;}}
+    for(const [i,name,n] of G.cv||[]){const d=day(G.start,i);const x=m.gCv[d]||(m.gCv[d]={});x[name]=(x[name]||0)+n;}}
   if(mOk)for(const [d,i,c,w] of Me.d)add(m.ch.m,d,[i,c,w,0]);
   for(const [at,,amt,src] of D.payments||[]){const s=String(src||'');const k=s==='네이버 검색광고'?'pl':s==='구글 검색광고'?'g':(/블로그/.test(s)&&/광고|파워콘텐츠/.test(s))?'pc':/^(메타 광고|메타 유료광고|페이스북 광고|인스타그램 광고)$/.test(s)?'m':null;if(!k)continue;const d=at.slice(0,10);const q=m.pay[k]||(m.pay[k]={});const v=q[d]||(q[d]=[0,0]);v[0]++;v[1]+=amt;}
   return m;
@@ -72,109 +66,99 @@ function model(D){
 const sumDays=(days,s,e,len)=>{const t=Array(len).fill(0);if(!days)return t;for(const [d,a] of Object.entries(days))if(d>=s&&d<=e)a.forEach((v,i)=>t[i]+=v);return t};
 const covered=(c,s,e)=>!!(c.end&&c.start<=s&&c.end>=e);
 
-/* 기간 목록 */
 function periods(){
   const E=M.end,out=[];
   if(view==='day'){for(let i=0;i<7;i++){const d=day(E,-i);out.push({k:d,s:d,e:d,label:`${MD(d)} (${wd(d)})`,ps:day(d,-7),pe:day(d,-7),cmp:'지난주 같은 요일'});}}
-  else if(view==='week'){for(let i=0;i<4;i++){const e=day(E,-7*i),s=day(e,-6);out.push({k:e,s,e,label:i?`${MD(s)} ~ ${MD(e)}`:`최근 7일 (${MD(s)} ~ ${MD(e)})`,ps:day(s,-7),pe:day(s,-1),cmp:'이전 7일'});}}
-  else{let y=+E.slice(0,4),mo=+E.slice(5,7);for(let i=0;i<4;i++){const ym=`${y}-${String(mo).padStart(2,'0')}`;const s=ym+'-01';if(s<'2026-08-01')break;const last=new Date(Date.UTC(y,mo,0)).toISOString().slice(0,10);const e=last<E?last:E;const py=mo===1?y-1:y,pm=mo===1?12:mo-1,pym=`${py}-${String(pm).padStart(2,'0')}`;const plast=new Date(Date.UTC(py,pm,0)).toISOString().slice(0,10);out.push({k:ym,s,e,label:`${mo}월`+(e<last?` (1~${+e.slice(8)}일)`:''),ps:pym+'-01',pe:plast,cmp:'전월 일평균',avg:true,noPrev:pym+'-01'<'2026-08-01'});mo--;if(!mo){mo=12;y--;}}}
+  else if(view==='week'){for(let i=0;i<4;i++){const e=day(E,-7*i),s=day(e,-6);out.push({k:e,s,e,label:i?`${MD(s)} ~ ${MD(e)}`:`최근 7일`,ps:day(s,-7),pe:day(s,-1),cmp:'이전 7일'});}}
+  else{let y=+E.slice(0,4),mo=+E.slice(5,7);for(let i=0;i<4;i++){const ym=`${y}-${String(mo).padStart(2,'0')}`;const s=ym+'-01';if(s<'2026-08-01')break;const last=new Date(Date.UTC(y,mo,0)).toISOString().slice(0,10);const e=last<E?last:E;const py=mo===1?y-1:y,pm=mo===1?12:mo-1,pym=`${py}-${String(pm).padStart(2,'0')}`;out.push({k:ym,s,e,label:`${mo}월`+(e<last?` (~${+e.slice(8)}일)`:''),ps:pym+'-01',pe:new Date(Date.UTC(py,pm,0)).toISOString().slice(0,10),cmp:'전월 일평균',avg:true,noPrev:pym+'-01'<'2026-08-01'});mo--;if(!mo){mo=12;y--;}}}
   return out;
 }
-function delta(c,p,P,good){if(P.noPrev||c==null||!p)return '<span class="d flat">-</span>';const cd=nd(P.s,P.e),pd=nd(P.ps,P.pe);const r=P.avg?((c/cd)-(p/pd))/(p/pd)*100:(c-p)/p*100;const cls=r>0.5?'up':r<-0.5?'down':'flat';return `<span class="d ${good||''} ${cls}">${cls==='up'?'▲':cls==='down'?'▼':''}${Math.abs(r).toFixed(0)}%</span>`;}
 const chg=(c,p,P)=>{if(P.noPrev||!p)return null;const cd=nd(P.s,P.e),pd=nd(P.ps,P.pe);return P.avg?((c/cd)-(p/pd))/(p/pd)*100:(c-p)/p*100;};
+const dl=(r,good)=>{if(r==null)return '';const c=r>0.5?'up':r<-0.5?'down':'flat';return `<span class="d ${good||''} ${c}">${c==='up'?'▲':c==='down'?'▼':''}${Math.abs(r).toFixed(0)}%</span>`;};
 
 function paint(){
   document.querySelectorAll('.seg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===view));
   const PS=periods();const P=PS.find(p=>p.k===key)||PS[0];key=P.k;
   $('chips').innerHTML=PS.map(p=>`<button data-k="${p.k}" aria-pressed="${p.k===key}">${esc(p.label)}</button>`).join('');
   $('chips').querySelectorAll('button').forEach(b=>b.onclick=()=>{key=b.dataset.k;save();paint();});
-  $('date').innerHTML=`${P.s===P.e?P.s+' ('+wd(P.s)+')':P.s+' ~ '+P.e}<span class="cmp">비교: ${P.noPrev?'이전 데이터 없음':P.cmp+' ('+(P.ps===P.pe?MD(P.ps):MD(P.ps)+' ~ '+MD(P.pe))+')'}</span>`;
-  cards(P);table(P);trend(P);
-  const showSug=view!=='day';$('sugWrap').hidden=!showSug;if(showSug)suggest(P);
+  $('date').textContent=P.s===P.e?`${MD(P.s)} (${wd(P.s)})`:`${MD(P.s)} ~ ${MD(P.e)}`;
+  $('cmp').textContent=P.noPrev?'':`${P.cmp} 대비`;
+  table(P);trend(P);
+  $('sugWrap').hidden=view==='day';if(view!=='day')suggest(P);
   post();
 }
-function cards(P){
-  const L=[['m','메타','Meta Ads',[['https://adsmanager.facebook.com/adsmanager/manage/campaigns?act=416026287579366','광고 관리자']]],['n','네이버','파워링크 · 파워콘텐츠',[['https://ads.naver.com/manage/ad-accounts/1912105/sa/campaigns/cmp-a001-01-000000010598857','파워링크 관리'],['https://ads.naver.com/manage/ad-accounts/1912102/sa/campaigns/cmp-a001-03-000000009220974','파워콘텐츠 관리']]],['g','구글','예스폼싸인_SA',[['https://ads.google.com/aw/campaigns','Google Ads 관리']]]];
-  $('cards').innerHTML=L.map(([k,t,desc,links])=>{const c=M.ch[k==='n'?'pl':k];const st=!c.end?'연결 필요':!covered(c,P.s,P.e)?'기간 일부 없음':c.stale?'갱신 지연':'연결됨';
-    return `<article class="card"><strong>${t}</strong> <span class="tag ${st==='연결됨'?'':'wait'}">${st}</span><p>${desc}</p><div class="muted">${c.end?'데이터 '+MD(c.start)+' ~ '+MD(c.end):'자사 계정 실적 미조회'}</div>${links.map(([u,l])=>`<a target="_blank" rel="noopener" href="${u}">${l} ↗</a>`).join('')}</article>`}).join('');
-}
-function rowData(k,P){const c=M.ch[k];const cur=sumDays(c.days,P.s,P.e,4),prev=sumDays(c.days,P.ps,P.pe,4);const pay=sumDays(M.pay[k],P.s,P.e,2),payP=sumDays(M.pay[k],P.ps,P.pe,2);return {k,ok:covered(c,P.s,P.e),okP:covered(c,P.ps,P.pe),cur,prev,pay,payP};}
+function rowData(k,P){const c=M.ch[k];return {k,ok:covered(c,P.s,P.e),okP:covered(c,P.ps,P.pe),cur:sumDays(c.days,P.s,P.e,4),prev:sumDays(c.days,P.ps,P.pe,4),pay:sumDays(M.pay[k],P.s,P.e,2)};}
 function table(P){
-  const R=CH.map(([k,n])=>({n,...rowData(k,P)}));const ok=R.filter(r=>r.ok);
-  const T={n:'합계',ok:true,okP:ok.every(r=>r.okP),cur:[0,0,0,0],prev:[0,0,0,0],pay:[0,0],payP:[0,0],tot:true};
+  const R=CH.map(([k,n])=>({n,...rowData(k,P)})),ok=R.filter(r=>r.ok);
+  const T={n:'합계',ok:true,okP:ok.every(r=>r.okP),cur:[0,0,0,0],prev:[0,0,0,0],pay:[0,0],tot:true};
   for(const r of ok){r.cur.forEach((v,i)=>T.cur[i]+=v);r.prev.forEach((v,i)=>T.prev[i]+=v);T.pay[0]+=r.pay[0];T.pay[1]+=r.pay[1];}
-  const line=r=>{if(!r.ok)return `<tr><td>${r.n}</td><td colspan="9" class="muted" style="text-align:left">${M.ch[r.k].end?MD(M.ch[r.k].end)+'까지만 있어 이 기간은 비워 둡니다':'미연결 · 실적 미조회'}</td></tr>`;
-    const [imp,clk,cost,cv]=r.cur,[pi,pc,pw]=r.prev;const P2={...P,noPrev:P.noPrev||!r.okP};const cpc=clk?cost/clk:null,pcpc=pc?pw/pc:null;
-    return `<tr class="${r.tot?'tot':''}"><td>${r.n}</td><td>${won(cost)}${delta(cost,pw,P2)}</td><td>${fmt(imp)}</td><td>${fmt(clk)}${delta(clk,pc,P2,'good')}</td><td>${imp?pct(clk/imp*100):'-'}</td><td>${won(cpc)}${cpc&&pcpc?`<span class="d bad ${cpc>pcpc*1.005?'up':cpc<pcpc*0.995?'down':'flat'}">${cpc>pcpc*1.005?'▲':cpc<pcpc*0.995?'▼':''}${Math.abs((cpc-pcpc)/pcpc*100).toFixed(0)}%</span>`:''}</td><td>${r.k==='m'?'-':fmt(cv)}</td><td>${r.k==='m'&&!r.pay[0]?(cost?'미확인':'0건'):fmt(r.pay[0])+'건'}${r.pay[1]?`<div class="muted">${won(r.pay[1])}</div>`:''}</td><td>${r.pay[0]?won(cost/r.pay[0]):'-'}</td><td>${r.pay[1]&&cost?pct(r.pay[1]/cost*100):'-'}</td></tr>`};
-  $('rows').innerHTML=R.map(line).join('')+(ok.length?line(T):'');
-  $('perfBase').textContent=P.label;
-  const miss=R.filter(r=>!r.ok).map(r=>r.n+(M.ch[r.k].end?` (${MD(M.ch[r.k].end)}까지)`:' (미연결)'));
-  $('notice').hidden=!miss.length;$('notice').textContent='기간 전체가 확인되지 않은 채널은 0원이나 일부 합계로 넣지 않고 합계에서도 뺍니다: '+miss.join(' · ');
+  const line=r=>{if(!r.ok)return `<tr><td>${r.n}</td><td colspan="5" class="muted" style="text-align:left">${M.ch[r.k].end?MD(M.ch[r.k].end)+'까지만 수집됨':'미연결'}</td></tr>`;
+    const [,clk,cost]=r.cur,[,pc,pw]=r.prev,P2={...P,noPrev:P.noPrev||!r.okP};const cpc=clk?cost/clk:null,pcpc=pc?pw/pc:null;
+    return `<tr class="${r.tot?'tot':''}"><td>${r.n}</td><td>${won(cost)}${cost||pw?dl(chg(cost,pw,P2)):''}</td><td>${fmt(clk)}${clk||pc?dl(chg(clk,pc,P2),'good'):''}</td><td>${won(cpc)}${cpc&&pcpc?dl((cpc-pcpc)/pcpc*100,'bad'):''}</td><td>${fmt(r.pay[0])}건${r.pay[1]?` <span class="muted">${won(r.pay[1])}</span>`:''}</td><td>${r.pay[0]?won(cost/r.pay[0]):'-'}</td></tr>`};
+  $('rows').innerHTML=R.map(line).join('')+line(T);
+  const miss=R.filter(r=>!r.ok).map(r=>r.n);const stale=R.filter(r=>r.ok&&M.ch[r.k].stale).map(r=>r.n);
+  const msg=[miss.length?`${miss.join(' · ')}는 이 기간 데이터가 없어 합계에서 뺐어요.`:'',stale.length?`${stale.join(' · ')}는 이번 갱신에 실패해 이전 수집값이에요.`:''].filter(Boolean).join(' ');
+  $('notice').hidden=!msg;$('notice').textContent=msg;
 }
 function trend(P){
   let B=[];
-  if(view==='day'){for(let i=6;i>=0;i--){const d=day(P.s,-i);B.push([`${MD(d)} (${wd(d)})`,d,d]);}$('trendTitle').innerHTML='최근 7일 추이 <small>'+MD(day(P.s,-6))+' ~ '+MD(P.s)+'</small>';}
-  else if(view==='week'){for(let d=P.s;d<=P.e;d=day(d,1))B.push([`${MD(d)} (${wd(d)})`,d,d]);$('trendTitle').innerHTML='일별 추이 <small>'+esc(P.label)+'</small>';}
-  else{let s=P.s;while(s<=P.e){let e=s;while(e<P.e&&wd(e)!=='일')e=day(e,1);B.push([`${MD(s)} ~ ${MD(e)}`,s,e]);s=day(e,1);}$('trendTitle').innerHTML='주별 추이 <small>월~일 · '+esc(P.label)+'</small>';}
-  $('trendHead').innerHTML='<tr><th>기간</th>'+CH.map(([k,n])=>`<th>${n.replace('네이버 ','')}<br>광고비 · 클릭</th>`).join('')+'<th>합계 광고비</th><th>싸인 결제</th></tr>';
-  $('trend').innerHTML=B.map(([l,s,e])=>{let tot=0,pay=0;const cells=CH.map(([k])=>{const c=M.ch[k];if(!covered(c,s,e))return '<td class="muted">-</td>';const t=sumDays(c.days,s,e,4);tot+=t[2];pay+=sumDays(M.pay[k],s,e,2)[0];return `<td>${won(t[2])}<div class="muted">${fmt(t[1])}클릭</div></td>`}).join('');return `<tr><td>${l}</td>${cells}<td><b>${won(tot)}</b></td><td>${fmt(pay)}건</td></tr>`}).join('');
+  if(view==='day'){for(let i=6;i>=0;i--){const d=day(P.s,-i);B.push([`${MD(d)} (${wd(d)})`,d,d]);}$('trendTitle').innerHTML='최근 7일 추이';}
+  else if(view==='week'){for(let d=P.s;d<=P.e;d=day(d,1))B.push([`${MD(d)} (${wd(d)})`,d,d]);$('trendTitle').innerHTML='일별 추이';}
+  else{let s=P.s;while(s<=P.e){let e=s;while(e<P.e&&wd(e)!=='일')e=day(e,1);B.push([`${MD(s)} ~ ${MD(e)}`,s,e]);s=day(e,1);}$('trendTitle').innerHTML='주별 추이';}
+  $('trendHead').innerHTML='<tr><th>기간</th>'+CH.map(([,n])=>`<th>${n.replace('네이버 ','').replace(' 검색광고','')}</th>`).join('')+'<th>합계 광고비</th><th>싸인 결제</th></tr>';
+  $('trend').innerHTML=B.map(([l,s,e])=>{let tot=0,pay=0;const cells=CH.map(([k])=>{const c=M.ch[k];if(!covered(c,s,e))return '<td class="muted">-</td>';const t=sumDays(c.days,s,e,4);tot+=t[2];pay+=sumDays(M.pay[k],s,e,2)[0];return `<td>${won(t[2])}</td>`}).join('');return `<tr><td>${l}</td>${cells}<td><b>${won(tot)}</b></td><td>${fmt(pay)}건</td></tr>`}).join('');
 }
 
-/* 제안 */
-function kwStats(P){return M.kw.map(x=>{const t={imp:0,clk:0,cost:0,pay:0,rk:0};for(const r of x.R)if(r.d>=P.s&&r.d<=P.e){t.imp+=r.imp;t.clk+=r.clk;t.cost+=r.cost;t.pay+=r.pay;t.rk+=r.rk;}return {...x,...t,rank:t.imp?t.rk/t.imp:null};}).filter(x=>x.imp||x.cost);}
+/* 제안: 채널당 최대 3줄 */
+function kwStats(P){return M.kw.map(x=>{const t={clk:0,cost:0,pay:0,rk:0,imp:0};for(const r of x.R)if(r.d>=P.s&&r.d<=P.e){t.imp+=r.imp;t.clk+=r.clk;t.cost+=r.cost;t.pay+=r.pay;t.rk+=r.rk;}return {...x,...t,rank:t.imp?t.rk/t.imp:null};}).filter(x=>x.cost||x.imp);}
 function suggest(P){
-  const basis=view==='week'?`${esc(P.label)} 데이터 기준 · ${P.cmp} 비교`:`${esc(P.label)} 데이터 기준 · ${P.cmp} 비교`;
-  $('sugBase').innerHTML=basis;
+  $('sugBase').textContent=`${view==='week'?P.label:P.label} 기준`;
   const it=(k,t)=>`<li><b class="k ${k}">${{cut:'줄이기',up:'늘리기',chk:'점검',test:'테스트'}[k]}</b>${t}</li>`;
-  const box=(t,bs,items)=>`<div class="sg"><h3>${t}</h3><div class="bs">${bs}</div><ul>${items.length?items.join(''):'<li class="muted">이 기간에는 눈에 띄는 조정 신호가 없어요. 현재 설정을 유지해요.</li>'}</ul></div>`;
+  const box=(t,sub,items)=>`<div class="sg"><h3>${t}<span>${sub}</span></h3><ul>${items.length?items.slice(0,3).join(''):'<li class="muted">조정할 신호 없음 · 현재 설정 유지</li>'}</ul></div>`;
   const out=[];
-  /* 네이버 */
   const pl=rowData('pl',P),pc=rowData('pc',P);
-  if(!pl.ok){out.push(box('네이버',`데이터 ${M.ch.pl.end?MD(M.ch.pl.end)+'까지':'없음'}`,[it('chk','광고센터 로그인이 풀려 이 기간 데이터가 비어 있어요. 로그인 후 다시 수집하면 제안이 채워져요.')]));}
-  else{const N=[];const nCost=pl.cur[2]+pc.cur[2];
-    const K=kwStats(P);
-    const waste=K.filter(x=>x.pay===0&&x.cost>=Math.max(3000,nCost*0.04)&&x.camp==='예스폼싸인').sort((a,b)=>b.cost-a.cost).slice(0,3);
-    if(waste.length)N.push(it('cut',`결제 전환 없이 비용이 큰 키워드: ${waste.map(x=>`<b>${esc(x.kw)}</b> ${won(x.cost)}·${fmt(x.clk)}클릭`).join(', ')}. 입찰가를 20~30% 낮추거나 일시중지해 보세요.`));
-    const win=K.filter(x=>x.pay>0).sort((a,b)=>b.pay-a.pay||a.cost-b.cost).slice(0,3);
-    if(win.length)N.push(it('up',`결제 전환이 난 키워드: ${win.map(x=>`<b>${esc(x.kw)}</b> ${fmt(x.pay)}건(평균 ${x.rank?x.rank.toFixed(1):'-'}위)`).join(', ')}. ${win.some(x=>x.rank>3)?'3위 밖인 키워드는 입찰가를 올려 상위 노출을 확보하세요.':'순위를 유지하고 예산이 모자라지 않게 지켜보세요.'}`));
+  if(!pl.ok)out.push(box('네이버','데이터 없음',[it('chk','광고센터 로그인 후 다시 수집하세요.')]));
+  else{const N=[],nCost=pl.cur[2]+pc.cur[2],K=kwStats(P);
+    const waste=K.filter(x=>x.pay===0&&x.camp==='예스폼싸인'&&x.cost>=Math.max(3000,nCost*0.04)).sort((a,b)=>b.cost-a.cost).slice(0,3);
+    if(waste.length)N.push(it('cut',`결제 없는 고비용 키워드 입찰 20~30% 하향: ${waste.map(x=>`<b>${esc(x.kw)}</b> ${won(x.cost)}`).join(', ')}`));
+    const win=K.filter(x=>x.pay>0).sort((a,b)=>b.pay-a.pay).slice(0,3),low=win.filter(x=>x.rank>3);
+    if(low.length)N.push(it('up',`결제 난 키워드 입찰 상향(3위 밖): ${low.map(x=>`<b>${esc(x.kw)}</b> ${x.rank.toFixed(1)}위`).join(', ')}`));
+    else if(win.length)N.push(it('up',`결제 난 키워드 순위 유지: ${win.map(x=>`<b>${esc(x.kw)}</b>`).join(', ')}`));
     const cpc=pl.cur[1]?pl.cur[2]/pl.cur[1]:0,pcpc=pl.prev[1]?pl.prev[2]/pl.prev[1]:0;
-    if(pl.okP&&!P.noPrev&&cpc&&pcpc&&Math.abs(cpc-pcpc)/pcpc>0.15)N.push(it(cpc>pcpc?'chk':'up',`파워링크 클릭당 비용이 ${won(pcpc)} → ${won(cpc)}으로 ${cpc>pcpc?'올랐어요. 상위 키워드 경쟁(모두싸인 등)이 붙었는지 순위·입찰가를 확인하세요.':'내려갔어요. 같은 예산으로 클릭을 더 받을 수 있으니 전환 키워드 입찰을 조금 올려 볼 만해요.'}`));
-    const clc=chg(pl.cur[1],pl.prev[1],P);if(pl.okP&&clc!=null&&clc<-20)N.push(it('chk',`파워링크 클릭이 ${Math.abs(clc).toFixed(0)}% 줄었어요. 노출 중단 소재·키워드나 일 예산 소진 시간을 확인하세요.`));
-    const pcOn=M.grp.filter(g=>g.k==='pc'&&g.on);const pcDead=pcOn.filter(g=>!g.R.some(r=>r.d>=P.s&&r.d<=P.e&&r.imp>0));
-    if(pcDead.length)N.push(it('chk',`켜져 있지만 이 기간 노출이 0인 파워콘텐츠 그룹 ${pcDead.length}개(${pcDead.slice(0,2).map(g=>esc(g.name)).join(', ')}${pcDead.length>2?' 외':''}). 콘텐츠 검수·입찰가를 확인하세요.`));
-    if(pc.cur[2]>0&&pc.pay[0]===0&&pc.cur[1]>=20)N.push(it('test',`파워콘텐츠는 ${won(pc.cur[2])}·${fmt(pc.cur[1])}클릭인데 싸인 결제 0건이에요. 블로그 글 안에 「이 서식으로 서명 요청하기」 버튼을 넣어 전환 경로를 짧게 만들어 보세요.`));
-    const hold=M.ads.filter(a=>a.groupOn&&a.state==='심사 대기').length;if(hold)N.push(it('chk',`심사 대기 중인 소재 ${hold}개가 있어요. 승인 여부를 확인하세요.`));
-    out.push(box('네이버',`광고비 ${won(nCost)} · 싸인 결제 ${fmt(pl.pay[0]+pc.pay[0])}건`,N.slice(0,5)));}
-  /* 구글 */
+    if(pl.okP&&!P.noPrev&&cpc&&pcpc&&Math.abs(cpc-pcpc)/pcpc>0.15)N.push(it('chk',`파워링크 클릭당 비용 ${won(pcpc)} → ${won(cpc)}, 상위 키워드 순위 확인`));
+    const dead=M.grp.filter(g=>g.k==='pc'&&g.on&&!g.R.some(r=>r.d>=P.s&&r.d<=P.e&&r.imp>0)).length;
+    if(dead)N.push(it('chk',`켜져 있는데 노출 0인 파워콘텐츠 그룹 ${dead}개 검수·입찰 확인`));
+    out.push(box('네이버',`${won(nCost)} · 결제 ${fmt(pl.pay[0]+pc.pay[0])}건`,N));}
   const g=rowData('g',P);
-  if(!g.ok)out.push(box('구글',`데이터 ${M.ch.g.end?MD(M.ch.g.end)+'까지':'없음'}`,[it('chk','구글 애즈 데이터가 이 기간을 다 덮지 못해요. 다음 갱신 뒤 다시 확인하세요.')]));
-  else{const Gs=[];const dev={};for(const [d,x] of Object.entries(M.gDev))if(d>=P.s&&d<=P.e)for(const [k,v] of Object.entries(x)){const r=dev[k]||(dev[k]=[0,0,0]);v.forEach((n,i)=>r[i]+=n);}
-    const tot=g.cur[2],mo=(dev.mo||[0,0,0]),pcD=(dev.pc||[0,0,0]);const moShare=tot?mo[2]/tot*100:0;
-    const cv={};for(const [d,x] of Object.entries(M.gCv))if(d>=P.s&&d<=P.e)for(const [k,n] of Object.entries(x))cv[k]=(cv[k]||0)+n;
-    if(moShare>=30)Gs.push(it('cut',`광고비의 ${pct(moShare)}가 휴대전화(${won(mo[2])}, 클릭당 ${won(mo[1]?mo[2]/mo[1]:null)})예요. 휴대전화 입찰을 -30%로 낮춰 1주 비교하고, 기기별 전환은 구글 애즈 기기 보고서에서 확인하세요.`));
-    const days=nd(P.s,P.e),avg=tot/days;if(M.budget){const u=avg/M.budget*100;if(u>=90)Gs.push(it('chk',`하루 평균 ${won(avg)}으로 일 예산 ${won(M.budget)}의 ${pct(u)}를 써요. 예산 때문에 노출이 끊길 수 있어 예산을 늘리기보다 성과 없는 키워드부터 정리하세요.`));else if(u<50)Gs.push(it('up',`하루 평균 ${won(avg)}으로 일 예산 ${won(M.budget)}의 ${pct(u)}만 써요. 전환 키워드 입찰을 올려 노출을 늘릴 여유가 있어요.`));}
-    const buy=cv['예스폼싸인_구매']||0,sign=(cv['가입_일반']||0)+(cv['예스폼싸인_가입완료']||0);
-    Gs.push(it('chk',`구글 애즈 집계 구매 ${fmt(buy)}건 · 가입 ${fmt(sign)}건, 관리자 기준 구글 결제 ${fmt(g.pay[0])}건. ${buy||g.pay[0]?`결제 1건당 광고비 ${won(tot/Math.max(buy,g.pay[0]))}.`:`광고비 ${won(tot)}에 결제가 없어요. 검색어 보고서에서 무관 검색어를 제외 키워드로 넣어 보세요.`}`));
-    const cpc=g.cur[1]?g.cur[2]/g.cur[1]:0,pcpc=g.prev[1]?g.prev[2]/g.prev[1]:0;if(g.okP&&!P.noPrev&&cpc&&pcpc&&Math.abs(cpc-pcpc)/pcpc>0.15)Gs.push(it('chk',`클릭당 비용이 ${won(pcpc)} → ${won(cpc)}으로 ${cpc>pcpc?'올랐어요':'내려갔어요'}. 입찰 전략·검색어 변화를 확인하세요.`));
-    out.push(box('구글',`광고비 ${won(tot)} · 싸인 결제 ${fmt(g.pay[0])}건`,Gs.slice(0,5)));}
-  /* 메타 */
+  if(!g.ok)out.push(box('구글','데이터 없음',[it('chk','다음 갱신 뒤 다시 확인하세요.')]));
+  else{const Gs=[],tot=g.cur[2],dev={},cv={};
+    for(const [d,x] of Object.entries(M.gDev))if(d>=P.s&&d<=P.e)for(const [k,v] of Object.entries(x)){const r=dev[k]||(dev[k]=[0,0,0]);v.forEach((n,i)=>r[i]+=n);}
+    for(const [d,x] of Object.entries(M.gCv))if(d>=P.s&&d<=P.e)for(const [k,n] of Object.entries(x))cv[k]=(cv[k]||0)+n;
+    const mo=dev.mo||[0,0,0],share=tot?mo[2]/tot*100:0;if(share>=30)Gs.push(it('cut',`휴대전화가 광고비의 ${pct(share)} → 모바일 입찰 -30%로 1주 비교`));
+    const buy=cv['예스폼싸인_구매']||0,pays=Math.max(buy,g.pay[0]);
+    Gs.push(it(pays?'chk':'cut',pays?`결제 ${fmt(pays)}건 · 결제당 ${won(tot/pays)}`:`${won(tot)} 쓰고 결제 0건 → 검색어 보고서에서 무관 검색어 제외`));
+    if(M.budget){const u=tot/nd(P.s,P.e)/M.budget*100;if(u>=90)Gs.push(it('chk',`일 예산 ${won(M.budget)}의 ${pct(u)} 소진 → 증액보다 키워드 정리 먼저`));else if(u<50)Gs.push(it('up',`일 예산 ${pct(u)}만 소진 → 전환 키워드 입찰 여유 있음`));}
+    out.push(box('구글',`${won(tot)} · 결제 ${fmt(g.pay[0])}건`,Gs));}
   const me=rowData('m',P);
-  if(!me.ok)out.push(box('메타','광고 관리자 미연결',[it('chk','광고 관리자 로그인 후 연결하면 광고비·클릭 기준 제안이 채워져요.'),it('test','경쟁사 모두싸인은 활성 광고 20건 중 7건을 무료 엑셀 서식·연말 HR 자료 같은 전용 페이지로 보내요. 예스폼 서식 1종(예: 교육 이수 확인서)으로 「서식 미리보기 → 이 서식으로 서명 요청하기」 소재를 만들어 홈 연결 광고와 첫 서명 요청 1건당 비용을 비교해 보세요.'),it('test','같은 이미지에 첫 문장만 다르게(서식 중심 vs 업무 상황 중심) 2개 소재로 1주 돌려 클릭률보다 첫 서명 요청 수로 판단하세요.')]));
-  else if(!me.cur[2]){const st=(D.metaAds.camps||[]).map(c=>c[1]+' '+(c[2]==='PAUSED'?'일시중지':c[2])).join(', ');out.push(box('메타',`광고비 0원 · ${esc(st)}`,[it('chk','이 기간 예스폼싸인 메타 광고 집행이 없어요. 싸인 캠페인은 4.20~5.20에만 돌았어요(3,303,706원). 다시 켤지 먼저 정하세요.'),it('test','다시 켠다면 홈 연결 대신 서식 1종(예: 교육 이수 확인서)의 「서식 미리보기 → 이 서식으로 서명 요청하기」 페이지로 보내세요. 경쟁사 모두싸인도 활성 광고 20건 중 7건을 자료·서식 전용 페이지로 보내요.'),it('test','같은 이미지에 첫 문장만 다르게(서식 중심 vs 업무 상황 중심) 2개 소재를 하루 2~3만원으로 1주 돌려, 첫 서명 요청 1건당 비용으로 판단하세요.'),it('chk','광고 URL에 utm_source=meta를 붙여 관리자 결제 출처에 메타가 잡히게 하세요.')]));}
-  else{const Ms=[];const [imp,clk,cost]=me.cur;const ctr=imp?clk/imp*100:0;if(ctr&&ctr<0.8)Ms.push(it('test',`클릭률 ${pct(ctr)}로 낮아요. 첫 문장을 업무 상황형(예: 「교육은 끝났는데 확인 서명은 아직인가요?」)으로 바꾼 소재를 추가해 보세요.`));const cpc=clk?cost/clk:0,pcpc=me.prev[1]?me.prev[2]/me.prev[1]:0;if(me.okP&&cpc&&pcpc&&Math.abs(cpc-pcpc)/pcpc>0.2)Ms.push(it('chk',`클릭당 비용 ${won(pcpc)} → ${won(cpc)}. 소재 피로도(빈도)를 확인하고 2주 넘은 소재는 교체하세요.`));Ms.push(it('chk','메타 유입 결제는 아직 관리자 결제 출처로 구분되지 않아요. 광고 URL에 utm_source=meta를 붙여 결제 출처가 잡히게 하세요.'));out.push(box('메타',`광고비 ${won(cost)} · 클릭 ${fmt(clk)}`,Ms));}
+  if(!me.ok)out.push(box('메타','미연결',[it('chk','광고 관리자에 로그인하면 다음 갱신부터 반영돼요.')]));
+  else if(!me.cur[2]){const st=M.metaCamps.some(c=>c[2]==='PAUSED')?'캠페인 일시중지':'집행 없음';out.push(box('메타',`0원 · ${st}`,[it('chk','재개 여부 결정 (싸인 캠페인은 4.20~5.20만 집행)'),it('test','재개 시 홈 대신 서식 전용 페이지로 연결, 첫 문장만 다른 소재 2개 비교'),it('chk','광고 URL에 utm_source=meta 추가 (결제 출처 확인용)')]));}
+  else{const Ms=[],[imp,clk,cost]=me.cur,ctr=imp?clk/imp*100:0;if(ctr&&ctr<0.8)Ms.push(it('test',`클릭률 ${ctr.toFixed(1)}% → 업무 상황형 첫 문장 소재 추가`));const cpc=clk?cost/clk:0,pcpc=me.prev[1]?me.prev[2]/me.prev[1]:0;if(me.okP&&cpc&&pcpc&&Math.abs(cpc-pcpc)/pcpc>0.2)Ms.push(it('chk',`클릭당 비용 ${won(pcpc)} → ${won(cpc)}, 2주 넘은 소재 교체`));if(!me.pay[0])Ms.push(it('chk','광고 URL에 utm_source=meta 추가 (결제 출처 확인용)'));out.push(box('메타',`${won(cost)} · 클릭 ${fmt(clk)}`,Ms));}
   $('sug').innerHTML=out.join('');
 }
 
 function save(){history.replaceState(null,'',`#v=${view}&k=${key||''}`);}
 function readHash(){const h=new URLSearchParams(location.hash.slice(1));if(['day','week','month'].includes(h.get('v')))view=h.get('v');key=h.get('k')||null;}
 function post(){if(window.parent!==window)parent.postMessage({type:'auto-h',h:document.documentElement.scrollHeight},location.origin);}
-document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{view=b.dataset.v;key=null;save();paint();});
-let tab='perf';
-function setTab(t){tab=t;document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===t));const isOps=t==='ops';$('ops').hidden=!isOps;$('report').hidden=isOps||!M;document.querySelector('.ctl .seg').style.visibility=isOps?'hidden':'';if(isOps&&!$('opsFrame').getAttribute('src'))$('opsFrame').src='stats.html?mode=mkt';post();}
+function setTab(t){tab=t;document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===t));const ops=t==='ops';$('ops').hidden=!ops;$('report').hidden=ops||!M;document.querySelector('.seg').style.visibility=ops?'hidden':'';if(ops&&!$('opsFrame').getAttribute('src'))$('opsFrame').src='stats.html?mode=mkt';post();}
 document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>setTab(b.dataset.t));
+document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{view=b.dataset.v;key=null;save();paint();});
 addEventListener('message',e=>{const f=$('opsFrame');if(f&&e.source===f.contentWindow&&e.data&&e.data.type==='auto-h'){f.style.height=Math.max(900,e.data.h)+'px';post();}});
+addEventListener('hashchange',()=>{if(!M)return;readHash();paint();});
 const PREVIEW=null;
-async function load(){const b=$('reload');b.disabled=true;try{if(PREVIEW){D=PREVIEW;b.hidden=true}else{const r=await fetch('/api/stats',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({id:'marketing',password:sessionStorage.getItem('pst_stats_pw')||'site'}),cache:'no-store'});if(!r.ok)throw new Error();D=await r.json();}M=model(D);readHash();$('report').hidden=tab==='ops';paint();$('fail').textContent=PREVIEW?'실제 집계값을 담은 미리보기 · 운영 배포 전':''}catch(e){console.error(e);$('fail').textContent='지표를 읽지 못했습니다. 아카이브 로그인 후 다시 읽어 주세요.'}finally{b.disabled=false}}
-$('reload').onclick=load;load();addEventListener('hashchange',()=>{if(!M)return;readHash();paint();});
+async function load(){const b=$('reload');b.disabled=true;b.textContent='불러오는 중…';try{if(PREVIEW){D=PREVIEW}else{const r=await fetch('/api/stats',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({id:'marketing',password:sessionStorage.getItem('pst_stats_pw')||'site'}),cache:'no-store'});if(!r.ok)throw new Error();D=await r.json();}
+  M=model(D);const u=new Date(new Date(D.updatedAt||Date.now()).getTime()+9*36e5);$('upd').textContent=`데이터 ~${MD(D.range.end)} · 갱신 ${u.getUTCMonth()+1}.${u.getUTCDate()} ${String(u.getUTCHours()).padStart(2,'0')}:${String(u.getUTCMinutes()).padStart(2,'0')}`;
+  if(!key)readHash();$('fail').textContent='';$('report').hidden=tab==='ops';paint();}
+  catch(e){$('fail').textContent='지표를 읽지 못했어요. 아카이브에 로그인한 뒤 「최신 데이터 불러오기」를 눌러 주세요.';$('report').hidden=false;}finally{b.disabled=false;b.textContent='최신 데이터 불러오기'}}
+$('reload').onclick=load;load();
 if(window.parent!==window)new ResizeObserver(post).observe(document.querySelector('main'));
 </script></html>
