@@ -692,11 +692,11 @@ function mktResult({ pm, cd, pd, label }) {
   const on = R.filter(r => r.on && (r.c[2] || r.pay.length));
   const T = { c: [0, 1, 2].map(i => on.reduce((a, r) => a + r.c[i], 0)), pay: on.flatMap(r => r.pay), cv: on.reduce((a, r) => a + (conv[r.k] || 0), 0) };
   const row = (n, c, pays, cv, tot) => `<tr${tot ? ' class="sel"' : ''}><td class="name">${tot ? '<b>합계</b>' : n}</td><td>${won(Math.round(c[2]))}</td><td>${fmt(c[1])}</td><td>${c[1] ? won(Math.round(c[2] / c[1])) : '-'}</td>
-    <td>${fmt(pays.length)}건<span class="psm">${won(pw(pays))}</span></td><td>${cv == null ? '-' : (Math.round(cv * 100) / 100).toLocaleString('ko-KR') + '건'}</td><td>${pays.length ? won(Math.round(c[2] / pays.length)) : '-'}</td><td>${pw(pays) && c[2] ? pctTxt(pw(pays) / c[2] * 100) : '-'}</td></tr>`;
+    <td>${fmt(pays.length)}건<span class="psm">${won(pw(pays))}</span></td></tr>`;
   const ends = on.map(r => r.end).filter(e => e && e < SEL.e);
   return `<section class="blk"><h2>마케팅 채널 결과 <small>${label}${ends.length ? ` · 광고 데이터 ${MD(ends.sort()[0])}까지` : ''}</small></h2>
     <div class="card"><div class="scroll"><table class="tbl">
-      <thead><tr><th>채널</th><th>광고비</th><th>클릭</th><th>클릭당</th><th>싸인 결제<span class="psm">관리자 결제 출처</span></th><th>결제 전환<span class="psm">매체 집계</span></th><th>결제당 광고비</th><th>광고비 대비 매출</th></tr></thead>
+      <thead><tr><th>채널</th><th>광고비</th><th>클릭</th><th>클릭당</th><th>결제 전환</th></tr></thead>
       <tbody>${on.map(r => row(MCH[r.k], r.c, r.pay, conv[r.k])).join('')}${on.length > 1 ? row('', T.c, T.pay, T.cv, true) : ''}</tbody></table></div></div></section>`;
 }
 
