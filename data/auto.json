@@ -3,13 +3,13 @@
     {
       "id": "sign-marketing",
       "title": "예스폼싸인 마케팅",
-      "desc": "메타 · 네이버 · 구글 광고 성과를 데일리/주간/월간으로 비교하고, 채널별 이번 주 진행 제안을 보여줘요. 실무 상세(키워드 · 바이럴 · 지면)는 두 번째 탭에 있어요.",
+      "desc": "전체 광고 성과 대시보드와 네이버 · 구글 · 메타 · 유입·지면 탭",
       "product": "예스폼싸인",
       "kind": "광고 관리",
       "status": "운영 중",
       "schedule": "매일 오전 9시 · 오후 5시 자동 갱신 (에디터/싸인 지표와 같은 데이터)",
       "updated": "2026-11-26",
-      "src": "sign-marketing.html",
+      "src": "stats.html?mode=mkt",
       "width": "fixed",
       "meta": [
         "Meta Ads",
