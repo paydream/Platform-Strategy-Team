@@ -56,6 +56,28 @@
   .clink{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border:1px solid var(--line);border-radius:9px;background:#fff;font-size:13px;font-weight:600;text-decoration:none;color:var(--text)}
   .clink small{font-weight:400;color:var(--sub)}
   .clink:hover{border-color:#0b6b35;color:#0b6b35}
+  /* 마케팅 화면: 전체 대시보드 + 채널 탭 (2026-11-26) */
+  body.mktm .blk h2 small,body.mktm .brief li small,body.mktm .clink small,body.mktm .qlink small{display:none}
+  .mdash{margin-top:18px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px}
+  .mdash .mh{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+  .mdash .mh b{font-size:17px}.mdash .mh span{font-size:12.5px;color:var(--sub)}
+  .mk5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:12px}
+  .mk{border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+  .mk .l{font-size:12.5px;color:var(--sub)}.mk .v{font-size:24px;font-weight:800;letter-spacing:-.01em;margin-top:2px}.mk .v small{font-size:12px;font-weight:600;color:var(--sub);margin-left:2px}
+  .mk .d{font-size:12px;margin-top:2px;color:var(--sub)}
+  .mch{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+  .mc{border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;background:#fff;text-align:left;font:inherit;color:inherit}
+  .mc:hover{border-color:#0b6b35}
+  .mc .t{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:14px}
+  .mc .t i{font-style:normal;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:99px;background:#eef0f3;color:var(--sub)}
+  .mc dl{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:8px}
+  .mc dt{font-size:11.5px;color:var(--sub)}.mc dd{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+  .mc .off{margin-top:8px;font-size:13px;color:var(--sub)}
+  .mtabs{display:flex;gap:6px;margin-top:22px;border-bottom:1px solid var(--line)}
+  .mtab{font:inherit;font-size:15px;font-weight:600;color:var(--sub);background:none;border:0;border-bottom:2px solid transparent;padding:10px 14px;cursor:pointer;margin-bottom:-1px}
+  .mtab[aria-selected="true"]{color:var(--text);border-bottom-color:#0b6b35}
+  .mempty{margin-top:14px;background:var(--card);border:1px dashed #d6dbe1;border-radius:14px;padding:22px;color:var(--sub);font-size:14px}
+  @media (max-width:960px){.mk5{grid-template-columns:repeat(2,1fr)}.mch{grid-template-columns:1fr}}
   .qlink{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px 0 10px;background:#fff;border:1px solid #bfe6cd;border-radius:10px;text-decoration:none;color:var(--text);font-size:14px;white-space:nowrap;max-width:100%;transition:border-color .15s,box-shadow .15s}
   .qlink:hover{border-color:#12a150;box-shadow:0 4px 14px rgba(18,161,80,.12)}
   .qlink .qi{font-size:15px;line-height:1}
@@ -454,6 +476,7 @@ function start() {
   $('#gate').hidden = true; $('#app').hidden = false; $('#logout').hidden = false;
   const h = new URLSearchParams(location.hash.slice(1));
   if (!MKT && h.get('p') === 'signmkt') { location.replace('auto.html?id=sign-marketing'); return; } // 예전 싸인 마케팅 탭 주소
+  mtab = ['naver', 'google', 'meta', 'src'].includes(h.get('t')) ? h.get('t') : 'naver';
   ptab = MKT ? 'signmkt' : h.get('p') === 'editor' ? 'editor' : 'sign'; // 첫 화면: 싸인 (마케팅은 자동관리 화면에서만)
   prod = ptab === 'editor' ? 'editor' : 'sign';
   month = D.months.some(x => x.m === h.get('m')) || (h.get('m') === 'q3' && Q3()) ? h.get('m') : D.months[D.months.length - 1].m;
@@ -468,10 +491,10 @@ function start() {
 }
 
 function render() {
-  document.body.className = prod + (document.body.classList.contains('embed') ? ' embed' : '');
+  document.body.className = prod + (document.body.classList.contains('embed') ? ' embed' : '') + (MKT ? ' mktm' : '');
   let ctx, sub;
   if (view === 'month') {
-    history.replaceState(null, '', `#p=${ptab}&v=month&m=${month}`);
+    history.replaceState(null, '', `#p=${ptab}&v=month&m=${month}${MKT ? '&t=' + mtab : ''}`);
     const q = Q3(); if (month === 'q3' && !q) month = D.months[D.months.length - 1].m;
     const i = D.months.findIndex(x => x.m === month), m = month === 'q3' ? q : D.months[i], pm = month === 'q3' ? null : D.months[i - 1] || null;
     CMP = month === 'q3' ? { short: '이전 3개월', label: '', avg: false, note: '', col: '이전 3개월 대비', none: true } : { short: '전월', label: '전월 대비', avg: true, note: pm ? '전월 비교는 일평균 기준' : '', col: '전월 대비' };
@@ -481,7 +504,7 @@ function render() {
   } else {
     const L = D.periods[view], k = pkey[view], i = L.findIndex(x => x.k === k), m = L[i];
     const pm = view === 'day' ? L[i - 7] || null : wFind(addDay(m.e, -7));
-    history.replaceState(null, '', `#p=${ptab}&v=${view}&k=${k}`);
+    history.replaceState(null, '', `#p=${ptab}&v=${view}&k=${k}${MKT ? '&t=' + mtab : ''}`);
     CMP = view === 'day'
       ? { short: '지난주 같은 요일', label: `지난주 ${wday(m.s)}요일 대비`, avg: false, note: pm ? `지난주 같은 요일(${MD(pm.s)})과 비교` : '', col: '지난주 대비' }
       : { short: '이전 7일', label: '이전 7일 대비', avg: false, note: pm ? `이전 7일(${dRange(pm.s, pm.e)})과 비교` : '', col: '이전 7일 대비' };
@@ -495,7 +518,7 @@ function render() {
   $('#app').innerHTML = `
   ${MKT ? `<section class="hero">
     <h1>예스폼싸인 마케팅</h1>
-    <p>광고 · 지면 · 유입 채널 · 바이럴 점검 | 데이터 ${D0(D.range.start)} ~ ${D0(D.range.end)} · ${upd()}</p>
+    <p>데이터 ~ ${D0(D.range.end)} · ${upd()}</p>
     ${stale()}
     ${quickLinks()}
     <div class="clinks">${MKT_CONSOLES.map(([n, d, u]) => `<a class="clink" href="${u}" target="_blank" rel="noopener">${n} <small>${d}</small> ↗</a>`).join('')}</div>
@@ -517,6 +540,7 @@ function render() {
   ${prod === 'editor' ? editorView(ctx) : ptab === 'signmkt' ? signMktView(ctx) : signView(ctx)}
   <div style="height:60px"></div>`;
   document.querySelectorAll('.ptab').forEach(b => b.onclick = () => { ptab = b.dataset.p; prod = ptab === 'editor' ? 'editor' : 'sign'; render(); });
+  document.querySelectorAll('[data-mt]').forEach(b => b.onclick = () => { mtab = b.dataset.mt; render(); });
   document.querySelectorAll('.seg button[data-m]').forEach(b => b.onclick = () => { month = b.dataset.m; render(); });
   document.querySelectorAll('.seg button[data-k]').forEach(b => b.onclick = () => { pkey[view] = b.dataset.k; render(); });
   const ws = $('#wStart'); if (ws) ws.onchange = () => { const w = ws.value && wFind(addDay(ws.value, 6)); if (w && wFind(addDay(w.e, -7))) { pkey.week = w.k; render(); } else { ws.value = wFind(pkey.week).s; } };
@@ -734,25 +758,73 @@ function srcSections({ m, pm, cd, pd, mk, pmk, label }) {
       <tbody>${ch.map(r => { const p = prevCh[r[0]]; return `<tr><td class="name">${esc(r[0])}${srcTi('ch', r[0])}</td><td>${fmt(r[1])}</td><td>${shareCell(r[1], chTot, chMax)}</td><td>${pm ? dtxt(diff(r[1], p && p[1], cd, pd)) : '-'}</td><td>${fmt(r[2])}</td></tr>`; }).join('')}</tbody>
     </table></div></div></section>`;
 }
-function signMktView({ m, pm, cd, pd, mk, pmk, label }) {
-  const pl = mk.place, plTot = mk.placeTot || [0, 0, 0], plMax = Math.max(...pl.map(r => r[1]), 1);
-  const prevPl = Object.fromEntries((pmk ? pmk.place : []).map(r => [r[0], r]));
-  const ch = mk.ch, chTot = ch.reduce((a, r) => a + r[1], 0), chMax = Math.max(...ch.map(r => r[1]), 1);
-  const prevCh = Object.fromEntries((pmk ? pmk.ch : []).map(r => [r[0], r]));
-  return `
-  ${mktBrief({ m, pm, cd, pd, mk, pmk, label })}
-
-  ${adsOverview({ m, pm, cd, pd, label })}
-
-  ${adsSection({ m, pm, cd, pd, label })}
-
-  ${gadsSection({ m, pm, cd, pd, label })}
-
-  ${(() => { try { return viralSection(); } catch (e) { console.error(e); return ''; } })()}
-
-  ${srcSections({ m, pm, cd, pd, mk, pmk, label })}
-
-  ${mainMenuSection()}`;
+let mtab = 'naver';
+// 채널별 합계 → { c:[노출,클릭,비용], p:[...], pay:[결제], payP:[...], end, on }
+function mktChannels(cur, prev) {
+  const A = D.ads, G = D.gads, M = D.metaAds;
+  const nv = r => { const t = [0, 0, 0]; if (!(A && A.v === 2) || !r) return t; const di = d => Math.round((Date.parse(d) - Date.parse(A.start)) / 864e5), a = di(r[0]), b = di(r[1]);
+    for (const [id, k] of A.meta.g) if (k === 'pl' || k === 'pc') for (const x of (A.d[id] || [])) if (x[0] >= a && x[0] <= b) { t[0] += x[1]; t[1] += x[2]; t[2] += x[3]; } return t; };
+  const gg = r => { if (!r) return [0, 0, 0]; const x = gadsSum(r); return [x[0], x[1], x[2]]; };
+  const mm = r => { const t = [0, 0, 0]; if (!(M && M.ok) || !r) return t; for (const [d, i, c, w] of (M.d || [])) if (d >= r[0] && d <= r[1]) { t[0] += +i; t[1] += +c; t[2] += +w; } return t; };
+  const isM = p => /^(메타 광고|메타 유료광고|페이스북 광고|인스타그램 광고)$/.test(String(p[3] || ''));
+  const pc0 = D.payments ? paysIn(cur[0], cur[1]) : [], pp0 = D.payments && prev ? paysIn(prev[0], prev[1]) : [];
+  const ch = (k, on, f, fp, end) => ({ k, on, c: f(cur), p: f(prev), pay: pc0.filter(fp), payP: pp0.filter(fp), end });
+  return [
+    ch('naver', !!(A && A.v === 2), nv, p => ['pl', 'pc'].includes(adPayCh(p)), A && A.end),
+    ch('google', !!(G && G.v === 1), gg, p => adPayCh(p) === 'g', G && G.end),
+    ch('meta', !!(M && M.ok), mm, isM, M && M.end),
+  ];
+}
+const MCH = { naver: '네이버', google: '구글', meta: '메타' };
+function mktDash({ pm, cd, pd, label }) {
+  const cur = [SEL.s, SEL.e], prev = pm ? (view === 'month' ? [mStart(pm), pm.end] : [pm.s, pm.e]) : null;
+  const R = mktChannels(cur, prev), on = R.filter(r => r.on);
+  const sum = (k, i) => on.reduce((a, r) => a + r[k][i], 0), pw = l => l.reduce((a, p) => a + p[2], 0);
+  const cost = sum('c', 2), costP = sum('p', 2), clk = sum('c', 1), clkP = sum('p', 1);
+  const pays = on.flatMap(r => r.pay), paysP = on.flatMap(r => r.payP), rev = pw(pays), revP = pw(paysP);
+  const d = (a, b) => prev ? dtxt(diff(a, b, cd, pd)) : '';
+  const card = (l, v, u, dd) => `<div class="mk"><div class="l">${l}</div><div class="v">${v}<small>${u}</small></div><div class="d">${dd || '&nbsp;'}</div></div>`;
+  const short = on.filter(r => r.end && r.end < SEL.e).map(r => `${MCH[r.k]} ${MD(r.end)}까지`);
+  return `<section class="mdash"><div class="mh"><b>전체 광고 성과 · ${label}</b><span>${prev ? CMP.label : ''}${short.length ? ` · ${short.join(' · ')} 데이터` : ''}</span></div>
+    <div class="mk5">
+      ${card('광고비', fmt(Math.round(cost)), '원', d(cost, costP))}
+      ${card('클릭', fmt(clk), '회', d(clk, clkP))}
+      ${card('클릭당 비용', clk ? fmt(Math.round(cost / clk)) : '-', '원', clkP ? `${CMP.short} ${won(Math.round(costP / clkP))}` : '')}
+      ${card('광고 경유 결제', fmt(pays.length), '건', won(rev))}
+      ${card('광고비 대비 매출', cost && rev ? pctTxt(rev / cost * 100) : '-', '', pays.length ? `결제당 광고비 ${won(Math.round(cost / pays.length))}` : '')}
+    </div>
+    <div class="mch">${R.map(r => `<button class="mc" type="button" data-mt="${r.k}"><div class="t">${MCH[r.k]}<i>${r.on ? (cost ? pctTxt(r.c[2] / cost * 100) : '-') : '연동 전'}</i></div>${r.on ? `<dl>
+      <div><dt>광고비</dt><dd>${won(Math.round(r.c[2]))}</dd></div><div><dt>클릭</dt><dd>${fmt(r.c[1])}</dd></div>
+      <div><dt>클릭당</dt><dd>${r.c[1] ? won(Math.round(r.c[2] / r.c[1])) : '-'}</dd></div><div><dt>결제</dt><dd>${fmt(r.pay.length)}건</dd></div></dl>` : '<div class="off">광고 데이터 연동 전</div>'}</button>`).join('')}</div>
+  </section>`;
+}
+function metaSection({ pm, cd, pd, label }) {
+  const M = D.metaAds;
+  if (!(M && M.ok)) return `<div class="mempty">메타 광고 데이터가 아직 연동되지 않았어요. <a href="https://adsmanager.facebook.com/" target="_blank" rel="noopener">광고 관리자 ↗</a></div>`;
+  const days = (M.d || []).filter(r => r[0] >= SEL.s && r[0] <= SEL.e).sort((a, b) => a[0] < b[0] ? 1 : -1);
+  const R = mktChannels([SEL.s, SEL.e], pm ? (view === 'month' ? [mStart(pm), pm.end] : [pm.s, pm.e]) : null).find(r => r.k === 'meta');
+  const c = R.c, p = R.p;
+  return `<section class="blk"><h2>메타 광고</h2>
+    <div class="kpis">
+      ${kpi('광고비', Math.round(c[2]), '원', pm ? diff(c[2], p[2], cd, pd) : null, '')}
+      ${kpi('노출', c[0], '회', pm ? diff(c[0], p[0], cd, pd) : null, '')}
+      ${kpi('클릭', c[1], '회', pm ? diff(c[1], p[1], cd, pd) : null, c[0] ? `클릭률 ${pctTxt(c[1] / c[0] * 100)}` : '')}
+      ${kpi('메타 경유 결제', R.pay.length, '건', null, won(R.pay.reduce((a, x) => a + x[2], 0)))}
+    </div>
+    ${days.length > 1 ? `<div class="card" style="margin-top:12px"><div class="scroll"><table class="tbl"><thead><tr><th>날짜</th><th>광고비</th><th>노출</th><th>클릭</th><th>클릭당</th></tr></thead>
+      <tbody>${days.map(r => `<tr><td class="name">${MD(r[0])} (${wday(r[0])})</td><td>${won(Math.round(r[3]))}</td><td>${fmt(r[1])}</td><td>${fmt(r[2])}</td><td>${r[2] ? won(Math.round(r[3] / r[2])) : '-'}</td></tr>`).join('')}</tbody></table></div></div>` : ''}</section>`;
+}
+function signMktView(ctx) {
+  const safe = f => { try { return f(); } catch (e) { console.error(e); return ''; } };
+  const TABS = [['naver', '네이버'], ['google', '구글'], ['meta', '메타'], ['src', '유입·지면']];
+  const body = mtab === 'google' ? safe(() => gadsSection(ctx))
+    : mtab === 'meta' ? safe(() => metaSection(ctx))
+    : mtab === 'src' ? safe(() => srcSections(ctx)) + safe(() => mainMenuSection())
+    : safe(() => adsSection(ctx)) + safe(() => viralSection());
+  return `${mktDash(ctx)}
+  ${mktBrief(ctx)}
+  <div class="mtabs" role="tablist">${TABS.map(([k, l]) => `<button class="mtab" role="tab" data-mt="${k}" aria-selected="${mtab === k}">${l}</button>`).join('')}</div>
+  ${body}`;
 }
 
 /* ---------- 메인 메뉴별 이동 (싸인 탭) — 2026-11-18 ----------
