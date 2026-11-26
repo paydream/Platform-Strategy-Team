@@ -116,10 +116,10 @@ const EMBED = window.parent !== window;
 const TIP = '구글 참잘 계정(wwwchamjal@gmail.com)으로 로그인하면 Clarity 녹화를 볼 수 있어요';
 if (EMBED) document.body.classList.add('embed');
 const RANK = { '높음': 3, '중간': 2, '낮음': 1, '정상': 0 };
-const AREA = { all: '예스폼 사이트 전체', member: '예스폼 멤버십 결제', shop: '예스폼 서식 결제', membership: '예스폼 멤버십 안내', settle: '예스폼 결제 페이지', 'sign-all': '예스폼싸인 사이트 전체', 'sign-contract': '예스폼싸인 계약 작성·서명', 'sign-pay': '예스폼싸인 결제' };
-const PROJ = { yesform: 'xfgy2v09sr', sign: 'xfim3z1mrb' };
-const REC = { member: 'member/settle\\.php', shop: 'shop/settle\\.php', membership: 'member/membership\\.php', settle: 'settle\\.php', 'sign-contract': 'document/contract/index\\.php', 'sign-pay': 'payment/payment\\.php' };
-const siteOfArea = a => /^sign/.test(a || '') ? 'sign' : 'yesform';
+const AREA = { all: '예스폼 사이트 전체', member: '예스폼 멤버십 결제', shop: '예스폼 쇼핑몰 결제', 'shop-view': '예스폼 쇼핑몰 상품', 'shop-all': '예스폼 쇼핑몰 전체', membership: '예스폼 멤버십 안내', settle: '예스폼 결제 페이지', 'sign-all': '예스폼싸인 사이트 전체', 'sign-contract': '예스폼싸인 계약 작성·서명', 'sign-pay': '예스폼싸인 결제' };
+const PROJ = { yesform: 'xfgy2v09sr', shop: 'xfgy2v09sr', sign: 'xfim3z1mrb' };
+const REC = { member: 'member/settle\\.php', shop: 'shop/settle\\.php', membership: 'member/membership\\.php', settle: 'settle\\.php', 'sign-contract': 'document/contract/index\\.php', 'sign-pay': 'payment/payment\\.php', 'shop-view': 'shop\\.yesform\\.com/z_n/shop/view' };
+const siteOfArea = a => /^sign/.test(a || '') ? 'sign' : /^shop/.test(a || '') ? 'shop' : 'yesform';
 let D = null;
 const proj = () => (D && D.project) || 'xfgy2v09sr';
 const dayRange = date => { const m = Date.parse(date + 'T00:00:00+09:00'); return [m, m + 864e5 - 1]; };
@@ -187,12 +187,12 @@ function render() {
         ${(v.msgs || []).length ? `<div class="ms">${v.msgs.slice(0, 2).map(([m, n]) => `<div>${esc(m)} · ${n}세션</div>`).join('')}</div>` : ''}
         <div class="rec">${top ? `<a class="btn" data-tip="${TIP}" href="${recUrl(today, re, top[0], si.proj)}" target="_blank" rel="noopener">이 페이지 오류 녹화 보기 ↗</a>` : `<a class="btn off" data-tip="${TIP}" href="${recUrl(today, re, null, si.proj)}" target="_blank" rel="noopener">페이지 안 오류 없음 · 목록 ↗</a>`}</div></div>`; };
     const n = 2 + (si.pages || []).length;
-    h += `<div class="sh"><h2>${esc(si.name)}</h2><span class="badge r-${siteLv}">${siteLv}</span><span>오늘 세션 ${fmt((day.all || {}).sessions)}</span></div>`;
+    h += `<div class="sh"><h2>${esc(si.name)}</h2><span class="badge r-${siteLv}">${siteLv}</span><span>오늘 세션 ${fmt((day.all || {}).sessions)}${si.scope ? ' · shop.yesform.com을 거친 세션' : ''}${si.report === 'shop' ? ' · 장애 알림 메일 따로 발송' : ''}</span></div>`;
     h += `<div class="areas" style="grid-template-columns:repeat(${n},minmax(0,1fr))">` +
       card('사이트 접속', lv(r => /traffic$/.test(r.key)), ratio == null ? '-' : Math.round(ratio * 100), '%', `직전 ${H}시간(${hmMs(t.start)}~${hmMs(t.end)}) / 지난주 같은 시간`,
         [[`직전 ${H}시간 세션`, fmt(t.now)], ['지난주 같은 시간', fmt(t.lastWeek)], ['높음 기준', `${Math.round((C.trafficHigh || .5) * 100)}% 미만`]]) +
       card('사이트 오류', lv(r => /site-errors|site-rate|new:all:/.test(r.key)), pc(r3.rate), '', '최근 3시간 오류 난 세션 비율',
-        [['최근 3시간 세션', fmt(r3.sessions)], ['오늘 오류 난 세션', pc((day.all || {}).rate)], ['높음 기준', `${pc(C.siteRate3hHigh || 8)} 이상`]]) +
+        [['최근 3시간 세션', fmt(r3.sessions)], ['오늘 오류 난 세션', pc((day.all || {}).rate)], ['높음 기준', `${pc(si.rateHigh || C.siteRate3hHigh || 8)} 이상`]]) +
       (si.pages || []).map(pageCard).join('') + '</div>';
   }
 
@@ -214,7 +214,7 @@ function render() {
 
   // 판정 기준
   h += `<div class="card"><h2>위험도 기준 <span>높음만 위 기록에 남아요</span></h2><table class="crit">
-    <tr><td><span class="badge r-높음">높음</span></td><td>접속이 지난주 같은 시간의 ${Math.round((C.trafficHigh || .5) * 100)}% 미만(예스폼 직전 1시간 · 싸인 직전 3시간) · 최근 3시간 사이트 오류 난 세션 ${pc(C.siteRate3hHigh)} 이상 · 핵심 페이지(예스폼 멤버십 결제·서식 결제·멤버십 안내, 싸인 계약 작성·서명·결제) 안에서 버튼 클릭 직후 오류가 난 세션이 기준 이상(예스폼·싸인 계약 2세션, 싸인 결제 1세션) · 페이지 안 오류 세션 ${pc(C.pageRateHigh)} 이상(세션 ${C.pageMin}개 이상) · 예스폼 최근 3시간 결제 페이지 접속 0</td></tr>
+    <tr><td><span class="badge r-높음">높음</span></td><td>접속이 지난주 같은 시간의 ${Math.round((C.trafficHigh || .5) * 100)}% 미만(예스폼 직전 1시간 · 쇼핑몰 6시간 · 싸인 3시간) · 최근 3시간 오류 난 세션 ${pc(C.siteRate3hHigh)} 이상(쇼핑몰 25%) · 핵심 페이지(예스폼 멤버십 결제·멤버십 안내, 쇼핑몰 결제·상품, 싸인 계약 작성·서명·결제) 안에서 버튼 클릭 직후 오류가 난 세션이 기준 이상(쇼핑몰 결제·싸인 결제 1세션, 나머지 2세션) · 페이지 안 오류 세션 ${pc(C.pageRateHigh)} 이상(세션 ${C.pageMin}개 이상) · 예스폼 최근 3시간 멤버십 결제 페이지 접속 0</td></tr>
     <tr><td><span class="badge r-중간">중간</span></td><td>접속 ${Math.round((C.trafficMid || .7) * 100)}% 미만 · 사이트 오늘 오류 난 세션 ${pc(C.siteRateTodayMid)} 이상 · 핵심 페이지 안 오류 1세션 이상</td></tr>
     <tr><td><span class="badge r-낮음">낮음</span></td><td>사이트 다른 곳의 새 오류</td></tr>
     <tr><td></td><td style="color:var(--faint)">핵심 페이지 수치는 녹화의 이벤트 기록을 열어 오류가 그 페이지에서 났을 때만 셉니다(다른 페이지에서 난 오류는 제외).</td></tr></table></div>`;
