@@ -2,6 +2,87 @@
   "version": 2,
   "projects": [
     {
+      "id": "20261126-172850-yesform-brief-rulebook-v1",
+      "title": "연말연초 업무 브리핑 모달 · 룰북 기준",
+      "team": "planning",
+      "category": "관리자",
+      "desc": "2027 서식 개정 룰북·매칭표를 기준으로 연말연초 모달을 만들면 어떻게 되는지 보는 화면. 현재 예스폼 모달 설정은 그대로 둠.",
+      "created": "2026.11.26",
+      "updated": "2026.11.26",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261126-172850-yesform-brief-rulebook-v1",
+          "label": "v1 · 룰북 기준 모달",
+          "title": "연말연초 업무 브리핑 모달 · 룰북 기준",
+          "desc": "룰북(시행일 2026.11~2027.2) 개정 24건을 모달 일정으로 변환, 추천 서식은 매칭표에서 다운로드 많은 순 3개. 현재 모달과 차이(새로 추가 18, 같은 개정 6) 표시.",
+          "created": "2026.11.26",
+          "folder": "archive/20261126-172850-yesform-brief-rulebook-v1",
+          "preview": "archive/20261126-172850-yesform-brief-rulebook-v1/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "룰북 기준 모달",
+              "href": "archive/20261126-172850-yesform-brief-rulebook-v1/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX/?node-id=200-591"
+        },
+        {
+          "id": "20261126-174227-yesform-brief-rulebook-v2",
+          "label": "v2 · 시트 「모달_룰북기준」 연동",
+          "title": "연말연초 업무 브리핑 모달 · 룰북 기준",
+          "desc": "룰북 개정 24건을 시트 「모달_룰북기준」에 모달 콘텐츠로 입력(대상·화면 항목명·주요 내용·서식 3개·배지). 미리보기는 이 시트만 사용(현재 모달 일정 제외). 룰북과 표가 어긋나면 「룰북 점검」에 표시.",
+          "created": "2026.11.26",
+          "folder": "archive/20261126-174227-yesform-brief-rulebook-v2",
+          "preview": "archive/20261126-174227-yesform-brief-rulebook-v2/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "룰북 기준 모달",
+              "href": "archive/20261126-174227-yesform-brief-rulebook-v2/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX/?node-id=200-591"
+        },
+        {
+          "id": "20261126-174844-yesform-brief-rulebook-v3",
+          "label": "v3 · 상단 정리",
+          "title": "연말연초 업무 브리핑 모달 · 룰북 기준",
+          "desc": "중복 제목·설명 삭제, 상단을 한 줄(기준·버튼)로 정리, 요약 카드 높이 축소.",
+          "created": "2026.11.26",
+          "folder": "archive/20261126-174844-yesform-brief-rulebook-v3",
+          "preview": "archive/20261126-174844-yesform-brief-rulebook-v3/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "룰북 기준 모달",
+              "href": "archive/20261126-174844-yesform-brief-rulebook-v3/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX/?node-id=200-591"
+        },
+        {
+          "id": "20261126-175738-yesform-brief-rulebook-v4",
+          "label": "v4 · D-day 오늘 기준",
+          "title": "연말연초 업무 브리핑 모달 · 룰북 기준",
+          "desc": "배지·경과 표시를 오늘 날짜 기준으로 계산(실제 모달과 동일).",
+          "created": "2026.11.26",
+          "folder": "archive/20261126-175738-yesform-brief-rulebook-v4",
+          "preview": "archive/20261126-175738-yesform-brief-rulebook-v4/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "룰북 기준 모달",
+              "href": "archive/20261126-175738-yesform-brief-rulebook-v4/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX/?node-id=200-591"
+        }
+      ]
+    },
+    {
       "id": "20261120-170306-yesform-brief-admin",
       "title": "연말연초 업무 브리핑 모달 · 콘텐츠 관리 (관리자)",
       "team": "planning",
@@ -251,70 +332,6 @@
               "href": "archive/20261126-175636-yesform-brief-admin-v15/index.html"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "20261126-172850-yesform-brief-rulebook-v1",
-      "title": "연말연초 업무 브리핑 모달 · 룰북 기준",
-      "team": "planning",
-      "category": "관리자",
-      "desc": "2027 서식 개정 룰북·매칭표를 기준으로 연말연초 모달을 만들면 어떻게 되는지 보는 화면. 현재 예스폼 모달 설정은 그대로 둠.",
-      "created": "2026.11.26",
-      "updated": "2026.11.26",
-      "hidden": false,
-      "final": null,
-      "versions": [
-        {
-          "id": "20261126-172850-yesform-brief-rulebook-v1",
-          "label": "v1 · 룰북 기준 모달",
-          "title": "연말연초 업무 브리핑 모달 · 룰북 기준",
-          "desc": "룰북(시행일 2026.11~2027.2) 개정 24건을 모달 일정으로 변환, 추천 서식은 매칭표에서 다운로드 많은 순 3개. 현재 모달과 차이(새로 추가 18, 같은 개정 6) 표시.",
-          "created": "2026.11.26",
-          "folder": "archive/20261126-172850-yesform-brief-rulebook-v1",
-          "preview": "archive/20261126-172850-yesform-brief-rulebook-v1/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "룰북 기준 모달",
-              "href": "archive/20261126-172850-yesform-brief-rulebook-v1/index.html"
-            }
-          ],
-          "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX/?node-id=200-591"
-        },
-        {
-          "id": "20261126-174227-yesform-brief-rulebook-v2",
-          "label": "v2 · 시트 「모달_룰북기준」 연동",
-          "title": "연말연초 업무 브리핑 모달 · 룰북 기준",
-          "desc": "룰북 개정 24건을 시트 「모달_룰북기준」에 모달 콘텐츠로 입력(대상·화면 항목명·주요 내용·서식 3개·배지). 미리보기는 이 시트만 사용(현재 모달 일정 제외). 룰북과 표가 어긋나면 「룰북 점검」에 표시.",
-          "created": "2026.11.26",
-          "folder": "archive/20261126-174227-yesform-brief-rulebook-v2",
-          "preview": "archive/20261126-174227-yesform-brief-rulebook-v2/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "룰북 기준 모달",
-              "href": "archive/20261126-174227-yesform-brief-rulebook-v2/index.html"
-            }
-          ],
-          "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX/?node-id=200-591"
-        },
-        {
-          "id": "20261126-174844-yesform-brief-rulebook-v3",
-          "label": "v3 · 상단 정리",
-          "title": "연말연초 업무 브리핑 모달 · 룰북 기준",
-          "desc": "중복 제목·설명 삭제, 상단을 한 줄(기준·버튼)로 정리, 요약 카드 높이 축소.",
-          "created": "2026.11.26",
-          "folder": "archive/20261126-174844-yesform-brief-rulebook-v3",
-          "preview": "archive/20261126-174844-yesform-brief-rulebook-v3/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "룰북 기준 모달",
-              "href": "archive/20261126-174844-yesform-brief-rulebook-v3/index.html"
-            }
-          ],
-          "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX/?node-id=200-591"
         }
       ]
     },
