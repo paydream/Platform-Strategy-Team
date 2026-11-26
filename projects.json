@@ -2,196 +2,13 @@
   "version": 2,
   "projects": [
     {
-      "id": "20261126-172850-yesform-brief-rulebook-v1",
-      "title": "연말연초 업무 브리핑 모달 · 룰북 기준",
-      "team": "planning",
-      "category": "관리자",
-      "desc": "2027 서식 개정 룰북·매칭표를 기준으로 연말연초 모달을 만들면 어떻게 되는지 보는 화면. 현재 예스폼 모달 설정은 그대로 둠.",
-      "created": "2026.11.26",
-      "updated": "2026.11.26",
-      "hidden": false,
-      "final": null,
-      "versions": [
-        {
-          "id": "20261126-172850-yesform-brief-rulebook-v1",
-          "label": "v1 · 룰북 기준 모달",
-          "title": "연말연초 업무 브리핑 모달 · 룰북 기준",
-          "desc": "룰북(시행일 2026.11~2027.2) 개정 24건을 모달 일정으로 변환, 추천 서식은 매칭표에서 다운로드 많은 순 3개. 현재 모달과 차이(새로 추가 18, 같은 개정 6) 표시.",
-          "created": "2026.11.26",
-          "folder": "archive/20261126-172850-yesform-brief-rulebook-v1",
-          "preview": "archive/20261126-172850-yesform-brief-rulebook-v1/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "룰북 기준 모달",
-              "href": "archive/20261126-172850-yesform-brief-rulebook-v1/index.html"
-            }
-          ],
-          "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX/?node-id=200-591"
-        },
-        {
-          "id": "20261126-174227-yesform-brief-rulebook-v2",
-          "label": "v2 · 시트 「모달_룰북기준」 연동",
-          "title": "연말연초 업무 브리핑 모달 · 룰북 기준",
-          "desc": "룰북 개정 24건을 시트 「모달_룰북기준」에 모달 콘텐츠로 입력(대상·화면 항목명·주요 내용·서식 3개·배지). 미리보기는 이 시트만 사용(현재 모달 일정 제외). 룰북과 표가 어긋나면 「룰북 점검」에 표시.",
-          "created": "2026.11.26",
-          "folder": "archive/20261126-174227-yesform-brief-rulebook-v2",
-          "preview": "archive/20261126-174227-yesform-brief-rulebook-v2/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "룰북 기준 모달",
-              "href": "archive/20261126-174227-yesform-brief-rulebook-v2/index.html"
-            }
-          ],
-          "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX/?node-id=200-591"
-        },
-        {
-          "id": "20261126-174844-yesform-brief-rulebook-v3",
-          "label": "v3 · 상단 정리",
-          "title": "연말연초 업무 브리핑 모달 · 룰북 기준",
-          "desc": "중복 제목·설명 삭제, 상단을 한 줄(기준·버튼)로 정리, 요약 카드 높이 축소.",
-          "created": "2026.11.26",
-          "folder": "archive/20261126-174844-yesform-brief-rulebook-v3",
-          "preview": "archive/20261126-174844-yesform-brief-rulebook-v3/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "룰북 기준 모달",
-              "href": "archive/20261126-174844-yesform-brief-rulebook-v3/index.html"
-            }
-          ],
-          "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX/?node-id=200-591"
-        }
-      ]
-    },
-    {
-      "id": "20261126-170559-membership",
-      "title": "멤버십 개편 페이지",
-      "team": "planning",
-      "category": "멤버십 개편",
-      "desc": "",
-      "created": "2026.11.26",
-      "updated": "2026.11.26",
-      "hidden": false,
-      "final": null,
-      "versions": [
-        {
-          "id": "20261126-171628-membership",
-          "label": "v3",
-          "title": "멤버십 개편 페이지",
-          "desc": "",
-          "created": "2026.11.26",
-          "folder": "archive/20261126-171628-membership",
-          "preview": "archive/20261126-171628-membership/멤버십개편_한눈에보기.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "멤버십개편_한눈에보기",
-              "href": "archive/20261126-171628-membership/멤버십개편_한눈에보기.html"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "20261126-163946-design",
-      "title": "[예스폼싸인] 이용요금 디자인",
-      "team": "design",
-      "category": "웹 메인",
-      "desc": "",
-      "created": "2026.11.26",
-      "updated": "2026.11.26",
-      "hidden": false,
-      "final": null,
-      "versions": [
-        {
-          "id": "20261126-163946-design",
-          "label": "v1",
-          "title": "[예스폼싸인] 이용요금 디자인",
-          "desc": "",
-          "created": "2026.11.26",
-          "folder": "archive/20261126-163946-design",
-          "preview": "archive/20261126-163946-design/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261126-163946-design/index.html"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "20261123-173640-design",
-      "title": "[예스폼] 이용요금 디자인 시안",
-      "team": "design",
-      "category": "웹 메인",
-      "desc": "",
-      "created": "2026.11.23",
-      "updated": "2026.11.26",
-      "hidden": false,
-      "final": null,
-      "versions": [
-        {
-          "id": "20261123-173640-design",
-          "label": "v1",
-          "title": "[예스폼] 이용요금 디자인 시안",
-          "desc": "",
-          "created": "2026.11.23",
-          "folder": "archive/20261123-173640-design",
-          "preview": "archive/20261123-173640-design/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261123-173640-design/index.html"
-            }
-          ]
-        },
-        {
-          "id": "20261123-174316-design",
-          "label": "v2",
-          "title": "[예스폼] 이용요금 디자인 시안",
-          "desc": "",
-          "created": "2026.11.23",
-          "folder": "archive/20261123-174316-design",
-          "preview": "archive/20261123-174316-design/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261123-174316-design/index.html"
-            }
-          ]
-        },
-        {
-          "id": "20261126-163752-design",
-          "label": "v3",
-          "title": "[예스폼] 이용요금 디자인 시안",
-          "desc": "",
-          "created": "2026.11.26",
-          "folder": "archive/20261126-163752-design",
-          "preview": "archive/20261126-163752-design/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261126-163752-design/index.html"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "id": "20261120-170306-yesform-brief-admin",
       "title": "연말연초 업무 브리핑 모달 · 콘텐츠 관리 (관리자)",
       "team": "planning",
       "category": "관리자",
       "desc": "예스폼 메인 로그인 모달(연말연초 업무 브리핑)의 콘텐츠 관리 화면. 시트 「모달_확정안_서식」 내용을 표로 보여 주고, 표를 고치면 모달 미리보기가 바로 바뀜.",
       "created": "2026.11.20",
-      "updated": "2026.11.25",
+      "updated": "2026.11.26",
       "hidden": true,
       "final": null,
       "versions": [
@@ -416,6 +233,205 @@
             {
               "label": "콘텐츠 관리 대시보드",
               "href": "archive/20261125-172741-yesform-brief-admin-v14/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261126-175636-yesform-brief-admin-v15",
+          "label": "v15 · D-day 오늘 기준",
+          "title": "연말연초 업무 브리핑 모달 · 콘텐츠 관리 (관리자)",
+          "desc": "배지 D-day를 예스폼 실제 모달처럼 오늘 날짜 기준으로 계산(이전: 이번 주 월요일).",
+          "created": "2026.11.26",
+          "folder": "archive/20261126-175636-yesform-brief-admin-v15",
+          "preview": "archive/20261126-175636-yesform-brief-admin-v15/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "콘텐츠 관리 대시보드",
+              "href": "archive/20261126-175636-yesform-brief-admin-v15/index.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "20261126-172850-yesform-brief-rulebook-v1",
+      "title": "연말연초 업무 브리핑 모달 · 룰북 기준",
+      "team": "planning",
+      "category": "관리자",
+      "desc": "2027 서식 개정 룰북·매칭표를 기준으로 연말연초 모달을 만들면 어떻게 되는지 보는 화면. 현재 예스폼 모달 설정은 그대로 둠.",
+      "created": "2026.11.26",
+      "updated": "2026.11.26",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261126-172850-yesform-brief-rulebook-v1",
+          "label": "v1 · 룰북 기준 모달",
+          "title": "연말연초 업무 브리핑 모달 · 룰북 기준",
+          "desc": "룰북(시행일 2026.11~2027.2) 개정 24건을 모달 일정으로 변환, 추천 서식은 매칭표에서 다운로드 많은 순 3개. 현재 모달과 차이(새로 추가 18, 같은 개정 6) 표시.",
+          "created": "2026.11.26",
+          "folder": "archive/20261126-172850-yesform-brief-rulebook-v1",
+          "preview": "archive/20261126-172850-yesform-brief-rulebook-v1/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "룰북 기준 모달",
+              "href": "archive/20261126-172850-yesform-brief-rulebook-v1/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX/?node-id=200-591"
+        },
+        {
+          "id": "20261126-174227-yesform-brief-rulebook-v2",
+          "label": "v2 · 시트 「모달_룰북기준」 연동",
+          "title": "연말연초 업무 브리핑 모달 · 룰북 기준",
+          "desc": "룰북 개정 24건을 시트 「모달_룰북기준」에 모달 콘텐츠로 입력(대상·화면 항목명·주요 내용·서식 3개·배지). 미리보기는 이 시트만 사용(현재 모달 일정 제외). 룰북과 표가 어긋나면 「룰북 점검」에 표시.",
+          "created": "2026.11.26",
+          "folder": "archive/20261126-174227-yesform-brief-rulebook-v2",
+          "preview": "archive/20261126-174227-yesform-brief-rulebook-v2/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "룰북 기준 모달",
+              "href": "archive/20261126-174227-yesform-brief-rulebook-v2/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX/?node-id=200-591"
+        },
+        {
+          "id": "20261126-174844-yesform-brief-rulebook-v3",
+          "label": "v3 · 상단 정리",
+          "title": "연말연초 업무 브리핑 모달 · 룰북 기준",
+          "desc": "중복 제목·설명 삭제, 상단을 한 줄(기준·버튼)로 정리, 요약 카드 높이 축소.",
+          "created": "2026.11.26",
+          "folder": "archive/20261126-174844-yesform-brief-rulebook-v3",
+          "preview": "archive/20261126-174844-yesform-brief-rulebook-v3/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "룰북 기준 모달",
+              "href": "archive/20261126-174844-yesform-brief-rulebook-v3/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX/?node-id=200-591"
+        }
+      ]
+    },
+    {
+      "id": "20261126-170559-membership",
+      "title": "멤버십 개편 페이지",
+      "team": "planning",
+      "category": "멤버십 개편",
+      "desc": "",
+      "created": "2026.11.26",
+      "updated": "2026.11.26",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261126-171628-membership",
+          "label": "v3",
+          "title": "멤버십 개편 페이지",
+          "desc": "",
+          "created": "2026.11.26",
+          "folder": "archive/20261126-171628-membership",
+          "preview": "archive/20261126-171628-membership/멤버십개편_한눈에보기.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "멤버십개편_한눈에보기",
+              "href": "archive/20261126-171628-membership/멤버십개편_한눈에보기.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "20261126-163946-design",
+      "title": "[예스폼싸인] 이용요금 디자인",
+      "team": "design",
+      "category": "웹 메인",
+      "desc": "",
+      "created": "2026.11.26",
+      "updated": "2026.11.26",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261126-163946-design",
+          "label": "v1",
+          "title": "[예스폼싸인] 이용요금 디자인",
+          "desc": "",
+          "created": "2026.11.26",
+          "folder": "archive/20261126-163946-design",
+          "preview": "archive/20261126-163946-design/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261126-163946-design/index.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "20261123-173640-design",
+      "title": "[예스폼] 이용요금 디자인 시안",
+      "team": "design",
+      "category": "웹 메인",
+      "desc": "",
+      "created": "2026.11.23",
+      "updated": "2026.11.26",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261123-173640-design",
+          "label": "v1",
+          "title": "[예스폼] 이용요금 디자인 시안",
+          "desc": "",
+          "created": "2026.11.23",
+          "folder": "archive/20261123-173640-design",
+          "preview": "archive/20261123-173640-design/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261123-173640-design/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261123-174316-design",
+          "label": "v2",
+          "title": "[예스폼] 이용요금 디자인 시안",
+          "desc": "",
+          "created": "2026.11.23",
+          "folder": "archive/20261123-174316-design",
+          "preview": "archive/20261123-174316-design/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261123-174316-design/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261126-163752-design",
+          "label": "v3",
+          "title": "[예스폼] 이용요금 디자인 시안",
+          "desc": "",
+          "created": "2026.11.26",
+          "folder": "archive/20261126-163752-design",
+          "preview": "archive/20261126-163752-design/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261126-163752-design/index.html"
             }
           ]
         }
