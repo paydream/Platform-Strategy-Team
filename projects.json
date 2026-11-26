@@ -2,6 +2,35 @@
   "version": 2,
   "projects": [
     {
+      "id": "20261126-170559-membership",
+      "title": "멤버십 개편 페이지",
+      "team": "planning",
+      "category": "멤버십 개편",
+      "desc": "",
+      "created": "2026.11.26",
+      "updated": "2026.11.26",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261126-170559-membership",
+          "label": "v1",
+          "title": "멤버십 개편 페이지",
+          "desc": "",
+          "created": "2026.11.26",
+          "folder": "archive/20261126-170559-membership",
+          "preview": "archive/20261126-170559-membership/멤버십개편_한눈에보기.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "멤버십개편_한눈에보기",
+              "href": "archive/20261126-170559-membership/멤버십개편_한눈에보기.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "20261126-163946-design",
       "title": "[예스폼싸인] 이용요금 디자인",
       "team": "design",
