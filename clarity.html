@@ -123,6 +123,8 @@ const proj = () => (D && D.project) || 'xfgy2v09sr';
 const dayRange = date => { const m = Date.parse(date + 'T00:00:00+09:00'); return [m, m + 864e5 - 1]; };
 // msg가 있으면 그 오류 문구로 거른 녹화(이 페이지를 거치고 이 오류가 난 세션), 없으면 이 페이지를 거치고 오류가 난 세션 전체
 const recUrl = (date, re, msg, pj) => { const [s, e] = dayRange(date); return `https://clarity.microsoft.com/projects/view/${pj || proj()}/impressions?URL=${encodeURIComponent('2;6;' + re)}&date=Custom&start=${s}&end=${e}&ScriptErrorText=${msg ? encodeURIComponent('0_' + msg) : 'scriptErrorEventCount'}`; };
+// 녹화 목록: 기간(s~e) + (있으면) 사이트 범위 URL + (errOnly면) 자바스크립트 오류 난 세션만
+const impUrl = (pj, s, e, re, errOnly) => `https://clarity.microsoft.com/projects/view/${pj || proj()}/impressions?date=Custom&start=${Math.round(s)}&end=${Math.round(e)}` + (re ? '&URL=' + encodeURIComponent('2;6;' + re) : '') + (errOnly ? '&ScriptErrorText=scriptErrorEventCount' : '');
 const dashUrl = (s, e, re, pj) => `https://clarity.microsoft.com/projects/view/${pj || proj()}/dashboard?date=Custom&start=${s}&end=${e}` + (re ? '&URL=' + encodeURIComponent('2;6;' + re) : '');
 
 function postH() { if (EMBED) try { parent.postMessage({ type: 'auto-h', h: document.documentElement.scrollHeight }, '*'); } catch {} }
@@ -166,8 +168,8 @@ function render() {
   const today = dateK(L.at);
   const SL = D.siteList || [{ id: 'yesform', name: '예스폼', proj: PROJ.yesform, trafWinH: 1, pages: ['member', 'shop', 'membership'].map(id => ({ id })) }];
   const SS = L.sites || { yesform: { traffic: L.traffic, recent3h: L.recent3h, day: L.day, pages: L.pages } };
-  const card = (title, level, big, unit, q, rows) => `<div class="area ${level === '높음' ? 'hot' : ''}"><div class="l">${title}<span class="badge r-${level}">${level}</span></div>
-    <div class="v">${big}<small>${unit}</small></div><div class="q">${q}</div>${rows.map(([a, b]) => `<div class="row"><span>${a}</span><b>${b}</b></div>`).join('')}</div>`;
+  const card = (title, level, big, unit, q, rows, link) => `<div class="area ${level === '높음' ? 'hot' : ''}"><div class="l">${title}<span class="badge r-${level}">${level}</span></div>
+    <div class="v">${big}<small>${unit}</small></div><div class="q">${q}</div>${rows.map(([a, b]) => `<div class="row"><span>${a}</span><b>${b}</b></div>`).join('')}${link ? `<div class="rec"><a class="btn${link.off ? ' off' : ''}" data-tip="${TIP}" href="${link.href}" target="_blank" rel="noopener">${link.label}</a></div>` : ''}</div>`;
   for (const si of SL) {
     const S = SS[si.id]; if (!S) continue;
     const sr = risks.filter(r => (r.site || siteOfArea(r.area)) === si.id);
@@ -188,9 +190,11 @@ function render() {
     h += `<div class="sh"><h2>${esc(si.name)}</h2><span class="badge r-${siteLv}">${siteLv}</span><span>오늘 세션 ${fmt((day.all || {}).sessions)}${si.scope ? ' · shop.yesform.com을 거친 세션' : ''}${si.report === 'shop' ? ' · 장애 알림 메일 따로 발송' : ''}</span></div>`;
     h += `<div class="areas" style="grid-template-columns:repeat(${n},minmax(0,1fr))">` +
       card('사이트 접속', lv(r => /traffic$/.test(r.key)), ratio == null ? '-' : Math.round(ratio * 100), '%', `직전 ${H}시간(${hmMs(t.start)}~${hmMs(t.end)}) / 지난주 같은 시간`,
-        [[`직전 ${H}시간 세션`, fmt(t.now)], ['지난주 같은 시간', fmt(t.lastWeek)], ['높음 기준', `${Math.round((C.trafficHigh || .5) * 100)}% 미만`]]) +
+        [[`직전 ${H}시간 세션`, fmt(t.now)], ['지난주 같은 시간', fmt(t.lastWeek)], ['높음 기준', `${Math.round((C.trafficHigh || .5) * 100)}% 미만`]],
+        t.start ? { href: impUrl(si.proj, t.start, t.end, si.scope), label: `이 시간대 녹화 보기 ↗`, off: lv(r => /traffic$/.test(r.key)) === '정상' } : null) +
       card('사이트 오류', lv(r => /site-errors|site-rate|new:all:/.test(r.key)), pc(r3.rate), '', '최근 3시간 오류 난 세션 비율',
-        [['최근 3시간 세션', fmt(r3.sessions)], ['오늘 오류 난 세션', pc((day.all || {}).rate)], ['높음 기준', `${pc(si.rateHigh || C.siteRate3hHigh || 8)} 이상`]]) +
+        [['최근 3시간 세션', fmt(r3.sessions)], ['오늘 오류 난 세션', pc((day.all || {}).rate)], ['높음 기준', `${pc(si.rateHigh || C.siteRate3hHigh || 8)} 이상`]],
+        { href: impUrl(si.proj, Date.parse(L.at) - 3 * 3600e3, Date.parse(L.at), si.scope, true), label: '최근 3시간 오류 녹화 보기 ↗', off: lv(r => /site-errors|site-rate|new:all:/.test(r.key)) === '정상' }) +
       (si.pages || []).map(pageCard).join('') + '</div>';
   }
 
