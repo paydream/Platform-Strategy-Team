@@ -76,6 +76,10 @@
   .mtabs{display:flex;gap:6px;margin-top:22px;border-bottom:1px solid var(--line)}
   .mtab{font:inherit;font-size:15px;font-weight:600;color:var(--sub);background:none;border:0;border-bottom:2px solid transparent;padding:10px 14px;cursor:pointer;margin-bottom:-1px}
   .mtab[aria-selected="true"]{color:var(--text);border-bottom-color:#0b6b35}
+  .sug{list-style:none;margin:14px 0 0;padding:12px 16px;background:var(--card);border:1px solid var(--line);border-radius:14px;display:flex;flex-direction:column;gap:7px;font-size:14px}
+  .sug li{display:flex;gap:8px;align-items:baseline}
+  .sug b.k{flex:none;font-size:11.5px;padding:1px 7px;border-radius:6px;background:#eef0f3;color:#4e5968}
+  .sug b.k.cut{background:#fdecec;color:#c92a2a}.sug b.k.up{background:#e8f7ee;color:#0b6b35}.sug b.k.test{background:#efeaff;color:#5b3fd1}
   .mempty{margin-top:14px;background:var(--card);border:1px dashed #d6dbe1;border-radius:14px;padding:22px;color:var(--sub);font-size:14px}
   @media (max-width:960px){.mk5{grid-template-columns:repeat(2,1fr)}.mch{grid-template-columns:1fr}}
   .qlink{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px 0 10px;background:#fff;border:1px solid #bfe6cd;border-radius:10px;text-decoration:none;color:var(--text);font-size:14px;white-space:nowrap;max-width:100%;transition:border-color .15s,box-shadow .15s}
@@ -815,13 +819,53 @@ function metaSection({ pm, cd, pd, label }) {
     ${days.length > 1 ? `<div class="card" style="margin-top:12px"><div class="scroll"><table class="tbl"><thead><tr><th>날짜</th><th>광고비</th><th>노출</th><th>클릭</th><th>클릭당</th></tr></thead>
       <tbody>${days.map(r => `<tr><td class="name">${MD(r[0])} (${wday(r[0])})</td><td>${won(Math.round(r[3]))}</td><td>${fmt(r[1])}</td><td>${fmt(r[2])}</td><td>${r[2] ? won(Math.round(r[3] / r[2])) : '-'}</td></tr>`).join('')}</tbody></table></div></div>` : ''}</section>`;
 }
+// 채널별 진행 제안 (주간·월간만, 한 줄씩) — sign-marketing.html suggest() 규칙을 옮김 (2026-11-26)
+function chSug(ch, { pm }) {
+  if (view === 'day') return '';
+  const cur = [SEL.s, SEL.e], prev = pm ? (view === 'month' ? [mStart(pm), pm.end] : [pm.s, pm.e]) : null;
+  const L = [], it = (k, t) => L.push(`<li><b class="k ${k}">${{ cut: '줄이기', up: '늘리기', chk: '점검', test: '테스트' }[k]}</b><span>${t}</span></li>`);
+  const nd = Math.round((Date.parse(SEL.e) - Date.parse(SEL.s)) / 864e5) + 1;
+  if (ch === 'naver') {
+    const A = D.ads; if (!(A && A.v === 2) || SEL.s > A.end) return '';
+    const di = d => Math.round((Date.parse(d) - Date.parse(A.start)) / 864e5);
+    const sum = (id, r) => { const t = [0, 0, 0, 0, 0, 0]; if (!r) return t; const a = di(r[0]), b = di(r[1]); for (const x of (A.d[id] || [])) if (x[0] >= a && x[0] <= b) for (let i = 0; i < 6; i++) t[i] += x[i + 1]; return t; };
+    const T = (k, r) => A.meta.g.filter(g => g[1] === k).reduce((a, g) => sum(g[0], r).map((v, i) => a[i] + v), [0, 0, 0, 0, 0, 0]);
+    const pl = T('pl', cur), plp = T('pl', prev), pc = T('pc', cur), nCost = pl[2] + pc[2];
+    const K = A.meta.k.map(([id, kw, , , , , , camp]) => { const c = sum(id, cur); return { kw, camp, c, rnk: c[0] ? c[5] / c[0] : 0 }; });
+    const waste = K.filter(k => !k.c[3] && k.c[2] >= Math.max(3000, nCost * 0.04)).sort((a, b) => b.c[2] - a.c[2]).slice(0, 3);
+    if (waste.length) it('cut', `결제 없는 고비용 키워드 입찰 20~30% 하향: ${waste.map(k => `<b>${esc(k.kw)}</b> ${won(k.c[2])}`).join(', ')}`);
+    const win = K.filter(k => k.c[3] > 0).sort((a, b) => b.c[3] - a.c[3]).slice(0, 3);
+    if (win.length) it('up', `결제 키워드 ${win.map(k => `<b>${esc(k.kw)}</b> ${fmt(k.c[3])}건(${k.rnk ? k.rnk.toFixed(1) : '-'}위)`).join(', ')}${win.some(k => k.rnk > 3) ? ' · 3위 밖은 입찰 상향' : ' · 순위 유지'}`);
+    const c1 = pl[1] ? pl[2] / pl[1] : 0, c0 = plp[1] ? plp[2] / plp[1] : 0;
+    if (prev && c1 && c0 && Math.abs(c1 - c0) / c0 > 0.15) it(c1 > c0 ? 'chk' : 'up', `파워링크 클릭당 ${won(Math.round(c0))} → ${won(Math.round(c1))}${c1 > c0 ? ' · 경쟁 키워드 순위·입찰 확인' : ' · 전환 키워드 입찰 상향 여지'}`);
+    const dead = A.meta.g.filter(g => g[1] === 'pc' && g[3] && !sum(g[0], cur)[0]);
+    if (dead.length) it('chk', `켜져 있는데 노출 0인 파워콘텐츠 그룹 ${dead.length}개 · 검수·입찰가 확인`);
+  } else if (ch === 'google') {
+    const G = D.gads; if (!(G && G.v === 1) || SEL.s > G.end) return '';
+    const g = gadsSum(cur), mo = gadsSum(cur, 'mo'), gp = gadsSum(prev), pays = (D.payments ? paysIn(cur[0], cur[1]) : []).filter(p => adPayCh(p) === 'g');
+    if (g[2] && mo[2] / g[2] >= 0.3) it('cut', `휴대전화 광고비 ${pctTxt(mo[2] / g[2] * 100)}(${won(Math.round(mo[2]))}) · 휴대전화 입찰 -30%`);
+    const bud = G.camp && G.camp.budget; if (bud) { const u = g[2] / nd / bud * 100; if (u >= 90) it('chk', `일 예산 소진율 ${pctTxt(u)} · 예산 증액보다 성과 없는 키워드 정리`); else if (u < 50) it('up', `일 예산 소진율 ${pctTxt(u)} · 전환 키워드 입찰 상향 여지`); }
+    const cv = gadsCv(cur) || {}, buy = cv['예스폼싸인_구매'] || 0;
+    if (!buy && !pays.length && g[2]) it('chk', `광고비 ${won(Math.round(g[2]))}에 결제 0건 · 검색어 보고서에서 제외 키워드 추가`);
+    const c1 = g[1] ? g[2] / g[1] : 0, c0 = gp[1] ? gp[2] / gp[1] : 0;
+    if (prev && c1 && c0 && Math.abs(c1 - c0) / c0 > 0.15) it('chk', `클릭당 ${won(Math.round(c0))} → ${won(Math.round(c1))} · 입찰 전략·검색어 확인`);
+  } else if (ch === 'meta') {
+    const M = D.metaAds; if (!(M && M.ok)) return '';
+    const m = mktChannels(cur, prev).find(r => r.k === 'meta');
+    if (!m.c[2]) { it('chk', '집행 없음 · 다시 켤지 결정'); it('test', '재개 시 홈 대신 서식 전용 페이지(서식 미리보기 → 서명 요청)로 연결'); }
+    else { const ctr = m.c[0] ? m.c[1] / m.c[0] * 100 : 0; if (ctr && ctr < 0.8) it('test', `클릭률 ${pctTxt(ctr)} · 업무 상황형 첫 문장 소재 추가`); }
+    it('chk', '광고 URL에 utm_source=meta 붙여 결제 출처 구분');
+  }
+  return L.length ? `<ul class="sug">${L.slice(0, 4).join('')}</ul>` : '';
+}
 function signMktView(ctx) {
   const safe = f => { try { return f(); } catch (e) { console.error(e); return ''; } };
   const TABS = [['naver', '네이버'], ['google', '구글'], ['meta', '메타'], ['src', '유입·지면']];
-  const body = mtab === 'google' ? safe(() => gadsSection(ctx))
+  const sug = ['naver', 'google', 'meta'].includes(mtab) ? safe(() => chSug(mtab, ctx)) : '';
+  const body = sug + (mtab === 'google' ? safe(() => gadsSection(ctx))
     : mtab === 'meta' ? safe(() => metaSection(ctx))
     : mtab === 'src' ? safe(() => srcSections(ctx)) + safe(() => mainMenuSection())
-    : safe(() => adsSection(ctx)) + safe(() => viralSection());
+    : safe(() => adsSection(ctx)) + safe(() => viralSection()));
   return `${mktDash(ctx)}
   ${mktBrief(ctx)}
   <div class="mtabs" role="tablist">${TABS.map(([k, l]) => `<button class="mtab" role="tab" data-mt="${k}" aria-selected="${mtab === k}">${l}</button>`).join('')}</div>
