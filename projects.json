@@ -28,6 +28,23 @@
             }
           ],
           "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX/?node-id=200-591"
+        },
+        {
+          "id": "20261126-174227-yesform-brief-rulebook-v2",
+          "label": "v2 · 시트 「모달_룰북기준」 연동",
+          "title": "연말연초 업무 브리핑 모달 · 룰북 기준",
+          "desc": "룰북 개정 24건을 시트 「모달_룰북기준」에 모달 콘텐츠로 입력(대상·화면 항목명·주요 내용·서식 3개·배지). 미리보기는 이 시트만 사용(현재 모달 일정 제외). 룰북과 표가 어긋나면 「룰북 점검」에 표시.",
+          "created": "2026.11.26",
+          "folder": "archive/20261126-174227-yesform-brief-rulebook-v2",
+          "preview": "archive/20261126-174227-yesform-brief-rulebook-v2/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "룰북 기준 모달",
+              "href": "archive/20261126-174227-yesform-brief-rulebook-v2/index.html"
+            }
+          ],
+          "figma": "https://www.figma.com/design/qH9puRCOmTRfDDyMGqubIX/?node-id=200-591"
         }
       ]
     },
