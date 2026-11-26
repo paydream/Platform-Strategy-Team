@@ -128,4 +128,29 @@
     } }; if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', addSub); else addSub(); })(grp, cur);
     nav.setAttribute('data-done', '1');
   }
+  // 예스폼 오류 모니터링: 아직 확인하지 않은 치명 장애(위험도 높음)가 있으면 메뉴를 「자동관리(확인필요)」로 바꾸고 모니터링 화면으로 바로 연결 (2026-11-26)
+  // 모니터링 화면(clarity.html)에서 「확인했어요」를 체크하면 window.pstClarityAlert(0)으로 바로 원래대로 돌아간다.
+  var paintAlert = function (n) {
+    var links = document.querySelectorAll('a.gnb-item');
+    for (var i = 0; i < links.length; i++) {
+      var a = links[i], h = a.getAttribute('data-href0') || a.getAttribute('href');
+      if (h !== 'auto.html') continue;
+      if (!a.getAttribute('data-href0')) { a.setAttribute('data-href0', 'auto.html'); a.setAttribute('data-title0', a.getAttribute('title') || ''); }
+      var old = a.querySelector('.gnb-alert');
+      if (n > 0) {
+        if (!old) { var s = document.createElement('span'); s.className = 'gnb-alert'; s.textContent = '(확인필요)'; s.style.cssText = 'color:#e03131;font-weight:700;margin-left:2px;white-space:nowrap'; (a.querySelector('.gnb-label') || a).appendChild(s); }
+        a.setAttribute('href', 'auto.html?id=clarity'); a.setAttribute('title', '예스폼 오류 모니터링 · 확인이 필요한 치명 장애 ' + n + '건');
+      } else {
+        if (old) old.parentNode.removeChild(old);
+        a.setAttribute('href', 'auto.html'); a.setAttribute('title', a.getAttribute('data-title0') || '');
+      }
+    }
+  };
+  window.pstClarityAlert = paintAlert;
+  if (window.fetch && navs.length) {
+    fetch('/api/clarity-alert?summary=1', { cache: 'no-store', credentials: 'same-origin' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { if (j && j.count) paintAlert(j.count); })
+      .catch(function () {});
+  }
 })();
