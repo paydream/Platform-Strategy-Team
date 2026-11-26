@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>멤버십 개편 한눈에 보기</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+/* Layout: 좌측 패널(트리 메뉴) | 우측(상단 바: 경로·조건·이전/다음 + 화면 iframe) */
+:root{--brand:#2f7bf5;--ink:#1d2433;--muted:#6b7385;--line:#e4e7ee;--bg:#eef0f4;--side:#1d2433;--side-line:#2d364a;--side-txt:#aab3c5}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font-family:"Pretendard","Malgun Gothic","Apple SD Gothic Neo",sans-serif;color:var(--ink);background:var(--bg);display:flex}
+button{font:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible{outline:2px solid #8fb8ff;outline-offset:2px}
+
+/* 좌측 패널 */
+.side{flex:none;width:280px;height:100%;background:var(--side);color:#fff;display:flex;flex-direction:column;transition:margin-left .2s}
+body.fold .side{margin-left:-280px}
+.side-head{padding:20px 20px 16px;border-bottom:1px solid var(--side-line)}
+.side-head .eyebrow{font-size:11px;font-weight:700;color:#7fa9ff;letter-spacing:.06em}
+.side-head h1{margin:4px 0 0;font-size:18px;font-weight:800}
+.tree{flex:1;overflow:auto;padding:10px 0 24px}
+.tree ul{list-style:none;margin:0;padding:0}
+
+/* 1단계: 섹션(이용요금 > 결제 / 마이페이지) */
+.sec-btn{width:100%;display:flex;align-items:center;gap:8px;border:0;background:none;color:#fff;font-size:14px;font-weight:700;padding:12px 20px 8px;text-align:left}
+.sec-btn .car,.grp-btn .car{font-size:10px;color:var(--side-txt);transition:transform .15s;width:10px}
+.closed > .sec-btn .car,.closed > .grp-btn .car{transform:rotate(-90deg)}
+.closed > ul{display:none}
+
+/* 2단계: 시안 그룹(A시안 / B시안) */
+.grp-btn{width:100%;display:flex;align-items:center;gap:8px;border:0;background:none;color:#dfe5f0;font-size:13px;font-weight:700;padding:8px 20px 6px 32px;text-align:left}
+.grp-btn .tag{margin-left:auto;font-size:11px;font-weight:500;color:var(--side-txt)}
+
+/* 3단계: 화면 */
+.item{width:100%;display:flex;align-items:baseline;gap:8px;border:0;background:none;color:var(--side-txt);font-size:13px;padding:7px 16px 7px 50px;text-align:left;border-left:3px solid transparent}
+.item:hover{color:#fff;background:rgba(255,255,255,.04)}
+.item.on{color:#fff;background:rgba(47,123,245,.18);border-left-color:var(--brand);font-weight:600}
+.item .n{font-size:11px;color:#6f7a90;font-variant-numeric:tabular-nums;min-width:16px}
+.item.proto{color:#9cc0ff}
+.item.proto .n{color:#7fa9ff}
+.sec > ul > li > .item{padding-left:34px}
+
+.side-foot{padding:12px 20px;border-top:1px solid var(--side-line);font-size:12px;color:#7d879b;line-height:1.6}
+.side-foot kbd{border:1px solid #3a4459;border-bottom-width:2px;border-radius:4px;padding:0 5px;font-size:11px;color:#c9d1e0}
+
+/* 우측 */
+.main{flex:1;min-width:0;height:100%;display:flex;flex-direction:column}
+.bar{flex:none;display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:#fff;border-bottom:1px solid var(--line);padding:10px 16px;min-height:56px}
+.fold-btn{width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:#fff;display:grid;place-items:center;font-size:15px;color:var(--muted)}
+.crumb{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.crumb b{color:var(--ink);font-size:15px;margin-left:4px}
+.sp{flex:1}
+.cond{font-size:12px;color:#3d4a63;background:#f1f4f9;border-radius:6px;padding:4px 9px;white-space:nowrap}
+.newtab{font-size:12px;color:var(--brand);text-decoration:none;white-space:nowrap}
+.nav{display:inline-flex;align-items:center;gap:6px}
+.nav button{width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--ink);font-size:16px;display:grid;place-items:center}
+.nav button:disabled{opacity:.35;cursor:default}
+.count{font-size:13px;font-variant-numeric:tabular-nums;color:var(--muted);min-width:52px;text-align:center}
+.stage{flex:1;min-height:0;position:relative}
+.stage iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff;display:none}
+.stage iframe.on{display:block}
+
+@media (max-width:760px){
+  .side{position:fixed;z-index:5;left:0;top:0;box-shadow:4px 0 20px rgba(0,0,0,.25)}
+  .cond,.newtab{display:none}
+}
+</style>
+</head>
+<body>
+
+<aside class="side" aria-label="화면 목록">
+  <div class="side-head">
+    <div class="eyebrow">예스폼</div>
+    <h1>멤버십 개편</h1>
+  </div>
+  <nav class="tree" id="tree"></nav>
+  <div class="side-foot">
+    <kbd>←</kbd> <kbd>→</kbd> 이전/다음 화면 · <kbd>[</kbd> 패널 접기<br>
+    화면 안쪽을 누른 뒤에는 위쪽 바를 한 번 눌러 주세요.
+  </div>
+</aside>
+
+<div class="main">
+  <header class="bar">
+    <button class="fold-btn" id="fold" aria-label="패널 접기/펴기" title="패널 접기/펴기">☰</button>
+    <div class="crumb" id="crumb"></div>
+    <span class="sp"></span>
+    <span class="cond" id="cond"></span>
+    <a class="newtab" id="newtab" target="_blank" rel="noopener">새 탭에서 열기 ↗</a>
+    <div class="nav">
+      <button type="button" id="prev" aria-label="이전 화면">←</button>
+      <span class="count" id="count" aria-live="polite"></span>
+      <button type="button" id="next" aria-label="다음 화면">→</button>
+    </div>
+  </header>
+  <main class="stage" id="stage"></main>
+</div>
+
+<script>
+/*
+  메뉴 구성: 이 파일 기준 상대 경로
+  - A_페이지형/, B_모달형/ : 결제흐름A_페이지형.zip, 결제흐름B_모달형.zip 과 같은 파일
+  - 정기결제관리/정기결제관리_리스트.html : 마이페이지 시안
+*/
+const MENU = [
+  { sec: '이용요금 > 결제', items: [
+    { title: 'A시안 · 페이지형', src: 'A_페이지형/index.html', cond: '이용요금 → 결제 페이지 → 결제 완료' },
+    { title: 'B시안 · 모달형', src: 'B_모달형/index.html', cond: '이용요금 / 서식 썸네일 → 결제 모달 → 결제 완료' },
+  ]},
+  { sec: '마이페이지', items: [
+    { title: '정기결제 관리', src: '정기결제관리/정기결제관리_리스트.html', cond: '정기결제 현황 · 해지' },
+  ]},
+];
+
+// 평탄화: 이전/다음 이동 순서
+const FLAT = [];
+MENU.forEach(s => {
+  (s.groups || [{ items: s.items }]).forEach(g => g.items.forEach(it => {
+    FLAT.push(Object.assign({ sec: s.sec, grp: g.name || '', tag: g.tag || '' }, it));
+  }));
+});
+
+const $ = s => document.querySelector(s);
+const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+let idx = 0;
+const itemBtn = it => {
+  const i = FLAT.indexOf(FLAT.find(f => f.src === it.src));
+  const n = it.proto ? '▶' : (FLAT.slice(0, i + 1).filter(f => !f.proto && f.grp === FLAT[i].grp && f.sec === FLAT[i].sec).length);
+  return `<li><button type="button" class="item${it.proto ? ' proto' : ''}" data-i="${i}"><span class="n">${n}</span>${esc(it.title)}</button></li>`;
+};
+$('#tree').innerHTML = '<ul>' + MENU.map(s => `
+  <li class="sec">
+    <button type="button" class="sec-btn" aria-expanded="true"><span class="car">▼</span>${esc(s.sec)}</button>
+    <ul>${s.groups
+      ? s.groups.map(g => `<li class="grp">
+          <button type="button" class="grp-btn" aria-expanded="true"><span class="car">▼</span>${esc(g.name)}<span class="tag">${esc(g.tag)}</span></button>
+          <ul>${g.items.map(itemBtn).join('')}</ul></li>`).join('')
+      : s.items.map(itemBtn).join('')}
+    </ul>
+  </li>`).join('') + '</ul>';
+
+// 화면 iframe은 처음 볼 때 만들고 유지 (시안 안에서 누른 상태가 이동 후에도 남도록)
+const frames = {};
+function show(i) {
+  idx = Math.max(0, Math.min(FLAT.length - 1, i));
+  const it = FLAT[idx];
+  if (!frames[idx]) {
+    const f = document.createElement('iframe');
+    f.src = encodeURI(it.src);
+    f.title = it.title;
+    $('#stage').appendChild(f);
+    frames[idx] = f;
+  }
+  Object.entries(frames).forEach(([k, f]) => f.classList.toggle('on', +k === idx));
+  document.querySelectorAll('.item').forEach(b => b.classList.toggle('on', +b.dataset.i === idx));
+  // 선택한 항목이 접힌 그룹 안에 있으면 펼침
+  const cur = document.querySelector(`.item[data-i="${idx}"]`);
+  cur.closest('.grp')?.classList.remove('closed');
+  cur.closest('.sec')?.classList.remove('closed');
+  cur.scrollIntoView({ block: 'nearest' });
+
+  $('#crumb').innerHTML = esc([it.sec, it.grp && (it.grp + ' · ' + it.tag)].filter(Boolean).join(' › ')) + ' ›<b>' + esc(it.title) + '</b>';
+  $('#cond').textContent = it.cond ? (it.proto ? '' : '조건 · ') + it.cond : '';
+  $('#cond').hidden = !it.cond;
+  $('#newtab').href = encodeURI(it.src);
+  $('#count').textContent = (idx + 1) + ' / ' + FLAT.length;
+  $('#prev').disabled = idx === 0;
+  $('#next').disabled = idx === FLAT.length - 1;
+  try { history.replaceState(null, '', '#' + idx); } catch (_) {}
+}
+
+$('#tree').addEventListener('click', e => {
+  const item = e.target.closest('.item');
+  if (item) return show(+item.dataset.i);
+  const tog = e.target.closest('.sec-btn, .grp-btn');
+  if (tog) {
+    const li = tog.parentElement;
+    li.classList.toggle('closed');
+    tog.setAttribute('aria-expanded', String(!li.classList.contains('closed')));
+  }
+});
+$('#prev').onclick = () => show(idx - 1);
+$('#next').onclick = () => show(idx + 1);
+$('#fold').onclick = () => document.body.classList.toggle('fold');
+document.addEventListener('keydown', e => {
+  if (e.target.closest('input,textarea,select')) return;
+  if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); show(idx + 1); }
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(idx - 1); }
+  if (e.key === '[') document.body.classList.toggle('fold');
+});
+show(parseInt(location.hash.slice(1), 10) || 0);
+</script>
+</body>
+</html>

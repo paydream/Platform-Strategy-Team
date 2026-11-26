@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>멤버십 결제</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap">
+<style>
+/* Layout: 헤더 → 좌측(요금제 → 결제수단 → 결제 전 확인 → 동의) + 우측 고정 결제 요약 → 약정 안내 모달 → 완료 */
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --sub:#f5f6f8; --fg:#191c22; --muted:#5d6472; --faint:#9aa1ad; --line:#e3e6ec;
+  --accent:#1f6fe5; --accent-soft:#e9f1ff; --accent-fg:#ffffff; --pink:#e5336f;
+  --save:#12804a; --save-soft:#e3f5ea; --warn:#b4561a; --warn-soft:#fdf0e6; --scrim:rgba(15,18,26,.5);
+  --font:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12141a; --surface:#1b1e26; --sub:#20242d; --fg:#eef0f4; --muted:#a2a9b6; --faint:#6b7280; --line:#2c303b;
+  --accent:#6f9dff; --accent-soft:#232c45; --accent-fg:#0d1020; --pink:#ff7fa6;
+  --save:#5fd393; --save-soft:#173325; --warn:#f0a56d; --warn-soft:#3a2617; --scrim:rgba(0,0,0,.6); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12141a; --surface:#1b1e26; --sub:#20242d; --fg:#eef0f4; --muted:#a2a9b6; --faint:#6b7280; --line:#2c303b;
+  --accent:#6f9dff; --accent-soft:#232c45; --accent-fg:#0d1020; --pink:#ff7fa6;
+  --save:#5fd393; --save-soft:#173325; --warn:#f0a56d; --warn-soft:#3a2617; --scrim:rgba(0,0,0,.6); color-scheme:dark}
+
+*{box-sizing:border-box}
+[hidden]{display:none !important} /* .sub-row 등 display 지정 요소도 숨김 처리 */
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{text-wrap:balance;margin:0;line-height:1.35}
+button{font:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible+span{outline:2px solid var(--accent);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+
+/* 헤더 */
+.site-head{background:var(--surface);border-bottom:1px solid var(--line);
+  margin-left:calc(-1 * max(16px,env(safe-area-inset-left,0px)));margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)));
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.site-head-in{max-width:1080px;margin:0 auto;padding-block:16px;display:flex;align-items:center;justify-content:space-between;gap:12px 24px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:16px}
+.logo-img{height:44px;width:auto;display:block;border-radius:4px}
+.brand-sub{font-size:20px;font-weight:700}
+.acct-row{font-size:15px}
+.acct-row em{font-style:normal;color:var(--accent);font-weight:500}
+
+.wrap{max-width:1080px;margin:0 auto;padding-block:40px 112px}
+.demo{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--muted);border:1px dashed var(--line);border-radius:10px;padding:10px 14px;background:var(--surface);margin-bottom:32px}
+.demo b{color:var(--fg)}
+.demo-top{max-width:1080px;margin:12px auto}
+.demo label{display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:var(--fg);font-weight:500}
+.page-title{font-size:28px;font-weight:800;letter-spacing:-.02em;margin-bottom:28px}/* 좌: 요금제 → 결제 정보 → 결제수단 → 결제 전 확인 / 우(고정): 결제 금액 → 동의 → 결제 버튼 */
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 416px;gap:24px;align-items:start}
+@media (max-width:900px){.layout{grid-template-columns:1fr}.summary{position:static}}
+/* 모바일: 결제하기 버튼이 화면 아래에 떠 있다가, 원래 버튼이 보이면 사라짐 */
+.float-pay{display:none}
+@media (max-width:900px){
+  .float-pay{display:block;position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);box-shadow:0 -6px 20px rgba(0,0,0,.08);
+    padding:12px max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));transition:transform .2s,opacity .2s}
+  .float-pay[data-hide="true"]{transform:translateY(100%);opacity:0;pointer-events:none}
+  .float-pay .pay-btn{margin-top:0}
+}
+
+.box{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px}
+.col{display:flex;flex-direction:column;gap:16px}
+.box h2{font-size:17px;font-weight:800;display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.box h2 .n{width:24px;height:24px;border-radius:50%;background:var(--fg);color:var(--bg);font-size:12px;display:grid;place-items:center;flex:none}
+
+/* 선택한 요금제 (고정) */
+.chosen{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1.5px solid var(--accent);background:var(--accent-soft);border-radius:12px;padding:16px 18px}
+.chosen .t{font-weight:800;font-size:18px;display:flex;align-items:center;gap:8px}
+.chosen .d{font-size:13px;color:var(--muted)}
+.chosen .ptag{font-size:11px;font-weight:700;color:var(--accent);background:var(--surface);border-radius:999px;padding:2px 8px}
+.change{font-size:13px;font-weight:700;color:var(--muted);white-space:nowrap}
+.fixed{font-size:15px;font-weight:700}
+.fixed .d{font-weight:500;font-size:13px;color:var(--muted);margin-left:6px}
+.demo select{font:inherit;font-size:13px;padding:2px 6px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--fg)}
+/* 요금제 선택 */
+.plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.opt{position:relative;display:block;cursor:pointer}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt>span{display:flex;flex-direction:column;gap:2px;height:100%;border:1.5px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--surface)}
+.opt input:checked+span{border-color:var(--accent);background:var(--accent-soft)}
+.opt input:disabled+span{opacity:.45;cursor:not-allowed}
+.opt .t{font-weight:800;font-size:16px}
+.opt .d{font-size:13px;color:var(--muted)}
+.opt .tag{position:absolute;top:-9px;right:12px;font-size:11px;font-weight:800;background:var(--accent);color:var(--accent-fg);border-radius:999px;padding:1px 8px}
+.sub-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px;margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
+.sub-row .lab{font-size:14px;font-weight:700;min-width:64px}
+.cycle{display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;min-width:260px}
+.cycle .opt>span{flex-direction:row;justify-content:space-between;align-items:center;padding:12px 14px}
+.save{font-size:12px;font-weight:700;color:var(--save);background:var(--save-soft);padding:1px 8px;border-radius:999px}
+.stepper{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.stepper button{width:38px;height:38px;border:0;background:var(--sub);color:var(--fg);font-size:18px}
+.stepper output{min-width:56px;text-align:center;font-weight:700}
+.hint{font-size:13px;color:var(--muted)}
+@media (max-width:560px){.plans{grid-template-columns:1fr}}
+
+/* 결제수단 */
+.pays{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.pays .opt>span{align-items:center;justify-content:center;text-align:center;padding:14px 8px;min-height:66px}
+.pays .t{font-size:14px;font-weight:700}
+.pays .d{font-size:11px;color:var(--warn)}
+@media (max-width:560px){.pays{grid-template-columns:1fr 1fr}}
+
+/* 결제 전 확인 */
+.check{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.check li{display:grid;grid-template-columns:20px 1fr;gap:8px;font-size:14px;line-height:1.5}
+.check li svg{margin-top:2px;color:var(--accent)}
+.check b{font-weight:inherit}
+
+/* 동의 */
+.agree{display:flex;flex-direction:column;gap:10px}
+.agree label{display:flex;align-items:center;gap:10px;font-size:14px;cursor:pointer}
+.agree label.all{font-weight:800;font-size:15px;padding-bottom:12px;border-bottom:1px solid var(--line);margin-bottom:2px}
+.agree input{width:18px;height:18px;accent-color:var(--accent);flex:none;margin:0}
+.agree .req{color:var(--accent);font-weight:700}
+.agree a{margin-left:auto;font-size:13px;color:var(--muted);white-space:nowrap}
+/* 동의: 대표 1줄 + 세부 항목 (시안 3과 같은 구조) */
+.sum-agree{margin-top:16px;padding:12px;border:1px solid var(--line);border-radius:12px;gap:0}
+.sum-agree label.all{font-size:14px;font-weight:700;padding-bottom:0;border-bottom:0;margin:0;align-items:flex-start}
+.sum-agree label.all input{width:18px;height:18px;margin-top:2px}
+.sum-agree .c-sub{display:flex;flex-direction:column;gap:8px;margin-top:10px;padding:10px 0 0;border-top:1px solid var(--line)}
+.sum-agree .c-sub label{font-size:12px;color:var(--muted);gap:10px}
+.sum-agree .c-sub input{margin-left:1.5px}
+.sum-agree .c-sub label>span{white-space:nowrap}
+@media (max-width:480px){.sum-agree .c-sub label>span{white-space:normal}}
+.sum-agree .c-sub input{width:15px;height:15px}
+.sum-agree .c-sub a{font-size:12px;text-decoration:underline;text-underline-offset:3px}
+/* 12개월 약정 안내 */
+.pledge{font-size:13px;line-height:1.6}
+.pledge ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+.pledge li{display:flex;gap:6px}
+.pledge li::before{content:"*";flex:none}
+.pledge-link{margin-top:8px;border:0;background:none;padding:0;font-size:13px;font-weight:500;color:var(--muted);text-decoration:underline;text-underline-offset:4px}
+/* 접히는 확인 사항 */
+.fold summary{list-style:none;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.fold summary::-webkit-details-marker{display:none}
+.fold summary h2{margin:0}
+.fold summary .chev{color:var(--muted);transition:transform .2s}
+.fold[open] summary .chev{transform:rotate(180deg)}
+.fold[open] summary{margin-bottom:16px}
+.fold summary:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:6px}
+
+/* 요약 */
+.summary{position:sticky;top:16px}
+/* 결제 금액 박스 */
+.summary .rows{gap:12px;padding:16px 0;border-top:0;border-bottom:1px solid var(--line);font-size:15px}
+.summary .rows:first-child{padding-top:4px}
+.summary .rows dd{font-weight:700}
+.summary .rows .minus{color:var(--pink)}
+.summary .total{border-top:0;padding-top:20px;align-items:center}
+.summary .total span:first-child{font-weight:700}
+.summary .total b{color:var(--fg);font-size:30px}
+.summary .total small{font-size:16px;font-weight:700;margin-left:1px}
+.vat-note{margin:12px 0 0;text-align:center;font-size:13px;color:var(--muted)}
+/* 요금제 칸의 이용 기간·약정 만료일 */
+.period{margin:16px 0 0;padding-top:16px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px;font-size:14px}
+.period div{display:flex;gap:12px}
+.period dt{min-width:64px;font-weight:700}
+.period dd{margin:0}
+.period .d{color:var(--muted);margin-left:6px;font-size:13px}
+.summary h2{margin-bottom:14px}
+.sum-plan{font-size:18px;font-weight:800}
+.sum-sub{font-size:13px;color:var(--muted);margin-bottom:16px}
+.rows{display:flex;flex-direction:column;gap:8px;font-size:14px;padding:14px 0;border-top:1px solid var(--line)}
+.rows div{display:flex;justify-content:space-between;gap:12px}
+.rows dt{color:var(--muted)}
+.rows dd{margin:0;text-align:right}
+.rows .disc{color:var(--save);font-weight:700}
+.total{display:flex;justify-content:space-between;align-items:baseline;border-top:2px solid var(--fg);padding-top:14px}
+.total span:first-child{font-weight:800}
+.total b{font-size:26px;font-weight:800;letter-spacing:-.02em;color:var(--accent)}
+.per{text-align:right;font-size:13px;color:var(--muted);margin-top:2px;min-height:1.6em}
+.pay-btn{width:100%;margin-top:18px;font-weight:800;font-size:16px;border:0;border-radius:12px;padding:15px;background:var(--accent);color:var(--accent-fg)}
+.pay-btn:disabled{background:var(--line);color:var(--faint);cursor:not-allowed}
+.renew{margin-top:12px;font-size:12px;color:var(--muted);text-align:center}
+
+/* 모달 */
+dialog{border:0;padding:0;border-radius:18px;background:var(--surface);color:var(--fg);width:min(500px,calc(100vw - 32px));max-height:calc(100dvh - 48px);box-shadow:0 24px 60px rgba(0,0,0,.25)}
+dialog::backdrop{background:var(--scrim)}
+.m-in{display:flex;flex-direction:column;max-height:calc(100dvh - 48px)}
+.m-body{padding:28px 24px 4px;overflow:auto;display:flex;flex-direction:column;gap:16px}
+.m-body h2{font-size:21px;font-weight:800}
+.m-body .lede{margin:-6px 0 0;color:var(--muted)}
+.m-foot{display:flex;gap:8px;padding:16px 24px 24px}
+.btn{flex:1;font-weight:700;font-size:15px;border-radius:10px;padding:12px 18px;border:1px solid var(--line);background:var(--surface);color:var(--fg)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.terms{border:1px solid var(--line);border-radius:12px;padding:4px 16px}
+.terms div{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-top:1px solid var(--line);font-size:14px}
+.terms div:first-child{border-top:0}
+.terms dt{color:var(--muted);flex:none}
+.terms dd{margin:0;text-align:right;font-weight:700}
+.alert{display:flex;gap:10px;background:var(--warn-soft);border-radius:12px;padding:12px 14px;font-size:14px}
+.alert svg{flex:none;color:var(--warn);margin-top:2px}
+.ic{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;margin:0 auto}
+.ic.ok{background:var(--save-soft);color:var(--save)}
+.ic.no{background:var(--warn-soft);color:var(--warn)}
+.center{text-align:center}
+
+/* 결제 진행 로딩 */
+.loading{max-width:520px;margin:64px auto 0;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px}
+.loading h1{font-size:22px;font-weight:800}
+.loading p{margin:0;color:var(--muted)}
+.spin{width:48px;height:48px;border-radius:50%;border:4px solid var(--accent-soft);border-top-color:var(--accent);animation:sp .9s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin{animation-duration:2.4s}}
+/* 완료 */
+.done{max-width:520px;margin:24px auto 0;text-align:center;display:flex;flex-direction:column;gap:16px}
+.done h1{font-size:26px;font-weight:800}
+.done p{margin:0;color:var(--muted)}
+.done .terms{text-align:left}
+.done .acts{display:flex;gap:8px}
+</style>
+
+<header class="site-head">
+  <div class="site-head-in">
+    <div class="brand"><img class="logo-img" src="logo.png" alt="예스폼" width="90" height="46"><span class="brand-sub">MEMBERSHIP</span></div>
+    <div class="acct-row"><em>OOO</em> 님 무료 회원</div>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+
+  <div id="checkout">
+    <h1 class="page-title">멤버십 결제</h1>
+    <div class="layout">
+      <div class="col">
+        <section class="box" aria-labelledby="h1">
+          <h2 id="h1">요금제</h2>
+          <div class="chosen">
+            <div><div class="t" id="cName"></div><div class="d" id="cDesc"></div></div>
+            <a href="index.html" class="change">요금제 변경</a>
+          </div>
+          <div class="sub-row" id="cycleRow">
+            <span class="lab">자동결제 주기</span>
+            <div class="cycle">
+              <label class="opt"><input type="radio" name="cycle" value="year" checked><span><span class="t" style="font-size:15px">연 결제</span><span class="save">31% 할인</span></span></label>
+              <label class="opt"><input type="radio" name="cycle" value="month"><span><span class="t" style="font-size:15px">월 결제</span><span class="d">12개월 약정</span></span></label>
+            </div>
+          </div>
+          <div class="sub-row" id="seatRow" hidden>
+            <span class="lab">이용 인원</span>
+            <div class="stepper"><button type="button" id="minus" aria-label="인원 줄이기">−</button><output id="seats" class="num">3명</output><button type="button" id="plus" aria-label="인원 늘리기">+</button></div>
+            <span class="hint">1인 월 4,000원</span>
+          </div>
+          <div class="sub-row" id="bizCycle" hidden>
+            <span class="lab">자동결제 주기</span>
+            <span class="fixed">매월</span>
+          </div>
+          <dl class="period" id="period"></dl>
+        </section>
+
+        <section class="box" aria-labelledby="h2">
+          <h2 id="h2">결제수단</h2>
+          <div class="pays" id="pays"></div>
+        </section>
+
+        <!-- 결제 전 꼭 확인하세요: 시안 3의 약정 안내 문구로 대체, 월정액일 때만 노출 -->
+        <section class="box" id="pledgeBox" aria-labelledby="hp" hidden>
+          <h2 id="hp">결제 전 꼭 확인하세요</h2>
+          <div class="pledge" id="pledge"></div>
+        </section>
+      </div>
+
+      <aside class="box summary" aria-labelledby="hs">
+        <h2 id="hs">결제 금액</h2>
+        <div id="sRows"></div>
+        <div class="total"><span>총 결제 금액</span><b class="num" id="sTotal"></b></div>
+        <div class="agree sum-agree" id="agree" role="group" aria-label="약관 동의"></div>
+        <button type="button" class="pay-btn" id="payBtn" disabled>결제하기</button>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<div class="float-pay" id="floatPay" data-hide="false"><button type="button" class="pay-btn" id="floatBtn">결제하기</button></div>
+
+<dialog id="dlg" aria-labelledby="mTitle"><div class="m-in" id="mIn"></div></dialog>
+
+<script>
+const won = n => n.toLocaleString('ko-KR') + '원';
+const $ = s => document.querySelector(s);
+const TODAY = new Date(2026, 10, 23);
+const fmt = d => `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+const addM = (n) => { const d = new Date(TODAY); d.setMonth(d.getMonth()+n); return d; };
+const addD = (n) => { const d = new Date(TODAY); d.setDate(d.getDate()+n); return d; };
+
+// 금액은 VAT 별도 기준 (business는 기본 3인 금액, 1인 추가 시 월 4,000원 · 연 결제 없음)
+const PRICE = {
+  basic:{ once:9000 },
+  premium:{ month:12000, year:100000 },
+  business:{ month:12000 },
+};
+const BIZ_BASE = 3, BIZ_ADD = 4000;
+const NAME = { basic:'베이직', premium:'프리미엄', business:'비즈니스' };
+// 결제수단: 가능한 것만 노출 (베이직 단건결제 5종, 프리미엄·비즈니스 자동결제 3종)
+const METHODS = {
+  once: [ { k:'card', t:'신용카드' }, { k:'naver', t:'네이버페이' }, { k:'kakao', t:'카카오페이' }, { k:'phone', t:'휴대폰' }, { k:'bank', t:'실시간 계좌이체' } ],
+  auto: [ { k:'card', t:'신용카드' }, { k:'naver', t:'네이버페이' }, { k:'kakao', t:'카카오페이' } ],
+};
+// 멤버십 페이지에서 넘어온 값 (?plan=business&seats=5). 없으면 시안용 선택값을 씀
+const q = new URLSearchParams(location.search);
+let entryPlan = ['basic','premium','business'].includes(q.get('plan')) ? q.get('plan') : 'premium';
+let seats = Math.max(3, parseInt(q.get('seats'),10) || 3), method = 'card';
+// 이용요금 페이지 프리미엄 카드에서 고른 결제 주기(?cycle=month)를 그대로 반영
+if (q.get('cycle')==='month') document.querySelector('[name=cycle][value=month]').checked = true;
+const DESC = { basic:'', premium:'서식과 계약을 꾸준히 쓸 때', business:'여러 명이 동시에 쓸 때' };
+
+function state(){
+  const plan = entryPlan;
+  const cycle = plan === 'basic' ? 'once' : plan === 'business' ? 'month' : document.querySelector('[name=cycle]:checked').value;
+  const n = plan === 'business' ? seats : 1;
+  const supply = plan === 'business' ? PRICE.business.month + (n - BIZ_BASE) * BIZ_ADD : PRICE[plan][cycle];
+  const vat = Math.round(supply * 0.1);
+  return { plan, cycle, n, supply, vat, total: supply + vat, auto: cycle !== 'once' };
+}
+
+const CK = '<svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M6.4 10.2l2.5 2.5 4.8-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const WARN = '<svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 5.8v5.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="10" cy="14" r="1.1" fill="currentColor"/></svg>';
+
+function render(){
+  const s = state();  // 요금제는 고정: 결제 주기는 프리미엄만 노출
+  $('#cName').innerHTML = NAME[s.plan] + (s.plan==='premium' ? ' <span class="ptag">BEST</span>' : '');
+  $('#cDesc').textContent = DESC[s.plan];
+  $('#cDesc').hidden = !DESC[s.plan];
+  $('#cycleRow').hidden = s.plan !== 'premium';
+  // 이용 기간 (모든 요금제) + 약정 만료일 (월정액만: 프리미엄 월 결제·비즈니스)
+  const until = s.cycle==='month' ? fmt(new Date(addM(1) - 864e5)) : s.cycle==='year' ? fmt(new Date(addM(12) - 864e5)) : fmt(addD(6));
+  let per = `<div><dt>이용 기간</dt><dd class="num">${fmt(TODAY)} ~ ${until}</dd></div>`;  if (s.cycle==='month') per += `<div><dt>약정 만료일</dt><dd class="num">${fmt(new Date(addM(12) - 864e5))}</dd></div>`;
+  // 자동 결제일: 월 결제는 매월 N일, 연 결제는 매년 M월 N일
+  if (s.auto) per += `<div><dt>자동 결제일</dt><dd>${s.cycle==='month' ? `매월 ${TODAY.getDate()}일` : `매년 ${TODAY.getMonth()+1}월 ${TODAY.getDate()}일`}</dd></div>`;
+  // '요금제 변경'으로 돌아갈 때 고른 값(연/월, 인원)을 함께 넘김
+  document.querySelector('.change').href = `index.html?cycle=${s.plan==='premium' ? s.cycle : 'year'}&seats=${seats}`;
+  $('#period').innerHTML = per;
+  $('#seatRow').hidden = s.plan !== 'business';
+  $('#bizCycle').hidden = s.plan !== 'business'; // 비즈니스는 월 결제만: 자동결제 주기를 글자로 표시
+  $('#seats').textContent = seats + '명';
+  $('#minus').disabled = seats <= BIZ_BASE;
+
+  const list = METHODS[s.auto ? 'auto' : 'once'];
+  if (!list.some(m=>m.k===method)) method = 'card';
+  $('#pays').innerHTML = list.map(m=>
+    `<label class="opt"><input type="radio" name="pay" value="${m.k}" ${m.k===method?'checked':''}><span><span class="t">${m.t}</span></span></label>`).join('');
+
+  // 결제 전 꼭 확인하세요: 12개월 약정 안내 (월정액만, 펼친 상태)
+  const pledge = s.cycle==='month';
+  $('#pledgeBox').hidden = !pledge;
+  $('#pledge').innerHTML = pledge ? `<ul><li>${NAME[s.plan]} 월정액 멤버십은 12개월 약정 상품입니다.</li>
+    <li>약정 기간 중 해지하면(결제 실패로 약정이 끝나는 경우 포함) 이용한 서식의 판매가를 기준으로 정산하며, 이미 결제한 금액을 포함해 최대 월 이용요금의 12개월분까지 청구될 수 있습니다.</li></ul>
+    ${s.plan==='premium'?'<button type="button" class="pledge-link" id="toYear">연 결제로 변경하고 31% 할인받기</button>':''}` : '';
+
+  // 약관 동의: 대표 동의 1줄 + 세부 항목 3개 (항상 펼침, 개정 이용약관 제16조의2~7 기준)
+  const prev = {}; document.querySelectorAll('#agree input[data-k]').forEach(i=>prev[i.dataset.k]=i.checked);
+  const terms = [
+    { k:'tos', t:'예스폼 이용약관(멤버십) 동의' },
+    { k:'term', t: pledge ? '12개월 약정·자동결제 및 청약철회 조건 동의' : s.auto ? '자동결제 및 청약철회 조건 동의' : '청약철회 조건 확인' },
+    { k:'pg', t:'결제대행 서비스 이용약관' },
+  ];
+  $('#agree').innerHTML = `<label class="all"><input type="checkbox" id="agAll"><span>주문 내용을 확인했으며 결제에 동의합니다.</span></label>
+    <div class="c-sub">` +
+    terms.map(x=>`<label><input type="checkbox" data-k="${x.k}" ${prev[x.k]?'checked':''}><span><span class="req">[필수]</span> ${x.t}</span><a href="#" onclick="return false">보기</a></label>`).join('') +
+    `</div>`;
+  syncAgree();
+
+  // 요약
+  // 결제 금액: 정가 → (할인) → 할인 적용 금액 → 부가세 → 총 결제 금액. 할인은 프리미엄 연 결제만
+  const list2 = s.cycle==='year' ? PRICE.premium.month * 12 : s.supply;
+  const off = list2 - s.supply;
+  let amt = `<dl class="rows"><div><dt>멤버십 정가</dt><dd class="num">${won(list2)}</dd></div>`;
+  if (off > 0) amt += `<div><dt>할인 금액 (31%)</dt><dd class="num minus">-${won(off)}</dd></div></dl><dl class="rows"><div><dt>할인 적용 금액</dt><dd class="num">${won(s.supply)}</dd></div>`;
+  amt += `<div><dt>부가세</dt><dd class="num">${won(s.vat)}</dd></div></dl>`;
+  $('#sRows').innerHTML = amt;
+  $('#sTotal').innerHTML = `${s.total.toLocaleString('ko-KR')}<small>원</small>`;
+  $('#floatBtn').textContent = `${won(s.total)} 결제하기`;
+}
+
+// 결제 주기를 바꾸면 동의 내용(약정 여부)이 달라지므로 그 항목과 전체 동의만 다시 체크받음
+function resetTermAgree(){
+  const t = document.querySelector('#agree input[data-k="term"]'); if (t) t.checked = false;
+}
+function syncAgree(){
+  const req = [...document.querySelectorAll('#agree input[data-k]')];
+  $('#agAll').checked = req.every(i=>i.checked);
+  $('#payBtn').disabled = !req.every(i=>i.checked);
+}
+document.addEventListener('change', e=>{
+  if (e.target.id === 'agAll'){ document.querySelectorAll('#agree input[data-k]').forEach(i=>i.checked=e.target.checked); syncAgree(); return; }
+  if (e.target.closest('#agree')){ syncAgree(); return; }
+  if (e.target.name === 'pay'){ method = e.target.value; return; }
+  if (e.target.name === 'cycle'){ resetTermAgree(); render(); }
+});
+// 약정 안내의 '연 결제로 변경' 링크
+document.addEventListener('click', e=>{
+  if (e.target.id === 'toYear'){ document.querySelector('[name=cycle][value=year]').checked = true; resetTermAgree(); render(); }
+});
+$('#minus').onclick =()=>{ if (seats>BIZ_BASE){ seats--; render(); } };
+$('#plus').onclick = ()=>{ seats++; render(); };
+
+// 결제하기
+function modal(html){ $('#mIn').innerHTML = html; dlg.showModal(); const t=$('#mIn h2'); if(t){t.id='mTitle';t.tabIndex=-1;t.focus({preventScroll:true});} }
+$('#payBtn').onclick = ()=>{
+  const s = state();
+  // 정산 미결제 회원은 이용요금 페이지에서 버튼을 누를 때 이미 안내하므로 여기서는 확인하지 않음
+  // 확인 모달은 약정 상품(프리미엄 월 결제·비즈니스)만. 연 결제·베이직은 바로 결제
+  if (s.cycle!=='month'){ done(); return; }
+  modal(`<div class="m-body">
+      <h2>${s.cycle==='month'?'월 결제는 12개월 약정이에요':'연 결제는 자동으로 연장돼요'}</h2>
+      <p class="lede">결제 전에 아래 내용을 한 번 더 확인해 주세요.</p>
+      <dl class="terms">
+        <div><dt>요금제</dt><dd>${NAME[s.plan]}${s.plan==='business'?` · ${s.n}명`:''} · ${s.cycle==='month'?'월 결제':'연 결제'}</dd></div>
+        <div><dt>결제 금액</dt><dd class="num">${won(s.total)} (VAT 포함)</dd></div>
+        <div><dt>약정 기간</dt><dd class="num">${fmt(TODAY)} ~ ${fmt(new Date(addM(12)-864e5))}</dd></div>
+        <div><dt>자동 결제일</dt><dd>매월 ${TODAY.getDate()}일</dd></div>
+      </dl>
+      <div class="alert">${WARN}<span>약정 기간 중 해지 시 별도 정산이 필요해요.</span></div>
+    </div>
+    <div class="m-foot"><button type="button" class="btn" data-a="close">취소</button><button type="button" class="btn primary" data-a="ok">확인하고 결제하기</button></div>`);
+};
+$('#mIn').addEventListener('click', e=>{
+  const a = e.target.closest('[data-a]')?.dataset.a;
+  if (a === 'close') dlg.close();
+  if (a === 'ok'){ dlg.close(); done(); }
+});
+dlg.addEventListener('click', e=>{ if (e.target === dlg) dlg.close(); });
+
+// 모바일 플로팅 버튼: 원래 결제하기 버튼이 화면에 보이면 숨김
+new IntersectionObserver(([e])=>{ $('#floatPay').dataset.hide = String(e.isIntersecting); }).observe($('#payBtn'));
+// 약관에 모두 동의했으면 바로 결제, 아니면 약관 동의 위치로 이동
+$('#floatBtn').onclick = ()=>{
+  if (!$('#payBtn').disabled){ $('#payBtn').click(); return; }
+  $('#agree').scrollIntoView({behavior:'smooth', block:'center'});
+};
+
+// 결제하기 → 로딩 화면 → 결제 완료 페이지 (B안과 같은 로딩)
+function done(){
+  $('#floatPay').remove();
+  window.scrollTo(0,0);
+  $('#checkout').innerHTML = `<div class="loading"><div class="spin" role="img" aria-label="결제 진행 중"></div>
+    <h1>결제를 진행하고 있어요</h1><p>결제창에서 결제를 마치면 자동으로 넘어가요.</p></div>`;
+  setTimeout(showDone, 1600);
+}
+function showDone(){
+  const s = state();
+  const until = s.cycle==='month' ? fmt(new Date(addM(1)-864e5)) : s.cycle==='year' ? fmt(new Date(addM(12)-864e5)) : fmt(addD(6));
+  $('#checkout').innerHTML = `<div class="done">
+    <div class="ic ok">${CK.replace(/16/g,'28')}</div>
+    <h1>${NAME[s.plan]} 멤버십이 시작됐어요</h1>
+    <p>지금부터 ${NAME[s.plan]} 혜택을 바로 이용할 수 있어요.</p>
+    <dl class="terms">
+      <div><dt>요금제</dt><dd>${NAME[s.plan]}${s.plan==='business'?` · ${s.n}명`:''} · ${s.cycle==='once'?'7일 이용권':s.cycle==='month'?'월 결제':'연 결제'}</dd></div>
+      <div><dt>결제 금액</dt><dd class="num">${won(s.total)}</dd></div>
+      <div><dt>이용 기간</dt><dd class="num">${fmt(TODAY)} ~ ${until}</dd></div>
+      ${s.auto?`<div><dt>다음 결제일</dt><dd class="num">${fmt(s.cycle==='month'?addM(1):addM(12))}</dd></div>`:''}
+    </dl>
+    <div class="acts"><a class="btn" style="text-decoration:none" href="index.html?grade=${s.plan}${s.plan==='business'?`&seats=${s.n}`:''}">이용요금 페이지로</a><a class="btn primary" style="text-decoration:none" href="index.html?grade=${s.plan}${s.plan==='business'?`&seats=${s.n}`:''}">서식 둘러보기</a></div>
+  </div>`;
+}
+render();
+</script>

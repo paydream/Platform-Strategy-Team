@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>근로계약서 서식</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap">
+<style>
+/* Layout: 헤더(등급 · 멤버십 가입) → 서식 썸네일 목록. 잠긴 서식이나 멤버십 가입을 누르면 바깥 화면의 결제 모달이 열림 */
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --sub:#f5f6f8; --fg:#191c22; --muted:#5d6472; --faint:#9aa1ad; --line:#e3e6ec;
+  --accent:#1f6fe5; --accent-soft:#e9f1ff; --accent-fg:#ffffff; --save:#12804a; --save-soft:#e3f5ea;
+  --font:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12141a; --surface:#1b1e26; --sub:#20242d; --fg:#eef0f4; --muted:#a2a9b6; --faint:#6b7280; --line:#2c303b;
+  --accent:#6f9dff; --accent-soft:#232c45; --accent-fg:#0d1020; --save:#5fd393; --save-soft:#173325; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12141a; --surface:#1b1e26; --sub:#20242d; --fg:#eef0f4; --muted:#a2a9b6; --faint:#6b7280; --line:#2c303b;
+  --accent:#6f9dff; --accent-soft:#232c45; --accent-fg:#0d1020; --save:#5fd393; --save-soft:#173325; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.6;padding:0 16px}
+h1,h3{margin:0;line-height:1.35}
+button{font:inherit;cursor:pointer}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.site-head{background:var(--surface);border-bottom:1px solid var(--line);margin:0 -16px;padding:0 16px}
+.site-head-in{max-width:1080px;margin:0 auto;padding-block:14px;display:flex;align-items:center;justify-content:space-between;gap:12px 24px;flex-wrap:wrap}
+.logo-img{height:40px;width:auto;display:block;border-radius:4px}
+.acct{display:flex;align-items:center;gap:14px}
+.acct em{font-style:normal;color:var(--accent);font-weight:700}
+.join{font-weight:700;font-size:14px;border:0;border-radius:999px;padding:8px 16px;background:var(--accent);color:var(--accent-fg)}
+.join:disabled{background:var(--save-soft);color:var(--save);cursor:default}
+.wrap{max-width:1080px;margin:0 auto;padding-block:32px 80px}
+.page-title{font-size:24px;font-weight:800;margin-bottom:20px}
+.forms{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.form{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:10px}
+.thumb{aspect-ratio:4/3;border-radius:8px;background:var(--sub);border:1px solid var(--line);display:grid;place-items:center;color:var(--faint);font-size:13px}
+.form h3{font-size:15px;font-weight:700}
+.lv{align-self:flex-start;font-size:11px;font-weight:800;border-radius:999px;padding:1px 8px;background:var(--accent-soft);color:var(--accent)}
+.lv.free{background:var(--sub);color:var(--muted)}
+.dl{font-weight:700;font-size:14px;border-radius:10px;padding:9px;border:1px solid var(--line);background:var(--surface);color:var(--fg);display:flex;align-items:center;justify-content:center;gap:6px}
+.dl.lock{color:var(--muted)}
+</style>
+
+<header class="site-head">
+  <div class="site-head-in">
+    <img class="logo-img" src="logo.png" alt="예스폼" width="82" height="42">
+    <div class="acct"><span><b>OOO 님</b> <em id="grade">무료</em> 회원</span><button type="button" class="join" id="joinBtn">멤버십 가입</button></div>
+  </div>
+</header>
+<main class="wrap">
+  <h1 class="page-title">근로계약서 서식</h1>
+  <div class="forms" id="forms"></div>
+</main>
+
+<script>
+const NAME = { free:'무료', basic:'베이직', premium:'프리미엄', business:'비즈니스' };
+const RANK = { free:0, basic:1, premium:2, business:3 };
+const FORMS = [
+  { t:'표준 근로계약서', lv:'free' }, { t:'단시간 근로계약서', lv:'basic' },
+  { t:'연봉계약서 (임원용)', lv:'premium' }, { t:'근로계약 변경 합의서', lv:'premium' },
+  { t:'일용직 근로계약서', lv:'basic' }, { t:'외국인 근로계약서', lv:'premium' },
+];
+const LOCK = '<svg width="14" height="14" viewBox="0 0 20 20" aria-hidden="true"><rect x="4" y="9" width="12" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M7 9V6.5a3 3 0 016 0V9" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>';
+const q = new URLSearchParams(location.search);
+const mine = RANK[q.get('grade')] ? q.get('grade') : 'free';
+
+document.getElementById('grade').textContent = NAME[mine] + (mine==='business' && q.get('seats') ? ` · ${q.get('seats')}명` : '');
+const join = document.getElementById('joinBtn');
+if (mine!=='free'){ join.textContent = '멤버십 이용 중'; join.disabled = true; }
+document.getElementById('forms').innerHTML = FORMS.map(f=>{
+  const open = RANK[mine] >= RANK[f.lv];
+  return `<article class="form"><div class="thumb">미리보기</div>
+    <span class="lv ${f.lv==='free'?'free':''}">${NAME[f.lv]}${f.lv==='free'?'':' 이상'}</span><h3>${f.t}</h3>
+    <button type="button" class="dl ${open?'':'lock'}" ${open?'':`data-need="${f.lv}"`}>${open?'':LOCK}다운로드</button></article>`;
+}).join('');
+
+// 잠긴 서식·멤버십 가입 → 바깥 화면에 결제 모달 열기 요청 (1단계 멤버십 선택부터)
+document.addEventListener('click', e=>{
+  const d = e.target.closest('[data-need]');
+  if (d) parent.postMessage({ type:'yf-open', from:'select', need:d.dataset.need }, '*');
+  else if (e.target.closest('#joinBtn') && !join.disabled) parent.postMessage({ type:'yf-open', from:'select', need:'premium' }, '*');
+});
+</script>

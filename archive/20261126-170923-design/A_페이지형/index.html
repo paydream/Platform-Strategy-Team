@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>결제 흐름 A · 페이지형</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap">
+<style>
+/* Layout: 단일 컬럼 1080px — 소개 → 요금제 카드 4열 → 그룹형 비교표 → 결제 전 확인 → FAQ */
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --fg:#191c22; --muted:#5d6472; --line:#e3e6ec;
+  --accent:#1f5eff; --accent-soft:#e9efff; --accent-fg:#ffffff;
+  --hl:#fff7e0; --hl-line:#f1d48a; --good:#1f5eff; --none:#b9bfca; --save:#12804a; --save-soft:#e3f5ea;
+  --band-bg:#14224d; --band-fg:#ffffff;
+  --font:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12141a; --surface:#1b1e26; --fg:#eef0f4; --muted:#a2a9b6; --line:#2c303b;
+  --accent:#6f95ff; --accent-soft:#232c45; --accent-fg:#0d1020;
+  --hl:#2b2617; --hl-line:#5c4c22; --good:#6f95ff; --none:#4c5260; --save:#5fd393; --save-soft:#173325; --band-bg:#22336b; --band-fg:#f3f5fb; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12141a; --surface:#1b1e26; --fg:#eef0f4; --muted:#a2a9b6; --line:#2c303b;
+  --accent:#6f95ff; --accent-soft:#232c45; --accent-fg:#0d1020;
+  --hl:#2b2617; --hl-line:#5c4c22; --good:#6f95ff; --none:#4c5260; --save:#5fd393; --save-soft:#173325; --band-bg:#22336b; --band-fg:#f3f5fb; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1080px;margin:0 auto;padding-block:72px 112px;display:flex;flex-direction:column;gap:120px}
+.wrap>.plans{margin-top:-72px}
+@media (max-width:720px){.wrap{padding-block:48px 72px;gap:80px}.wrap>.plans{margin-top:-48px}}
+h1,h2,h3{text-wrap:balance;margin:0;line-height:1.3}
+.draft-note{font-size:13px;color:var(--muted);border:1px dashed var(--line);border-radius:8px;padding:8px 12px;background:var(--surface)}
+.draft-note b{color:var(--fg)}
+
+/* 상단 헤더 */
+.site-head{background:var(--surface);border-bottom:1px solid var(--line);
+  margin-left:calc(-1 * max(16px,env(safe-area-inset-left,0px)));margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)));
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.site-head-in{max-width:1080px;margin:0 auto;padding-block:16px;display:flex;align-items:center;justify-content:space-between;gap:12px 24px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:16px}
+.logo-img{height:44px;width:auto;display:block;border-radius:4px}
+.logo-mark{font-size:22px;font-weight:800;color:var(--fg);letter-spacing:-.03em;border:1px dashed var(--line);border-radius:6px;padding:2px 8px}
+.brand-sub{font-size:20px;font-weight:700;letter-spacing:.01em}
+.acct{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.acct-row{display:flex;align-items:center;gap:16px;font-size:15px}
+.acct-row em{font-style:normal;color:var(--accent);font-weight:500}
+.acct-cta{font:inherit;font-size:14px;font-weight:700;background:var(--accent);color:var(--accent-fg);border:0;border-radius:6px;padding:8px 18px;cursor:pointer}
+.acct-cta:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.acct-tag{margin:0;font-size:12px;color:var(--muted)}
+@media (max-width:640px){.acct{align-items:flex-start}.brand-sub{font-size:16px}}
+
+/* 소개 */
+.hero{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px}
+.hero h1{font-size:clamp(26px,4vw,36px);font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0;color:var(--muted);max-width:52ch}
+.toggle{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px;gap:4px;margin-top:6px}
+.toggle button{font:inherit;font-size:14px;font-weight:700;border:0;background:transparent;color:var(--muted);padding:8px 18px;border-radius:999px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.toggle button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.toggle button:focus-visible,.grp-btn:focus-visible,.tier-tabs button:focus-visible,.cta:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.save{font-size:12px;font-weight:700;color:var(--save);background:var(--save-soft);padding:1px 8px;border-radius:999px}
+
+/* 요금제 카드 */
+.plans{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.plan{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px 20px;display:flex;flex-direction:column;gap:16px;position:relative}
+/* 카드 4장의 제목·가격·버튼·혜택 줄을 같은 높이로 맞춤 */
+@supports (grid-template-rows:subgrid){.plan{display:grid;grid-template-rows:subgrid;grid-row:span 4;row-gap:16px;align-content:start}}
+.price-wrap{display:flex;flex-direction:column;gap:14px}
+.plan.best{border:2px solid var(--accent)}
+.badge{position:absolute;top:-12px;left:20px;background:var(--accent);color:var(--accent-fg);font-size:12px;font-weight:800;letter-spacing:.06em;padding:2px 10px;border-radius:999px}
+/* 정액 표시 태그: 카드 오른쪽 위 */
+.ptag{position:absolute;top:24px;right:20px;font-size:12px;font-weight:700;line-height:1;color:var(--accent);background:var(--accent-soft);padding:6px 10px;border-radius:999px}
+.plan h3{font-size:18px;font-weight:800;display:flex;align-items:center;gap:10px}
+.plan .for{font-size:13px;color:var(--muted);margin-top:2px}
+.price{display:flex;flex-direction:column;gap:2px;min-height:96px}
+.price .was{font-size:13px;color:var(--muted);text-decoration:line-through;font-variant-numeric:tabular-nums}
+.price .now{font-size:30px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.price .now small{font-size:14px;font-weight:500;color:var(--muted);letter-spacing:0}
+.price .how{font-size:13px;color:var(--muted)}
+.cta{display:block;text-align:center;font:inherit;font-weight:700;font-size:15px;border-radius:10px;padding:11px;border:1px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer}
+.plan.best .cta{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.plan-notes{grid-column:1/-1;display:flex;flex-direction:column;align-items:flex-start;gap:14px;margin-top:12px;padding-left:4px}
+.plan-notes ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;color:var(--muted);font-size:15px}
+.plan-notes li{display:flex;gap:6px}
+.plan-notes li::before{content:"*";flex:none}
+.quote-btn{font:inherit;font-size:14px;font-weight:700;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:8px;padding:8px 16px;cursor:pointer}
+.quote-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sw{display:inline-flex;align-items:center;gap:10px;align-self:flex-start;font:inherit;font-size:15px;font-weight:700;color:var(--fg);background:none;border:0;padding:2px 0;cursor:pointer}
+.sw-track{width:44px;height:26px;border-radius:999px;background:var(--line);position:relative;flex:none;transition:background .2s}
+.sw-knob{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .2s}
+.sw[aria-checked="true"] .sw-track{background:var(--fg)}
+.sw[aria-checked="true"] .sw-knob{transform:translateX(18px);background:var(--surface)}
+.seat{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:15px;font-weight:700}
+.seat-step{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seat-step button{font:inherit;font-size:16px;font-weight:700;width:32px;height:30px;border:0;background:var(--surface);color:var(--fg);cursor:pointer}
+.seat-step button:disabled{color:var(--none);cursor:not-allowed}
+.seat-step button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.seat-step output{min-width:44px;text-align:center;font-variant-numeric:tabular-nums;border-left:1px solid var(--line);border-right:1px solid var(--line);line-height:30px}
+.sw:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+.adds{list-style:none;margin:0;padding:16px 0 0;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px;font-size:14px}
+.adds .lead{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.04em}
+.adds li{display:flex;gap:8px;align-items:flex-start}
+.adds li::before{content:"";flex:none;width:18px;height:18px;margin-top:2px;background:var(--good);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 10.5l3.2 3.2L15 6.8' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 10.5l3.2 3.2L15 6.8' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat}
+.adds li.lead::before{display:none}
+.adds li.inc{font-weight:700}
+.adds li.inc::before{content:"+";width:18px;height:auto;text-align:center;background:none;-webkit-mask:none;mask:none;margin-top:0;color:var(--good);font-weight:800}
+
+/* 비교표 */
+.sec-head{display:flex;flex-direction:column;gap:8px;margin-bottom:32px}
+.sec-head h2{font-size:24px;font-weight:800;letter-spacing:-.01em}
+.sec-head p{margin:0;color:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:16px;font-size:13px;color:var(--muted);margin-top:4px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:3px;background:var(--hl);border:1px solid var(--hl-line)}
+.tier-tabs{display:none;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.tier-tabs button{font:inherit;font-size:14px;font-weight:700;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;padding:6px 14px;cursor:pointer}
+.tier-tabs button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.cmp{width:100%;border-collapse:separate;border-spacing:0;background:var(--surface);border:1px solid var(--line)}
+.cmp col.c-name{width:32%}
+.cmp thead th{position:sticky;top:env(safe-area-inset-top,0px);z-index:3;background:var(--surface);border-bottom:2px solid var(--fg);padding:16px 8px 14px;text-align:center;vertical-align:top}
+.cmp thead th:first-child{text-align:left;padding-left:20px;vertical-align:bottom}
+.th-label{display:block;font-size:13px;color:var(--muted);font-weight:700;margin-bottom:10px}
+.th-name{display:block;font-size:16px;font-weight:800;margin-bottom:10px}
+.cmp thead th.is-best .th-name{color:var(--accent)}
+.th-price{display:block;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;margin:4px 0 10px;min-height:2.6em;line-height:1.3}
+.th-price small{display:block;font-size:12px;font-weight:400;color:var(--muted)}
+.th-cta{font:inherit;font-size:13px;font-weight:700;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:8px;padding:6px 12px;cursor:pointer;width:100%;max-width:120px}
+.th-cta.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.th-cta:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.toggle.mini{margin:0;padding:3px}
+.toggle.mini button{font-size:12px;padding:5px 10px}
+.grp-row th{padding:0;border-top:1px solid var(--line);background:var(--bg)}
+.grp-btn{width:100%;display:flex;align-items:center;gap:12px;font:inherit;color:inherit;background:transparent;border:0;padding:14px 20px;cursor:pointer;text-align:left}
+.grp-btn .gname{font-weight:800;font-size:16px;flex:none}
+.gicon{flex:none;width:32px;height:32px;border-radius:8px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent)}
+.grp-btn .gsum{color:var(--muted);font-size:14px;flex:1;min-width:0}
+.grp-btn .chev{flex:none;transition:transform .2s;color:var(--muted)}
+.grp[data-open="false"] .grp-btn .chev{transform:rotate(-90deg)}
+.grp[data-open="false"] tr.item{display:none}
+tr.item th{text-align:left;font-weight:500;padding:12px 8px 12px 20px;border-top:1px solid var(--line);vertical-align:top}
+.iname{display:flex;gap:12px;align-items:center}
+.iname>div{min-width:0}
+.ricon{flex:none;width:28px;height:28px;border-radius:7px;display:grid;place-items:center;border:1px solid var(--line);color:var(--muted);margin-top:1px}
+.ricon svg{width:15px;height:15px}
+.iname>div{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.tip{position:relative;display:inline-flex;align-items:center}
+.tip-btn{width:14px;height:14px;border:0;background:transparent;color:var(--muted);padding:0;cursor:help;display:grid;place-items:center;border-radius:50%}
+.tip-btn:hover,.tip-btn:focus-visible{color:var(--fg);outline:none}
+.tip-btn:focus-visible{box-shadow:0 0 0 2px var(--accent)}
+.tip-box{position:absolute;left:50%;top:calc(100% + 9px);transform:translateX(-50%);width:max-content;white-space:nowrap;background:var(--fg);color:var(--bg);font-size:11px;font-weight:600;line-height:1.5;text-align:center;padding:7px 11px;border-radius:8px;opacity:0;visibility:hidden;transition:opacity .15s;z-index:5;pointer-events:none}
+.tip-box::before{content:"";position:absolute;left:50%;top:-4px;width:8px;height:8px;background:var(--fg);transform:translateX(-50%) rotate(45deg)}
+.tip:hover .tip-box,.tip:focus-within .tip-box{opacity:1;visibility:visible}
+@media (prefers-reduced-motion:reduce){.tip-box{transition:none}}
+tr.item th .desc{display:block;font-size:13px;color:var(--muted);font-weight:400;margin-top:2px}
+tr.item td{text-align:center;border-top:1px solid var(--line);padding:12px 8px;font-variant-numeric:tabular-nums;font-weight:700;font-size:14px;vertical-align:middle}
+tr.item td.best{background:color-mix(in srgb,var(--accent-soft) 60%,transparent)}
+.ic-yes{color:var(--good)} .ic-no{color:var(--none)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* 인증·신뢰 */
+.trust{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:24px 16px;text-align:center}
+.trust li{display:flex;flex-direction:column;align-items:center;gap:14px;font-size:14px;line-height:1.5}
+.trust ul,.trust{list-style:none;margin:0;padding:0}
+.logo-ph{width:88px;height:88px;border-radius:50%;border:1px dashed var(--muted);display:grid;place-items:center;font-size:12px;color:var(--muted)}
+.trust b{display:block;font-weight:700}
+
+/* 배너: 콘텐츠 폭(1080px)에 맞춤 */
+.band{background:var(--band-bg);color:var(--band-fg);max-width:1080px;margin:0 auto;border-radius:16px}
+.band-in{padding:56px 48px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.band-in .eyebrow{font-size:13px;font-weight:700;letter-spacing:.06em;opacity:.75}
+.band-in h2{font-size:clamp(22px,3vw,30px);font-weight:800;margin-top:6px}
+.band-in p{margin:8px 0 0;opacity:.8}
+.band-cta{font:inherit;font-weight:700;background:var(--band-fg);color:var(--band-bg);border:0;border-radius:10px;padding:12px 22px;cursor:pointer}
+.band-cta:focus-visible{outline:2px solid var(--band-fg);outline-offset:3px}
+.band-tag{font-size:12px;opacity:.6;margin-top:10px}
+@media (max-width:720px){.band-in{padding:40px 24px}}
+
+/* 푸터 (기존 유지) */
+.site-foot{border-top:1px solid var(--line);margin-left:calc(-1 * max(16px,env(safe-area-inset-left,0px)));margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)));
+  padding:40px max(16px,env(safe-area-inset-right,0px)) 48px max(16px,env(safe-area-inset-left,0px));display:flex;justify-content:center;align-items:center;gap:12px 48px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
+.site-foot nav{display:flex;gap:10px;align-items:center}
+.site-foot nav span{color:var(--hl-line)}
+.site-foot a{color:inherit;text-decoration:none}
+
+/* FAQ */
+.faq{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;padding:18px 4px;font-weight:700;display:flex;justify-content:space-between;gap:12px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";color:var(--muted);font-weight:500;font-size:20px;line-height:1}
+.faq details[open] summary::after{content:"−"}
+.faq .ans{padding:0 4px 18px;color:var(--muted);max-width:70ch}
+.faq .ans p{margin:0 0 8px}
+.ex{display:inline-block;background:var(--bg);border-radius:8px;padding:8px 12px;font-size:14px;color:var(--fg);font-variant-numeric:tabular-nums}
+.foot{font-size:13px;color:var(--muted);text-align:center}
+
+@media (max-width:900px){.plans{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:720px){
+  .tier-tabs{display:flex}
+  .cmp col.c-name{width:62%}
+  .cmp[data-show="free"] .t:not(.t-free),
+  .cmp[data-show="basic"] .t:not(.t-basic),
+  .cmp[data-show="premium"] .t:not(.t-premium),
+  .cmp[data-show="business"] .t:not(.t-business){display:none}
+  .grp-btn{flex-wrap:wrap;gap:2px 12px}.grp-btn .gsum{flex-basis:100%;order:3}
+  .trust{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:480px){.plans{grid-template-columns:minmax(0,1fr)}.price{min-height:0}}
+@media (prefers-reduced-motion:reduce){.grp-btn .chev{transition:none}}
+</style>
+
+<header class="site-head">
+  <div class="site-head-in">
+    <div class="brand"><img class="logo-img" src="logo.png" alt="예스폼" width="90" height="46"><span class="brand-sub">MEMBERSHIP</span></div>
+    <div class="acct">
+      <div class="acct-row"><span><b>OOO 님</b> <em>무료</em> 회원</span><button type="button" class="acct-cta">유료 회원 전환</button></div>
+      <p class="acct-tag">계약서 수정부터 전자계약까지 모든 업무를 예스폼에서!</p>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="hero" aria-labelledby="hero-t">
+    <h1 id="hero-t">필요한 만큼 골라 쓰는 예스폼 멤버십</h1>
+  </section>
+
+  <section class="plans" aria-label="요금제">
+    <article class="plan">
+      <div><h3>무료</h3><p class="for">예스폼을 처음 써 볼 때</p></div>
+      <div class="price"><span class="now">0원</span><span class="how">가입만 하면 이용</span></div>
+      <button class="cta" type="button">무료로 시작</button>
+      <ul class="adds"><li class="lead">주요 혜택</li><li>무료 서식 5만 건</li><li>예스폼 에디터</li><li>비즈니스 인사이트</li><li>온라인 도장 3개</li></ul>
+    </article>
+    <article class="plan">
+      <div><h3>베이직</h3><p class="for">급하게 서식이 필요할 때</p></div>
+      <div class="price"><span class="now">9,000원 <small>/ 7일</small></span><span class="how">1회 결제 · 자동결제 없음</span></div>
+      <button class="cta" type="button">7일 이용권 구매</button>
+      <ul class="adds"><li class="lead">주요 혜택</li><li class="inc">무료 혜택 모두 포함</li><li>유료 서식 75만 건</li><li>온라인 도장 7개로 확대</li></ul>
+    </article>
+    <article class="plan best">
+      <span class="badge">BEST</span>
+      <span class="ptag" id="premiumTag" hidden>12개월 약정</span>
+      <div><h3>프리미엄</h3><p class="for">서식과 계약을 꾸준히 쓸 때</p></div>
+      <div class="price-wrap">
+        <div class="price" data-price="premium"></div>
+        <button type="button" class="sw" id="yearSw" role="switch" aria-checked="true"><span class="sw-track" aria-hidden="true"><span class="sw-knob"></span></span><span class="sw-label">연 결제</span><span class="save">31% 할인</span></button>
+      </div>
+      <button class="cta" type="button">프리미엄 시작</button>
+      <ul class="adds"><li class="lead">주요 혜택</li><li class="inc">베이직 혜택 모두 포함</li><li>프리미엄 서식 20만 건</li><li>전자계약 월 10건</li><li>서식 상담실</li><li>온라인 도장 15개로 확대</li></ul>
+    </article>
+    <article class="plan">
+      <span class="ptag">12개월 약정</span>
+      <div><h3>비즈니스</h3><p class="for">여러 명이 동시에 쓸 때</p></div>
+      <div class="price-wrap">
+        <div class="price" data-price="business"></div>
+        <div class="seat" role="group" aria-label="이용 인원">
+          <span class="seat-label">이용 인원</span>
+          <div class="seat-step">
+            <button type="button" id="seatMinus" aria-label="인원 줄이기">−</button>
+            <output id="seatVal" aria-live="polite">3명</output>
+            <button type="button" id="seatPlus" aria-label="인원 늘리기">+</button>
+          </div>
+        </div>
+      </div>
+      <button class="cta" type="button">비즈니스 시작</button>
+      <ul class="adds"><li class="lead">주요 혜택</li><li class="inc">프리미엄 혜택 모두 포함</li><li>동시 접속 가능</li><li>전자계약 월 20건으로 확대</li></ul>
+    </article>
+    <div class="plan-notes">
+      <ul>
+        <li>위 금액은 부가가치세(VAT)가 포함되지 않은 금액이에요.</li>
+        <li>월정액 약정 기간은 기본 12개월이에요.</li>
+        <li>견적서가 필요하면 금액별 견적서를 내려받아 회원가입과 결제를 편하게 진행하세요.</li>
+      </ul>
+      <button type="button" class="quote-btn"><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10M5.5 8.5L10 13l4.5-4.5M4 16.5h12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>견적서 다운받기</button>
+    </div>
+  </section>
+
+  <section aria-labelledby="cmp-t">
+    <div class="sec-head">
+      <h2 id="cmp-t">요금제별 혜택 비교</h2>
+      <p>혜택을 서식, 업무 도구, 패밀리 사이트, 고객 지원으로 묶었어요.</p>
+    </div>
+    <div class="tier-tabs" role="group" aria-label="비교할 요금제">
+      <button type="button" id="tab-free" data-tier="free" aria-pressed="false">무료</button>
+      <button type="button" id="tab-basic" data-tier="basic" aria-pressed="false">베이직</button>
+      <button type="button" id="tab-premium" data-tier="premium" aria-pressed="true">프리미엄</button>
+      <button type="button" id="tab-business" data-tier="business" aria-pressed="false">비즈니스</button>
+    </div>
+    <table class="cmp" id="cmp" data-show="premium">
+      <colgroup><col class="c-name"><col class="t t-free"><col class="t t-basic"><col class="t t-premium"><col class="t t-business"></colgroup>
+      <thead><tr>
+        <th scope="col"><span class="th-label" style="margin-bottom:0">혜택</span></th>
+        <th scope="col" class="t t-free"><span class="th-name">무료</span><button type="button" class="th-cta">무료로 시작</button></th>
+        <th scope="col" class="t t-basic"><span class="th-name">베이직</span><button type="button" class="th-cta">구매하기</button></th>
+        <th scope="col" class="t t-premium is-best"><span class="th-name">프리미엄</span><button type="button" class="th-cta primary">시작하기</button></th>
+        <th scope="col" class="t t-business"><span class="th-name">비즈니스</span><button type="button" class="th-cta">시작하기</button></th>
+      </tr></thead>
+    </table>
+  </section>
+</div>
+
+<section class="band" aria-labelledby="band-t">
+  <div class="band-in">
+    <div>
+      <h2 id="band-t">정기 결제 걱정 없이, 딱 한 건만</h2>
+      <p>한 번 결제로 필요한 서식만 받아보세요. 예스폼 쇼핑몰에서 간편하게 구매할 수 있습니다</p>
+    </div>
+    <button type="button" class="band-cta">쇼핑몰 바로가기 →</button>
+  </div>
+</section>
+
+<div class="wrap">
+  <section aria-labelledby="faq-t">
+    <div class="sec-head"><h2 id="faq-t">자주 묻는 질문</h2></div>
+    <div class="faq">
+      <details><summary>해지와 중도 해지는 어떻게 다른가요?</summary><div class="ans"><p>해지는 다음 결제를 멈추는 것으로, 결제한 기간이 끝날 때까지 이용할 수 있어요. 마이페이지의 해지하기에서 바로 신청할 수 있어요.</p><p>중도 해지는 약정 기간 중에 바로 이용을 멈추는 것이에요. 중도 해지는 고객센터를 통해서만 진행돼요.</p></div></details>
+      <details><summary>약정 중에 중도 해지하면 얼마를 내야 하나요?</summary><div class="ans"><p>월 결제는 받은 서식의 쇼핑몰 판매가(할인가) 합계에서 지금까지 낸 금액을 뺀 만큼 정산해요. 정산액은 12개월 이용 금액을 넘지 않아요. 쇼핑몰에서 판매하지 않는 서식은 정산에 포함되지 않아요.</p><p>마이페이지에서 해지하기를 누르면 받은 서식과 금액을 미리 확인할 수 있어요.</p><span class="ex">월 결제 3개월 차 · 낸 금액 36,000원 · 받은 서식 52,000원 → 정산 16,000원</span></div></details>
+      <details><summary>연 결제를 중간에 그만두면 환불되나요?</summary><div class="ans"><p>낸 금액에서 받은 서식의 쇼핑몰 판매가(할인가) 합계를 뺀 만큼 환불해요. 받은 서식 금액이 낸 금액 이상이면 환불액은 0원이에요. 고객센터로 문의해 주세요.</p><span class="ex">110,000원 결제 · 받은 서식 40,000원 → 70,000원 환불</span></div></details>
+      <details><summary>다른 요금제로 바꿀 수 있나요?</summary><div class="ans"><p>요금제를 바로 바꾸는 기능은 없어요. 베이직 이용 기간(7일)이 끝난 뒤 새로 결제하거나, 고객센터로 문의해 주세요.</p></div></details>
+      <details><summary>이미 이용 중인 회원도 요금이 바뀌나요?</summary><div class="ans"><p>기존 회원은 지금 요금이 그대로 유지돼요. 직접 새 요금제로 바꾸면 그때부터 새 요금이 적용돼요.</p></div></details>
+    </div>
+  </section>
+</div>
+
+<footer class="site-foot">
+  <span>© YESFORM All rights reserved.</span>
+  <nav aria-label="약관"><a href="#">이용약관</a><span>|</span><a href="#">개인정보처리방침</a><span>|</span><a href="#">고객센터</a></nav>
+</footer>
+
+<script>
+const PRICES={
+  premium:{month:{now:"12,000원",unit:"/ 월",how:"매달 자동결제"},
+           year:{now:"100,000원",unit:"/ 년",how:"월 약 8,300원 · 매년 자동갱신"}},
+  business:{month:{now:"12,000원",unit:"/ 월",how:"3인 기준 · 1인 추가 시 월 4,000원"}}
+};
+const BIZ_BASE=3,BIZ_PRICE=12000,BIZ_ADD=4000;
+let seats=BIZ_BASE;
+const GROUPS=[
+  {name:"서식",sum:"유료 서식은 베이직부터, 프리미엄 서식은 프리미엄부터 이용할 수 있어요",open:false,items:[
+    ["무료 서식","로그인한 회원 누구나 받을 수 있는 기본 문서 서식",["O","O","O","O"]],
+    ["베이직 서식","베이직 이상 회원을 위한 문서 서식",["X","O","O","O"]],
+    ["프리미엄 서식","프리미엄·비즈니스 회원 전용 문서 서식",["X","X","O","O"]],
+    ["엑셀 콘텐츠","전문가가 제작한 엑셀 프로그램과 템플릿",["X","O","O","O"]],
+    ["PPT 콘텐츠","완성도 높은 디자인의 PPT 템플릿",["X","O","O","O"]],
+    ["웹서식","설치 없이 웹에서 바로 작성하고 저장하는 서식",["X","O","O","O"]]]},
+  {name:"업무 도구",sum:"",open:true,items:[
+    ["예스폼 에디터","예스폼 서식을 웹에서 간편하게 편집하는 도구",["O","O","O","O"]],
+    ["온라인 도장","나만의 온라인 도장 제작 서비스",["3개","7개","15개","15개"]],
+    ["예스폼 블로그","업무에 필요한 법령·트렌드와 AI 활용 정보",["O","O","O","O"]],
+    ["정기메일(월 2회)","메일로 받아보는 AI 소식과 실무 콘텐츠",["O","O","O","O"]],
+    ["신설 법인 주소록","새로 설립된 법인의 주소 정보",["X","O","O","O"]],
+    ["법률 동영상 강의","어려운 법률을 쉽게 풀어주는 동영상 강의",["X","O","O","O"]]]},
+  {name:"패밀리 사이트",sum:"",open:true,items:[
+    ["전자계약 예스폼싸인","문서 작성부터 계약 체결까지 한 번에 진행하는 전자계약",["X","X","월 10건","월 20건"]],
+    ["유아동 학습지 참잘했어요","유아동을 위한 학습지 서비스",["X","O","O","O"]],
+    ["급여관리 페이존","복잡한 급여 업무를 간편하게 관리하는 서비스",["1개월","3개월","6개월","6개월"]]]},
+  {name:"고객 지원",sum:"",open:true,items:[
+    ["서식 상담실","서식 활용 관련 1:1 상담 서비스",["X","X","O","O"]],
+    ["서식 맞춤 제작","원하는 서식 맞춤 제작 서비스",["X","X","O","O"]]]}
+];
+const TIERS=["free","basic","premium","business"], TNAME=["무료","베이직","프리미엄","비즈니스"];
+const YES='<svg class="ic-yes" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10.5l3.2 3.2L15 6.8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const NO='<svg class="ic-no" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M6 10h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+const CHEV='<svg class="chev" width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 7.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+const SV=p=>`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const GICON=[
+  SV('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>'),
+  SV('<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/>'),
+  SV('<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>'),
+  SV('<path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/>')
+];
+function cell(v){return v==="O"?YES+'<span class="sr">제공</span>':v==="X"?NO+'<span class="sr">미제공</span>':v}
+const table=document.getElementById("cmp");
+GROUPS.forEach((g,gi)=>{
+  const tb=document.createElement("tbody");tb.className="grp";tb.dataset.open=String(g.open);
+  tb.dataset.open="true";
+  tb.innerHTML=`<tr class="grp-row"><th colspan="5" scope="colgroup" style="font-weight:inherit;text-align:left;padding:0"><div class="grp-btn" style="cursor:default"><span class="gname">${g.name}</span></div></th></tr>`+
+    g.items.map(([n,d,v])=>{const paid=v.slice(1);const diff=new Set(paid).size>1||(v[0]!=="X"&&v[0]!=="O");
+      return `<tr class="item${diff?" diff":""}"><th scope="row"><div class="iname"><span class="ricon" aria-hidden="true">${GICON[gi]}</span><div>${n}<span class="tip"><button type="button" class="tip-btn" aria-label="${n} 설명"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="8" cy="4.9" r=".9" fill="currentColor"/><path d="M8 7.2v4.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button><span class="tip-box" role="tooltip">${d}</span></span></div></div></th>`+
+      v.map((x,i)=>`<td class="t t-${TIERS[i]}${i===2?" best":""}">${cell(x)}</td>`).join("")+"</tr>"}).join("");
+  table.appendChild(tb);
+});
+
+function renderPrice(cycle){
+  document.querySelectorAll("[data-price]").forEach(el=>{const t=PRICES[el.dataset.price];const p=t[cycle]||t.month;
+    el.innerHTML=(p.was?`<span class="was">${p.was}</span>`:"")+`<span class="now">${p.now} <small>${p.unit}</small></span><span class="how">${p.how}</span>`});
+  document.querySelectorAll(".toggle button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.cycle===cycle)));
+  const HP={free:{month:["0원",""],year:["0원",""]},basic:{month:["9,000원 / 7일","1회 결제"],year:["9,000원 / 7일","1회 결제"]},
+    premium:{month:["12,000원 / 월","12개월 약정"],year:["100,000원 / 년","월 약 8,300원"]},
+    business:{month:["12,000원 / 월·3인 기준","1인 추가 월 4,000원"],year:["12,000원 / 월·3인 기준","월 결제만 가능"]}};
+  document.querySelectorAll("[data-hp]").forEach(el=>{const [p,s]=HP[el.dataset.hp][cycle];el.innerHTML=p+(s?`<small>${s}</small>`:"")});
+}
+const sw=document.getElementById("yearSw");
+sw.addEventListener("click",()=>{const on=sw.getAttribute("aria-checked")!=="true";sw.setAttribute("aria-checked",String(on));renderPrice(on?"year":"month")});
+renderPrice("year");
+/* 비즈니스 인원 선택: 3명부터, 1명 늘 때마다 월 4,000원 추가 */
+function renderSeats(){
+  const el=document.querySelector('[data-price="business"] .now');
+  if(el) el.innerHTML=`${(BIZ_PRICE+BIZ_ADD*(seats-BIZ_BASE)).toLocaleString("ko-KR")}원 <small>/ 월</small>`;
+  document.getElementById("seatVal").textContent=`${seats}명`;
+  document.getElementById("seatMinus").disabled=seats<=BIZ_BASE;
+}
+document.getElementById("seatMinus").addEventListener("click",()=>{if(seats>BIZ_BASE){seats--;renderSeats()}});
+document.getElementById("seatPlus").addEventListener("click",()=>{if(seats<99){seats++;renderSeats()}});
+sw.addEventListener("click",renderSeats);
+/* 프리미엄 '12개월 약정' 태그는 월 결제일 때만 보임 */
+sw.addEventListener("click",()=>{document.getElementById("premiumTag").hidden=sw.getAttribute("aria-checked")==="true"});
+renderSeats();
+
+document.querySelector(".tier-tabs").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
+  table.dataset.show=b.dataset.tier;document.querySelectorAll(".tier-tabs button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)))});
+</script>
+
+<style>
+/* 결제 흐름 시안용: 결제 후 '이용 중' 표시 */
+.plan.mine{border-color:#12804a !important;box-shadow:0 0 0 1px #12804a}
+.plan.mine .cta:disabled{background:#e3f5ea;border-color:#e3f5ea;color:#12804a;cursor:default}
+/* 시안용 조건 설정 줄 (B안과 같은 모양) */
+.flow-demo{display:flex;align-items:center;gap:8px 16px;flex-wrap:wrap;font-size:13px;color:var(--muted);border-bottom:1px dashed var(--line);background:var(--surface);
+  margin:0 calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding:10px max(16px,env(safe-area-inset-left,0px))}
+.flow-demo b{color:var(--fg)}
+.flow-demo label{display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:var(--fg);font-weight:500}
+.flow-reset{font-size:13px;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:6px;padding:2px 10px;text-decoration:none}
+/* 정산 미결제 회원 안내 모달 */
+.fail-dlg{border:0;padding:0;border-radius:18px;background:var(--surface);color:var(--fg);width:min(440px,calc(100vw - 32px));box-shadow:0 24px 60px rgba(0,0,0,.25)}
+.fail-dlg::backdrop{background:rgba(15,18,26,.5)}
+.fail-in{padding:32px 24px 24px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px}
+.fail-ic{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:#fdf0e6;color:#b4561a}
+.fail-in h2{font-size:20px;font-weight:800;margin:0}
+.fail-in p{margin:0;color:var(--muted);font-size:14px}
+.fail-acts{display:flex;gap:8px;width:100%;margin-top:8px}
+.fail-acts button{flex:1;font:inherit;font-weight:700;font-size:15px;border-radius:10px;padding:12px;border:1px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer}
+.fail-acts .primary{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+</style>
+<script>
+/* 결제 흐름 시안용: 요금제 카드 버튼 → 결제로 연결 (MODE: page = 결제 페이지 / modal = 결제 모달) */
+(function(){
+  const MODE = 'page';
+  const KEYS = ['free','basic','premium','business'];
+  const NAME = { free:'무료', basic:'베이직', premium:'프리미엄', business:'비즈니스' };
+  const q = new URLSearchParams(location.search);
+  const grade = q.get('grade');
+  const cards = [...document.querySelectorAll('.plans .plan')];
+
+  // 결제 완료 후 새로고침: 헤더 등급과 구매한 카드에 반영
+  if (grade && KEYS.includes(grade)){
+    const em = document.querySelector('.acct-row em');
+    if (em) em.textContent = NAME[grade] + (grade==='business' && q.get('seats') ? ` · ${q.get('seats')}명` : '');
+    const up = document.querySelector('.acct-cta'); if (up) up.hidden = true;
+    const card = cards[KEYS.indexOf(grade)];
+    if (card){ const b = card.querySelector('.cta'); b.textContent = '이용 중'; b.disabled = true; card.classList.add('mine'); }
+    // 비교표 위쪽 버튼도 같은 요금제는 '이용 중'으로 잠금
+    document.querySelectorAll('.th-cta').forEach(b=>{ if (b.closest('th')?.classList.contains('t-'+grade)){ b.textContent = '이용 중'; b.disabled = true; } });
+  }
+
+  // 시안용 조건 설정 줄 (B안과 같은 위치) + 정산 미결제 회원 안내 모달
+  if (MODE==='page'){
+    document.body.insertAdjacentHTML('afterbegin', `<div class="flow-demo"><b>시안용</b>
+      <label><input type="checkbox" id="failHist"> 결제 실패 · 정산 미결제 이력이 있는 회원</label>
+      <a class="flow-reset" href="index.html">처음부터 다시</a></div>`);
+    document.body.insertAdjacentHTML('beforeend', `<dialog id="failDlg" class="fail-dlg" aria-labelledby="failT"><div class="fail-in">
+      <div class="fail-ic" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 5.8v5.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="10" cy="14" r="1.1" fill="currentColor"/></svg></div>
+      <h2 id="failT">고객센터로 문의해 주세요</h2>
+      <p>결제되지 않은 정산 금액이 있어 지금은 바로 결제할 수 없어요. 1:1 문의를 남겨 주시면 확인 후 결제를 도와드릴게요.</p>
+      <div class="fail-acts"><button type="button" data-fclose>닫기</button><button type="button" class="primary" data-fclose>1:1 문의하기</button></div></div></dialog>`);
+  }
+  const failDlg = document.getElementById('failDlg');
+  if (failDlg){
+    failDlg.addEventListener('click', e=>{ if (e.target===failDlg || e.target.closest('[data-fclose]')) failDlg.close(); });
+  }
+
+  // 결제 페이지에서 '요금제 변경'으로 돌아오면 고른 값(연/월, 인원)을 그대로 복원
+  (function restore(){
+    const sw = document.getElementById('yearSw');
+    if (q.get('cycle')==='month' && sw && sw.getAttribute('aria-checked')==='true') sw.click();
+    const n = parseInt(q.get('seats'),10), plus = document.getElementById('seatPlus');
+    if (n > 3 && plus) for (let i=3; i<n; i++) plus.click();
+  })();
+
+  // 카드·비교표에서 고른 값: 요금제, 결제 주기(프리미엄 스위치), 인원(비즈니스)
+  function pick(plan){
+    const sw = document.getElementById('yearSw');
+    return {
+      plan,
+      cycle: sw && sw.getAttribute('aria-checked')==='true' ? 'year' : 'month',
+      seats: typeof seats !== 'undefined' ? seats : 3,
+    };
+  }
+  document.addEventListener('click', e=>{
+    const b = e.target.closest('.plans .cta, .th-cta');
+    const up = e.target.closest('.acct-cta');
+    if (b){
+      const plan = b.classList.contains('th-cta')
+        ? KEYS.find(k=>b.closest('th')?.classList.contains('t-'+k))
+        : KEYS[cards.indexOf(b.closest('.plan'))];
+      if (!plan) return;
+      const p = pick(plan);
+      if (p.plan==='free' || b.disabled) return;
+      e.preventDefault();
+      if (MODE==='page' && document.getElementById('failHist')?.checked){ failDlg.showModal(); return; }
+      if (MODE==='page') location.href = `checkout.html?plan=${p.plan}&cycle=${p.cycle}&seats=${p.seats}`;
+      else parent.postMessage({ type:'yf-open', from:'membership', ...p }, location.origin);
+    } else if (up){
+      e.preventDefault();
+      if (MODE==='page') document.querySelector('.plans').scrollIntoView({ behavior:'smooth', block:'start' });
+      else parent.postMessage({ type:'yf-open', from:'select' }, location.origin);
+    }
+  });
+})();
+</script>
