@@ -47,6 +47,22 @@
               "href": "archive/20261126-170923-design/B_모달형/index.html"
             }
           ]
+        },
+        {
+          "id": "20261126-171628-membership",
+          "label": "v3",
+          "title": "멤버십 개편 페이지",
+          "desc": "",
+          "created": "2026.11.26",
+          "folder": "archive/20261126-171628-membership",
+          "preview": "archive/20261126-171628-membership/멤버십개편_한눈에보기.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "멤버십개편_한눈에보기",
+              "href": "archive/20261126-171628-membership/멤버십개편_한눈에보기.html"
+            }
+          ]
         }
       ]
     },
