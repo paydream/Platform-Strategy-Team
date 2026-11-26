@@ -207,7 +207,7 @@ function render() {
   // 판정 기준
   h += `<div class="card"><h2>위험도 기준 <span>높음만 위 기록에 남아요</span></h2><table class="crit">
     <tr><td><span class="badge r-높음">높음</span></td><td>접속이 지난주 같은 시간의 ${Math.round((C.trafficHigh || .5) * 100)}% 미만(예스폼 직전 1시간 · 쇼핑몰 6시간 · 싸인 3시간) · 최근 3시간 오류 난 세션 ${pc(C.siteRate3hHigh)} 이상(쇼핑몰 25%) · 핵심 페이지(예스폼 멤버십 결제·멤버십 안내·가입, 쇼핑몰 결제·상품, 싸인 계약 작성·서명·결제·가입) 안에서 버튼 클릭 직후 오류가 난 세션이 기준 이상(쇼핑몰 결제·싸인 결제 1세션, 나머지 2세션) · 페이지 안 오류 세션 ${pc(C.pageRateHigh)} 이상(세션 ${C.pageMin}개 이상) · 예스폼 최근 3시간 멤버십 결제 페이지 접속 0</td></tr>
-    <tr><td><span class="badge r-중간">중간</span></td><td>접속 ${Math.round((C.trafficMid || .7) * 100)}% 미만 · 사이트 오늘 오류 난 세션 ${pc(C.siteRateTodayMid)} 이상 · 핵심 페이지 안 오류 1세션 이상</td></tr>
+    <tr><td><span class="badge r-중간">중간</span></td><td>접속 ${Math.round((C.trafficMid || .7) * 100)}% 미만 · 사이트 오늘 오류 난 세션 ${pc(C.siteRateTodayMid)} 이상 · 핵심 페이지에서 버튼 클릭 직후 오류가 났지만 높음 기준 미만 (페이지가 열릴 때 난 오류처럼 진행을 막지 않는 오류는 표시 안 함)</td></tr>
     <tr><td><span class="badge r-낮음">낮음</span></td><td>사이트 다른 곳의 새 오류</td></tr>
     <tr><td></td><td style="color:var(--faint)">핵심 페이지 수치는 녹화의 이벤트 기록을 열어 오류가 그 페이지에서 났을 때만 셉니다(다른 페이지에서 난 오류는 제외).</td></tr></table></div>`;
 
