@@ -95,7 +95,7 @@
 <header class="gnb"><div class="wrap gnb-top"><a class="gnb-logo" href="./" title="메인 홈으로"><strong>플랫폼전략팀</strong></a><div class="gnb-util"></div></div><nav class="wrap gnb-nav" data-current="auto" aria-label="주요 메뉴"></nav><script src="gnb.js"></script></header>
 <main class="wrap">
   <section class="hero">
-    <div><h1>예스폼 오류 모니터링</h1><p>예스폼 · 예스폼싸인 결제 불가 · 사이트 미노출 · 계약 작성 불가 수준의 치명 장애 감시 · Microsoft Clarity · 1시간마다 자동 점검</p></div>
+    <div><h1>예스폼 오류 모니터링</h1><p>예스폼 · 예스폼싸인 결제 불가 · 가입 불가 · 사이트 미노출 · 계약 작성 불가 수준의 치명 장애 감시 · Microsoft Clarity · 1시간마다 자동 점검</p></div>
     <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><div class="upd" id="upd"></div><a class="btn" id="clink" data-tip="구글 참잘 계정(wwwchamjal@gmail.com)으로 로그인하면 Clarity 녹화를 볼 수 있어요" href="#" target="_blank" rel="noopener">예스폼 Clarity ↗</a><a class="btn" id="clink2" data-tip="구글 참잘 계정(wwwchamjal@gmail.com)으로 로그인하면 Clarity 녹화를 볼 수 있어요" href="#" target="_blank" rel="noopener">싸인 Clarity ↗</a></div>
   </section>
   <div id="root"><p class="nod" style="margin-top:16px">불러오는 중…</p></div>
@@ -114,9 +114,9 @@ const EMBED = window.parent !== window;
 const TIP = '구글 참잘 계정(wwwchamjal@gmail.com)으로 로그인하면 Clarity 녹화를 볼 수 있어요';
 if (EMBED) document.body.classList.add('embed');
 const RANK = { '높음': 3, '중간': 2, '낮음': 1, '정상': 0 };
-const AREA = { all: '예스폼 사이트 전체', member: '예스폼 멤버십 결제', shop: '예스폼 쇼핑몰 결제', 'shop-view': '예스폼 쇼핑몰 상품', 'shop-all': '예스폼 쇼핑몰 전체', membership: '예스폼 멤버십 안내', settle: '예스폼 결제 페이지', 'sign-all': '예스폼싸인 사이트 전체', 'sign-contract': '예스폼싸인 계약 작성·서명', 'sign-pay': '예스폼싸인 결제' };
+const AREA = { all: '예스폼 사이트 전체', member: '예스폼 멤버십 결제', shop: '예스폼 쇼핑몰 결제', 'shop-view': '예스폼 쇼핑몰 상품', 'shop-all': '예스폼 쇼핑몰 전체', membership: '예스폼 멤버십 안내', settle: '예스폼 결제 페이지', 'sign-all': '예스폼싸인 사이트 전체', 'sign-contract': '예스폼싸인 계약 작성·서명', 'sign-pay': '예스폼싸인 결제', join: '예스폼 가입', 'sign-join': '예스폼싸인 가입' };
 const PROJ = { yesform: 'xfgy2v09sr', shop: 'xfgy2v09sr', sign: 'xfim3z1mrb' };
-const REC = { member: 'member/settle\\.php', shop: 'shop/settle\\.php', membership: 'member/membership\\.php', settle: 'settle\\.php', 'sign-contract': 'document/contract/index\\.php', 'sign-pay': 'payment/payment\\.php', 'shop-view': 'shop\\.yesform\\.com/z_n/shop/view' };
+const REC = { member: 'member/settle\\.php', shop: 'shop/settle\\.php', membership: 'member/membership\\.php', settle: 'settle\\.php', 'sign-contract': 'document/contract/index\\.php', 'sign-pay': 'payment/payment\\.php', 'shop-view': 'shop\\.yesform\\.com/z_n/shop/view', join: 'member/(n30_member_reg_form|member_interest|join_complete|naverIdLogin)|naverApiLogin', 'sign-join': 'member/registerForm\\.php|auth/emailAuth' };
 const siteOfArea = a => /^sign/.test(a || '') ? 'sign' : /^shop/.test(a || '') ? 'shop' : 'yesform';
 let D = null;
 const proj = () => (D && D.project) || 'xfgy2v09sr';
@@ -206,7 +206,7 @@ function render() {
 
   // 판정 기준
   h += `<div class="card"><h2>위험도 기준 <span>높음만 위 기록에 남아요</span></h2><table class="crit">
-    <tr><td><span class="badge r-높음">높음</span></td><td>접속이 지난주 같은 시간의 ${Math.round((C.trafficHigh || .5) * 100)}% 미만(예스폼 직전 1시간 · 쇼핑몰 6시간 · 싸인 3시간) · 최근 3시간 오류 난 세션 ${pc(C.siteRate3hHigh)} 이상(쇼핑몰 25%) · 핵심 페이지(예스폼 멤버십 결제·멤버십 안내, 쇼핑몰 결제·상품, 싸인 계약 작성·서명·결제) 안에서 버튼 클릭 직후 오류가 난 세션이 기준 이상(쇼핑몰 결제·싸인 결제 1세션, 나머지 2세션) · 페이지 안 오류 세션 ${pc(C.pageRateHigh)} 이상(세션 ${C.pageMin}개 이상) · 예스폼 최근 3시간 멤버십 결제 페이지 접속 0</td></tr>
+    <tr><td><span class="badge r-높음">높음</span></td><td>접속이 지난주 같은 시간의 ${Math.round((C.trafficHigh || .5) * 100)}% 미만(예스폼 직전 1시간 · 쇼핑몰 6시간 · 싸인 3시간) · 최근 3시간 오류 난 세션 ${pc(C.siteRate3hHigh)} 이상(쇼핑몰 25%) · 핵심 페이지(예스폼 멤버십 결제·멤버십 안내·가입, 쇼핑몰 결제·상품, 싸인 계약 작성·서명·결제·가입) 안에서 버튼 클릭 직후 오류가 난 세션이 기준 이상(쇼핑몰 결제·싸인 결제 1세션, 나머지 2세션) · 페이지 안 오류 세션 ${pc(C.pageRateHigh)} 이상(세션 ${C.pageMin}개 이상) · 예스폼 최근 3시간 멤버십 결제 페이지 접속 0</td></tr>
     <tr><td><span class="badge r-중간">중간</span></td><td>접속 ${Math.round((C.trafficMid || .7) * 100)}% 미만 · 사이트 오늘 오류 난 세션 ${pc(C.siteRateTodayMid)} 이상 · 핵심 페이지 안 오류 1세션 이상</td></tr>
     <tr><td><span class="badge r-낮음">낮음</span></td><td>사이트 다른 곳의 새 오류</td></tr>
     <tr><td></td><td style="color:var(--faint)">핵심 페이지 수치는 녹화의 이벤트 기록을 열어 오류가 그 페이지에서 났을 때만 셉니다(다른 페이지에서 난 오류는 제외).</td></tr></table></div>`;
