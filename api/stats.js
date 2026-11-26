@@ -104,6 +104,8 @@ module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
   // 예스폼 오류 모니터링 「확인 필요」(상단 메뉴 표시·확인 체크) — api/_clarityalert.js
   if (req.query && req.query.alert === 'clarity') return require('./_clarityalert')(req, res);
+  // 예스폼싸인 월보고서 「월간 인사이트」·「액션 플랜」 직접 수정 저장 — api/_signnotes.js (2026-11-26)
+  if (req.query && req.query.notes === 'sign') return require('./_signnotes')(req, res);
   if (req.method === 'GET') return res.status(200).json({ list: await Promise.all(LIST.filter(x => x.sidebar !== false).map(withMeta)) });
   if (req.method !== 'POST') return res.status(405).json({ error: '허용되지 않는 요청입니다.' });
   const site = siteOk(req);
