@@ -2,6 +2,67 @@
   "version": 2,
   "projects": [
     {
+      "id": "20261123-173640-design",
+      "title": "[예스폼] 이용요금 디자인 시안",
+      "team": "design",
+      "category": "웹 메인",
+      "desc": "",
+      "created": "2026.11.23",
+      "updated": "2026.11.26",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261123-173640-design",
+          "label": "v1",
+          "title": "[예스폼] 이용요금 디자인 시안",
+          "desc": "",
+          "created": "2026.11.23",
+          "folder": "archive/20261123-173640-design",
+          "preview": "archive/20261123-173640-design/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261123-173640-design/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261123-174316-design",
+          "label": "v2",
+          "title": "[예스폼] 이용요금 디자인 시안",
+          "desc": "",
+          "created": "2026.11.23",
+          "folder": "archive/20261123-174316-design",
+          "preview": "archive/20261123-174316-design/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261123-174316-design/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261126-163752-design",
+          "label": "v3",
+          "title": "[예스폼] 이용요금 디자인 시안",
+          "desc": "",
+          "created": "2026.11.26",
+          "folder": "archive/20261126-163752-design",
+          "preview": "archive/20261126-163752-design/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261126-163752-design/index.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "20261120-170306-yesform-brief-admin",
       "title": "연말연초 업무 브리핑 모달 · 콘텐츠 관리 (관리자)",
       "team": "planning",
@@ -819,51 +880,6 @@
             {
               "label": "대시보드",
               "href": "archive/20261124-090143-yesform-membership-dashboard-simhide/index.html"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "20261123-173640-design",
-      "title": "[예스폼] 이용요금 디자인 시안",
-      "team": "design",
-      "category": "웹 메인",
-      "desc": "",
-      "created": "2026.11.23",
-      "updated": "2026.11.23",
-      "hidden": false,
-      "final": null,
-      "versions": [
-        {
-          "id": "20261123-173640-design",
-          "label": "v1",
-          "title": "[예스폼] 이용요금 디자인 시안",
-          "desc": "",
-          "created": "2026.11.23",
-          "folder": "archive/20261123-173640-design",
-          "preview": "archive/20261123-173640-design/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261123-173640-design/index.html"
-            }
-          ]
-        },
-        {
-          "id": "20261123-174316-design",
-          "label": "v2",
-          "title": "[예스폼] 이용요금 디자인 시안",
-          "desc": "",
-          "created": "2026.11.23",
-          "folder": "archive/20261123-174316-design",
-          "preview": "archive/20261123-174316-design/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261123-174316-design/index.html"
             }
           ]
         }
