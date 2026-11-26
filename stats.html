@@ -45,6 +45,17 @@
   .hero h1{font-size:26px;letter-spacing:-.01em}
   .hero p{color:var(--sub);margin-top:4px;font-size:14px}
   .qlinks{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  /* 2026-11-26 마케팅 분리: 지표는 결과만, 실무 점검은 자동관리 「예스폼싸인 마케팅」(stats.html?mode=mkt) */
+  .hrow{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+  .mktbtn{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 16px;border-radius:10px;background:#0b6b35;color:#fff;font-weight:700;font-size:14px;text-decoration:none;white-space:nowrap;margin-top:4px}
+  .mktbtn:hover{filter:brightness(1.08)}
+  body.embed header.gnb{display:none}
+  body.embed .hero{padding-top:6px}
+  body.embed .hero h1{display:none}
+  .clinks{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .clink{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border:1px solid var(--line);border-radius:9px;background:#fff;font-size:13px;font-weight:600;text-decoration:none;color:var(--text)}
+  .clink small{font-weight:400;color:var(--sub)}
+  .clink:hover{border-color:#0b6b35;color:#0b6b35}
   .qlink{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px 0 10px;background:#fff;border:1px solid #bfe6cd;border-radius:10px;text-decoration:none;color:var(--text);font-size:14px;white-space:nowrap;max-width:100%;transition:border-color .15s,box-shadow .15s}
   .qlink:hover{border-color:#12a150;box-shadow:0 4px 14px rgba(18,161,80,.12)}
   .qlink .qi{font-size:15px;line-height:1}
@@ -437,10 +448,13 @@ function stale() {
   return lag > 2 ? `<div class="stale" role="status">데이터가 ${D0(D.range.end)}에 멈춰 있어요. 자동 갱신이 ${lag - 1}일째 안 됐어요 (GA4·싸인 관리자 로그인 만료 가능성).</div>` : '';
 }
 
+const MKT = new URLSearchParams(location.search).get('mode') === 'mkt'; // 자동관리 「예스폼싸인 마케팅」 화면
+if (MKT && window.parent !== window) document.body.classList.add('embed');
 function start() {
   $('#gate').hidden = true; $('#app').hidden = false; $('#logout').hidden = false;
   const h = new URLSearchParams(location.hash.slice(1));
-  ptab = ['editor', 'signmkt'].includes(h.get('p')) ? h.get('p') : 'sign'; // 첫 화면: 싸인
+  if (!MKT && h.get('p') === 'signmkt') { location.replace('auto.html?id=sign-marketing'); return; } // 예전 싸인 마케팅 탭 주소
+  ptab = MKT ? 'signmkt' : h.get('p') === 'editor' ? 'editor' : 'sign'; // 첫 화면: 싸인 (마케팅은 자동관리 화면에서만)
   prod = ptab === 'editor' ? 'editor' : 'sign';
   month = D.months.some(x => x.m === h.get('m')) || (h.get('m') === 'q3' && Q3()) ? h.get('m') : D.months[D.months.length - 1].m;
   const v = h.get('v');
@@ -454,7 +468,7 @@ function start() {
 }
 
 function render() {
-  document.body.className = prod;
+  document.body.className = prod + (document.body.classList.contains('embed') ? ' embed' : '');
   let ctx, sub;
   if (view === 'month') {
     history.replaceState(null, '', `#p=${ptab}&v=month&m=${month}`);
@@ -479,19 +493,24 @@ function render() {
       : wAligned(4).filter(x => wFind(addDay(x.e, -7))).reverse().map((x, j, a) => `<button role="tab" data-k="${x.k}" aria-selected="${x.k === k}">${j === a.length - 1 ? '직전 7일' : dRange(x.s, x.e)}</button>`).join('');
   }
   $('#app').innerHTML = `
-  <section class="hero">
-    <h1>에디터/싸인 지표</h1>
-    <p>예스폼 에디터 · 예스폼싸인 | 데이터 ${D0(D.range.start)} ~ ${D0(D.range.end)} · ${upd()}</p>
+  ${MKT ? `<section class="hero">
+    <h1>예스폼싸인 마케팅</h1>
+    <p>광고 · 지면 · 유입 채널 · 바이럴 점검 | 데이터 ${D0(D.range.start)} ~ ${D0(D.range.end)} · ${upd()}</p>
     ${stale()}
     ${quickLinks()}
+    <div class="clinks">${MKT_CONSOLES.map(([n, d, u]) => `<a class="clink" href="${u}" target="_blank" rel="noopener">${n} <small>${d}</small> ↗</a>`).join('')}</div>
+  </section>` : `<section class="hero"><div class="hrow"><div>
+    <h1>에디터/싸인 지표</h1>
+    <p>예스폼 에디터 · 예스폼싸인 | 데이터 ${D0(D.range.start)} ~ ${D0(D.range.end)} · ${upd()}</p></div>
+    <a class="mktbtn" href="auto.html?id=sign-marketing">📣 싸인 마케팅 →</a></div>
+    ${stale()}
   </section>
-  ${goalPanel()}
+  ${goalPanel()}`}
   <div class="ctrl">
-    <div class="ptabs" role="tablist">
+    ${MKT ? '<div></div>' : `<div class="ptabs" role="tablist">
       <button class="ptab" role="tab" data-p="editor" aria-selected="${ptab === 'editor'}"><i></i>예스폼 에디터</button>
       <button class="ptab" role="tab" data-p="sign" aria-selected="${ptab === 'sign'}"><i></i>예스폼싸인</button>
-      <button class="ptab" role="tab" data-p="signmkt" aria-selected="${ptab === 'signmkt'}"><i></i>싸인 마케팅</button>
-    </div>
+    </div>`}
     ${hasP() ? `<div class="seg vseg" role="tablist" aria-label="보기">${VIEWS.map(([v, l]) => `<button role="tab" data-v="${v}" aria-selected="${v === view}">${l}</button>`).join('')}</div>` : ''}
   </div>
   <div class="subsel">${view === 'week' ? wPicker() : ''}<div class="seg sub ${view}" role="tablist" aria-label="기간">${sub}</div></div>
@@ -504,7 +523,9 @@ function render() {
   document.querySelectorAll('.vseg button[data-v]').forEach(b => b.onclick = () => { view = b.dataset.v; render(); });
   const on = document.querySelector('.seg.sub button[aria-selected="true"]'); if (on) on.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   drawChart();
+  if (window.parent !== window) setTimeout(() => parent.postMessage({ type: 'auto-h', h: document.documentElement.scrollHeight }, '*'), 80);
 }
+const MKT_CONSOLES = [['메타', 'Meta Ads 광고 관리자 · 데이터 연동 전', 'https://adsmanager.facebook.com/'], ['네이버', '파워링크 · 파워콘텐츠', 'https://ads.naver.com/manage/ad-accounts/1912105/sa/campaigns/cmp-a001-01-000000010598857'], ['구글', 'Google Ads · 예스폼싸인_SA', 'https://ads.google.com/aw/campaigns']];
 
 const kpi = (label, v, unit, d, sub, main) => `<div class="kpi${main ? ' main' : ''}"><div class="l">${TL(label)}</div><div class="v">${fmt(v)}<small>${unit}</small></div>${pill(d)}${sub ? `<div class="sub">${sub}</div>` : ''}</div>`;
 function funnel(steps) {
@@ -593,7 +614,6 @@ function signView({ m, pm, cd, pd, mk, pmk, label }) {
   const pList = D.payments ? paysIn(SEL.s, SEL.e) : [];
   if (pList.length) { const gg = srcGroup(pList); bullets.push(`결제 출처: <b>${gg.slice(0, 5).map(([k, [n]]) => `${esc(k)} ${n}건`).join(' / ')}${gg.length > 5 ? ` 외 ${gg.length - 5}곳` : ''}</b>`); }
   if (payTop && payTop[2] > 0) bullets.push(`등록된 지면 중 결제가 가장 많이 나온 곳은 <b>${esc(payTop[0])}</b> (${fmt(payTop[2])}건 · ${won(payTop[3])})`);
-  bullets.push(`등록된 지면을 통한 결제는 전체 결제 ${fmt(pay[0])}건 중 <b>${fmt(plTot[1])}건</b>이에요`);
   bullets.push(`GA4 기준 가장 많이 들어온 채널은 <b>${esc(ch[0][0])}</b> (${fmt(ch[0][1])}명, ${pctTxt(pct(ch[0][1], chTot))})`);
   return `
   <div class="headline"><div class="t">${label} 요약 · 예스폼싸인</div>
@@ -613,10 +633,6 @@ function signView({ m, pm, cd, pd, mk, pmk, label }) {
     ${funnel([['활성 사용자', S.active, 'GA4 순 사용자'], ['신규 가입', S.signup], [S.usersSum ? '전자계약 실사용자 (월별 합)' : '전자계약 실사용자', S.users], ['결제', pay[0], won(pay[1])]])}</section>
 
   ${paySection(pay)}
-
-  ${srcSections({ m, pm, cd, pd, mk, pmk, label })}
-
-  ${mainMenuSection()}
 
   <section class="blk"><h2>일별 추이 ${view === 'day' ? '<small>최근 3주</small>' : view === 'week' ? '<small>최근 5주</small>' : ''}</h2><div class="chartbox"><div class="legend" id="legend"></div><svg class="chart" id="chart" role="img" aria-label="일별 추이"></svg></div></section>
 
@@ -734,7 +750,9 @@ function signMktView({ m, pm, cd, pd, mk, pmk, label }) {
 
   ${(() => { try { return viralSection(); } catch (e) { console.error(e); return ''; } })()}
 
-  ${srcSections({ m, pm, cd, pd, mk, pmk, label })}`;
+  ${srcSections({ m, pm, cd, pd, mk, pmk, label })}
+
+  ${mainMenuSection()}`;
 }
 
 /* ---------- 메인 메뉴별 이동 (싸인 탭) — 2026-11-18 ----------
