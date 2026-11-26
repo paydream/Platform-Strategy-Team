@@ -40,19 +40,19 @@
     {
       "id": "brief-rulebook",
       "title": "연말연초 업무 브리핑 모달 · 룰북 기준",
-      "desc": "2027 서식 개정 룰북·매칭표로 모달을 만들면 어떻게 되는지 미리 봐요. 법 개정 일정은 룰북에서, 추천 서식은 매칭표에서 가져오고 현재 모달과 차이를 보여줘요. 현재 모달 설정은 그대로예요.",
+      "desc": "시트 「모달_룰북기준」이 콘텐츠 표가 되고, 2027 서식 개정 룰북(시행일 11~2월) 개정 24건으로 만든 모달을 미리 봐요. 룰북과 표가 어긋나면 점검에 표시하고, 현재 모달과 차이도 보여줘요. 현재 모달 설정은 그대로예요.",
       "product": "예스폼",
       "kind": "콘텐츠 관리",
       "status": "시뮬레이션",
-      "schedule": "열 때마다 룰북 실시간 반영",
+      "schedule": "열 때마다 시트·룰북 실시간 반영",
       "updated": "2026-11-26",
       "thumb": "assets/auto/brief-rulebook.jpg",
-      "src": "archive/20261126-172850-yesform-brief-rulebook-v1/index.html",
-      "sheet": "https://docs.google.com/spreadsheets/d/1kyn4zyGjKMDuULLArtsucUnmTOxwhqkj1pRmeGJVsMs/edit?gid=1886620016#gid=1886620016",
+      "src": "archive/20261126-174227-yesform-brief-rulebook-v2/index.html",
+      "sheet": "https://docs.google.com/spreadsheets/d/1kyn4zyGjKMDuULLArtsucUnmTOxwhqkj1pRmeGJVsMs/edit?gid=338948901#gid=338948901",
       "meta": [
-        "룰북 연동",
+        "시트 연동",
         "개정 24건",
-        "새로 추가 18건"
+        "추천 서식 72개"
       ]
     },
     {
