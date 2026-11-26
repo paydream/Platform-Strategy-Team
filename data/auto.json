@@ -21,17 +21,18 @@
     {
       "id": "clarity",
       "title": "예스폼 오류 모니터링",
-      "desc": "결제 불가·사이트 미노출 수준의 치명 장애를 Clarity로 1시간마다 점검해 위험도를 표기하고, 위험도 높음만 기록",
+      "desc": "예스폼·예스폼싸인의 결제 불가·사이트 미노출·계약 작성 불가 수준 치명 장애를 Clarity로 1시간마다 점검해 위험도를 표기하고, 위험도 높음만 기록",
       "product": "예스폼",
       "kind": "장애 모니터링",
       "status": "운영 중",
       "schedule": "1시간마다 자동",
-      "updated": "2026-11-25",
+      "updated": "2026-11-26",
       "thumb": "assets/auto/clarity.jpg",
       "src": "clarity.html",
       "width": "fixed",
       "meta": [
         "Microsoft Clarity",
+        "예스폼 · 예스폼싸인",
         "위험도 높음만 기록"
       ]
     }
