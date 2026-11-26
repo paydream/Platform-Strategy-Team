@@ -74,8 +74,6 @@
   #clink[data-tip]:hover::before,#clink2[data-tip]:hover::before{bottom:auto;top:calc(100% - 2px);border-top-color:transparent;border-bottom-color:#191f28;left:auto;right:14px;transform:none}
   td a.rl[data-tip]:hover::after{bottom:auto;top:50%;left:auto;right:calc(100% + 10px);transform:translateY(-50%)}
   td a.rl[data-tip]:hover::before{bottom:auto;top:50%;left:auto;right:calc(100% + 0px);transform:translateY(-50%);border-top-color:transparent;border-left-color:#191f28}
-  .chips{display:flex;flex-wrap:wrap;gap:6px}
-  .chip{font-size:12.5px;padding:4px 10px;border-radius:99px;background:#f1f3f5;color:var(--text)}
   .nod{color:var(--faint);font-size:12.5px;padding:6px 0}
   .empty{padding:18px;text-align:center;color:var(--sub);font-size:13px;background:#f8f9fb;border-radius:10px}
   .crit{width:100%;font-size:12.5px}
@@ -205,12 +203,6 @@ function render() {
       <td class="nw">${esc(AREA[i.area] || i.area)}</td><td>${esc(i.text)}</td>
       <td class="nw">${REC[i.area] ? `<a class="rl" data-tip="${TIP}" href="${recUrl(dateK(i.first), REC[i.area], i.msg, PROJ[i.site || siteOfArea(i.area)])}" target="_blank" rel="noopener">녹화↗</a>` : `<a class="rl" data-tip="${TIP}" href="${dashUrl(Date.parse(i.first) - 3 * 3600e3, Date.parse(i.last) + 3600e3, null, PROJ[i.site || siteOfArea(i.area)])}" target="_blank" rel="noopener">Clarity↗</a>`}</td></tr>`).join('') +
     '</table></div>' : '<div class="empty">기록된 위험 높음 장애가 없어요.</div>') + '</div>';
-
-  // 알림 받는 사람
-  const AL = D.alert;
-  if (AL) h += `<div class="card"><h2>알림 받는 사람 <span>${esc(AL.rule || '위험 높음이 새로 생긴 점검에서만')} 발송</span></h2>
-    <div class="chips">${(AL.email || []).map(e => `<span class="chip">${esc(e)}</span>`).join('')}</div>
-    <p class="nod" style="padding-top:8px">이메일 ${fmt((AL.email || []).length)}명 · 보내는 계정 ${esc(AL.from || '')} · 플로우 개인 메시지 ${AL.flow ? '사용 중' : '설정 전(플로우 관리자 알림봇 필요)'}</p></div>`;
 
   // 판정 기준
   h += `<div class="card"><h2>위험도 기준 <span>높음만 위 기록에 남아요</span></h2><table class="crit">
