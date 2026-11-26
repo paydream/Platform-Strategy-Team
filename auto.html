@@ -41,6 +41,14 @@
   .cb .hl2{font-size:12.5px;background:#f4f7ff;border-radius:8px;padding:6px 9px;margin-top:4px}
   .cb .mt{margin-top:auto;padding-top:8px;display:flex;flex-wrap:wrap;gap:4px 10px;font-size:11.5px;color:var(--faint)}
   .nod{color:var(--faint);font-size:13px;padding:8px 0}
+  body.compact .hero{padding-top:10px;align-items:center}
+  body.compact .hero>div:first-child{display:flex;align-items:baseline;gap:12px}
+  body.compact .crumb{margin:0}
+  body.compact .hero h1{font-size:18px}
+  body.compact #pdesc{display:none}
+  body.compact .hero .btn{height:30px;font-size:12.5px}
+  body.compact .frame{margin-top:6px}
+  body.compact .frame iframe{height:calc(100vh - 120px)}
   .frame{margin-top:16px;background:var(--bg);overflow:hidden;width:100%}
   .frame iframe{display:block;width:100%;border:0;height:calc(100vh - 190px);min-height:640px;background:var(--bg)}
 </style>
@@ -79,6 +87,7 @@ function detail(it) {
   $('#crumb').hidden = false; $('#list').hidden = true;
   if (!it) { $('#pdesc').textContent = '없는 항목이에요. 목록에서 다시 골라 주세요.'; return; }
   document.title = `${it.title} | 자동관리 | 플랫폼전략팀 업무 아카이브`;
+  if (it.compact) document.body.classList.add('compact');
   const fixed = it.width === 'fixed'; // width:'fixed' 항목은 다른 메뉴처럼 본문 폭(1200px) 안에 고정
   if (!fixed) $('#main').classList.add('wide');
   $('#ptitle').textContent = it.title; $('#pdesc').textContent = it.desc || '';
