@@ -13,42 +13,6 @@
       "final": null,
       "versions": [
         {
-          "id": "20261126-170559-membership",
-          "label": "v1",
-          "title": "멤버십 개편 페이지",
-          "desc": "",
-          "created": "2026.11.26",
-          "folder": "archive/20261126-170559-membership",
-          "preview": "archive/20261126-170559-membership/멤버십개편_한눈에보기.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "멤버십개편_한눈에보기",
-              "href": "archive/20261126-170559-membership/멤버십개편_한눈에보기.html"
-            }
-          ]
-        },
-        {
-          "id": "20261126-170923-design",
-          "label": "v2",
-          "title": "멤버십 개편 페이지",
-          "desc": "",
-          "created": "2026.11.26",
-          "folder": "archive/20261126-170923-design",
-          "preview": "archive/20261126-170923-design/A_페이지형/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "A_페이지형",
-              "href": "archive/20261126-170923-design/A_페이지형/index.html"
-            },
-            {
-              "label": "B_모달형",
-              "href": "archive/20261126-170923-design/B_모달형/index.html"
-            }
-          ]
-        },
-        {
           "id": "20261126-171628-membership",
           "label": "v3",
           "title": "멤버십 개편 페이지",
@@ -4002,6 +3966,52 @@
     }
   ],
   "trash": [
+    {
+      "type": "version",
+      "projectId": "20261126-170559-membership",
+      "deleted": "2026.11.26",
+      "version": {
+        "id": "20261126-170923-design",
+        "label": "v2",
+        "title": "멤버십 개편 페이지",
+        "desc": "",
+        "created": "2026.11.26",
+        "folder": "archive/20261126-170923-design",
+        "preview": "archive/20261126-170923-design/A_페이지형/index.html",
+        "hidden": false,
+        "items": [
+          {
+            "label": "A_페이지형",
+            "href": "archive/20261126-170923-design/A_페이지형/index.html"
+          },
+          {
+            "label": "B_모달형",
+            "href": "archive/20261126-170923-design/B_모달형/index.html"
+          }
+        ]
+      }
+    },
+    {
+      "type": "version",
+      "projectId": "20261126-170559-membership",
+      "deleted": "2026.11.26",
+      "version": {
+        "id": "20261126-170559-membership",
+        "label": "v1",
+        "title": "멤버십 개편 페이지",
+        "desc": "",
+        "created": "2026.11.26",
+        "folder": "archive/20261126-170559-membership",
+        "preview": "archive/20261126-170559-membership/멤버십개편_한눈에보기.html",
+        "hidden": false,
+        "items": [
+          {
+            "label": "멤버십개편_한눈에보기",
+            "href": "archive/20261126-170559-membership/멤버십개편_한눈에보기.html"
+          }
+        ]
+      }
+    },
     {
       "type": "version",
       "projectId": "20261116-125722-yesform-brief-timeline-v1",
