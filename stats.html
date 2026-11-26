@@ -732,7 +732,7 @@ function actionPlan(NT) {
       <tbody>${rows}</tbody></table></div>
       <div class="nbar" style="padding:0 14px 14px"><span class="nerr" id="nErr"></span><button class="nbtn" data-nact="act-add">+ 항목 추가</button><button class="nbtn" data-nact="cancel">취소</button><button class="nbtn pri" data-nact="act-save">저장</button></div></div></section>`;
   }
-  return `<section class="blk"><h2 class="nh">액션 플랜${NT.actions && NT.at ? `<span class="nmeta">${noteAt(NT.at)}</span>` : ''}<button class="nbtn" data-nact="act-edit"${NOTES ? '' : ' disabled title="불러오는 중"'}>수정</button></h2><div class="card">${list.length ? `<div class="scroll"><table class="tbl acts">
+  return `<section class="blk"><h2 class="nh">액션 플랜${list.length && NT.at ? `<span class="nmeta">${noteAt(NT.at)}</span>` : ''}<button class="nbtn" data-nact="act-edit"${NOTES ? '' : ' disabled title="불러오는 중"'}>수정</button></h2><div class="card">${list.length ? `<div class="scroll"><table class="tbl acts">
     <thead><tr><th style="text-align:left">할 일</th><th>담당</th><th>기한</th><th>상태</th></tr></thead>
     <tbody>${list.map(a => `<tr><td class="at${a.st === 'done' ? ' done' : ''}">${noteFmt(a.t)}</td><td>${esc(a.owner) || '-'}</td><td>${esc(a.due) || '-'}</td><td><span class="stt ${a.st}">${ST[a.st] || '예정'}</span></td></tr>`).join('')}</tbody></table></div>`
     : `<p class="pempty">${NOTES ? (NOTES.err ? `불러오지 못했어요 (${esc(String(NOTES.err))})` : '아직 액션 플랜이 없어요. 「수정」을 눌러 이번 달 할 일을 적어 주세요.') : '불러오는 중…'}</p>`}</div></section>`;
