@@ -70,8 +70,8 @@
   [data-tip]{position:relative}
   [data-tip]:hover::after,[data-tip]:focus-visible::after{content:attr(data-tip);position:absolute;left:50%;bottom:calc(100% + 8px);transform:translateX(-50%);width:max-content;max-width:260px;white-space:normal;text-align:left;font-size:12px;font-weight:500;line-height:1.45;color:#fff;background:#191f28;border-radius:8px;padding:7px 10px;z-index:20;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.15)}
   [data-tip]:hover::before,[data-tip]:focus-visible::before{content:'';position:absolute;left:50%;bottom:calc(100% + 3px);transform:translateX(-50%);border:5px solid transparent;border-top-color:#191f28;z-index:20;pointer-events:none}
-  #clink[data-tip]:hover::after{bottom:auto;top:calc(100% + 8px);left:auto;right:0;transform:none}
-  #clink[data-tip]:hover::before{bottom:auto;top:calc(100% - 2px);border-top-color:transparent;border-bottom-color:#191f28;left:auto;right:14px;transform:none}
+  #clink[data-tip]:hover::after,#clink2[data-tip]:hover::after{bottom:auto;top:calc(100% + 8px);left:auto;right:0;transform:none}
+  #clink[data-tip]:hover::before,#clink2[data-tip]:hover::before{bottom:auto;top:calc(100% - 2px);border-top-color:transparent;border-bottom-color:#191f28;left:auto;right:14px;transform:none}
   td a.rl[data-tip]:hover::after{bottom:auto;top:50%;left:auto;right:calc(100% + 10px);transform:translateY(-50%)}
   td a.rl[data-tip]:hover::before{bottom:auto;top:50%;left:auto;right:calc(100% + 0px);transform:translateY(-50%);border-top-color:transparent;border-left-color:#191f28}
   .chips{display:flex;flex-wrap:wrap;gap:6px}
@@ -86,6 +86,10 @@
   .area .ms{margin-top:6px;font-size:11.5px;color:var(--bad);word-break:break-all}
   .area .ms div+div{margin-top:2px}
   .area .rec a.off{border-color:var(--line);color:var(--sub)}
+  .sh{display:flex;align-items:baseline;gap:10px;margin:22px 0 -4px}
+  .sh h2{font-size:17px}
+  .sh span{font-size:12px;color:var(--faint)}
+  .sh .badge{font-size:11.5px}
   @media (max-width:560px){.areas{grid-template-columns:1fr}}
 </style>
 </head>
@@ -93,8 +97,8 @@
 <header class="gnb"><div class="wrap gnb-top"><a class="gnb-logo" href="./" title="메인 홈으로"><strong>플랫폼전략팀</strong></a><div class="gnb-util"></div></div><nav class="wrap gnb-nav" data-current="auto" aria-label="주요 메뉴"></nav><script src="gnb.js"></script></header>
 <main class="wrap">
   <section class="hero">
-    <div><h1>예스폼 오류 모니터링</h1><p>결제 불가 · 사이트 미노출 수준의 치명 장애 감시 · Microsoft Clarity · 1시간마다 자동 점검</p></div>
-    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><div class="upd" id="upd"></div><a class="btn" id="clink" data-tip="구글 참잘 계정(wwwchamjal@gmail.com)으로 로그인하면 Clarity 녹화를 볼 수 있어요" href="#" target="_blank" rel="noopener">Clarity 열기 ↗</a></div>
+    <div><h1>예스폼 오류 모니터링</h1><p>예스폼 · 예스폼싸인 결제 불가 · 사이트 미노출 · 계약 작성 불가 수준의 치명 장애 감시 · Microsoft Clarity · 1시간마다 자동 점검</p></div>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><div class="upd" id="upd"></div><a class="btn" id="clink" data-tip="구글 참잘 계정(wwwchamjal@gmail.com)으로 로그인하면 Clarity 녹화를 볼 수 있어요" href="#" target="_blank" rel="noopener">예스폼 Clarity ↗</a><a class="btn" id="clink2" data-tip="구글 참잘 계정(wwwchamjal@gmail.com)으로 로그인하면 Clarity 녹화를 볼 수 있어요" href="#" target="_blank" rel="noopener">싸인 Clarity ↗</a></div>
   </section>
   <div id="root"><p class="nod" style="margin-top:16px">불러오는 중…</p></div>
 </main>
@@ -112,14 +116,16 @@ const EMBED = window.parent !== window;
 const TIP = '구글 참잘 계정(wwwchamjal@gmail.com)으로 로그인하면 Clarity 녹화를 볼 수 있어요';
 if (EMBED) document.body.classList.add('embed');
 const RANK = { '높음': 3, '중간': 2, '낮음': 1, '정상': 0 };
-const AREA = { all: '사이트 전체', member: '멤버십 결제 페이지', shop: '서식 결제 페이지', membership: '멤버십 안내 페이지', settle: '결제 페이지' };
-const REC = { member: 'member/settle\\.php', shop: 'shop/settle\\.php', membership: 'member/membership\\.php', settle: 'settle\\.php' };
+const AREA = { all: '예스폼 사이트 전체', member: '예스폼 멤버십 결제', shop: '예스폼 서식 결제', membership: '예스폼 멤버십 안내', settle: '예스폼 결제 페이지', 'sign-all': '예스폼싸인 사이트 전체', 'sign-contract': '예스폼싸인 계약 작성·서명', 'sign-pay': '예스폼싸인 결제' };
+const PROJ = { yesform: 'xfgy2v09sr', sign: 'xfim3z1mrb' };
+const REC = { member: 'member/settle\\.php', shop: 'shop/settle\\.php', membership: 'member/membership\\.php', settle: 'settle\\.php', 'sign-contract': 'document/contract/index\\.php', 'sign-pay': 'payment/payment\\.php' };
+const siteOfArea = a => /^sign/.test(a || '') ? 'sign' : 'yesform';
 let D = null;
 const proj = () => (D && D.project) || 'xfgy2v09sr';
 const dayRange = date => { const m = Date.parse(date + 'T00:00:00+09:00'); return [m, m + 864e5 - 1]; };
 // msg가 있으면 그 오류 문구로 거른 녹화(이 페이지를 거치고 이 오류가 난 세션), 없으면 이 페이지를 거치고 오류가 난 세션 전체
-const recUrl = (date, re, msg) => { const [s, e] = dayRange(date); return `https://clarity.microsoft.com/projects/view/${proj()}/impressions?URL=${encodeURIComponent('2;6;' + re)}&date=Custom&start=${s}&end=${e}&ScriptErrorText=${msg ? encodeURIComponent('0_' + msg) : 'scriptErrorEventCount'}`; };
-const dashUrl = (s, e, re) => `https://clarity.microsoft.com/projects/view/${proj()}/dashboard?date=Custom&start=${s}&end=${e}` + (re ? '&URL=' + encodeURIComponent('2;6;' + re) : '');
+const recUrl = (date, re, msg, pj) => { const [s, e] = dayRange(date); return `https://clarity.microsoft.com/projects/view/${pj || proj()}/impressions?URL=${encodeURIComponent('2;6;' + re)}&date=Custom&start=${s}&end=${e}&ScriptErrorText=${msg ? encodeURIComponent('0_' + msg) : 'scriptErrorEventCount'}`; };
+const dashUrl = (s, e, re, pj) => `https://clarity.microsoft.com/projects/view/${pj || proj()}/dashboard?date=Custom&start=${s}&end=${e}` + (re ? '&URL=' + encodeURIComponent('2;6;' + re) : '');
 
 function postH() { if (EMBED) try { parent.postMessage({ type: 'auto-h', h: document.documentElement.scrollHeight }, '*'); } catch {} }
 new ResizeObserver(postH).observe(document.body);
@@ -141,7 +147,7 @@ function setUpd() {
   const stale = !at || Date.now() - Date.parse(at) > 3 * 3600e3;
   $('#upd').innerHTML = at ? `<i class="${stale ? 'warn' : ''}"></i>마지막 점검 ${mdhm(at)}${stale ? ' · 3시간 넘게 점검이 없어요' : ''}` : '<i class="warn"></i>점검 전';
   const [s, e] = dayRange(new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10));
-  $('#clink').href = dashUrl(s, e);
+  $('#clink').href = dashUrl(s, e, null, PROJ.yesform); $('#clink2').href = dashUrl(s, e, null, PROJ.sign);
 }
 function render() {
   setUpd();
@@ -158,29 +164,37 @@ function render() {
   if (risks.length) h += `<div class="items">${[...risks].sort((a, b) => RANK[b.level] - RANK[a.level]).map(r => `<div class="item ${r.level === '높음' ? 'hi' : ''}"><span class="badge r-${r.level}">${r.level}</span><span>${esc(r.text)}${r.level === '높음' ? '' : ' <span style="color:var(--faint)">· 기록 안 함</span>'}</span></div>`).join('')}</div>`;
   h += '</div>';
 
-  // 영역별 현재 위험도
-  const t = L.traffic || {}, r3 = L.recent3h || {}, day = L.day || {};
-  const ratio = t.lastWeek ? t.now / t.lastWeek : null;
+  // 사이트별 현재 위험도
   const today = dateK(L.at);
-  const card = (title, level, big, unit, q, rows, rec) => `<div class="area ${level === '높음' ? 'hot' : ''}"><div class="l">${title}<span class="badge r-${level}">${level}</span></div>
-    <div class="v">${big}<small>${unit}</small></div><div class="q">${q}</div>${rows.map(([a, b]) => `<div class="row"><span>${a}</span><b>${b}</b></div>`).join('')}${rec ? `<div class="rec"><a class="btn" href="${rec}" target="_blank" rel="noopener">오류 세션 녹화 보기 ↗</a></div>` : ''}</div>`;
-  const P = L.pages || {};
-  const pageCard = id => { const v = P[id]; if (!v) return '';
-    const top = (v.msgs || [])[0];
-    return `<div class="area ${lvl(id) === '높음' ? 'hot' : ''}"><div class="l">${esc(v.name)}<span class="badge r-${lvl(id)}">${lvl(id)}</span></div>
-      <div class="v">${fmt(v.sessionsWithErr)}<small>/ ${fmt(v.sessions)}세션</small></div><div class="q">오늘 이 페이지 안에서 오류가 난 세션</div>
-      <div class="row"><span>버튼 클릭 직후 오류</span><b>${fmt(v.clickSessions)}세션</b></div>
-      <div class="row"><span>다른 페이지 오류(제외)</span><b>${fmt(v.offPage)}세션</b></div>
-      <div class="row"><span>높음 기준</span><b>클릭 오류 ${C.pageClickHigh || 2}세션</b></div>
-      ${(v.msgs || []).length ? `<div class="ms">${v.msgs.slice(0, 2).map(([m, n]) => `<div>${esc(m)} · ${n}세션</div>`).join('')}</div>` : ''}
-      <div class="rec">${top ? `<a class="btn" data-tip="${TIP}" href="${recUrl(today, v.re || REC[id], top[0])}" target="_blank" rel="noopener">이 페이지 오류 녹화 보기 ↗</a>` : `<a class="btn off" data-tip="${TIP}" href="${recUrl(today, v.re || REC[id])}" target="_blank" rel="noopener">페이지 안 오류 없음 · 목록 ↗</a>`}</div></div>`; };
-  h += '<div class="areas">' +
-    card('사이트 접속', lvlKey(['traffic']), ratio == null ? '-' : Math.round(ratio * 100), '%', `직전 1시간(${hmMs(t.start)}~${hmMs(t.end)}) / 지난주 같은 시간`,
-      [['직전 1시간 세션', fmt(t.now)], ['지난주 같은 시간', fmt(t.lastWeek)], ['높음 기준', `${Math.round((C.trafficHigh || .5) * 100)}% 미만`]]) +
-    card('사이트 오류', lvlKey(['site-errors', 'site-rate', 'new:all:']), pc(r3.rate), '', '최근 3시간 오류 난 세션 비율',
-      [['최근 3시간 세션', fmt(r3.sessions)], ['오늘 오류 난 세션', pc((day.all || {}).rate)], ['높음 기준', `${pc(C.siteRate3hHigh || 8)} 이상`]]) +
-    ['member', 'shop', 'membership'].map(id => pageCard(id)).join('') +
-    '</div>';
+  const SL = D.siteList || [{ id: 'yesform', name: '예스폼', proj: PROJ.yesform, trafWinH: 1, pages: ['member', 'shop', 'membership'].map(id => ({ id })) }];
+  const SS = L.sites || { yesform: { traffic: L.traffic, recent3h: L.recent3h, day: L.day, pages: L.pages } };
+  const card = (title, level, big, unit, q, rows) => `<div class="area ${level === '높음' ? 'hot' : ''}"><div class="l">${title}<span class="badge r-${level}">${level}</span></div>
+    <div class="v">${big}<small>${unit}</small></div><div class="q">${q}</div>${rows.map(([a, b]) => `<div class="row"><span>${a}</span><b>${b}</b></div>`).join('')}</div>`;
+  for (const si of SL) {
+    const S = SS[si.id]; if (!S) continue;
+    const sr = risks.filter(r => (r.site || siteOfArea(r.area)) === si.id);
+    const lv = f => sr.filter(f).reduce((m, r) => RANK[r.level] > RANK[m] ? r.level : m, '정상');
+    const siteLv = lv(() => true);
+    const t = S.traffic || {}, r3 = S.recent3h || {}, day = S.day || {}, P = S.pages || {};
+    const ratio = t.lastWeek ? t.now / t.lastWeek : null, H = t.hours || si.trafWinH || 1;
+    const pageCard = pg => { const v = P[pg.id]; if (!v) return '';
+      const top = (v.msgs || [])[0], l = lv(r => r.area === pg.id), re = v.re || REC[pg.id];
+      return `<div class="area ${l === '높음' ? 'hot' : ''}"><div class="l">${esc(v.name)}<span class="badge r-${l}">${l}</span></div>
+        <div class="v">${fmt(v.sessionsWithErr)}<small>/ ${fmt(v.sessions)}세션</small></div><div class="q">오늘 이 페이지 안에서 오류가 난 세션</div>
+        <div class="row"><span>버튼 클릭 직후 오류</span><b>${fmt(v.clickSessions)}세션</b></div>
+        <div class="row"><span>다른 페이지 오류(제외)</span><b>${fmt(v.offPage)}세션</b></div>
+        <div class="row"><span>높음 기준</span><b>클릭 오류 ${v.clickHigh || pg.clickHigh || C.pageClickHigh || 2}세션</b></div>
+        ${(v.msgs || []).length ? `<div class="ms">${v.msgs.slice(0, 2).map(([m, n]) => `<div>${esc(m)} · ${n}세션</div>`).join('')}</div>` : ''}
+        <div class="rec">${top ? `<a class="btn" data-tip="${TIP}" href="${recUrl(today, re, top[0], si.proj)}" target="_blank" rel="noopener">이 페이지 오류 녹화 보기 ↗</a>` : `<a class="btn off" data-tip="${TIP}" href="${recUrl(today, re, null, si.proj)}" target="_blank" rel="noopener">페이지 안 오류 없음 · 목록 ↗</a>`}</div></div>`; };
+    const n = 2 + (si.pages || []).length;
+    h += `<div class="sh"><h2>${esc(si.name)}</h2><span class="badge r-${siteLv}">${siteLv}</span><span>오늘 세션 ${fmt((day.all || {}).sessions)}</span></div>`;
+    h += `<div class="areas" style="grid-template-columns:repeat(${n},minmax(0,1fr))">` +
+      card('사이트 접속', lv(r => /traffic$/.test(r.key)), ratio == null ? '-' : Math.round(ratio * 100), '%', `직전 ${H}시간(${hmMs(t.start)}~${hmMs(t.end)}) / 지난주 같은 시간`,
+        [[`직전 ${H}시간 세션`, fmt(t.now)], ['지난주 같은 시간', fmt(t.lastWeek)], ['높음 기준', `${Math.round((C.trafficHigh || .5) * 100)}% 미만`]]) +
+      card('사이트 오류', lv(r => /site-errors|site-rate|new:all:/.test(r.key)), pc(r3.rate), '', '최근 3시간 오류 난 세션 비율',
+        [['최근 3시간 세션', fmt(r3.sessions)], ['오늘 오류 난 세션', pc((day.all || {}).rate)], ['높음 기준', `${pc(C.siteRate3hHigh || 8)} 이상`]]) +
+      (si.pages || []).map(pageCard).join('') + '</div>';
+  }
 
   // 위험 기록 (높음만)
   const inc = D.incidents || [];
@@ -189,7 +203,7 @@ function render() {
     inc.map(i => `<tr><td class="nw">${mdhm(i.first)}</td><td class="nw">${mdhm(i.last)}${i.checks > 1 ? ` <span style="color:var(--faint)">(${i.checks}회)</span>` : ''}</td>
       <td class="nw">${i.backfill ? '<span class="badge r-실패">사후 기록</span>' : i.resolvedAt ? `<span class="badge r-정상">해소 ${hm(i.resolvedAt)}</span>` : '<span class="badge r-높음">진행 중</span>'}</td>
       <td class="nw">${esc(AREA[i.area] || i.area)}</td><td>${esc(i.text)}</td>
-      <td class="nw">${REC[i.area] ? `<a class="rl" data-tip="${TIP}" href="${recUrl(dateK(i.first), REC[i.area], i.msg)}" target="_blank" rel="noopener">녹화↗</a>` : `<a class="rl" data-tip="${TIP}" href="${dashUrl(Date.parse(i.first) - 3 * 3600e3, Date.parse(i.last) + 3600e3)}" target="_blank" rel="noopener">Clarity↗</a>`}</td></tr>`).join('') +
+      <td class="nw">${REC[i.area] ? `<a class="rl" data-tip="${TIP}" href="${recUrl(dateK(i.first), REC[i.area], i.msg, PROJ[i.site || siteOfArea(i.area)])}" target="_blank" rel="noopener">녹화↗</a>` : `<a class="rl" data-tip="${TIP}" href="${dashUrl(Date.parse(i.first) - 3 * 3600e3, Date.parse(i.last) + 3600e3, null, PROJ[i.site || siteOfArea(i.area)])}" target="_blank" rel="noopener">Clarity↗</a>`}</td></tr>`).join('') +
     '</table></div>' : '<div class="empty">기록된 위험 높음 장애가 없어요.</div>') + '</div>';
 
   // 알림 받는 사람
@@ -200,10 +214,10 @@ function render() {
 
   // 판정 기준
   h += `<div class="card"><h2>위험도 기준 <span>높음만 위 기록에 남아요</span></h2><table class="crit">
-    <tr><td><span class="badge r-높음">높음</span></td><td>직전 1시간 접속이 지난주 같은 시간의 ${Math.round((C.trafficHigh || .5) * 100)}% 미만 · 최근 3시간 사이트 오류 난 세션 ${pc(C.siteRate3hHigh)} 이상 · 결제 관련 페이지(멤버십 결제·서식 결제·멤버십 안내) 안에서 버튼 클릭 직후 오류가 난 세션 ${C.pageClickHigh || 2}개 이상 · 페이지 안 오류 세션 ${pc(C.pageRateHigh)} 이상(세션 ${C.pageMin}개 이상) · 최근 3시간 결제 페이지 접속 0</td></tr>
-    <tr><td><span class="badge r-중간">중간</span></td><td>접속 ${Math.round((C.trafficMid || .7) * 100)}% 미만 · 사이트 오늘 오류 난 세션 ${pc(C.siteRateTodayMid)} 이상 · 결제 관련 페이지 안 오류 1세션 이상</td></tr>
+    <tr><td><span class="badge r-높음">높음</span></td><td>접속이 지난주 같은 시간의 ${Math.round((C.trafficHigh || .5) * 100)}% 미만(예스폼 직전 1시간 · 싸인 직전 3시간) · 최근 3시간 사이트 오류 난 세션 ${pc(C.siteRate3hHigh)} 이상 · 핵심 페이지(예스폼 멤버십 결제·서식 결제·멤버십 안내, 싸인 계약 작성·서명·결제) 안에서 버튼 클릭 직후 오류가 난 세션이 기준 이상(예스폼·싸인 계약 2세션, 싸인 결제 1세션) · 페이지 안 오류 세션 ${pc(C.pageRateHigh)} 이상(세션 ${C.pageMin}개 이상) · 예스폼 최근 3시간 결제 페이지 접속 0</td></tr>
+    <tr><td><span class="badge r-중간">중간</span></td><td>접속 ${Math.round((C.trafficMid || .7) * 100)}% 미만 · 사이트 오늘 오류 난 세션 ${pc(C.siteRateTodayMid)} 이상 · 핵심 페이지 안 오류 1세션 이상</td></tr>
     <tr><td><span class="badge r-낮음">낮음</span></td><td>사이트 다른 곳의 새 오류</td></tr>
-    <tr><td></td><td style="color:var(--faint)">결제 관련 페이지 수치는 녹화의 이벤트 기록을 열어 오류가 그 페이지에서 났을 때만 셉니다(다른 페이지에서 난 오류는 제외).</td></tr></table></div>`;
+    <tr><td></td><td style="color:var(--faint)">핵심 페이지 수치는 녹화의 이벤트 기록을 열어 오류가 그 페이지에서 났을 때만 셉니다(다른 페이지에서 난 오류는 제외).</td></tr></table></div>`;
 
   $('#root').innerHTML = h;
   postH();
