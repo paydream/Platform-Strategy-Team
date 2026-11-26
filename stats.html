@@ -645,6 +645,7 @@ function signView({ m, pm, cd, pd, mk, pmk, label }) {
   const pList = D.payments ? paysIn(SEL.s, SEL.e) : [];
   if (pList.length) { const gg = srcGroup(pList); bullets.push(`결제 출처: <b>${gg.slice(0, 5).map(([k, [n]]) => `${esc(k)} ${n}건`).join(' / ')}${gg.length > 5 ? ` 외 ${gg.length - 5}곳` : ''}</b>`); }
   if (payTop && payTop[2] > 0) bullets.push(`등록된 지면 중 결제가 가장 많이 나온 곳은 <b>${esc(payTop[0])}</b> (${fmt(payTop[2])}건 · ${won(payTop[3])})`);
+  bullets.push(`등록된 지면을 통한 결제는 전체 결제 ${fmt(pay[0])}건 중 <b>${fmt(plTot[1])}건</b>이에요`);
   bullets.push(`GA4 기준 가장 많이 들어온 채널은 <b>${esc(ch[0][0])}</b> (${fmt(ch[0][1])}명, ${pctTxt(pct(ch[0][1], chTot))})`);
   return `
   <div class="headline"><div class="t">${label} 요약 · 예스폼싸인</div>
@@ -664,6 +665,10 @@ function signView({ m, pm, cd, pd, mk, pmk, label }) {
     ${funnel([['활성 사용자', S.active, 'GA4 순 사용자'], ['신규 가입', S.signup], [S.usersSum ? '전자계약 실사용자 (월별 합)' : '전자계약 실사용자', S.users], ['결제', pay[0], won(pay[1])]])}</section>
 
   ${paySection(pay)}
+
+  ${srcSections({ m, pm, cd, pd, mk, pmk, label })}
+
+  ${mainMenuSection()}
 
   <section class="blk"><h2>일별 추이 ${view === 'day' ? '<small>최근 3주</small>' : view === 'week' ? '<small>최근 5주</small>' : ''}</h2><div class="chartbox"><div class="legend" id="legend"></div><svg class="chart" id="chart" role="img" aria-label="일별 추이"></svg></div></section>
 
