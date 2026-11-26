@@ -5,10 +5,9 @@
   var S = ' fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"';
   var F = ' fill="currentColor" fill-opacity=".2"';
   var MENU = [
-    { id: 'archive', href: './', label: '업무 아카이브', fg: '#2f6bff', bg: '#eaf1ff',
+    { id: 'archive', href: './', label: '업무 아카이브', title: '업무 아카이브 · 주요 업무', kw: '주요 업무 프로젝트', group: ['archive', 'work'],
+      sub: [{ id: 'archive', href: './', label: '업무 아카이브' }, { id: 'work', href: 'work.html', label: '주요 업무' }], fg: '#2f6bff', bg: '#eaf1ff',
       svg: '<path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H9l2 2h7.5A2.5 2.5 0 0 1 21 9.5v8a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5z"' + F + '/><path d="M3 10.5h18"/>' },
-    { id: 'work', href: 'work.html', label: '주요 업무', fg: '#0d9488', bg: '#e1f5f2',
-      svg: '<rect x="3" y="7" width="18" height="13" rx="2.5"' + F + '/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7"/><path d="M3 12.5h18"/><path d="M12 11.5v2.5" stroke-width="2.4"/>' },
     { id: 'metrics', href: 'stats.html', label: '에디터/싸인 지표', kw: '통계 지표 매출 결제', fg: '#0f9d58', bg: '#e4f6ec', title: '매일 자동 갱신',
       svg: '<rect x="4" y="12" width="3.6" height="8" rx="1"' + F + '/><rect x="10.2" y="8" width="3.6" height="12" rx="1"' + F + '/><rect x="16.4" y="4" width="3.6" height="16" rx="1" fill="currentColor"/>' },
     { id: 'perf', href: 'perf.html', label: '성과 측정', title: '성과 측정 · 매일 자동 갱신', kw: '성과 측정 GA4 탐색 대시보드 모달', fg: '#e8590c', bg: '#fff1e6',
