@@ -663,7 +663,7 @@ function mktBrief({ m, pm, cd, pd, mk, pmk, label }) {
   const GG = D.gads;
   if (GG && GG.v === 1 && SEL.s <= GG.end) {
     const gc = gadsSum(cur), gp = gadsSum(prev), gm = gadsSum(cur, 'mo'), gpay = pc0.filter(p => adPayCh(p) === 'g');
-    ins.push(`구글 검색광고 클릭 <b>${fmt(gc[1])}회</b>${ptxt(chg(gc[1], gp[1]))}, 비용 <b>${won(Math.round(gc[2]))}</b>, 클릭당 ${won(cpc(gc))} <small>싸인 결제 ${fmt(gpay.length)}건 · 구글 애즈 전환 ${fmt(Math.round(gc[3] * 10) / 10)}건</small>`);
+    ins.push(`구글 검색광고 클릭 <b>${fmt(gc[1])}회</b>${ptxt(chg(gc[1], gp[1]))}, 비용 <b>${won(Math.round(gc[2]))}</b>, 클릭당 ${won(cpc(gc))} <small>싸인 결제 ${fmt(gpay.length)}건 · 구글 애즈 결제 전환 ${fmt(Math.round(gc[3] * 10) / 10)}건</small>`);
     if (gc[2] && gm[2] / gc[2] >= 0.3) acts.push(`<b>구글 광고 휴대전화 입찰 조정</b>: 휴대전화 광고비 ${won(Math.round(gm[2]))} (${pctTxt(gm[2] / gc[2] * 100)})<small>싸인은 PC 전용 · 구글 애즈 캠페인 기기 설정에서 휴대전화 입찰가 -100% 검토</small>`);
   }
   // 유입 채널(GA4): 가장 크게 변한 채널
