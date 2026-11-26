@@ -326,7 +326,7 @@ const SRC_TIP = {
 };
 // 지표 이름 옆 i 설명 (광고 전환이 결제로 오해되지 않게, 2026-11-26)
 const kTi = t => `<span class="ti" tabindex="0" role="img" aria-label="설명" data-tip="${esc(t)}">i</span>`;
-const TIP_GADS_CONV = '구글 애즈가 직접 센 전환이에요. 구글 애즈에 등록된 전환 항목을 광고 클릭 뒤 일정 기간 동안, 다른 기기와 기여도 나눔(0.5건 등)까지 포함해 세요. 싸인 결제 건수가 아니에요. 실제 결제는 옆 「싸인 결제」(관리자 결제 출처) 기준이에요.';
+const TIP_GADS_CONV = '구글 애즈가 직접 센 전환이에요. 가입·결제 시작·싸인 결제를 합친 숫자이고, 광고 클릭 뒤 최대 90일 안에 다른 경로로 다시 와서 한 것도 세요(기여도를 나눠 0.5건처럼 소수도 나옴). 아래 줄이 항목별 숫자예요. 「싸인 결제」 카드는 마지막에 구글 광고로 들어와 결제한 건(관리자 결제 출처)이라 더 적어요.';
 const TIP_NADS_CONV = '네이버 광고센터가 직접 센 전환이에요. 광고 클릭 뒤 일정 기간 안에 생긴 전환 태그 기준이라 관리자 결제 건수와 다를 수 있어요. 매출·결제는 관리자 데이터를 기준으로 봐요.';
 const srcTi = (kind, name) => { const t = SRC_TIP[kind] && SRC_TIP[kind][name]; return t ? `<span class="ti" tabindex="0" role="img" aria-label="설명" data-tip="${esc(t)}">i</span>` : ''; };
  // 지표명 + i 툴팁 (지역 변수 L과 겹치지 않게 TL)
@@ -873,6 +873,12 @@ function gadsSum(r, dev) { // → [노출, 클릭, 비용, 전환]
 const gadsUpd = G => { const t = new Date(new Date(G.updatedAt).getTime() + 9 * 3600e3); return `${t.getUTCMonth() + 1}.${t.getUTCDate()} ${String(t.getUTCHours()).padStart(2, '0')}:${String(t.getUTCMinutes()).padStart(2, '0')}`; };
 // 관리자 결제 출처 → 광고 채널
 const adPayCh = p => { const s = String(p[3] || ''); if (s === '네이버 검색광고') return 'pl'; if (s === '구글 검색광고') return 'g'; if (/블로그/.test(s) && /광고|파워콘텐츠/.test(s)) return 'pc'; return null; };
+// 구글 애즈 전환을 항목별로 (D.gads.cv = [[날짜인덱스, 전환 액션, 전환수]], 2026-11-26)
+const GCV = [['예스폼싸인_구매', '싸인 결제'], ['예스폼싸인_가입완료', '싸인 가입'], ['가입_일반', '가입'], ['결제시작', '결제 시작']];
+function gadsCv(r) { const G = D.gads; if (!G || !G.cv || !r) return null; const di = d => Math.round((Date.parse(d) - Date.parse(G.start)) / 864e5), a = di(r[0]), b = di(r[1]); const o = {};
+  for (const [i, n, c] of G.cv) if (i >= a && i <= b) o[n] = (o[n] || 0) + c; return o; }
+const gcvTxt = o => { if (!o) return ''; const known = GCV.map(([k]) => k), parts = GCV.filter(([k]) => o[k]).map(([k, l]) => `${l} ${fmt(Math.round(o[k] * 100) / 100)}`);
+  const etc = Object.entries(o).filter(([k]) => !known.includes(k)).reduce((a, [, v]) => a + v, 0); if (etc) parts.push(`기타 ${fmt(Math.round(etc * 100) / 100)}`); return parts.join(' · '); };
 function gadsSection({ m, pm, cd, pd, label }) {
   const G = D.gads; if (!G || G.v !== 1) return '';
   const cur = [SEL.s, SEL.e], prev = pm ? (view === 'month' ? [mStart(pm), pm.end] : [pm.s, pm.e]) : null;
@@ -900,7 +906,7 @@ function gadsSection({ m, pm, cd, pd, label }) {
       ${kp('클릭', c[1], '회', chg(c[1], p[1]), `노출 ${fmt(c[0])} · 클릭률 ${pctTxt(ctr(c))}`)}
       ${kp('광고비', Math.round(c[2]), '원', chg(c[2], p[2]), `클릭당 ${won(cpc(c))}${prev ? ` · ${CMP.short} ${won(cpc(p))}` : ''}`)}
       ${kp('휴대전화 비중', Math.round(moShare), '%', undefined, mo ? `휴대전화 ${won(Math.round(mo.c[2]))} · 컴퓨터 ${won(Math.round((dev.find(x => x.k === 'pc') || { c: [0, 0, 0] }).c[2]))}` : '')}
-      ${kp('구글 애즈 전환' + kTi(TIP_GADS_CONV), Math.round(c[3] * 10) / 10, '건', chg(c[3], p[3]), '결제 아님 · 구글 애즈 집계')}
+      ${kp('구글 애즈 전환' + kTi(TIP_GADS_CONV), Math.round(c[3] * 100) / 100, '건', chg(c[3], p[3]), gcvTxt(gadsCv(cur)) || '구글 애즈 집계')}
       ${kp('싸인 결제', pays.length, '건', chg(pays.length, paysP.length), `${won(payW)} · 결제당 광고비 ${pays.length ? won(Math.round(c[2] / pays.length)) : '-'}`)}
     </div>
     <div class="two">
@@ -913,7 +919,7 @@ function gadsSection({ m, pm, cd, pd, label }) {
     </div>
     ${TR.length ? `<div class="card"><div class="hd"><b>${view === 'month' ? '월별 구글 광고 추이' : '주간 구글 광고 추이'}</b></div><div class="scroll"><table class="tbl">
       <thead><tr><th>${view === 'month' ? '월' : '주'}</th><th>노출</th><th>클릭</th><th>광고비</th><th>클릭당</th><th>휴대전화 비중</th><th>광고 전환</th><th>싸인 결제</th></tr></thead>
-      <tbody>${TR.map(w => `<tr><td>${w.l}</td><td>${fmt(w.t[0])}</td><td>${fmt(w.t[1])}</td><td>${won(Math.round(w.t[2]))}</td><td>${cpc(w.t) == null ? '-' : won(cpc(w.t))}</td><td>${w.t[2] ? pctTxt(w.mo[2] / w.t[2] * 100) : '-'}</td><td>${fmt(Math.round(w.t[3] * 10) / 10)}</td><td>${w.pay.length ? `${fmt(w.pay.length)}건<span class="psm">${won(w.pay.reduce((a, y) => a + y[2], 0))}</span>` : '<span class="muted">0</span>'}</td></tr>`).join('')}</tbody></table></div></div>` : ''}
+      <tbody>${TR.map(w => `<tr><td>${w.l}</td><td>${fmt(w.t[0])}</td><td>${fmt(w.t[1])}</td><td>${won(Math.round(w.t[2]))}</td><td>${cpc(w.t) == null ? '-' : won(cpc(w.t))}</td><td>${w.t[2] ? pctTxt(w.mo[2] / w.t[2] * 100) : '-'}</td><td>${fmt(Math.round(w.t[3] * 100) / 100)}${gcvTxt(gadsCv(w.r)) ? `<span class="psm">${gcvTxt(gadsCv(w.r))}</span>` : ''}</td><td>${w.pay.length ? `${fmt(w.pay.length)}건<span class="psm">${won(w.pay.reduce((a, y) => a + y[2], 0))}</span>` : '<span class="muted">0</span>'}</td></tr>`).join('')}</tbody></table></div></div>` : ''}
   </section>`;
 }
 // 광고 한눈에: 네이버(파워링크·파워콘텐츠) + 구글 검색광고를 한 표로
@@ -932,7 +938,7 @@ function adsOverview({ m, pm, cd, pd, label }) {
   const T = rows.reduce((a, r) => ({ c: a.c.map((v, i) => v + r.c[i]), p: a.p.map((v, i) => v + r.p[i]), pay: a.pay.concat(r.pay), payP: a.payP.concat(r.payP) }), { c: [0, 0, 0, 0], p: [0, 0, 0, 0], pay: [], payP: [] });
   const ends = rows.map(r => r.end).filter(Boolean), short = ends.filter(e => e < SEL.e);
   const line = (r, tot) => { const pw = r.pay.reduce((a, x) => a + x[2], 0);
-    return `<tr${tot ? ' class="sel"' : ''}><td class="name">${tot ? '<b>합계</b>' : r.n}</td><td>${won(Math.round(r.c[2]))}${T.c[2] && !tot ? `<span class="psm">${pctTxt(r.c[2] / T.c[2] * 100)}</span>` : ''}</td><td>${dtxt(chg(r.c[2], r.p[2]))}</td><td>${fmt(r.c[1])}</td><td>${cpc(r.c) == null ? '-' : won(cpc(r.c))}</td><td>${r.c[3] ? fmt(Math.round(r.c[3] * 10) / 10) : '<span class="muted">-</span>'}</td>
+    return `<tr${tot ? ' class="sel"' : ''}><td class="name">${tot ? '<b>합계</b>' : r.n}</td><td>${won(Math.round(r.c[2]))}${T.c[2] && !tot ? `<span class="psm">${pctTxt(r.c[2] / T.c[2] * 100)}</span>` : ''}</td><td>${dtxt(chg(r.c[2], r.p[2]))}</td><td>${fmt(r.c[1])}</td><td>${cpc(r.c) == null ? '-' : won(cpc(r.c))}</td><td>${r.c[3] ? fmt(Math.round(r.c[3] * 10) / 10) : '<span class="muted">-</span>'}${r.k === 'g' && gcvTxt(gadsCv(cur)) ? `<span class="psm">${gcvTxt(gadsCv(cur))}</span>` : ''}</td>
       <td>${r.pay.length ? `${fmt(r.pay.length)}건<span class="psm">${won(pw)}</span>` : '<span class="muted">0</span>'}</td><td>${r.pay.length ? won(Math.round(r.c[2] / r.pay.length)) : '<span class="muted">-</span>'}</td><td>${pw && r.c[2] ? pctTxt(pw / r.c[2] * 100) : '<span class="muted">-</span>'}</td></tr>`; };
   return `<section class="blk"><h2>광고 한눈에 <small>네이버 광고센터 · 구글 애즈 · 결제는 싸인 관리자 결제 출처 · ${label}</small></h2>
     ${short.length ? `<div class="stale" role="status">${rows.filter(r => r.end && r.end < SEL.e).map(r => `${r.n} ${MD(r.end)}까지`).join(' · ')} 데이터만 들어 있어요.</div>` : ''}
