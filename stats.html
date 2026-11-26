@@ -151,6 +151,27 @@
   .headline .s b{color:var(--c)}
   .headline ul{margin-top:8px;font-size:14px;color:#4e5968;list-style:none;display:flex;flex-direction:column;gap:2px}
   .headline li::before{content:"·";margin-right:6px;color:var(--faint)}
+  /* 싸인 월보고서: 월간 인사이트·액션 플랜 직접 수정 (2026-11-26) */
+  .headline .thd{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .nbtn{font-size:12px;color:var(--sub);border:1px solid var(--line);border-radius:6px;padding:4px 10px;background:#fff;cursor:pointer;font-family:inherit;white-space:nowrap}
+  .nbtn:hover{color:var(--c);border-color:var(--c)}
+  .nbtn.pri{background:var(--c);border-color:var(--c);color:#fff}
+  .nbtn:disabled{opacity:.5;cursor:default}
+  .nmeta{font-size:11px;color:var(--faint);font-weight:400;margin-left:6px}
+  .nedit textarea{width:100%;min-height:150px;margin-top:10px;border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:inherit;font-size:14px;line-height:1.6;resize:vertical}
+  .nedit .nhelp{font-size:12px;color:var(--faint);margin-top:6px}
+  .nbar{display:flex;gap:6px;justify-content:flex-end;margin-top:10px;flex-wrap:wrap}
+  .nerr{font-size:12px;color:var(--up);margin-right:auto;align-self:center}
+  .blk h2 .nbtn{margin-left:auto;font-weight:400}
+  .blk h2.nh{display:flex;align-items:center;gap:8px}
+  .acts td.at{text-align:left;white-space:normal;min-width:260px;font-weight:500}
+  .acts td{vertical-align:middle}
+  .acts td.done{color:var(--faint);text-decoration:line-through}
+  .stt{display:inline-block;font-size:12px;border-radius:999px;padding:2px 9px;background:#f2f4f6;color:var(--sub)}
+  .stt.doing{background:var(--c-bg);color:var(--c)}
+  .stt.done{background:#eef0f3;color:var(--faint)}
+  .acts input,.acts select{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:6px;padding:6px 8px;width:100%;background:#fff}
+  .acts .adel{border:0;background:none;color:var(--faint);cursor:pointer;font-size:16px}
 
   /* 네이버 광고 (광고센터) 섹션 — 2026-11-18 */
   .adtag{display:inline-block;font-size:11px;font-weight:600;border-radius:6px;padding:2px 7px;white-space:nowrap}
@@ -497,9 +518,11 @@ function start() {
     pkey.week = view === 'week' && wk.includes(h.get('k')) ? h.get('k') : wk[wk.length - 1];
   }
   render();
+  if (!MKT) loadNotes();
 }
 
 function render() {
+  const nk = view === 'month' && ptab === 'sign' ? noteKey() : null; if (NEDIT && nk !== render.nk) { NEDIT = null; NDRAFT = null; } render.nk = nk;
   document.body.className = prod + (document.body.classList.contains('embed') ? ' embed' : '') + (MKT ? ' mktm' : '');
   let ctx, sub;
   if (view === 'month') {
@@ -554,6 +577,7 @@ function render() {
   document.querySelectorAll('.vseg button[data-v]').forEach(b => b.onclick = () => { view = b.dataset.v; render(); });
   const on = document.querySelector('.seg.sub button[aria-selected="true"]'); if (on) on.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   drawChart();
+  bindNotes();
   if (window.parent !== window) setTimeout(() => parent.postMessage({ type: 'auto-h', h: document.documentElement.scrollHeight }, '*'), 80);
 }
 const MKT_CONSOLES = [['메타', 'Meta Ads 광고 관리자', 'https://adsmanager.facebook.com/'], ['네이버', '파워링크 · 파워콘텐츠', 'https://ads.naver.com/manage/ad-accounts/1912105/sa/campaigns/cmp-a001-01-000000010598857'], ['구글', 'Google Ads · 예스폼싸인_SA', 'https://ads.google.com/aw/campaigns']];
@@ -651,10 +675,19 @@ function signView({ m, pm, cd, pd, mk, pmk, label }) {
   if (payTop && payTop[2] > 0) bullets.push(`등록된 지면 중 결제가 가장 많이 나온 곳은 <b>${esc(payTop[0])}</b> (${fmt(payTop[2])}건 · ${won(payTop[3])})`);
   bullets.push(`등록된 지면을 통한 결제는 전체 결제 ${fmt(pay[0])}건 중 <b>${fmt(plTot[1])}건</b>이에요`);
   bullets.push(`GA4 기준 가장 많이 들어온 채널은 <b>${esc(ch[0][0])}</b> (${fmt(ch[0][1])}명, ${pctTxt(pct(ch[0][1], chTot))})`);
+  const NK = REP ? noteKey() : null, NT = NK && NOTES ? (NOTES.months[NK] || {}) : {};
+  const hasIns = !!(NT.insight && NT.insight.trim());
+  const insBody = !REP ? `<ul>${bullets.map(b => `<li>${b}</li>`).join('')}</ul>`
+    : NEDIT === 'ins' ? `<div class="nedit"><textarea id="insTa" aria-label="월간 인사이트">${esc(hasIns ? NT.insight : bullets.map(b => b.replace(/<[^>]+>/g, '')).join('\n'))}</textarea>
+      <div class="nhelp">한 줄이 한 항목이에요. **굵게** 처럼 쓰면 굵은 글씨로 보여요.</div>
+      <div class="nbar"><span class="nerr" id="nErr"></span>${hasIns ? '<button class="nbtn" data-nact="ins-reset">자동 요약으로 되돌리기</button>' : ''}<button class="nbtn" data-nact="cancel">취소</button><button class="nbtn pri" data-nact="ins-save">저장</button></div></div>`
+    : `<ul>${(hasIns ? NT.insight.split('\n').filter(x => x.trim()).map(noteFmt) : bullets).map(b => `<li>${b}</li>`).join('')}</ul>`;
   return `
-  <div class="headline"><div class="t">${label} 요약 · 예스폼싸인</div>
+  <div class="headline"><div class="thd"><div class="t">${label} ${REP ? '월간 인사이트' : '요약'} · 예스폼싸인${REP && hasIns ? `<span class="nmeta">직접 작성 · ${noteAt(NT.at)}</span>` : ''}</div>${REP && NEDIT !== 'ins' ? `<button class="nbtn" data-nact="ins-edit"${NOTES ? '' : ' disabled title="불러오는 중"'}>수정</button>` : ''}</div>
     <div class="s">결제 <b>${fmt(pay[0])}건 · ${won(pay[1])}</b>, 신규 가입 <b>${fmt(S.signup)}명</b>이에요.${pm ? ` 가입은 ${CMP.short}보다 ${updown(dSign)}` : ''}</div>
-    <ul>${bullets.map(b => `<li>${b}</li>`).join('')}</ul></div>
+    ${insBody}</div>
+
+  ${REP ? actionPlan(NT) : ''}
 
   <section class="blk"><h2>핵심 지표 <small>${CMP.note}</small></h2>
     <div class="kpis${S.contrib ? ' k5' : ''}">
@@ -676,6 +709,58 @@ function signView({ m, pm, cd, pd, mk, pmk, label }) {
   ${REP ? '' : chartBlk()}
 
   ${REP ? '' : trendTables('sign')}`;
+}
+
+// 월보고서 「월간 인사이트」·「액션 플랜」 직접 수정 — 저장: /api/stats?notes=sign (api/_signnotes.js, 암호화 파일) — 2026-11-26
+let NOTES = null, NEDIT = null, NDRAFT = null;
+const noteKey = () => month === 'q3' ? (Q3() ? 'q3-' + mStart(Q3()).slice(0, 7) : null) : month;
+const noteFmt = t => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+const noteAt = iso => { if (!iso) return ''; const k = new Date(Date.parse(iso) + 9 * 3600e3); return `${k.getUTCMonth() + 1}.${k.getUTCDate()} ${String(k.getUTCHours()).padStart(2, '0')}:${String(k.getUTCMinutes()).padStart(2, '0')} 수정`; };
+const ST = { todo: '예정', doing: '진행 중', done: '완료' };
+async function loadNotes() {
+  try { const r = await fetch('/api/stats?notes=sign', { cache: 'no-store' }); const j = await r.json(); NOTES = r.ok && j.months ? j : { months: {}, err: j.error || r.status }; }
+  catch { NOTES = { months: {}, err: '연결 실패' }; }
+  if (view === 'month' && ptab === 'sign') render();
+}
+function actionPlan(NT) {
+  const list = NT.actions || [];
+  if (NEDIT === 'act') {
+    const rows = (NDRAFT || []).map((a, i) => `<tr data-i="${i}"><td class="at"><input data-f="t" value="${esc(a.t)}" placeholder="할 일"></td><td><input data-f="owner" value="${esc(a.owner)}" placeholder="담당"></td><td><input data-f="due" value="${esc(a.due)}" placeholder="예: 12.5"></td>
+      <td><select data-f="st">${Object.entries(ST).map(([k, v]) => `<option value="${k}"${a.st === k ? ' selected' : ''}>${v}</option>`).join('')}</select></td><td><button class="adel" data-nact="act-del" data-i="${i}" aria-label="삭제">×</button></td></tr>`).join('');
+    return `<section class="blk"><h2 class="nh">액션 플랜</h2><div class="card"><div class="scroll"><table class="tbl acts">
+      <thead><tr><th style="text-align:left">할 일</th><th style="width:120px">담당</th><th style="width:110px">기한</th><th style="width:110px">상태</th><th style="width:40px"></th></tr></thead>
+      <tbody>${rows}</tbody></table></div>
+      <div class="nbar" style="padding:0 14px 14px"><span class="nerr" id="nErr"></span><button class="nbtn" data-nact="act-add">+ 항목 추가</button><button class="nbtn" data-nact="cancel">취소</button><button class="nbtn pri" data-nact="act-save">저장</button></div></div></section>`;
+  }
+  return `<section class="blk"><h2 class="nh">액션 플랜${NT.actions && NT.at ? `<span class="nmeta">${noteAt(NT.at)}</span>` : ''}<button class="nbtn" data-nact="act-edit"${NOTES ? '' : ' disabled title="불러오는 중"'}>수정</button></h2><div class="card">${list.length ? `<div class="scroll"><table class="tbl acts">
+    <thead><tr><th style="text-align:left">할 일</th><th>담당</th><th>기한</th><th>상태</th></tr></thead>
+    <tbody>${list.map(a => `<tr><td class="at${a.st === 'done' ? ' done' : ''}">${noteFmt(a.t)}</td><td>${esc(a.owner) || '-'}</td><td>${esc(a.due) || '-'}</td><td><span class="stt ${a.st}">${ST[a.st] || '예정'}</span></td></tr>`).join('')}</tbody></table></div>`
+    : `<p class="pempty">${NOTES ? (NOTES.err ? `불러오지 못했어요 (${esc(String(NOTES.err))})` : '아직 액션 플랜이 없어요. 「수정」을 눌러 이번 달 할 일을 적어 주세요.') : '불러오는 중…'}</p>`}</div></section>`;
+}
+function readDraft() {
+  document.querySelectorAll('.acts tbody tr[data-i]').forEach(tr => { const a = NDRAFT[+tr.dataset.i]; if (!a) return; tr.querySelectorAll('[data-f]').forEach(el => { a[el.dataset.f] = el.value; }); });
+}
+async function saveNote(patch, btn) {
+  const err = $('#nErr'); if (btn) btn.disabled = true; if (err) err.textContent = '저장 중…';
+  try {
+    const r = await fetch('/api/stats?notes=sign', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ m: noteKey(), ...patch }) });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(j.error || `오류 (${r.status})`);
+    NOTES = { months: j.months }; NEDIT = null; NDRAFT = null; render();
+  } catch (e) { if (err) err.textContent = e.message || '저장하지 못했어요'; if (btn) btn.disabled = false; }
+}
+function bindNotes() {
+  document.querySelectorAll('[data-nact]').forEach(b => b.onclick = () => {
+    const a = b.dataset.nact, NT = (NOTES && NOTES.months[noteKey()]) || {};
+    if (a === 'ins-edit') { NEDIT = 'ins'; render(); const t = $('#insTa'); if (t) t.focus(); }
+    else if (a === 'act-edit') { NEDIT = 'act'; NDRAFT = (NT.actions || []).map(x => ({ ...x })); if (!NDRAFT.length) NDRAFT.push({ t: '', owner: '', due: '', st: 'todo' }); render(); }
+    else if (a === 'cancel') { NEDIT = null; NDRAFT = null; render(); }
+    else if (a === 'act-add') { readDraft(); NDRAFT.push({ t: '', owner: '', due: '', st: 'todo' }); render(); const l = document.querySelectorAll('.acts input[data-f="t"]'); if (l.length) l[l.length - 1].focus(); }
+    else if (a === 'act-del') { readDraft(); NDRAFT.splice(+b.dataset.i, 1); render(); }
+    else if (a === 'act-save') { readDraft(); saveNote({ actions: NDRAFT.filter(x => x.t.trim()) }, b); }
+    else if (a === 'ins-save') saveNote({ insight: ($('#insTa').value || '').split('\n').map(x => x.trim()).filter(Boolean).join('\n') }, b);
+    else if (a === 'ins-reset') { if (confirm('직접 쓴 인사이트를 지우고 자동 요약으로 되돌릴까요?')) saveNote({ insight: '' }, b); }
+  });
 }
 
 // 월보고서용 마케팅 채널 결과 (마케팅 화면 채널 지표 중 결과만, 2026-11-26)
