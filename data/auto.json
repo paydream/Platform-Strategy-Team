@@ -1,6 +1,24 @@
 {
   "items": [
     {
+      "id": "sign-marketing",
+      "title": "예스폼싸인 마케팅",
+      "desc": "메타 · 네이버 · 구글 광고비와 싸인 관리자 결제를 같은 기간으로 비교합니다.",
+      "product": "예스폼싸인",
+      "kind": "광고 관리",
+      "status": "부분 연동",
+      "schedule": "기존 마케팅 지표와 함께 하루 2회 갱신",
+      "updated": "2026-11-26",
+      "src": "sign-marketing.html",
+      "width": "fixed",
+      "meta": [
+        "Meta Ads",
+        "네이버 광고",
+        "Google Ads"
+      ],
+      "thumb": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1NjAgMzUwIj48cmVjdCB3aWR0aD0iNTYwIiBoZWlnaHQ9IjM1MCIgZmlsbD0iI2VhZjFmNiIvPjxyZWN0IHg9IjMyIiB5PSI0NSIgd2lkdGg9IjQ5NiIgaGVpZ2h0PSIyNTkiIHJ4PSIxNyIgZmlsbD0iI2ZmZiIvPjx0ZXh0IHg9IjU2IiB5PSI4OSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjAiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMxOTM4NGEiPuyYiOyKpO2PvOyLuOyduCDrp4jsvIDtjIU8L3RleHQ+PHRleHQgeD0iNTYiIHk9IjExOCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTMiIGZpbGw9IiM1MjcxODMiPuq0keqzoCDthrXtlakg6rSA66asPC90ZXh0PjxnIGZpbGw9IiNmMWY1ZjgiPjxyZWN0IHg9IjU0IiB5PSIxNDgiIHdpZHRoPSIxNDAiIGhlaWdodD0iMTA2IiByeD0iOSIvPjxyZWN0IHg9IjIxMCIgeT0iMTQ4IiB3aWR0aD0iMTQwIiBoZWlnaHQ9IjEwNiIgcng9IjkiLz48cmVjdCB4PSIzNjYiIHk9IjE0OCIgd2lkdGg9IjE0MCIgaGVpZ2h0PSIxMDYiIHJ4PSI5Ii8+PC9nPjxnIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE4IiBmb250LXdlaWdodD0iYm9sZCI+PHRleHQgeD0iNzIiIHk9IjE5NyIgZmlsbD0iIzI3NTc4ZCI+TWV0YSBBZHM8L3RleHQ+PHRleHQgeD0iMjI4IiB5PSIxOTciIGZpbGw9IiMxMjY1NTAiPuuEpOydtOuyhCDqtJHqs6A8L3RleHQ+PHRleHQgeD0iMzg0IiB5PSIxOTciIGZpbGw9IiM2MzUxODMiPkdvb2dsZSBBZHM8L3RleHQ+PC9nPjxwYXRoIGQ9Ik03MiAyMjFoNzVtODAgMGg4Nm03MyAwaDgyIiBzdHJva2U9IiNjYWQ5ZGYiIHN0cm9rZS13aWR0aD0iNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+"
+    },
+    {
       "id": "brief-admin",
       "title": "연말연초 업무 브리핑 모달 · 콘텐츠 관리",
       "desc": "시트 「모달_블로그포함」이 콘텐츠 표가 되고, 위 모달 미리보기에 표 열 번호가 표시돼요. 매주 월요일 자동으로 시트를 점검·채우고 바뀐 칸을 초록색으로 보여줘요.",
