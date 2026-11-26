@@ -51,6 +51,11 @@
   .mktbtn:hover{filter:brightness(1.08)}
   body.embed header.gnb{display:none}
   body.embed .hero{padding-top:6px}
+  /* 2026-11-26 마케팅 상단 컴팩트: 갱신 한 줄 + 텍스트 링크, 보기·기간 한 줄 */
+  .mhero{padding-top:14px}body.embed .mhero{padding-top:0}
+  .mhead{display:flex;justify-content:space-between;align-items:center;gap:8px 14px;flex-wrap:wrap;font-size:13px;color:var(--sub);padding:2px 0}
+  .mhead .mlinks{display:flex;gap:14px;flex-wrap:wrap}.mhead a{color:var(--sub);text-decoration:none;white-space:nowrap}.mhead a:hover{color:var(--text);text-decoration:underline}
+  .mctrl{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0 2px}.mctrl .seg{padding:3px}.mctrl .seg button{padding:4px 10px;font-size:13px}body .mctrl .seg.sub.day button{flex-direction:row;gap:3px;padding:4px 10px;line-height:1.5}.mctrl .seg.sub.day button small{font-size:11px}
   body.embed .hero h1{display:none}
   .clinks{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
   .clink{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border:1px solid var(--line);border-radius:9px;background:#fff;font-size:13px;font-weight:600;text-decoration:none;color:var(--text)}
@@ -520,12 +525,10 @@ function render() {
       : wAligned(4).filter(x => wFind(addDay(x.e, -7))).reverse().map((x, j, a) => `<button role="tab" data-k="${x.k}" aria-selected="${x.k === k}">${j === a.length - 1 ? '직전 7일' : dRange(x.s, x.e)}</button>`).join('');
   }
   $('#app').innerHTML = `
-  ${MKT ? `<section class="hero">
+  ${MKT ? `<section class="hero mhero">
     <h1>예스폼싸인 마케팅</h1>
-    <p>데이터 ~ ${D0(D.range.end)} · ${upd()}</p>
+    <div class="mhead"><span>데이터 ~${MD(D.range.end)} · 갱신 ${upd().replace(/^.*마지막 갱신 /, '')}</span><span class="mlinks">${[...(D.links || []).filter(x => x && x.url).map(x => [x.title, x.url]), ...MKT_CONSOLES.map(([n, , u]) => [n, u])].map(([n, u]) => `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(n)} ↗</a>`).join('')}</span></div>
     ${stale()}
-    ${quickLinks()}
-    <div class="clinks">${MKT_CONSOLES.map(([n, d, u]) => `<a class="clink" href="${u}" target="_blank" rel="noopener">${n} <small>${d}</small> ↗</a>`).join('')}</div>
   </section>` : `<section class="hero"><div class="hrow"><div>
     <h1>에디터/싸인 지표</h1>
     <p>예스폼 에디터 · 예스폼싸인 | 데이터 ${D0(D.range.start)} ~ ${D0(D.range.end)} · ${upd()}</p></div>
@@ -533,14 +536,14 @@ function render() {
     ${stale()}
   </section>
   ${goalPanel()}`}
-  <div class="ctrl">
-    ${MKT ? '<div></div>' : `<div class="ptabs" role="tablist">
+  ${MKT ? `<div class="mctrl">${hasP() ? `<div class="seg vseg" role="tablist" aria-label="보기">${VIEWS.map(([v, l]) => `<button role="tab" data-v="${v}" aria-selected="${v === view}">${l.replace(' (직전 7일)', '')}</button>`).join('')}</div>` : ''}<div class="seg sub ${view}" role="tablist" aria-label="기간">${sub}</div></div>` : `<div class="ctrl">
+    <div class="ptabs" role="tablist">
       <button class="ptab" role="tab" data-p="editor" aria-selected="${ptab === 'editor'}"><i></i>예스폼 에디터</button>
       <button class="ptab" role="tab" data-p="sign" aria-selected="${ptab === 'sign'}"><i></i>예스폼싸인</button>
-    </div>`}
+    </div>
     ${hasP() ? `<div class="seg vseg" role="tablist" aria-label="보기">${VIEWS.map(([v, l]) => `<button role="tab" data-v="${v}" aria-selected="${v === view}">${l}</button>`).join('')}</div>` : ''}
   </div>
-  <div class="subsel">${view === 'week' ? wPicker() : ''}<div class="seg sub ${view}" role="tablist" aria-label="기간">${sub}</div></div>
+  <div class="subsel">${view === 'week' ? wPicker() : ''}<div class="seg sub ${view}" role="tablist" aria-label="기간">${sub}</div></div>`}
   ${prod === 'editor' ? editorView(ctx) : ptab === 'signmkt' ? signMktView(ctx) : signView(ctx)}
   <div style="height:60px"></div>`;
   document.querySelectorAll('.ptab').forEach(b => b.onclick = () => { ptab = b.dataset.p; prod = ptab === 'editor' ? 'editor' : 'sign'; render(); });
