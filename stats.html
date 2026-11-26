@@ -324,10 +324,21 @@ const SRC_TIP = {
     '직접 유입': 'GA4가 어디서 왔는지 알 수 없는 사용자예요. 주소창에 직접 입력, 즐겨찾기, 카카오톡·메신저·앱 안의 링크, 유입 정보(UTM)가 없는 링크로 들어온 경우가 여기에 모여요.'
   }
 };
+// 광고 전환을 결제 기준으로 (사용자 요청 2026-11-26: 네이버·구글 모두 결제만 전환으로)
+// 네이버: 광고센터 전환에는 결제 외 전환도 섞여 있어(전환매출 0인 전환) 전환매출이 있는 전환만 결제로 셈.
+//         하루·항목별로 결제 수 = min(전환수, 전환매출 ÷ 13,200원(가장 싼 이용권) 내림, 최소 1)
+// 구글: 전환 액션 중 「예스폼싸인_구매」만 결제로 셈(가입_일반·결제시작 제외). 기기는 컴퓨터로 둠(싸인은 PC 전용, 구글 애즈 결제는 기기 구분 없이 받음)
+function payConv() {
+  const A = D.ads; if (A && A.d) for (const rows of Object.values(A.d)) for (const x of rows) x[4] = x[5] > 0 ? Math.min(x[4], Math.max(1, Math.floor(x[5] / 13200))) : 0;
+  const G = D.gads; if (G && G.d && G.cv) { const buy = {}; for (const [i, n, c] of G.cv) if (n === '예스폼싸인_구매') buy[i] = (buy[i] || 0) + c;
+    for (const x of G.d) x[5] = 0; for (const [i, c] of Object.entries(buy)) { const r = G.d.find(x => x[0] === +i && x[1] === 'pc'); if (r) r[5] = c; else G.d.push([+i, 'pc', 0, 0, 0, c]); } G.payConv = true; }
+}
+const TIP_NADS_CONV = '네이버 광고센터 전환 중 결제(전환매출이 있는 전환)만 셌어요. 회원가입 등 매출 없는 전환은 빼요. 광고 클릭 뒤 일정 기간 안의 결제라 관리자 결제 출처의 「싸인 결제」와 다를 수 있어요.';
 // 지표 이름 옆 i 설명 (광고 전환이 결제로 오해되지 않게, 2026-11-26)
 const kTi = t => `<span class="ti" tabindex="0" role="img" aria-label="설명" data-tip="${esc(t)}">i</span>`;
-const TIP_GADS_CONV = '구글 애즈가 직접 센 전환이에요. 가입·결제 시작·싸인 결제를 합친 숫자이고, 광고 클릭 뒤 최대 90일 안에 다른 경로로 다시 와서 한 것도 세요(기여도를 나눠 0.5건처럼 소수도 나옴). 아래 줄이 항목별 숫자예요. 「싸인 결제」 카드는 마지막에 구글 광고로 들어와 결제한 건(관리자 결제 출처)이라 더 적어요.';
-const TIP_NADS_CONV = '네이버 광고센터가 직접 센 전환이에요. 광고 클릭 뒤 일정 기간 안에 생긴 전환 태그 기준이라 관리자 결제 건수와 다를 수 있어요. 매출·결제는 관리자 데이터를 기준으로 봐요.';
+const TIP_GADS_CONV_OLD = '구글 애즈가 직접 센 전환이에요. 가입·결제 시작·싸인 결제를 합친 숫자이고, 광고 클릭 뒤 최대 90일 안에 다른 경로로 다시 와서 한 것도 세요(기여도를 나눠 0.5건처럼 소수도 나옴). 아래 줄이 항목별 숫자예요. 「싸인 결제」 카드는 마지막에 구글 광고로 들어와 결제한 건(관리자 결제 출처)이라 더 적어요.';
+const TIP_GADS_CONV = '구글 애즈가 센 싸인 결제(전환 액션 「예스폼싸인_구매」)만 셌어요. 가입·결제 시작은 빼요. 광고 클릭 뒤 최대 90일 안에 다른 경로로 다시 와서 결제한 것도 들어가서, 옆 「싸인 결제」(마지막에 구글 광고로 들어와 결제, 관리자 기준)보다 많을 수 있어요.';
+const TIP_NADS_CONV_OLD = '네이버 광고센터가 직접 센 전환이에요. 광고 클릭 뒤 일정 기간 안에 생긴 전환 태그 기준이라 관리자 결제 건수와 다를 수 있어요. 매출·결제는 관리자 데이터를 기준으로 봐요.';
 const srcTi = (kind, name) => { const t = SRC_TIP[kind] && SRC_TIP[kind][name]; return t ? `<span class="ti" tabindex="0" role="img" aria-label="설명" data-tip="${esc(t)}">i</span>` : ''; };
  // 지표명 + i 툴팁 (지역 변수 L과 겹치지 않게 TL)
 (function () {
@@ -376,7 +387,7 @@ async function unlock(pw, silent) {
     const r = await fetch('/api/stats', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pw }), cache: 'no-store' });
     const j = await r.json().catch(() => ({}));
     if (!r.ok) { $('#gate').hidden = false; sessionStorage.removeItem(KEY); err.textContent = silent ? '' : (j.error || `오류가 났습니다 (${r.status})`); return; }
-    sessionStorage.setItem(KEY, pw); D = j; start();
+    sessionStorage.setItem(KEY, pw); D = j; payConv(); start();
   } catch (e) { $('#gate').hidden = false; err.textContent = '서버에 연결하지 못했습니다.'; }
   finally { btn.disabled = false; }
 }
@@ -634,7 +645,7 @@ function mktBrief({ m, pm, cd, pd, mk, pmk, label }) {
     const G = A.meta.g.map(([id, kind, name, on]) => ({ kind, name, on, c: sum(id, cur), p: sum(id, prev) }));
     const T = k => G.filter(g => g.kind === k).reduce((a, g) => ({ c: a.c.map((v, i) => v + g.c[i]), p: a.p.map((v, i) => v + g.p[i]) }), { c: [0, 0, 0, 0, 0, 0], p: [0, 0, 0, 0, 0, 0] });
     const pl = T('pl'), pc = T('pc'), cpcC = pl.c[1] ? pl.c[2] / pl.c[1] : 0, cpcP = pl.p[1] ? pl.p[2] / pl.p[1] : 0;
-    ins.push(`파워링크 클릭 <b>${fmt(pl.c[1])}회</b>${ptxt(chg(pl.c[1], pl.p[1]))}, 비용 <b>${won(pl.c[2])}</b>, 클릭당 ${won(Math.round(cpcC))}${prev && cpcP ? ` <small>${CMP.short} 클릭당 ${won(Math.round(cpcP))} · 광고 전환 ${fmt(pl.c[3] + pc.c[3])}건</small>` : ''}`);
+    ins.push(`파워링크 클릭 <b>${fmt(pl.c[1])}회</b>${ptxt(chg(pl.c[1], pl.p[1]))}, 비용 <b>${won(pl.c[2])}</b>, 클릭당 ${won(Math.round(cpcC))}${prev && cpcP ? ` <small>${CMP.short} 클릭당 ${won(Math.round(cpcP))} · 광고센터 결제 전환 ${fmt(pl.c[3] + pc.c[3])}건</small>` : ''}`);
     const lost = G.filter(g => g.kind === 'pc' && g.on && g.p[0] > 0 && g.c[0] === 0);
     const blocked = A.meta.a.filter(a => a[3] && a[7] !== '노출 가능' && a[7] !== 'OFF');
     if (lost.length || (pc.c[0] === 0 && (pc.p[0] > 0 || blocked.some(a => a[1] === 'pc')))) acts.push(`<span class="urg">긴급</span><b>파워콘텐츠 재가동</b>: ${lost.length ? lost.map(g => esc(g.name.split('_')[0])).join('·') + ' 그룹 노출 0' : '싸인 파워콘텐츠 전체 노출 0'}${blocked.length ? `, 심사 대기·반려 소재 ${blocked.length}개` : ''}<small>광고센터에서 소재 심사 상태 확인·재검수 요청 (${CMP.short} 노출 ${fmt(pc.p[0])} · 클릭 ${fmt(pc.p[1])})</small>`);
@@ -642,9 +653,9 @@ function mktBrief({ m, pm, cd, pd, mk, pmk, label }) {
     // 키워드: 전환 없이 비용 큰 것 / 브랜드 순위
     const K = A.meta.k.map(([id, kw, group, bid, grpBid, on, paused, camp, brand]) => { const c = sum(id, cur); return { kw, bid, camp, brand, c, rnk: c[0] ? c[5] / c[0] : 0 }; });
     const costly = K.filter(k => k.c[2] > 0 && !k.c[3]).sort((a, b) => b.c[2] - a.c[2]).slice(0, 3);
-    if (costly.length && costly[0].c[2] >= pl.c[2] * 0.1) acts.push(`<b>전환 없는 고비용 키워드 입찰 점검</b>: ${costly.map(k => `${esc(k.kw)} ${won(k.c[2])}(클릭 ${fmt(k.c[1])})`).join(', ')}<small>파워링크 비용의 ${pctTxt(pct(costly.reduce((a, k) => a + k.c[2], 0), pl.c[2]))} · 전환 0건 → 입찰가 하향 또는 랜딩 점검</small>`);
+    if (costly.length && costly[0].c[2] >= pl.c[2] * 0.1) acts.push(`<b>결제 없는 고비용 키워드 입찰 점검</b>: ${costly.map(k => `${esc(k.kw)} ${won(k.c[2])}(클릭 ${fmt(k.c[1])})`).join(', ')}<small>파워링크 비용의 ${pctTxt(pct(costly.reduce((a, k) => a + k.c[2], 0), pl.c[2]))} · 결제 0건 → 입찰가 하향 또는 랜딩 점검</small>`);
     const conv = K.filter(k => k.c[3] > 0).sort((a, b) => b.c[3] - a.c[3]).slice(0, 3);
-    if (conv.length) ins.push(`전환이 나온 키워드: <b>${conv.map(k => `${esc(k.kw)} ${fmt(k.c[3])}건`).join(', ')}</b>`);
+    if (conv.length) ins.push(`결제 전환이 나온 키워드: <b>${conv.map(k => `${esc(k.kw)} ${fmt(k.c[3])}건`).join(', ')}</b>`);
     const br = K.find(k => k.brand && /예스폼싸인$/.test(k.kw));
     if (br && br.rnk > 2) acts.push(`<b>브랜드 키워드 「예스폼싸인」 순위 보강</b>: 평균 ${br.rnk.toFixed(1)}위<small>입찰가 ${won(br.bid)} · 브랜드 검색은 1위 유지 권장</small>`);
   }
@@ -854,7 +865,7 @@ function signKwCard(L) {
   const act = sorted.filter(k => k.brand || k.cur[0] || k.prev[0]), idle = sorted.filter(k => !k.brand && !k.cur[0] && !k.prev[0]);
   const tot = L.reduce((a, k) => a.map((v, i) => v + k.cur[i]), [0, 0, 0, 0, 0]);
   const row = k => `<tr><td class="name">${esc(k.kw)}${k.brand ? ' <span class="adtype">브랜드</span>' : ''}<small>${esc(k.camp)} · ${esc(k.group)}</small></td><td>${st(k)}</td><td>${k.rnk ? k.rnk.toFixed(1) + '위' : '-'}</td><td>${fmt(k.cur[0])}</td><td>${fmt(k.cur[1])}</td><td>${won(k.cur[2])}</td><td>${won(k.bid)}${k.grpBid ? '<span class="psm">그룹 입찰</span>' : ''}</td><td>${k.cur[3] ? fmt(k.cur[3]) + '건' : '<span class="muted">-</span>'}</td><td>${dtxt(adChg(k.cur[1], k.prev[1]))}<span class="psm">${CMP.short} ${fmt(k.prev[1])}클릭</span></td></tr>`;
-  const head = '<thead><tr><th>키워드</th><th>상태</th><th>평균 순위</th><th>노출</th><th>클릭</th><th>비용</th><th>입찰가</th><th>전환</th><th>클릭 증감</th></tr></thead>';
+  const head = '<thead><tr><th>키워드</th><th>상태</th><th>평균 순위</th><th>노출</th><th>클릭</th><th>비용</th><th>입찰가</th><th>결제 전환</th><th>클릭 증감</th></tr></thead>';
   return `<div class="card"><div class="hd"><b>싸인 관리 키워드</b><span>${L.length}개 · 노출 ${fmt(tot[0])} · 클릭 ${fmt(tot[1])} · 비용 ${won(tot[2])}</span></div><div class="scroll"><table class="tbl">${head}<tbody>${act.map(row).join('')}</tbody></table></div>
     ${idle.length ? `<details class="admore"><summary>노출 없는 키워드 ${idle.length}개 보기</summary><div class="scroll"><table class="tbl"><tbody>${idle.map(row).join('')}</tbody></table></div></details>` : ''}</div>`;
 }
@@ -906,20 +917,20 @@ function gadsSection({ m, pm, cd, pd, label }) {
       ${kp('클릭', c[1], '회', chg(c[1], p[1]), `노출 ${fmt(c[0])} · 클릭률 ${pctTxt(ctr(c))}`)}
       ${kp('광고비', Math.round(c[2]), '원', chg(c[2], p[2]), `클릭당 ${won(cpc(c))}${prev ? ` · ${CMP.short} ${won(cpc(p))}` : ''}`)}
       ${kp('휴대전화 비중', Math.round(moShare), '%', undefined, mo ? `휴대전화 ${won(Math.round(mo.c[2]))} · 컴퓨터 ${won(Math.round((dev.find(x => x.k === 'pc') || { c: [0, 0, 0] }).c[2]))}` : '')}
-      ${kp('구글 애즈 전환' + kTi(TIP_GADS_CONV), Math.round(c[3] * 100) / 100, '건', chg(c[3], p[3]), gcvTxt(gadsCv(cur)) || '구글 애즈 집계')}
+      ${kp('구글 애즈 결제 전환' + kTi(TIP_GADS_CONV), Math.round(c[3] * 100) / 100, '건', chg(c[3], p[3]), '구글 애즈 집계 · 클릭 후 90일')}
       ${kp('싸인 결제', pays.length, '건', chg(pays.length, paysP.length), `${won(payW)} · 결제당 광고비 ${pays.length ? won(Math.round(c[2] / pays.length)) : '-'}`)}
     </div>
     <div class="two">
       <div class="card"><div class="hd"><b>기기별</b><span>${label}</span></div><div class="scroll"><table class="tbl">
-        <thead><tr><th>기기</th><th>노출</th><th>클릭</th><th>클릭률</th><th>클릭당</th><th>광고비</th><th>비중</th><th>광고 전환</th></tr></thead>
+        <thead><tr><th>기기</th><th>노출</th><th>클릭</th><th>클릭률</th><th>클릭당</th><th>광고비</th><th>비중</th><th>결제 전환</th></tr></thead>
         <tbody>${dev.map(x => `<tr><td class="name">${x.n}${x.k === 'mo' ? '<small>싸인 미지원</small>' : ''}</td><td>${fmt(x.c[0])}</td><td>${fmt(x.c[1])}</td><td>${pctTxt(ctr(x.c))}</td><td>${cpc(x.c) == null ? '-' : won(cpc(x.c))}</td><td>${won(Math.round(x.c[2]))}${prev ? `<span class="psm">${CMP.short} ${won(Math.round(x.p[2]))}</span>` : ''}</td><td>${c[2] ? pctTxt(x.c[2] / c[2] * 100) : '-'}</td><td>${x.c[3] ? fmt(Math.round(x.c[3] * 10) / 10) + '건' : '<span class="muted">-</span>'}</td></tr>`).join('')}</tbody></table></div></div>
       <div class="card"><div class="hd"><b>싸인 결제 (관리자 결제 출처)</b><span>구글 검색광고 경유</span></div><div class="scroll"><table class="tbl">
         <thead><tr><th>결제일</th><th>상품</th><th>금액</th></tr></thead>
         <tbody>${pays.length ? pays.map(x => `<tr><td>${esc(x[0])}</td><td>${esc(prodName(x[1]))}</td><td>${won(x[2])}</td></tr>`).join('') : `<tr><td colspan="3" class="muted">이 기간 결제 없음</td></tr>`}</tbody></table></div></div>
     </div>
     ${TR.length ? `<div class="card"><div class="hd"><b>${view === 'month' ? '월별 구글 광고 추이' : '주간 구글 광고 추이'}</b></div><div class="scroll"><table class="tbl">
-      <thead><tr><th>${view === 'month' ? '월' : '주'}</th><th>노출</th><th>클릭</th><th>광고비</th><th>클릭당</th><th>휴대전화 비중</th><th>광고 전환</th><th>싸인 결제</th></tr></thead>
-      <tbody>${TR.map(w => `<tr><td>${w.l}</td><td>${fmt(w.t[0])}</td><td>${fmt(w.t[1])}</td><td>${won(Math.round(w.t[2]))}</td><td>${cpc(w.t) == null ? '-' : won(cpc(w.t))}</td><td>${w.t[2] ? pctTxt(w.mo[2] / w.t[2] * 100) : '-'}</td><td>${fmt(Math.round(w.t[3] * 100) / 100)}${gcvTxt(gadsCv(w.r)) ? `<span class="psm">${gcvTxt(gadsCv(w.r))}</span>` : ''}</td><td>${w.pay.length ? `${fmt(w.pay.length)}건<span class="psm">${won(w.pay.reduce((a, y) => a + y[2], 0))}</span>` : '<span class="muted">0</span>'}</td></tr>`).join('')}</tbody></table></div></div>` : ''}
+      <thead><tr><th>${view === 'month' ? '월' : '주'}</th><th>노출</th><th>클릭</th><th>광고비</th><th>클릭당</th><th>휴대전화 비중</th><th>결제 전환</th><th>싸인 결제</th></tr></thead>
+      <tbody>${TR.map(w => `<tr><td>${w.l}</td><td>${fmt(w.t[0])}</td><td>${fmt(w.t[1])}</td><td>${won(Math.round(w.t[2]))}</td><td>${cpc(w.t) == null ? '-' : won(cpc(w.t))}</td><td>${w.t[2] ? pctTxt(w.mo[2] / w.t[2] * 100) : '-'}</td><td>${fmt(Math.round(w.t[3] * 100) / 100)}</td><td>${w.pay.length ? `${fmt(w.pay.length)}건<span class="psm">${won(w.pay.reduce((a, y) => a + y[2], 0))}</span>` : '<span class="muted">0</span>'}</td></tr>`).join('')}</tbody></table></div></div>` : ''}
   </section>`;
 }
 // 광고 한눈에: 네이버(파워링크·파워콘텐츠) + 구글 검색광고를 한 표로
@@ -938,12 +949,12 @@ function adsOverview({ m, pm, cd, pd, label }) {
   const T = rows.reduce((a, r) => ({ c: a.c.map((v, i) => v + r.c[i]), p: a.p.map((v, i) => v + r.p[i]), pay: a.pay.concat(r.pay), payP: a.payP.concat(r.payP) }), { c: [0, 0, 0, 0], p: [0, 0, 0, 0], pay: [], payP: [] });
   const ends = rows.map(r => r.end).filter(Boolean), short = ends.filter(e => e < SEL.e);
   const line = (r, tot) => { const pw = r.pay.reduce((a, x) => a + x[2], 0);
-    return `<tr${tot ? ' class="sel"' : ''}><td class="name">${tot ? '<b>합계</b>' : r.n}</td><td>${won(Math.round(r.c[2]))}${T.c[2] && !tot ? `<span class="psm">${pctTxt(r.c[2] / T.c[2] * 100)}</span>` : ''}</td><td>${dtxt(chg(r.c[2], r.p[2]))}</td><td>${fmt(r.c[1])}</td><td>${cpc(r.c) == null ? '-' : won(cpc(r.c))}</td><td>${r.c[3] ? fmt(Math.round(r.c[3] * 10) / 10) : '<span class="muted">-</span>'}${r.k === 'g' && gcvTxt(gadsCv(cur)) ? `<span class="psm">${gcvTxt(gadsCv(cur))}</span>` : ''}</td>
+    return `<tr${tot ? ' class="sel"' : ''}><td class="name">${tot ? '<b>합계</b>' : r.n}</td><td>${won(Math.round(r.c[2]))}${T.c[2] && !tot ? `<span class="psm">${pctTxt(r.c[2] / T.c[2] * 100)}</span>` : ''}</td><td>${dtxt(chg(r.c[2], r.p[2]))}</td><td>${fmt(r.c[1])}</td><td>${cpc(r.c) == null ? '-' : won(cpc(r.c))}</td><td>${r.c[3] ? fmt(Math.round(r.c[3] * 10) / 10) : '<span class="muted">-</span>'}</td>
       <td>${r.pay.length ? `${fmt(r.pay.length)}건<span class="psm">${won(pw)}</span>` : '<span class="muted">0</span>'}</td><td>${r.pay.length ? won(Math.round(r.c[2] / r.pay.length)) : '<span class="muted">-</span>'}</td><td>${pw && r.c[2] ? pctTxt(pw / r.c[2] * 100) : '<span class="muted">-</span>'}</td></tr>`; };
   return `<section class="blk"><h2>광고 한눈에 <small>네이버 광고센터 · 구글 애즈 · 결제는 싸인 관리자 결제 출처 · ${label}</small></h2>
     ${short.length ? `<div class="stale" role="status">${rows.filter(r => r.end && r.end < SEL.e).map(r => `${r.n} ${MD(r.end)}까지`).join(' · ')} 데이터만 들어 있어요.</div>` : ''}
     <div class="card"><div class="scroll"><table class="tbl">
-      <thead><tr><th>광고</th><th>광고비</th><th>${CMP.short} 대비</th><th>클릭</th><th>클릭당</th><th>광고 전환<span class="psm">매체 집계</span></th><th>싸인 결제</th><th>결제당 광고비</th><th>광고비 대비 매출</th></tr></thead>
+      <thead><tr><th>광고</th><th>광고비</th><th>${CMP.short} 대비</th><th>클릭</th><th>클릭당</th><th>결제 전환<span class="psm">매체 집계</span></th><th>싸인 결제</th><th>결제당 광고비</th><th>광고비 대비 매출</th></tr></thead>
       <tbody>${rows.map(r => line(r)).join('')}${line(T, true)}</tbody></table></div></div></section>`;
 }
 
@@ -993,10 +1004,10 @@ function adsSection({ m, pm, cd, pd, label }) {
       ${kp('파워링크 클릭', pl.cur[1], '회', adChg(pl.cur[1], pl.prev[1]), `노출 ${fmt(pl.cur[0])} · 클릭률 ${pctTxt(ctr(pl.cur))}`)}
       ${kp('파워링크 비용', pl.cur[2], '원', adChg(pl.cur[2], pl.prev[2]), `클릭당 ${won(cpc(pl.cur))} · ${CMP.short} ${won(cpc(pl.prev))}`)}
       ${kp('파워콘텐츠 클릭', pc.cur[1], '회', adChg(pc.cur[1], pc.prev[1]), `노출 ${fmt(pc.cur[0])} · 비용 ${won(pc.cur[2])}`)}
-      ${kp('광고센터 전환' + kTi(TIP_NADS_CONV), pl.cur[3] + pc.cur[3], '건', adChg(pl.cur[3] + pc.cur[3], pl.prev[3] + pc.prev[3]), `전환매출 ${won(pl.cur[4] + pc.cur[4])}`)}
+      ${kp('광고센터 결제 전환' + kTi(TIP_NADS_CONV), pl.cur[3] + pc.cur[3], '건', adChg(pl.cur[3] + pc.cur[3], pl.prev[3] + pc.prev[3]), `전환매출 ${won(pl.cur[4] + pc.cur[4])}`)}
     </div>
     <div class="card"><div class="hd"><b>광고 소재</b><span>파워링크 ${all.filter(a => a.t === '파워링크').length}개 · 파워콘텐츠 ${all.filter(a => a.t === '파워콘텐츠').length}개</span></div><div class="scroll"><table class="tbl">
-      <thead><tr><th>소재</th><th>상태</th><th>노출</th><th>클릭</th><th>클릭률</th><th>비용</th><th>전환</th><th>클릭 증감</th></tr></thead>
+      <thead><tr><th>소재</th><th>상태</th><th>노출</th><th>클릭</th><th>클릭률</th><th>비용</th><th>결제 전환</th><th>클릭 증감</th></tr></thead>
       <tbody>${act.map(adRow).join('')}</tbody></table></div>
       ${idle.length ? `<details class="admore"><summary>노출 없는 소재 ${idle.length}개 보기 (${[...new Set(idle.map(a => a.state))].join('·')})</summary><div class="scroll"><table class="tbl"><tbody>${idle.map(adRow).join('')}</tbody></table></div></details>` : ''}</div>
     ${X.length ? `<div class="card"><div class="hd"><b>파워링크 광고 이미지</b><span>노출 중 ${xOn.length}개</span></div><div class="adimgs">${xOn.map(imgCard).join('')}</div>
@@ -1004,7 +1015,7 @@ function adsSection({ m, pm, cd, pd, label }) {
     ${signKwCard(K.filter(k => k.sign))}
     <div class="two">
       <div class="card"><div class="hd"><b>파워링크 키워드</b><span>등록 ${fmt(A.kwTotal)}개 중 노출 ${fmt(kwImp.filter(k => k.camp === '예스폼싸인').length)}개 · 평균 5위 이내 ${fmt(kwImp.filter(k => k.camp === '예스폼싸인' && k.rnk > 0 && k.rnk <= 5).length)}개</span></div><div class="scroll vlim"><table class="tbl">
-        <thead><tr><th>키워드</th><th>평균 순위</th><th>노출</th><th>클릭</th><th>비용</th><th>클릭당</th><th>입찰가</th><th>전환</th></tr></thead>
+        <thead><tr><th>키워드</th><th>평균 순위</th><th>노출</th><th>클릭</th><th>비용</th><th>클릭당</th><th>입찰가</th><th>결제 전환</th></tr></thead>
         <tbody>${kwTop.map(k => `<tr><td class="name">${esc(k.kw)}<small>${esc(k.group)}</small></td><td>${k.rnk ? k.rnk.toFixed(1) + '위' : '-'}</td><td>${fmt(k.cur[0])}</td><td>${fmt(k.cur[1])}</td><td>${won(k.cur[2])}</td><td>${cpc(k.cur) == null ? '-' : won(cpc(k.cur))}</td><td>${won(k.bid)}${k.grpBid ? '<span class="psm">그룹 입찰</span>' : ''}</td><td>${k.cur[3] ? fmt(k.cur[3]) + '건' : '<span class="muted">-</span>'}</td></tr>`).join('')}</tbody></table></div></div>
       <div class="card"><div class="hd"><b>광고그룹</b></div><div class="scroll"><table class="tbl">
         <thead><tr><th>광고그룹</th><th>노출</th><th>클릭</th><th>비용</th><th>클릭 증감</th></tr></thead>
@@ -1012,7 +1023,7 @@ function adsSection({ m, pm, cd, pd, label }) {
     </div>
     ${view === 'week' ? recKwCard(A.recs) : ''}
     ${TR.length ? `<div class="card"><div class="hd"><b>${view === 'month' ? '월별 광고 추이' : '주간 광고 추이'}</b></div><div class="scroll"><table class="tbl">
-      <thead><tr><th>${view === 'month' ? '월' : '주'}</th><th>파워링크 노출</th><th>클릭</th><th>비용</th><th>클릭당</th><th>파워콘텐츠 노출</th><th>클릭</th><th>비용</th><th>광고 전환</th></tr></thead>
+      <thead><tr><th>${view === 'month' ? '월' : '주'}</th><th>파워링크 노출</th><th>클릭</th><th>비용</th><th>클릭당</th><th>파워콘텐츠 노출</th><th>클릭</th><th>비용</th><th>결제 전환</th></tr></thead>
       <tbody>${TR.map(w => `<tr><td>${w.l}</td><td>${fmt(w.pl[0])}</td><td>${fmt(w.pl[1])}</td><td>${won(w.pl[2])}</td><td>${cpc(w.pl) == null ? '-' : won(cpc(w.pl))}</td><td>${fmt(w.pc[0])}</td><td>${fmt(w.pc[1])}</td><td>${won(w.pc[2])}</td><td>${fmt(w.pl[3] + w.pc[3])}</td></tr>`).join('')}</tbody></table></div></div>` : ''}
   </section>`;
 }
