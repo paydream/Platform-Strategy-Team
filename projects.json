@@ -2,6 +2,51 @@
   "version": 2,
   "projects": [
     {
+      "id": "20261126-163946-design",
+      "title": "[예스폼싸인] 이용요금 디자인",
+      "team": "design",
+      "category": "웹 메인",
+      "desc": "",
+      "created": "2026.11.26",
+      "updated": "2026.11.27",
+      "hidden": false,
+      "final": null,
+      "versions": [
+        {
+          "id": "20261126-163946-design",
+          "label": "v1",
+          "title": "[예스폼싸인] 이용요금 디자인",
+          "desc": "",
+          "created": "2026.11.26",
+          "folder": "archive/20261126-163946-design",
+          "preview": "archive/20261126-163946-design/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261126-163946-design/index.html"
+            }
+          ]
+        },
+        {
+          "id": "20261127-155540-design",
+          "label": "v2",
+          "title": "[예스폼싸인] 이용요금 디자인",
+          "desc": "",
+          "created": "2026.11.27",
+          "folder": "archive/20261127-155540-design",
+          "preview": "archive/20261127-155540-design/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261127-155540-design/index.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "20261124-162015-design",
       "title": "[예스폼싸인] 디자인 시스템 적용",
       "team": "design",
@@ -420,35 +465,6 @@
             {
               "label": "멤버십개편_한눈에보기",
               "href": "archive/20261126-171628-membership/멤버십개편_한눈에보기.html"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "20261126-163946-design",
-      "title": "[예스폼싸인] 이용요금 디자인",
-      "team": "design",
-      "category": "웹 메인",
-      "desc": "",
-      "created": "2026.11.26",
-      "updated": "2026.11.26",
-      "hidden": false,
-      "final": null,
-      "versions": [
-        {
-          "id": "20261126-163946-design",
-          "label": "v1",
-          "title": "[예스폼싸인] 이용요금 디자인",
-          "desc": "",
-          "created": "2026.11.26",
-          "folder": "archive/20261126-163946-design",
-          "preview": "archive/20261126-163946-design/index.html",
-          "hidden": false,
-          "items": [
-            {
-              "label": "시안 01",
-              "href": "archive/20261126-163946-design/index.html"
             }
           ]
         }
