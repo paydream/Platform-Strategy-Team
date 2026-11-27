@@ -78,6 +78,13 @@
   .wk .bx.ins .bt{color:#0b6b35}.wk .bx.act .bt{color:#c2410c}
   .wk ul,.wk ol{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:13.5px;line-height:1.5}
   @media (max-width:860px){.wk{grid-template-columns:1fr}}
+  .wk .bt .ed{display:flex;gap:6px;align-items:center}
+  .wk .eb{font:inherit;font-size:12px;font-weight:600;border:1px solid var(--line);background:#fff;border-radius:7px;padding:2px 9px;cursor:pointer;color:var(--sub)}
+  .wk .eb:hover{border-color:var(--c);color:var(--c)}
+  .wk .eb.pri{background:var(--c);border-color:var(--c);color:#fff}
+  .wk .who{font-weight:400;font-size:11.5px;color:var(--faint)}
+  .wk textarea{width:100%;min-height:150px;font:inherit;font-size:13.5px;line-height:1.6;border:1px solid var(--line);border-radius:8px;padding:8px 10px;resize:vertical}
+  .wk .tip{font-size:11.5px;color:var(--faint);margin-top:4px}
   .crumb{display:inline-block;font-size:13px;color:var(--sub);text-decoration:none;margin-bottom:6px}
   .crumb:hover{color:var(--c)}
   .cb .hl2{font-size:12.5px;color:var(--text);background:#fff7f1;border-radius:8px;padding:6px 9px;margin-top:4px}
@@ -201,21 +208,63 @@ async function select(id) {
   if (!it.dash) { $('#dash').innerHTML = head + '<div class="db"><div class="empty">이 항목은 아직 대시보드가 없어요.</div></div>'; $('#upd').innerHTML = ''; return; }
   const d = await getData(it.dash);
   window.__series = null;
+  await loadNotes();
   $('#dash').innerHTML = head + weekly(it, d) + `<div class="db">${it.kind === 'autopay' ? dashAutopay(d && d.autopay, it) : dashBody(d, it)}</div>`;
   setUpd(d);
   drawLine();
 }
 
 // 주간 인사이트 · 추천 액션플랜: 데이터 마지막 날 기준 최근 7일 vs 그 전 7일 (일별 데이터에서 계산, 2026-11-27)
+// 직접 수정: 항목 id + 그 주 월요일 키로 저장(api/stats?notes=perf). 수정한 칸은 그 주 동안 자동 내용 대신 보인다 (2026-11-27)
+let NOTES = null, WK = null;
+async function loadNotes() {
+  if (NOTES) return;
+  try { const r = await fetch('/api/stats?notes=perf', { cache: 'no-store' }); NOTES = r.ok ? ((await r.json()).weeks || {}) : {}; } catch { NOTES = {}; }
+}
+const monOf = s => { const t = new Date(Date.parse(s)); const w = (t.getUTCDay() + 6) % 7; return new Date(t.getTime() - w * 864e5).toISOString().slice(0, 10); };
+const mdLine = x => esc(x).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+const toText = h => String(h).replace(/<b>(.*?)<\/b>/g, '**$1**').replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'");
 function weekly(it, d) {
   try {
     const W = it.kind === 'autopay' ? wkAutopay(d && d.autopay) : (it.dash === 'perf' && !it.kind) ? wkBrief(d) : null;
     if (!W) return '';
-    const li = a => a.map(x => '<li>' + x + '</li>').join('');
-    return '<div class="wk"><div class="bx ins"><div class="bt">주간 인사이트<span>' + W.label + '</span></div><ul>' + li(W.ins) + '</ul></div>'
-      + '<div class="bx act"><div class="bt">추천 액션플랜</div><ol>' + li(W.act.length ? W.act : ['지금 수치로는 바로 바꿀 것이 없어요. 다음 주 데이터로 다시 봐요.']) + '</ol></div></div>';
+    const end = it.kind === 'autopay' ? d.autopay.range.end : d.range.end;
+    const key = it.id + '|' + monOf(end), N = (NOTES || {})[key] || {};
+    if (!W.act.length) W.act = ['지금 수치로는 바로 바꿀 것이 없어요. 다음 주 데이터로 다시 봐요.'];
+    WK = { key, W, N };
+    return '<div class="wk" id="wk">' + wkBox('ins') + wkBox('act') + '</div>';
   } catch (e) { console.error(e); return ''; }
 }
+function wkBox(t, editing) {
+  const { W, N } = WK, isIns = t === 'ins';
+  const auto = isIns ? W.ins : W.act, own = (N[t] || '').trim();
+  const lines = own ? own.split('\n').map(x => x.trim()).filter(Boolean).map(mdLine) : auto;
+  const at = own && N.at ? new Date(new Date(N.at).getTime() + 9 * 3600e3) : null;
+  const who = at ? '<span class="who">직접 수정 · ' + (at.getUTCMonth() + 1) + '.' + at.getUTCDate() + ' ' + String(at.getUTCHours()).padStart(2, '0') + ':' + String(at.getUTCMinutes()).padStart(2, '0') + '</span>' : '';
+  const title = (isIns ? '주간 인사이트' : '추천 액션플랜') + (isIns ? '<span>' + W.label + '</span>' : '');
+  const tag = isIns ? 'ul' : 'ol';
+  if (editing) {
+    const txt = own || auto.map(toText).join('\n');
+    return '<div class="bx ' + t + '" data-t="' + t + '"><div class="bt">' + title + '<div class="ed"><button class="eb" data-a="cancel">취소</button>' + (own ? '<button class="eb" data-a="reset">자동으로 되돌리기</button>' : '') + '<button class="eb pri" data-a="save">저장</button></div></div>'
+      + '<textarea aria-label="' + (isIns ? '주간 인사이트' : '추천 액션플랜') + ' 수정">' + esc(txt) + '</textarea><div class="tip">한 줄 = 한 항목 · **굵게**</div></div>';
+  }
+  return '<div class="bx ' + t + '" data-t="' + t + '"><div class="bt">' + title + '<div class="ed">' + who + '<button class="eb" data-a="edit">수정</button></div></div><' + tag + '>' + lines.map(x => '<li>' + x + '</li>').join('') + '</' + tag + '></div>';
+}
+document.addEventListener('click', async e => {
+  const btn = e.target.closest('#wk .eb'); if (!btn || !WK) return;
+  const box = btn.closest('.bx'), t = box.dataset.t, a = btn.dataset.a;
+  if (a === 'edit') { box.outerHTML = wkBox(t, true); const ta = document.querySelector('#wk .bx[data-t="' + t + '"] textarea'); if (ta) ta.focus(); return; }
+  if (a === 'cancel') { box.outerHTML = wkBox(t); return; }
+  const val = a === 'reset' ? '' : box.querySelector('textarea').value.trim();
+  btn.disabled = true; btn.textContent = '저장 중…';
+  try {
+    const r = await fetch('/api/stats?notes=perf', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ k: WK.key, [t]: val }) });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(j.error || ('저장 실패 (' + r.status + ')'));
+    NOTES = j.weeks || {}; WK.N = NOTES[WK.key] || {};
+    box.outerHTML = wkBox(t);
+  } catch (err) { btn.disabled = false; btn.textContent = a === 'reset' ? '자동으로 되돌리기' : '저장'; alert(err.message); }
+});
 const addD = (s, n) => new Date(Date.parse(s) + n * 864e5).toISOString().slice(0, 10);
 const MDd = s => (+s.slice(5, 7)) + '.' + (+s.slice(8));
 function wkRange(end, start) { const s = addD(end, -6), pe = addD(end, -7), ps = addD(end, -13); return { s, e: end, ps, pe, hasPrev: start ? ps >= start : true, label: MDd(s) + ' ~ ' + MDd(end) }; }
