@@ -239,7 +239,6 @@ function wkBrief(d) {
   if (topF) ins.push('가장 많이 클릭한 서식 <b>' + esc(unset(topF[0])) + '</b> ' + fmt(topF[3]) + '명' + (topB ? ' · 블로그 <b>' + esc(unset(topB[0])) + '</b> ' + fmt(topB[3]) + '명' : ''));
   if (U.avgSec) ins.push('평균 열람 <b>' + U.avgSec.toFixed(1) + '초</b>' + (bt ? ' · 5초 안에 닫음 ' + pc1(short, bt) : '') + (hide && closes ? ' · 「오늘 다시 보지 않기」 ' + pc1(hide[3], closes) : ''));
   ins.push('클릭 후 결제 <b>' + fmt(buy) + '건</b>');
-  if (!R.hasPrev) ins.push('지난주 비교는 측정 2주차부터 나와요');
   const act = [];
   if (v && f / v < 0.02) act.push('서식 클릭률 2% 미만 → 일정 상세의 추천 서식을 위로 올리고 서식명·썸네일을 더 눈에 띄게');
   if (bt && short / bt > 0.5) act.push('절반 이상이 5초 안에 닫음 → 첫 화면에 이번 주 마감 일정 1~2개만 크게');
@@ -265,7 +264,6 @@ function wkAutopay(a) {
   ];
   if (topG && topG[1]) ins.push('해지하기가 가장 많은 등급 <b>' + esc(topG[0]) + '</b> ' + fmt(topG[1]) + '세션');
   if (err) ins.push('해지 처리 오류 <b>' + fmt(err) + '세션</b>');
-  if (!R.hasPrev) ins.push('지난주 비교는 측정 2주차부터 나와요');
   const act = [];
   if (err) act.push('해지 처리 오류 세션 확인 → 서버 응답·결제 대행사 해지 처리 점검');
   if (def != null && def < 0.5) act.push('방어율 50% 미만 → 해지 안내에 남은 이용 기간·유지 혜택(할인·일시정지)을 먼저 보여주기');
