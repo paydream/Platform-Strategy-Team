@@ -43,6 +43,20 @@
       "dash": "perf",
       "kind": "myresource",
       "explore": "https://analytics.google.com/analytics/web/?authuser=0#/analysis/a55667387p528546773/edit/XB3V7cCDScupxVymbBZMMw"
+    },
+    {
+      "id": "detail-usability",
+      "title": "예스폼 상세페이지 사용성",
+      "desc": "서식 상세페이지 전체 · 어디까지 봤나(영역 도달), 무엇을 눌렀나, 헛클릭·연타, 어떻게 끝났나(다운로드·이탈), 체류·스크롤·미리보기",
+      "product": "예스폼",
+      "status": "측정 중",
+      "start": "2026-11-27",
+      "events": 6,
+      "gtm": "GTM 버전 48",
+      "thumb": "assets/perf/detail-usability.jpg",
+      "dash": "perf",
+      "kind": "detail",
+      "explore": "https://analytics.google.com/analytics/web/?authuser=0#/analysis/a55667387p255821535/edit/lg7qRsn1SH-kBp5rpL9s3w"
     }
   ]
 }
