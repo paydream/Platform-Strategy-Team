@@ -75,8 +75,9 @@ let ITEMS = [];
 async function load() {
   try { const r = await fetch('data/auto.json', { cache: 'no-store' }); ITEMS = (await r.json()).items || []; } catch { ITEMS = []; }
   if (QID) return detail(ITEMS.find(x => x.id === QID));
-  $('#cnt').textContent = ITEMS.length ? `${ITEMS.length}건` : '';
-  $('#album').innerHTML = ITEMS.length ? ITEMS.map(it => `<a class="card" href="auto.html?id=${encodeURIComponent(it.id)}">
+  const LIST = ITEMS.filter(x => !x.hidden); // hidden: true 항목은 목록에서만 뺀다(주소로는 열림)
+  $('#cnt').textContent = LIST.length ? `${LIST.length}건` : '';
+  $('#album').innerHTML = LIST.length ? LIST.map(it => `<a class="card" href="auto.html?id=${encodeURIComponent(it.id)}">
       <div class="th">${it.thumb ? `<img src="${esc(it.thumb)}" alt="" loading="lazy">` : ''}<em class="${it.status === '운영 중' ? '' : 'ready'}">${esc(it.status || '')}</em></div>
       <div class="cb"><span class="pd">${esc([it.product, it.kind].filter(Boolean).join(' · '))}</span><b>${esc(it.title)}</b><p>${esc(it.desc || '')}</p>
         ${it.schedule ? `<div class="hl2">${esc(it.schedule)}</div>` : ''}
