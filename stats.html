@@ -671,6 +671,8 @@ function paySection(pay) {
         <tbody>${g.map(([k, [n, a]]) => `<tr><td class="name">${esc(k)}${srcTi('pay', k)}</td><td>${fmt(n)}건</td><td>${shareCell(n, tot, max)}</td><td>${won(a)}</td></tr>`).join('')}</tbody></table></div></div>
     </div>${note}</section>`;
 }
+// 결제 출처 짧은 이름: 캠페인 코드(' - ' 뒤)와 긴 꼬리를 뺀다
+const shortSrc = n => { let t = String(n).split(' - ')[0].trim(); if (/^네이버 공식 블로그 · 광고$/.test(t)) t = '네이버 블로그 광고'; return t.length > 18 ? t.slice(0, 17) + '…' : t; };
 function signView({ m, pm, cd, pd, mk, pmk, label }) {
   const S = m.sign, P = pm && pm.sign;
   const REP = view === 'month'; // 월간(최근 3개월 포함) = 월보고서: 전환 흐름·일별/주간 추이 빼고 마케팅 채널 결과 추가 (2026-11-26 사용자 요청)
@@ -686,10 +688,11 @@ function signView({ m, pm, cd, pd, mk, pmk, label }) {
   const payTop = pl.slice().sort((a, b) => b[2] - a[2] || b[3] - a[3])[0];
   const bullets = [];
   const pList = D.payments ? paysIn(SEL.s, SEL.e) : [];
-  if (pList.length) { const gg = srcGroup(pList); bullets.push(`결제 출처: <b>${gg.slice(0, 5).map(([k, [n]]) => `${esc(k)} ${n}건`).join(' / ')}${gg.length > 5 ? ` 외 ${gg.length - 5}곳` : ''}</b>`); }
-  if (payTop && payTop[2] > 0) bullets.push(`등록된 지면 중 결제가 가장 많이 나온 곳은 <b>${esc(payTop[0])}</b> (${fmt(payTop[2])}건 · ${won(payTop[3])})`);
-  bullets.push(`등록된 지면을 통한 결제는 전체 결제 ${fmt(pay[0])}건 중 <b>${fmt(plTot[1])}건</b>이에요`);
-  bullets.push(`GA4 기준 가장 많이 들어온 채널은 <b>${esc(ch[0][0])}</b> (${fmt(ch[0][1])}명, ${pctTxt(pct(ch[0][1], chTot))})`);
+  // 결제 출처는 핵심 3~4개만 짧은 이름으로 (2026-11-27 사용자 요청)
+  if (pList.length) { const gg = srcGroup(pList), k = gg.length > 3 && gg[3][1][0] >= 2 ? 4 : 3, rest = gg.slice(k).reduce((a, x) => a + x[1][0], 0);
+    bullets.push(`결제 출처: <b>${gg.slice(0, k).map(([nm, [n]]) => `${esc(shortSrc(nm))} ${n}건`).join(' · ')}</b>${rest ? ` 외 ${rest}건` : ''}`); }
+  if (payTop && payTop[2] > 0) bullets.push(`결제가 가장 많이 나온 곳은 <b>${esc(payTop[0])}</b> (${fmt(payTop[2])}건 · ${won(payTop[3])})`);
+  bullets.push(`많이 들어온 채널은 <b>${esc(ch[0][0])}</b> (${fmt(ch[0][1])}명, ${pctTxt(pct(ch[0][1], chTot))})`);
   const NK = REP ? noteKey() : null, NT = NK && NOTES ? (NOTES.months[NK] || {}) : {};
   const hasIns = !!(NT.insight && NT.insight.trim());
   const insBody = !REP ? `<ul>${bullets.map(b => `<li>${b}</li>`).join('')}</ul>`
