@@ -60,7 +60,7 @@
   tr:last-child td{border-bottom:0}
   .bar{display:inline-block;height:6px;border-radius:3px;background:var(--c);opacity:.75;vertical-align:middle;margin-right:6px}
   .nod{color:var(--faint);font-size:12px;padding:8px 0}
-  .dh.big{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(220px,1fr);gap:24px;align-items:start;padding:20px}
+  .dh.big{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,2.4fr);gap:24px;align-items:start;padding:20px}
   .dh.big .shot{display:block;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#f1f3f5;cursor:zoom-in}
   .dh.big .shot img{width:100%;height:auto;aspect-ratio:16/10;object-fit:contain;border:0;border-radius:0;display:block}
   .dh.big .shot:hover{border-color:#f3c3a4}
@@ -69,6 +69,15 @@
   .dh.big .info p{font-size:13px;color:var(--sub)}
   .dh.big .info .hint{font-size:12px;color:var(--faint)}
   @media (max-width:860px){.dh.big{grid-template-columns:1fr}}
+  /* 주간 인사이트 · 추천 액션플랜 (2026-11-27) */
+  .wk{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px 20px 0}
+  .wk .bx{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:#fff}
+  .wk .bx.ins{border-left:4px solid #12a150}.wk .bx.act{border-left:4px solid #e8590c}
+  .wk .bt{font-size:13px;font-weight:700;margin-bottom:8px;display:flex;justify-content:space-between;gap:8px}
+  .wk .bt span{font-weight:400;color:var(--faint);font-size:12px}
+  .wk .bx.ins .bt{color:#0b6b35}.wk .bx.act .bt{color:#c2410c}
+  .wk ul,.wk ol{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:13.5px;line-height:1.5}
+  @media (max-width:860px){.wk{grid-template-columns:1fr}}
   .crumb{display:inline-block;font-size:13px;color:var(--sub);text-decoration:none;margin-bottom:6px}
   .crumb:hover{color:var(--c)}
   .cb .hl2{font-size:12.5px;color:var(--text);background:#fff7f1;border-radius:8px;padding:6px 9px;margin-top:4px}
@@ -192,11 +201,78 @@ async function select(id) {
   if (!it.dash) { $('#dash').innerHTML = head + '<div class="db"><div class="empty">이 항목은 아직 대시보드가 없어요.</div></div>'; $('#upd').innerHTML = ''; return; }
   const d = await getData(it.dash);
   window.__series = null;
-  $('#dash').innerHTML = head + `<div class="db">${it.kind === 'autopay' ? dashAutopay(d && d.autopay, it) : dashBody(d, it)}</div>`;
+  $('#dash').innerHTML = head + weekly(it, d) + `<div class="db">${it.kind === 'autopay' ? dashAutopay(d && d.autopay, it) : dashBody(d, it)}</div>`;
   setUpd(d);
   drawLine();
 }
 
+// 주간 인사이트 · 추천 액션플랜: 데이터 마지막 날 기준 최근 7일 vs 그 전 7일 (일별 데이터에서 계산, 2026-11-27)
+function weekly(it, d) {
+  try {
+    const W = it.kind === 'autopay' ? wkAutopay(d && d.autopay) : (it.dash === 'perf' && !it.kind) ? wkBrief(d) : null;
+    if (!W) return '';
+    const li = a => a.map(x => '<li>' + x + '</li>').join('');
+    return '<div class="wk"><div class="bx ins"><div class="bt">주간 인사이트<span>' + W.label + '</span></div><ul>' + li(W.ins) + '</ul></div>'
+      + '<div class="bx act"><div class="bt">추천 액션플랜</div><ol>' + li(W.act.length ? W.act : ['지금 수치로는 바로 바꿀 것이 없어요. 다음 주 데이터로 다시 봐요.']) + '</ol></div></div>';
+  } catch (e) { console.error(e); return ''; }
+}
+const addD = (s, n) => new Date(Date.parse(s) + n * 864e5).toISOString().slice(0, 10);
+const MDd = s => (+s.slice(5, 7)) + '.' + (+s.slice(8));
+function wkRange(end, start) { const s = addD(end, -6), pe = addD(end, -7), ps = addD(end, -13); return { s, e: end, ps, pe, hasPrev: start ? ps >= start : true, label: MDd(s) + ' ~ ' + MDd(end) }; }
+const wsum = (rows, re, a, b, ix) => rows.filter(r => r[0] >= a && r[0] <= b && re.test(r[1])).reduce((t, r) => t + (r[ix] || 0), 0);
+const chg = (c, p) => p ? ' (' + (c >= p ? '▲' : '▼') + Math.abs((c - p) / p * 100).toFixed(0) + '%)' : '';
+const pc1 = (a, b) => b ? (a / b * 100).toFixed(1) + '%' : '-';
+function wkBrief(d) {
+  if (!d || !d.range || !(d.daily || []).length) return null;
+  const R = wkRange(d.range.end, d.range.start), rows = d.daily;
+  const S = (re, p) => wsum(rows, re, p ? R.ps : R.s, p ? R.pe : R.e, 2);
+  const v = S(/^brief_modal_view$/), vp = S(/^brief_modal_view$/, 1), f = S(/^brief_modal_form_click$/), fp = S(/^brief_modal_form_click$/, 1);
+  const b = S(/^brief_modal_blog_click$/), bp = S(/^brief_modal_blog_click$/, 1), ic = S(/^brief_modal_item_click$/), buy = S(/^brief_modal_purchase$/);
+  const U = d.useful || {}, hide = (U.byClose || []).find(r => r[0] === 'close_today_hide'), closes = (U.byClose || []).reduce((a, r) => a + (r[3] || 0), 0);
+  const BANDS = U.byBand || [], short = BANDS.filter(r => /5초 미만/.test(r[0])).reduce((a, r) => a + (r[3] || 0), 0), bt = BANDS.reduce((a, r) => a + (r[3] || 0), 0);
+  const topF = (d.formRank || []).slice().sort((x, y) => y[3] - x[3])[0], topB = (d.blogRank || []).slice().sort((x, y) => y[3] - x[3])[0];
+  const P = x => R.hasPrev ? x : '';
+  const ins = [
+    '모달 노출 <b>' + fmt(v) + '</b>' + P(chg(v, vp)) + ' · 일정 클릭 ' + fmt(ic) + ' (' + pc1(ic, v) + ')',
+    '추천 서식 클릭 <b>' + fmt(f) + '</b> (' + pc1(f, v) + ')' + P(chg(f, fp)) + ' · 블로그 <b>' + fmt(b) + '</b> (' + pc1(b, v) + ')' + P(chg(b, bp)),
+  ];
+  if (topF) ins.push('가장 많이 클릭한 서식 <b>' + esc(unset(topF[0])) + '</b> ' + fmt(topF[3]) + '명' + (topB ? ' · 블로그 <b>' + esc(unset(topB[0])) + '</b> ' + fmt(topB[3]) + '명' : ''));
+  if (U.avgSec) ins.push('평균 열람 <b>' + U.avgSec.toFixed(1) + '초</b>' + (bt ? ' · 5초 안에 닫음 ' + pc1(short, bt) : '') + (hide && closes ? ' · 「오늘 다시 보지 않기」 ' + pc1(hide[3], closes) : ''));
+  ins.push('클릭 후 결제 <b>' + fmt(buy) + '건</b>');
+  if (!R.hasPrev) ins.push('지난주 비교는 측정 2주차부터 나와요');
+  const act = [];
+  if (v && f / v < 0.02) act.push('서식 클릭률 2% 미만 → 일정 상세의 추천 서식을 위로 올리고 서식명·썸네일을 더 눈에 띄게');
+  if (bt && short / bt > 0.5) act.push('절반 이상이 5초 안에 닫음 → 첫 화면에 이번 주 마감 일정 1~2개만 크게');
+  if (hide && closes && hide[3] / closes > 0.25) act.push('「오늘 다시 보지 않기」 25% 이상 → 노출 빈도를 주 1~2회나 로그인 후 1회로');
+  if (v && b / v < 0.01) act.push('블로그 클릭 1% 미만 → 블로그 줄을 일정 설명 바로 밑으로');
+  if (f + b > 0 && !buy) act.push('클릭은 있지만 결제 0건 → 클릭한 서식 상세의 멤버십 안내·결제 버튼 점검');
+  if (topF) act.push('반응 좋은 서식 「' + esc(unset(topF[0])) + '」과 비슷한 서식을 다른 일정 추천에도 배치');
+  return { label: R.label + (R.hasPrev ? ' · 지난주 대비' : ''), ins, act: act.slice(0, 4) };
+}
+function wkAutopay(a) {
+  if (!a || !a.range || !(a.daily || []).length) return null;
+  const R = wkRange(a.range.end, a.range.start), rows = a.daily;
+  const S = (k, p) => wsum(rows, new RegExp('^autopay_session_' + k + '$'), p ? R.ps : R.s, p ? R.pe : R.e, 3);
+  const req = S('request'), keep = S('keep'), conf = S('confirm'), done = S('done'), err = S('error');
+  const reqP = S('request', 1), confP = S('confirm', 1);
+  const def = req ? (req - conf) / req : null, defP = reqP ? (reqP - confP) / reqP : null;
+  const GR = { guest: '비회원', free: '무료', paid: '유료', premium: '프리미엄', company: '기업', naver: '네이버' };
+  const g = {}; (a.grade || []).forEach(r => { if (r[1] === 'autopay_session_confirm') { const k = GR[r[0]] || r[0]; g[k] = (g[k] || 0) + (r[3] || 0); } });
+  const topG = Object.entries(g).sort((x, y) => y[1] - x[1])[0];
+  const ins = [
+    '해지요청 <b>' + fmt(req) + '세션</b>' + (R.hasPrev ? chg(req, reqP) : '') + ' → 해지하기 <b>' + fmt(conf) + '</b> · 해지 완료 ' + fmt(done),
+    '해지 방어율 <b>' + (def == null ? '-' : (def * 100).toFixed(0) + '%') + '</b>' + (R.hasPrev && defP != null ? ' (지난주 ' + (defP * 100).toFixed(0) + '%)' : '') + ' · 안내 보고 유지 ' + fmt(keep) + '세션',
+  ];
+  if (topG && topG[1]) ins.push('해지하기가 가장 많은 등급 <b>' + esc(topG[0]) + '</b> ' + fmt(topG[1]) + '세션');
+  if (err) ins.push('해지 처리 오류 <b>' + fmt(err) + '세션</b>');
+  if (!R.hasPrev) ins.push('지난주 비교는 측정 2주차부터 나와요');
+  const act = [];
+  if (err) act.push('해지 처리 오류 세션 확인 → 서버 응답·결제 대행사 해지 처리 점검');
+  if (def != null && def < 0.5) act.push('방어율 50% 미만 → 해지 안내에 남은 이용 기간·유지 혜택(할인·일시정지)을 먼저 보여주기');
+  if (topG && topG[1]) act.push('「' + esc(topG[0]) + '」 회원 해지가 많음 → 이 등급 대상 유지 혜택·사용 안내 메일 테스트');
+  if (conf && done < conf) act.push('해지하기 대비 완료가 적음 → 완료 단계 이탈·오류 확인');
+  return { label: R.label + (R.hasPrev ? ' · 지난주 대비' : ''), ins, act: act.slice(0, 4) };
+}
 function dashBody(d, it) {
   if (!d) return '<div class="empty">데이터를 아직 받지 못했어요. 매일 오후 5시에 GA4에서 자동으로 들어와요.</div>';
   const ev = Object.fromEntries((d.events || []).map(r => [r[0], { u: r[1], c: r[2], tx: r[3] || 0 }]));
