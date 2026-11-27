@@ -78,6 +78,7 @@
   .wk .bx.ins .bt{color:#0b6b35}.wk .bx.act .bt{color:#c2410c}
   .wk ul,.wk ol{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:13.5px;line-height:1.5}
   @media (max-width:860px){.wk{grid-template-columns:1fr}}
+  .bnote{margin-top:8px;font-size:12px;color:var(--faint);line-height:1.5}
   .wk .bt .ed{display:flex;gap:6px;align-items:center}
   .wk .eb{font:inherit;font-size:12px;font-weight:600;border:1px solid var(--line);background:#fff;border-radius:7px;padding:2px 9px;cursor:pointer;color:var(--sub)}
   .wk .eb:hover{border-color:var(--c);color:var(--c)}
@@ -411,7 +412,9 @@ function dashBody(d, it) {
   const bmx = Math.max(0, ...bandRows.map(r => r[2]));
   const DEV = { desktop: 'PC', mobile: '모바일', tablet: '태블릿' };
   const dev = agg(d.device || [], r => DEV[r[1]] || unset(r[1]), 2).map(([k, v]) => [esc(k), fmt(v[0]), fmt(v[1])]);
-  const buyRows = (d.purchase || []).map(r => [`${esc(unset(r[1]))}<small>${esc(unset(r[0]))}</small>`, fmt(r[3]), fmt(r[4])]);
+  // 결제 표: 서식 번호 대신 서식·블로그 이름 (클릭 순위·서식 표에서 번호로 이름 찾기, 2026-11-27)
+  const NM = {}; [...(d.formRank || []), ...(d.blogRank || []), ...(d.forms || [])].forEach(r => { if (r[1] && r[0] && r[0] !== '(not set)' && !NM[r[1]]) NM[r[1]] = r[0]; });
+  const buyRows = (d.purchase || []).map(r => [`${esc(NM[r[1]] || unset(r[1]))}<small>${r[0] === 'blog' ? '블로그' : '서식'}</small>`, fmt(r[3]), fmt(r[4])]);
   return `<p class="upd" style="margin-bottom:10px">기간 ${range} · 사용자는 기간 안 순 사용자</p>` + kpis +
     `<div class="grid2">
       <div class="box key"><h3>어떤 서식을 클릭했나 <span>추천 서식 클릭 순위</span></h3>${rank(d.formRank, '서식')}</div>
@@ -427,7 +430,7 @@ function dashBody(d, it) {
     <div class="grid2">
       <div class="box"><h3>일정별 관심도 <span>일정 · 서식 · 블로그 클릭</span></h3>${top(items, ['일정', '사용자', '횟수'])}</div>
       <div class="box"><h3>분야 필터 · 상단 일정 버튼 · 스크롤</h3>${top(filt, ['구분', '사용자', '횟수'])}</div>
-      <div class="box"><h3>서식 · 블로그 클릭 후 결제 <span>30일</span></h3>${top(buyRows, ['서식 번호 · 링크 종류', '사용자', '건수'])}</div>
+      <div class="box"><h3>서식 · 블로그 클릭 후 결제 <span>30일</span></h3>${top(buyRows, ['서식 · 블로그', '사용자', '건수'])}<p class="bnote">결제 전환 기준: 모달에서 추천 서식·블로그 글을 누른 브라우저가 30일 안에 예스폼에서 결제하면 1건. 마지막으로 누른 서식·글에 연결하고, 같은 거래는 한 번만 세요. 결제한 상품이 그 서식인지는 따지지 않아요.</p></div>
       <div class="box"><h3>기기별 이용</h3>${top(dev, ['기기', '사용자', '횟수'])}</div>
       <div class="box"><h3>이벤트 요약 <span>사용자 · 횟수</span></h3>${top(evRows, ['이벤트', '사용자', '횟수'], 12)}</div>
     </div>`;
