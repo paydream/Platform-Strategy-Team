@@ -701,6 +701,7 @@ const paySrcCell = (n, s, e) => { const l = D.payments ? paysIn(s, e) : []; retu
 let TPS = null;
 const isTrialPay = p => { if (!D.trial || !D.trial.tp) return false; if (!TPS) TPS = new Set(D.trial.tp); return TPS.has(p[0].slice(0, 16) + '|' + p[2]); };
 const trialN = l => l.filter(isTrialPay).length;
+const PAY_TRIAL = false; // 결제 출처에 「무료체험 회원 결제」 표시: 헷갈린다는 사용자 의견으로 끔 (2026-11-27). 데이터(D.trial.tp)는 유지
 function paySection(pay, rep) {
   if (!D.payments) return '';
   if (rep) return payDonut();
@@ -709,9 +710,9 @@ function paySection(pay, rep) {
   if (!tot) return `<section class="blk"><h2>결제 출처${ti('결제 출처')}</h2><div class="card"><p class="pempty">이 기간에는 결제가 없어요.</p></div></section>`;
   return `<section class="blk"><h2>결제 출처${ti('결제 출처')}</h2>
     <div>
-      <div class="card"><div class="hd"><b>출처별</b><span>${fmt(tot)}건 · ${won(list.reduce((a, p) => a + p[2], 0))}${D.trial && D.trial.tp ? ` · 무료체험 회원 결제 ${fmt(trialN(list))}건` : ''}</span></div><div class="scroll"><table class="tbl">
-        <thead><tr><th>출처</th><th>결제</th><th>${TL('비중')}</th><th>결제 금액</th>${D.trial && D.trial.tp ? `<th>${TL('무료체험 회원 결제')}</th>` : ''}</tr></thead>
-        <tbody>${g.map(([k, [n, a]]) => { const tn = trialN(list.filter(p => p[3] === k)); return `<tr><td class="name">${esc(k)}${srcTi('pay', k)}</td><td>${fmt(n)}건</td><td>${shareCell(n, tot, max)}</td><td>${won(a)}</td>${D.trial && D.trial.tp ? `<td class="${tn ? '' : 'muted'}">${fmt(tn)}건</td>` : ''}</tr>`; }).join('')}</tbody></table></div></div>
+      <div class="card"><div class="hd"><b>출처별</b><span>${fmt(tot)}건 · ${won(list.reduce((a, p) => a + p[2], 0))}${PAY_TRIAL && D.trial && D.trial.tp ? ` · 무료체험 회원 결제 ${fmt(trialN(list))}건` : ''}</span></div><div class="scroll"><table class="tbl">
+        <thead><tr><th>출처</th><th>결제</th><th>${TL('비중')}</th><th>결제 금액</th>${PAY_TRIAL && D.trial && D.trial.tp ? `<th>${TL('무료체험 회원 결제')}</th>` : ''}</tr></thead>
+        <tbody>${g.map(([k, [n, a]]) => { const tn = trialN(list.filter(p => p[3] === k)); return `<tr><td class="name">${esc(k)}${srcTi('pay', k)}</td><td>${fmt(n)}건</td><td>${shareCell(n, tot, max)}</td><td>${won(a)}</td>${PAY_TRIAL && D.trial && D.trial.tp ? `<td class="${tn ? '' : 'muted'}">${fmt(tn)}건</td>` : ''}</tr>`; }).join('')}</tbody></table></div></div>
     </div>${note}</section>`;
 }
 // 결제 출처 도넛 그래프 (싸인 월보고서, 2026-11-27): 상위 6개 + 나머지 「그 외」
@@ -719,7 +720,7 @@ function payDonut() {
   const list = paysIn(SEL.s, SEL.e), g = srcGroup(list), tot = list.length, amt = list.reduce((a, p) => a + p[2], 0);
   if (!tot) return `<section class="blk"><h2>결제 출처${ti('결제 출처')}</h2><div class="card"><p class="pempty">이 기간에는 결제가 없어요.</p></div></section>`;
   const COL = ['#12a150', '#2f6bff', '#f59f00', '#e5484d', '#8b5cf6', '#0ea5e9', '#c9ced6'];
-  const TPON = !!(D.trial && D.trial.tp), tnOf = keys => trialN(list.filter(p => keys.includes(p[3])));
+  const TPON = PAY_TRIAL && !!(D.trial && D.trial.tp), tnOf = keys => trialN(list.filter(p => keys.includes(p[3])));
   const top = g.slice(0, 6).map(([k, [n, a]]) => [k, n, a, tnOf([k])]);
   if (g.length > 6) { const rest = g.slice(6); top.push([`그 외 ${rest.length}곳`, rest.reduce((x, r) => x + r[1][0], 0), rest.reduce((x, r) => x + r[1][1], 0), tnOf(rest.map(r => r[0]))]); }
   const R = 80, C = 2 * Math.PI * R; let off = 0;
