@@ -33,15 +33,16 @@
     {
       "id": "myresource",
       "title": "싸인 문서계약 자료실 성과측정",
-      "desc": "예스폼싸인 자료실 · 샘플 카드 클릭 시 조회 측정, 서식명/카테고리/keyn별 추적",
+      "desc": "예스폼싸인 자료실 · 어떤 샘플(서식명·카테고리·keyn)을 봤나, 본 뒤 7일 안에 결제했나",
       "product": "예스폼싸인",
       "status": "측정 중",
       "start": "2026-11-27",
-      "events": 1,
-      "gtm": "GTM 버전 12",
+      "events": 2,
+      "gtm": "GTM 버전 14",
       "thumb": "assets/perf/myresource.jpg",
       "dash": "perf",
-      "kind": "myresource"
+      "kind": "myresource",
+      "explore": "https://analytics.google.com/analytics/web/?authuser=0#/analysis/a55667387p528546773/edit/XB3V7cCDScupxVymbBZMMw"
     }
   ]
 }
