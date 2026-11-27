@@ -183,6 +183,7 @@ function headline(it, d) {
   if (!d) return '';
   const pick = (rows, k) => { const r = (rows || []).find(x => x[0] === k); return r ? r[1] : 0; };
   if (it.kind === 'myresource') { const m = d.myresource || {}; const pc = (k, i) => { const r = (m.events || []).find(x => x[0] === k); return r ? r[i] : 0; }; return `샘플 조회 <b>${fmt(pc('sample_view', 1))}</b>명 · 본 서식 <b>${fmt((m.rank || []).length)}</b>종 · 조회 후 결제 <b>${fmt(pc('sample_purchase', 2))}</b>건`; }
+  if (it.kind === 'detail') { const k = dtPick(d.detail), n = k.exits; return `상세 진입 <b>${fmt(k.view.u)}</b>명 · 다운로드로 끝남 <b>${n ? pc1(k.oc('download'), n) : '-'}</b> · 헛클릭 <b>${fmt(k.dead.u)}</b>명`; }
   if (it.kind === 'autopay') { const a = d.autopay || {}; const pc = k => { const r = (a.events || []).find(x => x[0] === k); return r ? r[2] : 0; }; return `해지요청 <b>${fmt(pc('autopay_session_request'))}</b>세션 · 해지하기 <b>${fmt(pc('autopay_session_confirm'))}</b>세션`; }
   return `노출 <b>${fmt(pick(d.events, 'brief_modal_view'))}</b>명 · 서식 클릭 <b>${fmt(pick(d.events, 'brief_modal_form_click'))}</b>명 · 블로그 <b>${fmt(pick(d.events, 'brief_modal_blog_click'))}</b>명`;
 }
@@ -211,7 +212,7 @@ async function select(id) {
   const d = await getData(it.dash);
   window.__series = null;
   await loadNotes();
-  $('#dash').innerHTML = head + weekly(it, d) + `<div class="db">${it.kind === 'autopay' ? dashAutopay(d && d.autopay, it) : it.kind === 'myresource' ? dashMyres(d && d.myresource, it) : dashBody(d, it)}</div>`;
+  $('#dash').innerHTML = head + weekly(it, d) + `<div class="db">${it.kind === 'autopay' ? dashAutopay(d && d.autopay, it) : it.kind === 'myresource' ? dashMyres(d && d.myresource, it) : it.kind === 'detail' ? dashDetail(d && d.detail, it) : dashBody(d, it)}</div>`;
   setUpd(d);
   drawLine();
 }
@@ -228,9 +229,9 @@ const mdLine = x => esc(x).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
 const toText = h => String(h).replace(/<b>(.*?)<\/b>/g, '**$1**').replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'");
 function weekly(it, d) {
   try {
-    const W = it.kind === 'autopay' ? wkAutopay(d && d.autopay) : it.kind === 'myresource' ? wkMyres(d && d.myresource) : (it.dash === 'perf' && !it.kind) ? wkBrief(d) : null;
+    const W = it.kind === 'autopay' ? wkAutopay(d && d.autopay) : it.kind === 'myresource' ? wkMyres(d && d.myresource) : it.kind === 'detail' ? wkDetail(d && d.detail) : (it.dash === 'perf' && !it.kind) ? wkBrief(d) : null;
     if (!W) return '';
-    const end = it.kind === 'autopay' ? d.autopay.range.end : it.kind === 'myresource' ? d.myresource.range.end : d.range.end;
+    const end = it.kind === 'autopay' ? d.autopay.range.end : it.kind === 'myresource' ? d.myresource.range.end : it.kind === 'detail' ? d.detail.range.end : d.range.end;
     const key = it.id + '|' + monOf(end), N = (NOTES || {})[key] || {};
     if (!W.act.length) W.act = ['지금 수치로는 바로 바꿀 것이 없어요. 다음 주 데이터로 다시 봐요.'];
     WK = { key, W, N };
@@ -319,6 +320,108 @@ function wkAutopay(a) {
   if (topG && topG[1]) act.push('「' + esc(topG[0]) + '」 회원 해지가 많음 → 이 등급 대상 유지 혜택·사용 안내 메일 테스트');
   if (conf && done < conf) act.push('해지하기 대비 완료가 적음 → 완료 단계 이탈·오류 확인');
   return { label: R.label + (R.hasPrev ? ' · 지난주 대비' : ''), ins, act: act.slice(0, 4) };
+}
+// 상세페이지 사용성 (GA4 예스폼 255821535, detail_* 이벤트, GTM 버전 48~, 2026-11-27)
+// exit 계열 행: [측정기준, 사용자, 이탈 수, 체류초, 첫행동초, 스크롤%, 미리보기 장수, 클릭, 도달 영역, 헛클릭] (숫자는 합계)
+const DT_SEC = { preview: '미리보기', preview_end: '미리보기 마지막 장', info: '목적 및 용도', format: '파일 형식(다운로드)', price: '가격 카드', rec_user: '추천 사용자', rec_season: '추천 시즌', rec_situation: '추천 상황', tags: '태그', related: '함께 많이 확인한 서식', content: '본문(서식 설명)', banner: '배너', faq: '자주 묻는 질문', body: '본문 내용', toc: '목차', review: '이용후기', ad: '파워링크 광고', page_end: '페이지 끝' };
+const DT_AREA = { download: '파일 다운로드', related_download: '연관 서식 바로 다운로드', related: '연관 서식', related_nav: '연관 서식 넘김', preview_nav: '미리보기 넘김', preview_thumb: '미리보기 썸네일', preview_image: '미리보기 이미지', favorite: '찜', share: '공유', author: '작성자', mo_format_open: '모바일 파일 형식 열기', mo_format_close: '모바일 파일 형식 닫기', format_area: '파일 형식 영역', price: '가격 카드', rec_user: '추천 사용자', rec_season: '추천 시즌', rec_situation: '추천 상황', info: '정보 영역', tags: '태그', content: '본문', content_link: '본문 링크', banner: '배너', faq: '자주 묻는 질문', body: '본문 내용', toc: '목차', review: '이용후기', ad: '파워링크 광고', header: '상단 메뉴·검색', top_banner: '상단 싸인 배너', floating: '플로팅 상담', popular_modal: '인기 서식 모달', review_popup: '후기 팝업', etc: '기타', no_action: '아무것도 안 누르고 이탈', click_no_move: '눌렀지만 페이지 이동 없음', none: '아무것도 안 누름' };
+const dtSecName = c => c && c.indexOf('content:') === 0 ? '본문 · ' + c.slice(8) : (DT_SEC[c] || unset(c));
+const dtArea = c => DT_AREA[c] || unset(c);
+const DT_LB = { next: '다음 장', prev: '이전 장', thumb: '썸네일', up: '썸네일 위로', down: '썸네일 아래로', add: '찜하기', remove: '찜 해제', img: '이미지' };
+const dtLabel = v => { v = String(v || ''); if (/^download:/.test(v)) return v.slice(9); if (/^web:/.test(v)) return v.slice(4) + '(웹)'; return DT_LB[v] || unset(v); };
+const dtAvg = (r, i, n) => (n ? (r[i] || 0) / n : 0);
+function dtPick(t) {
+  const ev = Object.fromEntries(((t && t.events) || []).map(r => [r[0], { u: r[1], c: r[2] }]));
+  const g = k => ev[k] || { u: 0, c: 0 };
+  const out = (t && t.outcome) || [];
+  const ex = out.reduce((a, r) => { for (let i = 1; i < r.length; i++) a[i] = (a[i] || 0) + (r[i] || 0); return a; }, ['all']);
+  const oc = k => (out.find(r => r[0] === k) || [k, 0, 0])[2] || 0;
+  const reach = {}; ((t && t.sections) || []).forEach(r => { const k = r[0]; reach[k] = reach[k] || { u: 0, first: 0 }; reach[k].u += r[2] || 0; if (r[1] === 'first_view') reach[k].first += r[2] || 0; });
+  return { g, view: g('detail_view'), click: g('detail_click'), dead: g('detail_dead_click'), rage: g('detail_rage_click'), exit: ex, exits: ex[2] || 0, oc, reach };
+}
+function wkDetail(t) {
+  if (!t || !t.range || !(t.daily || []).length) return null;
+  const R = wkRange(t.range.end, t.range.start), rows = t.daily;
+  const S = (re, p) => wsum(rows, re, p ? R.ps : R.s, p ? R.pe : R.e, 2);
+  const v = S(/^detail_view$/), vp = S(/^detail_view$/, 1), c = S(/^detail_click$/), cp = S(/^detail_click$/, 1);
+  const P = x => R.hasPrev ? x : '';
+  const k = dtPick(t), n = k.exits;
+  const noAct = k.oc('no_action'), dl = k.oc('download');
+  const ins = ['상세 진입 <b>' + fmt(v) + '명</b>' + P(chg(v, vp)) + ' · 상세 안에서 클릭 ' + fmt(c) + '명' + P(chg(c, cp))];
+  if (n) ins.push('다운로드로 끝난 비율 <b>' + pc1(dl, n) + '</b> · 아무것도 안 누르고 이탈 <b>' + pc1(noAct, n) + '</b> · 평균 체류 ' + Math.round(dtAvg(k.exit, 3, n)) + '초');
+  const vu = k.view.u;
+  const low = ['format', 'related', 'content', 'review'].filter(x => k.reach[x]).map(x => [x, k.reach[x].u / (vu || 1)]).sort((a, b) => a[1] - b[1])[0];
+  if (low) ins.push('도달이 가장 낮은 핵심 영역 <b>' + esc(dtSecName(low[0])) + '</b> ' + (low[1] * 100).toFixed(0) + '%');
+  const dd = ((t.dead || []).filter(r => r[0] === 'detail_dead_click').sort((a, b) => b[3] - a[3]))[0];
+  if (dd) ins.push('헛클릭이 가장 많은 곳 <b>' + esc(dtArea(dd[1])) + '</b> ' + fmt(dd[3]) + '명');
+  const act = [];
+  if (n && noAct / n > 0.4) act.push('아무것도 안 누르고 나가는 비율 40% 초과 → 첫 화면에 다운로드 버튼·가격 안내를 더 크게');
+  if (dd && /preview/.test(dd[1])) act.push('미리보기 이미지 헛클릭 많음 → 이미지 눌러서 크게 보기 추가 검토');
+  else if (dd) act.push('「' + esc(dtArea(dd[1])) + '」 헛클릭 → 눌릴 것처럼 보이는 요소 정리 또는 링크 연결');
+  if (low && low[1] < 0.3) act.push('「' + esc(dtSecName(low[0])) + '」 도달 30% 미만 → 위치를 위로 올리거나 앞쪽에 요약 배치');
+  const rg = ((t.dead || []).filter(r => r[0] === 'detail_rage_click').sort((a, b) => b[3] - a[3]))[0];
+  if (rg) act.push('「' + esc(dtArea(rg[1])) + '」 연타 발생 → 반응 속도·동작 확인');
+  return { label: R.label + (R.hasPrev ? ' · 지난주 대비' : ''), ins, act: act.slice(0, 4) };
+}
+function dashDetail(t, it) {
+  const range = t && t.range ? `${D0(t.range.start)} ~ ${D0(t.range.end)}` : '2026.11.27 ~';
+  const k = dtPick(t), n = k.exits, vu = k.view.u;
+  const kpis = `<div class="kpis">
+    <div class="kpi"><div class="l">상세 진입</div><div class="v">${fmt(vu)}<small>명</small></div><div class="s">${fmt(k.view.c)}회 · 상세 안 클릭 ${fmt(k.click.u)}명</div></div>
+    <div class="kpi hl"><div class="l">다운로드로 끝남</div><div class="v">${n ? pc1(k.oc('download'), n) : '-'}</div><div class="s">이탈 ${fmt(n)}건 중 ${fmt(k.oc('download'))}건</div></div>
+    <div class="kpi hl"><div class="l">아무것도 안 누르고 이탈</div><div class="v">${n ? pc1(k.oc('no_action'), n) : '-'}</div><div class="s">${fmt(k.oc('no_action'))}건</div></div>
+    <div class="kpi"><div class="l">평균 체류 · 최대 스크롤</div><div class="v">${n ? Math.round(dtAvg(k.exit, 3, n)) : '-'}<small>초</small></div><div class="s">평균 스크롤 ${n ? Math.round(dtAvg(k.exit, 5, n)) + '%' : '-'} · 미리보기 ${n ? dtAvg(k.exit, 6, n).toFixed(1) + '장' : '-'}</div></div>
+    <div class="kpi"><div class="l">헛클릭 · 연타</div><div class="v">${fmt(k.dead.u)}<small>명</small></div><div class="s">연타 ${fmt(k.rage.u)}명 · 진입 대비 ${pct(k.dead.u, vu)}</div></div></div>`;
+  const note = '상세페이지(문서·엑셀·PPT·계약서 등) 전체가 대상이에요. 이탈 요약은 페이지를 떠나거나 다른 탭으로 넘어갈 때 1번 보내고, 체류 시간은 화면을 보고 움직인 시간만 셉니다. 측정은 GTM 버전 48(11/27 저녁)부터예요.';
+  if (!t || !(t.events || []).length) return `<p class="upd" style="margin-bottom:10px">기간 ${range}</p>` + kpis + `<div class="empty">아직 수집된 상세페이지 데이터가 없어요. 매일 오후 5시에 전날까지 들어와요. ${note}</div>`;
+  window.__line = t.daily || [];
+  window.__series = [[/^detail_view$/, '#e8590c', 2], [/^detail_click$/, '#2f6bff', 2]];
+  const top = (rows, cols, n2 = 12) => rows.length ? `<table><thead><tr>${cols.map(c => `<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.slice(0, n2).map(r => `<tr>${r.map(v => `<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table>` : '<p class="nod">아직 데이터 없음</p>';
+  const barTd = (v, mx) => `<span class="bar" style="width:${mx ? Math.max(4, Math.round(v / mx * 70)) : 0}px"></span>${fmt(v)}`;
+  // 영역 도달: 화면 위→아래 순서
+  const ORDER = Object.keys(DT_SEC);
+  const rk = Object.entries(k.reach).sort((a, b) => {
+    const ia = a[0].indexOf('content:') === 0 ? ORDER.indexOf('content') + 0.5 : ORDER.indexOf(a[0]), ib = b[0].indexOf('content:') === 0 ? ORDER.indexOf('content') + 0.5 : ORDER.indexOf(b[0]);
+    return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib); });
+  const reachRows = rk.map(([c, v]) => [esc(dtSecName(c)), barTd(v.u, vu), pct(v.u, vu), pct(v.first, v.u)]);
+  // 영역별 클릭 (영역 합계)
+  const ca = {}; (t.clicks || []).forEach(r => { ca[r[0]] = ca[r[0]] || [0, 0, []]; ca[r[0]][0] += r[2] || 0; ca[r[0]][1] += r[3] || 0; ca[r[0]][2].push([dtLabel(r[1]), r[2]]); });
+  const cRows = Object.entries(ca).sort((a, b) => b[1][0] - a[1][0]);
+  const cmx = cRows.length ? cRows[0][1][0] : 0;
+  const clickRows = cRows.map(([a, v]) => [esc(dtArea(a)), barTd(v[0], cmx), fmt(v[1]), esc(v[2].sort((x, y) => y[1] - x[1]).slice(0, 3).map(x => x[0]).join(' · '))]);
+  const exRow = r => { const c = r[2] || 0; return [fmt(r[1]), fmt(c), c ? Math.round(r[3] / c) + '초' : '-', c ? Math.round(r[5] / c) + '%' : '-', c ? (r[6] / c).toFixed(1) : '-', c ? (r[7] / c).toFixed(1) : '-']; };
+  const outRows = ((t.outcome) || []).slice().sort((a, b) => b[2] - a[2]).map(r => [esc(dtArea(r[0])), ...exRow(r).slice(0, 2), pct(r[2], n), ...exRow(r).slice(2)]);
+  const firstRows = ((t.first) || []).slice().sort((a, b) => b[2] - a[2]).map(r => [esc(dtArea(r[0])), fmt(r[1]), pct(r[2], n)]);
+  const deadRows = ((t.dead) || []).slice().sort((a, b) => b[3] - a[3]).map(r => [r[0] === 'detail_rage_click' ? '연타' : '헛클릭', esc(dtArea(r[1])), esc(dtLabel(r[2])), fmt(r[3])]);
+  const BAND = { '0-25': '0~25%', '25-50': '25~50%', '50-75': '50~75%', '75-100': '75~100%' };
+  const bandRows = ((t.band) || []).slice().sort((a, b) => String(a[0]).localeCompare(String(b[0]), 'en', { numeric: true })).map(r => [esc(BAND[r[0]] || unset(r[0])), fmt(r[2]), pct(r[2], n), exRow(r)[2], exRow(r)[4]]);
+  const formRows = ((t.forms) || []).slice().sort((a, b) => b[2] - a[2]).map(r => { const s = r.slice(1); return [`<span title="${esc(r[0])}">${esc(unset(r[0]))}</span><small>${esc(unset(r[1]))}</small>`, ...exRow(s).slice(0, 2), exRow(s)[2], exRow(s)[3], exRow(s)[4], fmt(s[9] || 0)]; });
+  const DEV = { desktop: 'PC', mobile: '모바일', tablet: '태블릿' };
+  const GR = { guest: '비회원', free: '무료', paid: '유료', premium: '프리미엄', company: '기업', naver: '네이버' };
+  const KD = { bundle: '번들·모음집', single: '단일 서식' };
+  const segRows = (rows, map) => (rows || []).slice().sort((a, b) => b[2] - a[2]).map(r => [esc(map[r[0]] || unset(r[0])), ...exRow(r).slice(0, 2), exRow(r)[2], exRow(r)[3], exRow(r)[4]]);
+  const segCols = ['', '사용자', '이탈', '평균 체류', '평균 스크롤', '미리보기'];
+  return `<p class="upd" style="margin-bottom:10px">기간 ${range} · 사용자는 기간 안 순 사용자 · 평균은 이탈 1건 기준</p>` + kpis +
+    `<p class="nod">${note}</p>
+    <div class="grid2">
+      <div class="box key"><h3>어디까지 봤나 <span>영역 도달 · 진입 사용자 대비</span></h3>${top(reachRows, ['영역(위→아래)', '도달 사용자', '도달률', '첫 화면에서'], 40)}</div>
+      <div class="box key"><h3>무엇을 눌렀나 <span>영역별 클릭 · 많이 누른 항목</span></h3>${top(clickRows, ['영역', '사용자', '클릭', '많이 누른 항목'], 20)}</div>
+    </div>
+    <div class="chart"><h3>일별 추이 <span>사용자</span></h3><div class="lg"><span><i style="background:#e8590c"></i>상세 진입</span><span><i style="background:#2f6bff"></i>상세 안 클릭</span></div><svg class="ln" id="ln"></svg></div>
+    <div class="grid2">
+      <div class="box key"><h3>어떻게 끝났나 <span>이탈 결과</span></h3>${top(outRows, ['결과', '사용자', '이탈', '비율', '평균 체류', '평균 스크롤', '미리보기', '클릭'])}</div>
+      <div class="box"><h3>처음 누른 곳 <span>첫 행동</span></h3>${top(firstRows, ['첫 행동', '사용자', '비율'])}</div>
+    </div>
+    <div class="grid2">
+      <div class="box"><h3>헛클릭·연타 <span>안 눌리는 곳 · 답답한 곳</span></h3>${top(deadRows, ['종류', '영역', '누른 곳', '사용자'], 15)}</div>
+      <div class="box"><h3>스크롤 구간별 이탈</h3>${top(bandRows, ['최대 스크롤', '이탈', '비율', '평균 체류', '미리보기'])}</div>
+    </div>
+    <div class="grid2" style="grid-template-columns:1fr"><div class="box"><h3>서식별 사용성 <span>이탈 많은 순 · 평균은 이탈 1건 기준</span></h3>${top(formRows, ['서식', '사용자', '이탈', '평균 체류', '평균 스크롤', '미리보기', '헛클릭'], 20)}</div></div>
+    <div class="grid2">
+      <div class="box"><h3>기기별</h3>${top(segRows(t.device, DEV), ['기기', ...segCols.slice(1)])}</div>
+      <div class="box"><h3>회원 등급별</h3>${top(segRows(t.grade, GR), ['회원 등급', ...segCols.slice(1)])}</div>
+    </div>
+    <div class="grid2" style="grid-template-columns:1fr"><div class="box"><h3>번들·단일 서식별</h3>${top(segRows(t.kind, KD), ['서식 종류', ...segCols.slice(1)])}</div></div>`;
 }
 // 싸인 문서계약 자료실 (GA4 예스폼싸인 528546773, sample_view / sample_purchase, GTM 버전 14~)
 // rank/buy 행: [서식명, 카테고리, keyn, 이벤트, 사용자, 횟수] · cate 행: [카테고리, 이벤트, 사용자, 횟수] · daily 행: [날짜, 이벤트, 사용자, 횟수]
