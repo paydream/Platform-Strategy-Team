@@ -32,7 +32,20 @@ td:first-child{font-weight:600}td:first-child,th:first-child{text-align:left}tbo
 .cy .l{font-size:13px;color:var(--sub);font-weight:500}.cy .v{font-size:16px;font-weight:700;margin:4px 0 8px;letter-spacing:-.01em}.cy p{margin:0;font-size:13.5px;color:#4e5968;line-height:1.6}.cy p b{color:var(--text)}.cy p+p{margin-top:4px}.cy a{font-size:12px}
 .bar{height:8px;background:#eef0f3;border-radius:99px;overflow:hidden;margin:6px 0 6px;position:relative}.bar i{display:block;height:100%;background:var(--c);opacity:.85;border-radius:99px}.bar s{position:absolute;top:0;bottom:0;left:50%;border-left:2px solid #fff}
 footer{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px;font-size:13px;color:var(--sub)}footer a{color:var(--sub)}#fail{color:var(--up);font-size:13px}
-@media(max-width:820px){.sug,.cyc{grid-template-columns:1fr}th,td{padding:8px}}
+/* 채널별 운영 카드 (2026-11-27 사용자 요청: 채널별로 명확하게, 카드 문구는 핵심만) */
+.ch{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-top:12px;overflow:hidden}
+.ch .chh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:14px 18px;border-bottom:1px solid var(--line)}
+.ch .chh b{font-size:17px;display:flex;align-items:center;gap:8px}.ch .chh b::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--cc)}
+.ch .chh .sub{font-size:13px;color:var(--sub)}.ch .chh .meet{margin-left:auto;font-size:12.5px;color:var(--text);background:#f2f4f6;border-radius:99px;padding:3px 10px;white-space:nowrap}
+.ch.nv{--cc:#03c75a}.ch.gg{--cc:#4285f4}.ch.mt{--cc:#0866ff}
+.ch .chb{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)}
+.ch .kpi2{padding:14px 18px}.ch .todo{padding:14px 18px;border-left:1px solid var(--line);background:#fcfcfd}
+.ch h4{margin:0 0 8px;font-size:12px;color:var(--sub);font-weight:500}
+.mt2{width:100%;font-size:14px}.mt2 th,.mt2 td{padding:7px 8px;border-bottom:1px solid #f0f2f4;background:none}.mt2 th{font-size:11.5px}.mt2 tr:last-child td{border-bottom:0}.mt2 td:first-child{font-weight:600;color:var(--text)}.mt2 tbody tr:hover{background:none}
+.tg{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.tg span{font-size:12.5px;background:#f2f4f6;border-radius:8px;padding:4px 9px;color:#4e5968}.tg span b{color:var(--text);margin-left:3px}.tg span.warn{background:#fdecec;color:#c8363b}.tg span.warn b{color:#c8363b}.tg a{font-size:12.5px;background:#f2f4f6;border-radius:8px;padding:4px 9px;color:#4e5968;text-decoration:none}.tg a b{color:var(--text);margin-left:3px}.tg a:hover{background:var(--c-bg);color:var(--c)}
+.todo ul{margin:0;padding:0;list-style:none;display:grid;gap:8px}.todo li{font-size:14px;line-height:1.5;display:flex;gap:8px;align-items:baseline}.todo li .k{flex:none;font-size:11px;font-weight:600;border-radius:6px;padding:1px 7px}.todo .none{color:var(--faint);font-size:13px}
+.ch .bar{max-width:260px}
+@media(max-width:820px){.ch .chb{grid-template-columns:1fr}.ch .todo{border-left:0;border-top:1px solid var(--line)}.ch .chh .meet{margin-left:0}th,td{padding:8px}}
 </style><main>
 <div class="top"><div class="tabs" role="tablist"><button role="tab" data-t="perf" aria-selected="true">광고 성과 · 진행 제안</button><button role="tab" data-t="ops" aria-selected="false">실무 상세</button></div><div class="seg" role="group" aria-label="보기"><button data-v="day">데일리</button><button data-v="week">주간</button><button data-v="month">월간</button></div></div>
 <div id="fail" role="status"></div>
@@ -41,10 +54,9 @@ footer{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px;font-size:13px;color
 <div class="meta"><div><span class="date" id="date"></span><span class="cmp" id="cmp"></span></div><div class="reload"><span class="upd" id="upd"></span><button id="reload">최신 데이터 불러오기</button></div></div>
 <div id="notice" class="alert" hidden></div>
 <div class="headline" id="hl"></div>
-<section id="ncycWrap"><h2>네이버 광고 운영 사이클 <small>매주 화요일 15:00 회의 · 박치홍 · 이관준</small></h2><div class="cyc" id="ncyc"></div></section>
-<section id="cycWrap"><h2>메타 광고 운영 사이클 <small>매주 화요일 14:00 회의</small></h2><div class="cyc" id="cyc"></div></section>
-<section id="sugWrap"><h2>이번 주 진행 제안 <small id="sugBase"></small></h2><div class="sug" id="sug"></div></section>
-<h2>채널별 성과</h2>
+<h2>채널별 운영 <small id="chBase"></small></h2>
+<div id="chs"></div>
+<h2>채널 비교</h2>
 <div class="panel"><table><thead><tr><th>채널</th><th>광고비</th><th>클릭</th><th>클릭당 비용</th><th>싸인 결제</th><th>결제당 광고비</th></tr></thead><tbody id="rows"></tbody></table></div>
 <h2 id="trendTitle">추이</h2>
 <div class="panel"><table><thead id="trendHead"></thead><tbody id="trend"></tbody></table></div>
@@ -137,6 +149,55 @@ function nCycle(){
     <div class="cy"><div class="l">매주 화요일 15:00 · 회의</div><div class="v">다음 회의 ${MD(nx)} (${wd(nx)}) 15:00</div><p>참석 <b>${NAVER_PLAN.people}</b></p><p>네이버 애즈 지표 확인 → 바이럴 지난주 결과 확인 → 이번 주 진행 결정</p></div>`;
 }
 
+/* 채널별 운영 카드: 선택한 기간(P) 기준 지표 + 이번 주 할 일(주간·월간만) + 회의 정보 */
+function chCards(P){
+  $('chBase').textContent=`${MD(P.s)}${P.s!==P.e?' ~ '+MD(P.e):''} · ${P.noPrev?'':P.cmp+' 대비'}`;
+  const it=(k,t)=>`<li><span class="k ${k}">${{cut:'줄이기',up:'늘리기',chk:'점검',test:'테스트'}[k]}</span><span>${t}</span></li>`;
+  const todo=L=>view==='day'?'':`<div class="todo"><h4>이번 주 할 일</h4><ul>${L.length?L.slice(0,3).join(''):'<li class="none">현재 설정 유지</li>'}</ul></div>`;
+  const row=(nm,k)=>{const r=rowData(k,P);if(!r.ok)return `<tr><td>${nm}</td><td colspan="4" class="muted" style="text-align:left">${M.ch[k].end?MD(M.ch[k].end)+'까지 수집':'미연결'}</td></tr>`;
+    const [,clk,cost]=r.cur,[,pc,pw]=r.prev,P2={...P,noPrev:P.noPrev||!r.okP},cpc=clk?cost/clk:null,pcpc=pc?pw/pc:null;
+    return `<tr><td>${nm}</td><td>${won(cost)}${cost||pw?dl(chg(cost,pw,P2)):''}</td><td>${fmt(clk)}${clk||pc?dl(chg(clk,pc,P2),'good'):''}</td><td>${won(cpc)}${cpc&&pcpc&&!P2.noPrev?dl((cpc-pcpc)/pcpc*100,'bad'):''}</td><td>${fmt(r.pay[0])}건</td></tr>`;};
+  const mt=rows=>`<table class="mt2"><thead><tr><th></th><th>광고비</th><th>클릭</th><th>클릭당</th><th>결제</th></tr></thead><tbody>${rows}</tbody></table>`;
+  const card=(cls,name,sub,meet,body,L)=>`<div class="ch ${cls}"><div class="chh"><b>${name}</b><span class="sub">${sub}</span>${meet?`<span class="meet">${meet}</span>`:''}</div><div class="chb"><div class="kpi2">${body}</div>${todo(L)}</div></div>`;
+  const out=[];
+  // 네이버
+  {const nx=nextMeet(2,15*60),N=[],pl=rowData('pl',P),K=kwStats(P);
+    if(pl.ok){const nCost=pl.cur[2]+rowData('pc',P).cur[2];
+      const waste=K.filter(x=>x.pay===0&&x.camp==='예스폼싸인'&&x.cost>=Math.max(3000,nCost*0.04)).sort((a,b)=>b.cost-a.cost).slice(0,3);
+      if(waste.length)N.push(it('cut',`입찰 20~30%↓ · ${waste.map(x=>esc(x.kw)).join(', ')}`));
+      const win=K.filter(x=>x.pay>0).sort((a,b)=>b.pay-a.pay).slice(0,3),low=win.filter(x=>x.rank>3);
+      if(low.length)N.push(it('up',`입찰↑(3위 밖) · ${low.map(x=>esc(x.kw)).join(', ')}`));
+      const cpc=pl.cur[1]?pl.cur[2]/pl.cur[1]:0,pcpc=pl.prev[1]?pl.prev[2]/pl.prev[1]:0;
+      if(pl.okP&&!P.noPrev&&cpc&&pcpc&&Math.abs(cpc-pcpc)/pcpc>0.15)N.push(it('chk',`키워드 클릭당 ${won(pcpc)} → ${won(cpc)}`));
+      const dead=M.grp.filter(g=>g.k==='pc'&&g.on&&!g.R.some(r=>r.d>=P.s&&r.d<=P.e&&r.imp>0)).length;
+      if(dead)N.push(it('chk',`노출 0 파워콘텐츠 그룹 ${dead}개`));}
+    else N.push(it('chk','광고센터 데이터 없음'));
+    const V=D.viral||{},inP=x=>x.date&&x.date>=P.s&&x.date<=P.e,posts=(V.posts||[]).filter(inP).length,cm=(V.comments||[]).filter(x=>inP(x)&&x.status==='완료').length;
+    const chip=(u,t,n)=>u?`<a href="${esc(u)}" target="_blank" rel="noopener">${t}<b>${n}</b> ↗</a>`:`<span>${t}<b>${n}</b></span>`;
+    out.push(card('nv','네이버','키워드 광고 · 파워콘텐츠 · 바이럴',`회의 화 15:00 · 박치홍·이관준 · 다음 ${MD(nx)}`,
+      mt(row('키워드 광고','pl')+row('파워콘텐츠','pc'))+`<div class="tg">${chip(V.postsLink,'카페 글',fmt(posts))}${chip(V.commentsLink,'덧글',fmt(cm))}<span>블로그 글<b>-</b></span><span>지식인<b>-</b></span></div>`,N));}
+  // 구글
+  {const g=rowData('g',P),Gs=[],tg=[];
+    if(g.ok){const tot=g.cur[2],dev={},cv={};
+      for(const [d,x] of Object.entries(M.gDev))if(d>=P.s&&d<=P.e)for(const [k,v] of Object.entries(x)){const r=dev[k]||(dev[k]=[0,0,0]);v.forEach((n,i)=>r[i]+=n);}
+      const mo=dev.mo||[0,0,0],share=tot?mo[2]/tot*100:0;if(tot)tg.push(`<span class="${share>=30?'warn':''}">휴대전화 비중<b>${pct(share)}</b></span>`);
+      if(share>=30)Gs.push(it('cut','모바일 입찰 -30%'));
+      if(tot&&!g.pay[0])Gs.push(it('cut','무관 검색어 제외'));
+      if(M.budget){const u=tot/nd(P.s,P.e)/M.budget*100;tg.push(`<span class="${u>=90?'warn':''}">일 예산 소진<b>${pct(u)}</b></span>`);if(u>=90)Gs.push(it('chk','증액 말고 키워드 정리'));else if(u<50)Gs.push(it('up','결제 키워드 입찰 여유'));}}
+    else Gs.push(it('chk','구글 애즈 데이터 없음'));
+    out.push(card('gg','구글','검색광고 · 예스폼싸인_SA','',mt(row('검색광고','g'))+(tg.length?`<div class="tg">${tg.join('')}</div>`:''),Gs));}
+  // 메타
+  {const nx=nextMeet(2,14*60),me=rowData('m',P),Ms=[],c=M.ch.m,end=c.end&&c.end<D.range.end?c.end:D.range.end,ms=end.slice(0,8)+'01',mc=c.end?sumDays(c.days,ms,end,4):null;
+    const paused=M.metaCamps.some(x=>x[2]==='PAUSED'),dim=new Date(Date.UTC(+end.slice(0,4),+end.slice(5,7),0)).getUTCDate(),proj=mc?mc[2]/nd(ms,end)*dim:0;
+    if(!me.ok)Ms.push(it('chk','광고 관리자 로그인 필요'));
+    else if(!mc[2]){Ms.push(it('up',`${+end.slice(5,7)%12+1}월 광고 그룹 2개 세팅`));Ms.push(it('test','그룹별 소재 2개'));Ms.push(it('chk','URL에 utm_source=meta'));}
+    else{if(proj>META_PLAN.max)Ms.push(it('cut','월 100만원 초과 · 그룹 예산 축소'));else if(proj<META_PLAN.min)Ms.push(it('up','월 50만원 미만 · 효율 그룹 증액'));
+      const [imp,clk]=me.cur,ctr=imp?clk/imp*100:0;if(ctr&&ctr<0.8)Ms.push(it('test',`클릭률 ${ctr.toFixed(1)}% · 소재 교체`));if(!me.pay[0])Ms.push(it('chk','URL에 utm_source=meta'));}
+    const bud=mc?`<span>${+end.slice(5,7)}월 광고비<b>${won(mc[2])}</b></span><span>월 예산<b>50~100만원</b></span>`:'';
+    out.push(card('mt','메타','광고 그룹 2개 · 월 50~100만원',`회의 화 14:00 · 다음 ${MD(nx)}`,mt(row('메타 광고','m'))+`<div class="tg">${paused&&!(me.ok&&me.cur[2])?'<span class="warn">캠페인<b>일시중지</b></span>':''}${bud}</div>`,Ms));}
+  $('chs').innerHTML=out.join('');
+}
+
 function paint(){
   document.querySelectorAll('.seg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===view));
   const PS=periods();const P=PS.find(p=>p.k===key)||PS[0];key=P.k;
@@ -144,8 +205,7 @@ function paint(){
   $('chips').querySelectorAll('button').forEach(b=>b.onclick=()=>{key=b.dataset.k;save();paint();});
   $('date').textContent=P.s===P.e?`${MD(P.s)} (${wd(P.s)})`:`${MD(P.s)} ~ ${MD(P.e)}`;
   $('cmp').textContent=P.noPrev?'':`${P.cmp} 대비`;
-  table(P);trend(P);cycle();nCycle();
-  $('sugWrap').hidden=view==='day';if(view!=='day')suggest(P);
+  table(P);trend(P);chCards(P);
   post();
 }
 function rowData(k,P){const c=M.ch[k];return {k,ok:covered(c,P.s,P.e),okP:covered(c,P.ps,P.pe),cur:sumDays(c.days,P.s,P.e,4),prev:sumDays(c.days,P.ps,P.pe,4),pay:sumDays(M.pay[k],P.s,P.e,2)};}
