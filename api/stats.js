@@ -106,6 +106,11 @@ module.exports = async (req, res) => {
   if (req.query && req.query.alert === 'clarity') return require('./_clarityalert')(req, res);
   // 예스폼싸인 월보고서 「월간 인사이트」·「액션 플랜」 직접 수정 저장 — api/_signnotes.js (2026-11-26)
   if (req.query && req.query.notes === 'sign') return require('./_signnotes')(req, res);
+  // 성과 측정 상세 「주간 인사이트」·「추천 액션플랜」 직접 수정 저장 — api/_perfnotes.js (2026-11-27)
+  if (req.query && req.query.notes === 'perf') {
+    if (!siteOk(req) || !perfOk(req)) return res.status(401).json({ error: '성과 측정 비밀번호가 필요합니다. 페이지를 새로고침해 주세요.' });
+    return require('./_perfnotes')(req, res);
+  }
   if (req.method === 'GET') return res.status(200).json({ list: await Promise.all(LIST.filter(x => x.sidebar !== false).map(withMeta)) });
   if (req.method !== 'POST') return res.status(405).json({ error: '허용되지 않는 요청입니다.' });
   const site = siteOk(req);
