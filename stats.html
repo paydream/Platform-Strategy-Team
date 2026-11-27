@@ -49,6 +49,20 @@
   .hrow{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
   .mktbtn{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 16px;border-radius:10px;background:#0b6b35;color:#fff;font-weight:700;font-size:14px;text-decoration:none;white-space:nowrap;margin-top:4px}
   .mktbtn:hover{filter:brightness(1.08)}
+  /* 상단 정리 (2026-11-27): 제목 한 줄 + 에디터·싸인 큰 탭 + 선택한 제품 목표만 */
+  .thead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-top:26px}
+  .thead h1{font-size:24px;letter-spacing:-.01em}
+  .thead .meta{font-size:12.5px;color:var(--sub);margin-left:10px;font-weight:400}
+  .btabs{display:grid;grid-template-columns:1fr 1fr;margin-top:16px;border-bottom:1px solid var(--line)}
+  .btab{font:inherit;background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-1px;padding:14px 6px 12px;cursor:pointer;text-align:left;display:flex;align-items:baseline;gap:12px;color:var(--sub)}
+  .btab b{font-size:21px;font-weight:700;letter-spacing:-.01em}
+  .btab span{font-size:13px}
+  .btab:hover{color:var(--text)}
+  .btab[aria-selected="true"]{color:var(--text)}
+  .btab[data-p="editor"][aria-selected="true"]{border-bottom-color:#2f6bff}.btab[data-p="editor"][aria-selected="true"] b{color:#2f6bff}
+  .btab[data-p="sign"][aria-selected="true"]{border-bottom-color:#12a150}.btab[data-p="sign"][aria-selected="true"] b{color:#12a150}
+  .goals.g1 .gl{grid-template-columns:1fr}.goals.g2 .gl{grid-template-columns:1fr 1fr}
+  @media (max-width:640px){.btab{flex-direction:column;gap:2px}.btab b{font-size:18px}.goals.g2 .gl{grid-template-columns:1fr}}
   body.embed header.gnb{display:none}
   body.embed .hero{padding-top:6px}
   /* 2026-11-26 마케팅 상단 컴팩트: 갱신 한 줄 + 텍스트 링크, 보기·기간 한 줄 */
@@ -552,24 +566,19 @@ function render() {
     <h1>예스폼싸인 마케팅</h1>
     <div class="mhead"><span>데이터 ~${MD(D.range.end)} · 갱신 ${upd().replace(/^.*마지막 갱신 /, '')}</span><span class="mlinks">${[...(D.links || []).filter(x => x && x.url).map(x => [x.title, x.url]), ...MKT_CONSOLES.map(([n, , u]) => [n, u])].map(([n, u]) => `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(n)} ↗</a>`).join('')}</span></div>
     ${stale()}
-  </section>` : `<section class="hero"><div class="hrow"><div>
-    <h1>에디터/싸인 지표</h1>
-    <p>예스폼 에디터 · 예스폼싸인 | 데이터 ${D0(D.range.start)} ~ ${D0(D.range.end)} · ${upd()}</p></div>
-    <a class="mktbtn" href="auto.html?id=sign-marketing">📣 싸인 마케팅 →</a></div>
-    ${stale()}
-  </section>
-  ${goalPanel()}`}
+  </section>` : `<section class="thead"><h1>에디터/싸인 지표<span class="meta">데이터 ~${MD(D.range.end)} · 갱신 ${upd().replace(/^.*마지막 갱신 /, '')}</span></h1>
+    ${prod === 'sign' ? '<a class="mktbtn" href="auto.html?id=sign-marketing">📣 싸인 마케팅 →</a>' : ''}</section>
+  ${stale()}
+  <div class="btabs" role="tablist" aria-label="제품">${[['editor', '예스폼 에디터'], ['sign', '예스폼싸인']].map(([p, n]) => `<button class="btab" role="tab" data-p="${p}" aria-selected="${ptab === p}"><b>${n}</b><span>${tabSum(p)}</span></button>`).join('')}</div>
+  ${goalPanel(prod)}`}
   ${MKT ? `<div class="mctrl">${hasP() ? `<div class="seg vseg" role="tablist" aria-label="보기">${VIEWS.map(([v, l]) => `<button role="tab" data-v="${v}" aria-selected="${v === view}">${l.replace(' (직전 7일)', '')}</button>`).join('')}</div>` : ''}<div class="seg sub ${view}" role="tablist" aria-label="기간">${sub}</div></div>` : `<div class="ctrl">
-    <div class="ptabs" role="tablist">
-      <button class="ptab" role="tab" data-p="editor" aria-selected="${ptab === 'editor'}"><i></i>예스폼 에디터</button>
-      <button class="ptab" role="tab" data-p="sign" aria-selected="${ptab === 'sign'}"><i></i>예스폼싸인</button>
-    </div>
+    <div></div>
     ${hasP() ? `<div class="seg vseg" role="tablist" aria-label="보기">${VIEWS.map(([v, l]) => `<button role="tab" data-v="${v}" aria-selected="${v === view}">${l}</button>`).join('')}</div>` : ''}
   </div>
   <div class="subsel">${view === 'week' ? wPicker() : ''}<div class="seg sub ${view}" role="tablist" aria-label="기간">${sub}</div></div>`}
   ${prod === 'editor' ? editorView(ctx) : ptab === 'signmkt' ? signMktView(ctx) : signView(ctx)}
   <div style="height:60px"></div>`;
-  document.querySelectorAll('.ptab').forEach(b => b.onclick = () => { ptab = b.dataset.p; prod = ptab === 'editor' ? 'editor' : 'sign'; render(); });
+  document.querySelectorAll('.ptab, .btab').forEach(b => b.onclick = () => { ptab = b.dataset.p; prod = ptab === 'editor' ? 'editor' : 'sign'; render(); });
   document.querySelectorAll('[data-mt]').forEach(b => b.onclick = () => { mtab = b.dataset.mt; render(); });
   document.querySelectorAll('.seg button[data-m]').forEach(b => b.onclick = () => { month = b.dataset.m; render(); });
   document.querySelectorAll('.seg button[data-k]').forEach(b => b.onclick = () => { pkey[view] = b.dataset.k; render(); });
@@ -1288,7 +1297,14 @@ function wPicker() {
   return `<label class="wpick">기간 직접 선택 <input type="date" id="wStart" value="${cur.s}" min="${P[0].s}" max="${P[P.length - 1].s}" aria-label="주간 시작일"><span>~ ${MD(cur.e)} (${wday(cur.e)})</span></label>`;
 }
 // 월간 목표 달성 현황 — 데이터 마지막 달 기준, 에디터·싸인을 한 번에 (목표값은 암호화 데이터의 goals)
-function goalPanel() {
+// 큰 탭 옆 한 줄: 이번 달 핵심 숫자
+function tabSum(p) {
+  const m = D.months[D.months.length - 1]; if (!m) return '';
+  if (p === 'editor') return `${+m.m.slice(5)}월 활성 ${fmt(m.editor.active)}명`;
+  const pay = ((D.mkt.sign[m.m] || {}).pay || [0, 0]);
+  return `${+m.m.slice(5)}월 활성 ${fmt(m.sign.active)}명 · 결제 ${fmt(pay[0])}건`;
+}
+function goalPanel(only) {
   const m = D.months[D.months.length - 1], g = (D.goals || {})[m.m];
   if (!g) return '';
   const total = lastDay(m), done = days(m), tp = done / total * 100, left = total - done;
@@ -1296,7 +1312,9 @@ function goalPanel() {
   if (g.editor && g.editor.active) items.push(['editor', '에디터', '활성 사용자', m.editor.active, g.editor.active, '명']);
   if (g.sign && g.sign.active) items.push(['sign', '싸인', '활성 사용자', m.sign.active, g.sign.active, '명']);
   if (g.sign && g.sign.pay) items.push(['sign', '싸인', '결제 건수', ((D.mkt.sign[m.m] || {}).pay || [0])[0], g.sign.pay, '건']);
-  return `<section class="goals" aria-label="월간 목표 달성 현황"><div class="gh"><b>${+m.m.slice(5)}월 목표 달성 현황${ti('목표')}</b><span>${MD(m.end)}까지 · ${total}일 중 ${done}일 지남 (${tp.toFixed(0)}%)</span></div>
+  if (only) { const keep = items.filter(x => x[0] === only); items.length = 0; items.push(...keep); }
+  if (!items.length) return '';
+  return `<section class="goals${items.length === 1 ? ' g1' : items.length === 2 ? ' g2' : ''}" aria-label="월간 목표 달성 현황"><div class="gh"><b>${+m.m.slice(5)}월 목표 달성 현황${ti('목표')}</b><span>${MD(m.end)}까지 · ${total}일 중 ${done}일 지남 (${tp.toFixed(0)}%)</span></div>
     <div class="gl">${items.map(([p, pn, label, cur, goal, unit]) => {
       const r = cur / goal * 100, proj = cur / done * total, need = left > 0 ? Math.max(0, goal - cur) / left : 0;
       const st = r >= 100 ? ['done', '달성'] : r >= tp ? ['ahead', '순항'] : r >= tp * 0.8 ? ['near', '조금 부족'] : ['behind', '부족'];
