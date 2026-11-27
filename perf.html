@@ -150,7 +150,7 @@ let ITEMS = [], DATA = {}, cur = null;
 
 // 이벤트 이름 → 한국어
 const EV = { brief_modal_view: '모달 노출', brief_modal_item_click: '일정 클릭', brief_modal_form_click: '추천 서식 클릭', brief_modal_blog_click: '블로그 클릭',
-  brief_modal_filter_click: '분야 필터', brief_modal_header_click: '상단 일정 버튼', brief_modal_scroll: '스크롤', brief_modal_close: '닫기', brief_modal_purchase: '클릭 후 결제' };
+  brief_modal_filter_click: '분야 필터', brief_modal_header_click: '상단 일정 버튼', brief_modal_scroll: '스크롤', brief_modal_close: '닫기', brief_modal_purchase: '모달 이용 후 결제' };
 const evn = e => EV[e] || e;
 const unset = v => !v || v === '(not set)' ? '(미지정)' : v;
 
@@ -289,7 +289,7 @@ function wkBrief(d) {
   ];
   if (topF) ins.push('가장 많이 클릭한 서식 <b>' + esc(unset(topF[0])) + '</b> ' + fmt(topF[3]) + '명' + (topB ? ' · 블로그 <b>' + esc(unset(topB[0])) + '</b> ' + fmt(topB[3]) + '명' : ''));
   if (U.avgSec) ins.push('평균 열람 <b>' + U.avgSec.toFixed(1) + '초</b>' + (bt ? ' · 5초 안에 닫음 ' + pc1(short, bt) : '') + (hide && closes ? ' · 「오늘 다시 보지 않기」 ' + pc1(hide[3], closes) : ''));
-  ins.push('클릭 후 결제 <b>' + fmt(buy) + '건</b>');
+  ins.push('모달 이용 후 결제 <b>' + fmt(buy) + '건</b>');
   const act = [];
   if (v && f / v < 0.02) act.push('서식 클릭률 2% 미만 → 일정 상세의 추천 서식을 위로 올리고 서식명·썸네일을 더 눈에 띄게');
   if (bt && short / bt > 0.5) act.push('절반 이상이 5초 안에 닫음 → 첫 화면에 이번 주 마감 일정 1~2개만 크게');
@@ -394,7 +394,7 @@ function dashBody(d, it) {
     <div class="kpi hl"><div class="l">추천 서식 클릭</div><div class="v">${fmt(form.u)}<small>명</small></div><div class="s">${fmt(form.c)}회 · 노출 대비 ${pct(form.u, view.u)}</div></div>
     <div class="kpi hl"><div class="l">블로그 글 클릭</div><div class="v">${fmt(blog.u)}<small>명</small></div><div class="s">${fmt(blog.c)}회 · 노출 대비 ${pct(blog.u, view.u)}</div></div>
     <div class="kpi hl"><div class="l">평균 열람 시간</div><div class="v">${sec(U.avgSec)}</div><div class="s">15초 이상 본 비율 ${pct(good, bandTot)}</div></div>
-    <div class="kpi"><div class="l">클릭 후 결제 (30일)</div><div class="v">${fmt(buy.c)}<small>건</small></div><div class="s">${fmt(buy.u)}명</div></div></div>`;
+    <div class="kpi"><div class="l">모달 이용 후 결제 (30일)</div><div class="v">${fmt(buy.c)}<small>건</small></div><div class="s">${fmt(buy.u)}명</div></div></div>`;
   if (!(d.events || []).length) return `<p class="upd" style="margin-bottom:10px">기간 ${range}</p>` + kpis + `<div class="empty">아직 수집된 이벤트가 없어요. 모달이 예스폼 메인에 공개된 다음 날 오후 5시부터 숫자가 채워져요. 열람 시간 · 본 일정 수 · 행동 수는 GTM 버전 44(11/24) 이후 열람부터 쌓여요.</div>`;
   window.__line = d.daily || [];
   const top = (rows, cols, n = 8) => rows.length ? `<table><thead><tr>${cols.map(c => `<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.slice(0, n).map(r => `<tr>${r.map(v => `<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table>` : '<p class="nod">아직 데이터 없음</p>';
@@ -414,7 +414,8 @@ function dashBody(d, it) {
   const dev = agg(d.device || [], r => DEV[r[1]] || unset(r[1]), 2).map(([k, v]) => [esc(k), fmt(v[0]), fmt(v[1])]);
   // 결제 표: 서식 번호 대신 서식·블로그 이름 (클릭 순위·서식 표에서 번호로 이름 찾기, 2026-11-27)
   const NM = {}; [...(d.formRank || []), ...(d.blogRank || []), ...(d.forms || [])].forEach(r => { if (r[1] && r[0] && r[0] !== '(not set)' && !NM[r[1]]) NM[r[1]] = r[0]; });
-  const buyRows = (d.purchase || []).map(r => [`${esc(NM[r[1]] || unset(r[1]))}<small>${r[0] === 'blog' ? '블로그' : '서식'}</small>`, fmt(r[3]), fmt(r[4])]);
+  const ENG = { view15s: '모달 15초 이상 열람', action: '모달에서 일정·필터 등 이용' };
+  const buyRows = (d.purchase || []).map(r => r[0] === 'engaged' ? [`${esc(ENG[r[1]] || '모달 이용')}<small>서식·블로그 클릭 없음</small>`, fmt(r[3]), fmt(r[4])] : [`${esc(NM[r[1]] || unset(r[1]))}<small>${r[0] === 'blog' ? '블로그' : '서식'} 클릭</small>`, fmt(r[3]), fmt(r[4])]);
   return `<p class="upd" style="margin-bottom:10px">기간 ${range} · 사용자는 기간 안 순 사용자</p>` + kpis +
     `<div class="grid2">
       <div class="box key"><h3>어떤 서식을 클릭했나 <span>추천 서식 클릭 순위</span></h3>${rank(d.formRank, '서식')}</div>
@@ -430,7 +431,7 @@ function dashBody(d, it) {
     <div class="grid2">
       <div class="box"><h3>일정별 관심도 <span>일정 · 서식 · 블로그 클릭</span></h3>${top(items, ['일정', '사용자', '횟수'])}</div>
       <div class="box"><h3>분야 필터 · 상단 일정 버튼 · 스크롤</h3>${top(filt, ['구분', '사용자', '횟수'])}</div>
-      <div class="box"><h3>서식 · 블로그 클릭 후 결제 <span>30일</span></h3>${top(buyRows, ['서식 · 블로그', '사용자', '건수'])}<p class="bnote">결제 전환 기준: 모달에서 추천 서식·블로그 글을 누른 브라우저가 30일 안에 예스폼에서 결제하면 1건. 마지막으로 누른 서식·글에 연결하고, 같은 거래는 한 번만 세요. 결제한 상품이 그 서식인지는 따지지 않아요.</p></div>
+      <div class="box"><h3>모달 이용 후 결제 <span>30일</span></h3>${top(buyRows, ['연결 근거', '사용자', '건수'])}<p class="bnote">결제 연결 기준: 모달을 유용하게 본 사용자가 30일 안에 예스폼에서 결제하면 1건. 유용하게 본 사용자 = 추천 서식·블로그 클릭, 일정·분야·상단 버튼 클릭이나 스크롤, 또는 15초 이상 보고 닫음(「오늘 다시 보지 않기」 제외). 서식·블로그를 누른 경우 그 서식에 연결하고, 같은 거래는 한 번만 세요. 결제한 상품이 그 서식인지는 따지지 않아요. 11/27 저녁부터 이 기준으로 집계해요(그 전 결제는 서식·블로그 클릭 기준).</p></div>
       <div class="box"><h3>기기별 이용</h3>${top(dev, ['기기', '사용자', '횟수'])}</div>
       <div class="box"><h3>이벤트 요약 <span>사용자 · 횟수</span></h3>${top(evRows, ['이벤트', '사용자', '횟수'], 12)}</div>
     </div>`;
