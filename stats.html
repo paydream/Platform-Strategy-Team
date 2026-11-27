@@ -217,6 +217,32 @@
   .adimg .mt b{color:var(--ink,#111);font-weight:600}
   .scroll.vlim{max-height:646px;overflow-y:auto} /* 표 10줄 정도만 보이고 나머지는 스크롤 */
   .scroll.vlim thead th{position:sticky;top:0;z-index:1}
+  /* 싸인 월보고서 그래프·접기 (2026-11-27) */
+  .scroll.vlim5{max-height:274px;overflow-y:auto} /* 유입 채널: 상위 5줄만 보이고 나머지는 스크롤 */
+  .scroll.vlim5 thead th{position:sticky;top:0;z-index:1}
+  .hbc{padding:14px 18px 16px;display:flex;flex-direction:column;gap:16px}
+  .hbc .r{display:grid;grid-template-columns:72px 1fr;gap:4px 14px;align-items:center}
+  .hbc .r > b{grid-row:span 2;font-size:15px}
+  .hbc .bl{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--sub);min-width:0}
+  .hbc .bl i{display:block;height:14px;border-radius:4px;min-width:3px;flex:none}
+  .hbc .bl i.cost{background:#c9ced6}.hbc .bl i.rev{background:var(--c)}
+  .hbc .bl span{white-space:nowrap}.hbc .bl span b{color:var(--text);font-weight:600}
+  .hbc .r small{grid-column:2;font-size:12px;color:var(--faint);margin-top:-2px}
+  .hbc .lg{display:flex;gap:14px;font-size:12px;color:var(--sub);padding-top:2px}.hbc .lg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+  .donut{display:grid;grid-template-columns:200px minmax(0,620px);gap:36px;align-items:center;padding:16px 20px}
+  .donut svg{width:200px;height:200px}
+  .donut .lgd{list-style:none;display:flex;flex-direction:column;gap:7px;font-size:14px;min-width:0}
+  .donut .lgd li{display:grid;grid-template-columns:12px minmax(0,1fr) auto auto;gap:10px;align-items:center}
+  .donut .lgd li i{width:12px;height:12px;border-radius:3px}
+  .donut .lgd li span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .donut .lgd li b{font-weight:600;text-align:right}.donut .lgd li em{font-style:normal;color:var(--sub);font-size:12px;text-align:right;min-width:92px}
+  details.fold{margin-top:28px}details.fold > summary{list-style:none;cursor:pointer;display:flex;align-items:baseline;gap:8px;font-size:18px;font-weight:700}
+  details.fold > summary::-webkit-details-marker{display:none}
+  details.fold > summary::before{content:'▸';font-size:13px;color:var(--sub);transition:transform .15s;display:inline-block}
+  details.fold[open] > summary::before{transform:rotate(90deg)}
+  details.fold > summary small{font-size:13px;font-weight:400;color:var(--sub)}
+  details.fold > summary .open-hint{margin-left:auto;font-size:12px;font-weight:400;color:var(--sub)}details.fold[open] > summary .open-hint{display:none}
+  @media (max-width:720px){.donut{grid-template-columns:1fr;justify-items:center}}
   .tbl td.adt{text-align:left;white-space:normal;min-width:240px;max-width:420px}
   .tbl td.adt b{display:block;font-size:14px;font-weight:600}
   .tbl td.adt small{display:block;font-size:11px;color:var(--faint);line-height:1.4;margin-top:2px}
@@ -669,8 +695,9 @@ const srcGroup = list => { const o = {}; list.forEach(p => { const x = (o[p[3]] 
 const srcLine = (list, sep = ' / ') => srcGroup(list).map(([k, [n]]) => `${esc(k)} ${n}건`).join(sep);
 const prodName = c => /^SIGN\d+$/.test(c) ? `${+c.slice(4)}건 이용권` : c;
 const paySrcCell = (n, s, e) => { const l = D.payments ? paysIn(s, e) : []; return `${fmt(n)}${l.length ? `<span class="psm">${srcLine(l, ' · ')}</span>` : ''}`; };
-function paySection(pay) {
+function paySection(pay, rep) {
   if (!D.payments) return '';
+  if (rep) return payDonut();
   const list = paysIn(SEL.s, SEL.e), g = srcGroup(list), tot = list.length, max = Math.max(...g.map(x => x[1][0]), 1);
   const note = '';
   if (!tot) return `<section class="blk"><h2>결제 출처${ti('결제 출처')}</h2><div class="card"><p class="pempty">이 기간에는 결제가 없어요.</p></div></section>`;
@@ -680,6 +707,20 @@ function paySection(pay) {
         <thead><tr><th>출처</th><th>결제</th><th>${TL('비중')}</th><th>결제 금액</th></tr></thead>
         <tbody>${g.map(([k, [n, a]]) => `<tr><td class="name">${esc(k)}${srcTi('pay', k)}</td><td>${fmt(n)}건</td><td>${shareCell(n, tot, max)}</td><td>${won(a)}</td></tr>`).join('')}</tbody></table></div></div>
     </div>${note}</section>`;
+}
+// 결제 출처 도넛 그래프 (싸인 월보고서, 2026-11-27): 상위 6개 + 나머지 「그 외」
+function payDonut() {
+  const list = paysIn(SEL.s, SEL.e), g = srcGroup(list), tot = list.length, amt = list.reduce((a, p) => a + p[2], 0);
+  if (!tot) return `<section class="blk"><h2>결제 출처${ti('결제 출처')}</h2><div class="card"><p class="pempty">이 기간에는 결제가 없어요.</p></div></section>`;
+  const COL = ['#12a150', '#2f6bff', '#f59f00', '#e5484d', '#8b5cf6', '#0ea5e9', '#c9ced6'];
+  const top = g.slice(0, 6).map(([k, [n, a]]) => [k, n, a]);
+  if (g.length > 6) { const rest = g.slice(6); top.push([`그 외 ${rest.length}곳`, rest.reduce((x, r) => x + r[1][0], 0), rest.reduce((x, r) => x + r[1][1], 0)]); }
+  const R = 80, C = 2 * Math.PI * R; let off = 0;
+  const arcs = top.map(([, n], k) => { const len = n / tot * C; const el = `<circle r="${R}" cx="100" cy="100" fill="none" stroke="${COL[k]}" stroke-width="34" stroke-dasharray="${len.toFixed(2)} ${(C - len).toFixed(2)}" stroke-dashoffset="${(-off).toFixed(2)}" transform="rotate(-90 100 100)"></circle>`; off += len; return el; }).join('');
+  return `<section class="blk"><h2>결제 출처${ti('결제 출처')}</h2>
+    <div class="card"><div class="hd"><b>출처별 결제 건수</b><span>${fmt(tot)}건 · ${won(amt)}</span></div>
+      <div class="donut"><svg viewBox="0 0 200 200" role="img" aria-label="결제 출처 비중">${arcs}<text x="100" y="96" text-anchor="middle" font-size="26" font-weight="700" fill="#191f28">${fmt(tot)}건</text><text x="100" y="120" text-anchor="middle" font-size="12" fill="#6b7684">결제</text></svg>
+        <ul class="lgd">${top.map(([k, n, a], i) => `<li><i style="background:${COL[i]}"></i><span title="${esc(k)}">${esc(k)}</span><b>${fmt(n)}건 · ${pctTxt(n / tot * 100)}</b><em>${won(a)}</em></li>`).join('')}</ul></div></div></section>`;
 }
 // 결제 출처 짧은 이름: 캠페인 코드(' - ' 뒤)와 긴 꼬리를 뺀다
 const shortSrc = n => { let t = String(n).split(' - ')[0].trim(); if (/^네이버 공식 블로그 · 광고$/.test(t)) t = '네이버 블로그 광고'; return t.length > 18 ? t.slice(0, 17) + '…' : t; };
@@ -732,11 +773,11 @@ function signView({ m, pm, cd, pd, mk, pmk, label }) {
 
   ${REP ? mktResult({ pm, cd, pd, label }) : funnelBlk()}
 
-  ${paySection(pay)}
+  ${paySection(pay, REP)}
 
-  ${srcSections({ m, pm, cd, pd, mk, pmk, label })}
+  ${srcSections({ m, pm, cd, pd, mk, pmk, label }, REP)}
 
-  ${mainMenuSection()}
+  ${mainMenuSection(REP)}
 
   ${REP ? '' : chartBlk()}
 
@@ -824,10 +865,16 @@ function mktResult({ pm, cd, pd, label }) {
   const row = (n, c, pays, cv, tot) => `<tr${tot ? ' class="sel"' : ''}><td class="name">${tot ? '<b>합계</b>' : n}</td><td>${won(Math.round(c[2]))}</td><td>${fmt(c[1])}</td><td>${c[1] ? won(Math.round(c[2] / c[1])) : '-'}</td>
     <td>${fmt(pays.length)}건<span class="psm">${won(pw(pays))}</span></td></tr>`;
   const ends = on.map(r => r.end).filter(e => e && e < SEL.e);
+  // 그래프(2026-11-27 사용자 요청): 채널마다 광고비(회색)와 결제 금액(초록)을 같은 눈금 막대로
+  const mx = Math.max(1, ...on.map(r => Math.max(r.c[2], pw(r.pay))));
+  const bar = (v, cls) => `<i class="${cls}" style="width:calc(${(v / mx * 100).toFixed(1)}% - 170px)"></i>`;
+  const chart = on.map(r => `<div class="r"><b>${MCH[r.k]}</b>
+      <div class="bl">${bar(r.c[2], 'cost')}<span>광고비 <b>${won(Math.round(r.c[2]))}</b></span></div>
+      <div class="bl">${bar(pw(r.pay), 'rev')}<span>결제 <b>${fmt(r.pay.length)}건 · ${won(pw(r.pay))}</b></span></div>
+      <small>클릭 ${fmt(r.c[1])} · 클릭당 ${r.c[1] ? won(Math.round(r.c[2] / r.c[1])) : '-'}</small></div>`).join('');
   return `<section class="blk"><h2>마케팅 채널 결과 <small>${label}${ends.length ? ` · 광고 데이터 ${MD(ends.sort()[0])}까지` : ''}</small></h2>
-    <div class="card"><div class="scroll"><table class="tbl">
-      <thead><tr><th>채널</th><th>광고비</th><th>클릭</th><th>클릭당</th><th>결제 전환</th></tr></thead>
-      <tbody>${on.map(r => row(MCH[r.k], r.c, r.pay, conv[r.k])).join('')}${on.length > 1 ? row('', T.c, T.pay, T.cv, true) : ''}</tbody></table></div></div></section>`;
+    <div class="card"><div class="hd"><b>광고비 · 결제</b><span>합계 광고비 ${won(Math.round(T.c[2]))} · 클릭 ${fmt(T.c[1])} · 결제 ${fmt(T.pay.length)}건 ${won(pw(T.pay))}</span></div>
+      <div class="hbc">${chart || '<p class="pempty">이 기간 광고 집행이 없어요.</p>'}<div class="lg"><span><i style="background:#c9ced6"></i>광고비</span><span><i style="background:var(--c)"></i>결제 금액 (관리자 결제 출처)</span></div></div></div></section>`;
 }
 
 /* ---------- 싸인 마케팅 탭 (광고·지면·유입 채널) — 2026-11-18 지표와 분리 ---------- */
@@ -897,7 +944,7 @@ function mktBrief({ m, pm, cd, pd, mk, pmk, label }) {
 // 결제 출처 이름 → 지면 그룹 (관리자 plGroup과 같은 규칙). 지면이 아닌 출처(검색·직접 유입 등)는 null
 const payPlace = n => /씽크존|^thinkzon/i.test(n) ? '씽크존' : /서식사전/.test(n) ? '서식사전' : /^메일링/.test(n) ? '메일링' : /네이버 카페/.test(n) ? '네이버 카페'
   : /블로그/.test(n) && /^네이버 (공식 )?블로그|블로그 광고|파워콘텐츠/.test(n) ? (/광고|대행사|파워콘텐츠/.test(n) ? '블로그 광고' : '블로그 운영') : /온라인도장/.test(n) ? '온라인도장' : /^예스폼/.test(n) ? '예스폼 사이트 지면' : null;
-function srcSections({ m, pm, cd, pd, mk, pmk, label }) {
+function srcSections({ m, pm, cd, pd, mk, pmk, label }, rep) {
   // 관리자 유입 결제 통계가 놓친 결제 중 GA4로 지면이 확인된 건을 더한다 (2026-11-20: 씽크존 thinkzon / banner 결제가 관리자 통계엔 0으로 나옴)
   const gx = {}; let gxN = 0;
   if (D.payments) for (const p of paysIn(SEL.s, SEL.e)) { if (!/^GA4:/.test(p[4] || '')) continue; const g = payPlace(p[3]); if (!g) continue; (gx[g] = gx[g] || [0, 0])[0]++; gx[g][1] += p[2]; gxN++; }
@@ -919,8 +966,8 @@ function srcSections({ m, pm, cd, pd, mk, pmk, label }) {
           <div class="nv"><span class="${r[3] ? 'best' : 'muted'}">결제 ${fmt(r[3])}건</span><small>${r[4] ? won(r[4]) + ' · ' : ''}방문 ${fmt(r[2])}</small></div></li>`).join('')}</ol></div>
     </div></section>
 
-  <section class="blk"><h2>유입 채널별 사용자${ti('유입 채널별 사용자')} <small>GA4</small></h2>
-    <div class="card"><div class="scroll"><table class="tbl">
+  <section class="blk"><h2>유입 채널별 사용자${ti('유입 채널별 사용자')} <small>GA4${rep && ch.length > 5 ? ` · 상위 5개 · 나머지 ${ch.length - 5}개는 스크롤` : ''}</small></h2>
+    <div class="card"><div class="scroll${rep ? ' vlim5' : ''}"><table class="tbl">
       <thead><tr><th>${TL('유입 채널')}</th><th>사용자</th><th>${TL('비중')}</th><th>${TL(CMP.col)}</th><th>${TL('신규 사용자')}</th></tr></thead>
       <tbody>${ch.map(r => { const p = prevCh[r[0]]; return `<tr><td class="name">${esc(r[0])}${srcTi('ch', r[0])}</td><td>${fmt(r[1])}</td><td>${shareCell(r[1], chTot, chMax)}</td><td>${pm ? dtxt(diff(r[1], p && p[1], cd, pd)) : '-'}</td><td>${fmt(r[2])}</td></tr>`; }).join('')}</tbody>
     </table></div></div></section>`;
@@ -1038,7 +1085,7 @@ function signMktView(ctx) {
 /* ---------- 메인 메뉴별 이동 (싸인 탭) — 2026-11-18 ----------
    데이터: D.mainMenu = { months[{k,s,e,main,moved,dest{path:users}}], cur, prev } · GA4 page_referrer가 메인(/)인 페이지뷰 사용자 */
 const MM_ROWS = [['전자서명 만들기', '/signature/'], ['회원가입 화면', '/member/registerForm.php'], ['내 계약', '/myContract/'], ['이용요금', '/payment/'], ['서비스가이드', '/serviceGuide/'], ['고객센터', '/support/faqList.php'], ['계약 작성', '/document/contract/index.php']];
-function mainMenuSection() {
+function mainMenuSection(fold) {
   const M = D.mainMenu; if (view !== 'month' || !M || !M.months || !M.months.length) return '';
   const cols = M.months.map(x => ({ h: mLabel({ m: x.k, start: x.s, end: x.e }), x }));
   if (M.cur) cols.push({ h: `최근 7일 <small>${dRange(M.cur.s, M.cur.e)}</small>`, x: M.cur, p: M.prev });
@@ -1047,9 +1094,11 @@ function mainMenuSection() {
   const rows = [['메인 방문자', c => `<b>${fmt(c.x.main)}</b>${c.p ? `<span class="psm">이전 7일 ${fmt(c.p.main)}</span>` : ''}`],
     ['다른 페이지로 이동', c => cell(c.x.moved, c.x, c.p && rate(c.p))],
     ...MM_ROWS.map(([l, path]) => [l, c => cell(c.x.dest[path] || 0, c.x, c.p && rate(c.p, path))])];
-  return `<section class="blk"><h2>메인 메뉴별 이동 <small>GA4 · 메인 바로 다음 페이지 사용자 (메인 방문자 대비)</small></h2><div class="card"><div class="scroll"><table class="tbl">
+  const tbl = `<div class="card"><div class="scroll"><table class="tbl">
     <thead><tr><th>메뉴</th>${cols.map(c => `<th>${c.h}</th>`).join('')}</tr></thead>
-    <tbody>${rows.map(([l, f]) => `<tr><td class="name">${l}</td>${cols.map(c => `<td>${f(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div></section>`;
+    <tbody>${rows.map(([l, f]) => `<tr><td class="name">${l}</td>${cols.map(c => `<td>${f(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`;
+  if (fold) return `<details class="fold"><summary>메인 메뉴별 이동 <small>GA4 · 메인 바로 다음 페이지 사용자 (메인 방문자 대비)</small><span class="open-hint">펼치기</span></summary>${tbl}</details>`; // 싸인 월보고서: 접은 상태 (2026-11-27)
+  return `<section class="blk"><h2>메인 메뉴별 이동 <small>GA4 · 메인 바로 다음 페이지 사용자 (메인 방문자 대비)</small></h2>${tbl}</section>`;
 }
 
 /* ---------- 네이버 바이럴 (구글 시트 「예스폼싸인_네이버 마케팅 사이클」) — 2026-11-19 ----------
