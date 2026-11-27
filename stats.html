@@ -192,6 +192,12 @@
   .stt.done{background:#eef0f3;color:var(--faint)}
   .acts input,.acts select{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:6px;padding:6px 8px;width:100%;background:#fff}
   .acts .adel{border:0;background:none;color:var(--faint);cursor:pointer;font-size:16px}
+  /* 액션 플랜 순서 바꾸기(2026-11-27): 손잡이 끌기 또는 ▲▼ */
+  .acts td.mv{width:74px;padding-right:0;white-space:nowrap}
+  .acts .grip{display:inline-block;cursor:grab;color:var(--faint);font-size:15px;padding:0 4px;vertical-align:middle;user-select:none}
+  .acts .mvb{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:5px;width:22px;height:22px;font-size:10px;line-height:1;cursor:pointer;padding:0;vertical-align:middle}
+  .acts .mvb:hover:not(:disabled){border-color:var(--c);color:var(--c)}.acts .mvb:disabled{opacity:.35;cursor:default}
+  .acts tr.dragging{opacity:.4}.acts tr.dropT td{box-shadow:inset 0 2px 0 var(--c)}.acts tr.dropB td{box-shadow:inset 0 -2px 0 var(--c)}
 
   /* 네이버 광고 (광고센터) 섹션 — 2026-11-18 */
   .adtag{display:inline-block;font-size:11px;font-weight:600;border-radius:6px;padding:2px 7px;white-space:nowrap}
@@ -751,10 +757,11 @@ async function loadNotes() {
 function actionPlan(NT) {
   const list = NT.actions || [];
   if (NEDIT === 'act') {
-    const rows = (NDRAFT || []).map((a, i) => `<tr data-i="${i}"><td class="at"><input data-f="t" value="${esc(a.t)}" placeholder="할 일"></td><td><input data-f="owner" value="${esc(a.owner)}" placeholder="담당"></td><td><input data-f="due" value="${esc(a.due)}" placeholder="예: 12.5"></td>
+    const nD = (NDRAFT || []).length;
+    const rows = (NDRAFT || []).map((a, i) => `<tr data-i="${i}"><td class="mv"><span class="grip" draggable="true" title="끌어서 순서 바꾸기">⠿</span><button class="mvb" data-nact="act-up" data-i="${i}" aria-label="위로"${i ? '' : ' disabled'}>▲</button> <button class="mvb" data-nact="act-down" data-i="${i}" aria-label="아래로"${i < nD - 1 ? '' : ' disabled'}>▼</button></td><td class="at"><input data-f="t" value="${esc(a.t)}" placeholder="할 일"></td><td><input data-f="owner" value="${esc(a.owner)}" placeholder="담당"></td><td><input data-f="due" value="${esc(a.due)}" placeholder="예: 12.5"></td>
       <td><select data-f="st">${Object.entries(ST).map(([k, v]) => `<option value="${k}"${a.st === k ? ' selected' : ''}>${v}</option>`).join('')}</select></td><td><button class="adel" data-nact="act-del" data-i="${i}" aria-label="삭제">×</button></td></tr>`).join('');
     return `<section class="blk"><h2 class="nh">액션 플랜</h2><div class="card"><div class="scroll"><table class="tbl acts">
-      <thead><tr><th style="text-align:left">할 일</th><th style="width:120px">담당</th><th style="width:110px">기한</th><th style="width:110px">상태</th><th style="width:40px"></th></tr></thead>
+      <thead><tr><th style="width:74px"></th><th style="text-align:left">할 일</th><th style="width:120px">담당</th><th style="width:110px">기한</th><th style="width:110px">상태</th><th style="width:40px"></th></tr></thead>
       <tbody>${rows}</tbody></table></div>
       <div class="nbar" style="padding:0 14px 14px"><span class="nerr" id="nErr"></span><button class="nbtn" data-nact="act-add">+ 항목 추가</button><button class="nbtn" data-nact="cancel">취소</button><button class="nbtn pri" data-nact="act-save">저장</button></div></div></section>`;
   }
@@ -776,6 +783,17 @@ async function saveNote(patch, btn) {
   } catch (e) { if (err) err.textContent = e.message || '저장하지 못했어요'; if (btn) btn.disabled = false; }
 }
 function bindNotes() {
+  // 액션 플랜 끌어서 순서 바꾸기: 손잡이(⠿)를 잡고 다른 줄 위·아래에 놓기
+  let dragI = null;
+  document.querySelectorAll('.acts tbody tr[data-i]').forEach(tr => {
+    const g = tr.querySelector('.grip'); if (!g) return;
+    g.addEventListener('dragstart', e => { dragI = +tr.dataset.i; tr.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', String(dragI)); e.dataTransfer.setDragImage(tr, 20, 20); } catch {} });
+    g.addEventListener('dragend', () => { tr.classList.remove('dragging'); document.querySelectorAll('.acts tr.dropT,.acts tr.dropB').forEach(x => x.classList.remove('dropT', 'dropB')); dragI = null; });
+    tr.addEventListener('dragover', e => { if (dragI == null) return; e.preventDefault(); const r = tr.getBoundingClientRect(), top = e.clientY < r.top + r.height / 2; tr.classList.toggle('dropT', top); tr.classList.toggle('dropB', !top); });
+    tr.addEventListener('dragleave', () => tr.classList.remove('dropT', 'dropB'));
+    tr.addEventListener('drop', e => { if (dragI == null) return; e.preventDefault(); const r = tr.getBoundingClientRect(), top = e.clientY < r.top + r.height / 2; readDraft();
+      const from = dragI, item = NDRAFT.splice(from, 1)[0]; let to = +tr.dataset.i + (top ? 0 : 1); if (from < to) to--; NDRAFT.splice(to, 0, item); dragI = null; render(); });
+  });
   document.querySelectorAll('[data-nact]').forEach(b => b.onclick = () => {
     const a = b.dataset.nact, NT = (NOTES && NOTES.months[noteKey()]) || {};
     if (a === 'ins-edit') { NEDIT = 'ins'; render(); const t = $('#insTa'); if (t) t.focus(); }
@@ -783,6 +801,7 @@ function bindNotes() {
     else if (a === 'cancel') { NEDIT = null; NDRAFT = null; render(); }
     else if (a === 'act-add') { readDraft(); NDRAFT.push({ t: '', owner: '', due: '', st: 'todo' }); render(); const l = document.querySelectorAll('.acts input[data-f="t"]'); if (l.length) l[l.length - 1].focus(); }
     else if (a === 'act-del') { readDraft(); NDRAFT.splice(+b.dataset.i, 1); render(); }
+    else if (a === 'act-up' || a === 'act-down') { readDraft(); const i = +b.dataset.i, j = a === 'act-up' ? i - 1 : i + 1; if (j >= 0 && j < NDRAFT.length) { [NDRAFT[i], NDRAFT[j]] = [NDRAFT[j], NDRAFT[i]]; render(); const nb = document.querySelector(`.acts [data-nact="${a}"][data-i="${j}"]`); if (nb && !nb.disabled) nb.focus(); } }
     else if (a === 'act-save') { readDraft(); saveNote({ actions: NDRAFT.filter(x => x.t.trim()) }, b); }
     else if (a === 'ins-save') saveNote({ insight: ($('#insTa').value || '').split('\n').map(x => x.trim()).filter(Boolean).join('\n') }, b);
     else if (a === 'ins-reset') { if (confirm('직접 쓴 인사이트를 지우고 자동 요약으로 되돌릴까요?')) saveNote({ insight: '' }, b); }
