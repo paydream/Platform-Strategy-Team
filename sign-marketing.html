@@ -14,8 +14,9 @@ a{color:#135c8a;text-underline-offset:3px}button{font:inherit;color:inherit;back
 .alert{background:#fff7e9;border-radius:8px;padding:7px 12px;color:#78551e;font-size:13px;margin-top:10px}
 .sug{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.sg{background:#fff;border:1px solid #dfe5ea;border-radius:14px;padding:14px 16px}.sg h3{margin:0 0 8px;font-size:15px;display:flex;justify-content:space-between;gap:8px}.sg h3 span{font-size:12px;color:#526478;font-weight:500}.sg ul{margin:0;padding:0;list-style:none;display:grid;gap:7px}.sg li{font-size:13.5px;line-height:1.5}.sg li b.k{display:inline-block;font-size:11px;border-radius:5px;padding:0 6px;margin-right:6px;vertical-align:1px}
 .k.cut{background:#fde8e6;color:#a33a2c}.k.up{background:#e3f4ea;color:#17614a}.k.chk{background:#eef1f5;color:#40546b}.k.test{background:#ece8fb;color:#4f3b9a}
+.cyc{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.cy{background:#fff;border:1px solid #dfe5ea;border-radius:14px;padding:14px 16px}.cy .l{font-size:12px;color:#526478;font-weight:600}.cy .v{font-size:15.5px;font-weight:700;margin:2px 0 6px}.cy p{margin:0;font-size:13px;color:#40546b;line-height:1.55}.cy p b{color:#18253b}.bar{height:6px;background:#eef1f5;border-radius:9px;overflow:hidden;margin:6px 0 4px;position:relative}.bar i{display:block;height:100%;background:#4f6bd8;border-radius:9px}.bar s{position:absolute;top:0;bottom:0;left:50%;border-left:2px solid #fff}
 footer{display:flex;gap:14px;flex-wrap:wrap;margin-top:16px;font-size:13px;color:#526478}#fail{color:#873521;font-size:13px}
-@media(max-width:820px){.sug{grid-template-columns:1fr}th,td{padding:8px}}
+@media(max-width:820px){.sug,.cyc{grid-template-columns:1fr}th,td{padding:8px}}
 </style><main>
 <div class="top"><div class="tabs" role="tablist"><button role="tab" data-t="perf" aria-selected="true">광고 성과 · 진행 제안</button><button role="tab" data-t="ops" aria-selected="false">실무 상세</button></div><div class="seg" role="group" aria-label="보기"><button data-v="day">데일리</button><button data-v="week">주간</button><button data-v="month">월간</button></div></div>
 <div id="fail" role="status"></div>
@@ -23,6 +24,7 @@ footer{display:flex;gap:14px;flex-wrap:wrap;margin-top:16px;font-size:13px;color
 <div class="chips" id="chips" role="group" aria-label="기간 선택"></div>
 <div class="meta"><div><span class="date" id="date"></span><span class="cmp" id="cmp"></span></div><div class="reload"><span class="upd" id="upd"></span><button id="reload">최신 데이터 불러오기</button></div></div>
 <div id="notice" class="alert" hidden></div>
+<section id="cycWrap"><h2>메타 광고 운영 사이클 <small>매주 화요일 14:00 회의</small></h2><div class="cyc" id="cyc"></div></section>
 <section id="sugWrap"><h2>이번 주 진행 제안 <small id="sugBase"></small></h2><div class="sug" id="sug"></div></section>
 <h2>채널별 성과</h2>
 <div class="panel"><table><thead><tr><th>채널</th><th>광고비</th><th>클릭</th><th>클릭당 비용</th><th>싸인 결제</th><th>결제당 광고비</th></tr></thead><tbody id="rows"></tbody></table></div>
@@ -76,6 +78,26 @@ function periods(){
 const chg=(c,p,P)=>{if(P.noPrev||!p)return null;const cd=nd(P.s,P.e),pd=nd(P.ps,P.pe);return P.avg?((c/cd)-(p/pd))/(p/pd)*100:(c-p)/p*100;};
 const dl=(r,good)=>{if(r==null)return '';const c=r>0.5?'up':r<-0.5?'down':'flat';return `<span class="d ${good||''} ${c}">${c==='up'?'▲':c==='down'?'▼':''}${Math.abs(r).toFixed(0)}%</span>`;};
 
+/* 메타 광고 운영 사이클 (2026-11-27 사용자 계획): 매월 광고 그룹 2개 · 월 예산 50~100만원 → 주간 효율 확인·소재 점검 → 매주 화 14:00 회의 */
+const META_PLAN={groups:2,min:500000,max:1000000,meetDay:2,meetTime:'14:00'};
+function cycle(){
+  const c=M.ch.m,end=c.end&&c.end<D.range.end?c.end:D.range.end,ms=end.slice(0,8)+'01',dim=new Date(Date.UTC(+end.slice(0,4),+end.slice(5,7),0)).getUTCDate(),el=nd(ms,end);
+  const ok=!!c.end,mc=ok?sumDays(c.days,ms,end,4):null,proj=mc?mc[2]/el*dim:null;
+  const ws=day(end,-6),wc=ok?sumDays(c.days,ws,end,4):null,wp=sumDays(M.pay.m||{},ws,end,2);
+  const now=new Date(Date.now()+9*36e5);let nx=new Date(Date.UTC(now.getUTCFullYear(),now.getUTCMonth(),now.getUTCDate()));
+  const past=now.getUTCDay()===META_PLAN.meetDay&&now.getUTCHours()*60+now.getUTCMinutes()>=14*60;
+  while(nx.getUTCDay()!==META_PLAN.meetDay||(past&&nx.getUTCDate()===now.getUTCDate()&&nx.getUTCMonth()===now.getUTCMonth()))nx=new Date(nx.getTime()+864e5);
+  const nxs=nx.toISOString().slice(0,10),pctB=mc?Math.min(100,mc[2]/META_PLAN.max*100):0;
+  const budTxt=!ok?'<p>메타 데이터 미연결 · 광고 관리자 로그인 후 반영</p>'
+    :!mc[2]?`<p>${+end.slice(5,7)}월 집행 없음 (${MD(ms)}~${MD(end)}) → ${+end.slice(5,7)%12+1}월 그룹 2개 세팅</p>`
+    :`<div class="bar" title="예산 상한 100만원 기준, 흰 선 = 50만원"><i style="width:${pctB}%"></i><s></s></div><p>${+end.slice(5,7)}월 광고비 <b>${won(mc[2])}</b> (${MD(ms)}~${MD(end)}) · 월말 예상 <b>${won(proj)}</b>${proj<META_PLAN.min?' · 하한 50만원 미만':proj>META_PLAN.max?' · 상한 100만원 초과':''}</p>`;
+  const wkTxt=!wc?'<p>메타 데이터 미연결</p>':!wc[2]?`<p>직전 7일(${MD(ws)}~${MD(end)}) 집행 없음</p>`
+    :`<p>직전 7일(${MD(ws)}~${MD(end)}) 광고비 <b>${won(wc[2])}</b> · 클릭 <b>${fmt(wc[1])}</b> · 클릭당 <b>${won(wc[1]?wc[2]/wc[1]:null)}</b> · 싸인 결제 <b>${fmt(wp[0])}건</b></p>`;
+  $('cyc').innerHTML=`<div class="cy"><div class="l">매월 · 세팅</div><div class="v">광고 그룹 ${META_PLAN.groups}개 · 월 50~100만원</div>${budTxt}</div>
+    <div class="cy"><div class="l">매주 · 점검</div><div class="v">그룹 2개 효율 확인 · 소재 점검</div>${wkTxt}</div>
+    <div class="cy"><div class="l">매주 화요일 14:00 · 회의</div><div class="v">다음 회의 ${MD(nxs)} (${wd(nxs)}) 14:00</div><p>지난주 그룹별 효율 → 소재 교체·유지 → 예산 배분 결정</p></div>`;
+}
+
 function paint(){
   document.querySelectorAll('.seg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===view));
   const PS=periods();const P=PS.find(p=>p.k===key)||PS[0];key=P.k;
@@ -83,7 +105,7 @@ function paint(){
   $('chips').querySelectorAll('button').forEach(b=>b.onclick=()=>{key=b.dataset.k;save();paint();});
   $('date').textContent=P.s===P.e?`${MD(P.s)} (${wd(P.s)})`:`${MD(P.s)} ~ ${MD(P.e)}`;
   $('cmp').textContent=P.noPrev?'':`${P.cmp} 대비`;
-  table(P);trend(P);
+  table(P);trend(P);cycle();
   $('sugWrap').hidden=view==='day';if(view!=='day')suggest(P);
   post();
 }
@@ -141,8 +163,8 @@ function suggest(P){
     out.push(box('구글',`${won(tot)} · 결제 ${fmt(g.pay[0])}건`,Gs));}
   const me=rowData('m',P);
   if(!me.ok)out.push(box('메타','미연결',[it('chk','광고 관리자에 로그인하면 다음 갱신부터 반영돼요.')]));
-  else if(!me.cur[2]){const st=M.metaCamps.some(c=>c[2]==='PAUSED')?'캠페인 일시중지':'집행 없음';out.push(box('메타',`0원 · ${st}`,[it('chk','재개 여부 결정 (싸인 캠페인은 4.20~5.20만 집행)'),it('test','재개 시 홈 대신 서식 전용 페이지로 연결, 첫 문장만 다른 소재 2개 비교'),it('chk','광고 URL에 utm_source=meta 추가 (결제 출처 확인용)')]));}
-  else{const Ms=[],[imp,clk,cost]=me.cur,ctr=imp?clk/imp*100:0;if(ctr&&ctr<0.8)Ms.push(it('test',`클릭률 ${ctr.toFixed(1)}% → 업무 상황형 첫 문장 소재 추가`));const cpc=clk?cost/clk:0,pcpc=me.prev[1]?me.prev[2]/me.prev[1]:0;if(me.okP&&cpc&&pcpc&&Math.abs(cpc-pcpc)/pcpc>0.2)Ms.push(it('chk',`클릭당 비용 ${won(pcpc)} → ${won(cpc)}, 2주 넘은 소재 교체`));if(!me.pay[0])Ms.push(it('chk','광고 URL에 utm_source=meta 추가 (결제 출처 확인용)'));out.push(box('메타',`${won(cost)} · 클릭 ${fmt(clk)}`,Ms));}
+  else if(!me.cur[2]){const st=M.metaCamps.some(c=>c[2]==='PAUSED')?'캠페인 일시중지':'집행 없음';out.push(box('메타',`0원 · ${st}`,[it('up','이번 달 광고 그룹 2개 세팅 (월 50~100만원)'),it('test','그룹별 소재 2개 이상 · 서식 전용 페이지로 연결'),it('chk','광고 URL에 utm_source=meta 추가 (결제 출처 확인용)')]));}
+  else{const Ms=[],[imp,clk,cost]=me.cur,ctr=imp?clk/imp*100:0;if(ctr&&ctr<0.8)Ms.push(it('test',`클릭률 ${ctr.toFixed(1)}% → 업무 상황형 첫 문장 소재 추가`));const cpc=clk?cost/clk:0,pcpc=me.prev[1]?me.prev[2]/me.prev[1]:0;if(me.okP&&cpc&&pcpc&&Math.abs(cpc-pcpc)/pcpc>0.2)Ms.push(it('chk',`클릭당 비용 ${won(pcpc)} → ${won(cpc)}, 2주 넘은 소재 교체`));if(view==='month'){const mb=cost/nd(P.s,P.e)*new Date(Date.UTC(+P.s.slice(0,4),+P.s.slice(5,7),0)).getUTCDate();if(mb>META_PLAN.max)Ms.push(it('cut',`월 환산 ${won(mb)} → 상한 100만원 넘음, 효율 낮은 그룹 예산 축소`));else if(mb<META_PLAN.min)Ms.push(it('up',`월 환산 ${won(mb)} → 하한 50만원 미만, 효율 좋은 그룹 증액`));}if(!me.pay[0])Ms.push(it('chk','광고 URL에 utm_source=meta 추가 (결제 출처 확인용)'));out.push(box('메타',`${won(cost)} · 클릭 ${fmt(clk)}`,Ms));}
   $('sug').innerHTML=out.join('');
 }
 
