@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>예스폼싸인 · 고객센터 문의하기</title>
+<!--
+  예스폼싸인 고객센터 · 문의하기 탭 (2026-11-27)
+  Figma: 싸인_디자인시스템 › 전체 화면 · 문의하기 탭 54813:50817 (1400 × 1633)
+  입력 제한: yesformsign.com/support/qna.php 와 같음 (문의 내용 1000자 · 연락처 숫자 13자 · 첨부 파일 종류)
+  · 헤더(화면 위 고정 · 72) → 고객센터 제목 → 탭(문의하기 켜짐) → 문의하기 제목 → 입력 표 → [문의하기] → 푸터
+  · 스타일 css/style.css · 동작 js/common.js + js/inquiry.js · 그림 images/
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- 헤더 (Header_home · Type=logout, PC(web)) — 화면 위에 고정 -->
+<header class="hd">
+  <div class="hd__inner inner">
+    <h1 class="hd__logo"><a href="#"><img src="images/logo-sign@2x.png" width="91" height="30" alt="예스폼싸인"></a></h1>
+    <nav class="hd__lnb" aria-label="주 메뉴">
+      <a href="#">서비스가이드</a>
+      <a href="#">전자서명 만들기</a>
+      <a href="#">이용요금</a>
+      <a href="#" aria-current="page">고객센터</a>
+    </nav>
+    <div class="hd__info">
+      <a class="hd__btn hd__btn--primary" href="#">1개월 무료 체험</a>
+      <a class="hd__btn" href="#">로그인</a>
+    </div>
+  </div>
+</header>
+
+<main class="cs cs--board">
+  <h2 class="cs__title">고객센터</h2>
+  <div class="cs__body">
+    <!-- 탭 (Segmented Control) — 문의하기 켜짐 -->
+    <nav class="seg" aria-label="고객센터 메뉴">
+      <a class="seg__item" href="index.html">FAQ</a>
+      <i class="seg__div" aria-hidden="true"></i>
+      <a class="seg__item" href="notice.html">공지사항</a>
+      <i class="seg__div seg__div--off" aria-hidden="true"></i>
+      <a class="seg__item" href="inquiry.html" aria-current="page">문의하기</a>
+    </nav>
+
+    <!-- 문의하기 — 제목 → 입력 표(분류 · 이름 · 이메일 주소 · 문의 내용 · 답변 알림 · 첨부파일) → [문의하기] -->
+    <section class="board" aria-labelledby="boardTitle">
+      <h3 class="board__title" id="boardTitle">문의하기</h3>
+      <form class="qform" action="#" method="post" novalidate data-qna>
+        <div class="qtable">
+          <div class="qrow qrow--cat" role="radiogroup" aria-labelledby="qnaCatLabel">
+            <span class="qrow__label" id="qnaCatLabel">분류</span>
+            <div class="qrow__val">
+              <label class="choice choice--radio"><input type="radio" name="category" value="1" checked><span class="choice__icon" aria-hidden="true"></span>이용문의</label>
+              <label class="choice choice--radio"><input type="radio" name="category" value="2"><span class="choice__icon" aria-hidden="true"></span>오류문의</label>
+              <label class="choice choice--radio"><input type="radio" name="category" value="0"><span class="choice__icon" aria-hidden="true"></span>기타문의</label>
+            </div>
+          </div>
+          <div class="qrow">
+            <label class="qrow__label" for="qnaName">이름</label>
+            <div class="qrow__val"><input class="input" id="qnaName" name="name" type="text" placeholder="이름을 입력해주세요." autocomplete="name"></div>
+          </div>
+          <div class="qrow">
+            <label class="qrow__label" for="qnaEmail">이메일 주소</label>
+            <div class="qrow__val"><input class="input" id="qnaEmail" name="email" type="email" placeholder="이메일을 입력해주세요." autocomplete="email"></div>
+          </div>
+          <div class="qrow qrow--msg">
+            <label class="qrow__label" for="qnaMessage">문의 내용</label>
+            <div class="qrow__val">
+              <div class="tarea">
+                <textarea id="qnaMessage" name="message" maxlength="1000" placeholder="내용을 입력해주세요."></textarea>
+                <span class="tarea__count" data-count aria-live="polite">0/1000</span>
+              </div>
+            </div>
+          </div>
+          <div class="qrow qrow--h65">
+            <label class="qrow__label" for="qnaPhone">답변 알림</label>
+            <div class="qrow__val">
+              <div class="qrow__pair">
+                <input class="input input--w400" id="qnaPhone" name="phone" type="text" inputmode="numeric" maxlength="13" placeholder="연락가능한 연락처를 숫자만 입력해주세요." autocomplete="tel">
+                <label class="choice choice--check"><input type="checkbox" name="sms_agree" value="1"><span class="choice__icon" aria-hidden="true"></span>휴대폰 SMS 수신에 동의합니다.</label>
+              </div>
+            </div>
+          </div>
+          <div class="qrow qrow--h65">
+            <label class="qrow__label" for="qnaFileName">첨부파일</label>
+            <div class="qrow__val">
+              <div class="qrow__pair qrow__pair--file">
+                <input class="input input--w400 input--ro" id="qnaFileName" type="text" placeholder="선택된 파일 없음" readonly tabindex="-1">
+                <button class="btn-line" type="button" data-file-btn>첨부파일 추가</button>
+                <input id="qnaFile" name="qna_attachment" type="file" accept=".pdf,.png,.jpg,.jpeg,.gif,.hwp,.hwpx,.zip,.doc,.docx,.xls,.xlsx" hidden>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="qform__submit"><button class="btn-primary" type="submit">문의하기</button></div>
+      </form>
+    </section>
+  </div>
+</main>
+
+<!-- 푸터 (footer · pc) -->
+<footer class="ft">
+  <div class="ft__inner">
+    <div class="ft__top">
+      <div class="ft__col ft__col--left">
+        <div>
+          <p class="ft__title">고객센터</p>
+          <p class="ft__tel">1588-2390</p>
+          <ul class="ft__info">
+            <li>상담시간 : 주중 오전 9시 - 오후 5시 30분</li>
+            <li>점심시간 : 주중 오전 11시 50분 - 오후 1시</li>
+            <li>토요일, 일요일 &amp; 공휴일 휴무</li>
+          </ul>
+        </div>
+        <div class="ft__btns">
+          <a class="ft__round" href="#">자주 묻는 질문</a>
+          <a class="ft__round" href="#">전화상담 예약</a>
+        </div>
+      </div>
+      <i class="ft__div" aria-hidden="true"></i>
+      <div class="ft__col ft__col--center">
+        <p class="ft__title">공지사항</p>
+        <ul class="ft__news">
+          <li><a href="#">2026년 준비는 병오년 필수서식 모음집으로 끝! 준비</a><span>2026-01-02</span></li>
+          <li><a href="#">2026년 준비는 병오년 필수서식 모음집으로 끝! 준비</a><span>2026-01-02</span></li>
+          <li><a href="#">2026년 준비는 병오년 필수서식 모음집으로 끝! 준비</a><span>2026-01-02</span></li>
+          <li><a href="#">동절기현장 안전사고관리 예방서식 모음집 OPEN!!</a><span>2026-01-02</span></li>
+          <li><a href="#">2026년 회사표준사규집 OPEN!</a><span>2026-01-02</span></li>
+        </ul>
+      </div>
+      <i class="ft__div" aria-hidden="true"></i>
+      <div class="ft__col ft__col--right">
+        <address class="ft__corp">
+          <p>㈜예스폼 대표 : 이재영, 이응열</p>
+          <p class="ft__addr">04790 서울특별시 성동구 아차산로 49<br>(성수동1가,서울숲코오롱디지털타워 3차 901호)</p>
+          <p>사업자등록번호 : 120-86-50680</p>
+          <p>통신판매업신고번호 : 성동-1911호</p>
+          <p>개인정보보호책임자 : 이응열</p>
+        </address>
+        <button class="ft__round ft__round--map" type="button">사이트맵<img src="images/ic-down-20.svg" width="20" height="20" alt=""></button>
+      </div>
+    </div>
+    <div class="ft__bottom">
+      <nav class="ft__links" aria-label="회사 정보">
+        <a href="#">회사소개</a>
+        <a href="#">이용약관</a>
+        <a href="#">개인정보처리방침</a>
+        <a href="#">제휴문의</a>
+        <a href="#">공지사항</a>
+      </nav>
+      <div class="ft__sns">
+        <a href="#" aria-label="네이버 블로그"><img src="images/ic-sns-nblog-18.svg" width="18" height="18" alt=""></a>
+        <a href="#" aria-label="네이버 포스트"><img src="images/ic-sns-npost-18.svg" width="18" height="18" alt=""></a>
+        <a href="#" aria-label="티스토리"><img src="images/ic-sns-tistory-18.svg" width="18" height="18" alt=""></a>
+        <a href="#" aria-label="인스타그램"><img src="images/ic-sns-insta-18.svg" width="18" height="18" alt=""></a>
+        <a href="#" aria-label="유튜브"><img src="images/ic-sns-youtube-18.svg" width="18" height="18" alt=""></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="js/common.js"></script>
+<script src="js/inquiry.js"></script>
+</body>
+</html>

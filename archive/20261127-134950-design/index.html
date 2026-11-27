@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>예스폼싸인 · 고객센터 FAQ</title>
+<!--
+  예스폼싸인 고객센터 · FAQ 탭 (2026-11-27)
+  Figma: 싸인_디자인시스템 › 전체 화면 — FAQ 탭 프레임은 없어서
+    공지사항 탭 54813:51077 · 문의하기 탭 54813:50817 에 쓰인 부품(헤더 · 탭 · 입력칸 · 버튼 · 목록 줄 · 쪽 이동 · 푸터)으로 만듦
+  내용: yesformsign.com 고객센터 FAQ (6개 분류 · 질문 56개)
+  · 배치는 기존 화면(yesformsign.com/support/faqList.php) 그대로:
+    헤더(화면 위 고정) → 고객센터 제목 → 탭(FAQ 켜짐) → 안내 문구 → 검색 → 분류 탭 7칸
+    → [전체] 분류 상자 6개(2열 · 상자마다 질문 5개) / [분류] 소분류별 질문 목록(누르면 답변) → 푸터
+  · 스타일 css/style.css · 동작 js/common.js + js/main.js · 그림 images/
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- 헤더 (Header_home · Type=logout, PC(web)) — 화면 위에 고정 -->
+<header class="hd">
+  <div class="hd__inner inner">
+    <h1 class="hd__logo"><a href="#"><img src="images/logo-sign@2x.png" width="91" height="30" alt="예스폼싸인"></a></h1>
+    <nav class="hd__lnb" aria-label="주 메뉴">
+      <a href="#">서비스가이드</a>
+      <a href="#">전자서명 만들기</a>
+      <a href="#">이용요금</a>
+      <a href="#" aria-current="page">고객센터</a>
+    </nav>
+    <div class="hd__info">
+      <a class="hd__btn hd__btn--primary" href="#">1개월 무료 체험</a>
+      <a class="hd__btn" href="#">로그인</a>
+    </div>
+  </div>
+</header>
+
+<main class="cs">
+  <h2 class="cs__title">고객센터</h2>
+  <div class="cs__body">
+    <!-- 탭 (Segmented Control) — FAQ 켜짐 -->
+    <nav class="seg" aria-label="고객센터 메뉴">
+      <a class="seg__item" href="index.html" aria-current="page">FAQ</a>
+      <i class="seg__div seg__div--off" aria-hidden="true"></i>
+      <a class="seg__item" href="notice.html">공지사항</a>
+      <i class="seg__div" aria-hidden="true"></i>
+      <a class="seg__item" href="inquiry.html">문의하기</a>
+    </nav>
+
+    <section class="faq" aria-label="FAQ" data-faq>
+      <div class="faq__intro">
+        <h3 class="faq__lead">무엇을 도와드릴까요?<br>궁금한 점은 무엇이든 물어보세요</h3>
+        <div class="search-wrap">
+          <form class="search" role="search" data-faq-search>
+            <input class="search__input" type="search" name="query" placeholder="궁금한 점을 검색하세요." aria-label="FAQ 검색" autocomplete="off">
+            <button class="search__btn" type="submit" aria-label="검색"><img src="images/ic-search-24.svg" width="24" height="24" alt=""></button>
+          </form>
+          <!-- 자주 묻는 키워드 — 폭은 검색칸(480)을 넘지 않음 · 누르면 그 말로 검색 -->
+          <div class="kw" role="group" aria-label="자주 묻는 키워드">
+            <button class="kw__chip" type="button" data-kw="요금제">요금제</button>
+            <button class="kw__chip" type="button" data-kw="이메일 인증">이메일 인증</button>
+            <button class="kw__chip" type="button" data-kw="도장">도장</button>
+            <button class="kw__chip" type="button" data-kw="법적 효력">법적 효력</button>
+            <button class="kw__chip" type="button" data-kw="비밀번호">비밀번호</button>
+          </div>
+        </div>
+      </div>
+      <div class="ftabs" role="tablist" aria-label="분류">
+        <button class="ftab" type="button" role="tab" data-tab="전체" aria-selected="true">전체</button>
+        <button class="ftab" type="button" role="tab" data-tab="계정" aria-selected="false">계정</button>
+        <button class="ftab" type="button" role="tab" data-tab="이용 요금" aria-selected="false">이용 요금</button>
+        <button class="ftab" type="button" role="tab" data-tab="자료실" aria-selected="false">자료실</button>
+        <button class="ftab" type="button" role="tab" data-tab="서명 만들기" aria-selected="false">서명 만들기</button>
+        <button class="ftab" type="button" role="tab" data-tab="계약하기" aria-selected="false">계약하기</button>
+        <button class="ftab" type="button" role="tab" data-tab="법적 효력" aria-selected="false">법적 효력</button>
+      </div>
+      <div class="fpanel" role="tabpanel" data-panel="전체" aria-label="전체">
+      <div class="fbox-grid">
+        <div class="fbox">
+          <h4 class="fbox__title"><img src="images/ic-cat-user-20.svg" width="20" height="20" alt="">계정</h4>
+          <ul class="fbox__list">
+            <li><button class="fbox__q" type="button" data-go="213" data-cat="계정">예스폼 아이디로 예스폼싸인을 이용할 수 있나요?</button></li>
+            <li><button class="fbox__q" type="button" data-go="215" data-cat="계정">하나의 계정으로 여러명이 계약을 진행해도 되나요?</button></li>
+            <li><button class="fbox__q" type="button" data-go="218" data-cat="계정">이메일 인증은 필수로 진행해야하나요?</button></li>
+            <li><button class="fbox__q" type="button" data-go="219" data-cat="계정">이메일 인증된 아이디를 바꾸고싶습니다.</button></li>
+            <li><button class="fbox__q" type="button" data-go="220" data-cat="계정">예스폼싸인 회원을 탈퇴하면 예스폼도 함께 탈퇴되나요?</button></li>
+          </ul>
+        </div>
+        <div class="fbox">
+          <h4 class="fbox__title"><img src="images/ic-cat-card-20.svg" width="20" height="20" alt="">이용 요금</h4>
+          <ul class="fbox__list">
+            <li><button class="fbox__q" type="button" data-go="222" data-cat="이용 요금">예스폼싸인 계약 1건당 비용은 얼마인가요?</button></li>
+            <li><button class="fbox__q" type="button" data-go="224" data-cat="이용 요금">예스폼 멤버십을 이용 중인데 건수 추가 구매가 가능한가요?</button></li>
+            <li><button class="fbox__q" type="button" data-go="225" data-cat="이용 요금">기간이 다른 요금제를 보유하고 있으면 어떤 순서로 차감되나요?</button></li>
+            <li><button class="fbox__q" type="button" data-go="227" data-cat="이용 요금">결제 내역은 어디서 확인할 수 있나요?</button></li>
+            <li><button class="fbox__q" type="button" data-go="230" data-cat="이용 요금">일부 건수만 사용했는데 환불이 가능한가요?</button></li>
+          </ul>
+        </div>
+        <div class="fbox">
+          <h4 class="fbox__title"><img src="images/ic-cat-folder-20.svg" width="20" height="20" alt="">자료실</h4>
+          <ul class="fbox__list">
+            <li><button class="fbox__q" type="button" data-go="231" data-cat="자료실">예스폼싸인에서 제공되는 계약서는 무료로 사용 가능한가요?</button></li>
+            <li><button class="fbox__q" type="button" data-go="232" data-cat="자료실">제공된 서식 외에도 문서를 사용할 수 있나요?</button></li>
+            <li><button class="fbox__q" type="button" data-go="233" data-cat="자료실">예스폼 문서를 예스폼싸인에서도 사용 가능한가요?</button></li>
+            <li><button class="fbox__q" type="button" data-go="234" data-cat="자료실">등록할 수 있는 문서 형식은 어떤게 있나요?</button></li>
+            <li><button class="fbox__q" type="button" data-go="235" data-cat="자료실">계약서 등록 시 문서가 깨져서 나옵니다.</button></li>
+          </ul>
+        </div>
+        <div class="fbox">
+          <h4 class="fbox__title"><img src="images/ic-cat-pencil-20.svg" width="20" height="20" alt="">서명 만들기</h4>
+          <ul class="fbox__list">
+            <li><button class="fbox__q" type="button" data-go="236" data-cat="서명 만들기">도장에 특수문자를 넣을 수 있나요?</button></li>
+            <li><button class="fbox__q" type="button" data-go="237" data-cat="서명 만들기">법인 도장 만들때 가운데 대표이사 대신 다른 글자를 넣을 수 있나요?</button></li>
+            <li><button class="fbox__q" type="button" data-go="238" data-cat="서명 만들기">도장이 없는데, 직접 서명만으로 계약이 가능한가요?</button></li>
+            <li><button class="fbox__q" type="button" data-go="239" data-cat="서명 만들기">제가 만든 싸인은 어디서 확인 가능한가요?</button></li>
+            <li><button class="fbox__q" type="button" data-go="240" data-cat="서명 만들기">이미 가지고 있는 서명 이미지를 사용할 수 있나요?</button></li>
+          </ul>
+        </div>
+        <div class="fbox">
+          <h4 class="fbox__title"><img src="images/ic-cat-contract-20.svg" width="20" height="20" alt="">계약하기</h4>
+          <ul class="fbox__list">
+            <li><button class="fbox__q" type="button" data-go="241" data-cat="계약하기">계약 요청하려면 로그인 해야하나요?</button></li>
+            <li><button class="fbox__q" type="button" data-go="244" data-cat="계약하기">계약 요청 시 필요한 계약서는 직접 준비해야하나요?</button></li>
+            <li><button class="fbox__q" type="button" data-go="246" data-cat="계약하기">계약 요청 시 개인정보를 꼭 입력해야하나요?</button></li>
+            <li><button class="fbox__q" type="button" data-go="251" data-cat="계약하기">서명 참여자도 건수가 차감되나요?</button></li>
+            <li><button class="fbox__q" type="button" data-go="255" data-cat="계약하기">계약이 완료되면 알람이 따로 오나요?</button></li>
+          </ul>
+        </div>
+        <div class="fbox">
+          <h4 class="fbox__title"><img src="images/ic-cat-shield-20.svg" width="20" height="20" alt="">법적 효력</h4>
+          <ul class="fbox__list">
+            <li><button class="fbox__q" type="button" data-go="258" data-cat="법적 효력">전자계약은 법적 효력이 있나요?</button></li>
+            <li><button class="fbox__q" type="button" data-go="260" data-cat="법적 효력">종이계약서와 전자계약서의 법적 효력에 차이가 있나요?</button></li>
+            <li><button class="fbox__q" type="button" data-go="263" data-cat="법적 효력">예스폼싸인에서 서명을 요청한 후 실제로 싸인을 한 것도 감사추적 인증서 발급이 가능한가요?</button></li>
+            <li><button class="fbox__q" type="button" data-go="264" data-cat="법적 효력">예스폼싸인에서 계약서 열람이 가능한가요?</button></li>
+            <li><button class="fbox__q" type="button" data-go="265" data-cat="법적 효력">예스폼싸인에서 만든 서명과 도장은 법적으로 효력이 있나요?</button></li>
+          </ul>
+        </div>
+      </div>
+      </div>
+      <div class="fpanel" role="tabpanel" data-panel="계정" aria-label="계정" hidden>
+        <div class="fgroup">
+          <h4 class="fgroup__title">계정관리</h4>
+          <ul class="flist">
+            <li class="fitem" data-id="213">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a213"><span class="fitem__text">예스폼 아이디로 예스폼싸인을 이용할 수 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a213" hidden><p><span class="fitem__a-mark">A.</span>기존에 사용하시던 예스폼 아이디와 비밀번호만으로 별도의 회원가입 절차 없이 즉시 예스폼싸인의 모든 기능을 이용할 수 있습니다.</p><p>특히 예스폼 프리미엄 회원의 경우 예스폼싸인 건수를 혜택으로 제공하고 있습니다.</p><p>회원 등급별로 서명 요청 가능한 혜택을 최대 240건을 제공하고 있으며, 기업이나 팀 단위로 계약 업무가 많은 환경에서도 예스폼 멤버십 혜택으로 안정적이고 효율적으로 이용이 가능합니다.</p></div>
+            </li>
+            <li class="fitem" data-id="214">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a214"><span class="fitem__text">로그인 아이디, 비밀번호를 잃어버렸습니다.</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a214" hidden><p><span class="fitem__a-mark">A.</span>예스폼 로그인 정보가 기억나지 않으실 경우,<br>상단 메뉴 [로그인] &gt; [아이디/비밀번호 찾기]를 클릭하여 로그인 정보를 찾으실 수 있습니다.</p><p>📍 아이디 찾기<br>가입 시 등록하신 이름과 이메일, 휴대폰 번호, 사업자 번호를 입력하시면 즉시 아이디를 확인할 수 있습니다.</p><p>📍 비밀번호 찾기<br>아이디와 본인 확인 정보를 입력하시면 등록된 이메일 또는 휴대폰 번호로 비밀번호 재설정 안내를 받아 새 비밀번호를 설정할 수 있습니다.</p><p>만약 위의 방법으로도 계정 확인이 어렵다면 예스폼싸인 <a class="faq__link" href="#">[고객센터] &gt; [문의하기]</a>로 문의 남겨주시면 빠르게 도와드리겠습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="215">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a215"><span class="fitem__text">하나의 계정으로 여러명이 계약을 진행해도 되나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a215" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 고객님의 계약 보안을 위해 계정 공유를 위해 엄격히 금지하고 있습니다.</p><p>회원 본인 명의 외 타인과 계정 정보를 공유할 경우, 개인정보 유출이나 계약 내용 노출 등 보안 사고가 발생할 수 있으며 예스폼싸인은 이에 대한 어떠한 책임을 지지 않습니다. 이는 예스폼싸인 이용 약관에 근거하는 내용으로 안전한 서비스 이용을 위해 반드시 본인 계정만 사용해주시기 바랍니다.</p></div>
+            </li>
+            <li class="fitem" data-id="216">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a216"><span class="fitem__text">하나의 이메일로 여러개의 아이디를 만들 수 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a216" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 하나의 이메일 주소로 여러 아이디를 생성할 수 있습니다.</p><p>단, 서비스 이용 시에는 이메일 인증이 완료된 아이디로만 계약을 진행하실 수 있으며, 하나의 이메일 당 한 아이디만 인증이 가능합니다.</p><p>계약의 보안과 신원 확인을 위한 정책이므로 반드시 이메일 인증을 완료한 후 서비스를 이용해주시기 바랍니다.</p></div>
+            </li>
+            <li class="fitem" data-id="217">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a217"><span class="fitem__text">계정이 해킹당한 것 같습니다.</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a217" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인 이용 중 회원님이 작성한 적이 없는 계약서, 서명, 도장 등 이상 로그인 기록을 발견하신 경우 예스폼싸인 <a class="faq__link" href="#">[고객센터] &gt; [문의하기]</a>로 문의 남겨주시면 빠르게 도와드리겠습니다.</p></div>
+            </li>
+          </ul>
+        </div>
+        <div class="fgroup">
+          <h4 class="fgroup__title">이메일인증</h4>
+          <ul class="flist">
+            <li class="fitem" data-id="218">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a218"><span class="fitem__text">이메일 인증은 필수로 진행해야하나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a218" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 아이디당 이메일 인증을 필수적으로 진행하고 있습니다.</p><p>이메일 인증은 계약서의 법적 효력을 보장하기 위한 수단이며 이메일 인증을 하지 않는 경우 계약서 건수 결제 및 예스폼 멤버십 결제는 가능하지만 예스폼싸인에서 계약 진행이 불가합니다. 계약의 안전한 법적 효력을 위해 이메일 인증을 필수로 진행해주시기 바랍니다.</p></div>
+            </li>
+            <li class="fitem" data-id="219">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a219"><span class="fitem__text">이메일 인증된 아이디를 바꾸고싶습니다.</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a219" hidden><p><span class="fitem__a-mark">A.</span>이메일 인증이 완료된 아이디의 이메일은 사용자가 임의로 수정할 수 없습니다.</p><p>인증된 이메일 변경을 원하시는 경우 <a class="faq__link" href="#">[고객센터] &gt; [문의하기]</a> 로 문의 남겨주시면 빠르게 도와드리겠습니다.</p></div>
+            </li>
+          </ul>
+        </div>
+        <div class="fgroup">
+          <h4 class="fgroup__title">탈퇴</h4>
+          <ul class="flist">
+            <li class="fitem" data-id="220">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a220"><span class="fitem__text">예스폼싸인 회원을 탈퇴하면 예스폼도 함께 탈퇴되나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a220" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 예스폼 이용 약관 제 2-1조 &#x27;약관의 적용범위&#x27; 에 따라 일부 내용을 제외 동일한 이용 약관과 운영 정책이 적용되고 있습니다.</p><p>예스폼싸인 서비스 탈퇴할 경우 예스폼 패밀리 사이트의 다른 서비스도 함께 탈퇴 처리 되므로, 각 사이트의 환불 정책을 참고하여 신중하게 회원 탈퇴를 진행해주시기 바랍니다.</p></div>
+            </li>
+            <li class="fitem" data-id="221">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a221"><span class="fitem__text">탈퇴 시 결제 금액은 어떻게 되나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a221" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인 서비스 탈퇴 시 환불 절차를 진행하지 않을 시 모든 결제 금액은 그대로 소멸됩니다.</p><p>소멸된 금액은 복구가 불가능하므로 서비스 탈퇴 전 정확한 환불 금액과 절차를 <a class="faq__link" href="#">[고객센터] &gt; [문의하기]</a> 를 통해 안내 받으시기 바랍니다. 환불 신청 시 계정 정보와 결제 내역을 함께 확인하시면 보다 빠르게 처리됩니다.</p></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="fpanel" role="tabpanel" data-panel="이용 요금" aria-label="이용 요금" hidden>
+        <div class="fgroup">
+          <h4 class="fgroup__title">요금제 안내</h4>
+          <ul class="flist">
+            <li class="fitem" data-id="222">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a222"><span class="fitem__text">예스폼싸인 계약 1건당 비용은 얼마인가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a222" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 계약 1건 진행하는 최소 비용은 1건당 400원입니다.<br>계약 건수, 서비스 옵션, 추가 기능 이용 여부에 따라 요금이 달라질 수 있으며, 자세한 요금 정보와 결제 방식은 [이용요금] 페이지에서 확인하실 수 있습니다.<br><br><a class="faq__link" href="#">📌 이용요금 자세히 보기 &gt;</a><br><br>또한 예스폼 프리미엄 회원의 경우에는 계약을 진행할 수 있는 예스폼싸인 건수 혜택이 제공되므로 예스폼 문서와 함께 전자 계약을 같이 사용하고 싶으신 경우 프리미엄 가입으로 효율적인 비용으로 예스폼의 서비스를 이용할 수 있습니다.</p><p><a class="faq__link" href="#">📌 예스폼 이용요금 자세히 보기 &gt;</a></p></div>
+            </li>
+            <li class="fitem" data-id="223">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a223"><span class="fitem__text">계약 건수를 추가로 구매할 수 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a223" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 필요에 따라 계약 건수를 추가로 구매할 수 있습니다.<br>사용 중인 요금제 이상 계약 건수가 필요할 경우 로그인 후 [회원정보 관리] &gt; [결제 관리] 에서 간편하게 구매가 가능합니다.</p><p>추가 구매 시에도 기존 요금제와 동일하게 건수 별 할인 혜택이 적용되므로 사용량에 맞춰 효율적으로 계약을 진행할 수 있습니다.<br>또한, 구매한 계약 건수는 결제일로부터 1년 동안 유효하여 기간 내 자유롭게 이용 가능합니다.</p><p>보다 자세한 요금 정보와 구매 방법은 예스폼싸인 [이용요금] 에서 확인하실 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="224">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a224"><span class="fitem__text">예스폼 멤버십을 이용 중인데 건수 추가 구매가 가능한가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a224" hidden><p><span class="fitem__a-mark">A.</span>예스폼 멤버십에서 제공된 기본 계약 건수를 모두 소진한 경우, 건수를 추가로 구매하실 수 있습니다.</p><p>추가 구매는 로그인 후 [대시보드 &gt; 요금제 구매] 메뉴를 통해 간편하게 진행할 수 있으며, 건수별 할인 혜택이 동일하게 적용됩니다.<br>구매한 계약 건수는 결제일로부터 1년간 유효하여 기간 내 자유롭게 사용할 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="225">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a225"><span class="fitem__text">기간이 다른 요금제를 보유하고 있으면 어떤 순서로 차감되나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a225" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인 계약 횟수 차감 순서는 다음과 같습니다.</p><p>1. 예스폼 멤버십 건수 : 예스폼에서 결제한 멤버십에서 제공하는 건수<br>2. 예스폼싸인 건수 : 예스폼싸인의 사용량 맞춤 요금제의 건수</p><p>예스폼싸인에서 제공하는 무료 건수는 멤버십 또는 요금제를 결제하신 경우 소멸됩니다.</p></div>
+            </li>
+            <li class="fitem" data-id="226">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a226"><span class="fitem__text">결제가 중복으로 처리되었습니다.</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a226" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인 사용량 맞춤 요금제 결제 중 중복 결제가 발생한 경우 <a class="faq__link" href="#">[고객센터] &gt; [문의하기]</a> 로 문의 남겨주시면 빠르게 도와드리겠습니다.</p></div>
+            </li>
+          </ul>
+        </div>
+        <div class="fgroup">
+          <h4 class="fgroup__title">결제</h4>
+          <ul class="flist">
+            <li class="fitem" data-id="227">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a227"><span class="fitem__text">결제 내역은 어디서 확인할 수 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a227" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인 사용량 맞춤 요금제 결제 완료 후 결제 내역 확인을 원하시면, [마이페이지] &gt; [회원정보 관리] &gt; [결제 관리] 에서 결제한 요금제 목록을 확인할 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="228">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a228"><span class="fitem__text">세금계산서나 영수증은 어디서 받을 수 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a228" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인 사용량 맞춤 요금제 결제한 세금 계산서나 영수증 확인을 원하시면, [마이페이지] &gt; [회원정보 관리] &gt; [결제 관리] 에서 결제한 요금제 목록을 확인할 수 있습니다.</p></div>
+            </li>
+          </ul>
+        </div>
+        <div class="fgroup">
+          <h4 class="fgroup__title">환불</h4>
+          <ul class="flist">
+            <li class="fitem" data-id="229">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a229"><span class="fitem__text">사용하지 않은 요금제는 환불이 가능한가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a229" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 사용하지 않은 계약 건수에 대해 환불이 가능합니다.<br>환불 기한은 요금제 소멸 기한인 1년 이내, 정확한 환불 금액과 절차는 <a class="faq__link" href="#">[고객센터] &gt; [문의하기]</a>로 문의 남겨주시면 빠르게 도와드리겠습니다.<br>환불 신청 시 계정 정보와 결제 내역을 함께 확인해주시면 보다 빠르게 처리됩니다.</p></div>
+            </li>
+            <li class="fitem" data-id="230">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a230"><span class="fitem__text">일부 건수만 사용했는데 환불이 가능한가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a230" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 사용하지 않은 계약 건수에 대해 부분 환불이 가능합니다.<br>환불 금액은 사용한 건수당 1,500원이 차감된 후 계산됩니다.<br>즉, 사용하신 계약 건수만큼 비용을 제외한 나머지 금액이 환불됩니다.</p><p>정확한 환불 금액과 절차는 <a class="faq__link" href="#">[고객센터] &gt; [문의하기]</a> 로 문의 남겨주시면 빠르게 도와드리겠습니다.<br>환불 신청 시 계정 정보와 결제 내역을 함께 확인해주시면 보다 빠르게 처리됩니다.</p></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="fpanel" role="tabpanel" data-panel="자료실" aria-label="자료실" hidden>
+        <div class="fgroup">
+          <h4 class="fgroup__title">계약서</h4>
+          <ul class="flist">
+            <li class="fitem" data-id="231">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a231"><span class="fitem__text">예스폼싸인에서 제공되는 계약서는 무료로 사용 가능한가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a231" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 약 240여 건의 다양한 계약서 서식을 무료로 제공하고 있습니다.<br>회원 가입만 하면 별도의 비용 부담 없이 누구나 자유롭게 이용할 수 있으며 계약서 작성 시 바로 적용할 수 있는 템플릿 형태로 제공되어 작성 시간을 크게 단축할 수 있습니다.</p><p>무료 제공 서식은 일반적인 거래계약서, 용역계약서, 임대차계약서, NDA(비밀유지계약서) 등 다양한 분야를 포함하고 있어 다양한 비즈니스 상황에 바로 활용할 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="232">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a232"><span class="fitem__text">제공된 서식 외에도 문서를 사용할 수 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a232" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 제공 중인 무료 계약서 외에도 직접 준비한 계약서로도 계약이 가능합니다.</p><p>예스폼싸인에서는 약 회원 가입만 해도 240건 이상의 무료 계약서를 제공하며 변환 후에도 문제 없이 계약 진행이 가능합니다.<br><a class="faq__link" href="#">📌 문서/계약 자료실 바로가기 &gt;</a></p><p>더 다양한 계약서와 계약서 작성 예시를 보고 싶다면 예스폼에서 다양한 계약서 양식과 작성 가이드로 간편한 계약을 진행해보세요!<br><a class="faq__link" href="#">📌 예스폼 계약서 바로가기 &gt;</a></p></div>
+            </li>
+            <li class="fitem" data-id="233">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a233"><span class="fitem__text">예스폼 문서를 예스폼싸인에서도 사용 가능한가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a233" hidden><p><span class="fitem__a-mark">A.</span>예스폼에서 다운로드한 계약서는 예스폼싸인에서 사용 가능합니다.</p><p>그 외에도 기존에 보유하고 사용하시던 계약서를 업로드하여 간편하게 계약을 진행할 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="234">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a234"><span class="fitem__text">등록할 수 있는 문서 형식은 어떤게 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a234" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 파일 업로드 후 PDF로 변환하는 형식으로 계약서를 변환하여 보관하고 있습니다.</p><p>변환에 지원되는 파일 형식은 hwp, doc, docx, xls, xlsx, ppt, pptx, pdf, jpg, jpeg, png 등 지원이 가능하며 지원되는 형식의 파일이 정상적으로 업로드가 되지 않는 파일의 경우 <a class="faq__link" href="#">[고객센터] &gt; [문의하기]</a> 로 문의 남겨주시면 빠르게 도와드리겠습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="235">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a235"><span class="fitem__text">계약서 등록 시 문서가 깨져서 나옵니다.</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a235" hidden><p><span class="fitem__a-mark">A.</span>계약서를 변환하는 과정에서 일부 문서가 깨지는 현상이 발생할 수 있습니다.</p><p>이는 폰트 매칭 오류나 문서 자체 문제로 인해 변환이 정상적으로 이루어지지 않을 수 있기 때문입니다.<br>문서 내용을 확인한 후 다시 시도해주시고, 동일한 문제가 반복될 경우 다른 계약서로 변경해주시기 바랍니다.</p></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="fpanel" role="tabpanel" data-panel="서명 만들기" aria-label="서명 만들기" hidden>
+        <div class="fgroup">
+          <h4 class="fgroup__title">도장</h4>
+          <ul class="flist">
+            <li class="fitem" data-id="236">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a236"><span class="fitem__text">도장에 특수문자를 넣을 수 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a236" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인에서 제공되는 전자 도장에는 특수문자를 입력할 수 없습니다.<br>도장은 기본적으로 한글, 영어, 숫자만 지원하며 안전하고 표준화된 서명 환경을 위해 특수문자나 이모지 등의 사용이 제한됩니다.</p></div>
+            </li>
+            <li class="fitem" data-id="237">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a237"><span class="fitem__text">법인 도장 만들때 가운데 대표이사 대신 다른 글자를 넣을 수 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a237" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인에서 제공하는 법인 도장 서비스는 법적 효력이 발생할 수 있도록 표준 형식에 맞춰 제작됩니다.</p><p>법인 도장의 중앙에는 반드시 &#x27;대표이사&#x27;(또는 한자 &#x27;代表理事&#x27;)가 표시되어야 합니다. 회사의 대표성을 증명하는 공식 도장으로, 등기소에도 이 표기가 찍힌 도장으로 신고해야 효력이 있습니다. 따라서 &#x27;대표이사&#x27; 외에 다른 단어나 직위가 들어가면 법인 인감으로 인정되지 않아 각종 계약/공문 등에서 법적 효력이 제한될 수 있습니다.</p></div>
+            </li>
+          </ul>
+        </div>
+        <div class="fgroup">
+          <h4 class="fgroup__title">싸인</h4>
+          <ul class="flist">
+            <li class="fitem" data-id="238">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a238"><span class="fitem__text">도장이 없는데, 직접 서명만으로 계약이 가능한가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a238" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 실제 도장이 없어도 직접 서명만으로도 종이 계약서에 실제로 서명한 것과 동일하게 효력이 인정됩니다.<br>따라서 직접 서명만으로도 언제든지 예스폼싸인 내에서 손쉽게 계약이 가능합니다.</p></div>
+            </li>
+            <li class="fitem" data-id="239">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a239"><span class="fitem__text">제가 만든 싸인은 어디서 확인 가능한가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a239" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인에서 직접 만든 전자 서명(싸인)은 로그인 후 [마이페이지] &gt; [서명관리]에 접속하면 지금까지 생성한 모든 전자 서명과 도장 내역을 한눈에 확인하고 수정, 삭제할 수 있습니다.<br>필요 시 새로운 서명을 추가하거나 기존 서명을 업데이트하여 최신 상태로 유지할 수 있습니다.</p></div>
+            </li>
+          </ul>
+        </div>
+        <div class="fgroup">
+          <h4 class="fgroup__title">이미지 업로드</h4>
+          <ul class="flist">
+            <li class="fitem" data-id="240">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a240"><span class="fitem__text">이미 가지고 있는 서명 이미지를 사용할 수 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a240" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인에서 기존에 사용하던 이미지를 업로드 후 사이즈 조절, 회전, 대비 변경, 간단한 변경 및 사용이 가능합니다.</p></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="fpanel" role="tabpanel" data-panel="계약하기" aria-label="계약하기" hidden>
+        <div class="fgroup">
+          <h4 class="fgroup__title">계약 요청</h4>
+          <ul class="flist">
+            <li class="fitem" data-id="241">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a241"><span class="fitem__text">계약 요청하려면 로그인 해야하나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a241" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인에서 계약을 요청하려는 서명 요청자인 경우 로그인이 필수적으로 진행되어야 합니다.</p><p>회원가입이 필요한 경우 [회원가입] 을 통해 가입 진행 후 계약을 진행해 주세요.</p></div>
+            </li>
+            <li class="fitem" data-id="242">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a242"><span class="fitem__text">계약 요청은 1명당 1건이 차감되나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a242" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인 계약 요청은 1건 당 1회씩 차감됩니다.<br>건 당 계약 가능한 최대 인원수는 10명입니다.<br>&quot;나를 서명 참여자로 추가&quot; 기능을 사용하는 경우 나 포함 10명까지 계약 진행이 가능합니다.</p></div>
+            </li>
+            <li class="fitem" data-id="243">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a243"><span class="fitem__text">최대 몇명까지 한번에 계약할 수 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a243" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인 계약은 건 당 최대 10명까지 서명을 진행할 수 있습니다.<br>계약 요청 시 계약 건수는 1회씩 차감됩니다.</p></div>
+            </li>
+            <li class="fitem" data-id="244">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a244"><span class="fitem__text">계약 요청 시 필요한 계약서는 직접 준비해야하나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a244" hidden><p><span class="fitem__a-mark">A.</span>계약 요청 시 필요한 계약서를 보유 중인 계약서로 계약도 가능합니다.</p><p>예스폼싸인에서는 약 회원 가입만 해도 240건 이상의 무료 계약서를 제공하며 변환 후에도 문제 없이 계약 진행이 가능합니다.<br><a class="faq__link" href="#">📌 문서/계약 자료실 바로가기 &gt;</a></p><p>더 다양한 계약서와 계약서 작성 예시를 보고 싶다면 예스폼에서 다양한 계약서 양식과 작성 가이드로 간편한 계약을 진행해보세요!<br><a class="faq__link" href="#">📌 예스폼 계약서 바로가기 &gt;</a></p></div>
+            </li>
+            <li class="fitem" data-id="245">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a245"><span class="fitem__text">한번에 여러개의 문서 서명을 요청할 수 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a245" hidden><p><span class="fitem__a-mark">A.</span>한 번에 여러 개의 문서 서명을 요청할 수 있습니다.</p><p>단, 여러 개의 문서는 모든 서명 참여자에게 동일하게 보여지므로 서명 참여자별로 적절한 문서로 계약을 요청해 주세요.</p></div>
+            </li>
+            <li class="fitem" data-id="246">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a246"><span class="fitem__text">계약 요청 시 개인정보를 꼭 입력해야하나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a246" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 계약 당사자의 정확한 신원 확인과 법적 분쟁 예방을 위해 최소한의 개인정보 입력이 필요합니다. 입력된 정보는 본인 인증 및 법적 증거로 활용되며 외부에 공개되지 않고 안전하게 보호 됩니다.</p><p>정확한 정보 입력 시 추후 서류 발급, 분쟁 시 증거 활용 등에서 불이익이 발생하지 않으니 반드시 실제 개인정보를 입력하여 계약을 진행해 주세요.</p></div>
+            </li>
+            <li class="fitem" data-id="247">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a247"><span class="fitem__text">계약 요청 시 실명 대신 닉네임을 써도 되나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a247" hidden><p><span class="fitem__a-mark">A.</span>계약 요청 시 실명 대신 닉네임을 사용할 경우, 추후 법적 분쟁에서의 신원 확인이 어려워 법적 효력이 약해질 수 있습니다.</p><p>예스폼싸인에서는 계약 당사자임을 명확히 입증할 수 있도록 반드시 실명을 사용하여 계약 요청해 주시기를 권장합니다.</p></div>
+            </li>
+            <li class="fitem" data-id="248">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a248"><span class="fitem__text">추가 인증을 잘못 입력한 채 계약을 요청했습니다.</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a248" hidden><p><span class="fitem__a-mark">A.</span>계약 요청 시 등록한 추가 인증은 서명 요청자와 서명 참여자 간의 인증으로 예스폼싸인에서 내부적으로 확인이 어렵습니다.</p><p>추가 인증을 잊어버린 경우에는 계약 요청 취소한 뒤 다시 계약 요청을 진행해주세요.</p><p>계약 취소 시 차감 된 건수는 반환이 불가하니, 추가 인증 요청 시 인증 암호를 한번 더 확인 부탁드리겠습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="249">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a249"><span class="fitem__text">계약 시 상대방에게 추가로 문서를 요청하고싶습니다.</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a249" hidden><p><span class="fitem__a-mark">A.</span>계약 요청 시 [첨부파일 요청] 버튼을 통해 서명 요청자에게 문서를 요청할 수 있습니다.</p><p>예스폼싸인에서 계약 진행 시 서명 참여자별로 첨부파일을 요청할 수 있으며, 필수 여부를 선택해 계약에 필요한 문서를 수집할 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="269">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a269"><span class="fitem__text">서명 순서를 지정하는 것과 지정하지 않는 것의 차이가 무엇인가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a269" hidden><p><span class="fitem__a-mark">A.</span>서명 순서를 지정하면 참여자가 설정한 순서에 따라 차례대로 계약을 진행합니다.<br>이전 참여자의 서명이 완료된 후 다음 참여자에게 서명 요청 알림이 발송되므로, 검토 및 승인 절차가 필요한 계약에 활용할 수 있습니다.</p><p>서명 순서 없이 진행 시 모든 참여자에게 계약 요청 알림이 동시에 발송됩니다.<br>참여자별 서명 완료 순서와 관계없이 각자 가능한 시점에 계약을 확인하고 서명할 수 있어, 빠른 계약 진행이 필요한 경우에 적합합니다.</p><p>계약을 요청하려는 방식에 따라 계약 내용 확인 후 담당자 승인, 최종 결재 등 순서가 필요한 계약은 순차 서명을, 참여자 모두가 같은 시점에 계약을 확인하고 서명해도 되는 경우에는 순서 없이 서명으로 계약을 진행해 주세요.</p></div>
+            </li>
+          </ul>
+        </div>
+        <div class="fgroup">
+          <h4 class="fgroup__title">서명 참여</h4>
+          <ul class="flist">
+            <li class="fitem" data-id="250">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a250"><span class="fitem__text">서명하려면 로그인은 필수인가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a250" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 비회원도 서명에 참여하실 수 있습니다.</p><p>서명 요청 알람을 수신한 경우, 별도의 예스폼 계정 없이 링크를 통해 서명할 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="251">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a251"><span class="fitem__text">서명 참여자도 건수가 차감되나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a251" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 비회원도 서명에 참여하실 수 있습니다.</p><p>서명 참여자는 별도의 건수 차감 없이 서명 진행이 가능합니다.</p></div>
+            </li>
+            <li class="fitem" data-id="252">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a252"><span class="fitem__text">계약서가 잠겨있는데 비밀번호를 모릅니다.</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a252" hidden><p><span class="fitem__a-mark">A.</span>계약 요청 시 등록한 추가 인증은 서명 요청자와 서명 참여자 간의 인증으로 서명 요청자에게 별도 문의하시기 바랍니다.</p><p>추가 인증이 전달되기 전 암호를 잊어버린 경우 예스폼싸인에서는 확인이 불가능하므로 서명 요청자에게 새 계약서로 다시 요청해 주시기 바랍니다.</p></div>
+            </li>
+            <li class="fitem" data-id="253">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a253"><span class="fitem__text">계약서를 열었는데 &#x27;이미 취소된 계약&#x27;이라고 뜹니다.</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a253" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인에서 요청된 계약의 경우 서명 참여자가 최대 10명까지 가능합니다.</p><p>계약이 취소된 경우 본인을 제외한 서명 요청자 또는 다른 서명 참여자가 취소했을 수 있으므로 서명 요청자에게 문의해주세요.</p></div>
+            </li>
+            <li class="fitem" data-id="254">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a254"><span class="fitem__text">실수로 서명을 거절했습니다.</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a254" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인에서 요청된 계약의 경우 서명 참여자가 최대 10명까지 가능합니다.</p><p>계약이 취소되면 모든 서명 참여자의 계약도 함께 종료되므로 취소 사유를 서명 요청자에게 확인한 후 새 계약서로 다시 진행해 주세요.</p></div>
+            </li>
+          </ul>
+        </div>
+        <div class="fgroup">
+          <h4 class="fgroup__title">계약 완료</h4>
+          <ul class="flist">
+            <li class="fitem" data-id="255">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a255"><span class="fitem__text">계약이 완료되면 알람이 따로 오나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a255" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 계약이 완료되면 메일과 알림톡을 통해 즉시 안내되므로 별도로 확인하지 않아도 진행 상황을 바로 파악할 수 있습니다.</p><p>* 메일 안내 : 계약이 완료되는 즉시 등록된 이메일로 완료 사실과 계약서 확인 링크가 전송됩니다.<br>* 알림톡 안내 : 휴대폰 번호가 등록되어 있는 경우, 카카오톡 알림톡을 통해서도 계약 완료 안내를 받을 수 있습니다.<br>* 계약 내역 확인: 발신자와 수신자는 모두 로그인 후 마이페이지 &gt; 계약관리에서 계약 상태와 완료된 문서를 확인할 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="256">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a256"><span class="fitem__text">모든 인원이 서명을 완료했다는데 감사추적인증서가 발급이 안되었습니다.</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a256" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 모든 인원이 서명을 완료 후 PDF 병합이 완료가 된 시점에 메일과 알림톡을 통해 즉시 안내됩니다.</p><p>만약 완료 안내에 대한 별도의 알림 및 상태 변경이 없다면 모든 인원의 서명을 완료했는지 확인 후 모든 인원의 서명이 완료된 상태인 경우 <a class="faq__link" href="#">[고객센터] &gt; [문의하기]</a> 로 문의 남겨주시면 빠르게 도와드리겠습니다.</p></div>
+            </li>
+          </ul>
+        </div>
+        <div class="fgroup">
+          <h4 class="fgroup__title">알림</h4>
+          <ul class="flist">
+            <li class="fitem" data-id="257">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a257"><span class="fitem__text">계약관련 알림이 오지않았습니다.</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a257" hidden><p><span class="fitem__a-mark">A.</span>간혹 예스폼싸인에서 발송되는 계약 완료 알림이 메일함 대신 스팸함으로 분류될 수 있습니다. 먼저 스팸메일함을 확인해 주세요.</p><p>만약 스팸메일함에도 알림이 없다면 등록하신 이메일 정보가 정확한지 확인 부탁드리겠습니다.</p><p>또한, 알림톡을 통해서도 안내를 받을 수 있으므로 휴대폰 번호 등록 여부와 정보를 함께 확인하시면 보다 안전하게 계약 완료 알림을 받을 수 있습니다.</p><p>이후에도 문제가 계속된다면 <a class="faq__link" href="#">[고객센터] &gt; [문의하기]</a> 로 문의 남겨주시면 빠르게 도와드리겠습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="270">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a270"><span class="fitem__text">계약 알림을 실수로 삭제했습니다.</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a270" hidden><p><span class="fitem__a-mark">A.</span>계약 관련 알림을 실수로 삭제한 경우, [계약 재발송] 기능을 통해 서명 참여자에게 알림을 다시 발송할 수 있습니다.</p><p>재발송 후에도 알림을 받지 못한 경우 스팸 메일함, 등록된 이메일 주소 및 휴대폰 번호를 확인해 주세요. 이후에도 문제가 지속되면 <a class="faq__link" href="#">[고객센터] &gt; [문의하기]</a>로 문의해 주시면 빠르게 도와드리겠습니다.</p></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="fpanel" role="tabpanel" data-panel="법적 효력" aria-label="법적 효력" hidden>
+        <div class="fgroup">
+          <h4 class="fgroup__title">전자계약 법적 효력</h4>
+          <ul class="flist">
+            <li class="fitem" data-id="258">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a258"><span class="fitem__text">전자계약은 법적 효력이 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a258" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인에서 체결된 모든 전자계약은 「전자문서 및 전자거래 기본법」 제4조 제1항 및 「전자서명법」 제3조 제1항에 근거하여, 종이 계약서와 동일한 법적 효력을 인정받습니다.<br>전자문서는 전자적 형태라는 이유만으로 법적 효력이 부인되지 않으며, 전자서명 역시 서명 및 날인과 동일한 효력으로 인정됩니다.</p><p>따라서 예스폼싸인에서 작성·체결한 계약서와 전자서명은 대한민국 법령에 따라 안전하게 법적 효력을 발휘하므로, 안심하고 서비스를 이용하실 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="259">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a259"><span class="fitem__text">전자계약에서 본인확인은 어떻게 이루어지며, 증거력은 충분한가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a259" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 전자계약 과정에서 본인 명의의 휴대폰 번호 인증, 이메일 인증 등 다양한 본인확인 절차를 통해 계약 당사자의 신원을 정확하게 확인합니다.<br>계약 체결 시 입력되는 서명 정보뿐만 아니라 본인 명의로 인증된 연락처 정보, 계약서 열람 및 서명 시간, IP 주소 등의 인증 로그와 계약서 데이터가 안전하게 기록 및 보관됩니다.</p><p>이러한 데이터와 인증 기록은 만약 분쟁이 발생할 경우 법적 증거 자료로 활용되며, 전자계약의 진정성을 입증하는 핵심 자료가 됩니다.<br>즉, 예스폼싸인에서 이뤄진 전자계약은 본인확인 절차와 전자적 데이터 관리 체계를 통해 법원 등에서도 충분한 증거력과 신뢰성을 인정받을 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="260">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a260"><span class="fitem__text">종이계약서와 전자계약서의 법적 효력에 차이가 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a260" hidden><p><span class="fitem__a-mark">A.</span>법적으로 계약 당사자의 의사 합치가 확인될 수 있다면 종이계약서와 전자계약서 모두 동일한 법적 효력을 갖습니다.</p><p>* 민법상 계약 원칙 : 민법의 낙성불요식(契約成立에 형식 필요 없음) 원칙에 따라 계약은 당사자 간 합의만으로 성립하며, 계약서의 형태에 제한이 없습니다.<br>* 전자계약서 효력 : 전자계약서는 서명, 인증, 기록 보관 등을 통해 계약 당사자의 합의와 책임이 명확히 확인되므로 종이계약서와 동일하게 법적 효력을 인정받습니다.<br>* 증거 효력 : 법적 분쟁 시에도 전자계약서는 원본 증거로서 효력을 가지며 위·변조 방지와 기록 보관 기능을 통해 안전하게 계약 내용을 증명할 수 있습니다.</p><p>즉, 전자계약서도 종이계약서와 동일하게 법적 효력을 보장받으므로 시간과 장소에 구애받지 않고 안전하게 계약을 체결할 수 있습니다.</p></div>
+            </li>
+          </ul>
+        </div>
+        <div class="fgroup">
+          <h4 class="fgroup__title">감사 추적 인증서</h4>
+          <ul class="flist">
+            <li class="fitem" data-id="261">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a261"><span class="fitem__text">감사추적인증서가 무엇인가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a261" hidden><p><span class="fitem__a-mark">A.</span>감사추적인증서는 예스폼싸인에서 전자계약이 진행되는 모든 과정(문서 열람, 서명, 전송, 완료 등)에 대한 상세 이력이 자동으로 기록된 전자적 인증서입니다.</p><p>이 인증서에는 문서의 작성자, 참여자, 서명 일시, 문서 처리 단계별 시간, IP 주소, 본인확인 정보 등 주요 정보가 포함되어 있어, 누가 언제 어떤 환경에서 어떤 활동(열람, 동의, 서명 등)을 했는지 한눈에 확인할 수 있습니다.</p><p>감사추적인증서는 아래와 같은 역할을 합니다.<br>1. 계약의 모든 과정을 투명하게 추적하여 위·변조 위험을 방지합니다.<br>2. 분쟁 발생 시 법적 증거로 활용되어 계약의 진위를 입증합니다.<br>3. 사소한 변경이나 문서 활동까지 모두 기록하기 때문에, 종이 계약 이상의 신뢰성과 보안성을 제공합니다.</p><p>예스폼싸인에서는 계약이 완료 후 감사추적인증서를 문서와 함께 다운로드하거나, 서명 참여자에게 자동으로 발송하여 언제든 쉽게 확인할 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="262">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a262"><span class="fitem__text">감사추적인증서는 발급되나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a262" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 모든 서명이 완료되면 감사추적인증서가 자동으로 발급되며 계약 요청 시 등록하신 이메일 또는 휴대폰 번호로 인증서가 전송됩니다.</p><p>감사추적인증서는 계약서의 서명 완료 기록을 증명할 수 있는 문서로 내부 감사나 법적 증빙 자료로 활용 가능합니다.<br>만약 서명이 완료되었음에도 감사추적인증서를 받지 못한 경우, 예스폼 고객센터로 문의하시면 빠르게 확인 및 재발급 지원을 받을 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="263">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a263"><span class="fitem__text">예스폼싸인에서 서명을 요청한 후 실제로 싸인을 한 것도 감사추적 인증서 발급이 가능한가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a263" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인에서 계약을 요청 한 후 대면으로 수기 서명이 진행된 경우는 감사추적인증서 발행이 불가합니다.</p><p>감사 추적인증서란 계약의 진행과정과 참여자 정보를 시간순으로 기록한 인증서로 사이트 내를 통한 계약을 요청 후 요청한 계약서를 예스폼싸인을 통해서 서명이 완료된 경우에만 감사 추적인증서를 발행할 수 있습니다.</p></div>
+            </li>
+          </ul>
+        </div>
+        <div class="fgroup">
+          <h4 class="fgroup__title">보안</h4>
+          <ul class="flist">
+            <li class="fitem" data-id="264">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a264"><span class="fitem__text">예스폼싸인에서 계약서 열람이 가능한가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a264" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인의 관리자는 서비스 관리·운영만 담당을 하며 고객이 직접 작성하고 체결한 계약서의 상세 내용은 절대 열람할 수 없습니다.<br>모든 계약서와 개인정보, 서명 데이터는 법률에 따라 안전하게 암호화·분리 저장되며, 본인 인증을 거친 당사자만 해당 계약서에 접근이 가능합니다.</p><p>예스폼싸인 관리자는 단순 서비스 운영 및 기술적 지원 업무만 수행할 뿐 고객 개별 계약 내용이나 파일, 작성 내역에는 접근 권한이 없습니다.<br>따라서 고객님이 작성하신 계약서의 보안은 철저히 보호되니 안심하시고 서비스를 이용하실 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="265">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a265"><span class="fitem__text">예스폼싸인에서 만든 서명과 도장은 법적으로 효력이 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a265" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인에서 만든 서명과 도장은 「전자문서 및 전자거래 기본법」과 「전자서명법」에 따라 종이 계약서에 직접 서명하거나 도장(날인)한 것과 동일한 법적 효력을 가집니다.<br>전자적 형태라는 이유만으로 효력이 부인되지 않으니, 안심하고 전자계약 서비스를 이용하실 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="266">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a266"><span class="fitem__text">누군가 제 도장이나 서명을 모방해서 계약이 가능한가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a266" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 계약 체결 시 본인명의 인증(휴대폰 인증, 인증암호, IP 등)과 함께 서명·도장 등록 및 사용 내역 등 모든 활동이 상세히 기록되어 있습니다.</p><p>타인이 도장이나 서명 이미지를 임의로 모방해 계약을 시도하더라도, 본인 확인 절차(휴대폰·인증 암호 등)를 통과하지 않으면 실제 계약이 성립될 수 없습니다. 또한 계약 체결 과정과 관련된 모든 인증 및 감사추적 기록(서명 시점, 인증 방법, IP, 접속 환경 등)이 남기 때문에 모방이나 위·변조 시도 역시 즉시 식별 및 대응이 가능합니다.</p><p>혹시 부정한 접근이나 위변조 의심 사례가 발생한 경우, 신속히 <a class="faq__link" href="#">[고객센터] &gt; [문의하기]</a>로 문의 남겨주시면 빠르게 도와드리겠습니다.</p></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="fpanel" role="tabpanel" data-panel="검색" aria-label="검색 결과" hidden>
+        <div class="fgroup">
+          <h4 class="fgroup__title" data-search-title>검색 결과</h4>
+          <ul class="flist" data-search-list>
+            <li class="fitem" data-id="213">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a213s"><span class="fitem__text"><span class="fitem__cat">[계정]</span>예스폼 아이디로 예스폼싸인을 이용할 수 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a213s" hidden><p><span class="fitem__a-mark">A.</span>기존에 사용하시던 예스폼 아이디와 비밀번호만으로 별도의 회원가입 절차 없이 즉시 예스폼싸인의 모든 기능을 이용할 수 있습니다.</p><p>특히 예스폼 프리미엄 회원의 경우 예스폼싸인 건수를 혜택으로 제공하고 있습니다.</p><p>회원 등급별로 서명 요청 가능한 혜택을 최대 240건을 제공하고 있으며, 기업이나 팀 단위로 계약 업무가 많은 환경에서도 예스폼 멤버십 혜택으로 안정적이고 효율적으로 이용이 가능합니다.</p></div>
+            </li>
+            <li class="fitem" data-id="214">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a214s"><span class="fitem__text"><span class="fitem__cat">[계정]</span>로그인 아이디, 비밀번호를 잃어버렸습니다.</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a214s" hidden><p><span class="fitem__a-mark">A.</span>예스폼 로그인 정보가 기억나지 않으실 경우,<br>상단 메뉴 [로그인] &gt; [아이디/비밀번호 찾기]를 클릭하여 로그인 정보를 찾으실 수 있습니다.</p><p>📍 아이디 찾기<br>가입 시 등록하신 이름과 이메일, 휴대폰 번호, 사업자 번호를 입력하시면 즉시 아이디를 확인할 수 있습니다.</p><p>📍 비밀번호 찾기<br>아이디와 본인 확인 정보를 입력하시면 등록된 이메일 또는 휴대폰 번호로 비밀번호 재설정 안내를 받아 새 비밀번호를 설정할 수 있습니다.</p><p>만약 위의 방법으로도 계정 확인이 어렵다면 예스폼싸인 <a class="faq__link" href="#">[고객센터] &gt; [문의하기]</a>로 문의 남겨주시면 빠르게 도와드리겠습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="215">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a215s"><span class="fitem__text"><span class="fitem__cat">[계정]</span>하나의 계정으로 여러명이 계약을 진행해도 되나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a215s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 고객님의 계약 보안을 위해 계정 공유를 위해 엄격히 금지하고 있습니다.</p><p>회원 본인 명의 외 타인과 계정 정보를 공유할 경우, 개인정보 유출이나 계약 내용 노출 등 보안 사고가 발생할 수 있으며 예스폼싸인은 이에 대한 어떠한 책임을 지지 않습니다. 이는 예스폼싸인 이용 약관에 근거하는 내용으로 안전한 서비스 이용을 위해 반드시 본인 계정만 사용해주시기 바랍니다.</p></div>
+            </li>
+            <li class="fitem" data-id="216">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a216s"><span class="fitem__text"><span class="fitem__cat">[계정]</span>하나의 이메일로 여러개의 아이디를 만들 수 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a216s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 하나의 이메일 주소로 여러 아이디를 생성할 수 있습니다.</p><p>단, 서비스 이용 시에는 이메일 인증이 완료된 아이디로만 계약을 진행하실 수 있으며, 하나의 이메일 당 한 아이디만 인증이 가능합니다.</p><p>계약의 보안과 신원 확인을 위한 정책이므로 반드시 이메일 인증을 완료한 후 서비스를 이용해주시기 바랍니다.</p></div>
+            </li>
+            <li class="fitem" data-id="217">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a217s"><span class="fitem__text"><span class="fitem__cat">[계정]</span>계정이 해킹당한 것 같습니다.</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a217s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인 이용 중 회원님이 작성한 적이 없는 계약서, 서명, 도장 등 이상 로그인 기록을 발견하신 경우 예스폼싸인 <a class="faq__link" href="#">[고객센터] &gt; [문의하기]</a>로 문의 남겨주시면 빠르게 도와드리겠습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="218">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a218s"><span class="fitem__text"><span class="fitem__cat">[계정]</span>이메일 인증은 필수로 진행해야하나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a218s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 아이디당 이메일 인증을 필수적으로 진행하고 있습니다.</p><p>이메일 인증은 계약서의 법적 효력을 보장하기 위한 수단이며 이메일 인증을 하지 않는 경우 계약서 건수 결제 및 예스폼 멤버십 결제는 가능하지만 예스폼싸인에서 계약 진행이 불가합니다. 계약의 안전한 법적 효력을 위해 이메일 인증을 필수로 진행해주시기 바랍니다.</p></div>
+            </li>
+            <li class="fitem" data-id="219">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a219s"><span class="fitem__text"><span class="fitem__cat">[계정]</span>이메일 인증된 아이디를 바꾸고싶습니다.</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a219s" hidden><p><span class="fitem__a-mark">A.</span>이메일 인증이 완료된 아이디의 이메일은 사용자가 임의로 수정할 수 없습니다.</p><p>인증된 이메일 변경을 원하시는 경우 <a class="faq__link" href="#">[고객센터] &gt; [문의하기]</a> 로 문의 남겨주시면 빠르게 도와드리겠습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="220">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a220s"><span class="fitem__text"><span class="fitem__cat">[계정]</span>예스폼싸인 회원을 탈퇴하면 예스폼도 함께 탈퇴되나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a220s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 예스폼 이용 약관 제 2-1조 &#x27;약관의 적용범위&#x27; 에 따라 일부 내용을 제외 동일한 이용 약관과 운영 정책이 적용되고 있습니다.</p><p>예스폼싸인 서비스 탈퇴할 경우 예스폼 패밀리 사이트의 다른 서비스도 함께 탈퇴 처리 되므로, 각 사이트의 환불 정책을 참고하여 신중하게 회원 탈퇴를 진행해주시기 바랍니다.</p></div>
+            </li>
+            <li class="fitem" data-id="221">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a221s"><span class="fitem__text"><span class="fitem__cat">[계정]</span>탈퇴 시 결제 금액은 어떻게 되나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a221s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인 서비스 탈퇴 시 환불 절차를 진행하지 않을 시 모든 결제 금액은 그대로 소멸됩니다.</p><p>소멸된 금액은 복구가 불가능하므로 서비스 탈퇴 전 정확한 환불 금액과 절차를 <a class="faq__link" href="#">[고객센터] &gt; [문의하기]</a> 를 통해 안내 받으시기 바랍니다. 환불 신청 시 계정 정보와 결제 내역을 함께 확인하시면 보다 빠르게 처리됩니다.</p></div>
+            </li>
+            <li class="fitem" data-id="222">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a222s"><span class="fitem__text"><span class="fitem__cat">[이용 요금]</span>예스폼싸인 계약 1건당 비용은 얼마인가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a222s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 계약 1건 진행하는 최소 비용은 1건당 400원입니다.<br>계약 건수, 서비스 옵션, 추가 기능 이용 여부에 따라 요금이 달라질 수 있으며, 자세한 요금 정보와 결제 방식은 [이용요금] 페이지에서 확인하실 수 있습니다.<br><br><a class="faq__link" href="#">📌 이용요금 자세히 보기 &gt;</a><br><br>또한 예스폼 프리미엄 회원의 경우에는 계약을 진행할 수 있는 예스폼싸인 건수 혜택이 제공되므로 예스폼 문서와 함께 전자 계약을 같이 사용하고 싶으신 경우 프리미엄 가입으로 효율적인 비용으로 예스폼의 서비스를 이용할 수 있습니다.</p><p><a class="faq__link" href="#">📌 예스폼 이용요금 자세히 보기 &gt;</a></p></div>
+            </li>
+            <li class="fitem" data-id="223">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a223s"><span class="fitem__text"><span class="fitem__cat">[이용 요금]</span>계약 건수를 추가로 구매할 수 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a223s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 필요에 따라 계약 건수를 추가로 구매할 수 있습니다.<br>사용 중인 요금제 이상 계약 건수가 필요할 경우 로그인 후 [회원정보 관리] &gt; [결제 관리] 에서 간편하게 구매가 가능합니다.</p><p>추가 구매 시에도 기존 요금제와 동일하게 건수 별 할인 혜택이 적용되므로 사용량에 맞춰 효율적으로 계약을 진행할 수 있습니다.<br>또한, 구매한 계약 건수는 결제일로부터 1년 동안 유효하여 기간 내 자유롭게 이용 가능합니다.</p><p>보다 자세한 요금 정보와 구매 방법은 예스폼싸인 [이용요금] 에서 확인하실 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="224">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a224s"><span class="fitem__text"><span class="fitem__cat">[이용 요금]</span>예스폼 멤버십을 이용 중인데 건수 추가 구매가 가능한가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a224s" hidden><p><span class="fitem__a-mark">A.</span>예스폼 멤버십에서 제공된 기본 계약 건수를 모두 소진한 경우, 건수를 추가로 구매하실 수 있습니다.</p><p>추가 구매는 로그인 후 [대시보드 &gt; 요금제 구매] 메뉴를 통해 간편하게 진행할 수 있으며, 건수별 할인 혜택이 동일하게 적용됩니다.<br>구매한 계약 건수는 결제일로부터 1년간 유효하여 기간 내 자유롭게 사용할 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="225">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a225s"><span class="fitem__text"><span class="fitem__cat">[이용 요금]</span>기간이 다른 요금제를 보유하고 있으면 어떤 순서로 차감되나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a225s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인 계약 횟수 차감 순서는 다음과 같습니다.</p><p>1. 예스폼 멤버십 건수 : 예스폼에서 결제한 멤버십에서 제공하는 건수<br>2. 예스폼싸인 건수 : 예스폼싸인의 사용량 맞춤 요금제의 건수</p><p>예스폼싸인에서 제공하는 무료 건수는 멤버십 또는 요금제를 결제하신 경우 소멸됩니다.</p></div>
+            </li>
+            <li class="fitem" data-id="226">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a226s"><span class="fitem__text"><span class="fitem__cat">[이용 요금]</span>결제가 중복으로 처리되었습니다.</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a226s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인 사용량 맞춤 요금제 결제 중 중복 결제가 발생한 경우 <a class="faq__link" href="#">[고객센터] &gt; [문의하기]</a> 로 문의 남겨주시면 빠르게 도와드리겠습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="227">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a227s"><span class="fitem__text"><span class="fitem__cat">[이용 요금]</span>결제 내역은 어디서 확인할 수 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a227s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인 사용량 맞춤 요금제 결제 완료 후 결제 내역 확인을 원하시면, [마이페이지] &gt; [회원정보 관리] &gt; [결제 관리] 에서 결제한 요금제 목록을 확인할 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="228">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a228s"><span class="fitem__text"><span class="fitem__cat">[이용 요금]</span>세금계산서나 영수증은 어디서 받을 수 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a228s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인 사용량 맞춤 요금제 결제한 세금 계산서나 영수증 확인을 원하시면, [마이페이지] &gt; [회원정보 관리] &gt; [결제 관리] 에서 결제한 요금제 목록을 확인할 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="229">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a229s"><span class="fitem__text"><span class="fitem__cat">[이용 요금]</span>사용하지 않은 요금제는 환불이 가능한가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a229s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 사용하지 않은 계약 건수에 대해 환불이 가능합니다.<br>환불 기한은 요금제 소멸 기한인 1년 이내, 정확한 환불 금액과 절차는 <a class="faq__link" href="#">[고객센터] &gt; [문의하기]</a>로 문의 남겨주시면 빠르게 도와드리겠습니다.<br>환불 신청 시 계정 정보와 결제 내역을 함께 확인해주시면 보다 빠르게 처리됩니다.</p></div>
+            </li>
+            <li class="fitem" data-id="230">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a230s"><span class="fitem__text"><span class="fitem__cat">[이용 요금]</span>일부 건수만 사용했는데 환불이 가능한가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a230s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 사용하지 않은 계약 건수에 대해 부분 환불이 가능합니다.<br>환불 금액은 사용한 건수당 1,500원이 차감된 후 계산됩니다.<br>즉, 사용하신 계약 건수만큼 비용을 제외한 나머지 금액이 환불됩니다.</p><p>정확한 환불 금액과 절차는 <a class="faq__link" href="#">[고객센터] &gt; [문의하기]</a> 로 문의 남겨주시면 빠르게 도와드리겠습니다.<br>환불 신청 시 계정 정보와 결제 내역을 함께 확인해주시면 보다 빠르게 처리됩니다.</p></div>
+            </li>
+            <li class="fitem" data-id="231">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a231s"><span class="fitem__text"><span class="fitem__cat">[자료실]</span>예스폼싸인에서 제공되는 계약서는 무료로 사용 가능한가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a231s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 약 240여 건의 다양한 계약서 서식을 무료로 제공하고 있습니다.<br>회원 가입만 하면 별도의 비용 부담 없이 누구나 자유롭게 이용할 수 있으며 계약서 작성 시 바로 적용할 수 있는 템플릿 형태로 제공되어 작성 시간을 크게 단축할 수 있습니다.</p><p>무료 제공 서식은 일반적인 거래계약서, 용역계약서, 임대차계약서, NDA(비밀유지계약서) 등 다양한 분야를 포함하고 있어 다양한 비즈니스 상황에 바로 활용할 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="232">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a232s"><span class="fitem__text"><span class="fitem__cat">[자료실]</span>제공된 서식 외에도 문서를 사용할 수 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a232s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 제공 중인 무료 계약서 외에도 직접 준비한 계약서로도 계약이 가능합니다.</p><p>예스폼싸인에서는 약 회원 가입만 해도 240건 이상의 무료 계약서를 제공하며 변환 후에도 문제 없이 계약 진행이 가능합니다.<br><a class="faq__link" href="#">📌 문서/계약 자료실 바로가기 &gt;</a></p><p>더 다양한 계약서와 계약서 작성 예시를 보고 싶다면 예스폼에서 다양한 계약서 양식과 작성 가이드로 간편한 계약을 진행해보세요!<br><a class="faq__link" href="#">📌 예스폼 계약서 바로가기 &gt;</a></p></div>
+            </li>
+            <li class="fitem" data-id="233">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a233s"><span class="fitem__text"><span class="fitem__cat">[자료실]</span>예스폼 문서를 예스폼싸인에서도 사용 가능한가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a233s" hidden><p><span class="fitem__a-mark">A.</span>예스폼에서 다운로드한 계약서는 예스폼싸인에서 사용 가능합니다.</p><p>그 외에도 기존에 보유하고 사용하시던 계약서를 업로드하여 간편하게 계약을 진행할 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="234">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a234s"><span class="fitem__text"><span class="fitem__cat">[자료실]</span>등록할 수 있는 문서 형식은 어떤게 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a234s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 파일 업로드 후 PDF로 변환하는 형식으로 계약서를 변환하여 보관하고 있습니다.</p><p>변환에 지원되는 파일 형식은 hwp, doc, docx, xls, xlsx, ppt, pptx, pdf, jpg, jpeg, png 등 지원이 가능하며 지원되는 형식의 파일이 정상적으로 업로드가 되지 않는 파일의 경우 <a class="faq__link" href="#">[고객센터] &gt; [문의하기]</a> 로 문의 남겨주시면 빠르게 도와드리겠습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="235">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a235s"><span class="fitem__text"><span class="fitem__cat">[자료실]</span>계약서 등록 시 문서가 깨져서 나옵니다.</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a235s" hidden><p><span class="fitem__a-mark">A.</span>계약서를 변환하는 과정에서 일부 문서가 깨지는 현상이 발생할 수 있습니다.</p><p>이는 폰트 매칭 오류나 문서 자체 문제로 인해 변환이 정상적으로 이루어지지 않을 수 있기 때문입니다.<br>문서 내용을 확인한 후 다시 시도해주시고, 동일한 문제가 반복될 경우 다른 계약서로 변경해주시기 바랍니다.</p></div>
+            </li>
+            <li class="fitem" data-id="236">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a236s"><span class="fitem__text"><span class="fitem__cat">[서명 만들기]</span>도장에 특수문자를 넣을 수 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a236s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인에서 제공되는 전자 도장에는 특수문자를 입력할 수 없습니다.<br>도장은 기본적으로 한글, 영어, 숫자만 지원하며 안전하고 표준화된 서명 환경을 위해 특수문자나 이모지 등의 사용이 제한됩니다.</p></div>
+            </li>
+            <li class="fitem" data-id="237">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a237s"><span class="fitem__text"><span class="fitem__cat">[서명 만들기]</span>법인 도장 만들때 가운데 대표이사 대신 다른 글자를 넣을 수 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a237s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인에서 제공하는 법인 도장 서비스는 법적 효력이 발생할 수 있도록 표준 형식에 맞춰 제작됩니다.</p><p>법인 도장의 중앙에는 반드시 &#x27;대표이사&#x27;(또는 한자 &#x27;代表理事&#x27;)가 표시되어야 합니다. 회사의 대표성을 증명하는 공식 도장으로, 등기소에도 이 표기가 찍힌 도장으로 신고해야 효력이 있습니다. 따라서 &#x27;대표이사&#x27; 외에 다른 단어나 직위가 들어가면 법인 인감으로 인정되지 않아 각종 계약/공문 등에서 법적 효력이 제한될 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="238">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a238s"><span class="fitem__text"><span class="fitem__cat">[서명 만들기]</span>도장이 없는데, 직접 서명만으로 계약이 가능한가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a238s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 실제 도장이 없어도 직접 서명만으로도 종이 계약서에 실제로 서명한 것과 동일하게 효력이 인정됩니다.<br>따라서 직접 서명만으로도 언제든지 예스폼싸인 내에서 손쉽게 계약이 가능합니다.</p></div>
+            </li>
+            <li class="fitem" data-id="239">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a239s"><span class="fitem__text"><span class="fitem__cat">[서명 만들기]</span>제가 만든 싸인은 어디서 확인 가능한가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a239s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인에서 직접 만든 전자 서명(싸인)은 로그인 후 [마이페이지] &gt; [서명관리]에 접속하면 지금까지 생성한 모든 전자 서명과 도장 내역을 한눈에 확인하고 수정, 삭제할 수 있습니다.<br>필요 시 새로운 서명을 추가하거나 기존 서명을 업데이트하여 최신 상태로 유지할 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="240">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a240s"><span class="fitem__text"><span class="fitem__cat">[서명 만들기]</span>이미 가지고 있는 서명 이미지를 사용할 수 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a240s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인에서 기존에 사용하던 이미지를 업로드 후 사이즈 조절, 회전, 대비 변경, 간단한 변경 및 사용이 가능합니다.</p></div>
+            </li>
+            <li class="fitem" data-id="241">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a241s"><span class="fitem__text"><span class="fitem__cat">[계약하기]</span>계약 요청하려면 로그인 해야하나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a241s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인에서 계약을 요청하려는 서명 요청자인 경우 로그인이 필수적으로 진행되어야 합니다.</p><p>회원가입이 필요한 경우 [회원가입] 을 통해 가입 진행 후 계약을 진행해 주세요.</p></div>
+            </li>
+            <li class="fitem" data-id="242">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a242s"><span class="fitem__text"><span class="fitem__cat">[계약하기]</span>계약 요청은 1명당 1건이 차감되나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a242s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인 계약 요청은 1건 당 1회씩 차감됩니다.<br>건 당 계약 가능한 최대 인원수는 10명입니다.<br>&quot;나를 서명 참여자로 추가&quot; 기능을 사용하는 경우 나 포함 10명까지 계약 진행이 가능합니다.</p></div>
+            </li>
+            <li class="fitem" data-id="243">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a243s"><span class="fitem__text"><span class="fitem__cat">[계약하기]</span>최대 몇명까지 한번에 계약할 수 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a243s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인 계약은 건 당 최대 10명까지 서명을 진행할 수 있습니다.<br>계약 요청 시 계약 건수는 1회씩 차감됩니다.</p></div>
+            </li>
+            <li class="fitem" data-id="244">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a244s"><span class="fitem__text"><span class="fitem__cat">[계약하기]</span>계약 요청 시 필요한 계약서는 직접 준비해야하나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a244s" hidden><p><span class="fitem__a-mark">A.</span>계약 요청 시 필요한 계약서를 보유 중인 계약서로 계약도 가능합니다.</p><p>예스폼싸인에서는 약 회원 가입만 해도 240건 이상의 무료 계약서를 제공하며 변환 후에도 문제 없이 계약 진행이 가능합니다.<br><a class="faq__link" href="#">📌 문서/계약 자료실 바로가기 &gt;</a></p><p>더 다양한 계약서와 계약서 작성 예시를 보고 싶다면 예스폼에서 다양한 계약서 양식과 작성 가이드로 간편한 계약을 진행해보세요!<br><a class="faq__link" href="#">📌 예스폼 계약서 바로가기 &gt;</a></p></div>
+            </li>
+            <li class="fitem" data-id="245">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a245s"><span class="fitem__text"><span class="fitem__cat">[계약하기]</span>한번에 여러개의 문서 서명을 요청할 수 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a245s" hidden><p><span class="fitem__a-mark">A.</span>한 번에 여러 개의 문서 서명을 요청할 수 있습니다.</p><p>단, 여러 개의 문서는 모든 서명 참여자에게 동일하게 보여지므로 서명 참여자별로 적절한 문서로 계약을 요청해 주세요.</p></div>
+            </li>
+            <li class="fitem" data-id="246">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a246s"><span class="fitem__text"><span class="fitem__cat">[계약하기]</span>계약 요청 시 개인정보를 꼭 입력해야하나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a246s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 계약 당사자의 정확한 신원 확인과 법적 분쟁 예방을 위해 최소한의 개인정보 입력이 필요합니다. 입력된 정보는 본인 인증 및 법적 증거로 활용되며 외부에 공개되지 않고 안전하게 보호 됩니다.</p><p>정확한 정보 입력 시 추후 서류 발급, 분쟁 시 증거 활용 등에서 불이익이 발생하지 않으니 반드시 실제 개인정보를 입력하여 계약을 진행해 주세요.</p></div>
+            </li>
+            <li class="fitem" data-id="247">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a247s"><span class="fitem__text"><span class="fitem__cat">[계약하기]</span>계약 요청 시 실명 대신 닉네임을 써도 되나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a247s" hidden><p><span class="fitem__a-mark">A.</span>계약 요청 시 실명 대신 닉네임을 사용할 경우, 추후 법적 분쟁에서의 신원 확인이 어려워 법적 효력이 약해질 수 있습니다.</p><p>예스폼싸인에서는 계약 당사자임을 명확히 입증할 수 있도록 반드시 실명을 사용하여 계약 요청해 주시기를 권장합니다.</p></div>
+            </li>
+            <li class="fitem" data-id="248">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a248s"><span class="fitem__text"><span class="fitem__cat">[계약하기]</span>추가 인증을 잘못 입력한 채 계약을 요청했습니다.</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a248s" hidden><p><span class="fitem__a-mark">A.</span>계약 요청 시 등록한 추가 인증은 서명 요청자와 서명 참여자 간의 인증으로 예스폼싸인에서 내부적으로 확인이 어렵습니다.</p><p>추가 인증을 잊어버린 경우에는 계약 요청 취소한 뒤 다시 계약 요청을 진행해주세요.</p><p>계약 취소 시 차감 된 건수는 반환이 불가하니, 추가 인증 요청 시 인증 암호를 한번 더 확인 부탁드리겠습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="249">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a249s"><span class="fitem__text"><span class="fitem__cat">[계약하기]</span>계약 시 상대방에게 추가로 문서를 요청하고싶습니다.</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a249s" hidden><p><span class="fitem__a-mark">A.</span>계약 요청 시 [첨부파일 요청] 버튼을 통해 서명 요청자에게 문서를 요청할 수 있습니다.</p><p>예스폼싸인에서 계약 진행 시 서명 참여자별로 첨부파일을 요청할 수 있으며, 필수 여부를 선택해 계약에 필요한 문서를 수집할 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="269">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a269s"><span class="fitem__text"><span class="fitem__cat">[계약하기]</span>서명 순서를 지정하는 것과 지정하지 않는 것의 차이가 무엇인가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a269s" hidden><p><span class="fitem__a-mark">A.</span>서명 순서를 지정하면 참여자가 설정한 순서에 따라 차례대로 계약을 진행합니다.<br>이전 참여자의 서명이 완료된 후 다음 참여자에게 서명 요청 알림이 발송되므로, 검토 및 승인 절차가 필요한 계약에 활용할 수 있습니다.</p><p>서명 순서 없이 진행 시 모든 참여자에게 계약 요청 알림이 동시에 발송됩니다.<br>참여자별 서명 완료 순서와 관계없이 각자 가능한 시점에 계약을 확인하고 서명할 수 있어, 빠른 계약 진행이 필요한 경우에 적합합니다.</p><p>계약을 요청하려는 방식에 따라 계약 내용 확인 후 담당자 승인, 최종 결재 등 순서가 필요한 계약은 순차 서명을, 참여자 모두가 같은 시점에 계약을 확인하고 서명해도 되는 경우에는 순서 없이 서명으로 계약을 진행해 주세요.</p></div>
+            </li>
+            <li class="fitem" data-id="250">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a250s"><span class="fitem__text"><span class="fitem__cat">[계약하기]</span>서명하려면 로그인은 필수인가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a250s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 비회원도 서명에 참여하실 수 있습니다.</p><p>서명 요청 알람을 수신한 경우, 별도의 예스폼 계정 없이 링크를 통해 서명할 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="251">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a251s"><span class="fitem__text"><span class="fitem__cat">[계약하기]</span>서명 참여자도 건수가 차감되나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a251s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 비회원도 서명에 참여하실 수 있습니다.</p><p>서명 참여자는 별도의 건수 차감 없이 서명 진행이 가능합니다.</p></div>
+            </li>
+            <li class="fitem" data-id="252">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a252s"><span class="fitem__text"><span class="fitem__cat">[계약하기]</span>계약서가 잠겨있는데 비밀번호를 모릅니다.</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a252s" hidden><p><span class="fitem__a-mark">A.</span>계약 요청 시 등록한 추가 인증은 서명 요청자와 서명 참여자 간의 인증으로 서명 요청자에게 별도 문의하시기 바랍니다.</p><p>추가 인증이 전달되기 전 암호를 잊어버린 경우 예스폼싸인에서는 확인이 불가능하므로 서명 요청자에게 새 계약서로 다시 요청해 주시기 바랍니다.</p></div>
+            </li>
+            <li class="fitem" data-id="253">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a253s"><span class="fitem__text"><span class="fitem__cat">[계약하기]</span>계약서를 열었는데 &#x27;이미 취소된 계약&#x27;이라고 뜹니다.</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a253s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인에서 요청된 계약의 경우 서명 참여자가 최대 10명까지 가능합니다.</p><p>계약이 취소된 경우 본인을 제외한 서명 요청자 또는 다른 서명 참여자가 취소했을 수 있으므로 서명 요청자에게 문의해주세요.</p></div>
+            </li>
+            <li class="fitem" data-id="254">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a254s"><span class="fitem__text"><span class="fitem__cat">[계약하기]</span>실수로 서명을 거절했습니다.</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a254s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인에서 요청된 계약의 경우 서명 참여자가 최대 10명까지 가능합니다.</p><p>계약이 취소되면 모든 서명 참여자의 계약도 함께 종료되므로 취소 사유를 서명 요청자에게 확인한 후 새 계약서로 다시 진행해 주세요.</p></div>
+            </li>
+            <li class="fitem" data-id="255">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a255s"><span class="fitem__text"><span class="fitem__cat">[계약하기]</span>계약이 완료되면 알람이 따로 오나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a255s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 계약이 완료되면 메일과 알림톡을 통해 즉시 안내되므로 별도로 확인하지 않아도 진행 상황을 바로 파악할 수 있습니다.</p><p>* 메일 안내 : 계약이 완료되는 즉시 등록된 이메일로 완료 사실과 계약서 확인 링크가 전송됩니다.<br>* 알림톡 안내 : 휴대폰 번호가 등록되어 있는 경우, 카카오톡 알림톡을 통해서도 계약 완료 안내를 받을 수 있습니다.<br>* 계약 내역 확인: 발신자와 수신자는 모두 로그인 후 마이페이지 &gt; 계약관리에서 계약 상태와 완료된 문서를 확인할 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="256">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a256s"><span class="fitem__text"><span class="fitem__cat">[계약하기]</span>모든 인원이 서명을 완료했다는데 감사추적인증서가 발급이 안되었습니다.</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a256s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 모든 인원이 서명을 완료 후 PDF 병합이 완료가 된 시점에 메일과 알림톡을 통해 즉시 안내됩니다.</p><p>만약 완료 안내에 대한 별도의 알림 및 상태 변경이 없다면 모든 인원의 서명을 완료했는지 확인 후 모든 인원의 서명이 완료된 상태인 경우 <a class="faq__link" href="#">[고객센터] &gt; [문의하기]</a> 로 문의 남겨주시면 빠르게 도와드리겠습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="257">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a257s"><span class="fitem__text"><span class="fitem__cat">[계약하기]</span>계약관련 알림이 오지않았습니다.</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a257s" hidden><p><span class="fitem__a-mark">A.</span>간혹 예스폼싸인에서 발송되는 계약 완료 알림이 메일함 대신 스팸함으로 분류될 수 있습니다. 먼저 스팸메일함을 확인해 주세요.</p><p>만약 스팸메일함에도 알림이 없다면 등록하신 이메일 정보가 정확한지 확인 부탁드리겠습니다.</p><p>또한, 알림톡을 통해서도 안내를 받을 수 있으므로 휴대폰 번호 등록 여부와 정보를 함께 확인하시면 보다 안전하게 계약 완료 알림을 받을 수 있습니다.</p><p>이후에도 문제가 계속된다면 <a class="faq__link" href="#">[고객센터] &gt; [문의하기]</a> 로 문의 남겨주시면 빠르게 도와드리겠습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="270">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a270s"><span class="fitem__text"><span class="fitem__cat">[계약하기]</span>계약 알림을 실수로 삭제했습니다.</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a270s" hidden><p><span class="fitem__a-mark">A.</span>계약 관련 알림을 실수로 삭제한 경우, [계약 재발송] 기능을 통해 서명 참여자에게 알림을 다시 발송할 수 있습니다.</p><p>재발송 후에도 알림을 받지 못한 경우 스팸 메일함, 등록된 이메일 주소 및 휴대폰 번호를 확인해 주세요. 이후에도 문제가 지속되면 <a class="faq__link" href="#">[고객센터] &gt; [문의하기]</a>로 문의해 주시면 빠르게 도와드리겠습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="258">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a258s"><span class="fitem__text"><span class="fitem__cat">[법적 효력]</span>전자계약은 법적 효력이 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a258s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인에서 체결된 모든 전자계약은 「전자문서 및 전자거래 기본법」 제4조 제1항 및 「전자서명법」 제3조 제1항에 근거하여, 종이 계약서와 동일한 법적 효력을 인정받습니다.<br>전자문서는 전자적 형태라는 이유만으로 법적 효력이 부인되지 않으며, 전자서명 역시 서명 및 날인과 동일한 효력으로 인정됩니다.</p><p>따라서 예스폼싸인에서 작성·체결한 계약서와 전자서명은 대한민국 법령에 따라 안전하게 법적 효력을 발휘하므로, 안심하고 서비스를 이용하실 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="259">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a259s"><span class="fitem__text"><span class="fitem__cat">[법적 효력]</span>전자계약에서 본인확인은 어떻게 이루어지며, 증거력은 충분한가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a259s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 전자계약 과정에서 본인 명의의 휴대폰 번호 인증, 이메일 인증 등 다양한 본인확인 절차를 통해 계약 당사자의 신원을 정확하게 확인합니다.<br>계약 체결 시 입력되는 서명 정보뿐만 아니라 본인 명의로 인증된 연락처 정보, 계약서 열람 및 서명 시간, IP 주소 등의 인증 로그와 계약서 데이터가 안전하게 기록 및 보관됩니다.</p><p>이러한 데이터와 인증 기록은 만약 분쟁이 발생할 경우 법적 증거 자료로 활용되며, 전자계약의 진정성을 입증하는 핵심 자료가 됩니다.<br>즉, 예스폼싸인에서 이뤄진 전자계약은 본인확인 절차와 전자적 데이터 관리 체계를 통해 법원 등에서도 충분한 증거력과 신뢰성을 인정받을 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="260">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a260s"><span class="fitem__text"><span class="fitem__cat">[법적 효력]</span>종이계약서와 전자계약서의 법적 효력에 차이가 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a260s" hidden><p><span class="fitem__a-mark">A.</span>법적으로 계약 당사자의 의사 합치가 확인될 수 있다면 종이계약서와 전자계약서 모두 동일한 법적 효력을 갖습니다.</p><p>* 민법상 계약 원칙 : 민법의 낙성불요식(契約成立에 형식 필요 없음) 원칙에 따라 계약은 당사자 간 합의만으로 성립하며, 계약서의 형태에 제한이 없습니다.<br>* 전자계약서 효력 : 전자계약서는 서명, 인증, 기록 보관 등을 통해 계약 당사자의 합의와 책임이 명확히 확인되므로 종이계약서와 동일하게 법적 효력을 인정받습니다.<br>* 증거 효력 : 법적 분쟁 시에도 전자계약서는 원본 증거로서 효력을 가지며 위·변조 방지와 기록 보관 기능을 통해 안전하게 계약 내용을 증명할 수 있습니다.</p><p>즉, 전자계약서도 종이계약서와 동일하게 법적 효력을 보장받으므로 시간과 장소에 구애받지 않고 안전하게 계약을 체결할 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="261">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a261s"><span class="fitem__text"><span class="fitem__cat">[법적 효력]</span>감사추적인증서가 무엇인가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a261s" hidden><p><span class="fitem__a-mark">A.</span>감사추적인증서는 예스폼싸인에서 전자계약이 진행되는 모든 과정(문서 열람, 서명, 전송, 완료 등)에 대한 상세 이력이 자동으로 기록된 전자적 인증서입니다.</p><p>이 인증서에는 문서의 작성자, 참여자, 서명 일시, 문서 처리 단계별 시간, IP 주소, 본인확인 정보 등 주요 정보가 포함되어 있어, 누가 언제 어떤 환경에서 어떤 활동(열람, 동의, 서명 등)을 했는지 한눈에 확인할 수 있습니다.</p><p>감사추적인증서는 아래와 같은 역할을 합니다.<br>1. 계약의 모든 과정을 투명하게 추적하여 위·변조 위험을 방지합니다.<br>2. 분쟁 발생 시 법적 증거로 활용되어 계약의 진위를 입증합니다.<br>3. 사소한 변경이나 문서 활동까지 모두 기록하기 때문에, 종이 계약 이상의 신뢰성과 보안성을 제공합니다.</p><p>예스폼싸인에서는 계약이 완료 후 감사추적인증서를 문서와 함께 다운로드하거나, 서명 참여자에게 자동으로 발송하여 언제든 쉽게 확인할 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="262">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a262s"><span class="fitem__text"><span class="fitem__cat">[법적 효력]</span>감사추적인증서는 발급되나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a262s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 모든 서명이 완료되면 감사추적인증서가 자동으로 발급되며 계약 요청 시 등록하신 이메일 또는 휴대폰 번호로 인증서가 전송됩니다.</p><p>감사추적인증서는 계약서의 서명 완료 기록을 증명할 수 있는 문서로 내부 감사나 법적 증빙 자료로 활용 가능합니다.<br>만약 서명이 완료되었음에도 감사추적인증서를 받지 못한 경우, 예스폼 고객센터로 문의하시면 빠르게 확인 및 재발급 지원을 받을 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="263">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a263s"><span class="fitem__text"><span class="fitem__cat">[법적 효력]</span>예스폼싸인에서 서명을 요청한 후 실제로 싸인을 한 것도 감사추적 인증서 발급이 가능한가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a263s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인에서 계약을 요청 한 후 대면으로 수기 서명이 진행된 경우는 감사추적인증서 발행이 불가합니다.</p><p>감사 추적인증서란 계약의 진행과정과 참여자 정보를 시간순으로 기록한 인증서로 사이트 내를 통한 계약을 요청 후 요청한 계약서를 예스폼싸인을 통해서 서명이 완료된 경우에만 감사 추적인증서를 발행할 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="264">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a264s"><span class="fitem__text"><span class="fitem__cat">[법적 효력]</span>예스폼싸인에서 계약서 열람이 가능한가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a264s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인의 관리자는 서비스 관리·운영만 담당을 하며 고객이 직접 작성하고 체결한 계약서의 상세 내용은 절대 열람할 수 없습니다.<br>모든 계약서와 개인정보, 서명 데이터는 법률에 따라 안전하게 암호화·분리 저장되며, 본인 인증을 거친 당사자만 해당 계약서에 접근이 가능합니다.</p><p>예스폼싸인 관리자는 단순 서비스 운영 및 기술적 지원 업무만 수행할 뿐 고객 개별 계약 내용이나 파일, 작성 내역에는 접근 권한이 없습니다.<br>따라서 고객님이 작성하신 계약서의 보안은 철저히 보호되니 안심하시고 서비스를 이용하실 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="265">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a265s"><span class="fitem__text"><span class="fitem__cat">[법적 효력]</span>예스폼싸인에서 만든 서명과 도장은 법적으로 효력이 있나요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a265s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인에서 만든 서명과 도장은 「전자문서 및 전자거래 기본법」과 「전자서명법」에 따라 종이 계약서에 직접 서명하거나 도장(날인)한 것과 동일한 법적 효력을 가집니다.<br>전자적 형태라는 이유만으로 효력이 부인되지 않으니, 안심하고 전자계약 서비스를 이용하실 수 있습니다.</p></div>
+            </li>
+            <li class="fitem" data-id="266">
+              <button class="fitem__q" type="button" aria-expanded="false" aria-controls="a266s"><span class="fitem__text"><span class="fitem__cat">[법적 효력]</span>누군가 제 도장이나 서명을 모방해서 계약이 가능한가요?</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></button>
+              <div class="fitem__a" id="a266s" hidden><p><span class="fitem__a-mark">A.</span>예스폼싸인은 계약 체결 시 본인명의 인증(휴대폰 인증, 인증암호, IP 등)과 함께 서명·도장 등록 및 사용 내역 등 모든 활동이 상세히 기록되어 있습니다.</p><p>타인이 도장이나 서명 이미지를 임의로 모방해 계약을 시도하더라도, 본인 확인 절차(휴대폰·인증 암호 등)를 통과하지 않으면 실제 계약이 성립될 수 없습니다. 또한 계약 체결 과정과 관련된 모든 인증 및 감사추적 기록(서명 시점, 인증 방법, IP, 접속 환경 등)이 남기 때문에 모방이나 위·변조 시도 역시 즉시 식별 및 대응이 가능합니다.</p><p>혹시 부정한 접근이나 위변조 의심 사례가 발생한 경우, 신속히 <a class="faq__link" href="#">[고객센터] &gt; [문의하기]</a>로 문의 남겨주시면 빠르게 도와드리겠습니다.</p></div>
+            </li>
+          </ul>
+          <p class="fempty" data-search-empty hidden>검색 결과가 없습니다. 궁금한 점은 <a class="faq__link" href="#">[문의하기]</a>로 남겨 주세요.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<!-- 푸터 (footer · pc) -->
+<footer class="ft">
+  <div class="ft__inner">
+    <div class="ft__top">
+      <div class="ft__col ft__col--left">
+        <div>
+          <p class="ft__title">고객센터</p>
+          <p class="ft__tel">1588-2390</p>
+          <ul class="ft__info">
+            <li>상담시간 : 주중 오전 9시 - 오후 5시 30분</li>
+            <li>점심시간 : 주중 오전 11시 50분 - 오후 1시</li>
+            <li>토요일, 일요일 &amp; 공휴일 휴무</li>
+          </ul>
+        </div>
+        <div class="ft__btns">
+          <a class="ft__round" href="#">자주 묻는 질문</a>
+          <a class="ft__round" href="#">전화상담 예약</a>
+        </div>
+      </div>
+      <i class="ft__div" aria-hidden="true"></i>
+      <div class="ft__col ft__col--center">
+        <p class="ft__title">공지사항</p>
+        <ul class="ft__news">
+          <li><a href="#">2026년 준비는 병오년 필수서식 모음집으로 끝! 준비</a><span>2026-01-02</span></li>
+          <li><a href="#">2026년 준비는 병오년 필수서식 모음집으로 끝! 준비</a><span>2026-01-02</span></li>
+          <li><a href="#">2026년 준비는 병오년 필수서식 모음집으로 끝! 준비</a><span>2026-01-02</span></li>
+          <li><a href="#">동절기현장 안전사고관리 예방서식 모음집 OPEN!!</a><span>2026-01-02</span></li>
+          <li><a href="#">2026년 회사표준사규집 OPEN!</a><span>2026-01-02</span></li>
+        </ul>
+      </div>
+      <i class="ft__div" aria-hidden="true"></i>
+      <div class="ft__col ft__col--right">
+        <address class="ft__corp">
+          <p>㈜예스폼 대표 : 이재영, 이응열</p>
+          <p class="ft__addr">04790 서울특별시 성동구 아차산로 49<br>(성수동1가,서울숲코오롱디지털타워 3차 901호)</p>
+          <p>사업자등록번호 : 120-86-50680</p>
+          <p>통신판매업신고번호 : 성동-1911호</p>
+          <p>개인정보보호책임자 : 이응열</p>
+        </address>
+        <button class="ft__round ft__round--map" type="button">사이트맵<img src="images/ic-down-20.svg" width="20" height="20" alt=""></button>
+      </div>
+    </div>
+    <div class="ft__bottom">
+      <nav class="ft__links" aria-label="회사 정보">
+        <a href="#">회사소개</a>
+        <a href="#">이용약관</a>
+        <a href="#">개인정보처리방침</a>
+        <a href="#">제휴문의</a>
+        <a href="#">공지사항</a>
+      </nav>
+      <div class="ft__sns">
+        <a href="#" aria-label="네이버 블로그"><img src="images/ic-sns-nblog-18.svg" width="18" height="18" alt=""></a>
+        <a href="#" aria-label="네이버 포스트"><img src="images/ic-sns-npost-18.svg" width="18" height="18" alt=""></a>
+        <a href="#" aria-label="티스토리"><img src="images/ic-sns-tistory-18.svg" width="18" height="18" alt=""></a>
+        <a href="#" aria-label="인스타그램"><img src="images/ic-sns-insta-18.svg" width="18" height="18" alt=""></a>
+        <a href="#" aria-label="유튜브"><img src="images/ic-sns-youtube-18.svg" width="18" height="18" alt=""></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="js/common.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

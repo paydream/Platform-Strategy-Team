@@ -1,0 +1,235 @@
+/* ==========================================================================
+   예스폼싸인 · 고객센터 FAQ (2026-11-27)
+   Figma: 싸인_디자인시스템 › 전체 화면 — FAQ 탭 프레임은 없음
+     공지사항 탭 54813:51077 · 문의하기 탭 54813:50817 의 부품과 간격으로 만듦
+   내용: yesformsign.com 고객센터 FAQ
+   흰 바탕(라이트 모드)
+   ========================================================================== */
+*{box-sizing:border-box}
+/* 디자인시스템 글자색 변수 (Figma 예스폼 디자인 시스템/semantic · font/…) */
+:root{--font-text-primary:#1D1F20;--font-text-secondary:#383B3E;--font-text-tertiary:#888F95;
+  --bg-hover:#F6F7F8;--bg-active:#F1F2F4}            /* Background/bg-hover (gray-lt-02) · Background/bg-active (gray-lt-03) — 마우스 올림 · 누름 배경 */
+html{scroll-padding-top:72px}                      /* 고정 헤더 높이만큼 */
+html,body{margin:0;background:#fff;color:#1D1F20}
+body{min-width:1280px;padding-top:72px;font-family:Pretendard,'Pretendard Variable','Noto Sans KR',-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,p,ol,ul,address{margin:0;padding:0;font-style:normal}   /* h4 기본 여백도 지움 */
+ul{list-style:none}
+a{color:inherit;text-decoration:none}
+button,input{font:inherit;color:inherit}
+img{display:block}
+[hidden]{display:none !important}
+:focus-visible{outline:2px solid #7DA2FF;outline-offset:2px}
+
+/* 본문 폭 — 1280 · 좌우 10 → 콘텐츠 1260 (Figma 1400 프레임에서 x 70 ~ 1330) */
+.inner{max-width:1280px;margin:0 auto;padding:0 10px}
+
+/* ---------- 헤더 (Header_home) — 높이 72 (안쪽 줄 60을 위아래 6씩 띄워 가운데) · 아래 줄 1px #EBEDEF · 화면 위에 고정 ---------- */
+.hd{position:fixed;top:0;left:0;right:0;z-index:50;height:72px;padding:6px 0;background:#fff;box-shadow:inset 0 -1px 0 #EBEDEF}
+.hd__inner{display:flex;align-items:center;height:60px}
+/* 로고 칸 180 (오른쪽 60 · 아래 8) · 로고 91 × 30 */
+.hd__logo{flex:0 0 180px;display:flex;flex-direction:column;justify-content:center;height:60px;padding:0 60px 8px 0}
+.hd__logo img{width:91px;height:30px}
+/* 메뉴 — 16 / 22 SemiBold · 간격 48 · 위 2 */
+.hd__lnb{display:flex;align-items:center;gap:48px;height:60px;padding-top:2px}
+.hd__lnb a{font-size:16px;line-height:22px;font-weight:600;color:#1D1F20;white-space:nowrap;transition:color .15s}
+.hd__lnb a:hover{color:#2D62FA}
+/* 오른쪽 버튼 — 높이 36 · 좌우 14 · 14 / 14 Medium · 간격 8 · 모서리 8 */
+.hd__info{flex:1 0 0;display:flex;align-items:center;justify-content:flex-end;gap:8px}
+.hd__btn{display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 14px;border:1px solid #E3E5E8;border-radius:8px;background:#fff;
+  font-size:14px;line-height:14px;font-weight:500;color:#031228;white-space:nowrap;transition:background-color .15s}
+.hd__btn:hover{background:#F2F2F5}
+.hd__btn:active{background:#EDEDF0}
+.hd__btn--primary{border-color:#2D62FA;color:#1B52ED}
+.hd__btn--primary:hover{background:#F5F9FF}
+.hd__btn--primary:active{background:#EBF4FF}
+
+/* ---------- 고객센터 — 위 40 · 제목과 탭 사이 40 (공지사항 · 문의하기 프레임과 같음) ---------- */
+.cs{padding:40px 0 72px}                           /* FAQ: 본문 끝 → 푸터 72 (Figma 54944:45887 — 아래 32 + 40) */
+.cs__title{font-size:32px;line-height:42px;font-weight:600;color:#000;text-align:center}
+.cs__body{width:900px;margin:40px auto 0}
+
+/* 탭 (Segmented Control · h42) — 900 × 48 · 안쪽 3 · 모서리 12 · #F1F2F4 */
+.seg{display:flex;align-items:center;height:48px;padding:3px;border-radius:12px;background:#F1F2F4}
+.seg__item{flex:1 1 0;display:flex;align-items:center;justify-content:center;height:42px;padding:8px 12px;border-radius:9px;
+  font-size:15px;line-height:15px;font-weight:600;color:#888F95;white-space:nowrap}
+.seg__item[aria-current="page"]{background:#fff;color:#1B52ED}
+.seg__div{flex:0 0 1px;height:20px;background:#E3E5E8}
+.seg__div--off{visibility:hidden}                  /* 켜진 칸 옆 선은 숨김 (문의하기 프레임과 같게) */
+
+/* ---------- FAQ — 기존 화면(yesformsign.com) 배치 그대로: 안내 문구 → 검색 → 분류 탭 → 분류 상자(전체) / 분류별 목록 ---------- */
+.faq{margin-top:24px}                 /* 탭 아래 → 안내 상자 24 (Figma 54944:45887) */
+/* 안내 상자 — 900 · 위아래 40 · 모서리 12 (radius-12) · 배경 #F5F9FF (Oblue/Oblue_01) · 안쪽 사이 24 */
+.faq__intro{display:flex;flex-direction:column;align-items:center;gap:24px;padding:40px 0;border-radius:12px;background:#F5F9FF}
+.faq__lead{font-size:22px;line-height:30px;font-weight:700;color:#1D1F20;text-align:center}   /* Typography › Heading/Heading 22 — 22 / 30 / 700 */
+/* 검색칸 (Input/textarea h42) — 폭 480 · 안쪽 8 / 12 · 모서리 8 · 오른쪽 돋보기 24 */
+.search{position:relative;width:480px}
+.search__input{display:block;width:100%;height:42px;margin:0;padding:8px 48px 8px 12px;border:1px solid #E3E5E8;border-radius:8px;background:#fff;
+  font-size:15px;line-height:21px;color:#1D1F20;outline:none;transition:background-color .15s,border-color .15s;-webkit-appearance:none;appearance:none}
+.search__input::placeholder{color:#A0A6AC}
+.search__input::-webkit-search-cancel-button{display:none}
+.search__input:hover{background:var(--bg-hover)}   /* Input Hovered = Background/bg-hover */
+.search__input:focus{background:#fff;border-color:#1B52ED}
+.search__btn{position:absolute;top:9px;right:12px;width:24px;height:24px;padding:0;margin:0;border:0;background:none;cursor:pointer}
+.search__btn img{width:24px;height:24px}
+/* 키워드 칩 — 검색칸 아래 12 · 폭 480 안 (넘으면 다음 줄로) · 칩 높이 28 · 좌우 12 · 사이 8 · 13 / 16 (Figma 54944:45887) */
+.search-wrap{display:flex;flex-direction:column;gap:12px;width:480px}
+.kw{display:flex;flex-wrap:wrap;align-items:center;gap:8px;max-width:480px}
+.kw__chip{display:inline-flex;align-items:center;height:28px;padding:0 12px;margin:0;border:1px solid #EBEDEF;border-radius:100px;background:#fff;   /* 흰 바탕 (bg-surface) + 선 #EBEDEF (Line/line-btn-grey) */
+  font-size:13px;line-height:16px;font-weight:500;color:var(--font-text-secondary);white-space:nowrap;cursor:pointer;transition:background-color .15s}   /* 글자 font/text-secondary — primary 한 단계 아래 */
+.kw__chip:hover{background:var(--bg-hover)}         /* Background/bg-hover #F6F7F8 · 글자색은 그대로 (secondary) */
+.kw__chip:active{background:var(--bg-active)}       /* Background/bg-active #F1F2F4 */
+
+/* 분류 탭 (tab/resource · h46) — 7칸 같은 폭 · 아래 선 1 #F1F2F4 · 켜짐 #1B52ED + 막대 2 · 꺼짐 #A0A6AC */
+.ftabs{display:flex;margin-top:40px;border-bottom:1px solid #F1F2F4}   /* 탭 46 아래에 선 1 (높이 47 · Figma 와 같음) */
+.ftab{position:relative;flex:1 1 0;height:46px;padding:0;margin:0;border:0;background:none;
+  font-size:16px;line-height:16px;font-weight:600;color:#A0A6AC;white-space:nowrap;cursor:pointer}
+.ftab[aria-selected="true"]{color:#1B52ED;cursor:default}
+.ftab[aria-selected="true"]::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:#1B52ED}
+
+.fpanel{margin-top:24px}                           /* 분류 탭 → 내용 24 */
+
+/* 전체 — 분류 상자 2열 · 사이 24 · 선 1 #E3E5E8 · 모서리 12 · 안쪽 32 (여백은 모두 4의 배수) */
+.fbox-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.fbox{padding:32px;border:1px solid #E3E5E8;border-radius:12px}
+.fbox__title{display:flex;align-items:center;gap:8px;padding-bottom:16px;border-bottom:1px solid #EBEDEF;font-size:18px;line-height:26px;font-weight:600;color:#1D1F20}
+.fbox__title img{flex:0 0 20px;width:20px;height:20px}
+.fbox__list{display:flex;flex-direction:column;gap:16px;margin-top:16px}   /* 제목 아래 선 위아래 16 · 질문 사이 16 */
+.fbox__q{display:block;width:100%;padding:0;margin:0;border:0;background:none;text-align:left;cursor:pointer;
+  font-size:15px;line-height:21px;color:var(--font-text-secondary);word-break:keep-all;transition:color .15s}
+.fbox__q:hover{color:var(--font-text-primary)}     /* 마우스 올림 — 파랑 대신 font/text-primary (시안에 없어 새로 정함) */
+
+/* 분류별 — 소분류 제목(공지사항 제목과 같은 20 / 28) + 목록(공지사항 표와 같은 줄) · 소분류 사이 60 */
+.fgroup + .fgroup{margin-top:60px}
+.fgroup__title{padding:0 2px;font-size:22px;line-height:30px;font-weight:700;color:#1D1F20}   /* Heading/Heading 22 — 22 / 30 / 700 */
+.flist{margin-top:12px;border-top:1px solid #464A4E}
+.fitem{border-bottom:1px solid #EBEDEF;scroll-margin-top:120px}
+.fitem__q{display:flex;align-items:center;gap:8px;width:100%;min-height:65px;padding:0 24px;margin:0;border:0;background:#fff;text-align:left;cursor:pointer;transition:background-color .15s}
+.fitem__q:hover{background:var(--bg-hover)}         /* Background/bg-hover · 시안에 없어 새로 정함 */
+.fitem__text{flex:1 1 auto;min-width:0;padding:12px 8px 12px 0;font-size:16px;line-height:22px;color:#1D1F20;word-break:keep-all}
+.fitem__cat{margin-right:4px;color:#888F95}
+.fitem__arrow{flex:0 0 16px;width:16px;height:16px;transition:transform .2s}
+.fitem.is-open .fitem__arrow{transform:rotate(180deg)}
+/* 답변 — 기존 화면처럼 회색 바탕 · 안쪽 24 (질문 글과 왼쪽 맞춤) · 글 Body 15 */
+.fitem__a{padding:24px;border-top:1px solid #EBEDEF;background:#F6F8FA}
+.fitem__a p{font-size:15px;line-height:21px;color:#383B3E;word-break:keep-all}
+.fitem__a p + p{margin-top:12px}
+.fitem__a-mark{margin-right:4px;font-weight:600;color:#1D1F20}
+.faq__link{font-weight:600;color:#1B52ED}
+.faq__link:hover{text-decoration:underline}
+/* 검색 결과 없음 — 시안에 없어 새로 정함 */
+.fempty{margin-top:12px;padding:48px 0;border-top:1px solid #464A4E;border-bottom:1px solid #EBEDEF;text-align:center;font-size:15px;line-height:21px;color:#888F95}
+
+/* ---------- 공지사항 · 문의하기 탭 (Figma 54813:51077 · 54813:50817) ---------- */
+.cs--board{padding-bottom:48px}                    /* 본문 끝 → 푸터 48 (Figma: 아래 8 + 40) */
+.board{margin-top:24px}                            /* 탭 아래 24 */
+.board__title{padding:0 2px;font-size:22px;line-height:30px;font-weight:700;color:#1D1F20}   /* Heading/Heading 22 (Figma 20 / 28 / 600 → 요청으로 22) */
+
+/* 공지사항 — 목록 줄은 FAQ 목록(.flist · .fitem)과 같음 + 오른쪽 날짜 */
+.fitem__meta{flex:0 0 auto;display:flex;align-items:center;gap:8px}
+.fitem__date{font-size:14px;line-height:20px;color:#888F95;white-space:nowrap}
+/* 공지 본문 글 모양 — 시안에 없어 새로 정함 (글자 크기 · 간격만) */
+.nbody h5{margin:32px 0 12px;font-size:16px;line-height:22px;font-weight:600;color:#1D1F20;word-break:keep-all}
+.nbody h5 b{margin-right:8px}
+.nbody h6{margin:16px 0 4px;font-size:15px;line-height:21px;font-weight:600;color:#1D1F20;word-break:keep-all}
+.nbody > :first-child{margin-top:0}
+.nbody strong{font-weight:600;color:#1D1F20}
+.nbody__label{font-size:13px;line-height:16px;font-weight:600;color:#888F95}
+.nbody__toc{margin:8px 0 0;padding:0;list-style:none;font-size:15px;line-height:21px;color:#383B3E}
+.nbody__toc li + li{margin-top:4px}
+.nbody__toc b{display:inline-block;width:28px;font-weight:600;color:#1D1F20}
+.nbody__toc + p{margin-top:24px}
+.nbody table{width:100%;margin:12px 0;border-collapse:collapse;border-top:1px solid #464A4E;background:#fff}
+.nbody th,.nbody td{padding:8px 12px;border-bottom:1px solid #E3E5E8;font-size:14px;line-height:20px;text-align:left;vertical-align:top;color:#383B3E}
+.nbody th{font-weight:600;color:#1D1F20}
+.nbody thead th{background:#F1F2F4}
+
+/* 아래 줄 — 표와 사이 36 · 높이 46 · [다음 페이지] 가운데 · 쪽 이동 오른쪽 */
+.pager{display:flex;align-items:center;justify-content:space-between;height:46px;margin-top:36px}
+.pager__space{flex:0 0 129px}
+/* [다음 페이지] button_primary · line · h36 · R-100 · neutral (선은 Figma 에서 #E3E5E8 로 덮어씀) */
+.btn-more{display:inline-flex;align-items:center;justify-content:center;width:180px;height:36px;padding:0 14px;margin:0;border:1px solid #E3E5E8;border-radius:100px;background:#fff;
+  font-size:14px;line-height:14px;font-weight:500;color:#031228;white-space:nowrap;cursor:pointer}
+.btn-more:hover{background:#F2F2F5}                /* 부품 상태 hover = button/neutral/subtle-hover */
+.btn-more:active{background:#EDEDF0}               /* 부품 상태 pressed = button/neutral/subtle-pressed */
+/* 쪽 이동 (PageNavigation) — 사이 10 · 현재 쪽 48 × 36 #F1F2F4 · "/ 전체" Medium 14 #30323A */
+.pnav{flex:0 0 129px;display:flex;align-items:center;justify-content:flex-end;gap:10px;height:46px}
+.pnav__arrow{display:flex;width:16px;height:16px;padding:0;margin:0;border:0;background:none;cursor:pointer}
+.pnav__arrow img{width:16px;height:16px}
+.pnav__cur{display:flex;align-items:center;justify-content:center;width:48px;height:36px;border-radius:8px;background:#F1F2F4;font-size:14px;line-height:20px;color:#1D1F20}
+.pnav__count{display:flex;gap:7px;font-size:14px;line-height:17px;font-weight:500;color:#30323A}
+
+/* 문의하기 — 표 위 선 #464A4E · 행 아래 선 #EBEDEF · 라벨 칸 160 */
+.qform{margin-top:12px}
+.qtable{border-top:1px solid #464A4E}
+.qrow{display:flex;border-bottom:1px solid #EBEDEF}
+.qrow__label{flex:0 0 160px;display:flex;align-items:center;justify-content:center;font-size:15px;line-height:15px;font-weight:600;color:#1D1F20}
+.qrow__val{flex:1 1 auto;display:flex;align-items:center;min-width:0;min-height:63px;padding:8px 24px}
+.qrow--cat .qrow__val{gap:30px;padding:15px 30px}
+.qrow--msg .qrow__val{padding:12px 24px}
+.qrow--h65 .qrow__val{min-height:65px}
+.qrow__pair{display:flex;align-items:center;gap:12px}
+.qrow__pair--file{gap:8px}
+/* 입력칸 (Input/textarea · h42) — 부품 상태: 기본 · 마우스 올림 #F6F7F8 · 포커스 선 #1B52ED · 읽기 전용 */
+.input{display:block;width:100%;height:42px;margin:0;padding:8px 12px;border:1px solid #E3E5E8;border-radius:8px;background:#fff;
+  font-size:15px;line-height:21px;color:#1D1F20;outline:none;-webkit-appearance:none;appearance:none}
+.input::placeholder{color:#A0A6AC}
+.input:hover{background:var(--bg-hover)}           /* Input Hovered = Background/bg-hover */
+.input:focus{background:#fff;border-color:#1B52ED}
+.input--w400{flex:0 0 400px;width:400px}
+.input--ro,.input--ro:hover,.input--ro:focus{background:#F1F2F4;border-color:#EBEDEF;color:#383B3E;cursor:default}
+/* 문의 내용 (Input/textarea · long) — 692 × 400 · 안쪽 10 / 12 · 글 칸 + 아래 글자 수 (부품 상태는 기본 하나뿐) */
+.tarea{display:flex;flex-direction:column;gap:4px;width:100%;height:400px;padding:10px 12px;border:1px solid #E3E5E8;border-radius:8px;background:#fff}
+.tarea textarea{flex:1 1 auto;display:block;width:100%;margin:0;padding:0;border:0;background:none;resize:none;outline:none;
+  font:inherit;font-size:15px;line-height:21px;color:#1D1F20}
+.tarea textarea::placeholder{color:#A0A6AC}
+.tarea__count{font-size:12px;line-height:12px;color:#A0A6AC;text-align:right}
+/* 라디오 (radio list · Light/Radio buttons 16) · 체크 (checkbox · Circle XS 16) — 아이콘 칸 20 */
+.choice{position:relative;display:inline-flex;align-items:center;gap:6px;font-size:14px;line-height:20px;color:#383B3E;white-space:nowrap;cursor:pointer}
+.choice--check{gap:4px}
+.choice input{position:absolute;width:1px;height:1px;margin:0;opacity:0}
+.choice__icon{flex:0 0 20px;width:20px;height:20px;background:no-repeat center / 16px 16px}
+.choice--radio .choice__icon{background-image:url(../images/ic-radio-off-16.svg)}
+.choice--radio input:checked + .choice__icon{background-image:url(../images/ic-radio-on-16.svg)}
+.choice--check .choice__icon{background-image:url(../images/ic-check-circle-off-16.svg)}
+.choice--check input:checked + .choice__icon{background-image:url(../images/ic-check-circle-on-16.svg)}
+.choice input:focus-visible + .choice__icon{outline:2px solid #7DA2FF;outline-offset:0;border-radius:50%}
+/* [첨부파일 추가] button_primary · line · h42 · R-8 · neutral — 부품 상태 hover #F2F2F5 · pressed #EDEDF0 */
+.btn-line{display:inline-flex;align-items:center;justify-content:center;height:42px;padding:0 16px;margin:0;border:1px solid #4E5968;border-radius:8px;background:#fff;
+  font-size:15px;line-height:15px;font-weight:600;color:#031228;white-space:nowrap;cursor:pointer}
+.btn-line:hover{background:#F2F2F5}                /* button/neutral/subtle-hover */
+.btn-line:active{background:#EDEDF0}               /* button/neutral/subtle-pressed */
+/* [문의하기] button_primary · solid · h42 · R-8 · primary — 표 아래 36 · 180 × 42 · 부품 상태 hover #1E4BC9 · pressed #1B52ED */
+.qform__submit{display:flex;justify-content:center;margin-top:36px}
+.btn-primary{display:inline-flex;align-items:center;justify-content:center;width:180px;height:42px;padding:0 16px;margin:0;border:0;border-radius:8px;background:#1B52ED;
+  font-size:15px;line-height:15px;font-weight:600;color:#fff;white-space:nowrap;cursor:pointer}
+.btn-primary:hover{background:#1E4BC9}             /* Oblue/Oblue_12 */
+.btn-primary:active{background:#1B52ED}            /* Oblue/Oblue_11 */
+
+/* ---------- 푸터 (footer · pc) — #333 · 위아래 55 · 폭 1280 ---------- */
+.ft{padding:55px 0;background:#333}
+.ft__inner{display:flex;flex-direction:column;gap:80px;max-width:1280px;margin:0 auto}
+.ft__top{display:flex;align-items:flex-start;justify-content:space-between}
+.ft__div{flex:0 0 1px;height:214px;background:#444}
+.ft__title{padding-bottom:10px;font-size:22px;line-height:30px;font-weight:700;color:#fff}   /* Heading/Heading 22 — 22 / 30 / 700 */
+.ft__col--left{display:flex;flex-direction:column;gap:20px;width:267px}
+.ft__tel{font-size:40px;line-height:56px;font-weight:600;color:#fff}
+.ft__info{margin-top:5px;font-size:14px;line-height:24px;font-weight:500;color:#B4B4B4}
+.ft__btns{display:flex;gap:20px}
+/* 둥근 버튼 (button_round · tertiary · large) — 높이 40 · 좌우 20 · 테두리 1 흰색 · 15 / 22 SemiBold */
+.ft__round{display:inline-flex;align-items:center;justify-content:center;gap:5px;height:40px;padding:0 20px;margin:0;border:1px solid #fff;border-radius:20px;background:transparent;
+  font-size:15px;line-height:22px;font-weight:600;color:#fff;white-space:nowrap;cursor:pointer}
+.ft__round--map{padding:0 15px 0 20px}
+.ft__col--center{width:426px}
+.ft__news{padding-top:10px}
+.ft__news li{display:flex;align-items:center;justify-content:space-between;gap:23px;height:36px;font-size:14px;line-height:24px;font-weight:500}
+.ft__news a{flex:0 0 275px;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:#B4B4B4}
+.ft__news span{flex:0 0 auto;color:#666}
+.ft__col--right{display:flex;flex-direction:column;align-items:flex-end;gap:20px;width:267px}
+.ft__corp{text-align:right;font-size:14px;line-height:24px;font-weight:500;color:#B4B4B4}
+.ft__corp p{padding:1px 0}
+.ft__corp .ft__addr{padding:2px 0}
+.ft__bottom{display:flex;align-items:center;justify-content:space-between;height:30px}
+.ft__links{display:flex;align-items:center;gap:20px}
+.ft__links a{font-size:14px;line-height:24px;font-weight:600;color:#fff;white-space:nowrap}
+.ft__sns{display:flex;align-items:center;gap:10px}
+.ft__sns a{display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:15px;background:#666}

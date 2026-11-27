@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>예스폼싸인 · 고객센터 공지사항</title>
+<!--
+  예스폼싸인 고객센터 · 공지사항 탭 (2026-11-27)
+  Figma: 싸인_디자인시스템 › 전체 화면 · 공지사항 탭 54813:51077 (1400 × 1086)
+  내용: yesformsign.com 고객센터 공지사항 3건 (제목 · 날짜 · 본문 글 — 본문 그림은 뺌)
+  · 헤더(화면 위 고정 · 72) → 고객센터 제목 → 탭(공지사항 켜짐) → 공지사항 제목 → 목록 → [다음 페이지] · 쪽 이동 → 푸터
+  · 스타일 css/style.css · 동작 js/common.js + js/notice.js · 그림 images/
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- 헤더 (Header_home · Type=logout, PC(web)) — 화면 위에 고정 -->
+<header class="hd">
+  <div class="hd__inner inner">
+    <h1 class="hd__logo"><a href="#"><img src="images/logo-sign@2x.png" width="91" height="30" alt="예스폼싸인"></a></h1>
+    <nav class="hd__lnb" aria-label="주 메뉴">
+      <a href="#">서비스가이드</a>
+      <a href="#">전자서명 만들기</a>
+      <a href="#">이용요금</a>
+      <a href="#" aria-current="page">고객센터</a>
+    </nav>
+    <div class="hd__info">
+      <a class="hd__btn hd__btn--primary" href="#">1개월 무료 체험</a>
+      <a class="hd__btn" href="#">로그인</a>
+    </div>
+  </div>
+</header>
+
+<main class="cs cs--board">
+  <h2 class="cs__title">고객센터</h2>
+  <div class="cs__body">
+    <!-- 탭 (Segmented Control) — 공지사항 켜짐 -->
+    <nav class="seg" aria-label="고객센터 메뉴">
+      <a class="seg__item" href="index.html">FAQ</a>
+      <i class="seg__div seg__div--off" aria-hidden="true"></i>
+      <a class="seg__item" href="notice.html" aria-current="page">공지사항</a>
+      <i class="seg__div seg__div--off" aria-hidden="true"></i>
+      <a class="seg__item" href="inquiry.html">문의하기</a>
+    </nav>
+
+    <!-- 공지사항 — 제목 → 목록(줄을 누르면 본문) → [다음 페이지] · 쪽 이동 -->
+    <section class="board" aria-labelledby="boardTitle" data-notice>
+      <h3 class="board__title" id="boardTitle">공지사항</h3>
+      <ul class="flist">
+        <li class="fitem" data-id="82">
+          <button class="fitem__q" type="button" aria-expanded="false">
+            <span class="fitem__text">[공지] 예스폼싸인 서비스 업데이트</span>
+            <span class="fitem__meta"><span class="fitem__date">2026-08-31</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></span>
+          </button>
+          <div class="fitem__a nbody" hidden><p class="nbody__label">CONTENTS</p><ol class="nbody__toc"><li><b>01</b>예스폼이 만든 전자계약, 예스폼싸인</li><li><b>02</b>미서명 계약, 이제 알아서 챙깁니다</li><li><b>03</b>계약이 쌓여도 원하는 내역만 빠르게</li><li><b>04</b>순서대로 받아야 하는 계약이라면</li><li><b>05</b>입력은 줄이고, 편의성은 높였습니다</li><li><b>06</b>전자계약, 안심하고 맡기세요</li><li><b>07</b>자주 묻는 질문 (FAQ)</li></ol><p>종이 계약서를 인쇄하고, 도장을 찍은 뒤 우편으로 보내거나 직접 만나 서명을 받는 방식은 이제 점점 옛일이 되어가고 있습니다.</p><p>전자계약은 인터넷만 연결되어 있다면 언제 어디서나 계약서를 작성하고, 수신자의 <strong>휴대폰이나 이메일로 링크를 보내 비대면으로 서명을 완료할 수 있는 최신 계약 방식</strong>입니다.</p><p>관련 법률에 따라 기존 종이 계약서와 완벽히 동일한 법적 효력을 보장받을 뿐만 아니라, 인쇄비나 우편 발송 비용, 직접 이동하는 시간까지 획기적으로 줄여주는 것이 가장 큰 장점입니다. 하지만 단순히 종이를 파일로 바꾸는 것만으로는 부족합니다.</p><p>진짜 전자계약의 가치는 <strong>계약서 발송 이후 일어나는 번거로운 사후 관리를 얼마나 스마트하게 해결해 주느냐</strong>에 있습니다.</p><h5><b>01</b>예스폼이 만든 전자계약, 예스폼싸인</h5><p><strong>30년 동안 대한민국 문서서식을 책임져 온 예스폼이<br>이제 전자계약까지 책임집니다.</strong></p><p>예스폼싸인은 대한민국 대표 서식 플랫폼 <strong>예스폼이 선보이는 전자계약 서비스</strong>입니다.<br>번거롭게 종이 계약서를 출력해 도장을 찍고 우편이나 인편으로 주고받던 모든 과정을 온라인에서 한 번에 해결해 드립니다. 발신자는 작성한 계약서를 업로드하거나 예스폼 서식을 불러온 뒤 상대방에게 서명을 요청하기만 하면 됩니다.</p><p>수신자는 별도의 <strong>회원가입이나 앱 설치 없이 전달받은 링크를 통해 즉시 서명</strong>할 수 있습니다. 예스폼싸인을 통한 전자계약은 「전자문서 및 전자거래 기본법」 및 「전자서명법」에 따라 기존 종이 계약서와 완전히 동일한 법적 효력을 가집니다.</p><p>기존 예스폼 아이디가 있다면 별도의 회원가입 없이 그대로 이용할 수 있고, 예스폼 프리미엄 회원은 전자계약을 최대 240건까지 혜택으로 제공받습니다. 100,000종이 넘는 문서서식을 다뤄 온 예스폼의 노하우가 계약 단계까지 이어지는 셈입니다.</p><h5>업그레이드된 예스폼싸인, 무엇이 달라졌을까?</h5><h6>놓친 서명까지 챙겨주는 리마인더</h6><p>미서명 수신자에게 직접 알림을 보내고, 만료 하루 전에는 자동 안내가 발송됩니다.</p><h6>계약서 유형별 분류</h6><p>거래처, 업무, 진행 상태별로 라벨을 달아 검색 필터로 원하는 내역을 빠르게 찾아볼 수 있습니다.</p><h6>서명 순서 지정 가능</h6><p>순차 및 동시 발송 중 선택하여 정해진 순서대로 서명을 진행할 수 있습니다.</p><h6>원클릭 주소록 &amp; 멀티 발송</h6><p>주소록에서 정보를 바로 불러오고, 이메일과 휴대폰 중 발송 수단을 선택할 수 있습니다.</p><h5><b>02</b>미서명 계약, 이제 알아서 챙깁니다 ─ 리마인더</h5><p>담당자가 마감일을 일일이 챙기지 않아도, 계약 만료 1일 전까지 서명이 완료되지 않은 건은 <strong>시스템이 수신자에게 자동으로 안내를 발송</strong>합니다. 필요할 경우 진행 현황 화면에서 수동으로 알림을 보낼 수도 있습니다.</p><p>최종 발송 일시와 이력이 체계적으로 기록되어 동일인에 대한 중복 발송을 방지하며, 수신자의 알림 피로도를 줄여줍니다. 이를 통해 서명 요청자가 일일이 순서를 추적하거나 독촉하지 않아도 서명 절차가 매끄럽게 진행됩니다.</p><h5><b>03</b>계약이 쌓여도 원하는 내역만 빠르게 ─ 라벨링</h5><p>각 계약 건에 ‘A거래처’, ‘진행 중’, ‘용역계약’ 등 맞춤형 라벨을 부여하면, <strong>특정 조건이나 거래처별 계약 항목을 조회</strong>할 수 있습니다. 계약 데이터가 누적되더라도 목록 수동 확인에 따른 번거로움을 최소화하며, 유사 계약 건을 체계적으로 관리하여 차기 계약서 작성의 참조 데이터로 용이하게 활용할 수 있습니다.</p><h5><b>04</b>순서대로 받아야 하는 계약이라면 ─ 서명 순서 지정</h5><table><thead><tr><th>구분</th><th>순차 서명</th><th>동시 서명</th></tr></thead><tbody><tr><th scope="row">발송 방식</th><td>앞선 참여자의 서명 완료 시<br>다음 사람에게 자동 전송</td><td>모든 참여자에게 서명 요청<br>동시에 일괄 발송</td></tr><tr><th scope="row">추천 대상</th><td>단계별 검토 및 서명 순서가<br>정해져 있는 계약</td><td>순서 상관없이 동의·서명이<br>필요한 계약</td></tr><tr><th scope="row">주요 사례</th><td>실무자 검토·서명 후 팀장이<br>최종 승인하는 결재건</td><td>다수 참여자에게 동일한<br>약관·동의서를 받는 계약</td></tr></tbody></table><p>※ 계약 1건 당 최대 10명까지 참여 가능</p><h5><b>05</b>입력은 줄이고, 편의성은 높였습니다</h5><h6>1초 만에 만드는 맞춤 싸인·도장</h6><p>자필 서명은 물론 단 1초 만에 완성되는 자동 싸인 제작 기능을 제공합니다. 기존에 사용하던 개인·법인 인감도장 이미지도 손쉽게 불러와 등록할 수 있어 계약 날인 과정이 훨씬 빠르고 편리해집니다.</p><h6>주소록 불러오기</h6><p>자주 계약하는 거래처의 이름, 이메일, 연락처를 주소록에 저장해 두고 필요할 때 바로 채워 넣을 수 있습니다. 매번 다시 입력하는 수고를 덜어 주고, 오타로 인한 오발송 위험도 줄여 줍니다.</p><h6>휴대폰·이메일 발송 선택</h6><p>수신자마다 서명 요청을 이메일로 보낼지, 휴대폰으로 보낼지 맞춤 선택이 가능합니다. 상대방이 확인하기 편한 채널을 활용하면 서명 완료까지 걸리는 시간을 단축할 수 있습니다.</p><h5><b>06</b>종이 문서보다 안전한 전자계약, 안심하고 맡겨도 되는 이유</h5><h6>종이 계약서와 동일한 법적 효력</h6><p>예스폼싸인을 통해 체결된 전자문서는 「전자문서 및 전자거래 기본법」 및 「전자서명법」에 의거하여 기존 서면 계약과 동등한 법적 구속력을 보유합니다.</p><h6>본인확인과 감사추적 기록</h6><p>계약 참여자는 본인인증(휴대폰/이메일) 후 서명을 진행하며, 서명 일시, 인증 채널, IP, 접속 환경 등의 타임스탬프가 무결하게 기록됩니다. 완료 시 자동 발행되는 감사추적인증서는 법적 증빙 자료로 기능하며, 인증을 거치지 않은 부정한 서명 시도는 법적으로 무효 처리됩니다.</p><h6>암호화 분리 보관, 본인만 접근</h6><p>계약 문서 및 서명 정보는 암호화 조치 후 분리 저장되어, 본인 인증을 완료한 당사자에 한해서만 열람 권한이 부여됩니다. 인프라 관리자를 포함한 제3자의 무단 접근이 기술적으로 차단되어 높은 수준의 데이터 보안을 제공합니다.</p><h5><b>07</b>자주 묻는 질문 (FAQ)</h5><h6>Q. 예스폼 아이디로 예스폼싸인을 바로 쓸 수 있나요?</h6><p>기존 예스폼 아이디와 비밀번호만으로 별도의 회원가입 없이 즉시 이용하실 수 있습니다. 예스폼싸인은 예스폼 계정을 그대로 쓰는 전자계약 서비스입니다. 특히 예스폼 프리미엄 회원은 등급별로 전자계약을 최대 240건까지 혜택으로 제공받습니다.</p><h6>Q. 계약 한 건에 몇 명까지 서명할 수 있나요?</h6><p>계약 1건당 최대 10명까지 서명 참여자를 지정할 수 있습니다. 인원수와 무관하게 계약 요청 시 1회만 건수가 차감되며, 서명 참여자는 별도의 건수 차감 없이 참여할 수 있습니다.</p><h6>Q. 상대방도 회원가입을 해야 서명할 수 있나요?</h6><p>서명 참여자는 비회원 상태로도 서명이 가능합니다. 알림으로 받은 링크를 통해 별도 계정 없이 서명할 수 있습니다. 단, 계약을 요청하는 발송자는 로그인이 필요합니다.</p><h6>Q. 전자계약도 종이 계약서와 같은 법적 효력이 있나요?</h6><p>예스폼싸인에서 체결한 전자계약은 「전자문서 및 전자거래 기본법」과 「전자서명법」에 따라 종이 계약서와 동일한 법적 효력을 인정받습니다. 모든 서명이 완료되면 감사추적인증서가 자동 발급되어, 서명 시점과 인증 기록을 분쟁 시 증빙 자료로 활용하실 수 있습니다.</p><h5>이제 계약 방식도 훨씬 똑똑해져야 합니다.</h5><p>여전히 서명 하나 받으려고 상대방에게 일일이 전화하고, 체결된 계약서를 폴더마다 직접 찾아 나누고 계신가요?<br>보내고 끝이 아니라 발송 이후의 과정까지 완벽하게 챙겨주는 예스폼싸인으로 시작해 보세요. 미체결 계약 추적 알림부터 라벨 분류, 서명 순서 지정까지 알아서 척척 진행되는 압도적인 편리함을 직접 경험해 보시길 바랍니다.</p></div>
+        </li>
+        <li class="fitem" data-id="81">
+          <button class="fitem__q" type="button" aria-expanded="false">
+            <span class="fitem__text">[안내] 서비스 안정화 점검 및 멤버십 신규 혜택 안내</span>
+            <span class="fitem__meta"><span class="fitem__date">2026-05-14</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></span>
+          </button>
+          <div class="fitem__a nbody" hidden><p>안녕하세요, 예스폼싸인입니다.<br>정식 오픈을 위한 서비스 점검 일정을 안내드립니다.</p><p>- 점검 일시 : 2026년 5월 18일(월) 08:30 ~ 09:00 (30분)<br>- 점검 내용 : 서비스 안정화 및 정식 오픈 준비 작업</p><p>점검 시간 동안에는 서비스 이용이 일시적으로 제한될 수 있는 점 양해 부탁드립니다.<br>정식 오픈을 맞아 예스폼 멤버십에 새로운 혜택도 함께 추가되었습니다.<br>자세한 내용은 <a class="faq__link" href="#">[2026 예스폼 멤버십 완전정리! 예스폼싸인 전자계약 무료 혜택까지 ▶]</a> 에서 확인해 보세요.</p><p>앞으로도 실무에 바로 쓸 수 있는 전자계약 서비스로 여러분의 업무를 돕겠습니다.<br>회원 여러분의 많은 관심과 이용 부탁 드립니다.</p><p>감사합니다.</p></div>
+        </li>
+        <li class="fitem" data-id="80">
+          <button class="fitem__q" type="button" aria-expanded="false">
+            <span class="fitem__text">빠르고 안전한 전자계약, 예스폼싸인 BETA OPEN</span>
+            <span class="fitem__meta"><span class="fitem__date">2026-04-20</span><img class="fitem__arrow" src="images/ic-arrow-down-16.svg" width="16" height="16" alt=""></span>
+          </button>
+          <div class="fitem__a nbody" hidden><p>안녕하세요<br>지난 30년간 대한민국 문서 서식 시장을 지켜온 예스폼의 노하우를 담아 작성부터 보관까지 전 과정을 하나로 연결한 통합 전자계약 서비스 「예스폼싸인」이 2026년 4월 20일 베타 오픈을 하였습니다.</p><p>베타 서비스 기간 동안 새로운 서비스를 충분히 경험해 보실 수 있도록 회원가입한 분들에게 모든 기능을 제한 없이 무료로 제공합니다.</p><p>- 체험 기간 : 2026년 4월 20일(월) ~ 2026년 5월 17일(일)<br>- 혜택: 예스폼싸인의 전 기능 무료 체험 가능</p><p>예스폼싸인은 문서작성 · 공유 · 서명 · 보관으로  없이 연결하는 통합 전자계약 플랫폼입니다.</p><p>- 전자서명 무료 제작<br>- 분야별 전문 계약서 50종 무료 다운로드<br>- 안전한 보안 관리</p><p>더 나아가 예스폼 멤버십 혜택까지 추가로 제공될 예정입니다! 900만 회원이 검증한 신뢰 예스폼은 앞으로도 실무 현장의 목소리를 반영하여 더욱 편리하고 믿을 수 있는 서비스를 제공하기 위해 최선을 다하겠습니다.<br>이번 무료체험 기간을 통해 전자계약의 편리함을 직접 경험해 보시기 바랍니다.</p></div>
+        </li>
+      </ul>
+      <div class="pager">
+        <span class="pager__space" aria-hidden="true"></span>
+        <button class="btn-more" type="button" data-page="next">다음 페이지</button>
+        <nav class="pnav" aria-label="쪽 이동">
+          <button class="pnav__arrow" type="button" data-page="prev" aria-label="이전 쪽"><img src="images/ic-chevron-left-16.svg" width="16" height="16" alt=""></button>
+          <span class="pnav__cur" data-page-cur aria-current="page">1</span>
+          <span class="pnav__count"><span>/</span><span data-page-total>1</span></span>
+          <button class="pnav__arrow" type="button" data-page="next" aria-label="다음 쪽"><img src="images/ic-chevron-right-16.svg" width="16" height="16" alt=""></button>
+        </nav>
+      </div>
+    </section>
+  </div>
+</main>
+
+<!-- 푸터 (footer · pc) -->
+<footer class="ft">
+  <div class="ft__inner">
+    <div class="ft__top">
+      <div class="ft__col ft__col--left">
+        <div>
+          <p class="ft__title">고객센터</p>
+          <p class="ft__tel">1588-2390</p>
+          <ul class="ft__info">
+            <li>상담시간 : 주중 오전 9시 - 오후 5시 30분</li>
+            <li>점심시간 : 주중 오전 11시 50분 - 오후 1시</li>
+            <li>토요일, 일요일 &amp; 공휴일 휴무</li>
+          </ul>
+        </div>
+        <div class="ft__btns">
+          <a class="ft__round" href="#">자주 묻는 질문</a>
+          <a class="ft__round" href="#">전화상담 예약</a>
+        </div>
+      </div>
+      <i class="ft__div" aria-hidden="true"></i>
+      <div class="ft__col ft__col--center">
+        <p class="ft__title">공지사항</p>
+        <ul class="ft__news">
+          <li><a href="#">2026년 준비는 병오년 필수서식 모음집으로 끝! 준비</a><span>2026-01-02</span></li>
+          <li><a href="#">2026년 준비는 병오년 필수서식 모음집으로 끝! 준비</a><span>2026-01-02</span></li>
+          <li><a href="#">2026년 준비는 병오년 필수서식 모음집으로 끝! 준비</a><span>2026-01-02</span></li>
+          <li><a href="#">동절기현장 안전사고관리 예방서식 모음집 OPEN!!</a><span>2026-01-02</span></li>
+          <li><a href="#">2026년 회사표준사규집 OPEN!</a><span>2026-01-02</span></li>
+        </ul>
+      </div>
+      <i class="ft__div" aria-hidden="true"></i>
+      <div class="ft__col ft__col--right">
+        <address class="ft__corp">
+          <p>㈜예스폼 대표 : 이재영, 이응열</p>
+          <p class="ft__addr">04790 서울특별시 성동구 아차산로 49<br>(성수동1가,서울숲코오롱디지털타워 3차 901호)</p>
+          <p>사업자등록번호 : 120-86-50680</p>
+          <p>통신판매업신고번호 : 성동-1911호</p>
+          <p>개인정보보호책임자 : 이응열</p>
+        </address>
+        <button class="ft__round ft__round--map" type="button">사이트맵<img src="images/ic-down-20.svg" width="20" height="20" alt=""></button>
+      </div>
+    </div>
+    <div class="ft__bottom">
+      <nav class="ft__links" aria-label="회사 정보">
+        <a href="#">회사소개</a>
+        <a href="#">이용약관</a>
+        <a href="#">개인정보처리방침</a>
+        <a href="#">제휴문의</a>
+        <a href="#">공지사항</a>
+      </nav>
+      <div class="ft__sns">
+        <a href="#" aria-label="네이버 블로그"><img src="images/ic-sns-nblog-18.svg" width="18" height="18" alt=""></a>
+        <a href="#" aria-label="네이버 포스트"><img src="images/ic-sns-npost-18.svg" width="18" height="18" alt=""></a>
+        <a href="#" aria-label="티스토리"><img src="images/ic-sns-tistory-18.svg" width="18" height="18" alt=""></a>
+        <a href="#" aria-label="인스타그램"><img src="images/ic-sns-insta-18.svg" width="18" height="18" alt=""></a>
+        <a href="#" aria-label="유튜브"><img src="images/ic-sns-youtube-18.svg" width="18" height="18" alt=""></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="js/common.js"></script>
+<script src="js/notice.js"></script>
+</body>
+</html>
