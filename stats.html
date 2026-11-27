@@ -232,7 +232,8 @@
   .donut{display:grid;grid-template-columns:200px minmax(0,620px);gap:36px;align-items:center;padding:16px 20px}
   .donut svg{width:200px;height:200px}
   .donut .lgd{list-style:none;display:flex;flex-direction:column;gap:7px;font-size:14px;min-width:0}
-  .donut .lgd li{display:grid;grid-template-columns:12px minmax(0,1fr) auto auto;gap:10px;align-items:center}
+  .donut .lgd li{display:grid;grid-template-columns:12px minmax(0,1fr) auto auto auto;gap:10px;align-items:center}
+  .donut .lgd li em.tpc{min-width:62px;color:var(--faint)}.donut .lgd li em.tpc.on{color:var(--c);font-weight:600}
   .donut .lgd li i{width:12px;height:12px;border-radius:3px}
   .donut .lgd li span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .donut .lgd li b{font-weight:600;text-align:right}.donut .lgd li em{font-style:normal;color:var(--sub);font-size:12px;text-align:right;min-width:92px}
@@ -405,6 +406,7 @@ const TIP = {
   '결제 금액': '예스폼싸인 관리자 결제 통계의 결제 금액 합계예요.',
   '예스폼 기여 결제': '관리자 「예스폼 기여통계」의 기여 결제(금액·건수)예요. 싸인 이용자가 예스폼 플랜(1WB~1ME)을 결제한 것으로, 싸인 결제와는 따로 세요.',
   '신규 가입': '예스폼싸인 관리자 회원 통계의 신규 가입자 수예요. 내부 테스트 계정이 섞일 수 있어요.',
+  '무료체험 회원 결제': '결제한 회원이 그 결제 전에 싸인 1개월 무료체험을 시작한 회원인 건수예요(결제 주문번호로 회원을 찾아 체험 기록과 맞춤). 체험 기록은 8월 이후 이메일 인증 회원만 있어서 그 전에 가입한 회원의 결제는 0건으로 잡혀요.',
   '싸인 무료 체험': '싸인 이메일 인증 때 1개월 무료체험(10건)이 지급돼요. 큰 숫자는 이 기간에 체험을 시작한(인증한) 회원 수예요. 체험 후 결제 = 그 기간에 체험을 시작한 회원 중 이후 싸인 이용권을 결제한 회원(오늘까지 누적, 수동 지급 제외). 지금 체험 중·사용 = 오늘 기준 값이라 가장 최근 기간(이번 달·최근 7일·어제)에만 보여요. 관리자 회원 상세 기준이고 내부 테스트 계정이 섞일 수 있어요.',
   '관리자 방문자': '예스폼싸인 관리자 방문 통계예요. 여러 날을 볼 때는 일별 방문자를 더한 값이라, 같은 사람이 다른 날 오면 따로 세요. 참고용이며 기준 지표는 활성 사용자예요.',
   '전자계약 실사용자': '관리자 이용 통계에서 전자계약을 실제로 쓴 사용자 수예요. 데일리·주간은 일별 값의 합계, 월간은 관리자 월간 값이라 업데이트 당일이 일부 들어갈 수 있어요.',
@@ -695,6 +697,10 @@ const srcGroup = list => { const o = {}; list.forEach(p => { const x = (o[p[3]] 
 const srcLine = (list, sep = ' / ') => srcGroup(list).map(([k, [n]]) => `${esc(k)} ${n}건`).join(sep);
 const prodName = c => /^SIGN\d+$/.test(c) ? `${+c.slice(4)}건 이용권` : c;
 const paySrcCell = (n, s, e) => { const l = D.payments ? paysIn(s, e) : []; return `${fmt(n)}${l.length ? `<span class="psm">${srcLine(l, ' · ')}</span>` : ''}`; };
+// 무료체험 회원의 결제(체험 시작 뒤) — D.trial.tp ['YYYY-MM-DD HH:MM|금액'] (scripts/trial.js, 2026-11-27)
+let TPS = null;
+const isTrialPay = p => { if (!D.trial || !D.trial.tp) return false; if (!TPS) TPS = new Set(D.trial.tp); return TPS.has(p[0].slice(0, 16) + '|' + p[2]); };
+const trialN = l => l.filter(isTrialPay).length;
 function paySection(pay, rep) {
   if (!D.payments) return '';
   if (rep) return payDonut();
@@ -703,9 +709,9 @@ function paySection(pay, rep) {
   if (!tot) return `<section class="blk"><h2>결제 출처${ti('결제 출처')}</h2><div class="card"><p class="pempty">이 기간에는 결제가 없어요.</p></div></section>`;
   return `<section class="blk"><h2>결제 출처${ti('결제 출처')}</h2>
     <div>
-      <div class="card"><div class="hd"><b>출처별</b><span>${fmt(tot)}건 · ${won(list.reduce((a, p) => a + p[2], 0))}</span></div><div class="scroll"><table class="tbl">
-        <thead><tr><th>출처</th><th>결제</th><th>${TL('비중')}</th><th>결제 금액</th></tr></thead>
-        <tbody>${g.map(([k, [n, a]]) => `<tr><td class="name">${esc(k)}${srcTi('pay', k)}</td><td>${fmt(n)}건</td><td>${shareCell(n, tot, max)}</td><td>${won(a)}</td></tr>`).join('')}</tbody></table></div></div>
+      <div class="card"><div class="hd"><b>출처별</b><span>${fmt(tot)}건 · ${won(list.reduce((a, p) => a + p[2], 0))}${D.trial && D.trial.tp ? ` · 무료체험 회원 결제 ${fmt(trialN(list))}건` : ''}</span></div><div class="scroll"><table class="tbl">
+        <thead><tr><th>출처</th><th>결제</th><th>${TL('비중')}</th><th>결제 금액</th>${D.trial && D.trial.tp ? `<th>${TL('무료체험 회원 결제')}</th>` : ''}</tr></thead>
+        <tbody>${g.map(([k, [n, a]]) => { const tn = trialN(list.filter(p => p[3] === k)); return `<tr><td class="name">${esc(k)}${srcTi('pay', k)}</td><td>${fmt(n)}건</td><td>${shareCell(n, tot, max)}</td><td>${won(a)}</td>${D.trial && D.trial.tp ? `<td class="${tn ? '' : 'muted'}">${fmt(tn)}건</td>` : ''}</tr>`; }).join('')}</tbody></table></div></div>
     </div>${note}</section>`;
 }
 // 결제 출처 도넛 그래프 (싸인 월보고서, 2026-11-27): 상위 6개 + 나머지 「그 외」
@@ -713,14 +719,15 @@ function payDonut() {
   const list = paysIn(SEL.s, SEL.e), g = srcGroup(list), tot = list.length, amt = list.reduce((a, p) => a + p[2], 0);
   if (!tot) return `<section class="blk"><h2>결제 출처${ti('결제 출처')}</h2><div class="card"><p class="pempty">이 기간에는 결제가 없어요.</p></div></section>`;
   const COL = ['#12a150', '#2f6bff', '#f59f00', '#e5484d', '#8b5cf6', '#0ea5e9', '#c9ced6'];
-  const top = g.slice(0, 6).map(([k, [n, a]]) => [k, n, a]);
-  if (g.length > 6) { const rest = g.slice(6); top.push([`그 외 ${rest.length}곳`, rest.reduce((x, r) => x + r[1][0], 0), rest.reduce((x, r) => x + r[1][1], 0)]); }
+  const TPON = !!(D.trial && D.trial.tp), tnOf = keys => trialN(list.filter(p => keys.includes(p[3])));
+  const top = g.slice(0, 6).map(([k, [n, a]]) => [k, n, a, tnOf([k])]);
+  if (g.length > 6) { const rest = g.slice(6); top.push([`그 외 ${rest.length}곳`, rest.reduce((x, r) => x + r[1][0], 0), rest.reduce((x, r) => x + r[1][1], 0), tnOf(rest.map(r => r[0]))]); }
   const R = 80, C = 2 * Math.PI * R; let off = 0;
   const arcs = top.map(([, n], k) => { const len = n / tot * C; const el = `<circle r="${R}" cx="100" cy="100" fill="none" stroke="${COL[k]}" stroke-width="34" stroke-dasharray="${len.toFixed(2)} ${(C - len).toFixed(2)}" stroke-dashoffset="${(-off).toFixed(2)}" transform="rotate(-90 100 100)"></circle>`; off += len; return el; }).join('');
   return `<section class="blk"><h2>결제 출처${ti('결제 출처')}</h2>
-    <div class="card"><div class="hd"><b>출처별 결제 건수</b><span>${fmt(tot)}건 · ${won(amt)}</span></div>
+    <div class="card"><div class="hd"><b>출처별 결제 건수</b><span>${fmt(tot)}건 · ${won(amt)}${TPON ? ` · 무료체험 회원 결제 <b style="color:var(--c)">${fmt(trialN(list))}건</b>${ti('무료체험 회원 결제')}` : ''}</span></div>
       <div class="donut"><svg viewBox="0 0 200 200" role="img" aria-label="결제 출처 비중">${arcs}<text x="100" y="96" text-anchor="middle" font-size="26" font-weight="700" fill="#191f28">${fmt(tot)}건</text><text x="100" y="120" text-anchor="middle" font-size="12" fill="#6b7684">결제</text></svg>
-        <ul class="lgd">${top.map(([k, n, a], i) => `<li><i style="background:${COL[i]}"></i><span title="${esc(k)}">${esc(k)}</span><b>${fmt(n)}건 · ${pctTxt(n / tot * 100)}</b><em>${won(a)}</em></li>`).join('')}</ul></div></div></section>`;
+        <ul class="lgd">${top.map(([k, n, a, tn], i) => `<li><i style="background:${COL[i]}"></i><span title="${esc(k)}">${esc(k)}</span><b>${fmt(n)}건 · ${pctTxt(n / tot * 100)}</b><em>${won(a)}</em>${TPON ? `<em class="tpc${tn ? ' on' : ''}">체험 ${fmt(tn)}건</em>` : ''}</li>`).join('')}</ul></div></div></section>`;
 }
 // 결제 출처 짧은 이름: 캠페인 코드(' - ' 뒤)와 긴 꼬리를 뺀다
 const shortSrc = n => { let t = String(n).split(' - ')[0].trim(); if (/^네이버 공식 블로그 · 광고$/.test(t)) t = '네이버 블로그 광고'; return t.length > 18 ? t.slice(0, 17) + '…' : t; };
