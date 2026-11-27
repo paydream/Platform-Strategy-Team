@@ -247,6 +247,9 @@
   .blk > h2 small{font-size:13px;font-weight:400;color:var(--sub)}
   .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}
   .kpis.k5{grid-template-columns:repeat(5,1fr)}
+  .kpis.k6{grid-template-columns:repeat(3,1fr)} /* 싸인 핵심 지표 6개(무료 체험 추가, 2026-11-27) = 3개씩 2줄 */
+  @media (max-width:960px){.kpis.k6{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:520px){.kpis.k6{grid-template-columns:1fr}}
   @media (max-width:1240px){.kpis.k5{grid-template-columns:repeat(3,1fr)}}
   @media (max-width:960px){.kpis.k5{grid-template-columns:repeat(2,1fr)}}
   @media (max-width:520px){.kpis.k5{grid-template-columns:1fr}}
@@ -370,6 +373,7 @@ const TIP = {
   '결제 금액': '예스폼싸인 관리자 결제 통계의 결제 금액 합계예요.',
   '예스폼 기여 결제': '관리자 「예스폼 기여통계」의 기여 결제(금액·건수)예요. 싸인 이용자가 예스폼 플랜(1WB~1ME)을 결제한 것으로, 싸인 결제와는 따로 세요.',
   '신규 가입': '예스폼싸인 관리자 회원 통계의 신규 가입자 수예요. 내부 테스트 계정이 섞일 수 있어요.',
+  '싸인 무료 체험': '싸인 이메일 인증 때 1개월 무료체험(10건)이 지급돼요. 큰 숫자는 이 기간에 체험을 시작한(인증한) 회원 수예요. 결제 전환 = 그중 체험 시작 뒤 싸인 이용권을 결제한 회원(지금까지 누적, 수동 지급 제외). 지금 체험 중 = 오늘 기준 무료체험 상태인 회원, 사용 = 그중 체험 건수를 1건 이상 쓴 회원. 관리자 회원 상세 기준이고 내부 테스트 계정이 섞일 수 있어요.',
   '관리자 방문자': '예스폼싸인 관리자 방문 통계예요. 여러 날을 볼 때는 일별 방문자를 더한 값이라, 같은 사람이 다른 날 오면 따로 세요. 참고용이며 기준 지표는 활성 사용자예요.',
   '전자계약 실사용자': '관리자 이용 통계에서 전자계약을 실제로 쓴 사용자 수예요. 데일리·주간은 일별 값의 합계, 월간은 관리자 월간 값이라 업데이트 당일이 일부 들어갈 수 있어요.',
   '에디터 경유 실사용자': '전자계약 실사용자 중 예스폼 에디터를 거쳐 온 사용자예요.',
@@ -680,6 +684,9 @@ function signView({ m, pm, cd, pd, mk, pmk, label }) {
     ${funnel([['활성 사용자', S.active, 'GA4 순 사용자'], ['신규 가입', S.signup], [S.usersSum ? '전자계약 실사용자 (월별 합)' : '전자계약 실사용자', S.users], ['결제', pay[0], won(pay[1])]])}</section>`;
   const chartBlk = () => `  <section class="blk"><h2>일별 추이 ${view === 'day' ? '<small>최근 3주</small>' : view === 'week' ? '<small>최근 5주</small>' : ''}</h2><div class="chartbox"><div class="legend" id="legend"></div><svg class="chart" id="chart" role="img" aria-label="일별 추이"></svg></div></section>`;
   const pay = mk.pay || [0, 0], ppay = pmk && pmk.pay;
+  // 싸인 무료 체험(관리자 회원 상세 스캔, scripts/trial.js): 기간 안에 체험 시작(이메일 인증)한 회원 [시작, 크레딧 사용, 결제 전환]
+  const trialSum = (s, e) => { const T = D.trial; if (!T || !T.d || e < T.start) return null; const r = [0, 0, 0]; for (const [d, v] of Object.entries(T.d)) if (d >= s && d <= e) v.forEach((n, i) => { r[i] += n; }); return r; };
+  const TR = trialSum(SEL.s, SEL.e), TRP = pm ? trialSum(pm.s || mStart(pm), pm.e || pm.end) : null;
   const dAct = diff(S.active, P && P.active, cd, pd), dSign = diff(S.signup, P && P.signup, cd, pd), dPay = diff(pay[0], ppay && ppay[0], cd, pd);
   const pl = mk.place, plTot = mk.placeTot || [0, 0, 0], plMax = Math.max(...pl.map(r => r[1]), 1);
   const prevPl = Object.fromEntries((pmk ? pmk.place : []).map(r => [r[0], r]));
@@ -708,12 +715,13 @@ function signView({ m, pm, cd, pd, mk, pmk, label }) {
   ${REP ? actionPlan(NT) : ''}
 
   <section class="blk"><h2>핵심 지표 <small>${CMP.note}</small></h2>
-    <div class="kpis${S.contrib ? ' k5' : ''}">
+    <div class="kpis${S.contrib ? (TR ? ' k6' : ' k5') : (TR ? ' k5' : '')}">
       ${kpi('결제 건수', pay[0], '건', dPay, `결제 금액 ${won(pay[1])}`, true)}
       ${S.contrib ? kpi('예스폼 기여 결제', S.contrib[1], '원', diff(S.contrib[1], P && P.contrib && P.contrib[1], cd, pd), `${fmt(S.contrib[0])}건`) : ''}
       ${kpi('신규 가입', S.signup, '명', dSign, `활성 사용자의 ${pctTxt(pct(S.signup, S.active))}`)}
       ${kpi('활성 사용자', S.active, '명', dAct, `GA4 순 사용자 · 관리자 방문자 ${fmt(S.visit)}명(일별 합계)`)}
       ${kpi(S.usersSum ? '전자계약 실사용자 (월별 합)' : '전자계약 실사용자', S.users, '명', diff(S.users, P && P.users, cd, pd), `에디터 경유 ${fmt(S.editorUsers)}명${view === 'week' ? ' · 일별 합계' : ''}`)}
+      ${TR ? kpi('싸인 무료 체험', TR[0], '명', TRP ? diff(TR[0], TRP[0], cd, pd) : null, `결제 전환 ${fmt(TR[2])}명 (${pctTxt(pct(TR[2], TR[0]))})<br>지금 체험 중 ${fmt(D.trial.now)}명 · 사용 ${fmt(D.trial.nowUsed)}명`) : ''}
     </div></section>
 
   ${REP ? mktResult({ pm, cd, pd, label }) : funnelBlk()}
