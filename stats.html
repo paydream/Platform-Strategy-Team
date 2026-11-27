@@ -53,16 +53,25 @@
   .thead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-top:26px}
   .thead h1{font-size:24px;letter-spacing:-.01em}
   .thead .meta{font-size:12.5px;color:var(--sub);margin-left:10px;font-weight:400}
-  .btabs{display:grid;grid-template-columns:1fr 1fr;margin-top:16px;border-bottom:1px solid var(--line)}
-  .btab{font:inherit;background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-1px;padding:14px 6px 12px;cursor:pointer;text-align:left;display:flex;align-items:baseline;gap:12px;color:var(--sub)}
-  .btab b{font-size:21px;font-weight:700;letter-spacing:-.01em}
-  .btab span{font-size:13px}
-  .btab:hover{color:var(--text)}
-  .btab[aria-selected="true"]{color:var(--text)}
-  .btab[data-p="editor"][aria-selected="true"]{border-bottom-color:#2f6bff}.btab[data-p="editor"][aria-selected="true"] b{color:#2f6bff}
-  .btab[data-p="sign"][aria-selected="true"]{border-bottom-color:#12a150}.btab[data-p="sign"][aria-selected="true"] b{color:#12a150}
+  .btabs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+  .btab{font:inherit;cursor:pointer;text-align:left;display:flex;align-items:center;gap:14px;padding:16px 20px;border-radius:16px;border:2px solid var(--line);background:#fff;color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.04);transition:border-color .15s,box-shadow .15s,transform .15s}
+  .btab:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(0,0,0,.08)}
+  .btab .bi,.btab .chk{font-style:normal}
+  .btab .bi{flex:none;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:20px;font-weight:800}
+  .btab .bt2{display:flex;flex-direction:column;gap:2px;min-width:0}
+  .btab b{font-size:20px;font-weight:800;letter-spacing:-.01em}
+  .btab span{font-size:13px;color:var(--sub)}
+  .btab .chk{margin-left:auto;font-size:12px;font-weight:700;padding:4px 10px;border-radius:99px;background:#eef0f3;color:var(--sub)}
+  .btab[data-p="sign"] .bi{background:#e8f7ee;color:#12a150}.btab[data-p="editor"] .bi{background:#eaf1ff;color:#2f6bff}
+  .btab[aria-selected="true"]{color:#fff}
+  .btab[aria-selected="true"] span{color:rgba(255,255,255,.85)}
+  .btab[aria-selected="true"] .bi{background:rgba(255,255,255,.2);color:#fff}
+  .btab[aria-selected="true"] .chk{background:#fff}
+  .btab[data-p="sign"][aria-selected="true"]{background:#12a150;border-color:#12a150;box-shadow:0 8px 20px -8px #12a150}.btab[data-p="sign"][aria-selected="true"] .chk{color:#12a150}
+  .btab[data-p="editor"][aria-selected="true"]{background:#2f6bff;border-color:#2f6bff;box-shadow:0 8px 20px -8px #2f6bff}.btab[data-p="editor"][aria-selected="true"] .chk{color:#2f6bff}
+  .btab[aria-selected="false"] .chk{display:none}
   .goals.g1 .gl{grid-template-columns:1fr}.goals.g2 .gl{grid-template-columns:1fr 1fr}
-  @media (max-width:640px){.btab{flex-direction:column;gap:2px}.btab b{font-size:18px}.goals.g2 .gl{grid-template-columns:1fr}}
+  @media (max-width:640px){.btab{padding:12px 14px;gap:10px}.btab .bi{width:36px;height:36px}.btab b{font-size:17px}.goals.g2 .gl{grid-template-columns:1fr}}
   body.embed header.gnb{display:none}
   body.embed .hero{padding-top:6px}
   /* 2026-11-26 마케팅 상단 컴팩트: 갱신 한 줄 + 텍스트 링크, 보기·기간 한 줄 */
@@ -569,7 +578,7 @@ function render() {
   </section>` : `<section class="thead"><h1>에디터/싸인 지표<span class="meta">데이터 ~${MD(D.range.end)} · 갱신 ${upd().replace(/^.*마지막 갱신 /, '')}</span></h1>
     ${prod === 'sign' ? '<a class="mktbtn" href="auto.html?id=sign-marketing">📣 싸인 마케팅 →</a>' : ''}</section>
   ${stale()}
-  <div class="btabs" role="tablist" aria-label="제품">${[['editor', '예스폼 에디터'], ['sign', '예스폼싸인']].map(([p, n]) => `<button class="btab" role="tab" data-p="${p}" aria-selected="${ptab === p}"><b>${n}</b><span>${tabSum(p)}</span></button>`).join('')}</div>
+  <div class="btabs" role="tablist" aria-label="제품">${[['sign', '예스폼싸인', '싸'], ['editor', '예스폼 에디터', '에']].map(([p, n, ic]) => `<button class="btab" role="tab" data-p="${p}" aria-selected="${ptab === p}"><i class="bi" aria-hidden="true">${ic}</i><span class="bt2"><b>${n}</b><span>${tabSum(p)}</span></span><em class="chk">보는 중</em></button>`).join('')}</div>
   ${goalPanel(prod)}`}
   ${MKT ? `<div class="mctrl">${hasP() ? `<div class="seg vseg" role="tablist" aria-label="보기">${VIEWS.map(([v, l]) => `<button role="tab" data-v="${v}" aria-selected="${v === view}">${l.replace(' (직전 7일)', '')}</button>`).join('')}</div>` : ''}<div class="seg sub ${view}" role="tablist" aria-label="기간">${sub}</div></div>` : `<div class="ctrl">
     <div></div>
