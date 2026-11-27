@@ -43,6 +43,22 @@
               "href": "archive/20261127-134950-design/index.html"
             }
           ]
+        },
+        {
+          "id": "20261127-150727-design",
+          "label": "v3",
+          "title": "[예스폼싸인] 디자인 시스템 적용",
+          "desc": "",
+          "created": "2026.11.27",
+          "folder": "archive/20261127-150727-design",
+          "preview": "archive/20261127-150727-design/index.html",
+          "hidden": false,
+          "items": [
+            {
+              "label": "시안 01",
+              "href": "archive/20261127-150727-design/index.html"
+            }
+          ]
         }
       ]
     },
